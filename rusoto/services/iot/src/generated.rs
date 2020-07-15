@@ -25,27 +25,27 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p>Details of abort criteria to abort the job.</p>
+/// <p>The criteria that determine when and how a job abort takes place.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AbortConfig {
-    /// <p>The list of abort criteria to define rules to abort the job.</p>
+    /// <p>The list of criteria that determine when and how to abort the job.</p>
     #[serde(rename = "criteriaList")]
     pub criteria_list: Vec<AbortCriteria>,
 }
 
-/// <p>Details of abort criteria to define rules to abort the job.</p>
+/// <p>The criteria that determine when and how a job abort takes place.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AbortCriteria {
-    /// <p>The type of abort action to initiate a job abort.</p>
+    /// <p>The type of job action to take to initiate the job abort.</p>
     #[serde(rename = "action")]
     pub action: String,
-    /// <p>The type of job execution failure to define a rule to initiate a job abort.</p>
+    /// <p>The type of job execution failures that can initiate a job abort.</p>
     #[serde(rename = "failureType")]
     pub failure_type: String,
-    /// <p>Minimum number of executed things before evaluating an abort rule.</p>
+    /// <p>The minimum number of things which must receive job execution notifications before the job can be aborted.</p>
     #[serde(rename = "minNumberOfExecutedThings")]
     pub min_number_of_executed_things: i64,
-    /// <p>The threshold as a percentage of the total number of executed things that will initiate a job abort.</p> <p>AWS IoT supports up to two digits after the decimal (for example, 10.9 and 10.99, but not 10.999).</p>
+    /// <p>The minimum percentage of job execution failures that must occur to initiate the job abort.</p> <p>AWS IoT supports up to two digits after the decimal (for example, 10.9 and 10.99, but not 10.999).</p>
     #[serde(rename = "thresholdPercentage")]
     pub threshold_percentage: f64,
 }
@@ -351,7 +351,7 @@ pub struct AttachPolicyRequest {
     /// <p>The name of the policy to attach.</p>
     #[serde(rename = "policyName")]
     pub policy_name: String,
-    /// <p>The <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-security-identity.html">identity</a> to which the policy is attached.</p>
+    /// <p>The <a href="https://docs.aws.amazon.com/iot/latest/developerguide/security-iam.html">identity</a> to which the policy is attached.</p>
     #[serde(rename = "target")]
     pub target: String,
 }
@@ -717,13 +717,58 @@ pub struct AuthorizerSummary {
     pub authorizer_name: Option<String>,
 }
 
+/// <p>The criteria that determine when and how a job abort takes place.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AwsJobAbortConfig {
+    /// <p>The list of criteria that determine when and how to abort the job.</p>
+    #[serde(rename = "abortCriteriaList")]
+    pub abort_criteria_list: Vec<AwsJobAbortCriteria>,
+}
+
+/// <p>The criteria that determine when and how a job abort takes place.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AwsJobAbortCriteria {
+    /// <p>The type of job action to take to initiate the job abort.</p>
+    #[serde(rename = "action")]
+    pub action: String,
+    /// <p>The type of job execution failures that can initiate a job abort.</p>
+    #[serde(rename = "failureType")]
+    pub failure_type: String,
+    /// <p>The minimum number of things which must receive job execution notifications before the job can be aborted.</p>
+    #[serde(rename = "minNumberOfExecutedThings")]
+    pub min_number_of_executed_things: i64,
+    /// <p>The minimum percentage of job execution failures that must occur to initiate the job abort.</p> <p>AWS IoT supports up to two digits after the decimal (for example, 10.9 and 10.99, but not 10.999).</p>
+    #[serde(rename = "thresholdPercentage")]
+    pub threshold_percentage: f64,
+}
+
 /// <p>Configuration for the rollout of OTA updates.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsJobExecutionsRolloutConfig {
+    /// <p>The rate of increase for a job rollout. This parameter allows you to define an exponential rate increase for a job rollout.</p>
+    #[serde(rename = "exponentialRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exponential_rate: Option<AwsJobExponentialRolloutRate>,
     /// <p>The maximum number of OTA update job executions started per minute.</p>
     #[serde(rename = "maximumPerMinute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_per_minute: Option<i64>,
+}
+
+/// <p>The rate of increase for a job rollout. This parameter allows you to define an exponential rate increase for a job rollout.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsJobExponentialRolloutRate {
+    /// <p>The minimum number of things that will be notified of a pending job, per minute, at the start of the job rollout. This is the initial rate of the rollout.</p>
+    #[serde(rename = "baseRatePerMinute")]
+    pub base_rate_per_minute: i64,
+    /// <p>The rate of increase for a job rollout. The number of things notified is multiplied by this factor.</p>
+    #[serde(rename = "incrementFactor")]
+    pub increment_factor: f64,
+    /// <p>The criteria to initiate the increase in rate of rollout for a job.</p> <p>AWS IoT supports up to one digit after the decimal (for example, 1.5, but not 1.55).</p>
+    #[serde(rename = "rateIncreaseCriteria")]
+    pub rate_increase_criteria: AwsJobRateIncreaseCriteria,
 }
 
 /// <p>Configuration information for pre-signed URLs. Valid when <code>protocols</code> contains HTTP.</p>
@@ -733,6 +778,29 @@ pub struct AwsJobPresignedUrlConfig {
     #[serde(rename = "expiresInSec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_in_sec: Option<i64>,
+}
+
+/// <p>The criteria to initiate the increase in rate of rollout for a job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AwsJobRateIncreaseCriteria {
+    /// <p>When this number of things have been notified, it will initiate an increase in the rollout rate.</p>
+    #[serde(rename = "numberOfNotifiedThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_notified_things: Option<i64>,
+    /// <p>When this number of things have succeeded in their job execution, it will initiate an increase in the rollout rate.</p>
+    #[serde(rename = "numberOfSucceededThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_succeeded_things: Option<i64>,
+}
+
+/// <p>Specifies the amount of time each device has to finish its execution of the job. A timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the timer expires, it will be automatically set to <code>TIMED_OUT</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AwsJobTimeoutConfig {
+    /// <p>Specifies the amount of time, in minutes, this device has to finish execution of this job. The timeout interval can be anywhere between 1 minute and 7 days (1 to 10080 minutes). The in progress timer can't be updated and will apply to all job executions for the job. Whenever a job execution remains in the IN_PROGRESS status for longer than this interval, the job execution will fail and switch to the terminal <code>TIMED_OUT</code> status.</p>
+    #[serde(rename = "inProgressTimeoutInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub in_progress_timeout_in_minutes: Option<i64>,
 }
 
 /// <p>A Device Defender security profile behavior.</p>
@@ -1572,6 +1640,10 @@ pub struct CreateOTAUpdateRequest {
     #[serde(rename = "additionalParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The criteria that determine when and how a job abort takes place.</p>
+    #[serde(rename = "awsJobAbortConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_job_abort_config: Option<AwsJobAbortConfig>,
     /// <p>Configuration for the rollout of OTA updates.</p>
     #[serde(rename = "awsJobExecutionsRolloutConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1580,6 +1652,10 @@ pub struct CreateOTAUpdateRequest {
     #[serde(rename = "awsJobPresignedUrlConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_job_presigned_url_config: Option<AwsJobPresignedUrlConfig>,
+    /// <p>Specifies the amount of time each device has to finish its execution of the job. A timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the timer expires, it will be automatically set to <code>TIMED_OUT</code>.</p>
+    #[serde(rename = "awsJobTimeoutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_job_timeout_config: Option<AwsJobTimeoutConfig>,
     /// <p>The description of the OTA update.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1594,7 +1670,7 @@ pub struct CreateOTAUpdateRequest {
     #[serde(rename = "protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocols: Option<Vec<String>>,
-    /// <p>The IAM role that allows access to the AWS IoT Jobs service.</p>
+    /// <p>The IAM role that grants AWS IoT access to the Amazon S3, AWS IoT jobs and AWS Code Signing resources to create an OTA update job.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
     /// <p>Metadata which can be used to manage updates.</p>
@@ -1605,7 +1681,7 @@ pub struct CreateOTAUpdateRequest {
     #[serde(rename = "targetSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_selection: Option<String>,
-    /// <p>The targeted devices to receive OTA updates.</p>
+    /// <p>The devices targeted to receive OTA updates.</p>
     #[serde(rename = "targets")]
     pub targets: Vec<String>,
 }
@@ -2296,11 +2372,11 @@ pub struct DeleteOTAUpdateRequest {
     #[serde(rename = "deleteStream")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_stream: Option<bool>,
-    /// <p>Specifies if the AWS Job associated with the OTA update should be deleted with the OTA update is deleted.</p>
+    /// <p>Specifies if the AWS Job associated with the OTA update should be deleted when the OTA update is deleted.</p>
     #[serde(rename = "forceDeleteAWSJob")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force_delete_aws_job: Option<bool>,
-    /// <p>The OTA update ID to delete.</p>
+    /// <p>The ID of the OTA update to delete.</p>
     #[serde(rename = "otaUpdateId")]
     pub ota_update_id: String,
 }
@@ -22376,7 +22452,7 @@ pub trait Iot {
         input: RemoveThingFromBillingGroupRequest,
     ) -> Result<RemoveThingFromBillingGroupResponse, RusotoError<RemoveThingFromBillingGroupError>>;
 
-    /// <p>Remove the specified thing from the specified group.</p>
+    /// <p>Remove the specified thing from the specified group.</p> <p>You must specify either a <code>thingGroupArn</code> or a <code>thingGroupName</code> to identify the thing group and either a <code>thingArn</code> or a <code>thingName</code> to identify the thing to remove from the thing group. </p>
     async fn remove_thing_from_thing_group(
         &self,
         input: RemoveThingFromThingGroupRequest,
@@ -22840,7 +22916,7 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-iot-principal", &input.principal);
+        request.add_header("x-amzn-iot-principal", &input.principal.to_string());
 
         let mut response = self
             .client
@@ -22914,7 +22990,7 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-principal", &input.principal);
+        request.add_header("x-amzn-principal", &input.principal.to_string());
 
         let mut response = self
             .client
@@ -25918,7 +25994,7 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-iot-principal", &input.principal);
+        request.add_header("x-amzn-iot-principal", &input.principal.to_string());
 
         let mut response = self
             .client
@@ -25992,7 +26068,7 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-principal", &input.principal);
+        request.add_header("x-amzn-principal", &input.principal.to_string());
 
         let mut response = self
             .client
@@ -27429,7 +27505,7 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-iot-policy", &input.policy_name);
+        request.add_header("x-amzn-iot-policy", &input.policy_name.to_string());
         let mut params = Params::new();
         if let Some(ref x) = input.ascending_order {
             params.put("isAscendingOrder", x);
@@ -27505,7 +27581,7 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-iot-principal", &input.principal);
+        request.add_header("x-amzn-iot-principal", &input.principal.to_string());
         let mut params = Params::new();
         if let Some(ref x) = input.ascending_order {
             params.put("isAscendingOrder", x);
@@ -27548,7 +27624,7 @@ impl Iot for IotClient {
 
         request.set_endpoint_prefix("iot".to_string());
 
-        request.add_header("x-amzn-principal", &input.principal);
+        request.add_header("x-amzn-principal", &input.principal.to_string());
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
@@ -28770,7 +28846,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p>Remove the specified thing from the specified group.</p>
+    /// <p>Remove the specified thing from the specified group.</p> <p>You must specify either a <code>thingGroupArn</code> or a <code>thingGroupName</code> to identify the thing group and either a <code>thingArn</code> or a <code>thingName</code> to identify the thing to remove from the thing group. </p>
     #[allow(unused_mut)]
     async fn remove_thing_from_thing_group(
         &self,

@@ -144,7 +144,7 @@ pub struct ColumnWildcard {
     pub excluded_column_names: Option<Vec<String>>,
 }
 
-/// <p>The AWS Lake Formation principal.</p>
+/// <p>The AWS Lake Formation principal. Supported principals are IAM users or IAM roles.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLakePrincipal {
     /// <p>An identifier for the AWS Lake Formation principal.</p>
@@ -153,26 +153,34 @@ pub struct DataLakePrincipal {
     pub data_lake_principal_identifier: Option<String>,
 }
 
-/// <p>The AWS Lake Formation principal.</p>
+/// <p>A structure representing a list of AWS Lake Formation principals designated as data lake administrators and lists of principal permission entries for default create database and default create table permissions.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLakeSettings {
-    /// <p>A list of up to three principal permissions entries for default create database permissions.</p>
+    /// <p>A structure representing a list of up to three principal permissions entries for default create database permissions.</p>
     #[serde(rename = "CreateDatabaseDefaultPermissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_database_default_permissions: Option<Vec<PrincipalPermissions>>,
-    /// <p>A list of up to three principal permissions entries for default create table permissions.</p>
+    /// <p>A structure representing a list of up to three principal permissions entries for default create table permissions.</p>
     #[serde(rename = "CreateTableDefaultPermissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_table_default_permissions: Option<Vec<PrincipalPermissions>>,
-    /// <p>A list of AWS Lake Formation principals.</p>
+    /// <p>A list of AWS Lake Formation principals. Supported principals are IAM users or IAM roles.</p>
     #[serde(rename = "DataLakeAdmins")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_lake_admins: Option<Vec<DataLakePrincipal>>,
+    /// <p>A list of the resource-owning account IDs that the caller's account can use to share their user access details (user ARNs). The user ARNs can be logged in the resource owner's AWS CloudTrail log.</p> <p>You may want to specify this property when you are in a high-trust boundary, such as the same team or company. </p>
+    #[serde(rename = "TrustedResourceOwners")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trusted_resource_owners: Option<Vec<String>>,
 }
 
 /// <p>A structure for a data location object where permissions are granted or revoked. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLocationResource {
+    /// <p>The identifier for the Data Catalog where the location is registered with AWS Lake Formation. By default, it is the account ID of the caller.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) that uniquely identifies the data location resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
@@ -181,6 +189,10 @@ pub struct DataLocationResource {
 /// <p>A structure for the database object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatabaseResource {
+    /// <p>The identifier for the Data Catalog. By default, it is the account ID of the caller.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The name of the database resource. Unique to the Data Catalog.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -259,7 +271,7 @@ pub struct GetDataLakeSettingsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataLakeSettingsResponse {
-    /// <p>A list of AWS Lake Formation principals. </p>
+    /// <p>A structure representing a list of AWS Lake Formation principals designated as data lake administrators.</p>
     #[serde(rename = "DataLakeSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_lake_settings: Option<DataLakeSettings>,
@@ -438,7 +450,7 @@ pub struct PutDataLakeSettingsRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>A list of AWS Lake Formation principals.</p>
+    /// <p>A structure representing a list of AWS Lake Formation principals designated as data lake administrators.</p>
     #[serde(rename = "DataLakeSettings")]
     pub data_lake_settings: DataLakeSettings,
 }
@@ -453,11 +465,11 @@ pub struct RegisterResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to register.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>The identifier for the role.</p>
+    /// <p>The identifier for the role that registers the resource.</p>
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p>Designates a trusted caller, an IAM principal, by registering this caller with the Data Catalog. </p>
+    /// <p>Designates an AWS Identity and Access Management (IAM) service-linked role by registering this role with the Data Catalog. A service-linked role is a unique type of IAM role that is linked directly to Lake Formation.</p> <p>For more information, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/service-linked-roles.html">Using Service-Linked Roles for Lake Formation</a>.</p>
     #[serde(rename = "UseServiceLinkedRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_service_linked_role: Option<bool>,
@@ -517,7 +529,7 @@ pub struct RevokePermissionsRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The permissions revoked to the principal on the resource. For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
+    /// <p>The permissions revoked to the principal on the resource. For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     #[serde(rename = "Permissions")]
     pub permissions: Vec<String>,
     /// <p>Indicates a list of permissions for which to revoke the grant option allowing the principal to pass permissions to other principals.</p>
@@ -539,17 +551,34 @@ pub struct RevokePermissionsResponse {}
 /// <p>A structure for the table object. A table is a metadata definition that represents your data. You can Grant and Revoke table privileges to a principal. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TableResource {
+    /// <p>The identifier for the Data Catalog. By default, it is the account ID of the caller.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The name of the database for the table. Unique to a Data Catalog. A database is a set of associated table definitions organized into a logical group. You can Grant and Revoke database privileges to a principal. </p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
     /// <p>The name of the table.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A wildcard object representing every table under a database.</p> <p>At least one of <code>TableResource$Name</code> or <code>TableResource$TableWildcard</code> is required.</p>
+    #[serde(rename = "TableWildcard")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_wildcard: Option<TableWildcard>,
 }
+
+/// <p>A wildcard object representing every table under a database.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TableWildcard {}
 
 /// <p>A structure for a table with columns object. This object is only used when granting a SELECT permission.</p> <p>This object must take a value for at least one of <code>ColumnsNames</code>, <code>ColumnsIndexes</code>, or <code>ColumnsWildcard</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TableWithColumnsResource {
+    /// <p>The identifier for the Data Catalog. By default, it is the account ID of the caller.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The list of column names for the table. At least one of <code>ColumnNames</code> or <code>ColumnWildcard</code> is required.</p>
     #[serde(rename = "ColumnNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -560,12 +589,10 @@ pub struct TableWithColumnsResource {
     pub column_wildcard: Option<ColumnWildcard>,
     /// <p>The name of the database for the table with columns resource. Unique to the Data Catalog. A database is a set of associated table definitions organized into a logical group. You can Grant and Revoke database privileges to a principal. </p>
     #[serde(rename = "DatabaseName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub database_name: Option<String>,
+    pub database_name: String,
     /// <p>The name of the table resource. A table is a metadata definition that represents your data. You can Grant and Revoke table privileges to a principal. </p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1192,13 +1219,13 @@ pub trait LakeFormation {
         input: DescribeResourceRequest,
     ) -> Result<DescribeResourceResponse, RusotoError<DescribeResourceError>>;
 
-    /// <p>The AWS Lake Formation principal.</p>
+    /// <p>Retrieves the list of the data lake administrators of a Lake Formation-managed data lake. </p>
     async fn get_data_lake_settings(
         &self,
         input: GetDataLakeSettingsRequest,
     ) -> Result<GetDataLakeSettingsResponse, RusotoError<GetDataLakeSettingsError>>;
 
-    /// <p>Returns the permissions for a specified table or database resource located at a path in Amazon S3.</p>
+    /// <p>Returns the Lake Formation permissions for a specified table or database resource located at a path in Amazon S3. <code>GetEffectivePermissionsForPath</code> will not return databases and tables if the catalog is encrypted.</p>
     async fn get_effective_permissions_for_path(
         &self,
         input: GetEffectivePermissionsForPathRequest,
@@ -1207,13 +1234,13 @@ pub trait LakeFormation {
         RusotoError<GetEffectivePermissionsForPathError>,
     >;
 
-    /// <p>Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
+    /// <p>Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     async fn grant_permissions(
         &self,
         input: GrantPermissionsRequest,
     ) -> Result<GrantPermissionsResponse, RusotoError<GrantPermissionsError>>;
 
-    /// <p>Returns a list of the principal permissions on the resource, filtered by the permissions of the caller. For example, if you are granted an ALTER permission, you are able to see only the principal permissions for ALTER.</p> <p>This operation returns only those permissions that have been explicitly granted.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
+    /// <p>Returns a list of the principal permissions on the resource, filtered by the permissions of the caller. For example, if you are granted an ALTER permission, you are able to see only the principal permissions for ALTER.</p> <p>This operation returns only those permissions that have been explicitly granted.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     async fn list_permissions(
         &self,
         input: ListPermissionsRequest,
@@ -1225,13 +1252,13 @@ pub trait LakeFormation {
         input: ListResourcesRequest,
     ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>>;
 
-    /// <p>The AWS Lake Formation principal.</p>
+    /// <p>Sets the list of data lake administrators who have admin privileges on all resources managed by Lake Formation. For more information on admin privileges, see <a href="https://docs.aws.amazon.com/lake-formation/latest/dg/lake-formation-permissions.html">Granting Lake Formation Permissions</a>.</p> <p>This API replaces the current list of data lake admins with the new list being passed. To add an admin, fetch the current list and add the new admin to that list and pass that list in this API.</p>
     async fn put_data_lake_settings(
         &self,
         input: PutDataLakeSettingsRequest,
     ) -> Result<PutDataLakeSettingsResponse, RusotoError<PutDataLakeSettingsError>>;
 
-    /// <p>Registers the resource as managed by the Data Catalog.</p> <p>To add or update data, Lake Formation needs read/write access to the chosen Amazon S3 path. Choose a role that you know has permission to do this, or choose the AWSServiceRoleForLakeFormationDataAccess service-linked role. When you register the first Amazon S3 path, the service-linked role and a new inline policy are created on your behalf. Lake Formation adds the first path to the inline policy and attaches it to the service-linked role. When you register subsequent paths, Lake Formation adds the path to the existing policy.</p>
+    /// <p>Registers the resource as managed by the Data Catalog.</p> <p>To add or update data, Lake Formation needs read/write access to the chosen Amazon S3 path. Choose a role that you know has permission to do this, or choose the AWSServiceRoleForLakeFormationDataAccess service-linked role. When you register the first Amazon S3 path, the service-linked role and a new inline policy are created on your behalf. Lake Formation adds the first path to the inline policy and attaches it to the service-linked role. When you register subsequent paths, Lake Formation adds the path to the existing policy.</p> <p>The following request registers a new location and gives AWS Lake Formation permission to use the service-linked role to access that location.</p> <p> <code>ResourceArn = arn:aws:s3:::my-bucket UseServiceLinkedRole = true</code> </p> <p>If <code>UseServiceLinkedRole</code> is not set to true, you must provide or set the <code>RoleArn</code>:</p> <p> <code>arn:aws:iam::12345:role/my-data-access-role</code> </p>
     async fn register_resource(
         &self,
         input: RegisterResourceRequest,
@@ -1363,7 +1390,7 @@ impl LakeFormation for LakeFormationClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeResourceResponse, _>()
     }
 
-    /// <p>The AWS Lake Formation principal.</p>
+    /// <p>Retrieves the list of the data lake administrators of a Lake Formation-managed data lake. </p>
     async fn get_data_lake_settings(
         &self,
         input: GetDataLakeSettingsRequest,
@@ -1381,7 +1408,7 @@ impl LakeFormation for LakeFormationClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetDataLakeSettingsResponse, _>()
     }
 
-    /// <p>Returns the permissions for a specified table or database resource located at a path in Amazon S3.</p>
+    /// <p>Returns the Lake Formation permissions for a specified table or database resource located at a path in Amazon S3. <code>GetEffectivePermissionsForPath</code> will not return databases and tables if the catalog is encrypted.</p>
     async fn get_effective_permissions_for_path(
         &self,
         input: GetEffectivePermissionsForPathRequest,
@@ -1406,7 +1433,7 @@ impl LakeFormation for LakeFormationClient {
             .deserialize::<GetEffectivePermissionsForPathResponse, _>()
     }
 
-    /// <p>Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
+    /// <p>Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     async fn grant_permissions(
         &self,
         input: GrantPermissionsRequest,
@@ -1424,7 +1451,7 @@ impl LakeFormation for LakeFormationClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GrantPermissionsResponse, _>()
     }
 
-    /// <p>Returns a list of the principal permissions on the resource, filtered by the permissions of the caller. For example, if you are granted an ALTER permission, you are able to see only the principal permissions for ALTER.</p> <p>This operation returns only those permissions that have been explicitly granted.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
+    /// <p>Returns a list of the principal permissions on the resource, filtered by the permissions of the caller. For example, if you are granted an ALTER permission, you are able to see only the principal permissions for ALTER.</p> <p>This operation returns only those permissions that have been explicitly granted.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     async fn list_permissions(
         &self,
         input: ListPermissionsRequest,
@@ -1460,7 +1487,7 @@ impl LakeFormation for LakeFormationClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListResourcesResponse, _>()
     }
 
-    /// <p>The AWS Lake Formation principal.</p>
+    /// <p>Sets the list of data lake administrators who have admin privileges on all resources managed by Lake Formation. For more information on admin privileges, see <a href="https://docs.aws.amazon.com/lake-formation/latest/dg/lake-formation-permissions.html">Granting Lake Formation Permissions</a>.</p> <p>This API replaces the current list of data lake admins with the new list being passed. To add an admin, fetch the current list and add the new admin to that list and pass that list in this API.</p>
     async fn put_data_lake_settings(
         &self,
         input: PutDataLakeSettingsRequest,
@@ -1478,7 +1505,7 @@ impl LakeFormation for LakeFormationClient {
         proto::json::ResponsePayload::new(&response).deserialize::<PutDataLakeSettingsResponse, _>()
     }
 
-    /// <p>Registers the resource as managed by the Data Catalog.</p> <p>To add or update data, Lake Formation needs read/write access to the chosen Amazon S3 path. Choose a role that you know has permission to do this, or choose the AWSServiceRoleForLakeFormationDataAccess service-linked role. When you register the first Amazon S3 path, the service-linked role and a new inline policy are created on your behalf. Lake Formation adds the first path to the inline policy and attaches it to the service-linked role. When you register subsequent paths, Lake Formation adds the path to the existing policy.</p>
+    /// <p>Registers the resource as managed by the Data Catalog.</p> <p>To add or update data, Lake Formation needs read/write access to the chosen Amazon S3 path. Choose a role that you know has permission to do this, or choose the AWSServiceRoleForLakeFormationDataAccess service-linked role. When you register the first Amazon S3 path, the service-linked role and a new inline policy are created on your behalf. Lake Formation adds the first path to the inline policy and attaches it to the service-linked role. When you register subsequent paths, Lake Formation adds the path to the existing policy.</p> <p>The following request registers a new location and gives AWS Lake Formation permission to use the service-linked role to access that location.</p> <p> <code>ResourceArn = arn:aws:s3:::my-bucket UseServiceLinkedRole = true</code> </p> <p>If <code>UseServiceLinkedRole</code> is not set to true, you must provide or set the <code>RoleArn</code>:</p> <p> <code>arn:aws:iam::12345:role/my-data-access-role</code> </p>
     async fn register_resource(
         &self,
         input: RegisterResourceRequest,

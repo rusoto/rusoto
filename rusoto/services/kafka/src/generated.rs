@@ -291,6 +291,11 @@ pub struct ClusterOperationInfo {
     #[serde(rename = "OperationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_state: Option<String>,
+    /// <pre><code>        &lt;p&gt;Steps completed during the operation.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "OperationSteps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_steps: Option<Vec<ClusterOperationStep>>,
     /// <pre><code>        &lt;p&gt;Type of the cluster operation.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "OperationType")]
@@ -306,6 +311,52 @@ pub struct ClusterOperationInfo {
     #[serde(rename = "TargetClusterInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_cluster_info: Option<MutableClusterInfo>,
+}
+
+/// <pre><code>        &lt;p&gt;Step taken during a cluster operation.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ClusterOperationStep {
+    /// <pre><code>        &lt;p&gt;Information about the step and its status.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "StepInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_info: Option<ClusterOperationStepInfo>,
+    /// <pre><code>        &lt;p&gt;The name of the step.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "StepName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_name: Option<String>,
+}
+
+/// <pre><code>        &lt;p&gt;State information about the operation step.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ClusterOperationStepInfo {
+    /// <pre><code>        &lt;p&gt;The steps current status.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "StepStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_status: Option<String>,
+}
+
+/// <pre><code>        &lt;p&gt;Contains source Kafka versions and compatible target Kafka versions.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CompatibleKafkaVersion {
+    /// <pre><code>        &lt;p&gt;A Kafka version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "SourceVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_version: Option<String>,
+    /// <pre><code>        &lt;p&gt;A list of Kafka versions.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "TargetVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_versions: Option<Vec<String>>,
 }
 
 /// <pre><code>        &lt;p&gt;Represents an MSK Configuration.&lt;/p&gt;
@@ -458,7 +509,8 @@ pub struct CreateConfigurationRequest {
     /// <pre><code>        &lt;p&gt;The versions of Apache Kafka with which you can use this MSK configuration.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "KafkaVersions")]
-    pub kafka_versions: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kafka_versions: Option<Vec<String>>,
     /// <pre><code>        &lt;p&gt;The name of the configuration.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "Name")]
@@ -771,6 +823,26 @@ pub struct GetBootstrapBrokersResponse {
     pub bootstrap_broker_string_tls: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCompatibleKafkaVersionsRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster check.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetCompatibleKafkaVersionsResponse {
+    /// <pre><code>        &lt;p&gt;A list of CompatibleKafkaVersion objects.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "CompatibleKafkaVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_kafka_versions: Option<Vec<CompatibleKafkaVersion>>,
+}
+
 /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
 /// </code></pre>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1050,6 +1122,11 @@ pub struct MutableClusterInfo {
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_monitoring: Option<String>,
+    /// <pre><code>        &lt;p&gt;The Kafka version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "KafkaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kafka_version: Option<String>,
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -1354,6 +1431,43 @@ pub struct UpdateClusterConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterConfigurationResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster operation.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterOperationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_operation_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateClusterKafkaVersionRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster to be updated.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    pub cluster_arn: String,
+    /// <pre><code>        &lt;p&gt;The custom configuration that should be applied on the new version of cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ConfigurationInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_info: Option<ConfigurationInfo>,
+    /// <pre><code>        &lt;p&gt;Current cluster version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "CurrentVersion")]
+    pub current_version: String,
+    /// <pre><code>        &lt;p&gt;Target Kafka version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "TargetKafkaVersion")]
+    pub target_kafka_version: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateClusterKafkaVersionResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "ClusterArn")]
@@ -1979,6 +2093,97 @@ impl fmt::Display for GetBootstrapBrokersError {
     }
 }
 impl Error for GetBootstrapBrokersError {}
+/// Errors returned by GetCompatibleKafkaVersions
+#[derive(Debug, PartialEq)]
+pub enum GetCompatibleKafkaVersionsError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    TooManyRequests(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl GetCompatibleKafkaVersionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetCompatibleKafkaVersionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetCompatibleKafkaVersionsError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetCompatibleKafkaVersionsError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        GetCompatibleKafkaVersionsError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetCompatibleKafkaVersionsError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        GetCompatibleKafkaVersionsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetCompatibleKafkaVersionsError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetCompatibleKafkaVersionsError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetCompatibleKafkaVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCompatibleKafkaVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetCompatibleKafkaVersionsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetCompatibleKafkaVersionsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCompatibleKafkaVersionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetCompatibleKafkaVersionsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCompatibleKafkaVersionsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetCompatibleKafkaVersionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetCompatibleKafkaVersionsError {}
 /// Errors returned by ListClusterOperations
 #[derive(Debug, PartialEq)]
 pub enum ListClusterOperationsError {
@@ -2681,6 +2886,91 @@ impl fmt::Display for UpdateClusterConfigurationError {
     }
 }
 impl Error for UpdateClusterConfigurationError {}
+/// Errors returned by UpdateClusterKafkaVersion
+#[derive(Debug, PartialEq)]
+pub enum UpdateClusterKafkaVersionError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    TooManyRequests(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl UpdateClusterKafkaVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterKafkaVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateClusterKafkaVersionError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateClusterKafkaVersionError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        UpdateClusterKafkaVersionError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateClusterKafkaVersionError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        UpdateClusterKafkaVersionError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateClusterKafkaVersionError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateClusterKafkaVersionError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateClusterKafkaVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateClusterKafkaVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateClusterKafkaVersionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateClusterKafkaVersionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateClusterKafkaVersionError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateClusterKafkaVersionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateClusterKafkaVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateClusterKafkaVersionError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateClusterKafkaVersionError {}
 /// Errors returned by UpdateMonitoring
 #[derive(Debug, PartialEq)]
 pub enum UpdateMonitoringError {
@@ -2804,6 +3094,13 @@ pub trait Kafka {
         input: GetBootstrapBrokersRequest,
     ) -> Result<GetBootstrapBrokersResponse, RusotoError<GetBootstrapBrokersError>>;
 
+    /// <pre><code>        &lt;p&gt;Gets the Apache Kafka versions to which you can update the MSK cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn get_compatible_kafka_versions(
+        &self,
+        input: GetCompatibleKafkaVersionsRequest,
+    ) -> Result<GetCompatibleKafkaVersionsResponse, RusotoError<GetCompatibleKafkaVersionsError>>;
+
     /// <pre><code>        &lt;p&gt;Returns a list of all the operations that have been performed on the specified MSK cluster.&lt;/p&gt;
     /// </code></pre>
     async fn list_cluster_operations(
@@ -2887,6 +3184,13 @@ pub trait Kafka {
         &self,
         input: UpdateClusterConfigurationRequest,
     ) -> Result<UpdateClusterConfigurationResponse, RusotoError<UpdateClusterConfigurationError>>;
+
+    /// <pre><code>        &lt;p&gt;Updates the Apache Kafka version for the cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn update_cluster_kafka_version(
+        &self,
+        input: UpdateClusterKafkaVersionRequest,
+    ) -> Result<UpdateClusterKafkaVersionResponse, RusotoError<UpdateClusterKafkaVersionError>>;
 
     /// <pre><code>        &lt;p&gt;Updates the monitoring settings for the cluster. You can use this operation to specify which Apache Kafka metrics you want Amazon MSK to send to Amazon CloudWatch. You can also specify settings for open monitoring with Prometheus.&lt;/p&gt;
     /// </code></pre>
@@ -3195,6 +3499,42 @@ impl Kafka for KafkaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(GetBootstrapBrokersError::from_response(response))
+        }
+    }
+
+    /// <pre><code>        &lt;p&gt;Gets the Apache Kafka versions to which you can update the MSK cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[allow(unused_mut)]
+    async fn get_compatible_kafka_versions(
+        &self,
+        input: GetCompatibleKafkaVersionsRequest,
+    ) -> Result<GetCompatibleKafkaVersionsResponse, RusotoError<GetCompatibleKafkaVersionsError>>
+    {
+        let request_uri = "/v1/compatible-kafka-versions";
+
+        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.cluster_arn {
+            params.put("clusterArn", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetCompatibleKafkaVersionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCompatibleKafkaVersionsError::from_response(response))
         }
     }
 
@@ -3633,6 +3973,42 @@ impl Kafka for KafkaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateClusterConfigurationError::from_response(response))
+        }
+    }
+
+    /// <pre><code>        &lt;p&gt;Updates the Apache Kafka version for the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[allow(unused_mut)]
+    async fn update_cluster_kafka_version(
+        &self,
+        input: UpdateClusterKafkaVersionRequest,
+    ) -> Result<UpdateClusterKafkaVersionResponse, RusotoError<UpdateClusterKafkaVersionError>>
+    {
+        let request_uri = format!(
+            "/v1/clusters/{cluster_arn}/version",
+            cluster_arn = input.cluster_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateClusterKafkaVersionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateClusterKafkaVersionError::from_response(response))
         }
     }
 

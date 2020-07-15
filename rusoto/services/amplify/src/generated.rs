@@ -25,227 +25,231 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p> Amplify App represents different branches of a repository for building, deploying, and hosting. </p>
+/// <p> Represents the different branches of a repository for building, deploying, and hosting an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct App {
-    /// <p> ARN for the Amplify App. </p>
+    /// <p> The Amazon Resource Name (ARN) of the Amplify app. </p>
     #[serde(rename = "appArn")]
     pub app_arn: String,
-    /// <p> Unique Id for the Amplify App. </p>
+    /// <p> The unique ID of the Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Automated branch creation config for the Amplify App. </p>
+    /// <p> Describes the automated branch creation configuration for the Amplify app. </p>
     #[serde(rename = "autoBranchCreationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_config: Option<AutoBranchCreationConfig>,
-    /// <p> Automated branch creation glob patterns for the Amplify App. </p>
+    /// <p> Describes the automated branch creation glob patterns for the Amplify app. </p>
     #[serde(rename = "autoBranchCreationPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_patterns: Option<Vec<String>>,
-    /// <p> Basic Authorization credentials for branches for the Amplify App. </p>
+    /// <p> The basic authorization credentials for branches for the Amplify app. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub basic_auth_credentials: Option<String>,
-    /// <p> BuildSpec content for Amplify App. </p>
+    /// <p> Describes the content of the build specification (build spec) for the Amplify app. </p>
     #[serde(rename = "buildSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_spec: Option<String>,
-    /// <p> Create date / time for the Amplify App. </p>
+    /// <p> Creates a date and time for the Amplify app. </p>
     #[serde(rename = "createTime")]
     pub create_time: f64,
-    /// <p> Custom redirect / rewrite rules for the Amplify App. </p>
+    /// <p> Describes the custom redirect and rewrite rules for the Amplify app. </p>
     #[serde(rename = "customRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_rules: Option<Vec<CustomRule>>,
-    /// <p> Default domain for the Amplify App. </p>
+    /// <p> The default domain for the Amplify app. </p>
     #[serde(rename = "defaultDomain")]
     pub default_domain: String,
-    /// <p> Description for the Amplify App. </p>
+    /// <p> The description for the Amplify app. </p>
     #[serde(rename = "description")]
     pub description: String,
-    /// <p> Enables automated branch creation for the Amplify App. </p>
+    /// <p> Enables automated branch creation for the Amplify app. </p>
     #[serde(rename = "enableAutoBranchCreation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_branch_creation: Option<bool>,
-    /// <p> Enables Basic Authorization for branches for the Amplify App. </p>
+    /// <p> Enables basic authorization for the Amplify app's branches. </p>
     #[serde(rename = "enableBasicAuth")]
     pub enable_basic_auth: bool,
-    /// <p> Enables auto-building of branches for the Amplify App. </p>
+    /// <p> Enables the auto-building of branches for the Amplify app. </p>
     #[serde(rename = "enableBranchAutoBuild")]
     pub enable_branch_auto_build: bool,
-    /// <p> Environment Variables for the Amplify App. </p>
+    /// <p> Automatically disconnect a branch in the Amplify Console when you delete a branch from your Git repository. </p>
+    #[serde(rename = "enableBranchAutoDeletion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_branch_auto_deletion: Option<bool>,
+    /// <p> The environment variables for the Amplify app. </p>
     #[serde(rename = "environmentVariables")]
     pub environment_variables: ::std::collections::HashMap<String, String>,
-    /// <p> IAM service role ARN for the Amplify App. </p>
+    /// <p> The AWS Identity and Access Management (IAM) service role for the Amazon Resource Name (ARN) of the Amplify app. </p>
     #[serde(rename = "iamServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_service_role_arn: Option<String>,
-    /// <p> Name for the Amplify App. </p>
+    /// <p> The name for the Amplify app. </p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p> Platform for the Amplify App. </p>
+    /// <p> The platform for the Amplify app. </p>
     #[serde(rename = "platform")]
     pub platform: String,
-    /// <p> Structure with Production Branch information. </p>
+    /// <p> Describes the information about a production branch of the Amplify app. </p>
     #[serde(rename = "productionBranch")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub production_branch: Option<ProductionBranch>,
-    /// <p> Repository for the Amplify App. </p>
+    /// <p> The repository for the Amplify app. </p>
     #[serde(rename = "repository")]
     pub repository: String,
-    /// <p> Tag for Amplify App. </p>
+    /// <p> The tag for the Amplify app. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p> Update date / time for the Amplify App. </p>
+    /// <p> Updates the date and time for the Amplify app. </p>
     #[serde(rename = "updateTime")]
     pub update_time: f64,
 }
 
-/// <p> Structure for artifact. </p>
+/// <p> Describes an artifact. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Artifact {
-    /// <p> File name for the artifact. </p>
+    /// <p> The file name for the artifact. </p>
     #[serde(rename = "artifactFileName")]
     pub artifact_file_name: String,
-    /// <p> Unique Id for a artifact. </p>
+    /// <p> The unique ID for the artifact. </p>
     #[serde(rename = "artifactId")]
     pub artifact_id: String,
 }
 
-/// <p> Structure with auto branch creation config. </p>
+/// <p> Describes the automated branch creation configuration. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoBranchCreationConfig {
-    /// <p> Basic Authorization credentials for the auto created branch. </p>
+    /// <p> The basic authorization credentials for the autocreated branch. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub basic_auth_credentials: Option<String>,
-    /// <p> BuildSpec for the auto created branch. </p>
+    /// <p> The build specification (build spec) for the autocreated branch. </p>
     #[serde(rename = "buildSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_spec: Option<String>,
-    /// <p> Enables auto building for the auto created branch. </p>
+    /// <p> Enables auto building for the autocreated branch. </p>
     #[serde(rename = "enableAutoBuild")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_build: Option<bool>,
-    /// <p> Enables Basic Auth for the auto created branch. </p>
+    /// <p> Enables basic authorization for the autocreated branch. </p>
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_basic_auth: Option<bool>,
-    /// <p> Enables Pull Request Preview for auto created branch. </p>
+    /// <p> Enables pull request preview for the autocreated branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_pull_request_preview: Option<bool>,
-    /// <p> Environment Variables for the auto created branch. </p>
+    /// <p> The environment variables for the autocreated branch. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_variables: Option<::std::collections::HashMap<String, String>>,
-    /// <p> Framework for the auto created branch. </p>
+    /// <p> The framework for the autocreated branch. </p>
     #[serde(rename = "framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
-    /// <p> The Amplify Environment name for the pull request. </p>
+    /// <p> The Amplify environment name for the pull request. </p>
     #[serde(rename = "pullRequestEnvironmentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pull_request_environment_name: Option<String>,
-    /// <p> Stage for the auto created branch. </p>
+    /// <p> Describes the current stage for the autocreated branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<String>,
 }
 
-/// <p> Backend environment for an Amplify App. </p>
+/// <p> Describes the backend environment for an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackendEnvironment {
-    /// <p> Arn for a backend environment, part of an Amplify App. </p>
+    /// <p> The Amazon Resource Name (ARN) for a backend environment that is part of an Amplify app. </p>
     #[serde(rename = "backendEnvironmentArn")]
     pub backend_environment_arn: String,
-    /// <p> Creation date and time for a backend environment, part of an Amplify App. </p>
+    /// <p> The creation date and time for a backend environment that is part of an Amplify app. </p>
     #[serde(rename = "createTime")]
     pub create_time: f64,
-    /// <p> Name of deployment artifacts. </p>
+    /// <p> The name of deployment artifacts. </p>
     #[serde(rename = "deploymentArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_artifacts: Option<String>,
-    /// <p> Name for a backend environment, part of an Amplify App. </p>
+    /// <p> The name for a backend environment that is part of an Amplify app. </p>
     #[serde(rename = "environmentName")]
     pub environment_name: String,
-    /// <p> CloudFormation stack name of backend environment. </p>
+    /// <p> The AWS CloudFormation stack name of a backend environment. </p>
     #[serde(rename = "stackName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_name: Option<String>,
-    /// <p> Last updated date and time for a backend environment, part of an Amplify App. </p>
+    /// <p> The last updated date and time for a backend environment that is part of an Amplify app. </p>
     #[serde(rename = "updateTime")]
     pub update_time: f64,
 }
 
-/// <p> Branch for an Amplify App, which maps to a 3rd party repository branch. </p>
+/// <p> The branch for an Amplify app, which maps to a third-party repository branch. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Branch {
-    /// <p> Id of the active job for a branch, part of an Amplify App. </p>
+    /// <p> The ID of the active job for a branch of an Amplify app. </p>
     #[serde(rename = "activeJobId")]
     pub active_job_id: String,
-    /// <p> List of custom resources that are linked to this branch. </p>
+    /// <p> A list of custom resources that are linked to this branch. </p>
     #[serde(rename = "associatedResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub associated_resources: Option<Vec<String>>,
-    /// <p> ARN for a Backend Environment, part of an Amplify App. </p>
+    /// <p> The Amazon Resource Name (ARN) for a backend environment that is part of an Amplify app. </p>
     #[serde(rename = "backendEnvironmentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backend_environment_arn: Option<String>,
-    /// <p> Basic Authorization credentials for a branch, part of an Amplify App. </p>
+    /// <p> The basic authorization credentials for a branch of an Amplify app. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub basic_auth_credentials: Option<String>,
-    /// <p> ARN for a branch, part of an Amplify App. </p>
+    /// <p> The Amazon Resource Name (ARN) for a branch that is part of an Amplify app. </p>
     #[serde(rename = "branchArn")]
     pub branch_arn: String,
-    /// <p> Name for a branch, part of an Amplify App. </p>
+    /// <p> The name for the branch that is part of an Amplify app. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> BuildSpec content for branch for Amplify App. </p>
+    /// <p> The build specification (build spec) content for the branch of an Amplify app. </p>
     #[serde(rename = "buildSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_spec: Option<String>,
-    /// <p> Creation date and time for a branch, part of an Amplify App. </p>
+    /// <p> The creation date and time for a branch that is part of an Amplify app. </p>
     #[serde(rename = "createTime")]
     pub create_time: f64,
-    /// <p> Custom domains for a branch, part of an Amplify App. </p>
+    /// <p> The custom domains for a branch of an Amplify app. </p>
     #[serde(rename = "customDomains")]
     pub custom_domains: Vec<String>,
-    /// <p> Description for a branch, part of an Amplify App. </p>
+    /// <p> The description for the branch that is part of an Amplify app. </p>
     #[serde(rename = "description")]
     pub description: String,
     /// <p> The destination branch if the branch is a pull request branch. </p>
     #[serde(rename = "destinationBranch")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_branch: Option<String>,
-    /// <p> Display name for a branch, will use as the default domain prefix. </p>
+    /// <p> The display name for the branch. This is used as the default domain prefix. </p>
     #[serde(rename = "displayName")]
     pub display_name: String,
-    /// <p> Enables auto-building on push for a branch, part of an Amplify App. </p>
+    /// <p> Enables auto-building on push for a branch of an Amplify app. </p>
     #[serde(rename = "enableAutoBuild")]
     pub enable_auto_build: bool,
-    /// <p> Enables Basic Authorization for a branch, part of an Amplify App. </p>
+    /// <p> Enables basic authorization for a branch of an Amplify app. </p>
     #[serde(rename = "enableBasicAuth")]
     pub enable_basic_auth: bool,
-    /// <p> Enables notifications for a branch, part of an Amplify App. </p>
+    /// <p> Enables notifications for a branch that is part of an Amplify app. </p>
     #[serde(rename = "enableNotification")]
     pub enable_notification: bool,
-    /// <p> Enables Pull Request Preview for this branch. </p>
+    /// <p> Enables pull request preview for the branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     pub enable_pull_request_preview: bool,
-    /// <p> Environment Variables specific to a branch, part of an Amplify App. </p>
+    /// <p> The environment variables specific to a branch of an Amplify app. </p>
     #[serde(rename = "environmentVariables")]
     pub environment_variables: ::std::collections::HashMap<String, String>,
-    /// <p> Framework for a branch, part of an Amplify App. </p>
+    /// <p> The framework for a branch of an Amplify app. </p>
     #[serde(rename = "framework")]
     pub framework: String,
-    /// <p> The Amplify Environment name for the pull request. </p>
+    /// <p> The Amplify environment name for the pull request. </p>
     #[serde(rename = "pullRequestEnvironmentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pull_request_environment_name: Option<String>,
@@ -253,96 +257,100 @@ pub struct Branch {
     #[serde(rename = "sourceBranch")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_branch: Option<String>,
-    /// <p> Stage for a branch, part of an Amplify App. </p>
+    /// <p> The current stage for the branch that is part of an Amplify app. </p>
     #[serde(rename = "stage")]
     pub stage: String,
-    /// <p> Tag for branch for Amplify App. </p>
+    /// <p> The tag for the branch of an Amplify app. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p> Thumbnail URL for the branch. </p>
+    /// <p> The thumbnail URL for the branch of an Amplify app. </p>
     #[serde(rename = "thumbnailUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_url: Option<String>,
-    /// <p> Total number of Jobs part of an Amplify App. </p>
+    /// <p> The total number of jobs that are part of an Amplify app. </p>
     #[serde(rename = "totalNumberOfJobs")]
     pub total_number_of_jobs: String,
-    /// <p> The content TTL for the website in seconds. </p>
+    /// <p> The content Time to Live (TTL) for the website in seconds. </p>
     #[serde(rename = "ttl")]
     pub ttl: String,
-    /// <p> Last updated date and time for a branch, part of an Amplify App. </p>
+    /// <p> The last updated date and time for a branch that is part of an Amplify app. </p>
     #[serde(rename = "updateTime")]
     pub update_time: f64,
 }
 
-/// <p> Request structure used to create Apps in Amplify. </p>
+/// <p> The request structure used to create apps in Amplify. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppRequest {
-    /// <p> Personal Access token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. Token is not stored. </p>
+    /// <p> The personal access token for a third-party source control system for an Amplify app. The personal access token is used to create a webhook and a read-only deploy key. The token is not stored. </p>
     #[serde(rename = "accessToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
-    /// <p> Automated branch creation config for the Amplify App. </p>
+    /// <p> The automated branch creation configuration for the Amplify app. </p>
     #[serde(rename = "autoBranchCreationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_config: Option<AutoBranchCreationConfig>,
-    /// <p> Automated branch creation glob patterns for the Amplify App. </p>
+    /// <p> The automated branch creation glob patterns for the Amplify app. </p>
     #[serde(rename = "autoBranchCreationPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_patterns: Option<Vec<String>>,
-    /// <p> Credentials for Basic Authorization for an Amplify App. </p>
+    /// <p> The credentials for basic authorization for an Amplify app. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub basic_auth_credentials: Option<String>,
-    /// <p> BuildSpec for an Amplify App </p>
+    /// <p> The build specification (build spec) for an Amplify app. </p>
     #[serde(rename = "buildSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_spec: Option<String>,
-    /// <p> Custom rewrite / redirect rules for an Amplify App. </p>
+    /// <p> The custom rewrite and redirect rules for an Amplify app. </p>
     #[serde(rename = "customRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_rules: Option<Vec<CustomRule>>,
-    /// <p> Description for an Amplify App </p>
+    /// <p> The description for an Amplify app. </p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> Enables automated branch creation for the Amplify App. </p>
+    /// <p> Enables automated branch creation for the Amplify app. </p>
     #[serde(rename = "enableAutoBranchCreation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_branch_creation: Option<bool>,
-    /// <p> Enable Basic Authorization for an Amplify App, this will apply to all branches part of this App. </p>
+    /// <p> Enables basic authorization for an Amplify app. This will apply to all branches that are part of this app. </p>
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_basic_auth: Option<bool>,
-    /// <p> Enable the auto building of branches for an Amplify App. </p>
+    /// <p> Enables the auto building of branches for an Amplify app. </p>
     #[serde(rename = "enableBranchAutoBuild")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_branch_auto_build: Option<bool>,
-    /// <p> Environment variables map for an Amplify App. </p>
+    /// <p> Automatically disconnects a branch in the Amplify Console when you delete a branch from your Git repository. </p>
+    #[serde(rename = "enableBranchAutoDeletion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_branch_auto_deletion: Option<bool>,
+    /// <p> The environment variables map for an Amplify app. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_variables: Option<::std::collections::HashMap<String, String>>,
-    /// <p> AWS IAM service role for an Amplify App </p>
+    /// <p> The AWS Identity and Access Management (IAM) service role for an Amplify app. </p>
     #[serde(rename = "iamServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_service_role_arn: Option<String>,
-    /// <p> Name for the Amplify App </p>
+    /// <p> The name for the Amplify app. </p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p> OAuth token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. OAuth token is not stored. </p>
+    /// <p> The OAuth token for a third-party source control system for an Amplify app. The OAuth token is used to create a webhook and a read-only deploy key. The OAuth token is not stored. </p>
     #[serde(rename = "oauthToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub oauth_token: Option<String>,
-    /// <p> Platform / framework for an Amplify App </p>
+    /// <p> The platform or framework for an Amplify app. </p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
-    /// <p> Repository for an Amplify App </p>
+    /// <p> The repository for an Amplify app. </p>
     #[serde(rename = "repository")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository: Option<String>,
-    /// <p> Tag for an Amplify App </p>
+    /// <p> The tag for an Amplify app. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -355,62 +363,62 @@ pub struct CreateAppResult {
     pub app: App,
 }
 
-/// <p> Request structure for a backend environment create request. </p>
+/// <p> The request structure for the backend environment create request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackendEnvironmentRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name of deployment artifacts. </p>
+    /// <p> The name of deployment artifacts. </p>
     #[serde(rename = "deploymentArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_artifacts: Option<String>,
-    /// <p> Name for the backend environment. </p>
+    /// <p> The name for the backend environment. </p>
     #[serde(rename = "environmentName")]
     pub environment_name: String,
-    /// <p> CloudFormation stack name of backend environment. </p>
+    /// <p> The AWS CloudFormation stack name of a backend environment. </p>
     #[serde(rename = "stackName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_name: Option<String>,
 }
 
-/// <p> Result structure for create backend environment. </p>
+/// <p> The result structure for the create backend environment request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackendEnvironmentResult {
-    /// <p> Backend environment structure for an amplify App. </p>
+    /// <p> Describes the backend environment for an Amplify app. </p>
     #[serde(rename = "backendEnvironment")]
     pub backend_environment: BackendEnvironment,
 }
 
-/// <p> Request structure for a branch create request. </p>
+/// <p> The request structure for the create branch request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBranchRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> ARN for a Backend Environment, part of an Amplify App. </p>
+    /// <p> The Amazon Resource Name (ARN) for a backend environment that is part of an Amplify app. </p>
     #[serde(rename = "backendEnvironmentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backend_environment_arn: Option<String>,
-    /// <p> Basic Authorization credentials for the branch. </p>
+    /// <p> The basic authorization credentials for the branch. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub basic_auth_credentials: Option<String>,
-    /// <p> Name for the branch. </p>
+    /// <p> The name for the branch. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> BuildSpec for the branch. </p>
+    /// <p> The build specification (build spec) for the branch. </p>
     #[serde(rename = "buildSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_spec: Option<String>,
-    /// <p> Description for the branch. </p>
+    /// <p> The description for the branch. </p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> Display name for a branch, will use as the default domain prefix. </p>
+    /// <p> The display name for a branch. This is used as the default domain prefix. </p>
     #[serde(rename = "displayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
@@ -418,7 +426,7 @@ pub struct CreateBranchRequest {
     #[serde(rename = "enableAutoBuild")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_build: Option<bool>,
-    /// <p> Enables Basic Auth for the branch. </p>
+    /// <p> Enables basic authorization for the branch. </p>
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_basic_auth: Option<bool>,
@@ -426,134 +434,142 @@ pub struct CreateBranchRequest {
     #[serde(rename = "enableNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
-    /// <p> Enables Pull Request Preview for this branch. </p>
+    /// <p> Enables pull request preview for this branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_pull_request_preview: Option<bool>,
-    /// <p> Environment Variables for the branch. </p>
+    /// <p> The environment variables for the branch. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_variables: Option<::std::collections::HashMap<String, String>>,
-    /// <p> Framework for the branch. </p>
+    /// <p> The framework for the branch. </p>
     #[serde(rename = "framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
-    /// <p> The Amplify Environment name for the pull request. </p>
+    /// <p> The Amplify environment name for the pull request. </p>
     #[serde(rename = "pullRequestEnvironmentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pull_request_environment_name: Option<String>,
-    /// <p> Stage for the branch. </p>
+    /// <p> Describes the current stage for the branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<String>,
-    /// <p> Tag for the branch. </p>
+    /// <p> The tag for the branch. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p> The content TTL for the website in seconds. </p>
+    /// <p> The content Time To Live (TTL) for the website in seconds. </p>
     #[serde(rename = "ttl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ttl: Option<String>,
 }
 
-/// <p> Result structure for create branch request. </p>
+/// <p> The result structure for create branch request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBranchResult {
-    /// <p> Branch structure for an Amplify App. </p>
+    /// <p> Describes the branch for an Amplify app, which maps to a third-party repository branch. </p>
     #[serde(rename = "branch")]
     pub branch: Branch,
 }
 
-/// <p> Request structure for create a new deployment. </p>
+/// <p> The request structure for the create a new deployment request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for the branch, for the Job. </p>
+    /// <p> The name for the branch, for the job. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> Optional file map that contains file name as the key and file content md5 hash as the value. If this argument is provided, the service will generate different upload url per file. Otherwise, the service will only generate a single upload url for the zipped files. </p>
+    /// <p> An optional file map that contains the file name as the key and the file content md5 hash as the value. If this argument is provided, the service will generate a unique upload URL per file. Otherwise, the service will only generate a single upload URL for the zipped files. </p>
     #[serde(rename = "fileMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_map: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p> Result structure for create a new deployment. </p>
+/// <p> The result structure for the create a new deployment request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResult {
-    /// <p> When the fileMap argument is provided in the request, the fileUploadUrls will contain a map of file names to upload url. </p>
+    /// <p> When the <code>fileMap</code> argument is provided in the request, <code>fileUploadUrls</code> will contain a map of file names to upload URLs. </p>
     #[serde(rename = "fileUploadUrls")]
     pub file_upload_urls: ::std::collections::HashMap<String, String>,
-    /// <p> The jobId for this deployment, will supply to start deployment api. </p>
+    /// <p> The job ID for this deployment. will supply to start deployment api. </p>
     #[serde(rename = "jobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p> When the fileMap argument is NOT provided. This zipUploadUrl will be returned. </p>
+    /// <p> When the <code>fileMap</code> argument is not provided in the request, this <code>zipUploadUrl</code> is returned. </p>
     #[serde(rename = "zipUploadUrl")]
     pub zip_upload_url: String,
 }
 
-/// <p> Request structure for create Domain Association request. </p>
+/// <p> The request structure for the create domain association request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainAssociationRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Domain name for the Domain Association. </p>
+    /// <p> Sets the branch patterns for automatic subdomain creation. </p>
+    #[serde(rename = "autoSubDomainCreationPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_sub_domain_creation_patterns: Option<Vec<String>>,
+    /// <p> The required AWS Identity and Access Management (IAM) service role for the Amazon Resource Name (ARN) for automatically creating subdomains. </p>
+    #[serde(rename = "autoSubDomainIAMRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_sub_domain_iam_role: Option<String>,
+    /// <p> The domain name for the domain association. </p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p> Enables automated creation of Subdomains for branches. (Currently not supported) </p>
+    /// <p> Enables the automated creation of subdomains for branches. </p>
     #[serde(rename = "enableAutoSubDomain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_sub_domain: Option<bool>,
-    /// <p> Setting structure for the Subdomain. </p>
+    /// <p> The setting for the subdomain. </p>
     #[serde(rename = "subDomainSettings")]
     pub sub_domain_settings: Vec<SubDomainSetting>,
 }
 
-/// <p> Result structure for the create Domain Association request. </p>
+/// <p> The result structure for the create domain association request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainAssociationResult {
-    /// <p> Domain Association structure. </p>
+    /// <p> Describes the structure of a domain association, which associates a custom domain with an Amplify app. </p>
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
 }
 
-/// <p> Request structure for create webhook request. </p>
+/// <p> The request structure for the create webhook request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWebhookRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for a branch, part of an Amplify App. </p>
+    /// <p> The name for a branch that is part of an Amplify app. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> Description for a webhook. </p>
+    /// <p> The description for a webhook. </p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }
 
-/// <p> Result structure for the create webhook request. </p>
+/// <p> The result structure for the create webhook request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWebhookResult {
-    /// <p> Webhook structure. </p>
+    /// <p> Describes a webhook that connects repository events to an Amplify app. </p>
     #[serde(rename = "webhook")]
     pub webhook: Webhook,
 }
 
-/// <p> Custom rewrite / redirect rule. </p>
+/// <p> Describes a custom rewrite or redirect rule. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CustomRule {
-    /// <p> The condition for a URL rewrite or redirect rule, e.g. country code. </p>
+    /// <p> The condition for a URL rewrite or redirect rule, such as a country code. </p>
     #[serde(rename = "condition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub condition: Option<String>,
@@ -569,16 +585,16 @@ pub struct CustomRule {
     pub target: String,
 }
 
-/// <p> Request structure for an Amplify App delete request. </p>
+/// <p> Describes the request structure for the delete app request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
 }
 
-/// <p> Result structure for an Amplify App delete request. </p>
+/// <p> The result structure for the delete app request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppResult {
@@ -586,56 +602,56 @@ pub struct DeleteAppResult {
     pub app: App,
 }
 
-/// <p> Request structure for delete backend environment request. </p>
+/// <p> The request structure for the delete backend environment request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackendEnvironmentRequest {
-    /// <p> Unique Id of an Amplify App. </p>
+    /// <p> The unique ID of an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name of a backend environment of an Amplify App. </p>
+    /// <p> The name of a backend environment of an Amplify app. </p>
     #[serde(rename = "environmentName")]
     pub environment_name: String,
 }
 
-/// <p> Result structure of a delete backend environment result. </p>
+/// <p> The result structure of the delete backend environment result. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBackendEnvironmentResult {
-    /// <p> Backend environment structure for an Amplify App. </p>
+    /// <p> Describes the backend environment for an Amplify app. </p>
     #[serde(rename = "backendEnvironment")]
     pub backend_environment: BackendEnvironment,
 }
 
-/// <p> Request structure for delete branch request. </p>
+/// <p> The request structure for the delete branch request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBranchRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for the branch. </p>
+    /// <p> The name for the branch. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
 }
 
-/// <p> Result structure for delete branch request. </p>
+/// <p> The result structure for the delete branch request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBranchResult {
-    /// <p> Branch structure for an Amplify App. </p>
+    /// <p> The branch for an Amplify app, which maps to a third-party repository branch. </p>
     #[serde(rename = "branch")]
     pub branch: Branch,
 }
 
-/// <p> Request structure for the delete Domain Association request. </p>
+/// <p> The request structure for the delete domain association request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainAssociationRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique id for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name of the domain. </p>
+    /// <p> The name of the domain. </p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
@@ -647,22 +663,22 @@ pub struct DeleteDomainAssociationResult {
     pub domain_association: DomainAssociation,
 }
 
-/// <p> Request structure for delete job request. </p>
+/// <p> The request structure for the delete job request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteJobRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for the branch, for the Job. </p>
+    /// <p> The name for the branch, for the job. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> Unique Id for the Job. </p>
+    /// <p> The unique ID for the job. </p>
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
 
-/// <p> Result structure for the delete job request. </p>
+/// <p> The result structure for the delete job request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteJobResult {
@@ -670,87 +686,95 @@ pub struct DeleteJobResult {
     pub job_summary: JobSummary,
 }
 
-/// <p> Request structure for the delete webhook request. </p>
+/// <p> The request structure for the delete webhook request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWebhookRequest {
-    /// <p> Unique Id for a webhook. </p>
+    /// <p> The unique ID for a webhook. </p>
     #[serde(rename = "webhookId")]
     pub webhook_id: String,
 }
 
-/// <p> Result structure for the delete webhook request. </p>
+/// <p> The result structure for the delete webhook request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebhookResult {
-    /// <p> Webhook structure. </p>
+    /// <p> Describes a webhook that connects repository events to an Amplify app. </p>
     #[serde(rename = "webhook")]
     pub webhook: Webhook,
 }
 
-/// <p> Structure for Domain Association, which associates a custom domain with an Amplify App. </p>
+/// <p> Describes a domain association that associates a custom domain with an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainAssociation {
-    /// <p> DNS Record for certificate verification. </p>
+    /// <p> Sets branch patterns for automatic subdomain creation. </p>
+    #[serde(rename = "autoSubDomainCreationPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_sub_domain_creation_patterns: Option<Vec<String>>,
+    /// <p> The required AWS Identity and Access Management (IAM) service role for the Amazon Resource Name (ARN) for automatically creating subdomains. </p>
+    #[serde(rename = "autoSubDomainIAMRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_sub_domain_iam_role: Option<String>,
+    /// <p> The DNS record for certificate verification. </p>
     #[serde(rename = "certificateVerificationDNSRecord")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_verification_dns_record: Option<String>,
-    /// <p> ARN for the Domain Association. </p>
+    /// <p> The Amazon Resource Name (ARN) for the domain association. </p>
     #[serde(rename = "domainAssociationArn")]
     pub domain_association_arn: String,
-    /// <p> Name of the domain. </p>
+    /// <p> The name of the domain. </p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p> Status fo the Domain Association. </p>
+    /// <p> The current status of the domain association. </p>
     #[serde(rename = "domainStatus")]
     pub domain_status: String,
-    /// <p> Enables automated creation of Subdomains for branches. (Currently not supported) </p>
+    /// <p> Enables the automated creation of subdomains for branches. </p>
     #[serde(rename = "enableAutoSubDomain")]
     pub enable_auto_sub_domain: bool,
-    /// <p> Reason for the current status of the Domain Association. </p>
+    /// <p> The reason for the current status of the domain association. </p>
     #[serde(rename = "statusReason")]
     pub status_reason: String,
-    /// <p> Subdomains for the Domain Association. </p>
+    /// <p> The subdomains for the domain association. </p>
     #[serde(rename = "subDomains")]
     pub sub_domains: Vec<SubDomain>,
 }
 
-/// <p> Request structure for the generate access logs request. </p>
+/// <p> The request structure for the generate access logs request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateAccessLogsRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name of the domain. </p>
+    /// <p> The name of the domain. </p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p> The time at which the logs should end, inclusive. </p>
+    /// <p> The time at which the logs should end. The time range specified is inclusive of the end time. </p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p> The time at which the logs should start, inclusive. </p>
+    /// <p> The time at which the logs should start. The time range specified is inclusive of the start time. </p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
 }
 
-/// <p> Result structure for the generate access logs request. </p>
+/// <p> The result structure for the generate access logs request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateAccessLogsResult {
-    /// <p> Pre-signed URL for the requested access logs. </p>
+    /// <p> The pre-signed URL for the requested access logs. </p>
     #[serde(rename = "logUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_url: Option<String>,
 }
 
-/// <p> Request structure for get App request. </p>
+/// <p> The request structure for the get app request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
 }
@@ -762,56 +786,56 @@ pub struct GetAppResult {
     pub app: App,
 }
 
-/// <p> Request structure for the get artifact request. </p>
+/// <p> Returns the request structure for the get artifact request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetArtifactUrlRequest {
-    /// <p> Unique Id for a artifact. </p>
+    /// <p> The unique ID for an artifact. </p>
     #[serde(rename = "artifactId")]
     pub artifact_id: String,
 }
 
-/// <p> Result structure for the get artifact request. </p>
+/// <p> Returns the result structure for the get artifact request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetArtifactUrlResult {
-    /// <p> Unique Id for a artifact. </p>
+    /// <p> The unique ID for an artifact. </p>
     #[serde(rename = "artifactId")]
     pub artifact_id: String,
-    /// <p> Presigned url for the artifact. </p>
+    /// <p> The presigned URL for the artifact. </p>
     #[serde(rename = "artifactUrl")]
     pub artifact_url: String,
 }
 
-/// <p> Request structure for get backend environment request. </p>
+/// <p> The request structure for the get backend environment request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackendEnvironmentRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique id for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for the backend environment. </p>
+    /// <p> The name for the backend environment. </p>
     #[serde(rename = "environmentName")]
     pub environment_name: String,
 }
 
-/// <p> Result structure for get backend environment result. </p>
+/// <p> The result structure for the get backend environment result. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackendEnvironmentResult {
-    /// <p> Backend environment structure for an an Amplify App. </p>
+    /// <p> Describes the backend environment for an Amplify app. </p>
     #[serde(rename = "backendEnvironment")]
     pub backend_environment: BackendEnvironment,
 }
 
-/// <p> Request structure for get branch request. </p>
+/// <p> The request structure for the get branch request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBranchRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for the branch. </p>
+    /// <p> The name for the branch. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
 }
@@ -823,38 +847,38 @@ pub struct GetBranchResult {
     pub branch: Branch,
 }
 
-/// <p> Request structure for the get Domain Association request. </p>
+/// <p> The request structure for the get domain association request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainAssociationRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique id for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name of the domain. </p>
+    /// <p> The name of the domain. </p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
 }
 
-/// <p> Result structure for the get Domain Association request. </p>
+/// <p> The result structure for the get domain association request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainAssociationResult {
-    /// <p> Domain Association structure. </p>
+    /// <p> Describes the structure of a domain association, which associates a custom domain with an Amplify app. </p>
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
 }
 
-/// <p> Request structure for get job request. </p>
+/// <p> The request structure for the get job request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for the branch, for the Job. </p>
+    /// <p> The branch name for the job. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> Unique Id for the Job. </p>
+    /// <p> The unique ID for the job. </p>
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
@@ -866,643 +890,647 @@ pub struct GetJobResult {
     pub job: Job,
 }
 
-/// <p> Request structure for the get webhook request. </p>
+/// <p> The request structure for the get webhook request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetWebhookRequest {
-    /// <p> Unique Id for a webhook. </p>
+    /// <p> The unique ID for a webhook. </p>
     #[serde(rename = "webhookId")]
     pub webhook_id: String,
 }
 
-/// <p> Result structure for the get webhook request. </p>
+/// <p> The result structure for the get webhook request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWebhookResult {
-    /// <p> Webhook structure. </p>
+    /// <p> Describes the structure of a webhook. </p>
     #[serde(rename = "webhook")]
     pub webhook: Webhook,
 }
 
-/// <p> Structure for an execution job for an Amplify App. </p>
+/// <p> Describes an execution job for an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
-    /// <p> Execution steps for an execution job, for an Amplify App. </p>
+    /// <p> The execution steps for an execution job, for an Amplify app. </p>
     #[serde(rename = "steps")]
     pub steps: Vec<Step>,
-    /// <p> Summary for an execution job for an Amplify App. </p>
+    /// <p> Describes the summary for an execution job for an Amplify app. </p>
     #[serde(rename = "summary")]
     pub summary: JobSummary,
 }
 
-/// <p> Structure for the summary of a Job. </p>
+/// <p> Describes the summary for an execution job for an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobSummary {
-    /// <p> Commit Id from 3rd party repository provider for the Job. </p>
+    /// <p> The commit ID from a third-party repository provider for the job. </p>
     #[serde(rename = "commitId")]
     pub commit_id: String,
-    /// <p> Commit message from 3rd party repository provider for the Job. </p>
+    /// <p> The commit message from a third-party repository provider for the job. </p>
     #[serde(rename = "commitMessage")]
     pub commit_message: String,
-    /// <p> Commit date / time for the Job. </p>
+    /// <p> The commit date and time for the job. </p>
     #[serde(rename = "commitTime")]
     pub commit_time: f64,
-    /// <p> End date / time for the Job. </p>
+    /// <p> The end date and time for the job. </p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p> Arn for the Job. </p>
+    /// <p> The Amazon Resource Name (ARN) for the job. </p>
     #[serde(rename = "jobArn")]
     pub job_arn: String,
-    /// <p> Unique Id for the Job. </p>
+    /// <p> The unique ID for the job. </p>
     #[serde(rename = "jobId")]
     pub job_id: String,
-    /// <p> Type for the Job. \n "RELEASE": Manually released from source by using StartJob API. "RETRY": Manually retried by using StartJob API. "WEB_HOOK": Automatically triggered by WebHooks. </p>
+    /// <p> The type for the job. If the value is <code>RELEASE</code>, the job was manually released from its source by using the <code>StartJob</code> API. If the value is <code>RETRY</code>, the job was manually retried using the <code>StartJob</code> API. If the value is <code>WEB_HOOK</code>, the job was automatically triggered by webhooks. </p>
     #[serde(rename = "jobType")]
     pub job_type: String,
-    /// <p> Start date / time for the Job. </p>
+    /// <p> The start date and time for the job. </p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
-    /// <p> Status for the Job. </p>
+    /// <p> The current status for the job. </p>
     #[serde(rename = "status")]
     pub status: String,
 }
 
-/// <p> Request structure for an Amplify App list request. </p>
+/// <p> The request structure for the list apps request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppsRequest {
-    /// <p> Maximum number of records to list in a single response. </p>
+    /// <p> The maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
+    /// <p> A pagination token. If non-null, the pagination token is returned in a result. Pass its value in another request to retrieve more entries. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Result structure for an Amplify App list request. </p>
+/// <p> The result structure for an Amplify app list request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppsResult {
-    /// <p> List of Amplify Apps. </p>
+    /// <p> A list of Amplify apps. </p>
     #[serde(rename = "apps")]
     pub apps: Vec<App>,
-    /// <p> Pagination token. Set to null to start listing Apps from start. If non-null pagination token is returned in a result, then pass its value in here to list more projects. </p>
+    /// <p> A pagination token. Set to null to start listing apps from start. If non-null, the pagination token is returned in a result. Pass its value in here to list more projects. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Request structure for the list artifacts request. </p>
+/// <p> Describes the request structure for the list artifacts request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArtifactsRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for a branch, part of an Amplify App. </p>
+    /// <p> The name of a branch that is part of an Amplify app. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> Unique Id for an Job. </p>
+    /// <p> The unique ID for a job. </p>
     #[serde(rename = "jobId")]
     pub job_id: String,
-    /// <p> Maximum number of records to list in a single response. </p>
+    /// <p> The maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p> Pagination token. Set to null to start listing artifacts from start. If non-null pagination token is returned in a result, then pass its value in here to list more artifacts. </p>
+    /// <p> A pagination token. Set to null to start listing artifacts from start. If a non-null pagination token is returned in a result, pass its value in here to list more artifacts. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Result structure for the list artifacts request. </p>
+/// <p> The result structure for the list artifacts request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListArtifactsResult {
-    /// <p> List of artifacts. </p>
+    /// <p> A list of artifacts. </p>
     #[serde(rename = "artifacts")]
     pub artifacts: Vec<Artifact>,
-    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
+    /// <p> A pagination token. If a non-null pagination token is returned in a result, pass its value in another request to retrieve more entries. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Request structure for list backend environments request. </p>
+/// <p> The request structure for the list backend environments request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackendEnvironmentsRequest {
-    /// <p> Unique Id for an amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name of the backend environment </p>
+    /// <p> The name of the backend environment </p>
     #[serde(rename = "environmentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_name: Option<String>,
-    /// <p> Maximum number of records to list in a single response. </p>
+    /// <p> The maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p> Pagination token. Set to null to start listing backen environments from start. If a non-null pagination token is returned in a result, then pass its value in here to list more backend environments. </p>
+    /// <p> A pagination token. Set to null to start listing backend environments from the start. If a non-null pagination token is returned in a result, pass its value in here to list more backend environments. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Result structure for list backend environments result. </p>
+/// <p> The result structure for the list backend environments result. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackendEnvironmentsResult {
-    /// <p> List of backend environments for an Amplify App. </p>
+    /// <p> The list of backend environments for an Amplify app. </p>
     #[serde(rename = "backendEnvironments")]
     pub backend_environments: Vec<BackendEnvironment>,
-    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
+    /// <p> A pagination token. If a non-null pagination token is returned in a result, pass its value in another request to retrieve more entries. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Request structure for list branches request. </p>
+/// <p> The request structure for the list branches request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBranchesRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Maximum number of records to list in a single response. </p>
+    /// <p> The maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p> Pagination token. Set to null to start listing branches from start. If a non-null pagination token is returned in a result, then pass its value in here to list more branches. </p>
+    /// <p> A pagination token. Set to null to start listing branches from the start. If a non-null pagination token is returned in a result, pass its value in here to list more branches. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Result structure for list branches request. </p>
+/// <p> The result structure for the list branches request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBranchesResult {
-    /// <p> List of branches for an Amplify App. </p>
+    /// <p> A list of branches for an Amplify app. </p>
     #[serde(rename = "branches")]
     pub branches: Vec<Branch>,
-    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
+    /// <p> A pagination token. If a non-null pagination token is returned in a result, pass its value in another request to retrieve more entries. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Request structure for the list Domain Associations request. </p>
+/// <p> The request structure for the list domain associations request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainAssociationsRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Maximum number of records to list in a single response. </p>
+    /// <p> The maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p> Pagination token. Set to null to start listing Apps from start. If non-null pagination token is returned in a result, then pass its value in here to list more projects. </p>
+    /// <p> A pagination token. Set to null to start listing apps from the start. If non-null, a pagination token is returned in a result. Pass its value in here to list more projects. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Result structure for the list Domain Association request. </p>
+/// <p> The result structure for the list domain association request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainAssociationsResult {
-    /// <p> List of Domain Associations. </p>
+    /// <p> A list of domain associations. </p>
     #[serde(rename = "domainAssociations")]
     pub domain_associations: Vec<DomainAssociation>,
-    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
+    /// <p> A pagination token. If non-null, a pagination token is returned in a result. Pass its value in another request to retrieve more entries. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Request structure for list job request. </p>
+/// <p> The request structure for the list jobs request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for a branch. </p>
+    /// <p> The name for a branch. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> Maximum number of records to list in a single response. </p>
+    /// <p> The maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p> Pagination token. Set to null to start listing steps from start. If a non-null pagination token is returned in a result, then pass its value in here to list more steps. </p>
+    /// <p> A pagination token. Set to null to start listing steps from the start. If a non-null pagination token is returned in a result, pass its value in here to list more steps. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Maximum number of records to list in a single response. </p>
+/// <p> The maximum number of records to list in a single response. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResult {
-    /// <p> Result structure for list job result request. </p>
+    /// <p> The result structure for the list job result request. </p>
     #[serde(rename = "jobSummaries")]
     pub job_summaries: Vec<JobSummary>,
-    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
+    /// <p> A pagination token. If non-null the pagination token is returned in a result. Pass its value in another request to retrieve more entries. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Request structure used to list tags for resource. </p>
+/// <p> The request structure to use to list tags for a resource. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
-    /// <p> Resource arn used to list tags. </p>
+    /// <p> The Amazon Resource Name (ARN) to use to list tags. </p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
 }
 
-/// <p> Response for list tags. </p>
+/// <p> The response for the list tags for resource request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
-    /// <p> Tags result for response. </p>
+    /// <p> A list of tags for the specified The Amazon Resource Name (ARN). </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p> Request structure for the list webhooks request. </p>
+/// <p> The request structure for the list webhooks request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebhooksRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Maximum number of records to list in a single response. </p>
+    /// <p> The maximum number of records to list in a single response. </p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p> Pagination token. Set to null to start listing webhooks from start. If non-null pagination token is returned in a result, then pass its value in here to list more webhooks. </p>
+    /// <p> A pagination token. Set to null to start listing webhooks from the start. If non-null,the pagination token is returned in a result. Pass its value in here to list more webhooks. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p> Result structure for the list webhooks request. </p>
+/// <p> The result structure for the list webhooks request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebhooksResult {
-    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
+    /// <p> A pagination token. If non-null, the pagination token is returned in a result. Pass its value in another request to retrieve more entries. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p> List of webhooks. </p>
+    /// <p> A list of webhooks. </p>
     #[serde(rename = "webhooks")]
     pub webhooks: Vec<Webhook>,
 }
 
-/// <p> Structure with Production Branch information. </p>
+/// <p> Describes the information about a production branch for an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductionBranch {
-    /// <p> Branch Name for Production Branch. </p>
+    /// <p> The branch name for the production branch. </p>
     #[serde(rename = "branchName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub branch_name: Option<String>,
-    /// <p> Last Deploy Time of Production Branch. </p>
+    /// <p> The last deploy time of the production branch. </p>
     #[serde(rename = "lastDeployTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_deploy_time: Option<f64>,
-    /// <p> Status of Production Branch. </p>
+    /// <p> The status of the production branch. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p> Thumbnail URL for Production Branch. </p>
+    /// <p> The thumbnail URL for the production branch. </p>
     #[serde(rename = "thumbnailUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_url: Option<String>,
 }
 
-/// <p> Request structure for start a deployment. </p>
+/// <p> The request structure for the start a deployment request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeploymentRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for the branch, for the Job. </p>
+    /// <p> The name for the branch, for the job. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> The job id for this deployment, generated by create deployment request. </p>
+    /// <p> The job ID for this deployment, generated by the create deployment request. </p>
     #[serde(rename = "jobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p> The sourceUrl for this deployment, used when calling start deployment without create deployment. SourceUrl can be any HTTP GET url that is public accessible and downloads a single zip. </p>
+    /// <p> The source URL for this deployment, used when calling start deployment without create deployment. The source URL can be any HTTP GET URL that is publicly accessible and downloads a single .zip file. </p>
     #[serde(rename = "sourceUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_url: Option<String>,
 }
 
-/// <p> Result structure for start a deployment. </p>
+/// <p> The result structure for the start a deployment request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDeploymentResult {
-    /// <p> Summary for the Job. </p>
+    /// <p> The summary for the job. </p>
     #[serde(rename = "jobSummary")]
     pub job_summary: JobSummary,
 }
 
-/// <p> Request structure for Start job request. </p>
+/// <p> The request structure for the start job request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartJobRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for the branch, for the Job. </p>
+    /// <p> The branch name for the job. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> Commit Id from 3rd party repository provider for the Job. </p>
+    /// <p> The commit ID from a third-party repository provider for the job. </p>
     #[serde(rename = "commitId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub commit_id: Option<String>,
-    /// <p> Commit message from 3rd party repository provider for the Job. </p>
+    /// <p> The commit message from a third-party repository provider for the job. </p>
     #[serde(rename = "commitMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub commit_message: Option<String>,
-    /// <p> Commit date / time for the Job. </p>
+    /// <p> The commit date and time for the job. </p>
     #[serde(rename = "commitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub commit_time: Option<f64>,
-    /// <p> Unique Id for an existing job. Required for "RETRY" JobType. </p>
+    /// <p> The unique ID for an existing job. This is required if the value of <code>jobType</code> is <code>RETRY</code>. </p>
     #[serde(rename = "jobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p> Descriptive reason for starting this job. </p>
+    /// <p> A descriptive reason for starting this job. </p>
     #[serde(rename = "jobReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_reason: Option<String>,
-    /// <p> Type for the Job. Available JobTypes are: \n "RELEASE": Start a new job with the latest change from the specified branch. Only available for apps that have connected to a repository. "RETRY": Retry an existing job. JobId is required for this type of job. </p>
+    /// <p> Describes the type for the job. The job type <code>RELEASE</code> starts a new job with the latest change from the specified branch. This value is available only for apps that are connected to a repository. The job type <code>RETRY</code> retries an existing job. If the job type value is <code>RETRY</code>, the <code>jobId</code> is also required. </p>
     #[serde(rename = "jobType")]
     pub job_type: String,
 }
 
-/// <p> Result structure for run job request. </p>
+/// <p> The result structure for the run job request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartJobResult {
-    /// <p> Summary for the Job. </p>
+    /// <p> The summary for the job. </p>
     #[serde(rename = "jobSummary")]
     pub job_summary: JobSummary,
 }
 
-/// <p> Structure for an execution step for an execution job, for an Amplify App. </p>
+/// <p> Describes an execution step, for an execution job, for an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Step {
-    /// <p> URL to the artifact for the execution step. </p>
+    /// <p> The URL to the artifact for the execution step. </p>
     #[serde(rename = "artifactsUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifacts_url: Option<String>,
-    /// <p> The context for current step, will include build image if step is build. </p>
+    /// <p> The context for the current step. Includes a build image if the step is build. </p>
     #[serde(rename = "context")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<String>,
-    /// <p> End date/ time of the execution step. </p>
+    /// <p> The end date and time of the execution step. </p>
     #[serde(rename = "endTime")]
     pub end_time: f64,
-    /// <p> URL to the logs for the execution step. </p>
+    /// <p> The URL to the logs for the execution step. </p>
     #[serde(rename = "logUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_url: Option<String>,
-    /// <p> List of screenshot URLs for the execution step, if relevant. </p>
+    /// <p> The list of screenshot URLs for the execution step, if relevant. </p>
     #[serde(rename = "screenshots")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub screenshots: Option<::std::collections::HashMap<String, String>>,
-    /// <p> Start date/ time of the execution step. </p>
+    /// <p> The start date and time of the execution step. </p>
     #[serde(rename = "startTime")]
     pub start_time: f64,
-    /// <p> Status of the execution step. </p>
+    /// <p> The status of the execution step. </p>
     #[serde(rename = "status")]
     pub status: String,
-    /// <p> The reason for current step status. </p>
+    /// <p> The reason for the current step status. </p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<String>,
-    /// <p> Name of the execution step. </p>
+    /// <p> The name of the execution step. </p>
     #[serde(rename = "stepName")]
     pub step_name: String,
-    /// <p> URL to the test artifact for the execution step. </p>
+    /// <p> The URL to the test artifact for the execution step. </p>
     #[serde(rename = "testArtifactsUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub test_artifacts_url: Option<String>,
-    /// <p> URL to the test config for the execution step. </p>
+    /// <p> The URL to the test configuration for the execution step. </p>
     #[serde(rename = "testConfigUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub test_config_url: Option<String>,
 }
 
-/// <p> Request structure for stop job request. </p>
+/// <p> The request structure for the stop job request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopJobRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name for the branch, for the Job. </p>
+    /// <p> The name for the branch, for the job. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> Unique Id for the Job. </p>
+    /// <p> The unique id for the job. </p>
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
 
-/// <p> Result structure for the stop job request. </p>
+/// <p> The result structure for the stop job request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopJobResult {
-    /// <p> Summary for the Job. </p>
+    /// <p> The summary for the job. </p>
     #[serde(rename = "jobSummary")]
     pub job_summary: JobSummary,
 }
 
-/// <p> Subdomain for the Domain Association. </p>
+/// <p> The subdomain for the domain association. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubDomain {
-    /// <p> DNS record for the Subdomain. </p>
+    /// <p> The DNS record for the subdomain. </p>
     #[serde(rename = "dnsRecord")]
     pub dns_record: String,
-    /// <p> Setting structure for the Subdomain. </p>
+    /// <p> Describes the settings for the subdomain. </p>
     #[serde(rename = "subDomainSetting")]
     pub sub_domain_setting: SubDomainSetting,
-    /// <p> Verified status of the Subdomain </p>
+    /// <p> The verified status of the subdomain </p>
     #[serde(rename = "verified")]
     pub verified: bool,
 }
 
-/// <p> Setting for the Subdomain. </p>
+/// <p> Describes the settings for the subdomain. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SubDomainSetting {
-    /// <p> Branch name setting for the Subdomain. </p>
+    /// <p> The branch name setting for the subdomain. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> Prefix setting for the Subdomain. </p>
+    /// <p> The prefix setting for the subdomain. </p>
     #[serde(rename = "prefix")]
     pub prefix: String,
 }
 
-/// <p> Request structure used to tag resource. </p>
+/// <p> The request structure to tag a resource with a tag key and value. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
-    /// <p> Resource arn used to tag resource. </p>
+    /// <p> The Amazon Resource Name (ARN) to use to tag a resource. </p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p> Tags used to tag resource. </p>
+    /// <p> The tags used to tag the resource. </p>
     #[serde(rename = "tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-/// <p> Response for tag resource. </p>
+/// <p> The response for the tag resource request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-/// <p> Request structure used to untag resource. </p>
+/// <p> The request structure for the untag resource request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
-    /// <p> Resource arn used to untag resource. </p>
+    /// <p> The Amazon Resource Name (ARN) to use to untag a resource. </p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p> Tag keys used to untag resource. </p>
+    /// <p> The tag keys to use to untag a resource. </p>
     #[serde(rename = "tagKeys")]
     pub tag_keys: Vec<String>,
 }
 
-/// <p> Response for untag resource. </p>
+/// <p> The response for the untag resource request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-/// <p> Request structure for update App request. </p>
+/// <p> The request structure for the update app request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppRequest {
-    /// <p> Personal Access token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. Token is not stored. </p>
+    /// <p> The personal access token for a third-party source control system for an Amplify app. The token is used to create webhook and a read-only deploy key. The token is not stored. </p>
     #[serde(rename = "accessToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Automated branch creation branchConfig for the Amplify App. </p>
+    /// <p> The automated branch creation configuration for the Amplify app. </p>
     #[serde(rename = "autoBranchCreationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_config: Option<AutoBranchCreationConfig>,
-    /// <p> Automated branch creation glob patterns for the Amplify App. </p>
+    /// <p> Describes the automated branch creation glob patterns for the Amplify app. </p>
     #[serde(rename = "autoBranchCreationPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_branch_creation_patterns: Option<Vec<String>>,
-    /// <p> Basic Authorization credentials for an Amplify App. </p>
+    /// <p> The basic authorization credentials for an Amplify app. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub basic_auth_credentials: Option<String>,
-    /// <p> BuildSpec for an Amplify App. </p>
+    /// <p> The build specification (build spec) for an Amplify app. </p>
     #[serde(rename = "buildSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_spec: Option<String>,
-    /// <p> Custom redirect / rewrite rules for an Amplify App. </p>
+    /// <p> The custom redirect and rewrite rules for an Amplify app. </p>
     #[serde(rename = "customRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_rules: Option<Vec<CustomRule>>,
-    /// <p> Description for an Amplify App. </p>
+    /// <p> The description for an Amplify app. </p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> Enables automated branch creation for the Amplify App. </p>
+    /// <p> Enables automated branch creation for the Amplify app. </p>
     #[serde(rename = "enableAutoBranchCreation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_branch_creation: Option<bool>,
-    /// <p> Enables Basic Authorization for an Amplify App. </p>
+    /// <p> Enables basic authorization for an Amplify app. </p>
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_basic_auth: Option<bool>,
-    /// <p> Enables branch auto-building for an Amplify App. </p>
+    /// <p> Enables branch auto-building for an Amplify app. </p>
     #[serde(rename = "enableBranchAutoBuild")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_branch_auto_build: Option<bool>,
-    /// <p> Environment Variables for an Amplify App. </p>
+    /// <p> Automatically disconnects a branch in the Amplify Console when you delete a branch from your Git repository. </p>
+    #[serde(rename = "enableBranchAutoDeletion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_branch_auto_deletion: Option<bool>,
+    /// <p> The environment variables for an Amplify app. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_variables: Option<::std::collections::HashMap<String, String>>,
-    /// <p> IAM service role for an Amplify App. </p>
+    /// <p> The AWS Identity and Access Management (IAM) service role for an Amplify app. </p>
     #[serde(rename = "iamServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_service_role_arn: Option<String>,
-    /// <p> Name for an Amplify App. </p>
+    /// <p> The name for an Amplify app. </p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p> OAuth token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. OAuth token is not stored. </p>
+    /// <p> The OAuth token for a third-party source control system for an Amplify app. The token is used to create a webhook and a read-only deploy key. The OAuth token is not stored. </p>
     #[serde(rename = "oauthToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub oauth_token: Option<String>,
-    /// <p> Platform for an Amplify App. </p>
+    /// <p> The platform for an Amplify app. </p>
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
-    /// <p> Repository for an Amplify App </p>
+    /// <p> The name of the repository for an Amplify app </p>
     #[serde(rename = "repository")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository: Option<String>,
 }
 
-/// <p> Result structure for an Amplify App update request. </p>
+/// <p> The result structure for an Amplify app update request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppResult {
-    /// <p> App structure for the updated App. </p>
+    /// <p> Represents the updated Amplify app. </p>
     #[serde(rename = "app")]
     pub app: App,
 }
 
-/// <p> Request structure for update branch request. </p>
+/// <p> The request structure for the update branch request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBranchRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> ARN for a Backend Environment, part of an Amplify App. </p>
+    /// <p> The Amazon Resource Name (ARN) for a backend environment that is part of an Amplify app. </p>
     #[serde(rename = "backendEnvironmentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backend_environment_arn: Option<String>,
-    /// <p> Basic Authorization credentials for the branch. </p>
+    /// <p> The basic authorization credentials for the branch. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub basic_auth_credentials: Option<String>,
-    /// <p> Name for the branch. </p>
+    /// <p> The name for the branch. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> BuildSpec for the branch. </p>
+    /// <p> The build specification (build spec) for the branch. </p>
     #[serde(rename = "buildSpec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_spec: Option<String>,
-    /// <p> Description for the branch. </p>
+    /// <p> The description for the branch. </p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> Display name for a branch, will use as the default domain prefix. </p>
+    /// <p> The display name for a branch. This is used as the default domain prefix. </p>
     #[serde(rename = "displayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
@@ -1510,7 +1538,7 @@ pub struct UpdateBranchRequest {
     #[serde(rename = "enableAutoBuild")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_build: Option<bool>,
-    /// <p> Enables Basic Auth for the branch. </p>
+    /// <p> Enables basic authorization for the branch. </p>
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_basic_auth: Option<bool>,
@@ -1518,118 +1546,126 @@ pub struct UpdateBranchRequest {
     #[serde(rename = "enableNotification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_notification: Option<bool>,
-    /// <p> Enables Pull Request Preview for this branch. </p>
+    /// <p> Enables pull request preview for this branch. </p>
     #[serde(rename = "enablePullRequestPreview")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_pull_request_preview: Option<bool>,
-    /// <p> Environment Variables for the branch. </p>
+    /// <p> The environment variables for the branch. </p>
     #[serde(rename = "environmentVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_variables: Option<::std::collections::HashMap<String, String>>,
-    /// <p> Framework for the branch. </p>
+    /// <p> The framework for the branch. </p>
     #[serde(rename = "framework")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
-    /// <p> The Amplify Environment name for the pull request. </p>
+    /// <p> The Amplify environment name for the pull request. </p>
     #[serde(rename = "pullRequestEnvironmentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pull_request_environment_name: Option<String>,
-    /// <p> Stage for the branch. </p>
+    /// <p> Describes the current stage for the branch. </p>
     #[serde(rename = "stage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<String>,
-    /// <p> The content TTL for the website in seconds. </p>
+    /// <p> The content Time to Live (TTL) for the website in seconds. </p>
     #[serde(rename = "ttl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ttl: Option<String>,
 }
 
-/// <p> Result structure for update branch request. </p>
+/// <p> The result structure for the update branch request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBranchResult {
-    /// <p> Branch structure for an Amplify App. </p>
+    /// <p> The branch for an Amplify app, which maps to a third-party repository branch. </p>
     #[serde(rename = "branch")]
     pub branch: Branch,
 }
 
-/// <p> Request structure for update Domain Association request. </p>
+/// <p> The request structure for the update domain association request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainAssociationRequest {
-    /// <p> Unique Id for an Amplify App. </p>
+    /// <p> The unique ID for an Amplify app. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
-    /// <p> Name of the domain. </p>
+    /// <p> Sets the branch patterns for automatic subdomain creation. </p>
+    #[serde(rename = "autoSubDomainCreationPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_sub_domain_creation_patterns: Option<Vec<String>>,
+    /// <p> The required AWS Identity and Access Management (IAM) service role for the Amazon Resource Name (ARN) for automatically creating subdomains. </p>
+    #[serde(rename = "autoSubDomainIAMRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_sub_domain_iam_role: Option<String>,
+    /// <p> The name of the domain. </p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p> Enables automated creation of Subdomains for branches. (Currently not supported) </p>
+    /// <p> Enables the automated creation of subdomains for branches. </p>
     #[serde(rename = "enableAutoSubDomain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_auto_sub_domain: Option<bool>,
-    /// <p> Setting structure for the Subdomain. </p>
+    /// <p> Describes the settings for the subdomain. </p>
     #[serde(rename = "subDomainSettings")]
     pub sub_domain_settings: Vec<SubDomainSetting>,
 }
 
-/// <p> Result structure for the update Domain Association request. </p>
+/// <p> The result structure for the update domain association request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainAssociationResult {
-    /// <p> Domain Association structure. </p>
+    /// <p> Describes a domain association, which associates a custom domain with an Amplify app. </p>
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
 }
 
-/// <p> Request structure for update webhook request. </p>
+/// <p> The request structure for the update webhook request. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWebhookRequest {
-    /// <p> Name for a branch, part of an Amplify App. </p>
+    /// <p> The name for a branch that is part of an Amplify app. </p>
     #[serde(rename = "branchName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub branch_name: Option<String>,
-    /// <p> Description for a webhook. </p>
+    /// <p> The description for a webhook. </p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> Unique Id for a webhook. </p>
+    /// <p> The unique ID for a webhook. </p>
     #[serde(rename = "webhookId")]
     pub webhook_id: String,
 }
 
-/// <p> Result structure for the update webhook request. </p>
+/// <p> The result structure for the update webhook request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWebhookResult {
-    /// <p> Webhook structure. </p>
+    /// <p> Describes a webhook that connects repository events to an Amplify app. </p>
     #[serde(rename = "webhook")]
     pub webhook: Webhook,
 }
 
-/// <p> Structure for webhook, which associates a webhook with an Amplify App. </p>
+/// <p> Describes a webhook that connects repository events to an Amplify app. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Webhook {
-    /// <p> Name for a branch, part of an Amplify App. </p>
+    /// <p> The name for a branch that is part of an Amplify app. </p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
-    /// <p> Create date / time for a webhook. </p>
+    /// <p> The create date and time for a webhook. </p>
     #[serde(rename = "createTime")]
     pub create_time: f64,
-    /// <p> Description for a webhook. </p>
+    /// <p> The description for a webhook. </p>
     #[serde(rename = "description")]
     pub description: String,
-    /// <p> Update date / time for a webhook. </p>
+    /// <p> Updates the date and time for a webhook. </p>
     #[serde(rename = "updateTime")]
     pub update_time: f64,
-    /// <p> ARN for the webhook. </p>
+    /// <p> The Amazon Resource Name (ARN) for the webhook. </p>
     #[serde(rename = "webhookArn")]
     pub webhook_arn: String,
-    /// <p> Id of the webhook. </p>
+    /// <p> The ID of the webhook. </p>
     #[serde(rename = "webhookId")]
     pub webhook_id: String,
-    /// <p> Url of the webhook. </p>
+    /// <p> The URL of the webhook. </p>
     #[serde(rename = "webhookUrl")]
     pub webhook_url: String,
 }
@@ -1637,15 +1673,15 @@ pub struct Webhook {
 /// Errors returned by CreateApp
 #[derive(Debug, PartialEq)]
 pub enum CreateAppError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -1691,15 +1727,15 @@ impl Error for CreateAppError {}
 /// Errors returned by CreateBackendEnvironment
 #[derive(Debug, PartialEq)]
 pub enum CreateBackendEnvironmentError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -1751,17 +1787,17 @@ impl Error for CreateBackendEnvironmentError {}
 /// Errors returned by CreateBranch
 #[derive(Debug, PartialEq)]
 pub enum CreateBranchError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -1813,13 +1849,13 @@ impl Error for CreateBranchError {}
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -1861,17 +1897,17 @@ impl Error for CreateDeploymentError {}
 /// Errors returned by CreateDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainAssociationError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -1931,17 +1967,17 @@ impl Error for CreateDomainAssociationError {}
 /// Errors returned by CreateWebhook
 #[derive(Debug, PartialEq)]
 pub enum CreateWebhookError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -1993,15 +2029,15 @@ impl Error for CreateWebhookError {}
 /// Errors returned by DeleteApp
 #[derive(Debug, PartialEq)]
 pub enum DeleteAppError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2047,15 +2083,15 @@ impl Error for DeleteAppError {}
 /// Errors returned by DeleteBackendEnvironment
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackendEnvironmentError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2109,15 +2145,15 @@ impl Error for DeleteBackendEnvironmentError {}
 /// Errors returned by DeleteBranch
 #[derive(Debug, PartialEq)]
 pub enum DeleteBranchError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2165,15 +2201,15 @@ impl Error for DeleteBranchError {}
 /// Errors returned by DeleteDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainAssociationError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2227,15 +2263,15 @@ impl Error for DeleteDomainAssociationError {}
 /// Errors returned by DeleteJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2281,15 +2317,15 @@ impl Error for DeleteJobError {}
 /// Errors returned by DeleteWebhook
 #[derive(Debug, PartialEq)]
 pub enum DeleteWebhookError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2335,13 +2371,13 @@ impl Error for DeleteWebhookError {}
 /// Errors returned by GenerateAccessLogs
 #[derive(Debug, PartialEq)]
 pub enum GenerateAccessLogsError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2383,13 +2419,13 @@ impl Error for GenerateAccessLogsError {}
 /// Errors returned by GetApp
 #[derive(Debug, PartialEq)]
 pub enum GetAppError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2429,15 +2465,15 @@ impl Error for GetAppError {}
 /// Errors returned by GetArtifactUrl
 #[derive(Debug, PartialEq)]
 pub enum GetArtifactUrlError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2483,13 +2519,13 @@ impl Error for GetArtifactUrlError {}
 /// Errors returned by GetBackendEnvironment
 #[derive(Debug, PartialEq)]
 pub enum GetBackendEnvironmentError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2533,13 +2569,13 @@ impl Error for GetBackendEnvironmentError {}
 /// Errors returned by GetBranch
 #[derive(Debug, PartialEq)]
 pub enum GetBranchError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2581,13 +2617,13 @@ impl Error for GetBranchError {}
 /// Errors returned by GetDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum GetDomainAssociationError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2631,15 +2667,15 @@ impl Error for GetDomainAssociationError {}
 /// Errors returned by GetJob
 #[derive(Debug, PartialEq)]
 pub enum GetJobError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2683,15 +2719,15 @@ impl Error for GetJobError {}
 /// Errors returned by GetWebhook
 #[derive(Debug, PartialEq)]
 pub enum GetWebhookError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2737,11 +2773,11 @@ impl Error for GetWebhookError {}
 /// Errors returned by ListApps
 #[derive(Debug, PartialEq)]
 pub enum ListAppsError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2779,13 +2815,13 @@ impl Error for ListAppsError {}
 /// Errors returned by ListArtifacts
 #[derive(Debug, PartialEq)]
 pub enum ListArtifactsError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2827,11 +2863,11 @@ impl Error for ListArtifactsError {}
 /// Errors returned by ListBackendEnvironments
 #[derive(Debug, PartialEq)]
 pub enum ListBackendEnvironmentsError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2873,11 +2909,11 @@ impl Error for ListBackendEnvironmentsError {}
 /// Errors returned by ListBranches
 #[derive(Debug, PartialEq)]
 pub enum ListBranchesError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2915,11 +2951,11 @@ impl Error for ListBranchesError {}
 /// Errors returned by ListDomainAssociations
 #[derive(Debug, PartialEq)]
 pub enum ListDomainAssociationsError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -2959,13 +2995,13 @@ impl Error for ListDomainAssociationsError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -3007,11 +3043,11 @@ impl Error for ListJobsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an operation fails due to non-existent resource. </p>
+    /// <p> An operation failed due to a non-existent resource. </p>
     ResourceNotFound(String),
 }
 
@@ -3051,13 +3087,13 @@ impl Error for ListTagsForResourceError {}
 /// Errors returned by ListWebhooks
 #[derive(Debug, PartialEq)]
 pub enum ListWebhooksError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -3099,15 +3135,15 @@ impl Error for ListWebhooksError {}
 /// Errors returned by StartDeployment
 #[derive(Debug, PartialEq)]
 pub enum StartDeploymentError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -3153,15 +3189,15 @@ impl Error for StartDeploymentError {}
 /// Errors returned by StartJob
 #[derive(Debug, PartialEq)]
 pub enum StartJobError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -3207,15 +3243,15 @@ impl Error for StartJobError {}
 /// Errors returned by StopJob
 #[derive(Debug, PartialEq)]
 pub enum StopJobError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    /// <p> A resource could not be created because service quotas were exceeded. </p>
     LimitExceeded(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -3261,11 +3297,11 @@ impl Error for StopJobError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an operation fails due to non-existent resource. </p>
+    /// <p> An operation failed due to a non-existent resource. </p>
     ResourceNotFound(String),
 }
 
@@ -3303,11 +3339,11 @@ impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an operation fails due to non-existent resource. </p>
+    /// <p> An operation failed due to a non-existent resource. </p>
     ResourceNotFound(String),
 }
 
@@ -3345,13 +3381,13 @@ impl Error for UntagResourceError {}
 /// Errors returned by UpdateApp
 #[derive(Debug, PartialEq)]
 pub enum UpdateAppError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -3393,15 +3429,15 @@ impl Error for UpdateAppError {}
 /// Errors returned by UpdateBranch
 #[derive(Debug, PartialEq)]
 pub enum UpdateBranchError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -3449,15 +3485,15 @@ impl Error for UpdateBranchError {}
 /// Errors returned by UpdateDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainAssociationError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -3511,15 +3547,15 @@ impl Error for UpdateDomainAssociationError {}
 /// Errors returned by UpdateWebhook
 #[derive(Debug, PartialEq)]
 pub enum UpdateWebhookError {
-    /// <p> Exception thrown when a request contains unexpected data. </p>
+    /// <p> A request contains unexpected data. </p>
     BadRequest(String),
-    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    /// <p> An operation failed because a dependent service threw an exception. </p>
     DependentServiceFailure(String),
-    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    /// <p> The service failed to perform an operation due to an internal issue. </p>
     InternalFailure(String),
-    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    /// <p> An entity was not found during an operation. </p>
     NotFound(String),
-    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    /// <p> An operation failed due to a lack of access. </p>
     Unauthorized(String),
 }
 
@@ -3567,67 +3603,67 @@ impl Error for UpdateWebhookError {}
 /// Trait representing the capabilities of the Amplify API. Amplify clients implement this trait.
 #[async_trait]
 pub trait Amplify {
-    /// <p> Creates a new Amplify App. </p>
+    /// <p> Creates a new Amplify app. </p>
     async fn create_app(
         &self,
         input: CreateAppRequest,
     ) -> Result<CreateAppResult, RusotoError<CreateAppError>>;
 
-    /// <p> Creates a new backend environment for an Amplify App. </p>
+    /// <p> Creates a new backend environment for an Amplify app. </p>
     async fn create_backend_environment(
         &self,
         input: CreateBackendEnvironmentRequest,
     ) -> Result<CreateBackendEnvironmentResult, RusotoError<CreateBackendEnvironmentError>>;
 
-    /// <p> Creates a new Branch for an Amplify App. </p>
+    /// <p> Creates a new branch for an Amplify app. </p>
     async fn create_branch(
         &self,
         input: CreateBranchRequest,
     ) -> Result<CreateBranchResult, RusotoError<CreateBranchError>>;
 
-    /// <p> Create a deployment for manual deploy apps. (Apps are not connected to repository) </p>
+    /// <p> Creates a deployment for a manually deployed Amplify app. Manually deployed apps are not connected to a repository. </p>
     async fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
     ) -> Result<CreateDeploymentResult, RusotoError<CreateDeploymentError>>;
 
-    /// <p> Create a new DomainAssociation on an App </p>
+    /// <p> Creates a new domain association for an Amplify app. This action associates a custom domain with the Amplify app </p>
     async fn create_domain_association(
         &self,
         input: CreateDomainAssociationRequest,
     ) -> Result<CreateDomainAssociationResult, RusotoError<CreateDomainAssociationError>>;
 
-    /// <p> Create a new webhook on an App. </p>
+    /// <p> Creates a new webhook on an Amplify app. </p>
     async fn create_webhook(
         &self,
         input: CreateWebhookRequest,
     ) -> Result<CreateWebhookResult, RusotoError<CreateWebhookError>>;
 
-    /// <p> Delete an existing Amplify App by appId. </p>
+    /// <p> Deletes an existing Amplify app specified by an app ID. </p>
     async fn delete_app(
         &self,
         input: DeleteAppRequest,
     ) -> Result<DeleteAppResult, RusotoError<DeleteAppError>>;
 
-    /// <p> Delete backend environment for an Amplify App. </p>
+    /// <p> Deletes a backend environment for an Amplify app. </p>
     async fn delete_backend_environment(
         &self,
         input: DeleteBackendEnvironmentRequest,
     ) -> Result<DeleteBackendEnvironmentResult, RusotoError<DeleteBackendEnvironmentError>>;
 
-    /// <p> Deletes a branch for an Amplify App. </p>
+    /// <p> Deletes a branch for an Amplify app. </p>
     async fn delete_branch(
         &self,
         input: DeleteBranchRequest,
     ) -> Result<DeleteBranchResult, RusotoError<DeleteBranchError>>;
 
-    /// <p> Deletes a DomainAssociation. </p>
+    /// <p> Deletes a domain association for an Amplify app. </p>
     async fn delete_domain_association(
         &self,
         input: DeleteDomainAssociationRequest,
     ) -> Result<DeleteDomainAssociationResult, RusotoError<DeleteDomainAssociationError>>;
 
-    /// <p> Delete a job, for an Amplify branch, part of Amplify App. </p>
+    /// <p> Deletes a job for a branch of an Amplify app. </p>
     async fn delete_job(
         &self,
         input: DeleteJobRequest,
@@ -3639,147 +3675,147 @@ pub trait Amplify {
         input: DeleteWebhookRequest,
     ) -> Result<DeleteWebhookResult, RusotoError<DeleteWebhookError>>;
 
-    /// <p> Retrieve website access logs for a specific time range via a pre-signed URL. </p>
+    /// <p> Returns the website access logs for a specific time range using a presigned URL. </p>
     async fn generate_access_logs(
         &self,
         input: GenerateAccessLogsRequest,
     ) -> Result<GenerateAccessLogsResult, RusotoError<GenerateAccessLogsError>>;
 
-    /// <p> Retrieves an existing Amplify App by appId. </p>
+    /// <p> Returns an existing Amplify app by appID. </p>
     async fn get_app(&self, input: GetAppRequest)
         -> Result<GetAppResult, RusotoError<GetAppError>>;
 
-    /// <p> Retrieves artifact info that corresponds to a artifactId. </p>
+    /// <p> Returns the artifact info that corresponds to an artifact id. </p>
     async fn get_artifact_url(
         &self,
         input: GetArtifactUrlRequest,
     ) -> Result<GetArtifactUrlResult, RusotoError<GetArtifactUrlError>>;
 
-    /// <p> Retrieves a backend environment for an Amplify App. </p>
+    /// <p> Returns a backend environment for an Amplify app. </p>
     async fn get_backend_environment(
         &self,
         input: GetBackendEnvironmentRequest,
     ) -> Result<GetBackendEnvironmentResult, RusotoError<GetBackendEnvironmentError>>;
 
-    /// <p> Retrieves a branch for an Amplify App. </p>
+    /// <p> Returns a branch for an Amplify app. </p>
     async fn get_branch(
         &self,
         input: GetBranchRequest,
     ) -> Result<GetBranchResult, RusotoError<GetBranchError>>;
 
-    /// <p> Retrieves domain info that corresponds to an appId and domainName. </p>
+    /// <p> Returns the domain information for an Amplify app. </p>
     async fn get_domain_association(
         &self,
         input: GetDomainAssociationRequest,
     ) -> Result<GetDomainAssociationResult, RusotoError<GetDomainAssociationError>>;
 
-    /// <p> Get a job for a branch, part of an Amplify App. </p>
+    /// <p> Returns a job for a branch of an Amplify app. </p>
     async fn get_job(&self, input: GetJobRequest)
         -> Result<GetJobResult, RusotoError<GetJobError>>;
 
-    /// <p> Retrieves webhook info that corresponds to a webhookId. </p>
+    /// <p> Returns the webhook information that corresponds to a specified webhook ID. </p>
     async fn get_webhook(
         &self,
         input: GetWebhookRequest,
     ) -> Result<GetWebhookResult, RusotoError<GetWebhookError>>;
 
-    /// <p> Lists existing Amplify Apps. </p>
+    /// <p> Returns a list of the existing Amplify apps. </p>
     async fn list_apps(
         &self,
         input: ListAppsRequest,
     ) -> Result<ListAppsResult, RusotoError<ListAppsError>>;
 
-    /// <p> List artifacts with an app, a branch, a job and an artifact type. </p>
+    /// <p> Returns a list of artifacts for a specified app, branch, and job. </p>
     async fn list_artifacts(
         &self,
         input: ListArtifactsRequest,
     ) -> Result<ListArtifactsResult, RusotoError<ListArtifactsError>>;
 
-    /// <p> Lists backend environments for an Amplify App. </p>
+    /// <p> Lists the backend environments for an Amplify app. </p>
     async fn list_backend_environments(
         &self,
         input: ListBackendEnvironmentsRequest,
     ) -> Result<ListBackendEnvironmentsResult, RusotoError<ListBackendEnvironmentsError>>;
 
-    /// <p> Lists branches for an Amplify App. </p>
+    /// <p> Lists the branches of an Amplify app. </p>
     async fn list_branches(
         &self,
         input: ListBranchesRequest,
     ) -> Result<ListBranchesResult, RusotoError<ListBranchesError>>;
 
-    /// <p> List domains with an app </p>
+    /// <p> Returns the domain associations for an Amplify app. </p>
     async fn list_domain_associations(
         &self,
         input: ListDomainAssociationsRequest,
     ) -> Result<ListDomainAssociationsResult, RusotoError<ListDomainAssociationsError>>;
 
-    /// <p> List Jobs for a branch, part of an Amplify App. </p>
+    /// <p> Lists the jobs for a branch of an Amplify app. </p>
     async fn list_jobs(
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResult, RusotoError<ListJobsError>>;
 
-    /// <p> List tags for resource. </p>
+    /// <p> Returns a list of tags for a specified Amazon Resource Name (ARN). </p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p> List webhooks with an app. </p>
+    /// <p> Returns a list of webhooks for an Amplify app. </p>
     async fn list_webhooks(
         &self,
         input: ListWebhooksRequest,
     ) -> Result<ListWebhooksResult, RusotoError<ListWebhooksError>>;
 
-    /// <p> Start a deployment for manual deploy apps. (Apps are not connected to repository) </p>
+    /// <p> Starts a deployment for a manually deployed app. Manually deployed apps are not connected to a repository. </p>
     async fn start_deployment(
         &self,
         input: StartDeploymentRequest,
     ) -> Result<StartDeploymentResult, RusotoError<StartDeploymentError>>;
 
-    /// <p> Starts a new job for a branch, part of an Amplify App. </p>
+    /// <p> Starts a new job for a branch of an Amplify app. </p>
     async fn start_job(
         &self,
         input: StartJobRequest,
     ) -> Result<StartJobResult, RusotoError<StartJobError>>;
 
-    /// <p> Stop a job that is in progress, for an Amplify branch, part of Amplify App. </p>
+    /// <p> Stops a job that is in progress for a branch of an Amplify app. </p>
     async fn stop_job(
         &self,
         input: StopJobRequest,
     ) -> Result<StopJobResult, RusotoError<StopJobError>>;
 
-    /// <p> Tag resource with tag key and value. </p>
+    /// <p> Tags the resource with a tag key and value. </p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
-    /// <p> Untag resource with resourceArn. </p>
+    /// <p> Untags a resource with a specified Amazon Resource Name (ARN). </p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
-    /// <p> Updates an existing Amplify App. </p>
+    /// <p> Updates an existing Amplify app. </p>
     async fn update_app(
         &self,
         input: UpdateAppRequest,
     ) -> Result<UpdateAppResult, RusotoError<UpdateAppError>>;
 
-    /// <p> Updates a branch for an Amplify App. </p>
+    /// <p> Updates a branch for an Amplify app. </p>
     async fn update_branch(
         &self,
         input: UpdateBranchRequest,
     ) -> Result<UpdateBranchResult, RusotoError<UpdateBranchError>>;
 
-    /// <p> Create a new DomainAssociation on an App </p>
+    /// <p> Creates a new domain association for an Amplify app.</p>
     async fn update_domain_association(
         &self,
         input: UpdateDomainAssociationRequest,
     ) -> Result<UpdateDomainAssociationResult, RusotoError<UpdateDomainAssociationError>>;
 
-    /// <p> Update a webhook. </p>
+    /// <p> Updates a webhook. </p>
     async fn update_webhook(
         &self,
         input: UpdateWebhookRequest,
@@ -3825,7 +3861,7 @@ impl AmplifyClient {
 
 #[async_trait]
 impl Amplify for AmplifyClient {
-    /// <p> Creates a new Amplify App. </p>
+    /// <p> Creates a new Amplify app. </p>
     #[allow(unused_mut)]
     async fn create_app(
         &self,
@@ -3856,7 +3892,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Creates a new backend environment for an Amplify App. </p>
+    /// <p> Creates a new backend environment for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn create_backend_environment(
         &self,
@@ -3887,7 +3923,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Creates a new Branch for an Amplify App. </p>
+    /// <p> Creates a new branch for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn create_branch(
         &self,
@@ -3918,7 +3954,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Create a deployment for manual deploy apps. (Apps are not connected to repository) </p>
+    /// <p> Creates a deployment for a manually deployed Amplify app. Manually deployed apps are not connected to a repository. </p>
     #[allow(unused_mut)]
     async fn create_deployment(
         &self,
@@ -3953,7 +3989,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Create a new DomainAssociation on an App </p>
+    /// <p> Creates a new domain association for an Amplify app. This action associates a custom domain with the Amplify app </p>
     #[allow(unused_mut)]
     async fn create_domain_association(
         &self,
@@ -3984,7 +4020,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Create a new webhook on an App. </p>
+    /// <p> Creates a new webhook on an Amplify app. </p>
     #[allow(unused_mut)]
     async fn create_webhook(
         &self,
@@ -4015,7 +4051,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Delete an existing Amplify App by appId. </p>
+    /// <p> Deletes an existing Amplify app specified by an app ID. </p>
     #[allow(unused_mut)]
     async fn delete_app(
         &self,
@@ -4043,7 +4079,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Delete backend environment for an Amplify App. </p>
+    /// <p> Deletes a backend environment for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn delete_backend_environment(
         &self,
@@ -4075,7 +4111,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Deletes a branch for an Amplify App. </p>
+    /// <p> Deletes a branch for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn delete_branch(
         &self,
@@ -4107,7 +4143,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Deletes a DomainAssociation. </p>
+    /// <p> Deletes a domain association for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn delete_domain_association(
         &self,
@@ -4139,7 +4175,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Delete a job, for an Amplify branch, part of Amplify App. </p>
+    /// <p> Deletes a job for a branch of an Amplify app. </p>
     #[allow(unused_mut)]
     async fn delete_job(
         &self,
@@ -4200,7 +4236,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Retrieve website access logs for a specific time range via a pre-signed URL. </p>
+    /// <p> Returns the website access logs for a specific time range using a presigned URL. </p>
     #[allow(unused_mut)]
     async fn generate_access_logs(
         &self,
@@ -4231,7 +4267,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Retrieves an existing Amplify App by appId. </p>
+    /// <p> Returns an existing Amplify app by appID. </p>
     #[allow(unused_mut)]
     async fn get_app(
         &self,
@@ -4259,7 +4295,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Retrieves artifact info that corresponds to a artifactId. </p>
+    /// <p> Returns the artifact info that corresponds to an artifact id. </p>
     #[allow(unused_mut)]
     async fn get_artifact_url(
         &self,
@@ -4287,7 +4323,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Retrieves a backend environment for an Amplify App. </p>
+    /// <p> Returns a backend environment for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn get_backend_environment(
         &self,
@@ -4319,7 +4355,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Retrieves a branch for an Amplify App. </p>
+    /// <p> Returns a branch for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn get_branch(
         &self,
@@ -4351,7 +4387,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Retrieves domain info that corresponds to an appId and domainName. </p>
+    /// <p> Returns the domain information for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn get_domain_association(
         &self,
@@ -4383,7 +4419,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Get a job for a branch, part of an Amplify App. </p>
+    /// <p> Returns a job for a branch of an Amplify app. </p>
     #[allow(unused_mut)]
     async fn get_job(
         &self,
@@ -4416,7 +4452,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Retrieves webhook info that corresponds to a webhookId. </p>
+    /// <p> Returns the webhook information that corresponds to a specified webhook ID. </p>
     #[allow(unused_mut)]
     async fn get_webhook(
         &self,
@@ -4444,7 +4480,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Lists existing Amplify Apps. </p>
+    /// <p> Returns a list of the existing Amplify apps. </p>
     #[allow(unused_mut)]
     async fn list_apps(
         &self,
@@ -4481,7 +4517,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> List artifacts with an app, a branch, a job and an artifact type. </p>
+    /// <p> Returns a list of artifacts for a specified app, branch, and job. </p>
     #[allow(unused_mut)]
     async fn list_artifacts(
         &self,
@@ -4523,7 +4559,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Lists backend environments for an Amplify App. </p>
+    /// <p> Lists the backend environments for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn list_backend_environments(
         &self,
@@ -4534,10 +4570,10 @@ impl Amplify for AmplifyClient {
         let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let encoded = Some(serde_json::to_vec(&input).unwrap());
-        request.set_payload(encoded);
-
         let mut params = Params::new();
+        if let Some(ref x) = input.environment_name {
+            params.put("environmentName", x);
+        }
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
         }
@@ -4563,7 +4599,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Lists branches for an Amplify App. </p>
+    /// <p> Lists the branches of an Amplify app. </p>
     #[allow(unused_mut)]
     async fn list_branches(
         &self,
@@ -4600,7 +4636,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> List domains with an app </p>
+    /// <p> Returns the domain associations for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn list_domain_associations(
         &self,
@@ -4637,7 +4673,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> List Jobs for a branch, part of an Amplify App. </p>
+    /// <p> Lists the jobs for a branch of an Amplify app. </p>
     #[allow(unused_mut)]
     async fn list_jobs(
         &self,
@@ -4678,7 +4714,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> List tags for resource. </p>
+    /// <p> Returns a list of tags for a specified Amazon Resource Name (ARN). </p>
     #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
@@ -4706,7 +4742,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> List webhooks with an app. </p>
+    /// <p> Returns a list of webhooks for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn list_webhooks(
         &self,
@@ -4743,7 +4779,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Start a deployment for manual deploy apps. (Apps are not connected to repository) </p>
+    /// <p> Starts a deployment for a manually deployed app. Manually deployed apps are not connected to a repository. </p>
     #[allow(unused_mut)]
     async fn start_deployment(
         &self,
@@ -4778,7 +4814,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Starts a new job for a branch, part of an Amplify App. </p>
+    /// <p> Starts a new job for a branch of an Amplify app. </p>
     #[allow(unused_mut)]
     async fn start_job(
         &self,
@@ -4813,7 +4849,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Stop a job that is in progress, for an Amplify branch, part of Amplify App. </p>
+    /// <p> Stops a job that is in progress for a branch of an Amplify app. </p>
     #[allow(unused_mut)]
     async fn stop_job(
         &self,
@@ -4846,7 +4882,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Tag resource with tag key and value. </p>
+    /// <p> Tags the resource with a tag key and value. </p>
     #[allow(unused_mut)]
     async fn tag_resource(
         &self,
@@ -4877,7 +4913,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Untag resource with resourceArn. </p>
+    /// <p> Untags a resource with a specified Amazon Resource Name (ARN). </p>
     #[allow(unused_mut)]
     async fn untag_resource(
         &self,
@@ -4911,7 +4947,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Updates an existing Amplify App. </p>
+    /// <p> Updates an existing Amplify app. </p>
     #[allow(unused_mut)]
     async fn update_app(
         &self,
@@ -4942,7 +4978,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Updates a branch for an Amplify App. </p>
+    /// <p> Updates a branch for an Amplify app. </p>
     #[allow(unused_mut)]
     async fn update_branch(
         &self,
@@ -4977,7 +5013,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Create a new DomainAssociation on an App </p>
+    /// <p> Creates a new domain association for an Amplify app.</p>
     #[allow(unused_mut)]
     async fn update_domain_association(
         &self,
@@ -5012,7 +5048,7 @@ impl Amplify for AmplifyClient {
         }
     }
 
-    /// <p> Update a webhook. </p>
+    /// <p> Updates a webhook. </p>
     #[allow(unused_mut)]
     async fn update_webhook(
         &self,

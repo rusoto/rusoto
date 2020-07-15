@@ -43,6 +43,20 @@ pub struct AcceptInvitationRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptInvitationResponse {}
 
+/// <p>Contains information on the current access control policies for the bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AccessControlList {
+    /// <p>A value that indicates whether public read access for the bucket is enabled through an Access Control List (ACL).</p>
+    #[serde(rename = "AllowsPublicReadAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allows_public_read_access: Option<bool>,
+    /// <p>A value that indicates whether public write access for the bucket is enabled through an Access Control List (ACL).</p>
+    #[serde(rename = "AllowsPublicWriteAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allows_public_write_access: Option<bool>,
+}
+
 /// <p>Contains information about the access keys.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -75,6 +89,16 @@ pub struct AccountDetail {
     /// <p>The email address of the member account.</p>
     #[serde(rename = "Email")]
     pub email: String,
+}
+
+/// <p>Contains information about the account level permissions on the S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AccountLevelPermissions {
+    /// <p>Describes the S3 Block Public Access settings of the bucket's parent account.</p>
+    #[serde(rename = "BlockPublicAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_public_access: Option<BlockPublicAccess>,
 }
 
 /// <p>Contains information about actions.</p>
@@ -156,6 +180,60 @@ pub struct AwsApiCallAction {
     #[serde(rename = "ServiceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_name: Option<String>,
+}
+
+/// <p>Contains information on how the bucker owner's S3 Block Public Access settings are being applied to the S3 bucket. See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">S3 Block Public Access</a> for more information. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BlockPublicAccess {
+    /// <p>Indicates if S3 Block Public Access is set to <code>BlockPublicAcls</code>.</p>
+    #[serde(rename = "BlockPublicAcls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_public_acls: Option<bool>,
+    /// <p>Indicates if S3 Block Public Access is set to <code>BlockPublicPolicy</code>.</p>
+    #[serde(rename = "BlockPublicPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_public_policy: Option<bool>,
+    /// <p>Indicates if S3 Block Public Access is set to <code>IgnorePublicAcls</code>.</p>
+    #[serde(rename = "IgnorePublicAcls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ignore_public_acls: Option<bool>,
+    /// <p>Indicates if S3 Block Public Access is set to <code>RestrictPublicBuckets</code>.</p>
+    #[serde(rename = "RestrictPublicBuckets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restrict_public_buckets: Option<bool>,
+}
+
+/// <p>Contains information about the bucket level permissions for the S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BucketLevelPermissions {
+    /// <p>Contains information on how Access Control Policies are applied to the bucket.</p>
+    #[serde(rename = "AccessControlList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_control_list: Option<AccessControlList>,
+    /// <p>Contains information on which account level S3 Block Public Access settings are applied to the S3 bucket.</p>
+    #[serde(rename = "BlockPublicAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_public_access: Option<BlockPublicAccess>,
+    /// <p>Contains information on the bucket policies for the S3 bucket.</p>
+    #[serde(rename = "BucketPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_policy: Option<BucketPolicy>,
+}
+
+/// <p>Contains information on the current bucket policies for the S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BucketPolicy {
+    /// <p>A value that indicates whether public read access for the bucket is enabled through a bucket policy.</p>
+    #[serde(rename = "AllowsPublicReadAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allows_public_read_access: Option<bool>,
+    /// <p>A value that indicates whether public write access for the bucket is enabled through a bucket policy.</p>
+    #[serde(rename = "AllowsPublicWriteAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allows_public_write_access: Option<bool>,
 }
 
 /// <p>Contains information about the city associated with the IP address.</p>
@@ -298,7 +376,7 @@ pub struct CreateIPSetRequest {
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the IPSet. For example: .</p>
+    /// <p>The URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
     /// <p>The user-friendly name to identify the IPSet.</p> <p> Allowed characters are alphanumerics, spaces, hyphens (-), and underscores (_).</p>
@@ -395,7 +473,7 @@ pub struct CreateThreatIntelSetRequest {
     /// <p>The format of the file that contains the ThreatIntelSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the ThreatIntelSet. For example: .</p>
+    /// <p>The URI of the file that contains the ThreatIntelSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
     /// <p>A user-friendly ThreatIntelSet name displayed in all findings that are generated by activity that involves IP addresses included in this ThreatIntelSet.</p>
@@ -429,6 +507,20 @@ pub struct DeclineInvitationsResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
+}
+
+/// <p>Contains information on the server side encryption method used in the S3 bucket. See <a href="https://docs.aws.amazon.com/AmazonS3/atest/dev/serv-side-encryption.html">S3 Server-Side Encryption</a> for more information.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DefaultServerSideEncryption {
+    /// <p>The type of encryption used for objects within the S3 bucket.</p>
+    #[serde(rename = "EncryptionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the KMS encryption key. Only available if the bucket <code>EncryptionType</code> is <code>aws:kms</code>.</p>
+    #[serde(rename = "KmsMasterKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -923,7 +1015,7 @@ pub struct GetIPSetResponse {
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the IPSet. For example: .</p>
+    /// <p>The URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
     /// <p>The user-friendly name for the IPSet.</p>
@@ -1006,7 +1098,7 @@ pub struct GetThreatIntelSetResponse {
     /// <p>The format of the threatIntelSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the ThreatIntelSet. For example: .</p>
+    /// <p>The URI of the file that contains the ThreatIntelSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
     /// <p>A user-friendly ThreatIntelSet name displayed in all findings that are generated by activity that involves IP addresses included in this ThreatIntelSet.</p>
@@ -1201,7 +1293,7 @@ pub struct ListFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to list.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p><p>Represents the criteria used for querying findings. Valid values include:</p> <ul> <li> <p>JSON field name</p> </li> <li> <p>accountId</p> </li> <li> <p>region</p> </li> <li> <p>confidence</p> </li> <li> <p>id</p> </li> <li> <p>resource.accessKeyDetails.accessKeyId</p> </li> <li> <p>resource.accessKeyDetails.principalId</p> </li> <li> <p>resource.accessKeyDetails.userName</p> </li> <li> <p>resource.accessKeyDetails.userType</p> </li> <li> <p>resource.instanceDetails.iamInstanceProfile.id</p> </li> <li> <p>resource.instanceDetails.imageId</p> </li> <li> <p>resource.instanceDetails.instanceId</p> </li> <li> <p>resource.instanceDetails.outpostArn</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.ipv6Addresses</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicDnsName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicIp</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.subnetId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.vpcId</p> </li> <li> <p>resource.instanceDetails.tags.key</p> </li> <li> <p>resource.instanceDetails.tags.value</p> </li> <li> <p>resource.resourceType</p> </li> <li> <p>service.action.actionType</p> </li> <li> <p>service.action.awsApiCallAction.api</p> </li> <li> <p>service.action.awsApiCallAction.callerType</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.awsApiCallAction.serviceName</p> </li> <li> <p>service.action.dnsRequestAction.domain</p> </li> <li> <p>service.action.networkConnectionAction.blocked</p> </li> <li> <p>service.action.networkConnectionAction.connectionDirection</p> </li> <li> <p>service.action.networkConnectionAction.localPortDetails.port</p> </li> <li> <p>service.action.networkConnectionAction.protocol</p> </li> <li> <p>service.action.networkConnectionAction.localIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.networkConnectionAction.remotePortDetails.port</p> </li> <li> <p>service.additionalInfo.threatListName</p> </li> <li> <p>service.archived</p> <p>When this attribute is set to &#39;true&#39;, only archived findings are listed. When it&#39;s set to &#39;false&#39;, only unarchived findings are listed. When this attribute is not set, all existing findings are listed.</p> </li> <li> <p>service.resourceRole</p> </li> <li> <p>severity</p> </li> <li> <p>type</p> </li> <li> <p>updatedAt</p> <p>Type: Timestamp in Unix Epoch millisecond format: 1486685375000</p> </li> </ul></p>
+    /// <p><p>Represents the criteria used for querying findings. Valid values include:</p> <ul> <li> <p>JSON field name</p> </li> <li> <p>accountId</p> </li> <li> <p>region</p> </li> <li> <p>confidence</p> </li> <li> <p>id</p> </li> <li> <p>resource.accessKeyDetails.accessKeyId</p> </li> <li> <p>resource.accessKeyDetails.principalId</p> </li> <li> <p>resource.accessKeyDetails.userName</p> </li> <li> <p>resource.accessKeyDetails.userType</p> </li> <li> <p>resource.instanceDetails.iamInstanceProfile.id</p> </li> <li> <p>resource.instanceDetails.imageId</p> </li> <li> <p>resource.instanceDetails.instanceId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.ipv6Addresses</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicDnsName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicIp</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.subnetId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.vpcId</p> </li> <li> <p>resource.instanceDetails.tags.key</p> </li> <li> <p>resource.instanceDetails.tags.value</p> </li> <li> <p>resource.resourceType</p> </li> <li> <p>service.action.actionType</p> </li> <li> <p>service.action.awsApiCallAction.api</p> </li> <li> <p>service.action.awsApiCallAction.callerType</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.awsApiCallAction.serviceName</p> </li> <li> <p>service.action.dnsRequestAction.domain</p> </li> <li> <p>service.action.networkConnectionAction.blocked</p> </li> <li> <p>service.action.networkConnectionAction.connectionDirection</p> </li> <li> <p>service.action.networkConnectionAction.localPortDetails.port</p> </li> <li> <p>service.action.networkConnectionAction.protocol</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.networkConnectionAction.remotePortDetails.port</p> </li> <li> <p>service.additionalInfo.threatListName</p> </li> <li> <p>service.archived</p> <p>When this attribute is set to &#39;true&#39;, only archived findings are listed. When it&#39;s set to &#39;false&#39;, only unarchived findings are listed. When this attribute is not set, all existing findings are listed.</p> </li> <li> <p>service.resourceRole</p> </li> <li> <p>severity</p> </li> <li> <p>type</p> </li> <li> <p>updatedAt</p> <p>Type: Timestamp in Unix Epoch millisecond format: 1486685375000</p> </li> </ul></p>
     #[serde(rename = "FindingCriteria")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_criteria: Option<FindingCriteria>,
@@ -1299,7 +1391,7 @@ pub struct ListMembersRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Specifies what member accounts the response includes based on their relationship status with the master account. The default value is "true". If set to "false" the response includes all existing member accounts (including members who haven't been invited yet or have been disassociated).</p>
+    /// <p>Specifies whether to only return associated members or to return all members (including members who haven't been invited yet or have been disassociated).</p>
     #[serde(rename = "OnlyAssociated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub only_associated: Option<String>,
@@ -1594,6 +1686,30 @@ pub struct Organization {
     pub org: Option<String>,
 }
 
+/// <p>Contains information on the owner of the bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Owner {
+    /// <p>The canonical user ID of the bucket owner. For information about locating your canonical user ID see <a href="https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html#FindingCanonicalId">Finding Your Account Canonical User ID.</a> </p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+}
+
+/// <p>Contains information about how permissions are configured for the S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PermissionConfiguration {
+    /// <p>Contains information about the account level permissions on the S3 bucket.</p>
+    #[serde(rename = "AccountLevelPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_level_permissions: Option<AccountLevelPermissions>,
+    /// <p>Contains information about the bucket level permissions for the S3 bucket.</p>
+    #[serde(rename = "BucketLevelPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_level_permissions: Option<BucketLevelPermissions>,
+}
+
 /// <p>Contains information about the PORT_PROBE action described in the finding.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1654,6 +1770,20 @@ pub struct ProductCode {
     pub product_type: Option<String>,
 }
 
+/// <p>Describes the public access policies that apply to the S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PublicAccess {
+    /// <p>Describes the effective permission on this bucket after factoring all attached policies.</p>
+    #[serde(rename = "EffectivePermission")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_permission: Option<String>,
+    /// <p>Contains information about how permissions are configured for the S3 bucket.</p>
+    #[serde(rename = "PermissionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permission_configuration: Option<PermissionConfiguration>,
+}
+
 /// <p>Contains information about the remote IP address of the connection.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1710,6 +1840,47 @@ pub struct Resource {
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
+    /// <p>Contains information on the S3 bucket.</p>
+    #[serde(rename = "S3BucketDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_details: Option<Vec<S3BucketDetail>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct S3BucketDetail {
+    /// <p>The Amazon Resource Name (ARN) of the S3 bucket.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time the bucket was created at.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>Describes the server side encryption method used in the S3 bucket.</p>
+    #[serde(rename = "DefaultServerSideEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_server_side_encryption: Option<DefaultServerSideEncryption>,
+    /// <p>The name of the S3 bucket.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The owner of the S3 bucket.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner: Option<Owner>,
+    /// <p>Describes the public access policies that apply to the S3 bucket.</p>
+    #[serde(rename = "PublicAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_access: Option<PublicAccess>,
+    /// <p>All tags attached to the S3 bucket</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>Describes whether the bucket is a source or destination bucket.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>Contains information about the security groups associated with the EC2 instance.</p>
@@ -1999,7 +2170,7 @@ pub struct UpdateIPSetRequest {
     /// <p>The unique ID that specifies the IPSet that you want to update.</p>
     #[serde(rename = "IpSetId")]
     pub ip_set_id: String,
-    /// <p>The updated URI of the file that contains the IPSet. For example: .</p>
+    /// <p>The updated URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -2057,7 +2228,7 @@ pub struct UpdateThreatIntelSetRequest {
     /// <p>The detectorID that specifies the GuardDuty service whose ThreatIntelSet you want to update.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The updated URI of the file that contains the ThreateIntelSet. For example: .</p>
+    /// <p>The updated URI of the file that contains the ThreateIntelSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -4423,7 +4594,7 @@ pub trait GuardDuty {
         input: ListInvitationsRequest,
     ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>;
 
-    /// <p>Lists details about associated member accounts for the current GuardDuty master account.</p>
+    /// <p>Lists details about all member accounts for the current GuardDuty master account.</p>
     async fn list_members(
         &self,
         input: ListMembersRequest,
@@ -5843,7 +6014,7 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Lists details about associated member accounts for the current GuardDuty master account.</p>
+    /// <p>Lists details about all member accounts for the current GuardDuty master account.</p>
     #[allow(unused_mut)]
     async fn list_members(
         &self,

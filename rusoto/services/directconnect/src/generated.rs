@@ -1394,6 +1394,48 @@ pub struct Lags {
     pub lags: Option<Vec<Lag>>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListVirtualInterfaceTestHistoryRequest {
+    /// <p>The BGP peers that were placed in the DOWN state during the virtual interface failover test.</p>
+    #[serde(rename = "bgpPeers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bgp_peers: Option<Vec<String>>,
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p> <p>If <code>MaxResults</code> is given a value larger than 100, only 100 results are returned.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The status of the virtual interface failover test.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The ID of the virtual interface failover test.</p>
+    #[serde(rename = "testId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_id: Option<String>,
+    /// <p>The ID of the virtual interface that was tested.</p>
+    #[serde(rename = "virtualInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_interface_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListVirtualInterfaceTestHistoryResponse {
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ID of the tested virtual interface.</p>
+    #[serde(rename = "virtualInterfaceTestHistory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_interface_test_history: Option<Vec<VirtualInterfaceTestHistory>>,
+}
+
 /// <p>Information about a Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1513,7 +1555,7 @@ pub struct NewPrivateVirtualInterface {
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_id: Option<String>,
-    /// <p>The name of the virtual interface assigned by the customer network.</p>
+    /// <p>The name of the virtual interface assigned by the customer network. The name has a maximum of 100 characters. The following are valid characters: a-z, 0-9 and a hyphen (-).</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
     /// <p>The ID of the VLAN.</p>
@@ -1552,7 +1594,7 @@ pub struct NewPrivateVirtualInterfaceAllocation {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The name of the virtual interface assigned by the customer network.</p>
+    /// <p>The name of the virtual interface assigned by the customer network. The name has a maximum of 100 characters. The following are valid characters: a-z, 0-9 and a hyphen (-).</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
     /// <p>The ID of the VLAN.</p>
@@ -1591,7 +1633,7 @@ pub struct NewPublicVirtualInterface {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The name of the virtual interface assigned by the customer network.</p>
+    /// <p>The name of the virtual interface assigned by the customer network. The name has a maximum of 100 characters. The following are valid characters: a-z, 0-9 and a hyphen (-).</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
     /// <p>The ID of the VLAN.</p>
@@ -1630,7 +1672,7 @@ pub struct NewPublicVirtualInterfaceAllocation {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The name of the virtual interface assigned by the customer network.</p>
+    /// <p>The name of the virtual interface assigned by the customer network. The name has a maximum of 100 characters. The following are valid characters: a-z, 0-9 and a hyphen (-).</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
     /// <p>The ID of the VLAN.</p>
@@ -1674,7 +1716,7 @@ pub struct NewTransitVirtualInterface {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The name of the virtual interface assigned by the customer network.</p>
+    /// <p>The name of the virtual interface assigned by the customer network. The name has a maximum of 100 characters. The following are valid characters: a-z, 0-9 and a hyphen (-).</p>
     #[serde(rename = "virtualInterfaceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_name: Option<String>,
@@ -1716,7 +1758,7 @@ pub struct NewTransitVirtualInterfaceAllocation {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The name of the virtual interface assigned by the customer network.</p>
+    /// <p>The name of the virtual interface assigned by the customer network. The name has a maximum of 100 characters. The following are valid characters: a-z, 0-9 and a hyphen (-).</p>
     #[serde(rename = "virtualInterfaceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_name: Option<String>,
@@ -1747,6 +1789,48 @@ pub struct RouteFilterPrefix {
     #[serde(rename = "cidr")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cidr: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartBgpFailoverTestRequest {
+    /// <p>The BGP peers to place in the DOWN state.</p>
+    #[serde(rename = "bgpPeers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bgp_peers: Option<Vec<String>>,
+    /// <p>The time in minutes that the virtual interface failover test will last.</p> <p>Maximum value: 180 minutes (3 hours).</p> <p>Default: 180 minutes (3 hours).</p>
+    #[serde(rename = "testDurationInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_duration_in_minutes: Option<i64>,
+    /// <p>The ID of the virtual interface you want to test.</p>
+    #[serde(rename = "virtualInterfaceId")]
+    pub virtual_interface_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartBgpFailoverTestResponse {
+    /// <p>Information about the virtual interface failover test.</p>
+    #[serde(rename = "virtualInterfaceTest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_interface_test: Option<VirtualInterfaceTestHistory>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopBgpFailoverTestRequest {
+    /// <p>The ID of the virtual interface you no longer want to test.</p>
+    #[serde(rename = "virtualInterfaceId")]
+    pub virtual_interface_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopBgpFailoverTestResponse {
+    /// <p>Information about the virtual interface failover test.</p>
+    #[serde(rename = "virtualInterfaceTest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_interface_test: Option<VirtualInterfaceTestHistory>,
 }
 
 /// <p>Information about a tag.</p>
@@ -1951,7 +2035,7 @@ pub struct VirtualInterface {
     #[serde(rename = "virtualInterfaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
-    /// <p>The name of the virtual interface assigned by the customer network.</p>
+    /// <p>The name of the virtual interface assigned by the customer network. The name has a maximum of 100 characters. The following are valid characters: a-z, 0-9 and a hyphen (-).</p>
     #[serde(rename = "virtualInterfaceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_name: Option<String>,
@@ -1967,6 +2051,44 @@ pub struct VirtualInterface {
     #[serde(rename = "vlan")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vlan: Option<i64>,
+}
+
+/// <p>Information about the virtual interface failover test.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct VirtualInterfaceTestHistory {
+    /// <p>The BGP peers that were put in the DOWN state as part of the virtual interface failover test.</p>
+    #[serde(rename = "bgpPeers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bgp_peers: Option<Vec<String>>,
+    /// <p>The time that the virtual interface moves out of the DOWN state.</p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The owner ID of the tested virtual interface.</p>
+    #[serde(rename = "ownerAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_account: Option<String>,
+    /// <p>The time that the virtual interface moves to the DOWN state.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>The status of the virtual interface failover test.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The time that the virtual interface failover test ran in minutes.</p>
+    #[serde(rename = "testDurationInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_duration_in_minutes: Option<i64>,
+    /// <p>The ID of the virtual interface failover test.</p>
+    #[serde(rename = "testId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_id: Option<String>,
+    /// <p>The ID of the tested virtual interface.</p>
+    #[serde(rename = "virtualInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_interface_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -4206,6 +4328,132 @@ impl fmt::Display for DisassociateConnectionFromLagError {
     }
 }
 impl Error for DisassociateConnectionFromLagError {}
+/// Errors returned by ListVirtualInterfaceTestHistory
+#[derive(Debug, PartialEq)]
+pub enum ListVirtualInterfaceTestHistoryError {
+    /// <p>One or more parameters are not valid.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred.</p>
+    DirectConnectServer(String),
+}
+
+impl ListVirtualInterfaceTestHistoryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListVirtualInterfaceTestHistoryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DirectConnectClientException" => {
+                    return RusotoError::Service(
+                        ListVirtualInterfaceTestHistoryError::DirectConnectClient(err.msg),
+                    )
+                }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(
+                        ListVirtualInterfaceTestHistoryError::DirectConnectServer(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListVirtualInterfaceTestHistoryError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListVirtualInterfaceTestHistoryError::DirectConnectClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListVirtualInterfaceTestHistoryError::DirectConnectServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListVirtualInterfaceTestHistoryError {}
+/// Errors returned by StartBgpFailoverTest
+#[derive(Debug, PartialEq)]
+pub enum StartBgpFailoverTestError {
+    /// <p>One or more parameters are not valid.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred.</p>
+    DirectConnectServer(String),
+}
+
+impl StartBgpFailoverTestError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartBgpFailoverTestError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DirectConnectClientException" => {
+                    return RusotoError::Service(StartBgpFailoverTestError::DirectConnectClient(
+                        err.msg,
+                    ))
+                }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(StartBgpFailoverTestError::DirectConnectServer(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartBgpFailoverTestError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartBgpFailoverTestError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            StartBgpFailoverTestError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartBgpFailoverTestError {}
+/// Errors returned by StopBgpFailoverTest
+#[derive(Debug, PartialEq)]
+pub enum StopBgpFailoverTestError {
+    /// <p>One or more parameters are not valid.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred.</p>
+    DirectConnectServer(String),
+}
+
+impl StopBgpFailoverTestError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopBgpFailoverTestError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DirectConnectClientException" => {
+                    return RusotoError::Service(StopBgpFailoverTestError::DirectConnectClient(
+                        err.msg,
+                    ))
+                }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(StopBgpFailoverTestError::DirectConnectServer(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopBgpFailoverTestError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopBgpFailoverTestError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            StopBgpFailoverTestError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopBgpFailoverTestError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -4560,7 +4808,7 @@ pub trait DirectConnect {
     async fn create_lag(&self, input: CreateLagRequest)
         -> Result<Lag, RusotoError<CreateLagError>>;
 
-    /// <p>Creates a private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface can be connected to either a Direct Connect gateway or a Virtual Private Gateway (VGW). Connecting the private virtual interface to a Direct Connect gateway enables the possibility for connecting to multiple VPCs, including VPCs in different AWS Regions. Connecting the private virtual interface to a VGW only provides access to a single VPC within the same Region.</p>
+    /// <p>Creates a private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface can be connected to either a Direct Connect gateway or a Virtual Private Gateway (VGW). Connecting the private virtual interface to a Direct Connect gateway enables the possibility for connecting to multiple VPCs, including VPCs in different AWS Regions. Connecting the private virtual interface to a VGW only provides access to a single VPC within the same Region.</p> <p>Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
     async fn create_private_virtual_interface(
         &self,
         input: CreatePrivateVirtualInterfaceRequest,
@@ -4572,7 +4820,7 @@ pub trait DirectConnect {
         input: CreatePublicVirtualInterfaceRequest,
     ) -> Result<VirtualInterface, RusotoError<CreatePublicVirtualInterfaceError>>;
 
-    /// <p><p>Creates a transit virtual interface. A transit virtual interface should be used to access one or more transit gateways associated with Direct Connect gateways. A transit virtual interface enables the connection of multiple VPCs attached to a transit gateway to a Direct Connect gateway.</p> <important> <p>If you associate your transit gateway with one or more Direct Connect gateways, the Autonomous System Number (ASN) used by the transit gateway and the Direct Connect gateway must be different. For example, if you use the default ASN 64512 for both your the transit gateway and Direct Connect gateway, the association request fails.</p> </important></p>
+    /// <p>Creates a transit virtual interface. A transit virtual interface should be used to access one or more transit gateways associated with Direct Connect gateways. A transit virtual interface enables the connection of multiple VPCs attached to a transit gateway to a Direct Connect gateway.</p> <important> <p>If you associate your transit gateway with one or more Direct Connect gateways, the Autonomous System Number (ASN) used by the transit gateway and the Direct Connect gateway must be different. For example, if you use the default ASN 64512 for both your the transit gateway and Direct Connect gateway, the association request fails.</p> </important> <p>Setting the MTU of a virtual interface to 8500 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
     async fn create_transit_virtual_interface(
         &self,
         input: CreateTransitVirtualInterfaceRequest,
@@ -4737,6 +4985,27 @@ pub trait DirectConnect {
         input: DisassociateConnectionFromLagRequest,
     ) -> Result<Connection, RusotoError<DisassociateConnectionFromLagError>>;
 
+    /// <p>Lists the virtual interface failover test history.</p>
+    async fn list_virtual_interface_test_history(
+        &self,
+        input: ListVirtualInterfaceTestHistoryRequest,
+    ) -> Result<
+        ListVirtualInterfaceTestHistoryResponse,
+        RusotoError<ListVirtualInterfaceTestHistoryError>,
+    >;
+
+    /// <p>Starts the virtual interface failover test that verifies your configuration meets your resiliency requirements by placing the BGP peering session in the DOWN state. You can then send traffic to verify that there are no outages.</p> <p>You can run the test on public, private, transit, and hosted virtual interfaces.</p> <p>You can use <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_ListVirtualInterfaceTestHistory.html">ListVirtualInterfaceTestHistory</a> to view the virtual interface test history.</p> <p>If you need to stop the test before the test interval completes, use <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_StopBgpFailoverTest.html">StopBgpFailoverTest</a>.</p>
+    async fn start_bgp_failover_test(
+        &self,
+        input: StartBgpFailoverTestRequest,
+    ) -> Result<StartBgpFailoverTestResponse, RusotoError<StartBgpFailoverTestError>>;
+
+    /// <p>Stops the virtual interface failover test.</p>
+    async fn stop_bgp_failover_test(
+        &self,
+        input: StopBgpFailoverTestRequest,
+    ) -> Result<StopBgpFailoverTestResponse, RusotoError<StopBgpFailoverTestError>>;
+
     /// <p>Adds the specified tags to the specified AWS Direct Connect resource. Each resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the resource, this action updates its value.</p>
     async fn tag_resource(
         &self,
@@ -4762,7 +5031,7 @@ pub trait DirectConnect {
     async fn update_lag(&self, input: UpdateLagRequest)
         -> Result<Lag, RusotoError<UpdateLagError>>;
 
-    /// <p>Updates the specified attributes of the specified virtual private interface.</p> <p>Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
+    /// <p>Updates the specified attributes of the specified virtual private interface.</p> <p>Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual q interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
     async fn update_virtual_interface_attributes(
         &self,
         input: UpdateVirtualInterfaceAttributesRequest,
@@ -5240,7 +5509,7 @@ impl DirectConnect for DirectConnectClient {
         proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
     }
 
-    /// <p>Creates a private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface can be connected to either a Direct Connect gateway or a Virtual Private Gateway (VGW). Connecting the private virtual interface to a Direct Connect gateway enables the possibility for connecting to multiple VPCs, including VPCs in different AWS Regions. Connecting the private virtual interface to a VGW only provides access to a single VPC within the same Region.</p>
+    /// <p>Creates a private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface can be connected to either a Direct Connect gateway or a Virtual Private Gateway (VGW). Connecting the private virtual interface to a Direct Connect gateway enables the possibility for connecting to multiple VPCs, including VPCs in different AWS Regions. Connecting the private virtual interface to a VGW only provides access to a single VPC within the same Region.</p> <p>Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
     async fn create_private_virtual_interface(
         &self,
         input: CreatePrivateVirtualInterfaceRequest,
@@ -5282,7 +5551,7 @@ impl DirectConnect for DirectConnectClient {
         proto::json::ResponsePayload::new(&response).deserialize::<VirtualInterface, _>()
     }
 
-    /// <p><p>Creates a transit virtual interface. A transit virtual interface should be used to access one or more transit gateways associated with Direct Connect gateways. A transit virtual interface enables the connection of multiple VPCs attached to a transit gateway to a Direct Connect gateway.</p> <important> <p>If you associate your transit gateway with one or more Direct Connect gateways, the Autonomous System Number (ASN) used by the transit gateway and the Direct Connect gateway must be different. For example, if you use the default ASN 64512 for both your the transit gateway and Direct Connect gateway, the association request fails.</p> </important></p>
+    /// <p>Creates a transit virtual interface. A transit virtual interface should be used to access one or more transit gateways associated with Direct Connect gateways. A transit virtual interface enables the connection of multiple VPCs attached to a transit gateway to a Direct Connect gateway.</p> <important> <p>If you associate your transit gateway with one or more Direct Connect gateways, the Autonomous System Number (ASN) used by the transit gateway and the Direct Connect gateway must be different. For example, if you use the default ASN 64512 for both your the transit gateway and Direct Connect gateway, the association request fails.</p> </important> <p>Setting the MTU of a virtual interface to 8500 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
     async fn create_transit_virtual_interface(
         &self,
         input: CreateTransitVirtualInterfaceRequest,
@@ -5818,6 +6087,68 @@ impl DirectConnect for DirectConnectClient {
         proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
     }
 
+    /// <p>Lists the virtual interface failover test history.</p>
+    async fn list_virtual_interface_test_history(
+        &self,
+        input: ListVirtualInterfaceTestHistoryRequest,
+    ) -> Result<
+        ListVirtualInterfaceTestHistoryResponse,
+        RusotoError<ListVirtualInterfaceTestHistoryError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.ListVirtualInterfaceTestHistory",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListVirtualInterfaceTestHistoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListVirtualInterfaceTestHistoryResponse, _>()
+    }
+
+    /// <p>Starts the virtual interface failover test that verifies your configuration meets your resiliency requirements by placing the BGP peering session in the DOWN state. You can then send traffic to verify that there are no outages.</p> <p>You can run the test on public, private, transit, and hosted virtual interfaces.</p> <p>You can use <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_ListVirtualInterfaceTestHistory.html">ListVirtualInterfaceTestHistory</a> to view the virtual interface test history.</p> <p>If you need to stop the test before the test interval completes, use <a href="https://docs.aws.amazon.com/directconnect/latest/APIReference/API_StopBgpFailoverTest.html">StopBgpFailoverTest</a>.</p>
+    async fn start_bgp_failover_test(
+        &self,
+        input: StartBgpFailoverTestRequest,
+    ) -> Result<StartBgpFailoverTestResponse, RusotoError<StartBgpFailoverTestError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "OvertureService.StartBgpFailoverTest");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartBgpFailoverTestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartBgpFailoverTestResponse, _>()
+    }
+
+    /// <p>Stops the virtual interface failover test.</p>
+    async fn stop_bgp_failover_test(
+        &self,
+        input: StopBgpFailoverTestRequest,
+    ) -> Result<StopBgpFailoverTestResponse, RusotoError<StopBgpFailoverTestError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "OvertureService.StopBgpFailoverTest");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StopBgpFailoverTestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopBgpFailoverTestResponse, _>()
+    }
+
     /// <p>Adds the specified tags to the specified AWS Direct Connect resource. Each resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the resource, this action updates its value.</p>
     async fn tag_resource(
         &self,
@@ -5900,7 +6231,7 @@ impl DirectConnect for DirectConnectClient {
         proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
     }
 
-    /// <p>Updates the specified attributes of the specified virtual private interface.</p> <p>Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
+    /// <p>Updates the specified attributes of the specified virtual private interface.</p> <p>Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual q interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
     async fn update_virtual_interface_attributes(
         &self,
         input: UpdateVirtualInterfaceAttributesRequest,

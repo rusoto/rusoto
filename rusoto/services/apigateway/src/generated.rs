@@ -2088,7 +2088,7 @@ pub struct ImportDocumentationPartsRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportRestApiRequest {
-    /// <p>[Required] The POST request body containing external API definitions. Currently, only OpenAPI definition JSON/YAML files are supported. The maximum size of the API definition file is 2MB.</p>
+    /// <p>[Required] The POST request body containing external API definitions. Currently, only OpenAPI definition JSON/YAML files are supported. The maximum size of the API definition file is 6MB.</p>
     #[serde(rename = "body")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -2114,7 +2114,7 @@ pub struct Integration {
     #[serde(rename = "cacheKeyParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_key_parameters: Option<Vec<String>>,
-    /// <p>An API-specific tag group of related cached parameters. To be valid values for <code>cacheKeyParameters</code>, these parameters must also be specified for <a>Method</a> <code>requestParameters</code>.</p>
+    /// <p>Specifies a group of related cached parameters. By default, API Gateway uses the resource ID as the <code>cacheNamespace</code>. You can specify the same <code>cacheNamespace</code> across resources to return the same cached data for requests to different resources.</p>
     #[serde(rename = "cacheNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_namespace: Option<String>,
@@ -2158,6 +2158,10 @@ pub struct Integration {
     #[serde(rename = "timeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+    /// <p>Specifies the TLS configuration for an integration.</p>
+    #[serde(rename = "tlsConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_config: Option<TlsConfig>,
     /// <p>Specifies an API method integration type. The valid value is one of the following:</p> <ul> <li><code>AWS</code>: for integrating the API method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</li> <li><code>AWS_PROXY</code>: for integrating the API method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as the Lambda proxy integration.</li> <li><code>HTTP</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</li> <li><code>HTTP_PROXY</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as the HTTP proxy integration.</li> <li><code>MOCK</code>: for integrating the API method request with API Gateway as a "loop-back" endpoint without invoking any backend.</li> </ul> <p>For the HTTP and HTTP proxy integrations, each integration can specify a protocol (<code>http/https</code>), port and path. Standard 80 and 443 ports are supported as well as custom ports above 1024. An HTTP or HTTP proxy integration with a <code>connectionType</code> of <code>VPC_LINK</code> is referred to as a private integration and uses a <a>VpcLink</a> to connect API Gateway to a network load balancer of a VPC.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2411,11 +2415,11 @@ pub struct PutGatewayResponseRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutIntegrationRequest {
-    /// <p>An API-specific tag group of related cached parameters.</p>
+    /// <p>A list of request parameters whose values API Gateway caches. To be valid values for <code>cacheKeyParameters</code>, these parameters must also be specified for <a>Method</a> <code>requestParameters</code>.</p>
     #[serde(rename = "cacheKeyParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_key_parameters: Option<Vec<String>>,
-    /// <p>A list of request parameters whose values are to be cached.</p>
+    /// <p>Specifies a group of related cached parameters. By default, API Gateway uses the resource ID as the <code>cacheNamespace</code>. You can specify the same <code>cacheNamespace</code> across resources to return the same cached data for requests to different resources.</p>
     #[serde(rename = "cacheNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_namespace: Option<String>,
@@ -2464,6 +2468,9 @@ pub struct PutIntegrationRequest {
     #[serde(rename = "timeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+    #[serde(rename = "tlsConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_config: Option<TlsConfig>,
     /// <p>[Required] Specifies a put integration input's type.</p>
     #[serde(rename = "type")]
     pub type_: String,
@@ -2583,7 +2590,7 @@ pub struct PutMethodResponseRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRestApiRequest {
-    /// <p>[Required] The PUT request body containing external API definitions. Currently, only OpenAPI definition JSON/YAML files are supported. The maximum size of the API definition file is 2MB.</p>
+    /// <p>[Required] The PUT request body containing external API definitions. Currently, only OpenAPI definition JSON/YAML files are supported. The maximum size of the API definition file is 6MB.</p>
     #[serde(rename = "body")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -3117,6 +3124,14 @@ pub struct ThrottleSettings {
     #[serde(rename = "rateLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rate_limit: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TlsConfig {
+    /// <p>Specifies whether or not API Gateway skips verification that the certificate for an integration endpoint is issued by a <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-supported-certificate-authorities-for-http-endpoints.html">supported certificate authority</a>. This isn’t recommended, but it enables you to use certificates that are signed by private certificate authorities, or certificates that are self-signed. If enabled, API Gateway still performs basic certificate validation, which includes checking the certificate's expiration date, hostname, and presence of a root certificate authority. Supported only for <code>HTTP</code> and <code>HTTP_PROXY</code> integrations.</p>
+    #[serde(rename = "insecureSkipVerification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insecure_skip_verification: Option<bool>,
 }
 
 /// <p>Removes a tag from a given resource.</p>

@@ -106,6 +106,10 @@ pub struct ChangeSummary {
     #[serde(rename = "ChangeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_type: Option<String>,
+    /// <p>This object contains details specific to the change type of the requested change.</p>
+    #[serde(rename = "Details")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub details: Option<String>,
     /// <p>The entity to be changed.</p>
     #[serde(rename = "Entity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -232,11 +236,11 @@ pub struct EntitySummary {
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<String>,
-    /// <p>The name for the entity. This value is not unique. It is defined by the provider.</p>
+    /// <p>The name for the entity. This value is not unique. It is defined by the seller.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The visibility status of the entity to subscribers. This value can be <code>Public</code> (everyone can view the entity), <code>Limited</code> (the entity is visible to limited accounts only), or <code>Restricted</code> (the entity was published and then unpublished and only existing subscribers can view it). </p>
+    /// <p>The visibility status of the entity to buyers. This value can be <code>Public</code> (everyone can view the entity), <code>Limited</code> (the entity is visible to limited accounts only), or <code>Restricted</code> (the entity was published and then unpublished and only existing buyers can view it). </p>
     #[serde(rename = "Visibility")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visibility: Option<String>,
@@ -288,7 +292,7 @@ pub struct ListChangeSetsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An object that contains two attributes, <code>sortBy</code> and <code>sortOrder</code>.</p>
+    /// <p>An object that contains two attributes, <code>SortBy</code> and <code>SortOrder</code>.</p>
     #[serde(rename = "Sort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<Sort>,
@@ -328,7 +332,7 @@ pub struct ListEntitiesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An object that contains two attributes, <code>sortBy</code> and <code>sortOrder</code>.</p>
+    /// <p>An object that contains two attributes, <code>SortBy</code> and <code>SortOrder</code>.</p>
     #[serde(rename = "Sort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<Sort>,
@@ -347,7 +351,7 @@ pub struct ListEntitiesResponse {
     pub next_token: Option<String>,
 }
 
-/// <p>An object that contains two attributes, <code>sortBy</code> and <code>sortOrder</code>.</p>
+/// <p>An object that contains two attributes, <code>SortBy</code> and <code>SortOrder</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Sort {
@@ -732,7 +736,7 @@ pub trait MarketplaceCatalog {
         input: ListEntitiesRequest,
     ) -> Result<ListEntitiesResponse, RusotoError<ListEntitiesError>>;
 
-    /// <p>This operation allows you to request changes in your entities.</p>
+    /// <p>This operation allows you to request changes for your entities. Within a single ChangeSet, you cannot start the same change type against the same entity multiple times. Additionally, when a ChangeSet is running, all the entities targeted by the different changes are locked until the ChangeSet has completed (either succeeded, cancelled, or failed). If you try to start a ChangeSet containing a change against an entity that is already locked, you will receive a <code>ResourceInUseException</code>.</p> <p>For example, you cannot start the ChangeSet described in the <a href="https://docs.aws.amazon.com/marketplace-catalog/latest/api-reference/API_StartChangeSet.html#API_StartChangeSet_Examples">example</a> below because it contains two changes to execute the same change type (<code>AddRevisions</code>) against the same entity (<code>entity-id@1)</code>.</p>
     async fn start_change_set(
         &self,
         input: StartChangeSetRequest,
@@ -948,7 +952,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         }
     }
 
-    /// <p>This operation allows you to request changes in your entities.</p>
+    /// <p>This operation allows you to request changes for your entities. Within a single ChangeSet, you cannot start the same change type against the same entity multiple times. Additionally, when a ChangeSet is running, all the entities targeted by the different changes are locked until the ChangeSet has completed (either succeeded, cancelled, or failed). If you try to start a ChangeSet containing a change against an entity that is already locked, you will receive a <code>ResourceInUseException</code>.</p> <p>For example, you cannot start the ChangeSet described in the <a href="https://docs.aws.amazon.com/marketplace-catalog/latest/api-reference/API_StartChangeSet.html#API_StartChangeSet_Examples">example</a> below because it contains two changes to execute the same change type (<code>AddRevisions</code>) against the same entity (<code>entity-id@1)</code>.</p>
     #[allow(unused_mut)]
     async fn start_change_set(
         &self,

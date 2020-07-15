@@ -157,7 +157,7 @@ pub struct AssociateCertificateRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateCertificateResponse {}
 
-/// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * MP3, Mp3Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings</p>
+/// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * MP3, Mp3Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings * VORBIS, VorbisSettings * OPUS, OpusSettings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioCodecSettings {
     /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value AAC. The service accepts one of two mutually exclusive groups of AAC settings--VBR and CBR. To select one of these modes, set the value of Bitrate control mode (rateControlMode) to &quot;VBR&quot; or &quot;CBR&quot;.  In VBR mode, you control the audio quality with the setting VBR quality (vbrQuality). In CBR mode, you use the setting Bitrate (bitrate). Defaults and valid values depend on the rate control mode.</p>
@@ -192,6 +192,14 @@ pub struct AudioCodecSettings {
     #[serde(rename = "Mp3Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mp_3_settings: Option<Mp3Settings>,
+    /// <p>Required when you set Codec, under AudioDescriptions&gt;CodecSettings, to the value OPUS.</p>
+    #[serde(rename = "OpusSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub opus_settings: Option<OpusSettings>,
+    /// <p>Required when you set Codec, under AudioDescriptions&gt;CodecSettings, to the value Vorbis.</p>
+    #[serde(rename = "VorbisSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vorbis_settings: Option<VorbisSettings>,
     /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value WAV.</p>
     #[serde(rename = "WavSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -217,7 +225,7 @@ pub struct AudioDescription {
     #[serde(rename = "AudioTypeControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_type_control: Option<String>,
-    /// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * MP3, Mp3Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings</p>
+    /// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * MP3, Mp3Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings * VORBIS, VorbisSettings * OPUS, OpusSettings</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<AudioCodecSettings>,
@@ -350,7 +358,7 @@ pub struct Av1Settings {
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>When set to INTERPOLATE, produces smoother motion during frame rate conversion.</p>
+    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use duplicate drop conversion.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
@@ -590,14 +598,14 @@ pub struct CaptionSelector {
     pub source_settings: Option<CaptionSourceSettings>,
 }
 
-/// <p>Ignore this setting unless your input captions format is SCC. To have the service compensate for differing framerates between your input captions and input video, specify the framerate of the captions file. Specify this value as a fraction, using the settings Framerate numerator (framerateNumerator) and Framerate denominator (framerateDenominator). For example, you might specify 24 / 1 for 24 fps, 25 / 1 for 25 fps, 24000 / 1001 for 23.976 fps, or 30000 / 1001 for 29.97 fps.</p>
+/// <p>Ignore this setting unless your input captions format is SCC. To have the service compensate for differing frame rates between your input captions and input video, specify the frame rate of the captions file. Specify this value as a fraction, using the settings Framerate numerator (framerateNumerator) and Framerate denominator (framerateDenominator). For example, you might specify 24 / 1 for 24 fps, 25 / 1 for 25 fps, 24000 / 1001 for 23.976 fps, or 30000 / 1001 for 29.97 fps.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionSourceFramerate {
-    /// <p>Specify the denominator of the fraction that represents the framerate for the setting Caption source framerate (CaptionSourceFramerate). Use this setting along with the setting Framerate numerator (framerateNumerator).</p>
+    /// <p>Specify the denominator of the fraction that represents the frame rate for the setting Caption source frame rate (CaptionSourceFramerate). Use this setting along with the setting Framerate numerator (framerateNumerator).</p>
     #[serde(rename = "FramerateDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_denominator: Option<i64>,
-    /// <p>Specify the numerator of the fraction that represents the framerate for the setting Caption source framerate (CaptionSourceFramerate). Use this setting along with the setting Framerate denominator (framerateDenominator).</p>
+    /// <p>Specify the numerator of the fraction that represents the frame rate for the setting Caption source frame rate (CaptionSourceFramerate). Use this setting along with the setting Framerate denominator (framerateDenominator).</p>
     #[serde(rename = "FramerateNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_numerator: Option<i64>,
@@ -1655,7 +1663,7 @@ pub struct FileSourceSettings {
     #[serde(rename = "Convert608To708")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub convert_608_to_708: Option<String>,
-    /// <p>Ignore this setting unless your input captions format is SCC. To have the service compensate for differing framerates between your input captions and input video, specify the framerate of the captions file. Specify this value as a fraction, using the settings Framerate numerator (framerateNumerator) and Framerate denominator (framerateDenominator). For example, you might specify 24 / 1 for 24 fps, 25 / 1 for 25 fps, 24000 / 1001 for 23.976 fps, or 30000 / 1001 for 29.97 fps.</p>
+    /// <p>Ignore this setting unless your input captions format is SCC. To have the service compensate for differing frame rates between your input captions and input video, specify the frame rate of the captions file. Specify this value as a fraction, using the settings Framerate numerator (framerateNumerator) and Framerate denominator (framerateDenominator). For example, you might specify 24 / 1 for 24 fps, 25 / 1 for 25 fps, 24000 / 1001 for 23.976 fps, or 30000 / 1001 for 29.97 fps.</p>
     #[serde(rename = "Framerate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate: Option<CaptionSourceFramerate>,
@@ -1814,7 +1822,7 @@ pub struct H264Settings {
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>When set to INTERPOLATE, produces smoother motion during frame rate conversion.</p>
+    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use duplicate drop conversion.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
@@ -1872,19 +1880,19 @@ pub struct H264Settings {
     #[serde(rename = "NumberReferenceFrames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_reference_frames: Option<i64>,
-    /// <p>Using the API, enable ParFollowSource if you want the service to use the pixel aspect ratio from the input. Using the console, do this by choosing Follow source for Pixel aspect ratio.</p>
+    /// <p>Optional. Specify how the service determines the pixel aspect ratio (PAR) for this output. The default behavior, Follow source (INITIALIZE<em>FROM</em>SOURCE), uses the PAR from your input video for your output. To specify a different PAR in the console, choose any value other than Follow source. To specify a different PAR by editing the JSON job specification, choose SPECIFIED. When you choose SPECIFIED for this setting, you must also specify values for the parNumerator and parDenominator settings.</p>
     #[serde(rename = "ParControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_control: Option<String>,
-    /// <p>Pixel Aspect Ratio denominator.</p>
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parDenominator is 33.</p>
     #[serde(rename = "ParDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_denominator: Option<i64>,
-    /// <p>Pixel Aspect Ratio numerator.</p>
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parNumerator is 40.</p>
     #[serde(rename = "ParNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_numerator: Option<i64>,
-    /// <p>Use Quality tuning level (H264QualityTuningLevel) to specifiy whether to use fast single-pass, high-quality singlepass, or high-quality multipass video encoding.</p>
+    /// <p>Optional. Use Quality tuning level (qualityTuningLevel) to choose how you want to trade off encoding speed for output video quality. The default behavior is faster, lower quality, single-pass encoding.</p>
     #[serde(rename = "QualityTuningLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quality_tuning_level: Option<String>,
@@ -1986,11 +1994,11 @@ pub struct H265Settings {
     #[serde(rename = "FlickerAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flicker_adaptive_quantization: Option<String>,
-    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job sepecification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
+    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job specification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>When set to INTERPOLATE, produces smoother motion during frame rate conversion.</p>
+    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use duplicate drop conversion.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
@@ -2046,19 +2054,19 @@ pub struct H265Settings {
     #[serde(rename = "NumberReferenceFrames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_reference_frames: Option<i64>,
-    /// <p>Using the API, enable ParFollowSource if you want the service to use the pixel aspect ratio from the input. Using the console, do this by choosing Follow source for Pixel aspect ratio.</p>
+    /// <p>Optional. Specify how the service determines the pixel aspect ratio (PAR) for this output. The default behavior, Follow source (INITIALIZE<em>FROM</em>SOURCE), uses the PAR from your input video for your output. To specify a different PAR in the console, choose any value other than Follow source. To specify a different PAR by editing the JSON job specification, choose SPECIFIED. When you choose SPECIFIED for this setting, you must also specify values for the parNumerator and parDenominator settings.</p>
     #[serde(rename = "ParControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_control: Option<String>,
-    /// <p>Pixel Aspect Ratio denominator.</p>
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parDenominator is 33.</p>
     #[serde(rename = "ParDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_denominator: Option<i64>,
-    /// <p>Pixel Aspect Ratio numerator.</p>
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parNumerator is 40.</p>
     #[serde(rename = "ParNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_numerator: Option<i64>,
-    /// <p>Use Quality tuning level (H265QualityTuningLevel) to specifiy whether to use fast single-pass, high-quality singlepass, or high-quality multipass video encoding.</p>
+    /// <p>Optional. Use Quality tuning level (qualityTuningLevel) to choose how you want to trade off encoding speed for output video quality. The default behavior is faster, lower quality, single-pass encoding.</p>
     #[serde(rename = "QualityTuningLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quality_tuning_level: Option<String>,
@@ -2425,11 +2433,11 @@ pub struct Input {
     #[serde(rename = "AudioSelectorGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_selector_groups: Option<::std::collections::HashMap<String, AudioSelectorGroup>>,
-    /// <p>Use Audio selectors (AudioSelectors) to specify a track or set of tracks from the input that you will use in your outputs. You can use mutiple Audio selectors per input.</p>
+    /// <p>Use Audio selectors (AudioSelectors) to specify a track or set of tracks from the input that you will use in your outputs. You can use multiple Audio selectors per input.</p>
     #[serde(rename = "AudioSelectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_selectors: Option<::std::collections::HashMap<String, AudioSelector>>,
-    /// <p>Use Captions selectors (CaptionSelectors) to specify the captions data from the input that you will use in your outputs. You can use mutiple captions selectors per input.</p>
+    /// <p>Use captions selectors to specify the captions data from your input that you use in your outputs. You can use up to 20 captions selectors per input.</p>
     #[serde(rename = "CaptionSelectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption_selectors: Option<::std::collections::HashMap<String, CaptionSelector>>,
@@ -2437,7 +2445,7 @@ pub struct Input {
     #[serde(rename = "Crop")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crop: Option<Rectangle>,
-    /// <p>Enable Deblock (InputDeblockFilter) to produce smoother motion in the output. Default is disabled. Only manaully controllable for MPEG2 and uncompressed video inputs.</p>
+    /// <p>Enable Deblock (InputDeblockFilter) to produce smoother motion in the output. Default is disabled. Only manually controllable for MPEG2 and uncompressed video inputs.</p>
     #[serde(rename = "DeblockFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deblock_filter: Option<String>,
@@ -2540,11 +2548,11 @@ pub struct InputTemplate {
     #[serde(rename = "AudioSelectorGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_selector_groups: Option<::std::collections::HashMap<String, AudioSelectorGroup>>,
-    /// <p>Use Audio selectors (AudioSelectors) to specify a track or set of tracks from the input that you will use in your outputs. You can use mutiple Audio selectors per input.</p>
+    /// <p>Use Audio selectors (AudioSelectors) to specify a track or set of tracks from the input that you will use in your outputs. You can use multiple Audio selectors per input.</p>
     #[serde(rename = "AudioSelectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_selectors: Option<::std::collections::HashMap<String, AudioSelector>>,
-    /// <p>Use Captions selectors (CaptionSelectors) to specify the captions data from the input that you will use in your outputs. You can use mutiple captions selectors per input.</p>
+    /// <p>Use captions selectors to specify the captions data from your input that you use in your outputs. You can use up to 20 captions selectors per input.</p>
     #[serde(rename = "CaptionSelectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption_selectors: Option<::std::collections::HashMap<String, CaptionSelector>>,
@@ -2552,7 +2560,7 @@ pub struct InputTemplate {
     #[serde(rename = "Crop")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crop: Option<Rectangle>,
-    /// <p>Enable Deblock (InputDeblockFilter) to produce smoother motion in the output. Default is disabled. Only manaully controllable for MPEG2 and uncompressed video inputs.</p>
+    /// <p>Enable Deblock (InputDeblockFilter) to produce smoother motion in the output. Default is disabled. Only manually controllable for MPEG2 and uncompressed video inputs.</p>
     #[serde(rename = "DeblockFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deblock_filter: Option<String>,
@@ -3486,11 +3494,11 @@ pub struct Mpeg2Settings {
     #[serde(rename = "DynamicSubGop")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_sub_gop: Option<String>,
-    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job sepecification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
+    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job specification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>When set to INTERPOLATE, produces smoother motion during frame rate conversion.</p>
+    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use duplicate drop conversion.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
@@ -3544,19 +3552,19 @@ pub struct Mpeg2Settings {
     #[serde(rename = "NumberBFramesBetweenReferenceFrames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_b_frames_between_reference_frames: Option<i64>,
-    /// <p>Using the API, enable ParFollowSource if you want the service to use the pixel aspect ratio from the input. Using the console, do this by choosing Follow source for Pixel aspect ratio.</p>
+    /// <p>Optional. Specify how the service determines the pixel aspect ratio (PAR) for this output. The default behavior, Follow source (INITIALIZE<em>FROM</em>SOURCE), uses the PAR from your input video for your output. To specify a different PAR in the console, choose any value other than Follow source. To specify a different PAR by editing the JSON job specification, choose SPECIFIED. When you choose SPECIFIED for this setting, you must also specify values for the parNumerator and parDenominator settings.</p>
     #[serde(rename = "ParControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_control: Option<String>,
-    /// <p>Pixel Aspect Ratio denominator.</p>
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parDenominator is 33.</p>
     #[serde(rename = "ParDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_denominator: Option<i64>,
-    /// <p>Pixel Aspect Ratio numerator.</p>
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parNumerator is 40.</p>
     #[serde(rename = "ParNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_numerator: Option<i64>,
-    /// <p>Use Quality tuning level (Mpeg2QualityTuningLevel) to specifiy whether to use single-pass or multipass video encoding.</p>
+    /// <p>Optional. Use Quality tuning level (qualityTuningLevel) to choose how you want to trade off encoding speed for output video quality. The default behavior is faster, lower quality, single-pass encoding.</p>
     #[serde(rename = "QualityTuningLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quality_tuning_level: Option<String>,
@@ -3658,6 +3666,27 @@ pub struct MxfSettings {
     pub afd_signaling: Option<String>,
 }
 
+/// <p>For forensic video watermarking, MediaConvert supports Nagra NexGuard File Marker watermarking. MediaConvert supports both PreRelease Content (NGPR/G2) and OTT Streaming workflows.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct NexGuardFileMarkerSettings {
+    /// <p>Use the base64 license string that Nagra provides you. Enter it directly in your JSON job specification or in the console. Required when you include Nagra NexGuard File Marker watermarking (NexGuardWatermarkingSettings) in your job.</p>
+    #[serde(rename = "License")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license: Option<String>,
+    /// <p>Specify the payload ID that you want associated with this output. Valid values vary depending on your Nagra NexGuard forensic watermarking workflow. Required when you include Nagra NexGuard File Marker watermarking (NexGuardWatermarkingSettings) in your job. For PreRelease Content (NGPR/G2), specify an integer from 1 through 4,194,303. You must generate a unique ID for each asset you watermark, and keep a record of which ID you have assigned to each asset. Neither Nagra nor MediaConvert keep track of the relationship between output files and your IDs. For OTT Streaming, create two adaptive bitrate (ABR) stacks for each asset. Do this by setting up two output groups. For one output group, set the value of Payload ID (payload) to 0 in every output. For the other output group, set Payload ID (payload) to 1 in every output.</p>
+    #[serde(rename = "Payload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payload: Option<i64>,
+    /// <p>Enter one of the watermarking preset strings that Nagra provides you. Required when you include Nagra NexGuard File Marker watermarking (NexGuardWatermarkingSettings) in your job.</p>
+    #[serde(rename = "Preset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preset: Option<String>,
+    /// <p>Optional. Ignore this setting unless Nagra support directs you to specify a value. When you don&#39;t specify a value here, the Nagra NexGuard library uses its default value.</p>
+    #[serde(rename = "Strength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub strength: Option<String>,
+}
+
 /// <p>Settings for your Nielsen configuration. If you don&#39;t do Nielsen measurement and analytics, ignore these settings. When you enable Nielsen configuration (nielsenConfiguration), MediaConvert enables PCM to ID3 tagging for all outputs in the job. To enable Nielsen configuration programmatically, include an instance of nielsenConfiguration in your JSON job specification. Even if you don&#39;t include any children of nielsenConfiguration, you still enable the setting.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NielsenConfiguration {
@@ -3725,6 +3754,10 @@ pub struct NoiseReducerTemporalFilterSettings {
     #[serde(rename = "AggressiveMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggressive_mode: Option<i64>,
+    /// <p>Optional. When you set Noise reducer (noiseReducer) to Temporal (TEMPORAL), you can optionally use this setting to apply additional sharpening. The default behavior, Auto (AUTO) allows the transcoder to determine whether to apply filtering, depending on input type and quality.</p>
+    #[serde(rename = "PostTemporalSharpening")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub post_temporal_sharpening: Option<String>,
     /// <p>The speed of the filter (higher number is faster). Low setting reduces bit rate at the cost of transcode time, high setting improves transcode time at the cost of bit rate.</p>
     #[serde(rename = "Speed")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3733,6 +3766,23 @@ pub struct NoiseReducerTemporalFilterSettings {
     #[serde(rename = "Strength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub strength: Option<i64>,
+}
+
+/// <p>Required when you set Codec, under AudioDescriptions&gt;CodecSettings, to the value OPUS.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OpusSettings {
+    /// <p>Optional. Specify the average bitrate in bits per second. Valid values are multiples of 8000, from 32000 through 192000. The default value is 96000, which we recommend for quality and bandwidth.</p>
+    #[serde(rename = "Bitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bitrate: Option<i64>,
+    /// <p>Specify the number of channels in this output audio track. Choosing Mono on the console gives you 1 output channel; choosing Stereo gives you 2. In the API, valid values are 1 and 2.</p>
+    #[serde(rename = "Channels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channels: Option<i64>,
+    /// <p>Optional. Sample rate in hz. Valid values are 16000, 24000, and 48000. The default value is 48000.</p>
+    #[serde(rename = "SampleRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_rate: Option<i64>,
 }
 
 /// <p>An output object describes the settings for a single output file or stream in an output group.</p>
@@ -3750,7 +3800,7 @@ pub struct Output {
     #[serde(rename = "ContainerSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_settings: Option<ContainerSettings>,
-    /// <p>Use Extension (Extension) to specify the file extension for outputs in File output groups. If you do not specify a value, the service will use default extensions by container type as follows * MPEG-2 transport stream, m2ts * Quicktime, mov * MXF container, mxf * MPEG-4 container, mp4 * No Container, the service will use codec extensions (e.g. AAC, H265, H265, AC3)</p>
+    /// <p>Use Extension (Extension) to specify the file extension for outputs in File output groups. If you do not specify a value, the service will use default extensions by container type as follows * MPEG-2 transport stream, m2ts * Quicktime, mov * MXF container, mxf * MPEG-4 container, mp4 * WebM container, webm * No Container, the service will use codec extensions (e.g. AAC, H265, H265, AC3)</p>
     #[serde(rename = "Extension")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extension: Option<String>,
@@ -3864,6 +3914,15 @@ pub struct OutputSettings {
     pub hls_settings: Option<HlsSettings>,
 }
 
+/// <p>If you work with a third party video watermarking partner, use the group of settings that correspond with your watermarking partner to include watermarks in your output.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct PartnerWatermarking {
+    /// <p>For forensic video watermarking, MediaConvert supports Nagra NexGuard File Marker watermarking. MediaConvert supports both PreRelease Content (NGPR/G2) and OTT Streaming workflows.</p>
+    #[serde(rename = "NexguardFileMarkerSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nexguard_file_marker_settings: Option<NexGuardFileMarkerSettings>,
+}
+
 /// <p>A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3928,11 +3987,11 @@ pub struct ProresSettings {
     #[serde(rename = "CodecProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_profile: Option<String>,
-    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job sepecification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
+    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job specification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
-    /// <p>When set to INTERPOLATE, produces smoother motion during frame rate conversion.</p>
+    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use duplicate drop conversion.</p>
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
@@ -3950,15 +4009,15 @@ pub struct ProresSettings {
     #[serde(rename = "InterlaceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interlace_mode: Option<String>,
-    /// <p>Use (ProresParControl) to specify how the service determines the pixel aspect ratio. Set to Follow source (INITIALIZE<em>FROM</em>SOURCE) to use the pixel aspect ratio from the input.  To specify a different pixel aspect ratio: Using the console, choose it from the dropdown menu. Using the API, set ProresParControl to (SPECIFIED) and provide  for (ParNumerator) and (ParDenominator).</p>
+    /// <p>Optional. Specify how the service determines the pixel aspect ratio (PAR) for this output. The default behavior, Follow source (INITIALIZE<em>FROM</em>SOURCE), uses the PAR from your input video for your output. To specify a different PAR in the console, choose any value other than Follow source. To specify a different PAR by editing the JSON job specification, choose SPECIFIED. When you choose SPECIFIED for this setting, you must also specify values for the parNumerator and parDenominator settings.</p>
     #[serde(rename = "ParControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_control: Option<String>,
-    /// <p>Pixel Aspect Ratio denominator.</p>
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parDenominator is 33.</p>
     #[serde(rename = "ParDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_denominator: Option<i64>,
-    /// <p>Pixel Aspect Ratio numerator.</p>
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parNumerator is 40.</p>
     #[serde(rename = "ParNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_numerator: Option<i64>,
@@ -4491,7 +4550,7 @@ pub struct UpdateQueueResponse {
     pub queue: Option<Queue>,
 }
 
-/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * AV1, Av1Settings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings</p>
+/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * AV1, Av1Settings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * VP8, Vp8Settings * VP9, Vp9Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoCodecSettings {
     /// <p>Required when you set Codec, under VideoDescription&gt;CodecSettings to the value AV1.</p>
@@ -4522,6 +4581,14 @@ pub struct VideoCodecSettings {
     #[serde(rename = "ProresSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prores_settings: Option<ProresSettings>,
+    /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value VP8.</p>
+    #[serde(rename = "Vp8Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vp_8_settings: Option<Vp8Settings>,
+    /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value VP9.</p>
+    #[serde(rename = "Vp9Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vp_9_settings: Option<Vp9Settings>,
 }
 
 /// <p>Settings for video outputs</p>
@@ -4535,7 +4602,7 @@ pub struct VideoDescription {
     #[serde(rename = "AntiAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub anti_alias: Option<String>,
-    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * AV1, Av1Settings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings</p>
+    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * FRAME<em>CAPTURE, FrameCaptureSettings * AV1, Av1Settings * H</em>264, H264Settings * H_265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * VP8, Vp8Settings * VP9, Vp9Settings</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<VideoCodecSettings>,
@@ -4626,6 +4693,10 @@ pub struct VideoPreprocessor {
     #[serde(rename = "NoiseReducer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub noise_reducer: Option<NoiseReducer>,
+    /// <p>If you work with a third party video watermarking partner, use the group of settings that correspond with your watermarking partner to include watermarks in your output.</p>
+    #[serde(rename = "PartnerWatermarking")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partner_watermarking: Option<PartnerWatermarking>,
     /// <p>Timecode burn-in (TimecodeBurnIn)--Burns the output timecode and specified prefix into the output.</p>
     #[serde(rename = "TimecodeBurnin")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4663,6 +4734,137 @@ pub struct VideoSelector {
     #[serde(rename = "Rotate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rotate: Option<String>,
+}
+
+/// <p>Required when you set Codec, under AudioDescriptions&gt;CodecSettings, to the value Vorbis.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VorbisSettings {
+    /// <p>Optional. Specify the number of channels in this output audio track. Choosing Mono on the console gives you 1 output channel; choosing Stereo gives you 2. In the API, valid values are 1 and 2. The default value is 2.</p>
+    #[serde(rename = "Channels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channels: Option<i64>,
+    /// <p>Optional. Specify the audio sample rate in Hz. Valid values are 22050, 32000, 44100, and 48000. The default value is 48000.</p>
+    #[serde(rename = "SampleRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_rate: Option<i64>,
+    /// <p>Optional. Specify the variable audio quality of this Vorbis output from -1 (lowest quality, ~45 kbit/s) to 10 (highest quality, ~500 kbit/s). The default value is 4 (~128 kbit/s). Values 5 and 6 are approximately 160 and 192 kbit/s, respectively.</p>
+    #[serde(rename = "VbrQuality")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vbr_quality: Option<i64>,
+}
+
+/// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value VP8.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Vp8Settings {
+    /// <p>Target bitrate in bits/second. For example, enter five megabits per second as 5000000.</p>
+    #[serde(rename = "Bitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bitrate: Option<i64>,
+    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job specification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
+    #[serde(rename = "FramerateControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_control: Option<String>,
+    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use Drop duplicate (DUPLICATE_DROP) conversion. When you choose Interpolate (INTERPOLATE) instead, the conversion produces smoother motion.</p>
+    #[serde(rename = "FramerateConversionAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_conversion_algorithm: Option<String>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_denominator: Option<i64>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_numerator: Option<i64>,
+    /// <p>GOP Length (keyframe interval) in frames. Must be greater than zero.</p>
+    #[serde(rename = "GopSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_size: Option<f64>,
+    /// <p>Optional. Size of buffer (HRD buffer model) in bits. For example, enter five megabits as 5000000.</p>
+    #[serde(rename = "HrdBufferSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hrd_buffer_size: Option<i64>,
+    /// <p>Ignore this setting unless you set qualityTuningLevel to MULTI_PASS. Optional. Specify the maximum bitrate in bits/second. For example, enter five megabits per second as 5000000. The default behavior uses twice the target bitrate as the maximum bitrate.</p>
+    #[serde(rename = "MaxBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_bitrate: Option<i64>,
+    /// <p>Optional. Specify how the service determines the pixel aspect ratio (PAR) for this output. The default behavior, Follow source (INITIALIZE<em>FROM</em>SOURCE), uses the PAR from your input video for your output. To specify a different PAR in the console, choose any value other than Follow source. To specify a different PAR by editing the JSON job specification, choose SPECIFIED. When you choose SPECIFIED for this setting, you must also specify values for the parNumerator and parDenominator settings.</p>
+    #[serde(rename = "ParControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub par_control: Option<String>,
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parDenominator is 33.</p>
+    #[serde(rename = "ParDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub par_denominator: Option<i64>,
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parNumerator is 40.</p>
+    #[serde(rename = "ParNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub par_numerator: Option<i64>,
+    /// <p>Optional. Use Quality tuning level (qualityTuningLevel) to choose how you want to trade off encoding speed for output video quality. The default behavior is faster, lower quality, multi-pass encoding.</p>
+    #[serde(rename = "QualityTuningLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quality_tuning_level: Option<String>,
+    /// <p>With the VP8 codec, you can use only the variable bitrate (VBR) rate control mode.</p>
+    #[serde(rename = "RateControlMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rate_control_mode: Option<String>,
+}
+
+/// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value VP9.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Vp9Settings {
+    /// <p>Target bitrate in bits/second. For example, enter five megabits per second as 5000000.</p>
+    #[serde(rename = "Bitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bitrate: Option<i64>,
+    /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job specification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
+    #[serde(rename = "FramerateControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_control: Option<String>,
+    /// <p>Optional. Specify how the transcoder performs framerate conversion. The default behavior is to use Drop duplicate (DUPLICATE_DROP) conversion. When you choose Interpolate (INTERPOLATE) instead, the conversion produces smoother motion.</p>
+    #[serde(rename = "FramerateConversionAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_conversion_algorithm: Option<String>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_denominator: Option<i64>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_numerator: Option<i64>,
+    /// <p>GOP Length (keyframe interval) in frames. Must be greater than zero.</p>
+    #[serde(rename = "GopSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_size: Option<f64>,
+    /// <p>Size of buffer (HRD buffer model) in bits. For example, enter five megabits as 5000000.</p>
+    #[serde(rename = "HrdBufferSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hrd_buffer_size: Option<i64>,
+    /// <p>Ignore this setting unless you set qualityTuningLevel to MULTI_PASS. Optional. Specify the maximum bitrate in bits/second. For example, enter five megabits per second as 5000000. The default behavior uses twice the target bitrate as the maximum bitrate.</p>
+    #[serde(rename = "MaxBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_bitrate: Option<i64>,
+    /// <p>Optional. Specify how the service determines the pixel aspect ratio for this output. The default behavior is to use the same pixel aspect ratio as your input video.</p>
+    #[serde(rename = "ParControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub par_control: Option<String>,
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parDenominator is 33.</p>
+    #[serde(rename = "ParDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub par_denominator: Option<i64>,
+    /// <p>Required when you set Pixel aspect ratio (parControl) to SPECIFIED. On the console, this corresponds to any value other than Follow source. When you specify an output pixel aspect ratio (PAR) that is different from your input video PAR, provide your output PAR as a ratio. For example, for D1/DV NTSC widescreen, you would specify the ratio 40:33. In this example, the value for parNumerator is 40.</p>
+    #[serde(rename = "ParNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub par_numerator: Option<i64>,
+    /// <p>Optional. Use Quality tuning level (qualityTuningLevel) to choose how you want to trade off encoding speed for output video quality. The default behavior is faster, lower quality, multi-pass encoding.</p>
+    #[serde(rename = "QualityTuningLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quality_tuning_level: Option<String>,
+    /// <p>With the VP9 codec, you can use only the variable bitrate (VBR) rate control mode.</p>
+    #[serde(rename = "RateControlMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rate_control_mode: Option<String>,
 }
 
 /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value WAV.</p>

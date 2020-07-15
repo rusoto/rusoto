@@ -927,7 +927,7 @@ impl LexRuntime for LexRuntimeClient {
         let encoded = Some(input.input_stream.to_owned());
         request.set_payload(encoded);
         request.add_optional_header("Accept", input.accept.as_ref());
-        request.add_header("Content-Type", &input.content_type);
+        request.add_header("Content-Type", &input.content_type.to_string());
         request.add_optional_header(
             "x-amz-lex-request-attributes",
             input.request_attributes.as_ref(),

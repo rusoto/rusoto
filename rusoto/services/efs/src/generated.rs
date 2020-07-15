@@ -71,6 +71,23 @@ pub struct AccessPointDescription {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// <p>The backup policy for the file system, showing the curent status. If <code>ENABLED</code>, the file system is being backed up.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct BackupPolicy {
+    /// <p><p>Describes the status of the file system&#39;s backup policy.</p> <ul> <li> <p> <i> <code>ENABLED</code> - EFS is automatically backing up the file system.</i> </p> </li> <li> <p> <i> <code>ENABLING</code> - EFS is turning on automatic backups for the file system.</i> </p> </li> <li> <p> <i> <code>DISABLED</code> - automatic back ups are turned off for the file system.</i> </p> </li> <li> <p> <i> <code>DISABLED</code> - EFS is turning off automatic backups for the file system.</i> </p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    pub status: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BackupPolicyDescription {
+    /// <p>Describes the file system's backup policy, indicating whether automatic backups are turned on or off..</p>
+    #[serde(rename = "BackupPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_policy: Option<BackupPolicy>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccessPointRequest {
@@ -254,6 +271,14 @@ pub struct DescribeAccessPointsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeBackupPolicyRequest {
+    /// <p>Specifies which EFS file system to retrieve the <code>BackupPolicy</code> for.</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFileSystemPolicyRequest {
     /// <p>Specifies which EFS file system to retrieve the <code>FileSystemPolicy</code> for.</p>
     #[serde(rename = "FileSystemId")]
@@ -416,6 +441,10 @@ pub struct FileSystemDescription {
     #[serde(rename = "Encrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) for the EFS file system, in the format <code>arn:aws:elasticfilesystem:<i>region</i>:<i>account-id</i>:file-system/<i>file-system-id</i> </code>. Example with sample data: <code>arn:aws:elasticfilesystem:us-west-2:1111333322228888:file-system/fs-01234567</code> </p>
+    #[serde(rename = "FileSystemArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_arn: Option<String>,
     /// <p>The ID of the file system, assigned by Amazon EFS.</p>
     #[serde(rename = "FileSystemId")]
     pub file_system_id: String,
@@ -585,6 +614,10 @@ pub struct MountTargetDescription {
     /// <p>The ID of the mount target's subnet.</p>
     #[serde(rename = "SubnetId")]
     pub subnet_id: String,
+    /// <p>The Virtual Private Cloud (VPC) ID that the mount target is configured in.</p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
 }
 
 /// <p>The full POSIX identity, including the user ID, group ID, and any secondary group IDs, on the access point that is used for all file system operations performed by NFS clients using the access point.</p>
@@ -600,6 +633,17 @@ pub struct PosixUser {
     /// <p>The POSIX user ID used for all file system operations using this access point.</p>
     #[serde(rename = "Uid")]
     pub uid: i64,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutBackupPolicyRequest {
+    /// <p>The backup policy included in the <code>PutBackupPolicy</code> request.</p>
+    #[serde(rename = "BackupPolicy")]
+    pub backup_policy: BackupPolicy,
+    /// <p>Specifies which EFS file system to update the backup policy for.</p>
+    #[serde(rename = "FileSystemId")]
+    pub file_system_id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -701,6 +745,8 @@ pub enum CreateAccessPointError {
     BadRequest(String),
     /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
     FileSystemNotFound(String),
+    /// <p>Returned if the file system's lifecycle state is not "available".</p>
+    IncorrectFileSystemLifeCycleState(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
 }
@@ -727,6 +773,11 @@ impl CreateAccessPointError {
                         err.msg,
                     ))
                 }
+                "IncorrectFileSystemLifeCycleState" => {
+                    return RusotoError::Service(
+                        CreateAccessPointError::IncorrectFileSystemLifeCycleState(err.msg),
+                    )
+                }
                 "InternalServerError" => {
                     return RusotoError::Service(CreateAccessPointError::InternalServerError(
                         err.msg,
@@ -747,6 +798,9 @@ impl fmt::Display for CreateAccessPointError {
             CreateAccessPointError::AccessPointLimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateAccessPointError::BadRequest(ref cause) => write!(f, "{}", cause),
             CreateAccessPointError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            CreateAccessPointError::IncorrectFileSystemLifeCycleState(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateAccessPointError::InternalServerError(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -1276,6 +1330,58 @@ impl fmt::Display for DescribeAccessPointsError {
     }
 }
 impl Error for DescribeAccessPointsError {}
+/// Errors returned by DescribeBackupPolicy
+#[derive(Debug, PartialEq)]
+pub enum DescribeBackupPolicyError {
+    /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
+    BadRequest(String),
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>Returned if the default file system policy is in effect for the EFS file system specified.</p>
+    PolicyNotFound(String),
+}
+
+impl DescribeBackupPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupPolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequest" => {
+                    return RusotoError::Service(DescribeBackupPolicyError::BadRequest(err.msg))
+                }
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(DescribeBackupPolicyError::FileSystemNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(DescribeBackupPolicyError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "PolicyNotFound" => {
+                    return RusotoError::Service(DescribeBackupPolicyError::PolicyNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeBackupPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeBackupPolicyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeBackupPolicyError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeBackupPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DescribeBackupPolicyError::PolicyNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeBackupPolicyError {}
 /// Errors returned by DescribeFileSystemPolicy
 #[derive(Debug, PartialEq)]
 pub enum DescribeFileSystemPolicyError {
@@ -1730,6 +1836,58 @@ impl fmt::Display for ModifyMountTargetSecurityGroupsError {
     }
 }
 impl Error for ModifyMountTargetSecurityGroupsError {}
+/// Errors returned by PutBackupPolicy
+#[derive(Debug, PartialEq)]
+pub enum PutBackupPolicyError {
+    /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
+    BadRequest(String),
+    /// <p>Returned if the specified <code>FileSystemId</code> value doesn't exist in the requester's AWS account.</p>
+    FileSystemNotFound(String),
+    /// <p>Returned if the file system's lifecycle state is not "available".</p>
+    IncorrectFileSystemLifeCycleState(String),
+    /// <p>Returned if an error occurred on the server side.</p>
+    InternalServerError(String),
+}
+
+impl PutBackupPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBackupPolicyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequest" => {
+                    return RusotoError::Service(PutBackupPolicyError::BadRequest(err.msg))
+                }
+                "FileSystemNotFound" => {
+                    return RusotoError::Service(PutBackupPolicyError::FileSystemNotFound(err.msg))
+                }
+                "IncorrectFileSystemLifeCycleState" => {
+                    return RusotoError::Service(
+                        PutBackupPolicyError::IncorrectFileSystemLifeCycleState(err.msg),
+                    )
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(PutBackupPolicyError::InternalServerError(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutBackupPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutBackupPolicyError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutBackupPolicyError::FileSystemNotFound(ref cause) => write!(f, "{}", cause),
+            PutBackupPolicyError::IncorrectFileSystemLifeCycleState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutBackupPolicyError::InternalServerError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutBackupPolicyError {}
 /// Errors returned by PutFileSystemPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutFileSystemPolicyError {
@@ -2081,6 +2239,12 @@ pub trait Efs {
         input: DescribeAccessPointsRequest,
     ) -> Result<DescribeAccessPointsResponse, RusotoError<DescribeAccessPointsError>>;
 
+    /// <p>Returns the backup policy for the specified EFS file system.</p>
+    async fn describe_backup_policy(
+        &self,
+        input: DescribeBackupPolicyRequest,
+    ) -> Result<BackupPolicyDescription, RusotoError<DescribeBackupPolicyError>>;
+
     /// <p>Returns the <code>FileSystemPolicy</code> for the specified EFS file system.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeFileSystemPolicy</code> action.</p>
     async fn describe_file_system_policy(
         &self,
@@ -2131,6 +2295,12 @@ pub trait Efs {
         &self,
         input: ModifyMountTargetSecurityGroupsRequest,
     ) -> Result<(), RusotoError<ModifyMountTargetSecurityGroupsError>>;
+
+    /// <p>Updates the file system's backup policy. Use this action to start or stop automatic backups of the file system. </p>
+    async fn put_backup_policy(
+        &self,
+        input: PutBackupPolicyRequest,
+    ) -> Result<BackupPolicyDescription, RusotoError<PutBackupPolicyError>>;
 
     /// <p>Applies an Amazon EFS <code>FileSystemPolicy</code> to an Amazon EFS file system. A file system policy is an IAM resource-based policy and can contain multiple policy statements. A file system always has exactly one file system policy, which can be the default policy or an explicit policy set or updated using this API operation. When an explicit policy is set, it overrides the default policy. For more information about the default file system policy, see <a href="https://docs.aws.amazon.com/efs/latest/ug/iam-access-control-nfs-efs.html#default-filesystempolicy">Default EFS File System Policy</a>. </p> <p>This operation requires permissions for the <code>elasticfilesystem:PutFileSystemPolicy</code> action.</p>
     async fn put_file_system_policy(
@@ -2534,6 +2704,38 @@ impl Efs for EfsClient {
         }
     }
 
+    /// <p>Returns the backup policy for the specified EFS file system.</p>
+    #[allow(unused_mut)]
+    async fn describe_backup_policy(
+        &self,
+        input: DescribeBackupPolicyRequest,
+    ) -> Result<BackupPolicyDescription, RusotoError<DescribeBackupPolicyError>> {
+        let request_uri = format!(
+            "/2015-02-01/file-systems/{file_system_id}/backup-policy",
+            file_system_id = input.file_system_id
+        );
+
+        let mut request =
+            SignedRequest::new("GET", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BackupPolicyDescription, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeBackupPolicyError::from_response(response))
+        }
+    }
+
     /// <p>Returns the <code>FileSystemPolicy</code> for the specified EFS file system.</p> <p>This operation requires permissions for the <code>elasticfilesystem:DescribeFileSystemPolicy</code> action.</p>
     #[allow(unused_mut)]
     async fn describe_file_system_policy(
@@ -2842,6 +3044,41 @@ impl Efs for EfsClient {
             Err(ModifyMountTargetSecurityGroupsError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Updates the file system's backup policy. Use this action to start or stop automatic backups of the file system. </p>
+    #[allow(unused_mut)]
+    async fn put_backup_policy(
+        &self,
+        input: PutBackupPolicyRequest,
+    ) -> Result<BackupPolicyDescription, RusotoError<PutBackupPolicyError>> {
+        let request_uri = format!(
+            "/2015-02-01/file-systems/{file_system_id}/backup-policy",
+            file_system_id = input.file_system_id
+        );
+
+        let mut request =
+            SignedRequest::new("PUT", "elasticfilesystem", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BackupPolicyDescription, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutBackupPolicyError::from_response(response))
         }
     }
 

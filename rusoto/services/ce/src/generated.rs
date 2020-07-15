@@ -243,6 +243,10 @@ pub struct CurrentInstance {
     #[serde(rename = "CurrencyCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub currency_code: Option<String>,
+    /// <p>The name you've given an instance. This field will show as blank if you haven't given the instance a name.</p>
+    #[serde(rename = "InstanceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_name: Option<String>,
     /// <p> Current On Demand cost of operating this instance on a monthly basis.</p>
     #[serde(rename = "MonthlyCost")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -889,7 +893,7 @@ pub struct GetReservationUtilizationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRightsizingRecommendationRequest {
-    /// <p> Enables you to customize recommendations across two attributes. You can choose to view recommendations for instances within the same instance families or across different instance families. You can also choose to view your estimated savings associated with recommendations with consideration of existing Savings Plans or RI benefits, or niether. </p>
+    /// <p> Enables you to customize recommendations across two attributes. You can choose to view recommendations for instances within the same instance families or across different instance families. You can also choose to view your estimated savings associated with recommendations with consideration of existing Savings Plans or RI benefits, or neither. </p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<RightsizingRecommendationConfiguration>,
@@ -912,7 +916,7 @@ pub struct GetRightsizingRecommendationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRightsizingRecommendationResponse {
-    /// <p>Enables you to customize recommendations across two attributes. You can choose to view recommendations for instances within the same instance families or across different instance families. You can also choose to view your estimated savings associated with recommendations with consideration of existing Savings Plans or RI benefits, or niether. </p>
+    /// <p> Enables you to customize recommendations across two attributes. You can choose to view recommendations for instances within the same instance families or across different instance families. You can also choose to view your estimated savings associated with recommendations with consideration of existing Savings Plans or RI benefits, or neither. </p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<RightsizingRecommendationConfiguration>,
@@ -1006,7 +1010,7 @@ pub struct GetSavingsPlansPurchaseRecommendationRequest {
     /// <p>The Savings Plans recommendation type requested.</p>
     #[serde(rename = "SavingsPlansType")]
     pub savings_plans_type: String,
-    /// <p>The savings plan recommendation term used to generated these recommendations.</p>
+    /// <p>The savings plan recommendation term used to generate these recommendations.</p>
     #[serde(rename = "TermInYears")]
     pub term_in_years: String,
 }
@@ -1656,7 +1660,7 @@ pub struct RightsizingRecommendation {
     pub terminate_recommendation_detail: Option<TerminateRecommendationDetail>,
 }
 
-/// <p> Enables you to customize recommendations across two attributes. You can choose to view recommendations for instances within the same instance families or across different instance families. You can also choose to view your estimated savings associated with recommendations with consideration of existing Savings Plans or RI benefits, or niether. </p>
+/// <p> Enables you to customize recommendations across two attributes. You can choose to view recommendations for instances within the same instance families or across different instance families. You can also choose to view your estimated savings associated with recommendations with consideration of existing Savings Plans or RI benefits, or neither. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RightsizingRecommendationConfiguration {
     /// <p> The option to consider RI or Savings Plans discount benefits in your savings calculation. The default value is <code>TRUE</code>. </p>
@@ -1671,7 +1675,7 @@ pub struct RightsizingRecommendationConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RightsizingRecommendationMetadata {
-    /// <p> The time stamp for when Amazon Web Services made this recommendation.</p>
+    /// <p> The timestamp for when Amazon Web Services made this recommendation.</p>
     #[serde(rename = "GenerationTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub generation_timestamp: Option<String>,
@@ -1697,7 +1701,7 @@ pub struct RightsizingRecommendationSummary {
     #[serde(rename = "SavingsCurrencyCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub savings_currency_code: Option<String>,
-    /// <p> Savings percentage based on the recommended modifications, relative to the total On Demand costs associated with these instances.</p>
+    /// <p> Savings percentage based on the recommended modifications, relative to the total On-Demand costs associated with these instances.</p>
     #[serde(rename = "SavingsPercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub savings_percentage: Option<String>,
@@ -3151,7 +3155,7 @@ pub trait CostExplorer {
         input: GetReservationUtilizationRequest,
     ) -> Result<GetReservationUtilizationResponse, RusotoError<GetReservationUtilizationError>>;
 
-    /// <p>Creates recommendations that helps you save cost by identifying idle and underutilized Amazon EC2 instances.</p> <p>Recommendations are generated to either downsize or terminate instances, along with providing savings detail and metrics. For details on calculation and function, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-what-is.html">Optimizing Your Cost with Rightsizing Recommendations</a>.</p>
+    /// <p>Creates recommendations that help you save cost by identifying idle and underutilized Amazon EC2 instances.</p> <p>Recommendations are generated to either downsize or terminate instances, along with providing savings detail and metrics. For details on calculation and function, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html">Optimizing Your Cost with Rightsizing Recommendations</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
     async fn get_rightsizing_recommendation(
         &self,
         input: GetRightsizingRecommendationRequest,
@@ -3472,7 +3476,7 @@ impl CostExplorer for CostExplorerClient {
             .deserialize::<GetReservationUtilizationResponse, _>()
     }
 
-    /// <p>Creates recommendations that helps you save cost by identifying idle and underutilized Amazon EC2 instances.</p> <p>Recommendations are generated to either downsize or terminate instances, along with providing savings detail and metrics. For details on calculation and function, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-what-is.html">Optimizing Your Cost with Rightsizing Recommendations</a>.</p>
+    /// <p>Creates recommendations that help you save cost by identifying idle and underutilized Amazon EC2 instances.</p> <p>Recommendations are generated to either downsize or terminate instances, along with providing savings detail and metrics. For details on calculation and function, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ce-rightsizing.html">Optimizing Your Cost with Rightsizing Recommendations</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
     async fn get_rightsizing_recommendation(
         &self,
         input: GetRightsizingRecommendationRequest,

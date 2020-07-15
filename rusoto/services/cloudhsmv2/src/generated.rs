@@ -82,14 +82,15 @@ pub struct Backup {
     #[serde(rename = "SourceBackup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_backup: Option<String>,
-    /// <p>The identifier (ID) of the cluster containing the source backup from which the new backup was copied. .</p>
+    /// <p>The identifier (ID) of the cluster containing the source backup from which the new backup was copied.</p>
     #[serde(rename = "SourceCluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_cluster: Option<String>,
-    /// <p>The AWS region that contains the source backup from which the new backup was copied.</p>
+    /// <p>The AWS Region that contains the source backup from which the new backup was copied.</p>
     #[serde(rename = "SourceRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_region: Option<String>,
+    /// <p>The list of tags for the backup.</p>
     #[serde(rename = "TagList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
@@ -173,6 +174,7 @@ pub struct Cluster {
     #[serde(rename = "SubnetMapping")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_mapping: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The list of tags for the cluster.</p>
     #[serde(rename = "TagList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
@@ -191,6 +193,7 @@ pub struct CopyBackupToRegionRequest {
     /// <p>The AWS region that will contain your copied CloudHSM cluster backup.</p>
     #[serde(rename = "DestinationRegion")]
     pub destination_region: String,
+    /// <p>Tags to apply to the destination backup during creation. If you specify tags, only these tags will be applied to the destination backup. If you do not specify tags, the service copies tags from the source backup to the destination backup.</p>
     #[serde(rename = "TagList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
@@ -218,6 +221,7 @@ pub struct CreateClusterRequest {
     /// <p><p>The identifiers (IDs) of the subnets where you are creating the cluster. You must specify at least one subnet. If you specify multiple subnets, they must meet the following criteria:</p> <ul> <li> <p>All subnets must be in the same virtual private cloud (VPC).</p> </li> <li> <p>You can specify only one subnet per Availability Zone.</p> </li> </ul></p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
+    /// <p>Tags to apply to the CloudHSM cluster during creation.</p>
     #[serde(rename = "TagList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
@@ -568,7 +572,7 @@ pub enum CopyBackupToRegionError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-
+    /// <p>The request was rejected because of a tagging failure. Verify the tag conditions in all applicable policies, and then retry the request.</p>
     CloudHsmTag(String),
 }
 
@@ -636,7 +640,7 @@ pub enum CreateClusterError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-
+    /// <p>The request was rejected because of a tagging failure. Verify the tag conditions in all applicable policies, and then retry the request.</p>
     CloudHsmTag(String),
 }
 
@@ -814,7 +818,7 @@ pub enum DeleteClusterError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-
+    /// <p>The request was rejected because of a tagging failure. Verify the tag conditions in all applicable policies, and then retry the request.</p>
     CloudHsmTag(String),
 }
 
@@ -934,7 +938,7 @@ pub enum DescribeBackupsError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-
+    /// <p>The request was rejected because of a tagging failure. Verify the tag conditions in all applicable policies, and then retry the request.</p>
     CloudHsmTag(String),
 }
 
@@ -1000,7 +1004,7 @@ pub enum DescribeClustersError {
     CloudHsmInvalidRequest(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-
+    /// <p>The request was rejected because of a tagging failure. Verify the tag conditions in all applicable policies, and then retry the request.</p>
     CloudHsmTag(String),
 }
 
@@ -1124,7 +1128,7 @@ pub enum ListTagsError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-
+    /// <p>The request was rejected because of a tagging failure. Verify the tag conditions in all applicable policies, and then retry the request.</p>
     CloudHsmTag(String),
 }
 
@@ -1244,7 +1248,7 @@ pub enum TagResourceError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-
+    /// <p>The request was rejected because of a tagging failure. Verify the tag conditions in all applicable policies, and then retry the request.</p>
     CloudHsmTag(String),
 }
 
@@ -1306,7 +1310,7 @@ pub enum UntagResourceError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-
+    /// <p>The request was rejected because of a tagging failure. Verify the tag conditions in all applicable policies, and then retry the request.</p>
     CloudHsmTag(String),
 }
 

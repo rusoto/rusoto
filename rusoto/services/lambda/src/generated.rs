@@ -185,7 +185,7 @@ pub struct AliasConfiguration {
 /// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-traffic-shifting-using-aliases.html">traffic-shifting</a> configuration of a Lambda function alias.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AliasRoutingConfiguration {
-    /// <p>The name of the second alias, and the percentage of traffic that's routed to it.</p>
+    /// <p>The second version, and the percentage of traffic that's routed to it.</p>
     #[serde(rename = "AdditionalVersionWeights")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_version_weights: Option<::std::collections::HashMap<String, f64>>,
@@ -216,7 +216,7 @@ pub struct CreateAliasRequest {
     /// <p>The name of the alias.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-traffic-shifting-using-aliases.html">routing configuration</a> of the alias.</p>
+    /// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html#configuring-alias-routing">routing configuration</a> of the alias.</p>
     #[serde(rename = "RoutingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub routing_config: Option<AliasRoutingConfiguration>,
@@ -291,6 +291,10 @@ pub struct CreateFunctionRequest {
     #[serde(rename = "Environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<Environment>,
+    /// <p>Connection settings for an Amazon EFS file system.</p>
+    #[serde(rename = "FileSystemConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_configs: Option<Vec<FileSystemConfig>>,
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
@@ -532,6 +536,17 @@ pub struct EventSourceMappingConfiguration {
     pub uuid: Option<String>,
 }
 
+/// <p>Details about the connection between a Lambda function and an Amazon EFS file system.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct FileSystemConfig {
+    /// <p>The Amazon Resource Name (ARN) of the Amazon EFS access point that provides access to the file system.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+    /// <p>The path where the function can access the file system, starting with <code>/mnt/</code>.</p>
+    #[serde(rename = "LocalMountPath")]
+    pub local_mount_path: String,
+}
+
 /// <p>The code for the Lambda function. You can specify either an object in Amazon S3, or upload a deployment package directly.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -597,6 +612,10 @@ pub struct FunctionConfiguration {
     #[serde(rename = "Environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<EnvironmentResponse>,
+    /// <p>Connection settings for an Amazon EFS file system.</p>
+    #[serde(rename = "FileSystemConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_configs: Option<Vec<FileSystemConfig>>,
     /// <p>The function's Amazon Resource Name (ARN).</p>
     #[serde(rename = "FunctionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1722,7 +1741,7 @@ pub struct UpdateAliasRequest {
     #[serde(rename = "RevisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
-    /// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-traffic-shifting-using-aliases.html">routing configuration</a> of the alias.</p>
+    /// <p>The <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html#configuring-alias-routing">routing configuration</a> of the alias.</p>
     #[serde(rename = "RoutingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub routing_config: Option<AliasRoutingConfiguration>,
@@ -1828,6 +1847,10 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename = "Environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<Environment>,
+    /// <p>Connection settings for an Amazon EFS file system.</p>
+    #[serde(rename = "FileSystemConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_configs: Option<Vec<FileSystemConfig>>,
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>my-function</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:my-function</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:my-function</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
@@ -2310,7 +2333,7 @@ impl Error for DeleteAliasError {}
 pub enum DeleteEventSourceMappingError {
     /// <p>One of the parameters in the request is invalid.</p>
     InvalidParameterValue(String),
-    /// <p>The operation conflicts with the resource's availability. For example, you attempted to update an EventSource Mapping in CREATING, or tried to delete a EventSource mapping currently in the UPDATING state. </p>
+    /// <p>The operation conflicts with the resource's availability. For example, you attempted to update an EventSource Mapping in CREATING, or tried to delete a EventSource mapping currently in the UPDATING state.</p>
     ResourceInUse(String),
     /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -3310,6 +3333,14 @@ pub enum InvokeError {
     EC2Throttled(String),
     /// <p>AWS Lambda received an unexpected EC2 client exception while setting up for the Lambda function.</p>
     EC2Unexpected(String),
+    /// <p>An error occured when reading from or writing to a connected file system.</p>
+    EFSIO(String),
+    /// <p>The function couldn't make a network connection to the configured file system.</p>
+    EFSMountConnectivity(String),
+    /// <p>The function couldn't mount the configured file system due to a permission or configuration issue.</p>
+    EFSMountFailure(String),
+    /// <p>The function was able to make a network connection to the configured file system, but the mount operation timed out.</p>
+    EFSMountTimeout(String),
     /// <p>AWS Lambda was not able to create an elastic network interface in the VPC, specified as part of Lambda function configuration, because the limit for network interfaces has been reached.</p>
     ENILimitReached(String),
     /// <p>One of the parameters in the request is invalid.</p>
@@ -3362,6 +3393,16 @@ impl InvokeError {
                 }
                 "EC2UnexpectedException" => {
                     return RusotoError::Service(InvokeError::EC2Unexpected(err.msg))
+                }
+                "EFSIOException" => return RusotoError::Service(InvokeError::EFSIO(err.msg)),
+                "EFSMountConnectivityException" => {
+                    return RusotoError::Service(InvokeError::EFSMountConnectivity(err.msg))
+                }
+                "EFSMountFailureException" => {
+                    return RusotoError::Service(InvokeError::EFSMountFailure(err.msg))
+                }
+                "EFSMountTimeoutException" => {
+                    return RusotoError::Service(InvokeError::EFSMountTimeout(err.msg))
                 }
                 "ENILimitReachedException" => {
                     return RusotoError::Service(InvokeError::ENILimitReached(err.msg))
@@ -3432,6 +3473,10 @@ impl fmt::Display for InvokeError {
             InvokeError::EC2AccessDenied(ref cause) => write!(f, "{}", cause),
             InvokeError::EC2Throttled(ref cause) => write!(f, "{}", cause),
             InvokeError::EC2Unexpected(ref cause) => write!(f, "{}", cause),
+            InvokeError::EFSIO(ref cause) => write!(f, "{}", cause),
+            InvokeError::EFSMountConnectivity(ref cause) => write!(f, "{}", cause),
+            InvokeError::EFSMountFailure(ref cause) => write!(f, "{}", cause),
+            InvokeError::EFSMountTimeout(ref cause) => write!(f, "{}", cause),
             InvokeError::ENILimitReached(ref cause) => write!(f, "{}", cause),
             InvokeError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
             InvokeError::InvalidRequestContent(ref cause) => write!(f, "{}", cause),
@@ -4604,7 +4649,7 @@ pub enum UpdateEventSourceMappingError {
     InvalidParameterValue(String),
     /// <p>The resource already exists, or another operation is in progress.</p>
     ResourceConflict(String),
-    /// <p>The operation conflicts with the resource's availability. For example, you attempted to update an EventSource Mapping in CREATING, or tried to delete a EventSource mapping currently in the UPDATING state. </p>
+    /// <p>The operation conflicts with the resource's availability. For example, you attempted to update an EventSource Mapping in CREATING, or tried to delete a EventSource mapping currently in the UPDATING state.</p>
     ResourceInUse(String),
     /// <p>The resource specified in the request does not exist.</p>
     ResourceNotFound(String),
@@ -5120,7 +5165,7 @@ pub trait Lambda {
         input: PutFunctionConcurrencyRequest,
     ) -> Result<Concurrency, RusotoError<PutFunctionConcurrencyError>>;
 
-    /// <p>Configures options for <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html">asynchronous invocation</a> on a function, version, or alias. If a configuration already exists for a function, version, or alias, this operation overwrites it. If you exclude any settings, they are removed. To set one option without affecting existing settings for other options, use <a>PutFunctionEventInvokeConfig</a>.</p> <p>By default, Lambda retries an asynchronous invocation twice if the function returns an error. It retains events in a queue for up to six hours. When an event fails all processing attempts or stays in the asynchronous invocation queue for too long, Lambda discards it. To retain discarded events, configure a dead-letter queue with <a>UpdateFunctionConfiguration</a>.</p> <p>To send an invocation record to a queue, topic, function, or event bus, specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-async-destinations">destination</a>. You can configure separate destinations for successful invocations (on-success) and events that fail all processing attempts (on-failure). You can configure destinations in addition to or instead of a dead-letter queue.</p>
+    /// <p>Configures options for <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html">asynchronous invocation</a> on a function, version, or alias. If a configuration already exists for a function, version, or alias, this operation overwrites it. If you exclude any settings, they are removed. To set one option without affecting existing settings for other options, use <a>UpdateFunctionEventInvokeConfig</a>.</p> <p>By default, Lambda retries an asynchronous invocation twice if the function returns an error. It retains events in a queue for up to six hours. When an event fails all processing attempts or stays in the asynchronous invocation queue for too long, Lambda discards it. To retain discarded events, configure a dead-letter queue with <a>UpdateFunctionConfiguration</a>.</p> <p>To send an invocation record to a queue, topic, function, or event bus, specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-async-destinations">destination</a>. You can configure separate destinations for successful invocations (on-success) and events that fail all processing attempts (on-failure). You can configure destinations in addition to or instead of a dead-letter queue.</p>
     async fn put_function_event_invoke_config(
         &self,
         input: PutFunctionEventInvokeConfigRequest,
@@ -6603,7 +6648,7 @@ impl Lambda for LambdaClient {
         }
     }
 
-    /// <p>Configures options for <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html">asynchronous invocation</a> on a function, version, or alias. If a configuration already exists for a function, version, or alias, this operation overwrites it. If you exclude any settings, they are removed. To set one option without affecting existing settings for other options, use <a>PutFunctionEventInvokeConfig</a>.</p> <p>By default, Lambda retries an asynchronous invocation twice if the function returns an error. It retains events in a queue for up to six hours. When an event fails all processing attempts or stays in the asynchronous invocation queue for too long, Lambda discards it. To retain discarded events, configure a dead-letter queue with <a>UpdateFunctionConfiguration</a>.</p> <p>To send an invocation record to a queue, topic, function, or event bus, specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-async-destinations">destination</a>. You can configure separate destinations for successful invocations (on-success) and events that fail all processing attempts (on-failure). You can configure destinations in addition to or instead of a dead-letter queue.</p>
+    /// <p>Configures options for <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html">asynchronous invocation</a> on a function, version, or alias. If a configuration already exists for a function, version, or alias, this operation overwrites it. If you exclude any settings, they are removed. To set one option without affecting existing settings for other options, use <a>UpdateFunctionEventInvokeConfig</a>.</p> <p>By default, Lambda retries an asynchronous invocation twice if the function returns an error. It retains events in a queue for up to six hours. When an event fails all processing attempts or stays in the asynchronous invocation queue for too long, Lambda discards it. To retain discarded events, configure a dead-letter queue with <a>UpdateFunctionConfiguration</a>.</p> <p>To send an invocation record to a queue, topic, function, or event bus, specify a <a href="https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-async-destinations">destination</a>. You can configure separate destinations for successful invocations (on-success) and events that fail all processing attempts (on-failure). You can configure destinations in addition to or instead of a dead-letter queue.</p>
     #[allow(unused_mut)]
     async fn put_function_event_invoke_config(
         &self,

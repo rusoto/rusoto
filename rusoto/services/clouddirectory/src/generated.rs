@@ -8665,7 +8665,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -8697,7 +8697,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -8729,7 +8729,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -8761,7 +8761,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -8793,7 +8793,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -8825,7 +8825,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -8858,7 +8858,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
         request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -8890,7 +8890,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -8922,7 +8922,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -8954,7 +8954,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -8986,7 +8986,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9018,7 +9018,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9081,7 +9081,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -9111,7 +9111,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9143,7 +9143,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -9175,7 +9175,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9205,7 +9205,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -9237,7 +9237,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -9269,7 +9269,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9301,7 +9301,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9333,7 +9333,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9365,7 +9365,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9394,7 +9394,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9424,7 +9424,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9485,7 +9485,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9517,7 +9517,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -9549,7 +9549,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9582,7 +9582,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
         request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9615,7 +9615,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
         request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9645,7 +9645,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -9678,7 +9678,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -9742,7 +9742,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
         request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9837,7 +9837,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -9869,7 +9869,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -9901,7 +9901,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9934,7 +9934,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
         request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -9998,7 +9998,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
         request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10031,7 +10031,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
         request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10063,7 +10063,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10096,7 +10096,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
         request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10129,7 +10129,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
         request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10161,7 +10161,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10194,7 +10194,7 @@ impl CloudDirectory for CloudDirectoryClient {
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
         request.add_optional_header("x-amz-consistency-level", input.consistency_level.as_ref());
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10289,7 +10289,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -10321,7 +10321,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -10353,7 +10353,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10385,7 +10385,10 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.development_schema_arn);
+        request.add_header(
+            "x-amz-data-partition",
+            &input.development_schema_arn.to_string(),
+        );
 
         let mut response = self
             .client
@@ -10417,7 +10420,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -10449,7 +10452,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10543,7 +10546,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -10575,7 +10578,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10607,7 +10610,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.directory_arn);
+        request.add_header("x-amz-data-partition", &input.directory_arn.to_string());
 
         let mut response = self
             .client
@@ -10639,7 +10642,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client
@@ -10671,7 +10674,7 @@ impl CloudDirectory for CloudDirectoryClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("x-amz-data-partition", &input.schema_arn);
+        request.add_header("x-amz-data-partition", &input.schema_arn.to_string());
 
         let mut response = self
             .client

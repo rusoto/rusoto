@@ -55,16 +55,22 @@ pub struct CreateLifecyclePolicyResponse {
     pub policy_id: Option<String>,
 }
 
-/// <p>Specifies when to create snapshots of EBS volumes.</p>
+/// <p>Specifies when to create snapshots of EBS volumes.</p> <p>You must specify either a Cron expression or an interval, interval unit, and start time. You cannot specify both.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CreateRule {
+    /// <p>The schedule, as a Cron expression. The schedule interval must be between 1 hour and 1 year. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions">Cron expressions</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
+    #[serde(rename = "CronExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cron_expression: Option<String>,
     /// <p>The interval between snapshots. The supported values are 1, 2, 3, 4, 6, 8, 12, and 24.</p>
     #[serde(rename = "Interval")]
-    pub interval: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interval: Option<i64>,
     /// <p>The interval unit.</p>
     #[serde(rename = "IntervalUnit")]
-    pub interval_unit: String,
-    /// <p>The time, in UTC, to start the operation. The supported format is hh:mm.</p> <p>The operation occurs within a one-hour window following the specified time.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interval_unit: Option<String>,
+    /// <p>The time, in UTC, to start the operation. The supported format is hh:mm.</p> <p>The operation occurs within a one-hour window following the specified time. If you do not specify a time, Amazon DLM selects a time within the next 24 hours.</p>
     #[serde(rename = "Times")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub times: Option<Vec<String>>,
@@ -294,7 +300,7 @@ pub struct PolicyDetails {
     #[serde(rename = "PolicyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_type: Option<String>,
-    /// <p>The resource type.</p>
+    /// <p>The resource type. Use VOLUME to create snapshots of individual volumes or use INSTANCE to create multi-volume snapshots from the volumes for an instance.</p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,

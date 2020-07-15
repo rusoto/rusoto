@@ -55,7 +55,7 @@ impl CodeStarConnectionsClient {
 }
 
 use serde_json;
-/// <p>The AWS::CodeStarConnections::Connection resource can be used to connect external source providers with services like AWS CodePipeline.</p> <p>Note: A connection created through CloudFormation is in `PENDING` status by default. You can make its status `AVAILABLE` by editing the connection in the CodePipeline console.</p>
+/// <p>A resource that is used to connect third-party source providers with services like AWS CodePipeline.</p> <p>Note: A connection created through CloudFormation, the CLI, or the SDK is in `PENDING` status by default. You can make its status `AVAILABLE` by updating the connection in the console.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
@@ -71,11 +71,15 @@ pub struct Connection {
     #[serde(rename = "ConnectionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_status: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the host associated with the connection.</p>
+    #[serde(rename = "HostArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_arn: Option<String>,
     /// <p>The identifier of the external provider where your third-party code repository is configured. For Bitbucket, this is the account ID of the owner of the Bitbucket repository.</p>
     #[serde(rename = "OwnerAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account_id: Option<String>,
-    /// <p>The name of the external provider where your third-party code repository is configured. Currently, the valid provider type is Bitbucket.</p>
+    /// <p>The name of the external provider where your third-party code repository is configured. The valid provider type is Bitbucket.</p>
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_type: Option<String>,
@@ -87,9 +91,14 @@ pub struct CreateConnectionInput {
     /// <p>The name of the connection to be created. The name must be unique in the calling AWS account.</p>
     #[serde(rename = "ConnectionName")]
     pub connection_name: String,
-    /// <p>The name of the external provider where your third-party code repository is configured. Currently, the valid provider type is Bitbucket.</p>
+    /// <p>The Amazon Resource Name (ARN) of the host associated with the connection to be created.</p>
+    #[serde(rename = "HostArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_arn: Option<String>,
+    /// <p>The name of the external provider where your third-party code repository is configured. The valid provider type is Bitbucket.</p>
     #[serde(rename = "ProviderType")]
-    pub provider_type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_type: Option<String>,
     /// <p>The key-value pair to use when tagging the resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -110,6 +119,33 @@ pub struct CreateConnectionOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateHostInput {
+    /// <p>The name of the host to be created. The name must be unique in the calling AWS account.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The endpoint of the infrastructure to be represented by the host after it is created.</p>
+    #[serde(rename = "ProviderEndpoint")]
+    pub provider_endpoint: String,
+    /// <p>The name of the installed provider to be associated with your connection. The host resource represents the infrastructure where your provider type is installed. The valid provider type is GitHub Enterprise Server.</p>
+    #[serde(rename = "ProviderType")]
+    pub provider_type: String,
+    /// <p>The VPC configuration to be provisioned for the host. A VPC must be configured and the infrastructure to be represented by the host must already be connected to the VPC.</p>
+    #[serde(rename = "VpcConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_configuration: Option<VpcConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateHostOutput {
+    /// <p>The Amazon Resource Name (ARN) of the host to be created.</p>
+    #[serde(rename = "HostArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConnectionInput {
     /// <p><p>The Amazon Resource Name (ARN) of the connection to be deleted.</p> <note> <p>The ARN is never reused if the connection is deleted.</p> </note></p>
     #[serde(rename = "ConnectionArn")]
@@ -119,6 +155,18 @@ pub struct DeleteConnectionInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectionOutput {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteHostInput {
+    /// <p>The Amazon Resource Name (ARN) of the host to be deleted.</p>
+    #[serde(rename = "HostArn")]
+    pub host_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteHostOutput {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -139,7 +187,78 @@ pub struct GetConnectionOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetHostInput {
+    /// <p>The Amazon Resource Name (ARN) of the requested host.</p>
+    #[serde(rename = "HostArn")]
+    pub host_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetHostOutput {
+    /// <p>The name of the requested host.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The endpoint of the infrastructure represented by the requested host.</p>
+    #[serde(rename = "ProviderEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_endpoint: Option<String>,
+    /// <p>The provider type of the requested host, such as GitHub Enterprise Server.</p>
+    #[serde(rename = "ProviderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_type: Option<String>,
+    /// <p>The status of the requested host.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The VPC configuration of the requested host.</p>
+    #[serde(rename = "VpcConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_configuration: Option<VpcConfiguration>,
+}
+
+/// <p><p>A resource that represents the infrastructure where a third-party provider is installed. The host is used when you create connections to an installed third-party provider type, such as GitHub Enterprise Server. You create one host for all connections to that provider.</p> <note> <p>A host created through the CLI or the SDK is in <code>PENDING</code> status by default. You can make its status <code>AVAILABLE</code> by setting up the host in the console.</p> </note></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Host {
+    /// <p>The Amazon Resource Name (ARN) of the host.</p>
+    #[serde(rename = "HostArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_arn: Option<String>,
+    /// <p>The name of the host.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The endpoint of the infrastructure where your provider type is installed.</p>
+    #[serde(rename = "ProviderEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_endpoint: Option<String>,
+    /// <p>The name of the installed provider to be associated with your connection. The host resource represents the infrastructure where your provider type is installed. The valid provider type is GitHub Enterprise Server.</p>
+    #[serde(rename = "ProviderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider_type: Option<String>,
+    /// <p>The status of the host, such as PENDING, AVAILABLE, VPC_CONFIG_DELETING, VPC_CONFIG_INITIALIZING, and VPC_CONFIG_FAILED_INITIALIZATION.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The status description for the host.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>The VPC configuration provisioned for the host.</p>
+    #[serde(rename = "VpcConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_configuration: Option<VpcConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConnectionsInput {
+    /// <p>Filters the list of connections to those associated with a specified host.</p>
+    #[serde(rename = "HostArnFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_arn_filter: Option<String>,
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -162,6 +281,32 @@ pub struct ListConnectionsOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<Vec<Connection>>,
     /// <p>A token that can be used in the next <code>ListConnections</code> call. To view all items in the list, continue to call this operation with each subsequent token until no more <code>nextToken</code> values are returned.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListHostsInput {
+    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token that was returned from the previous <code>ListHosts</code> call, which can be used to return the next set of hosts in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListHostsOutput {
+    /// <p>A list of hosts and the details for each host, such as status, endpoint, and provider type.</p>
+    #[serde(rename = "Hosts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hosts: Option<Vec<Host>>,
+    /// <p>A token that can be used in the next <code>ListHosts</code> call. To view all items in the list, continue to call this operation with each subsequent token until no more <code>nextToken</code> values are returned.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -225,11 +370,33 @@ pub struct UntagResourceInput {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
+/// <p>The VPC configuration provisioned for the host.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VpcConfiguration {
+    /// <p>The ID of the security group or security groups associated with the Amazon VPC connected to the infrastructure where your provider type is installed.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    pub security_group_ids: Vec<String>,
+    /// <p>The ID of the subnet or subnets associated with the Amazon VPC connected to the infrastructure where your provider type is installed.</p>
+    #[serde(rename = "SubnetIds")]
+    pub subnet_ids: Vec<String>,
+    /// <p>The value of the Transport Layer Security (TLS) certificate associated with the infrastructure where your provider type is installed.</p>
+    #[serde(rename = "TlsCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_certificate: Option<String>,
+    /// <p>The ID of the Amazon VPC connected to the infrastructure where your provider type is installed.</p>
+    #[serde(rename = "VpcId")]
+    pub vpc_id: String,
+}
+
 /// Errors returned by CreateConnection
 #[derive(Debug, PartialEq)]
 pub enum CreateConnectionError {
     /// <p>Exceeded the maximum limit for connections.</p>
     LimitExceeded(String),
+    /// <p>Resource not found. Verify the connection resource ARN and try again.</p>
+    ResourceNotFound(String),
+    /// <p>Resource not found. Verify the ARN for the host resource and try again.</p>
+    ResourceUnavailable(String),
 }
 
 impl CreateConnectionError {
@@ -238,6 +405,14 @@ impl CreateConnectionError {
             match err.typ.as_str() {
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateConnectionError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateConnectionError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(CreateConnectionError::ResourceUnavailable(
+                        err.msg,
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -251,10 +426,42 @@ impl fmt::Display for CreateConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateConnectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
 impl Error for CreateConnectionError {}
+/// Errors returned by CreateHost
+#[derive(Debug, PartialEq)]
+pub enum CreateHostError {
+    /// <p>Exceeded the maximum limit for connections.</p>
+    LimitExceeded(String),
+}
+
+impl CreateHostError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHostError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateHostError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateHostError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateHostError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateHostError {}
 /// Errors returned by DeleteConnection
 #[derive(Debug, PartialEq)]
 pub enum DeleteConnectionError {
@@ -285,11 +492,49 @@ impl fmt::Display for DeleteConnectionError {
     }
 }
 impl Error for DeleteConnectionError {}
+/// Errors returned by DeleteHost
+#[derive(Debug, PartialEq)]
+pub enum DeleteHostError {
+    /// <p>Resource not found. Verify the connection resource ARN and try again.</p>
+    ResourceNotFound(String),
+    /// <p>Resource not found. Verify the ARN for the host resource and try again.</p>
+    ResourceUnavailable(String),
+}
+
+impl DeleteHostError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHostError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteHostError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(DeleteHostError::ResourceUnavailable(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteHostError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteHostError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteHostError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteHostError {}
 /// Errors returned by GetConnection
 #[derive(Debug, PartialEq)]
 pub enum GetConnectionError {
     /// <p>Resource not found. Verify the connection resource ARN and try again.</p>
     ResourceNotFound(String),
+    /// <p>Resource not found. Verify the ARN for the host resource and try again.</p>
+    ResourceUnavailable(String),
 }
 
 impl GetConnectionError {
@@ -298,6 +543,9 @@ impl GetConnectionError {
             match err.typ.as_str() {
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(GetConnectionError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(GetConnectionError::ResourceUnavailable(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -311,10 +559,41 @@ impl fmt::Display for GetConnectionError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             GetConnectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetConnectionError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
 }
 impl Error for GetConnectionError {}
+/// Errors returned by GetHost
+#[derive(Debug, PartialEq)]
+pub enum GetHostError {
+    /// <p>Resource not found. Verify the connection resource ARN and try again.</p>
+    ResourceNotFound(String),
+}
+
+impl GetHostError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHostError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetHostError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetHostError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetHostError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetHostError {}
 /// Errors returned by ListConnections
 #[derive(Debug, PartialEq)]
 pub enum ListConnectionsError {}
@@ -337,6 +616,28 @@ impl fmt::Display for ListConnectionsError {
     }
 }
 impl Error for ListConnectionsError {}
+/// Errors returned by ListHosts
+#[derive(Debug, PartialEq)]
+pub enum ListHostsError {}
+
+impl ListHostsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHostsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListHostsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for ListHostsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -444,11 +745,23 @@ pub trait CodeStarConnections {
         input: CreateConnectionInput,
     ) -> Result<CreateConnectionOutput, RusotoError<CreateConnectionError>>;
 
+    /// <p><p>Creates a resource that represents the infrastructure where a third-party provider is installed. The host is used when you create connections to an installed third-party provider type, such as GitHub Enterprise Server. You create one host for all connections to that provider.</p> <note> <p>A host created through the CLI or the SDK is in <code>PENDING</code> status by default. You can make its status <code>AVAILABLE</code> by setting up the host in the console.</p> </note></p>
+    async fn create_host(
+        &self,
+        input: CreateHostInput,
+    ) -> Result<CreateHostOutput, RusotoError<CreateHostError>>;
+
     /// <p>The connection to be deleted.</p>
     async fn delete_connection(
         &self,
         input: DeleteConnectionInput,
     ) -> Result<DeleteConnectionOutput, RusotoError<DeleteConnectionError>>;
+
+    /// <p><p>The host to be deleted. Before you delete a host, all connections associated to the host must be deleted.</p> <note> <p>A host cannot be deleted if it is in the VPC<em>CONFIG</em>INITIALIZING or VPC<em>CONFIG</em>DELETING state.</p> </note></p>
+    async fn delete_host(
+        &self,
+        input: DeleteHostInput,
+    ) -> Result<DeleteHostOutput, RusotoError<DeleteHostError>>;
 
     /// <p>Returns the connection ARN and details such as status, owner, and provider type.</p>
     async fn get_connection(
@@ -456,11 +769,23 @@ pub trait CodeStarConnections {
         input: GetConnectionInput,
     ) -> Result<GetConnectionOutput, RusotoError<GetConnectionError>>;
 
+    /// <p>Returns the host ARN and details such as status, provider type, endpoint, and, if applicable, the VPC configuration.</p>
+    async fn get_host(
+        &self,
+        input: GetHostInput,
+    ) -> Result<GetHostOutput, RusotoError<GetHostError>>;
+
     /// <p>Lists the connections associated with your account.</p>
     async fn list_connections(
         &self,
         input: ListConnectionsInput,
     ) -> Result<ListConnectionsOutput, RusotoError<ListConnectionsError>>;
+
+    /// <p>Lists the hosts associated with your account.</p>
+    async fn list_hosts(
+        &self,
+        input: ListHostsInput,
+    ) -> Result<ListHostsOutput, RusotoError<ListHostsError>>;
 
     /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>
     async fn list_tags_for_resource(
@@ -541,6 +866,27 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateConnectionOutput, _>()
     }
 
+    /// <p><p>Creates a resource that represents the infrastructure where a third-party provider is installed. The host is used when you create connections to an installed third-party provider type, such as GitHub Enterprise Server. You create one host for all connections to that provider.</p> <note> <p>A host created through the CLI or the SDK is in <code>PENDING</code> status by default. You can make its status <code>AVAILABLE</code> by setting up the host in the console.</p> </note></p>
+    async fn create_host(
+        &self,
+        input: CreateHostInput,
+    ) -> Result<CreateHostOutput, RusotoError<CreateHostError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.codestar.connections.CodeStar_connections_20191201.CreateHost",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateHostError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateHostOutput, _>()
+    }
+
     /// <p>The connection to be deleted.</p>
     async fn delete_connection(
         &self,
@@ -560,6 +906,27 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteConnectionOutput, _>()
+    }
+
+    /// <p><p>The host to be deleted. Before you delete a host, all connections associated to the host must be deleted.</p> <note> <p>A host cannot be deleted if it is in the VPC<em>CONFIG</em>INITIALIZING or VPC<em>CONFIG</em>DELETING state.</p> </note></p>
+    async fn delete_host(
+        &self,
+        input: DeleteHostInput,
+    ) -> Result<DeleteHostOutput, RusotoError<DeleteHostError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.codestar.connections.CodeStar_connections_20191201.DeleteHost",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteHostError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteHostOutput, _>()
     }
 
     /// <p>Returns the connection ARN and details such as status, owner, and provider type.</p>
@@ -583,6 +950,27 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetConnectionOutput, _>()
     }
 
+    /// <p>Returns the host ARN and details such as status, provider type, endpoint, and, if applicable, the VPC configuration.</p>
+    async fn get_host(
+        &self,
+        input: GetHostInput,
+    ) -> Result<GetHostOutput, RusotoError<GetHostError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.codestar.connections.CodeStar_connections_20191201.GetHost",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetHostError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetHostOutput, _>()
+    }
+
     /// <p>Lists the connections associated with your account.</p>
     async fn list_connections(
         &self,
@@ -602,6 +990,27 @@ impl CodeStarConnections for CodeStarConnectionsClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListConnectionsOutput, _>()
+    }
+
+    /// <p>Lists the hosts associated with your account.</p>
+    async fn list_hosts(
+        &self,
+        input: ListHostsInput,
+    ) -> Result<ListHostsOutput, RusotoError<ListHostsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "com.amazonaws.codestar.connections.CodeStar_connections_20191201.ListHosts",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListHostsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListHostsOutput, _>()
     }
 
     /// <p>Gets the set of key-value pairs (metadata) that are used to manage the resource.</p>

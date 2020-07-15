@@ -25,6 +25,25 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>Container for the parameters to the <code><a>AcceptInboundCrossClusterSearchConnection</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AcceptInboundCrossClusterSearchConnectionRequest {
+    /// <p>The id of the inbound connection that you want to accept.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    pub cross_cluster_search_connection_id: String,
+}
+
+/// <p>The result of a <code><a>AcceptInboundCrossClusterSearchConnection</a></code> operation. Contains details of accepted inbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AcceptInboundCrossClusterSearchConnectionResponse {
+    /// <p>Specifies the <code><a>InboundCrossClusterSearchConnection</a></code> of accepted inbound connection. </p>
+    #[serde(rename = "CrossClusterSearchConnection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection: Option<InboundCrossClusterSearchConnection>,
+}
+
 /// <p>The configured access rules for the domain's document and search endpoints, and the current status of those rules.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -276,6 +295,47 @@ pub struct CreateElasticsearchDomainResponse {
     pub domain_status: Option<ElasticsearchDomainStatus>,
 }
 
+/// <p>Container for the parameters to the <code><a>CreateOutboundCrossClusterSearchConnection</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateOutboundCrossClusterSearchConnectionRequest {
+    /// <p>Specifies the connection alias that will be used by the customer for this connection.</p>
+    #[serde(rename = "ConnectionAlias")]
+    pub connection_alias: String,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the destination Elasticsearch domain.</p>
+    #[serde(rename = "DestinationDomainInfo")]
+    pub destination_domain_info: DomainInformation,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the source Elasticsearch domain.</p>
+    #[serde(rename = "SourceDomainInfo")]
+    pub source_domain_info: DomainInformation,
+}
+
+/// <p>The result of a <code><a>CreateOutboundCrossClusterSearchConnection</a></code> request. Contains the details of the newly created cross-cluster search connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateOutboundCrossClusterSearchConnectionResponse {
+    /// <p>Specifies the connection alias provided during the create connection request.</p>
+    #[serde(rename = "ConnectionAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_alias: Option<String>,
+    /// <p>Specifies the <code><a>OutboundCrossClusterSearchConnectionStatus</a></code> for the newly created connection.</p>
+    #[serde(rename = "ConnectionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_status: Option<OutboundCrossClusterSearchConnectionStatus>,
+    /// <p>Unique id for the created outbound connection, which is used for subsequent operations on connection.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection_id: Option<String>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the destination Elasticsearch domain.</p>
+    #[serde(rename = "DestinationDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_domain_info: Option<DomainInformation>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the source Elasticsearch domain.</p>
+    #[serde(rename = "SourceDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_domain_info: Option<DomainInformation>,
+}
+
 /// <p> Container for request parameters to <code> <a>CreatePackage</a> </code> operation. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -322,6 +382,44 @@ pub struct DeleteElasticsearchDomainResponse {
     #[serde(rename = "DomainStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_status: Option<ElasticsearchDomainStatus>,
+}
+
+/// <p>Container for the parameters to the <code><a>DeleteInboundCrossClusterSearchConnection</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteInboundCrossClusterSearchConnectionRequest {
+    /// <p>The id of the inbound connection that you want to permanently delete.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    pub cross_cluster_search_connection_id: String,
+}
+
+/// <p>The result of a <code><a>DeleteInboundCrossClusterSearchConnection</a></code> operation. Contains details of deleted inbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteInboundCrossClusterSearchConnectionResponse {
+    /// <p>Specifies the <code><a>InboundCrossClusterSearchConnection</a></code> of deleted inbound connection. </p>
+    #[serde(rename = "CrossClusterSearchConnection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection: Option<InboundCrossClusterSearchConnection>,
+}
+
+/// <p>Container for the parameters to the <code><a>DeleteOutboundCrossClusterSearchConnection</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteOutboundCrossClusterSearchConnectionRequest {
+    /// <p>The id of the outbound connection that you want to permanently delete.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    pub cross_cluster_search_connection_id: String,
+}
+
+/// <p>The result of a <code><a>DeleteOutboundCrossClusterSearchConnection</a></code> operation. Contains details of deleted outbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteOutboundCrossClusterSearchConnectionResponse {
+    /// <p>Specifies the <code><a>OutboundCrossClusterSearchConnection</a></code> of deleted outbound connection. </p>
+    #[serde(rename = "CrossClusterSearchConnection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection: Option<OutboundCrossClusterSearchConnection>,
 }
 
 /// <p> Container for request parameters to <code> <a>DeletePackage</a> </code> operation. </p>
@@ -420,6 +518,70 @@ pub struct DescribeElasticsearchInstanceTypeLimitsResponse {
     #[serde(rename = "LimitsByRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limits_by_role: Option<::std::collections::HashMap<String, Limits>>,
+}
+
+/// <p>Container for the parameters to the <code><a>DescribeInboundCrossClusterSearchConnections</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeInboundCrossClusterSearchConnectionsRequest {
+    /// <p> A list of filters used to match properties for inbound cross-cluster search connection. Available <code><a>Filter</a></code> names for this operation are: <ul> <li>cross-cluster-search-connection-id</li> <li>source-domain-info.domain-name</li> <li>source-domain-info.owner-id</li> <li>source-domain-info.region</li> <li>destination-domain-info.domain-name</li> </ul> </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> NextToken is sent in case the earlier API call results contain the NextToken. It is used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>The result of a <code><a>DescribeInboundCrossClusterSearchConnections</a></code> request. Contains the list of connections matching the filter criteria.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeInboundCrossClusterSearchConnectionsResponse {
+    /// <p>Consists of list of <code><a>InboundCrossClusterSearchConnection</a></code> matching the specified filter criteria.</p>
+    #[serde(rename = "CrossClusterSearchConnections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connections: Option<Vec<InboundCrossClusterSearchConnection>>,
+    /// <p>If more results are available and NextToken is present, make the next request to the same API with the received NextToken to paginate the remaining results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Container for the parameters to the <code><a>DescribeOutboundCrossClusterSearchConnections</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeOutboundCrossClusterSearchConnectionsRequest {
+    /// <p> A list of filters used to match properties for outbound cross-cluster search connection. Available <code><a>Filter</a></code> names for this operation are: <ul> <li>cross-cluster-search-connection-id</li> <li>destination-domain-info.domain-name</li> <li>destination-domain-info.owner-id</li> <li>destination-domain-info.region</li> <li>source-domain-info.domain-name</li> </ul> </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> NextToken is sent in case the earlier API call results contain the NextToken. It is used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>The result of a <code><a>DescribeOutboundCrossClusterSearchConnections</a></code> request. Contains the list of connections matching the filter criteria.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeOutboundCrossClusterSearchConnectionsResponse {
+    /// <p>Consists of list of <code><a>OutboundCrossClusterSearchConnection</a></code> matching the specified filter criteria.</p>
+    #[serde(rename = "CrossClusterSearchConnections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connections: Option<Vec<OutboundCrossClusterSearchConnection>>,
+    /// <p>If more results are available and NextToken is present, make the next request to the same API with the received NextToken to paginate the remaining results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 /// <p>Filter to apply in <code>DescribePackage</code> response.</p>
@@ -586,6 +748,18 @@ pub struct DomainInfo {
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DomainInformation {
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    #[serde(rename = "OwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+    #[serde(rename = "Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
 }
 
 /// <p>Information on a package that is associated with a domain.</p>
@@ -915,6 +1089,20 @@ pub struct ErrorDetails {
     pub error_type: Option<String>,
 }
 
+/// <p> A filter used to limit results when describing inbound or outbound cross-cluster search connections. Multiple values can be specified per filter. A cross-cluster search connection must match at least one of the specified values for it to be returned from an operation. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct Filter {
+    /// <p> Specifies the name of the filter. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p> Contains one or more values for the filter. </p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
+}
+
 /// <p> Container for request parameters to <code> <a>GetCompatibleElasticsearchVersions</a> </code> operation. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -986,6 +1174,42 @@ pub struct GetUpgradeStatusResponse {
     #[serde(rename = "UpgradeStep")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub upgrade_step: Option<String>,
+}
+
+/// <p>Specifies details of an inbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InboundCrossClusterSearchConnection {
+    /// <p>Specifies the <code><a>InboundCrossClusterSearchConnectionStatus</a></code> for the outbound connection.</p>
+    #[serde(rename = "ConnectionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_status: Option<InboundCrossClusterSearchConnectionStatus>,
+    /// <p>Specifies the connection id for the inbound cross-cluster search connection.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection_id: Option<String>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the destination Elasticsearch domain.</p>
+    #[serde(rename = "DestinationDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_domain_info: Option<DomainInformation>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the source Elasticsearch domain.</p>
+    #[serde(rename = "SourceDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_domain_info: Option<DomainInformation>,
+}
+
+/// <p>Specifies the coonection status of an inbound cross-cluster search connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InboundCrossClusterSearchConnectionStatus {
+    /// <p>Specifies verbose information for the inbound connection status.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p><p>The state code for inbound connection. This can be one of the following:</p> <ul> <li>PENDING_ACCEPTANCE: Inbound connection is not yet accepted by destination domain owner.</li> <li>APPROVED: Inbound connection is pending acceptance by destination domain owner.</li> <li>REJECTING: Inbound connection rejection is in process.</li> <li>REJECTED: Inbound connection is rejected.</li> <li>DELETING: Inbound connection deletion is in progress.</li> <li>DELETED: Inbound connection is deleted and cannot be used further.</li> </ul></p>
+    #[serde(rename = "StatusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
 }
 
 /// <p> InstanceCountLimits represents the limits on number of instances that be created in Amazon Elasticsearch for given InstanceType. </p>
@@ -1264,6 +1488,46 @@ pub struct OptionStatus {
     pub update_version: Option<i64>,
 }
 
+/// <p>Specifies details of an outbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OutboundCrossClusterSearchConnection {
+    /// <p>Specifies the connection alias for the outbound cross-cluster search connection.</p>
+    #[serde(rename = "ConnectionAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_alias: Option<String>,
+    /// <p>Specifies the <code><a>OutboundCrossClusterSearchConnectionStatus</a></code> for the outbound connection.</p>
+    #[serde(rename = "ConnectionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_status: Option<OutboundCrossClusterSearchConnectionStatus>,
+    /// <p>Specifies the connection id for the outbound cross-cluster search connection.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection_id: Option<String>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the destination Elasticsearch domain.</p>
+    #[serde(rename = "DestinationDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_domain_info: Option<DomainInformation>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the source Elasticsearch domain.</p>
+    #[serde(rename = "SourceDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_domain_info: Option<DomainInformation>,
+}
+
+/// <p>Specifies the connection status of an outbound cross-cluster search connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OutboundCrossClusterSearchConnectionStatus {
+    /// <p>Specifies verbose information for the outbound connection status.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p><p>The state code for outbound connection. This can be one of the following:</p> <ul> <li>VALIDATING: The outbound connection request is being validated.</li> <li>VALIDATION<em>FAILED: Validation failed for the connection request.</li> <li>PENDING</em>ACCEPTANCE: Outbound connection request is validated and is not yet accepted by destination domain owner.</li> <li>PROVISIONING: Outbound connection request is in process.</li> <li>ACTIVE: Outbound connection is active and ready to use.</li> <li>REJECTED: Outbound connection request is rejected by destination domain owner.</li> <li>DELETING: Outbound connection deletion is in progress.</li> <li>DELETED: Outbound connection is deleted and cannot be used further.</li> </ul></p>
+    #[serde(rename = "StatusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+}
+
 /// <p>Basic information about a package.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1354,6 +1618,25 @@ pub struct RecurringCharge {
     #[serde(rename = "RecurringChargeFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recurring_charge_frequency: Option<String>,
+}
+
+/// <p>Container for the parameters to the <code><a>RejectInboundCrossClusterSearchConnection</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RejectInboundCrossClusterSearchConnectionRequest {
+    /// <p>The id of the inbound connection that you want to reject.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    pub cross_cluster_search_connection_id: String,
+}
+
+/// <p>The result of a <code><a>RejectInboundCrossClusterSearchConnection</a></code> operation. Contains details of rejected inbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RejectInboundCrossClusterSearchConnectionResponse {
+    /// <p>Specifies the <code><a>InboundCrossClusterSearchConnection</a></code> of rejected inbound connection. </p>
+    #[serde(rename = "CrossClusterSearchConnection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection: Option<InboundCrossClusterSearchConnection>,
 }
 
 /// <p>Container for the parameters to the <code><a>RemoveTags</a></code> operation. Specify the <code>ARN</code> for the Elasticsearch domain from which you want to remove the specified <code>TagKey</code>.</p>
@@ -1774,6 +2057,62 @@ pub struct ZoneAwarenessConfig {
     pub availability_zone_count: Option<i64>,
 }
 
+/// Errors returned by AcceptInboundCrossClusterSearchConnection
+#[derive(Debug, PartialEq)]
+pub enum AcceptInboundCrossClusterSearchConnectionError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>An exception for trying to create more than allowed resources or sub-resources. Gives http status code of 409.</p>
+    LimitExceeded(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl AcceptInboundCrossClusterSearchConnectionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AcceptInboundCrossClusterSearchConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        AcceptInboundCrossClusterSearchConnectionError::DisabledOperation(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        AcceptInboundCrossClusterSearchConnectionError::LimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        AcceptInboundCrossClusterSearchConnectionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AcceptInboundCrossClusterSearchConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AcceptInboundCrossClusterSearchConnectionError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptInboundCrossClusterSearchConnectionError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptInboundCrossClusterSearchConnectionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AcceptInboundCrossClusterSearchConnectionError {}
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
@@ -1994,6 +2333,74 @@ impl fmt::Display for CreateElasticsearchDomainError {
     }
 }
 impl Error for CreateElasticsearchDomainError {}
+/// Errors returned by CreateOutboundCrossClusterSearchConnection
+#[derive(Debug, PartialEq)]
+pub enum CreateOutboundCrossClusterSearchConnectionError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for trying to create more than allowed resources or sub-resources. Gives http status code of 409.</p>
+    LimitExceeded(String),
+    /// <p>An exception for creating a resource that already exists. Gives http status code of 400.</p>
+    ResourceAlreadyExists(String),
+}
+
+impl CreateOutboundCrossClusterSearchConnectionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateOutboundCrossClusterSearchConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        CreateOutboundCrossClusterSearchConnectionError::DisabledOperation(err.msg),
+                    )
+                }
+                "InternalException" => {
+                    return RusotoError::Service(
+                        CreateOutboundCrossClusterSearchConnectionError::Internal(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateOutboundCrossClusterSearchConnectionError::LimitExceeded(err.msg),
+                    )
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateOutboundCrossClusterSearchConnectionError::ResourceAlreadyExists(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateOutboundCrossClusterSearchConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateOutboundCrossClusterSearchConnectionError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOutboundCrossClusterSearchConnectionError::Internal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOutboundCrossClusterSearchConnectionError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOutboundCrossClusterSearchConnectionError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateOutboundCrossClusterSearchConnectionError {}
 /// Errors returned by CreatePackage
 #[derive(Debug, PartialEq)]
 pub enum CreatePackageError {
@@ -2136,6 +2543,98 @@ impl fmt::Display for DeleteElasticsearchServiceRoleError {
     }
 }
 impl Error for DeleteElasticsearchServiceRoleError {}
+/// Errors returned by DeleteInboundCrossClusterSearchConnection
+#[derive(Debug, PartialEq)]
+pub enum DeleteInboundCrossClusterSearchConnectionError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteInboundCrossClusterSearchConnectionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteInboundCrossClusterSearchConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        DeleteInboundCrossClusterSearchConnectionError::DisabledOperation(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteInboundCrossClusterSearchConnectionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteInboundCrossClusterSearchConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteInboundCrossClusterSearchConnectionError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteInboundCrossClusterSearchConnectionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteInboundCrossClusterSearchConnectionError {}
+/// Errors returned by DeleteOutboundCrossClusterSearchConnection
+#[derive(Debug, PartialEq)]
+pub enum DeleteOutboundCrossClusterSearchConnectionError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteOutboundCrossClusterSearchConnectionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteOutboundCrossClusterSearchConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        DeleteOutboundCrossClusterSearchConnectionError::DisabledOperation(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteOutboundCrossClusterSearchConnectionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteOutboundCrossClusterSearchConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteOutboundCrossClusterSearchConnectionError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOutboundCrossClusterSearchConnectionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteOutboundCrossClusterSearchConnectionError {}
 /// Errors returned by DeletePackage
 #[derive(Debug, PartialEq)]
 pub enum DeletePackageError {
@@ -2402,6 +2901,106 @@ impl fmt::Display for DescribeElasticsearchInstanceTypeLimitsError {
     }
 }
 impl Error for DescribeElasticsearchInstanceTypeLimitsError {}
+/// Errors returned by DescribeInboundCrossClusterSearchConnections
+#[derive(Debug, PartialEq)]
+pub enum DescribeInboundCrossClusterSearchConnectionsError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>The request processing has failed because of invalid pagination token provided by customer. Returns an HTTP status code of 400. </p>
+    InvalidPaginationToken(String),
+}
+
+impl DescribeInboundCrossClusterSearchConnectionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeInboundCrossClusterSearchConnectionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        DescribeInboundCrossClusterSearchConnectionsError::DisabledOperation(
+                            err.msg,
+                        ),
+                    )
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(
+                        DescribeInboundCrossClusterSearchConnectionsError::InvalidPaginationToken(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeInboundCrossClusterSearchConnectionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeInboundCrossClusterSearchConnectionsError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInboundCrossClusterSearchConnectionsError::InvalidPaginationToken(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeInboundCrossClusterSearchConnectionsError {}
+/// Errors returned by DescribeOutboundCrossClusterSearchConnections
+#[derive(Debug, PartialEq)]
+pub enum DescribeOutboundCrossClusterSearchConnectionsError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>The request processing has failed because of invalid pagination token provided by customer. Returns an HTTP status code of 400. </p>
+    InvalidPaginationToken(String),
+}
+
+impl DescribeOutboundCrossClusterSearchConnectionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOutboundCrossClusterSearchConnectionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        DescribeOutboundCrossClusterSearchConnectionsError::DisabledOperation(
+                            err.msg,
+                        ),
+                    )
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(
+                        DescribeOutboundCrossClusterSearchConnectionsError::InvalidPaginationToken(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeOutboundCrossClusterSearchConnectionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeOutboundCrossClusterSearchConnectionsError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOutboundCrossClusterSearchConnectionsError::InvalidPaginationToken(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeOutboundCrossClusterSearchConnectionsError {}
 /// Errors returned by DescribePackages
 #[derive(Debug, PartialEq)]
 pub enum DescribePackagesError {
@@ -3124,6 +3723,52 @@ impl fmt::Display for PurchaseReservedElasticsearchInstanceOfferingError {
     }
 }
 impl Error for PurchaseReservedElasticsearchInstanceOfferingError {}
+/// Errors returned by RejectInboundCrossClusterSearchConnection
+#[derive(Debug, PartialEq)]
+pub enum RejectInboundCrossClusterSearchConnectionError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl RejectInboundCrossClusterSearchConnectionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RejectInboundCrossClusterSearchConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        RejectInboundCrossClusterSearchConnectionError::DisabledOperation(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        RejectInboundCrossClusterSearchConnectionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RejectInboundCrossClusterSearchConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RejectInboundCrossClusterSearchConnectionError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RejectInboundCrossClusterSearchConnectionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for RejectInboundCrossClusterSearchConnectionError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -3349,6 +3994,15 @@ impl Error for UpgradeElasticsearchDomainError {}
 /// Trait representing the capabilities of the Amazon Elasticsearch Service API. Amazon Elasticsearch Service clients implement this trait.
 #[async_trait]
 pub trait Es {
+    /// <p>Allows the destination domain owner to accept an inbound cross-cluster search connection request.</p>
+    async fn accept_inbound_cross_cluster_search_connection(
+        &self,
+        input: AcceptInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        AcceptInboundCrossClusterSearchConnectionResponse,
+        RusotoError<AcceptInboundCrossClusterSearchConnectionError>,
+    >;
+
     /// <p>Attaches tags to an existing Elasticsearch domain. Tags are a set of case-sensitive key value pairs. An Elasticsearch domain may have up to 10 tags. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-awsresorcetagging" target="_blank"> Tagging Amazon Elasticsearch Service Domains for more information.</a></p>
     async fn add_tags(&self, input: AddTagsRequest) -> Result<(), RusotoError<AddTagsError>>;
 
@@ -3373,6 +4027,15 @@ pub trait Es {
         input: CreateElasticsearchDomainRequest,
     ) -> Result<CreateElasticsearchDomainResponse, RusotoError<CreateElasticsearchDomainError>>;
 
+    /// <p>Creates a new cross-cluster search connection from a source domain to a destination domain.</p>
+    async fn create_outbound_cross_cluster_search_connection(
+        &self,
+        input: CreateOutboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        CreateOutboundCrossClusterSearchConnectionResponse,
+        RusotoError<CreateOutboundCrossClusterSearchConnectionError>,
+    >;
+
     /// <p>Create a package for use with Amazon ES domains.</p>
     async fn create_package(
         &self,
@@ -3389,6 +4052,24 @@ pub trait Es {
     async fn delete_elasticsearch_service_role(
         &self,
     ) -> Result<(), RusotoError<DeleteElasticsearchServiceRoleError>>;
+
+    /// <p>Allows the destination domain owner to delete an existing inbound cross-cluster search connection.</p>
+    async fn delete_inbound_cross_cluster_search_connection(
+        &self,
+        input: DeleteInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        DeleteInboundCrossClusterSearchConnectionResponse,
+        RusotoError<DeleteInboundCrossClusterSearchConnectionError>,
+    >;
+
+    /// <p>Allows the source domain owner to delete an existing outbound cross-cluster search connection.</p>
+    async fn delete_outbound_cross_cluster_search_connection(
+        &self,
+        input: DeleteOutboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        DeleteOutboundCrossClusterSearchConnectionResponse,
+        RusotoError<DeleteOutboundCrossClusterSearchConnectionError>,
+    >;
 
     /// <p>Delete the package.</p>
     async fn delete_package(
@@ -3424,6 +4105,24 @@ pub trait Es {
     ) -> Result<
         DescribeElasticsearchInstanceTypeLimitsResponse,
         RusotoError<DescribeElasticsearchInstanceTypeLimitsError>,
+    >;
+
+    /// <p>Lists all the inbound cross-cluster search connections for a destination domain.</p>
+    async fn describe_inbound_cross_cluster_search_connections(
+        &self,
+        input: DescribeInboundCrossClusterSearchConnectionsRequest,
+    ) -> Result<
+        DescribeInboundCrossClusterSearchConnectionsResponse,
+        RusotoError<DescribeInboundCrossClusterSearchConnectionsError>,
+    >;
+
+    /// <p>Lists all the outbound cross-cluster search connections for a source domain.</p>
+    async fn describe_outbound_cross_cluster_search_connections(
+        &self,
+        input: DescribeOutboundCrossClusterSearchConnectionsRequest,
+    ) -> Result<
+        DescribeOutboundCrossClusterSearchConnectionsResponse,
+        RusotoError<DescribeOutboundCrossClusterSearchConnectionsError>,
     >;
 
     /// <p>Describes all packages available to Amazon ES. Includes options for filtering, limiting the number of results, and pagination.</p>
@@ -3524,6 +4223,15 @@ pub trait Es {
         RusotoError<PurchaseReservedElasticsearchInstanceOfferingError>,
     >;
 
+    /// <p>Allows the destination domain owner to reject an inbound cross-cluster search connection request.</p>
+    async fn reject_inbound_cross_cluster_search_connection(
+        &self,
+        input: RejectInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        RejectInboundCrossClusterSearchConnectionResponse,
+        RusotoError<RejectInboundCrossClusterSearchConnectionError>,
+    >;
+
     /// <p>Removes the specified set of tags from the specified Elasticsearch domain.</p>
     async fn remove_tags(
         &self,
@@ -3594,6 +4302,40 @@ impl EsClient {
 
 #[async_trait]
 impl Es for EsClient {
+    /// <p>Allows the destination domain owner to accept an inbound cross-cluster search connection request.</p>
+    #[allow(unused_mut)]
+    async fn accept_inbound_cross_cluster_search_connection(
+        &self,
+        input: AcceptInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        AcceptInboundCrossClusterSearchConnectionResponse,
+        RusotoError<AcceptInboundCrossClusterSearchConnectionError>,
+    > {
+        let request_uri = format!(
+            "/2015-01-01/es/ccs/inboundConnection/{connection_id}/accept",
+            connection_id = input.cross_cluster_search_connection_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AcceptInboundCrossClusterSearchConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AcceptInboundCrossClusterSearchConnectionError::from_response(response))
+        }
+    }
+
     /// <p>Attaches tags to an existing Elasticsearch domain. Tags are a set of case-sensitive key value pairs. An Elasticsearch domain may have up to 10 tags. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-awsresorcetagging" target="_blank"> Tagging Amazon Elasticsearch Service Domains for more information.</a></p>
     #[allow(unused_mut)]
     async fn add_tags(&self, input: AddTagsRequest) -> Result<(), RusotoError<AddTagsError>> {
@@ -3719,6 +4461,40 @@ impl Es for EsClient {
         }
     }
 
+    /// <p>Creates a new cross-cluster search connection from a source domain to a destination domain.</p>
+    #[allow(unused_mut)]
+    async fn create_outbound_cross_cluster_search_connection(
+        &self,
+        input: CreateOutboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        CreateOutboundCrossClusterSearchConnectionResponse,
+        RusotoError<CreateOutboundCrossClusterSearchConnectionError>,
+    > {
+        let request_uri = "/2015-01-01/es/ccs/outboundConnection";
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateOutboundCrossClusterSearchConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateOutboundCrossClusterSearchConnectionError::from_response(response))
+        }
+    }
+
     /// <p>Create a package for use with Amazon ES domains.</p>
     #[allow(unused_mut)]
     async fn create_package(
@@ -3805,6 +4581,74 @@ impl Es for EsClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteElasticsearchServiceRoleError::from_response(response))
+        }
+    }
+
+    /// <p>Allows the destination domain owner to delete an existing inbound cross-cluster search connection.</p>
+    #[allow(unused_mut)]
+    async fn delete_inbound_cross_cluster_search_connection(
+        &self,
+        input: DeleteInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        DeleteInboundCrossClusterSearchConnectionResponse,
+        RusotoError<DeleteInboundCrossClusterSearchConnectionError>,
+    > {
+        let request_uri = format!(
+            "/2015-01-01/es/ccs/inboundConnection/{connection_id}",
+            connection_id = input.cross_cluster_search_connection_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteInboundCrossClusterSearchConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteInboundCrossClusterSearchConnectionError::from_response(response))
+        }
+    }
+
+    /// <p>Allows the source domain owner to delete an existing outbound cross-cluster search connection.</p>
+    #[allow(unused_mut)]
+    async fn delete_outbound_cross_cluster_search_connection(
+        &self,
+        input: DeleteOutboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        DeleteOutboundCrossClusterSearchConnectionResponse,
+        RusotoError<DeleteOutboundCrossClusterSearchConnectionError>,
+    > {
+        let request_uri = format!(
+            "/2015-01-01/es/ccs/outboundConnection/{connection_id}",
+            connection_id = input.cross_cluster_search_connection_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteOutboundCrossClusterSearchConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteOutboundCrossClusterSearchConnectionError::from_response(response))
         }
     }
 
@@ -3979,6 +4823,76 @@ impl Es for EsClient {
             Err(DescribeElasticsearchInstanceTypeLimitsError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Lists all the inbound cross-cluster search connections for a destination domain.</p>
+    #[allow(unused_mut)]
+    async fn describe_inbound_cross_cluster_search_connections(
+        &self,
+        input: DescribeInboundCrossClusterSearchConnectionsRequest,
+    ) -> Result<
+        DescribeInboundCrossClusterSearchConnectionsResponse,
+        RusotoError<DescribeInboundCrossClusterSearchConnectionsError>,
+    > {
+        let request_uri = "/2015-01-01/es/ccs/inboundConnection/search";
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeInboundCrossClusterSearchConnectionsResponse, _>(
+            )?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeInboundCrossClusterSearchConnectionsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all the outbound cross-cluster search connections for a source domain.</p>
+    #[allow(unused_mut)]
+    async fn describe_outbound_cross_cluster_search_connections(
+        &self,
+        input: DescribeOutboundCrossClusterSearchConnectionsRequest,
+    ) -> Result<
+        DescribeOutboundCrossClusterSearchConnectionsResponse,
+        RusotoError<DescribeOutboundCrossClusterSearchConnectionsError>,
+    > {
+        let request_uri = "/2015-01-01/es/ccs/outboundConnection/search";
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeOutboundCrossClusterSearchConnectionsResponse, _>(
+            )?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeOutboundCrossClusterSearchConnectionsError::from_response(response))
         }
     }
 
@@ -4499,6 +5413,40 @@ impl Es for EsClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(PurchaseReservedElasticsearchInstanceOfferingError::from_response(response))
+        }
+    }
+
+    /// <p>Allows the destination domain owner to reject an inbound cross-cluster search connection request.</p>
+    #[allow(unused_mut)]
+    async fn reject_inbound_cross_cluster_search_connection(
+        &self,
+        input: RejectInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        RejectInboundCrossClusterSearchConnectionResponse,
+        RusotoError<RejectInboundCrossClusterSearchConnectionError>,
+    > {
+        let request_uri = format!(
+            "/2015-01-01/es/ccs/inboundConnection/{connection_id}/reject",
+            connection_id = input.cross_cluster_search_connection_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RejectInboundCrossClusterSearchConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RejectInboundCrossClusterSearchConnectionError::from_response(response))
         }
     }
 

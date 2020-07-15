@@ -13,6 +13,8 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
         .get_shape(&operation.input.as_ref().unwrap().shape)
         .unwrap();
 
+    let http_checksum_required = operation.http_checksum_required.unwrap_or(false);
+
     Some(shape.members
         .as_ref()
         .unwrap()
@@ -21,15 +23,29 @@ pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<
             member.location.as_ref()?;
             match &member.location.as_ref().unwrap()[..] {
                 "header" => {
-                    if shape.required(member_name) {
+                    let location_name = member.location_name.as_ref().unwrap();
+                    // If the operation is marked as requiring an HTTP checksum, the shape may have
+                    // a member that corresponds to the "Content-MD5" header. Elsewhere we ensure
+                    // that this header is set after the payload is ready. Our struct will not have
+                    // the matching field if the shape member is marked as deprecated. Conversely,
+                    // if member is not deprecated, then the field will be present in our struct,
+                    // and the logic to set the header could clobber a user-supplied value. For now
+                    // we treat this as an error in the service model.
+                    if http_checksum_required && location_name == "Content-MD5" {
+                        assert!(member.deprecated.unwrap_or(false),
+                            "{} has \"httpChecksumRequired: true\", but the shape member {} \
+                             is not marked as deprecated.",
+                            operation.name, member_name);
+                        None
+                    } else if shape.required(member_name) {
                         Some(format!("request.add_header(\"{location_name}\",
-                                      &input.{field_name});",
-                                     location_name = member.location_name.as_ref().unwrap(),
+                                      &input.{field_name}.to_string());",
+                                     location_name = location_name,
                                      field_name = generate_field_name(member_name)))
                     } else {
                         Some(format!("request.add_optional_header(\"{location_name}\",
                                       input.{field_name}.as_ref());",
-                                     location_name = member.location_name.as_ref().unwrap(),
+                                     location_name = location_name,
                                      field_name = generate_field_name(member_name)))
                     }
                 },

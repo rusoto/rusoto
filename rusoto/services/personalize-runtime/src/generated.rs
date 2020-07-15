@@ -61,6 +61,10 @@ pub struct GetRecommendationsRequest {
     #[serde(rename = "context")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ARN of the filter to apply to the returned recommendations. For more information, see Using Filters with Amazon Personalize.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
     /// <p>The item ID to provide recommendations for.</p> <p>Required for <code>RELATED_ITEMS</code> recipe type.</p>
     #[serde(rename = "itemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -92,7 +96,7 @@ pub struct PredictedItem {
     #[serde(rename = "itemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_id: Option<String>,
-    /// <p>A numeric representation of the model's certainty in the item's suitability. For more information on scoring logic, see <a>how-scores-work</a>.</p>
+    /// <p>A numeric representation of the model's certainty that the item will be the next user selection. For more information on scoring logic, see <a>how-scores-work</a>.</p>
     #[serde(rename = "score")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub score: Option<f64>,

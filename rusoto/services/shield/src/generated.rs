@@ -89,6 +89,18 @@ pub struct AssociateHealthCheckRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateHealthCheckResponse {}
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateProactiveEngagementDetailsRequest {
+    /// <p><p>A list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you for escalations to the DRT and to initiate proactive customer support. </p> <p>To enable proactive engagement, the contact list must include at least one phone number.</p> <note> <p>The contacts that you provide here replace any contacts that were already defined. If you already have contacts defined and want to use them, retrieve the list using <code>DescribeEmergencyContactSettings</code> and then provide it here. </p> </note></p>
+    #[serde(rename = "EmergencyContactList")]
+    pub emergency_contact_list: Vec<EmergencyContact>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateProactiveEngagementDetailsResponse {}
+
 /// <p>The details of a DDoS attack.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -291,7 +303,7 @@ pub struct DescribeEmergencyContactSettingsRequest {}
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEmergencyContactSettingsResponse {
-    /// <p>A list of email addresses that the DRT can use to contact you during a suspected attack.</p>
+    /// <p>A list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p>
     #[serde(rename = "EmergencyContactList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emergency_contact_list: Option<Vec<EmergencyContact>>,
@@ -334,6 +346,14 @@ pub struct DescribeSubscriptionResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisableProactiveEngagementRequest {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisableProactiveEngagementResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDRTLogBucketRequest {
     /// <p>The Amazon S3 bucket that contains your AWS WAF logs.</p>
     #[serde(rename = "LogBucket")]
@@ -367,13 +387,29 @@ pub struct DisassociateHealthCheckRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateHealthCheckResponse {}
 
-/// <p>Contact information that the DRT can use to contact you during a suspected attack.</p>
+/// <p>Contact information that the DRT can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmergencyContact {
-    /// <p>An email address that the DRT can use to contact you during a suspected attack.</p>
+    /// <p>Additional notes regarding the contact. </p>
+    #[serde(rename = "ContactNotes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_notes: Option<String>,
+    /// <p>The email address for the contact.</p>
     #[serde(rename = "EmailAddress")]
     pub email_address: String,
+    /// <p>The phone number for the contact.</p>
+    #[serde(rename = "PhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number: Option<String>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EnableProactiveEngagementRequest {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EnableProactiveEngagementResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -535,6 +571,10 @@ pub struct Subscription {
     #[serde(rename = "Limits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limits: Option<Vec<Limit>>,
+    /// <p>If <code>ENABLED</code>, the DDoS Response Team (DRT) will use email and phone to notify contacts about escalations to the DRT and to initiate proactive customer support.</p> <p>If <code>PENDING</code>, you have requested proactive engagement and the request is pending. The status changes to <code>ENABLED</code> when your request is fully processed.</p> <p>If <code>DISABLED</code>, the DRT will not proactively notify contacts about escalations or to initiate proactive customer support. </p>
+    #[serde(rename = "ProactiveEngagementStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proactive_engagement_status: Option<String>,
     /// <p>The start time of the subscription, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -605,7 +645,7 @@ pub struct TimeRange {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEmergencyContactSettingsRequest {
-    /// <p>A list of email addresses that the DRT can use to contact you during a suspected attack.</p>
+    /// <p>A list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p> <p>If you have proactive engagement enabled, the contact list must include at least one phone number.</p>
     #[serde(rename = "EmergencyContactList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emergency_contact_list: Option<Vec<EmergencyContact>>,
@@ -631,7 +671,7 @@ pub struct UpdateSubscriptionResponse {}
 /// Errors returned by AssociateDRTLogBucket
 #[derive(Debug, PartialEq)]
 pub enum AssociateDRTLogBucketError {
-    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting the request must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
+    /// <p>In order to grant the necessary access to the DDoS Response Team (DRT), the user submitting the request must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
     AccessDeniedForDependency(String),
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
@@ -643,7 +683,7 @@ pub enum AssociateDRTLogBucketError {
     LimitsExceeded(String),
     /// <p>The ARN of the role that you specifed does not exist.</p>
     NoAssociatedRole(String),
-    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -719,7 +759,7 @@ impl Error for AssociateDRTLogBucketError {}
 /// Errors returned by AssociateDRTRole
 #[derive(Debug, PartialEq)]
 pub enum AssociateDRTRoleError {
-    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting the request must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
+    /// <p>In order to grant the necessary access to the DDoS Response Team (DRT), the user submitting the request must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
     AccessDeniedForDependency(String),
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
@@ -727,7 +767,7 @@ pub enum AssociateDRTRoleError {
     InvalidOperation(String),
     /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
     InvalidParameter(String),
-    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -787,7 +827,7 @@ pub enum AssociateHealthCheckError {
     InvalidParameter(String),
     /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
     LimitsExceeded(String),
-    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -836,6 +876,82 @@ impl fmt::Display for AssociateHealthCheckError {
     }
 }
 impl Error for AssociateHealthCheckError {}
+/// Errors returned by AssociateProactiveEngagementDetails
+#[derive(Debug, PartialEq)]
+pub enum AssociateProactiveEngagementDetailsError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
+    InvalidOperation(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl AssociateProactiveEngagementDetailsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateProactiveEngagementDetailsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(
+                        AssociateProactiveEngagementDetailsError::InternalError(err.msg),
+                    )
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(
+                        AssociateProactiveEngagementDetailsError::InvalidOperation(err.msg),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        AssociateProactiveEngagementDetailsError::InvalidParameter(err.msg),
+                    )
+                }
+                "OptimisticLockException" => {
+                    return RusotoError::Service(
+                        AssociateProactiveEngagementDetailsError::OptimisticLock(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        AssociateProactiveEngagementDetailsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateProactiveEngagementDetailsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateProactiveEngagementDetailsError::InternalError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateProactiveEngagementDetailsError::InvalidOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateProactiveEngagementDetailsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateProactiveEngagementDetailsError::OptimisticLock(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateProactiveEngagementDetailsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AssociateProactiveEngagementDetailsError {}
 /// Errors returned by CreateProtection
 #[derive(Debug, PartialEq)]
 pub enum CreateProtectionError {
@@ -847,7 +963,7 @@ pub enum CreateProtectionError {
     InvalidResource(String),
     /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
     LimitsExceeded(String),
-    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
     /// <p>Exception indicating the specified resource already exists.</p>
     ResourceAlreadyExists(String),
@@ -947,7 +1063,7 @@ impl Error for CreateSubscriptionError {}
 pub enum DeleteProtectionError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -1226,10 +1342,76 @@ impl fmt::Display for DescribeSubscriptionError {
     }
 }
 impl Error for DescribeSubscriptionError {}
+/// Errors returned by DisableProactiveEngagement
+#[derive(Debug, PartialEq)]
+pub enum DisableProactiveEngagementError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
+    InvalidOperation(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DisableProactiveEngagementError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisableProactiveEngagementError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(DisableProactiveEngagementError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(DisableProactiveEngagementError::InvalidOperation(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DisableProactiveEngagementError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OptimisticLockException" => {
+                    return RusotoError::Service(DisableProactiveEngagementError::OptimisticLock(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DisableProactiveEngagementError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisableProactiveEngagementError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisableProactiveEngagementError::InternalError(ref cause) => write!(f, "{}", cause),
+            DisableProactiveEngagementError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            DisableProactiveEngagementError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DisableProactiveEngagementError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            DisableProactiveEngagementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisableProactiveEngagementError {}
 /// Errors returned by DisassociateDRTLogBucket
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDRTLogBucketError {
-    /// <p>In order to grant the necessary access to the DDoS Response Team, the user submitting the request must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
+    /// <p>In order to grant the necessary access to the DDoS Response Team (DRT), the user submitting the request must have the <code>iam:PassRole</code> permission. This error indicates the user did not have the appropriate permissions. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p>
     AccessDeniedForDependency(String),
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
@@ -1237,7 +1419,7 @@ pub enum DisassociateDRTLogBucketError {
     InvalidOperation(String),
     /// <p>The ARN of the role that you specifed does not exist.</p>
     NoAssociatedRole(String),
-    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -1307,7 +1489,7 @@ pub enum DisassociateDRTRoleError {
     InternalError(String),
     /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
     InvalidOperation(String),
-    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -1359,7 +1541,7 @@ pub enum DisassociateHealthCheckError {
     InternalError(String),
     /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
     InvalidParameter(String),
-    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -1408,6 +1590,70 @@ impl fmt::Display for DisassociateHealthCheckError {
     }
 }
 impl Error for DisassociateHealthCheckError {}
+/// Errors returned by EnableProactiveEngagement
+#[derive(Debug, PartialEq)]
+pub enum EnableProactiveEngagementError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
+    InvalidOperation(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
+    OptimisticLock(String),
+    /// <p>Exception indicating the specified resource does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl EnableProactiveEngagementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableProactiveEngagementError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(EnableProactiveEngagementError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "InvalidOperationException" => {
+                    return RusotoError::Service(EnableProactiveEngagementError::InvalidOperation(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(EnableProactiveEngagementError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "OptimisticLockException" => {
+                    return RusotoError::Service(EnableProactiveEngagementError::OptimisticLock(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(EnableProactiveEngagementError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for EnableProactiveEngagementError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            EnableProactiveEngagementError::InternalError(ref cause) => write!(f, "{}", cause),
+            EnableProactiveEngagementError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            EnableProactiveEngagementError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            EnableProactiveEngagementError::OptimisticLock(ref cause) => write!(f, "{}", cause),
+            EnableProactiveEngagementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for EnableProactiveEngagementError {}
 /// Errors returned by GetSubscriptionState
 #[derive(Debug, PartialEq)]
 pub enum GetSubscriptionStateError {
@@ -1531,7 +1777,7 @@ pub enum UpdateEmergencyContactSettingsError {
     InternalError(String),
     /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
     InvalidParameter(String),
-    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -1597,7 +1843,7 @@ pub enum UpdateSubscriptionError {
     InvalidParameter(String),
     /// <p>You are trying to update a subscription that has not yet completed the 1-year commitment. You can change the <code>AutoRenew</code> parameter during the last 30 days of your subscription. This exception indicates that you are attempting to change <code>AutoRenew</code> prior to that period.</p>
     LockedSubscription(String),
-    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -1647,13 +1893,13 @@ impl Error for UpdateSubscriptionError {}
 /// Trait representing the capabilities of the AWS Shield API. AWS Shield clients implement this trait.
 #[async_trait]
 pub trait Shield {
-    /// <p>Authorizes the DDoS Response team (DRT) to access the specified Amazon S3 bucket containing your AWS WAF logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
+    /// <p>Authorizes the DDoS Response Team (DRT) to access the specified Amazon S3 bucket containing your AWS WAF logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
     async fn associate_drt_log_bucket(
         &self,
         input: AssociateDRTLogBucketRequest,
     ) -> Result<AssociateDRTLogBucketResponse, RusotoError<AssociateDRTLogBucketError>>;
 
-    /// <p>Authorizes the DDoS Response team (DRT), using the specified role, to access your AWS account to assist with DDoS attack mitigation during potential attacks. This enables the DRT to inspect your AWS WAF configuration and create or update AWS WAF rules and web ACLs.</p> <p>You can associate only one <code>RoleArn</code> with your subscription. If you submit an <code>AssociateDRTRole</code> request for an account that already has an associated role, the new <code>RoleArn</code> will replace the existing <code>RoleArn</code>. </p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to the role you will specify in the request. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>. The role must also trust the service principal <code> drt.shield.amazonaws.com</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html">IAM JSON Policy Elements: Principal</a>.</p> <p>The DRT will have access only to your AWS WAF and Shield resources. By submitting this request, you authorize the DRT to inspect your AWS WAF and Shield configuration and create and update AWS WAF rules and web ACLs on your behalf. The DRT takes these actions only if explicitly authorized by you.</p> <p>You must have the <code>iam:PassRole</code> permission to make an <code>AssociateDRTRole</code> request. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p> <p>To use the services of the DRT and make an <code>AssociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
+    /// <p>Authorizes the DDoS Response Team (DRT), using the specified role, to access your AWS account to assist with DDoS attack mitigation during potential attacks. This enables the DRT to inspect your AWS WAF configuration and create or update AWS WAF rules and web ACLs.</p> <p>You can associate only one <code>RoleArn</code> with your subscription. If you submit an <code>AssociateDRTRole</code> request for an account that already has an associated role, the new <code>RoleArn</code> will replace the existing <code>RoleArn</code>. </p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to the role you will specify in the request. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>. The role must also trust the service principal <code> drt.shield.amazonaws.com</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html">IAM JSON Policy Elements: Principal</a>.</p> <p>The DRT will have access only to your AWS WAF and Shield resources. By submitting this request, you authorize the DRT to inspect your AWS WAF and Shield configuration and create and update AWS WAF rules and web ACLs on your behalf. The DRT takes these actions only if explicitly authorized by you.</p> <p>You must have the <code>iam:PassRole</code> permission to make an <code>AssociateDRTRole</code> request. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p> <p>To use the services of the DRT and make an <code>AssociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
     async fn associate_drt_role(
         &self,
         input: AssociateDRTRoleRequest,
@@ -1665,13 +1911,22 @@ pub trait Shield {
         input: AssociateHealthCheckRequest,
     ) -> Result<AssociateHealthCheckResponse, RusotoError<AssociateHealthCheckError>>;
 
+    /// <p><p>Initializes proactive engagement and sets the list of contacts for the DDoS Response Team (DRT) to use. You must provide at least one phone number in the emergency contact list. </p> <p>After you have initialized proactive engagement using this call, to disable or enable proactive engagement, use the calls <code>DisableProactiveEngagement</code> and <code>EnableProactiveEngagement</code>. </p> <note> <p>This call defines the list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you for escalations to the DRT and to initiate proactive customer support.</p> <p>The contacts that you provide in the request replace any contacts that were already defined. If you already have contacts defined and want to use them, retrieve the list using <code>DescribeEmergencyContactSettings</code> and then provide it to this call. </p> </note></p>
+    async fn associate_proactive_engagement_details(
+        &self,
+        input: AssociateProactiveEngagementDetailsRequest,
+    ) -> Result<
+        AssociateProactiveEngagementDetailsResponse,
+        RusotoError<AssociateProactiveEngagementDetailsError>,
+    >;
+
     /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, AWS Global Accelerator accelerator, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
     async fn create_protection(
         &self,
         input: CreateProtectionRequest,
     ) -> Result<CreateProtectionResponse, RusotoError<CreateProtectionError>>;
 
-    /// <p>Activates AWS Shield Advanced for an account.</p> <p>As part of this request you can specify <code>EmergencySettings</code> that automaticaly grant the DDoS response team (DRT) needed permissions to assist you during a suspected DDoS attack. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/authorize-DRT.html">Authorize the DDoS Response Team to Create Rules and Web ACLs on Your Behalf</a>.</p> <p>To use the services of the DRT, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
+    /// <p>Activates AWS Shield Advanced for an account.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
     async fn create_subscription(
         &self,
     ) -> Result<CreateSubscriptionResponse, RusotoError<CreateSubscriptionError>>;
@@ -1693,12 +1948,12 @@ pub trait Shield {
         input: DescribeAttackRequest,
     ) -> Result<DescribeAttackResponse, RusotoError<DescribeAttackError>>;
 
-    /// <p>Returns the current role and list of Amazon S3 log buckets used by the DDoS Response team (DRT) to access your AWS account while assisting with attack mitigation.</p>
+    /// <p>Returns the current role and list of Amazon S3 log buckets used by the DDoS Response Team (DRT) to access your AWS account while assisting with attack mitigation.</p>
     async fn describe_drt_access(
         &self,
     ) -> Result<DescribeDRTAccessResponse, RusotoError<DescribeDRTAccessError>>;
 
-    /// <p>Lists the email addresses that the DRT can use to contact you during a suspected attack.</p>
+    /// <p>A list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p>
     async fn describe_emergency_contact_settings(
         &self,
     ) -> Result<
@@ -1717,13 +1972,18 @@ pub trait Shield {
         &self,
     ) -> Result<DescribeSubscriptionResponse, RusotoError<DescribeSubscriptionError>>;
 
-    /// <p>Removes the DDoS Response team's (DRT) access to the specified Amazon S3 bucket containing your AWS WAF logs.</p> <p>To make a <code>DisassociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTLogBucket</code> request to remove this access.</p>
+    /// <p>Removes authorization from the DDoS Response Team (DRT) to notify contacts about escalations to the DRT and to initiate proactive customer support.</p>
+    async fn disable_proactive_engagement(
+        &self,
+    ) -> Result<DisableProactiveEngagementResponse, RusotoError<DisableProactiveEngagementError>>;
+
+    /// <p>Removes the DDoS Response Team's (DRT) access to the specified Amazon S3 bucket containing your AWS WAF logs.</p> <p>To make a <code>DisassociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTLogBucket</code> request to remove this access.</p>
     async fn disassociate_drt_log_bucket(
         &self,
         input: DisassociateDRTLogBucketRequest,
     ) -> Result<DisassociateDRTLogBucketResponse, RusotoError<DisassociateDRTLogBucketError>>;
 
-    /// <p>Removes the DDoS Response team's (DRT) access to your AWS account.</p> <p>To make a <code>DisassociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTRole</code> request to remove this access.</p>
+    /// <p>Removes the DDoS Response Team's (DRT) access to your AWS account.</p> <p>To make a <code>DisassociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTRole</code> request to remove this access.</p>
     async fn disassociate_drt_role(
         &self,
     ) -> Result<DisassociateDRTRoleResponse, RusotoError<DisassociateDRTRoleError>>;
@@ -1733,6 +1993,11 @@ pub trait Shield {
         &self,
         input: DisassociateHealthCheckRequest,
     ) -> Result<DisassociateHealthCheckResponse, RusotoError<DisassociateHealthCheckError>>;
+
+    /// <p>Authorizes the DDoS Response Team (DRT) to use email and phone to notify contacts about escalations to the DRT and to initiate proactive customer support.</p>
+    async fn enable_proactive_engagement(
+        &self,
+    ) -> Result<EnableProactiveEngagementResponse, RusotoError<EnableProactiveEngagementError>>;
 
     /// <p>Returns the <code>SubscriptionState</code>, either <code>Active</code> or <code>Inactive</code>.</p>
     async fn get_subscription_state(
@@ -1751,7 +2016,7 @@ pub trait Shield {
         input: ListProtectionsRequest,
     ) -> Result<ListProtectionsResponse, RusotoError<ListProtectionsError>>;
 
-    /// <p>Updates the details of the list of email addresses that the DRT can use to contact you during a suspected attack.</p>
+    /// <p>Updates the details of the list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p>
     async fn update_emergency_contact_settings(
         &self,
         input: UpdateEmergencyContactSettingsRequest,
@@ -1806,7 +2071,7 @@ impl ShieldClient {
 
 #[async_trait]
 impl Shield for ShieldClient {
-    /// <p>Authorizes the DDoS Response team (DRT) to access the specified Amazon S3 bucket containing your AWS WAF logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
+    /// <p>Authorizes the DDoS Response Team (DRT) to access the specified Amazon S3 bucket containing your AWS WAF logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
     async fn associate_drt_log_bucket(
         &self,
         input: AssociateDRTLogBucketRequest,
@@ -1825,7 +2090,7 @@ impl Shield for ShieldClient {
             .deserialize::<AssociateDRTLogBucketResponse, _>()
     }
 
-    /// <p>Authorizes the DDoS Response team (DRT), using the specified role, to access your AWS account to assist with DDoS attack mitigation during potential attacks. This enables the DRT to inspect your AWS WAF configuration and create or update AWS WAF rules and web ACLs.</p> <p>You can associate only one <code>RoleArn</code> with your subscription. If you submit an <code>AssociateDRTRole</code> request for an account that already has an associated role, the new <code>RoleArn</code> will replace the existing <code>RoleArn</code>. </p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to the role you will specify in the request. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>. The role must also trust the service principal <code> drt.shield.amazonaws.com</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html">IAM JSON Policy Elements: Principal</a>.</p> <p>The DRT will have access only to your AWS WAF and Shield resources. By submitting this request, you authorize the DRT to inspect your AWS WAF and Shield configuration and create and update AWS WAF rules and web ACLs on your behalf. The DRT takes these actions only if explicitly authorized by you.</p> <p>You must have the <code>iam:PassRole</code> permission to make an <code>AssociateDRTRole</code> request. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p> <p>To use the services of the DRT and make an <code>AssociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
+    /// <p>Authorizes the DDoS Response Team (DRT), using the specified role, to access your AWS account to assist with DDoS attack mitigation during potential attacks. This enables the DRT to inspect your AWS WAF configuration and create or update AWS WAF rules and web ACLs.</p> <p>You can associate only one <code>RoleArn</code> with your subscription. If you submit an <code>AssociateDRTRole</code> request for an account that already has an associated role, the new <code>RoleArn</code> will replace the existing <code>RoleArn</code>. </p> <p>Prior to making the <code>AssociateDRTRole</code> request, you must attach the <a href="https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy">AWSShieldDRTAccessPolicy</a> managed policy to the role you will specify in the request. For more information see <a href=" https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html">Attaching and Detaching IAM Policies</a>. The role must also trust the service principal <code> drt.shield.amazonaws.com</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html">IAM JSON Policy Elements: Principal</a>.</p> <p>The DRT will have access only to your AWS WAF and Shield resources. By submitting this request, you authorize the DRT to inspect your AWS WAF and Shield configuration and create and update AWS WAF rules and web ACLs on your behalf. The DRT takes these actions only if explicitly authorized by you.</p> <p>You must have the <code>iam:PassRole</code> permission to make an <code>AssociateDRTRole</code> request. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">Granting a User Permissions to Pass a Role to an AWS Service</a>. </p> <p>To use the services of the DRT and make an <code>AssociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
     async fn associate_drt_role(
         &self,
         input: AssociateDRTRoleRequest,
@@ -1862,6 +2127,34 @@ impl Shield for ShieldClient {
             .deserialize::<AssociateHealthCheckResponse, _>()
     }
 
+    /// <p><p>Initializes proactive engagement and sets the list of contacts for the DDoS Response Team (DRT) to use. You must provide at least one phone number in the emergency contact list. </p> <p>After you have initialized proactive engagement using this call, to disable or enable proactive engagement, use the calls <code>DisableProactiveEngagement</code> and <code>EnableProactiveEngagement</code>. </p> <note> <p>This call defines the list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you for escalations to the DRT and to initiate proactive customer support.</p> <p>The contacts that you provide in the request replace any contacts that were already defined. If you already have contacts defined and want to use them, retrieve the list using <code>DescribeEmergencyContactSettings</code> and then provide it to this call. </p> </note></p>
+    async fn associate_proactive_engagement_details(
+        &self,
+        input: AssociateProactiveEngagementDetailsRequest,
+    ) -> Result<
+        AssociateProactiveEngagementDetailsResponse,
+        RusotoError<AssociateProactiveEngagementDetailsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSShield_20160616.AssociateProactiveEngagementDetails",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AssociateProactiveEngagementDetailsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateProactiveEngagementDetailsResponse, _>()
+    }
+
     /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, AWS Global Accelerator accelerator, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
     async fn create_protection(
         &self,
@@ -1880,7 +2173,7 @@ impl Shield for ShieldClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateProtectionResponse, _>()
     }
 
-    /// <p>Activates AWS Shield Advanced for an account.</p> <p>As part of this request you can specify <code>EmergencySettings</code> that automaticaly grant the DDoS response team (DRT) needed permissions to assist you during a suspected DDoS attack. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/authorize-DRT.html">Authorize the DDoS Response Team to Create Rules and Web ACLs on Your Behalf</a>.</p> <p>To use the services of the DRT, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
+    /// <p>Activates AWS Shield Advanced for an account.</p> <p>When you initally create a subscription, your subscription is set to be automatically renewed at the end of the existing subscription period. You can change this by submitting an <code>UpdateSubscription</code> request. </p>
     async fn create_subscription(
         &self,
     ) -> Result<CreateSubscriptionResponse, RusotoError<CreateSubscriptionError>> {
@@ -1948,7 +2241,7 @@ impl Shield for ShieldClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeAttackResponse, _>()
     }
 
-    /// <p>Returns the current role and list of Amazon S3 log buckets used by the DDoS Response team (DRT) to access your AWS account while assisting with attack mitigation.</p>
+    /// <p>Returns the current role and list of Amazon S3 log buckets used by the DDoS Response Team (DRT) to access your AWS account while assisting with attack mitigation.</p>
     async fn describe_drt_access(
         &self,
     ) -> Result<DescribeDRTAccessResponse, RusotoError<DescribeDRTAccessError>> {
@@ -1964,7 +2257,7 @@ impl Shield for ShieldClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeDRTAccessResponse, _>()
     }
 
-    /// <p>Lists the email addresses that the DRT can use to contact you during a suspected attack.</p>
+    /// <p>A list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p>
     async fn describe_emergency_contact_settings(
         &self,
     ) -> Result<
@@ -2025,7 +2318,28 @@ impl Shield for ShieldClient {
             .deserialize::<DescribeSubscriptionResponse, _>()
     }
 
-    /// <p>Removes the DDoS Response team's (DRT) access to the specified Amazon S3 bucket containing your AWS WAF logs.</p> <p>To make a <code>DisassociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTLogBucket</code> request to remove this access.</p>
+    /// <p>Removes authorization from the DDoS Response Team (DRT) to notify contacts about escalations to the DRT and to initiate proactive customer support.</p>
+    async fn disable_proactive_engagement(
+        &self,
+    ) -> Result<DisableProactiveEngagementResponse, RusotoError<DisableProactiveEngagementError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSShield_20160616.DisableProactiveEngagement",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(request, DisableProactiveEngagementError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisableProactiveEngagementResponse, _>()
+    }
+
+    /// <p>Removes the DDoS Response Team's (DRT) access to the specified Amazon S3 bucket containing your AWS WAF logs.</p> <p>To make a <code>DisassociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTLogBucket</code> request to remove this access.</p>
     async fn disassociate_drt_log_bucket(
         &self,
         input: DisassociateDRTLogBucketRequest,
@@ -2047,7 +2361,7 @@ impl Shield for ShieldClient {
             .deserialize::<DisassociateDRTLogBucketResponse, _>()
     }
 
-    /// <p>Removes the DDoS Response team's (DRT) access to your AWS account.</p> <p>To make a <code>DisassociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTRole</code> request to remove this access.</p>
+    /// <p>Removes the DDoS Response Team's (DRT) access to your AWS account.</p> <p>To make a <code>DisassociateDRTRole</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>. However, if you are not subscribed to one of these support plans, but had been previously and had granted the DRT access to your account, you can submit a <code>DisassociateDRTRole</code> request to remove this access.</p>
     async fn disassociate_drt_role(
         &self,
     ) -> Result<DisassociateDRTRoleResponse, RusotoError<DisassociateDRTRoleError>> {
@@ -2080,6 +2394,27 @@ impl Shield for ShieldClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DisassociateHealthCheckResponse, _>()
+    }
+
+    /// <p>Authorizes the DDoS Response Team (DRT) to use email and phone to notify contacts about escalations to the DRT and to initiate proactive customer support.</p>
+    async fn enable_proactive_engagement(
+        &self,
+    ) -> Result<EnableProactiveEngagementResponse, RusotoError<EnableProactiveEngagementError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSShield_20160616.EnableProactiveEngagement",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(request, EnableProactiveEngagementError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<EnableProactiveEngagementResponse, _>()
     }
 
     /// <p>Returns the <code>SubscriptionState</code>, either <code>Active</code> or <code>Inactive</code>.</p>
@@ -2135,7 +2470,7 @@ impl Shield for ShieldClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListProtectionsResponse, _>()
     }
 
-    /// <p>Updates the details of the list of email addresses that the DRT can use to contact you during a suspected attack.</p>
+    /// <p>Updates the details of the list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p>
     async fn update_emergency_contact_settings(
         &self,
         input: UpdateEmergencyContactSettingsRequest,

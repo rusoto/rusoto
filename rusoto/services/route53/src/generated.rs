@@ -52,6 +52,14 @@ impl Route53Client {
         Ok(response)
     }
 }
+#[allow(dead_code)]
+struct AWSAccountIDDeserializer;
+impl AWSAccountIDDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 /// <p>A complex type that contains the type of limit that you specified in the request and the current value for that limit.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -3655,12 +3663,117 @@ impl HostedZoneLimitTypeSerializer {
     }
 }
 
+/// <p>A complex type that identifies a hosted zone that a specified Amazon VPC is associated with and the owner of the hosted zone. If there is a value for <code>OwningAccount</code>, there is no value for <code>OwningService</code>, and vice versa. </p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct HostedZoneOwner {
+    /// <p>If the hosted zone was created by an AWS account, or was created by an AWS service that creates hosted zones using the current account, <code>OwningAccount</code> contains the account ID of that account. For example, when you use AWS Cloud Map to create a hosted zone, Cloud Map creates the hosted zone using the current AWS account. </p>
+    pub owning_account: Option<String>,
+    /// <p>If an AWS service uses its own account to create a hosted zone and associate the specified VPC with that hosted zone, <code>OwningService</code> contains an abbreviation that identifies the service. For example, if Amazon Elastic File System (Amazon EFS) created a hosted zone and associated a VPC with the hosted zone, the value of <code>OwningService</code> is <code>efs.amazonaws.com</code>.</p>
+    pub owning_service: Option<String>,
+}
+
+#[allow(dead_code)]
+struct HostedZoneOwnerDeserializer;
+impl HostedZoneOwnerDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HostedZoneOwner, XmlParseError> {
+        deserialize_elements::<_, HostedZoneOwner, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "OwningAccount" => {
+                    obj.owning_account = Some(AWSAccountIDDeserializer::deserialize(
+                        "OwningAccount",
+                        stack,
+                    )?);
+                }
+                "OwningService" => {
+                    obj.owning_service = Some(HostedZoneOwningServiceDeserializer::deserialize(
+                        "OwningService",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct HostedZoneOwningServiceDeserializer;
+impl HostedZoneOwningServiceDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 #[allow(dead_code)]
 struct HostedZoneRRSetCountDeserializer;
 impl HostedZoneRRSetCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
+    }
+}
+#[allow(dead_code)]
+struct HostedZoneSummariesDeserializer;
+impl HostedZoneSummariesDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<HostedZoneSummary>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "HostedZoneSummary" {
+                obj.push(HostedZoneSummaryDeserializer::deserialize(
+                    "HostedZoneSummary",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>In the response to a <code>ListHostedZonesByVPC</code> request, the <code>HostedZoneSummaries</code> element contains one <code>HostedZoneSummary</code> element for each hosted zone that the specified Amazon VPC is associated with. Each <code>HostedZoneSummary</code> element contains the hosted zone name and ID, and information about who owns the hosted zone.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct HostedZoneSummary {
+    /// <p>The Route 53 hosted zone ID of a private hosted zone that the specified VPC is associated with.</p>
+    pub hosted_zone_id: String,
+    /// <p>The name of the private hosted zone, such as <code>example.com</code>.</p>
+    pub name: String,
+    /// <p>The owner of a private hosted zone that the specified VPC is associated with. The owner can be either an AWS account or an AWS service.</p>
+    pub owner: HostedZoneOwner,
+}
+
+#[allow(dead_code)]
+struct HostedZoneSummaryDeserializer;
+impl HostedZoneSummaryDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HostedZoneSummary, XmlParseError> {
+        deserialize_elements::<_, HostedZoneSummary, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "HostedZoneId" => {
+                    obj.hosted_zone_id =
+                        ResourceIdDeserializer::deserialize("HostedZoneId", stack)?;
+                }
+                "Name" => {
+                    obj.name = DNSNameDeserializer::deserialize("Name", stack)?;
+                }
+                "Owner" => {
+                    obj.owner = HostedZoneOwnerDeserializer::deserialize("Owner", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 #[allow(dead_code)]
@@ -4056,6 +4169,68 @@ impl ListHostedZonesByNameResponseDeserializer {
                     "NextHostedZoneId" => {
                         obj.next_hosted_zone_id = Some(ResourceIdDeserializer::deserialize(
                             "NextHostedZoneId",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Lists all the private hosted zones that a specified VPC is associated with, regardless of which AWS account created the hosted zones.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListHostedZonesByVPCRequest {
+    /// <p>(Optional) The maximum number of hosted zones that you want Amazon Route 53 to return. If the specified VPC is associated with more than <code>MaxItems</code> hosted zones, the response includes a <code>NextToken</code> element. <code>NextToken</code> contains the hosted zone ID of the first hosted zone that Route 53 will return if you submit another request.</p>
+    pub max_items: Option<String>,
+    /// <p>If the previous response included a <code>NextToken</code> element, the specified VPC is associated with more hosted zones. To get more hosted zones, submit another <code>ListHostedZonesByVPC</code> request. </p> <p>For the value of <code>NextToken</code>, specify the value of <code>NextToken</code> from the previous response.</p> <p>If the previous response didn't include a <code>NextToken</code> element, there are no more hosted zones to get.</p>
+    pub next_token: Option<String>,
+    /// <p>The ID of the Amazon VPC that you want to list hosted zones for.</p>
+    pub vpc_id: String,
+    /// <p>For the Amazon VPC that you specified for <code>VPCId</code>, the AWS Region that you created the VPC in. </p>
+    pub vpc_region: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListHostedZonesByVPCResponse {
+    /// <p>A list that contains one <code>HostedZoneSummary</code> element for each hosted zone that the specified Amazon VPC is associated with. Each <code>HostedZoneSummary</code> element contains the hosted zone name and ID, and information about who owns the hosted zone.</p>
+    pub hosted_zone_summaries: Vec<HostedZoneSummary>,
+    /// <p>The value that you specified for <code>MaxItems</code> in the most recent <code>ListHostedZonesByVPC</code> request.</p>
+    pub max_items: String,
+    /// <p>The value that you specified for <code>NextToken</code> in the most recent <code>ListHostedZonesByVPC</code> request.</p>
+    pub next_token: Option<String>,
+}
+
+#[allow(dead_code)]
+struct ListHostedZonesByVPCResponseDeserializer;
+impl ListHostedZonesByVPCResponseDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListHostedZonesByVPCResponse, XmlParseError> {
+        deserialize_elements::<_, ListHostedZonesByVPCResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "HostedZoneSummaries" => {
+                        obj.hosted_zone_summaries.extend(
+                            HostedZoneSummariesDeserializer::deserialize(
+                                "HostedZoneSummaries",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "MaxItems" => {
+                        obj.max_items = PageMaxItemsDeserializer::deserialize("MaxItems", stack)?;
+                    }
+                    "NextToken" => {
+                        obj.next_token = Some(PaginationTokenDeserializer::deserialize(
+                            "NextToken",
                             stack,
                         )?);
                     }
@@ -7260,6 +7435,8 @@ pub enum AssociateVPCWithHostedZoneError {
     NoSuchHostedZone(String),
     /// <p>Associating the specified VPC with the specified hosted zone has not been authorized.</p>
     NotAuthorized(String),
+    /// <p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
+    PriorRequestNotComplete(String),
     /// <p>You're trying to associate a VPC with a public hosted zone. Amazon Route 53 doesn't support associating a VPC with a public hosted zone.</p>
     PublicZoneVPCAssociation(String),
 }
@@ -7306,6 +7483,13 @@ impl AssociateVPCWithHostedZoneError {
                             AssociateVPCWithHostedZoneError::NotAuthorized(parsed_error.message),
                         )
                     }
+                    "PriorRequestNotComplete" => {
+                        return RusotoError::Service(
+                            AssociateVPCWithHostedZoneError::PriorRequestNotComplete(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
                     "PublicZoneVPCAssociation" => {
                         return RusotoError::Service(
                             AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(
@@ -7340,6 +7524,9 @@ impl fmt::Display for AssociateVPCWithHostedZoneError {
             AssociateVPCWithHostedZoneError::LimitsExceeded(ref cause) => write!(f, "{}", cause),
             AssociateVPCWithHostedZoneError::NoSuchHostedZone(ref cause) => write!(f, "{}", cause),
             AssociateVPCWithHostedZoneError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            AssociateVPCWithHostedZoneError::PriorRequestNotComplete(ref cause) => {
+                write!(f, "{}", cause)
+            }
             AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -9896,6 +10083,58 @@ impl fmt::Display for ListHostedZonesByNameError {
     }
 }
 impl Error for ListHostedZonesByNameError {}
+/// Errors returned by ListHostedZonesByVPC
+#[derive(Debug, PartialEq)]
+pub enum ListHostedZonesByVPCError {
+    /// <p>The input is not valid.</p>
+    InvalidInput(String),
+    /// <p>The value that you specified to get the second or subsequent page of results is invalid.</p>
+    InvalidPaginationToken(String),
+}
+
+impl ListHostedZonesByVPCError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHostedZonesByVPCError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return RusotoError::Service(ListHostedZonesByVPCError::InvalidInput(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidPaginationToken" => {
+                        return RusotoError::Service(
+                            ListHostedZonesByVPCError::InvalidPaginationToken(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListHostedZonesByVPCError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListHostedZonesByVPCError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListHostedZonesByVPCError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListHostedZonesByVPCError {}
 /// Errors returned by ListQueryLoggingConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListQueryLoggingConfigsError {
@@ -11036,7 +11275,7 @@ pub trait Route53 {
         RusotoError<DeleteVPCAssociationAuthorizationError>,
     >;
 
-    /// <p><p>Disassociates a VPC from a Amazon Route 53 private hosted zone. Note the following:</p> <ul> <li> <p>You can&#39;t disassociate the last VPC from a private hosted zone.</p> </li> <li> <p>You can&#39;t convert a private hosted zone into a public hosted zone.</p> </li> <li> <p>You can submit a <code>DisassociateVPCFromHostedZone</code> request using either the account that created the hosted zone or the account that created the VPC.</p> </li> </ul></p>
+    /// <p><p>Disassociates an Amazon Virtual Private Cloud (Amazon VPC) from an Amazon Route 53 private hosted zone. Note the following:</p> <ul> <li> <p>You can&#39;t disassociate the last Amazon VPC from a private hosted zone.</p> </li> <li> <p>You can&#39;t convert a private hosted zone into a public hosted zone.</p> </li> <li> <p>You can submit a <code>DisassociateVPCFromHostedZone</code> request using either the account that created the hosted zone or the account that created the Amazon VPC.</p> </li> <li> <p>Some services, such as AWS Cloud Map and Amazon Elastic File System (Amazon EFS) automatically create hosted zones and associate VPCs with the hosted zones. A service can create a hosted zone using your account or using its own account. You can disassociate a VPC from a hosted zone only if the service created the hosted zone using your account.</p> <p>When you run <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListHostedZonesByVPC.html">DisassociateVPCFromHostedZone</a>, if the hosted zone has a value for <code>OwningAccount</code>, you can use <code>DisassociateVPCFromHostedZone</code>. If the hosted zone has a value for <code>OwningService</code>, you can&#39;t use <code>DisassociateVPCFromHostedZone</code>.</p> </li> </ul></p>
     async fn disassociate_vpc_from_hosted_zone(
         &self,
         input: DisassociateVPCFromHostedZoneRequest,
@@ -11179,6 +11418,12 @@ pub trait Route53 {
         &self,
         input: ListHostedZonesByNameRequest,
     ) -> Result<ListHostedZonesByNameResponse, RusotoError<ListHostedZonesByNameError>>;
+
+    /// <p><p>Lists all the private hosted zones that a specified VPC is associated with, regardless of which AWS account or AWS service owns the hosted zones. The <code>HostedZoneOwner</code> structure in the response contains one of the following values:</p> <ul> <li> <p>An <code>OwningAccount</code> element, which contains the account number of either the current AWS account or another AWS account. Some services, such as AWS Cloud Map, create hosted zones using the current account. </p> </li> <li> <p>An <code>OwningService</code> element, which identifies the AWS service that created and owns the hosted zone. For example, if a hosted zone was created by Amazon Elastic File System (Amazon EFS), the value of <code>Owner</code> is <code>efs.amazonaws.com</code>. </p> </li> </ul></p>
+    async fn list_hosted_zones_by_vpc(
+        &self,
+        input: ListHostedZonesByVPCRequest,
+    ) -> Result<ListHostedZonesByVPCResponse, RusotoError<ListHostedZonesByVPCError>>;
 
     /// <p>Lists the configurations for DNS query logging that are associated with the current AWS account or the configuration that is associated with a specified hosted zone.</p> <p>For more information about DNS query logs, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateQueryLoggingConfig.html">CreateQueryLoggingConfig</a>. Additional information, including the format of DNS query logs, appears in <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
     async fn list_query_logging_configs(
@@ -11925,7 +12170,7 @@ impl Route53 for Route53Client {
         Ok(result)
     }
 
-    /// <p><p>Disassociates a VPC from a Amazon Route 53 private hosted zone. Note the following:</p> <ul> <li> <p>You can&#39;t disassociate the last VPC from a private hosted zone.</p> </li> <li> <p>You can&#39;t convert a private hosted zone into a public hosted zone.</p> </li> <li> <p>You can submit a <code>DisassociateVPCFromHostedZone</code> request using either the account that created the hosted zone or the account that created the VPC.</p> </li> </ul></p>
+    /// <p><p>Disassociates an Amazon Virtual Private Cloud (Amazon VPC) from an Amazon Route 53 private hosted zone. Note the following:</p> <ul> <li> <p>You can&#39;t disassociate the last Amazon VPC from a private hosted zone.</p> </li> <li> <p>You can&#39;t convert a private hosted zone into a public hosted zone.</p> </li> <li> <p>You can submit a <code>DisassociateVPCFromHostedZone</code> request using either the account that created the hosted zone or the account that created the Amazon VPC.</p> </li> <li> <p>Some services, such as AWS Cloud Map and Amazon Elastic File System (Amazon EFS) automatically create hosted zones and associate VPCs with the hosted zones. A service can create a hosted zone using your account or using its own account. You can disassociate a VPC from a hosted zone only if the service created the hosted zone using your account.</p> <p>When you run <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListHostedZonesByVPC.html">DisassociateVPCFromHostedZone</a>, if the hosted zone has a value for <code>OwningAccount</code>, you can use <code>DisassociateVPCFromHostedZone</code>. If the hosted zone has a value for <code>OwningService</code>, you can&#39;t use <code>DisassociateVPCFromHostedZone</code>.</p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn disassociate_vpc_from_hosted_zone(
         &self,
@@ -12576,6 +12821,41 @@ impl Route53 for Route53Client {
         let mut response = response;
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
             ListHostedZonesByNameResponseDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Lists all the private hosted zones that a specified VPC is associated with, regardless of which AWS account or AWS service owns the hosted zones. The <code>HostedZoneOwner</code> structure in the response contains one of the following values:</p> <ul> <li> <p>An <code>OwningAccount</code> element, which contains the account number of either the current AWS account or another AWS account. Some services, such as AWS Cloud Map, create hosted zones using the current account. </p> </li> <li> <p>An <code>OwningService</code> element, which identifies the AWS service that created and owns the hosted zone. For example, if a hosted zone was created by Amazon Elastic File System (Amazon EFS), the value of <code>Owner</code> is <code>efs.amazonaws.com</code>. </p> </li> </ul></p>
+    #[allow(unused_variables, warnings)]
+    async fn list_hosted_zones_by_vpc(
+        &self,
+        input: ListHostedZonesByVPCRequest,
+    ) -> Result<ListHostedZonesByVPCResponse, RusotoError<ListHostedZonesByVPCError>> {
+        let request_uri = "/2013-04-01/hostedzonesbyvpc";
+
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_items {
+            params.put("maxitems", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nexttoken", x);
+        }
+        params.put("vpcid", &input.vpc_id);
+        params.put("vpcregion", &input.vpc_region);
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(request, ListHostedZonesByVPCError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListHostedZonesByVPCResponseDeserializer::deserialize(actual_tag_name, stack)
         })
         .await?;
         let mut result = result;

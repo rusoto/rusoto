@@ -30,7 +30,7 @@ pub struct InvokeEndpointInput {
     #[serde(rename = "Accept")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept: Option<String>,
-    /// <p>Provides input data, in the format specified in the <code>ContentType</code> request header. Amazon SageMaker passes all of the data in the body to the model. </p> <p>For information about the format of the request body, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats—Inference</a>.</p>
+    /// <p>Provides input data, in the format specified in the <code>ContentType</code> request header. Amazon SageMaker passes all of the data in the body to the model. </p> <p>For information about the format of the request body, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats-Inference</a>.</p>
     #[serde(rename = "Body")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -49,15 +49,19 @@ pub struct InvokeEndpointInput {
     /// <p>The name of the endpoint that you specified when you created the endpoint using the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> API. </p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
-    /// <p>Specifies the model to be requested for an inference when invoking a multi-model endpoint. </p>
+    /// <p>The model to request for inference when invoking a multi-model endpoint. </p>
     #[serde(rename = "TargetModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_model: Option<String>,
+    /// <p>Specify the production variant to send the inference request to when invoking an endpoint that is running two or more variants. Note that this parameter overrides the default behavior for the endpoint, which is to distribute the invocation traffic based on the variant weights.</p>
+    #[serde(rename = "TargetVariant")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_variant: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct InvokeEndpointOutput {
-    /// <p>Includes the inference provided by the model.</p> <p>For information about the format of the response body, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats—Inference</a>.</p>
+    /// <p>Includes the inference provided by the model.</p> <p>For information about the format of the response body, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats-Inference</a>.</p>
     pub body: bytes::Bytes,
     /// <p>The MIME type of the inference returned in the response body.</p>
     pub content_type: Option<String>,
@@ -190,6 +194,10 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
             input.custom_attributes.as_ref(),
         );
         request.add_optional_header("X-Amzn-SageMaker-Target-Model", input.target_model.as_ref());
+        request.add_optional_header(
+            "X-Amzn-SageMaker-Target-Variant",
+            input.target_variant.as_ref(),
+        );
 
         let mut response = self
             .client

@@ -314,6 +314,8 @@ pub struct Operation {
     pub documentation_url: Option<String>,
     pub errors: Option<BTreeSet<Error>>,
     pub http: HttpRequest,
+    #[serde(rename = "httpChecksumRequired")]
+    pub http_checksum_required: Option<bool>,
     pub input: Option<Input>,
     pub name: String,
     pub output: Option<Output>,

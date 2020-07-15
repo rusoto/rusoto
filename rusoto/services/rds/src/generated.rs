@@ -923,13 +923,13 @@ impl CloudwatchLogsExportConfigurationSerializer {
     }
 }
 
-/// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Specifies the settings that control the size and behavior of the connection pool associated with a <code>DBProxyTargetGroup</code>.</p></p>
+/// <p>Specifies the settings that control the size and behavior of the connection pool associated with a <code>DBProxyTargetGroup</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConnectionPoolConfiguration {
     /// <p>The number of seconds for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions.</p> <p>Default: 120</p> <p>Constraints: between 1 and 3600, or 0 representing unlimited</p>
     pub connection_borrow_timeout: Option<i64>,
-    /// <p> One or more SQL statements for the proxy to run when opening each new database connection. Typically used with <code>SET</code> statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single <code>SET</code> statement, such as <code>SET x=1, y=2</code>. </p> <p> <code>InitQuery</code> is not currently supported for PostgreSQL.</p> <p>Default: no initialization query</p>
+    /// <p> One or more SQL statements for the proxy to run when opening each new database connection. Typically used with <code>SET</code> statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single <code>SET</code> statement, such as <code>SET x=1, y=2</code>. </p> <p>Default: no initialization query</p>
     pub init_query: Option<String>,
     /// <p>The maximum size of the connection pool for each target in a target group. For Aurora MySQL, it is expressed as a percentage of the <code>max_connections</code> setting for the RDS DB instance or Aurora DB cluster used by the target group.</p> <p>Default: 100</p> <p>Constraints: between 1 and 100</p>
     pub max_connections_percent: Option<i64>,
@@ -979,13 +979,13 @@ impl ConnectionPoolConfigurationSerializer {
     }
 }
 
-/// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Displays the settings that control the size and behavior of the connection pool associated with a <code>DBProxyTarget</code>.</p></p>
+/// <p>Displays the settings that control the size and behavior of the connection pool associated with a <code>DBProxyTarget</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConnectionPoolConfigurationInfo {
     /// <p>The number of seconds for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions.</p>
     pub connection_borrow_timeout: Option<i64>,
-    /// <p> One or more SQL statements for the proxy to run when opening each new database connection. Typically used with <code>SET</code> statements to make sure that each connection has identical settings such as time zone and character set. This setting is empty by default. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single <code>SET</code> statement, such as <code>SET x=1, y=2</code>. </p> <p> <code>InitQuery</code> is not currently supported for PostgreSQL.</p>
+    /// <p> One or more SQL statements for the proxy to run when opening each new database connection. Typically used with <code>SET</code> statements to make sure that each connection has identical settings such as time zone and character set. This setting is empty by default. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single <code>SET</code> statement, such as <code>SET x=1, y=2</code>. </p>
     pub init_query: Option<String>,
     /// <p>The maximum size of the connection pool for each target in a target group. For Aurora MySQL, it is expressed as a percentage of the <code>max_connections</code> setting for the RDS DB instance or Aurora DB cluster used by the target group.</p>
     pub max_connections_percent: Option<i64>,
@@ -1548,7 +1548,7 @@ impl CreateDBClusterEndpointMessageSerializer {
 pub struct CreateDBClusterMessage {
     /// <p>A list of Availability Zones (AZs) where instances in the DB cluster can be created. For information on AWS Regions and Availability Zones, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.RegionsAndAvailabilityZones.html">Choosing the Regions and Availability Zones</a> in the <i>Amazon Aurora User Guide</i>. </p>
     pub availability_zones: Option<Vec<String>>,
-    /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0. </p> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
+    /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0. </p> <note> <p>Currently, Backtrack is only supported for Aurora MySQL DB clusters.</p> </note> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
     pub backtrack_window: Option<i64>,
     /// <p><p>The number of days for which automated backups are retained.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 1 to 35</p> </li> </ul></p>
     pub backup_retention_period: Option<i64>,
@@ -1572,6 +1572,8 @@ pub struct CreateDBClusterMessage {
     pub domain_iam_role_name: Option<String>,
     /// <p>The list of log types that need to be enabled for exporting to CloudWatch Logs. The values in the list depend on the DB engine being used. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
+    /// <p>A value that indicates whether to enable write operations to be forwarded from this cluster to the primary cluster in an Aurora global database. The resulting changes are replicated back to this cluster. This parameter only applies to DB clusters that are secondary clusters in an Aurora global database. By default, Aurora disallows write operations for secondary clusters.</p>
+    pub enable_global_write_forwarding: Option<bool>,
     /// <p>A value that indicates whether to enable the HTTP endpoint for an Aurora Serverless DB cluster. By default, the HTTP endpoint is disabled.</p> <p>When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html">Using the Data API for Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p>
     pub enable_http_endpoint: Option<bool>,
     /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication</a> in the <i>Amazon Aurora User Guide.</i> </p>
@@ -1673,6 +1675,12 @@ impl CreateDBClusterMessageSerializer {
                 params,
                 &format!("{}{}", prefix, "EnableCloudwatchLogsExports"),
                 field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.enable_global_write_forwarding {
+            params.put(
+                &format!("{}{}", prefix, "EnableGlobalWriteForwarding"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.enable_http_endpoint {
@@ -1999,7 +2007,7 @@ pub struct CreateDBInstanceMessage {
     pub processor_features: Option<Vec<ProcessorFeature>>,
     /// <p>A value that specifies the order in which an Aurora Replica is promoted to the primary instance after a failure of the existing primary instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html#Aurora.Managing.FaultTolerance"> Fault Tolerance for an Aurora DB Cluster</a> in the <i>Amazon Aurora User Guide</i>. </p> <p>Default: 1</p> <p>Valid Values: 0 - 15</p>
     pub promotion_tier: Option<i64>,
-    /// <p><p>A value that indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible, it is an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. When the DB instance isn&#39;t publicly accessible, it is an internal instance with a DNS name that resolves to a private IP address.</p> <p>Default: The default behavior varies depending on whether <code>DBSubnetGroupName</code> is specified.</p> <p>If <code>DBSubnetGroupName</code> isn&#39;t specified, and <code>PubliclyAccessible</code> isn&#39;t specified, the following applies:</p> <ul> <li> <p>If the default VPC in the target region doesn’t have an Internet gateway attached to it, the DB instance is private.</p> </li> <li> <p>If the default VPC in the target region has an Internet gateway attached to it, the DB instance is public.</p> </li> </ul> <p>If <code>DBSubnetGroupName</code> is specified, and <code>PubliclyAccessible</code> isn&#39;t specified, the following applies:</p> <ul> <li> <p>If the subnets are part of a VPC that doesn’t have an Internet gateway attached to it, the DB instance is private.</p> </li> <li> <p>If the subnets are part of a VPC that has an Internet gateway attached to it, the DB instance is public.</p> </li> </ul></p>
+    /// <p><p>A value that indicates whether the DB instance is publicly accessible.</p> <p>When the DB instance is publicly accessible, its DNS endpoint resolves to the private IP address from within the DB instance&#39;s VPC, and to the public IP address from outside of the DB instance&#39;s VPC. Access to the DB instance is ultimately controlled by the security group it uses, and that public access is not permitted if the security group assigned to the DB instance doesn&#39;t permit it.</p> <p>When the DB instance isn&#39;t publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.</p> <p>Default: The default behavior varies depending on whether <code>DBSubnetGroupName</code> is specified.</p> <p>If <code>DBSubnetGroupName</code> isn&#39;t specified, and <code>PubliclyAccessible</code> isn&#39;t specified, the following applies:</p> <ul> <li> <p>If the default VPC in the target region doesn’t have an Internet gateway attached to it, the DB instance is private.</p> </li> <li> <p>If the default VPC in the target region has an Internet gateway attached to it, the DB instance is public.</p> </li> </ul> <p>If <code>DBSubnetGroupName</code> is specified, and <code>PubliclyAccessible</code> isn&#39;t specified, the following applies:</p> <ul> <li> <p>If the subnets are part of a VPC that doesn’t have an Internet gateway attached to it, the DB instance is private.</p> </li> <li> <p>If the subnets are part of a VPC that has an Internet gateway attached to it, the DB instance is public.</p> </li> </ul></p>
     pub publicly_accessible: Option<bool>,
     /// <p>A value that indicates whether the DB instance is encrypted. By default, it isn't encrypted.</p> <p> <b>Amazon Aurora</b> </p> <p>Not applicable. The encryption for DB instances is managed by the DB cluster.</p>
     pub storage_encrypted: Option<bool>,
@@ -2238,7 +2246,7 @@ pub struct CreateDBInstanceReadReplicaMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>The Active Directory directory ID to create the DB instance in.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p>
+    /// <p>The Active Directory directory ID to create the DB instance in.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
@@ -2270,7 +2278,7 @@ pub struct CreateDBInstanceReadReplicaMessage {
     pub pre_signed_url: Option<String>,
     /// <p>The number of CPU cores and the number of threads per core for the DB instance class of the DB instance.</p>
     pub processor_features: Option<Vec<ProcessorFeature>>,
-    /// <p>A value that indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible, it is an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. When the DB instance isn't publicly accessible, it is an internal instance with a DNS name that resolves to a private IP address. For more information, see <a>CreateDBInstance</a>.</p>
+    /// <p>A value that indicates whether the DB instance is publicly accessible.</p> <p>When the DB instance is publicly accessible, its DNS endpoint resolves to the private IP address from within the DB instance's VPC, and to the public IP address from outside of the DB instance's VPC. Access to the DB instance is ultimately controlled by the security group it uses, and that public access is not permitted if the security group assigned to the DB instance doesn't permit it.</p> <p>When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.</p> <p>For more information, see <a>CreateDBInstance</a>.</p>
     pub publicly_accessible: Option<bool>,
     /// <p><p>The identifier of the DB instance that will act as the source for the read replica. Each DB instance can have up to five read replicas.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier of an existing MySQL, MariaDB, Oracle, PostgreSQL, or SQL Server DB instance.</p> </li> <li> <p>Can specify a DB instance that is a MySQL read replica only if the source is running MySQL 5.6 or later.</p> </li> <li> <p>For the limitations of Oracle read replicas, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-read-replicas.html">Read Replica Limitations with Oracle</a> in the <i>Amazon RDS User Guide</i>.</p> </li> <li> <p>For the limitations of SQL Server read replicas, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/SQLServer.ReadReplicas.Limitations.html">Read Replica Limitations with Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> </li> <li> <p>Can specify a PostgreSQL DB instance only if the source is running PostgreSQL 9.3.5 or later (9.4.7 and higher for cross-region replication).</p> </li> <li> <p>The specified DB instance must have automatic backups enabled, that is, its backup retention period must be greater than 0.</p> </li> <li> <p>If the source DB instance is in the same AWS Region as the read replica, specify a valid DB instance identifier.</p> </li> <li> <p>If the source DB instance is in a different AWS Region from the read replica, specify a valid DB instance ARN. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing">Constructing an ARN for Amazon RDS</a> in the <i>Amazon RDS User Guide</i>. This doesn&#39;t apply to SQL Server, which doesn&#39;t support cross-region replicas.</p> </li> </ul></p>
     pub source_db_instance_identifier: String,
@@ -3282,6 +3290,10 @@ pub struct DBCluster {
     pub engine_mode: Option<String>,
     /// <p>Indicates the database engine version.</p>
     pub engine_version: Option<String>,
+    /// <p>Specifies whether you have requested to enable write forwarding for a secondary cluster in an Aurora global database. Because write forwarding takes time to enable, check the value of <code>GlobalWriteForwardingStatus</code> to confirm that the request has completed before using the write forwarding feature for this cluster.</p>
+    pub global_write_forwarding_requested: Option<bool>,
+    /// <p>Specifies whether a secondary cluster in an Aurora global database has write forwarding enabled, not enabled, or is in the process of enabling it.</p>
+    pub global_write_forwarding_status: Option<String>,
     /// <p>Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.</p>
     pub hosted_zone_id: Option<String>,
     /// <p>A value that indicates whether the HTTP endpoint for an Aurora Serverless DB cluster is enabled.</p> <p>When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html">Using the Data API for Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p>
@@ -3507,6 +3519,20 @@ impl DBClusterDeserializer {
                 "EngineVersion" => {
                     obj.engine_version =
                         Some(StringDeserializer::deserialize("EngineVersion", stack)?);
+                }
+                "GlobalWriteForwardingRequested" => {
+                    obj.global_write_forwarding_requested =
+                        Some(BooleanOptionalDeserializer::deserialize(
+                            "GlobalWriteForwardingRequested",
+                            stack,
+                        )?);
+                }
+                "GlobalWriteForwardingStatus" => {
+                    obj.global_write_forwarding_status =
+                        Some(WriteForwardingStatusDeserializer::deserialize(
+                            "GlobalWriteForwardingStatus",
+                            stack,
+                        )?);
                 }
                 "HostedZoneId" => {
                     obj.hosted_zone_id =
@@ -4983,7 +5009,7 @@ pub struct DBInstance {
     pub processor_features: Option<Vec<ProcessorFeature>>,
     /// <p>A value that specifies the order in which an Aurora Replica is promoted to the primary instance after a failure of the existing primary instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html#Aurora.Managing.FaultTolerance"> Fault Tolerance for an Aurora DB Cluster</a> in the <i>Amazon Aurora User Guide</i>. </p>
     pub promotion_tier: Option<i64>,
-    /// <p>Specifies the accessibility options for the DB instance. A value of true specifies an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. A value of false specifies an internal instance with a DNS name that resolves to a private IP address.</p>
+    /// <p>Specifies the accessibility options for the DB instance.</p> <p>When the DB instance is publicly accessible, its DNS endpoint resolves to the private IP address from within the DB instance's VPC, and to the public IP address from outside of the DB instance's VPC. Access to the DB instance is ultimately controlled by the security group it uses, and that public access is not permitted if the security group assigned to the DB instance doesn't permit it.</p> <p>When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.</p> <p>For more information, see <a>CreateDBInstance</a>.</p>
     pub publicly_accessible: Option<bool>,
     /// <p><p>Contains one or more identifiers of Aurora DB clusters to which the RDS DB instance is replicated as a read replica. For example, when you create an Aurora read replica of an RDS MySQL DB instance, the Aurora MySQL DB cluster for the Aurora read replica is shown. This output does not contain information about cross region Aurora read replicas.</p> <note> <p>Currently, each RDS DB instance can have only one Aurora read replica.</p> </note></p>
     pub read_replica_db_cluster_identifiers: Option<Vec<String>>,
@@ -5979,7 +6005,7 @@ impl DBParameterGroupsMessageDeserializer {
         )
     }
 }
-/// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>The data structure representing a proxy managed by the RDS Proxy.</p> <p>This data type is used as a response element in the <code>DescribeDBProxies</code> action.</p></p>
+/// <p>The data structure representing a proxy managed by the RDS Proxy.</p> <p>This data type is used as a response element in the <code>DescribeDBProxies</code> action.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBProxy {
@@ -6109,7 +6135,7 @@ impl DBProxyStatusDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
-/// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Contains the details for an RDS Proxy target. It represents an RDS DB instance or Aurora DB cluster that the proxy can connect to. One or more targets are associated with an RDS Proxy target group.</p> <p>This data type is used as a response element in the <code>DescribeDBProxyTargets</code> action.</p></p>
+/// <p>Contains the details for an RDS Proxy target. It represents an RDS DB instance or Aurora DB cluster that the proxy can connect to. One or more targets are associated with an RDS Proxy target group.</p> <p>This data type is used as a response element in the <code>DescribeDBProxyTargets</code> action.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBProxyTarget {
@@ -6171,7 +6197,7 @@ impl DBProxyTargetDeserializer {
         })
     }
 }
-/// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Represents a set of RDS DB instances, Aurora DB clusters, or both that a proxy can connect to. Currently, each target group is associated with exactly one RDS DB instance or Aurora DB cluster.</p> <p>This data type is used as a response element in the <code>DescribeDBProxyTargetGroups</code> action.</p></p>
+/// <p>Represents a set of RDS DB instances, Aurora DB clusters, or both that a proxy can connect to. Currently, each target group is associated with exactly one RDS DB instance or Aurora DB cluster.</p> <p>This data type is used as a response element in the <code>DescribeDBProxyTargetGroups</code> action.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBProxyTargetGroup {
@@ -6461,7 +6487,7 @@ pub struct DBSnapshot {
     pub engine_version: Option<String>,
     /// <p>True if mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled, and otherwise false.</p>
     pub iam_database_authentication_enabled: Option<bool>,
-    /// <p>Specifies the time when the snapshot was taken, in Universal Coordinated Time (UTC).</p>
+    /// <p>Specifies the time in Coordinated Universal Time (UTC) when the DB instance, from which the snapshot was taken, was created.</p>
     pub instance_create_time: Option<String>,
     /// <p>Specifies the Provisioned IOPS (I/O operations per second) value of the DB instance at the time of the snapshot.</p>
     pub iops: Option<i64>,
@@ -6479,7 +6505,7 @@ pub struct DBSnapshot {
     pub port: Option<i64>,
     /// <p>The number of CPU cores and the number of threads per core for the DB instance class of the DB instance when the DB snapshot was created.</p>
     pub processor_features: Option<Vec<ProcessorFeature>>,
-    /// <p>Provides the time when the snapshot was taken, in Universal Coordinated Time (UTC).</p>
+    /// <p>Specifies when the snapshot was taken in Coodinated Universal Time (UTC).</p>
     pub snapshot_create_time: Option<String>,
     /// <p>Provides the type of the DB snapshot.</p>
     pub snapshot_type: Option<String>,
@@ -11085,6 +11111,8 @@ impl GlobalClusterListDeserializer {
 pub struct GlobalClusterMember {
     /// <p> The Amazon Resource Name (ARN) for each Aurora cluster. </p>
     pub db_cluster_arn: Option<String>,
+    /// <p>Specifies whether a secondary cluster in an Aurora global database has write forwarding enabled, not enabled, or is in the process of enabling it.</p>
+    pub global_write_forwarding_status: Option<String>,
     /// <p> Specifies whether the Aurora cluster is the primary cluster (that is, has read-write capability) for the Aurora global database with which it is associated. </p>
     pub is_writer: Option<bool>,
     /// <p> The Amazon Resource Name (ARN) for each read-only secondary cluster associated with the Aurora global database. </p>
@@ -11104,6 +11132,13 @@ impl GlobalClusterMemberDeserializer {
                 "DBClusterArn" => {
                     obj.db_cluster_arn =
                         Some(StringDeserializer::deserialize("DBClusterArn", stack)?);
+                }
+                "GlobalWriteForwardingStatus" => {
+                    obj.global_write_forwarding_status =
+                        Some(WriteForwardingStatusDeserializer::deserialize(
+                            "GlobalWriteForwardingStatus",
+                            stack,
+                        )?);
                 }
                 "IsWriter" => {
                     obj.is_writer = Some(BooleanDeserializer::deserialize("IsWriter", stack)?);
@@ -11771,7 +11806,7 @@ pub struct ModifyDBClusterMessage {
     pub allow_major_version_upgrade: Option<bool>,
     /// <p>A value that indicates whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB cluster. If this parameter is disabled, changes to the DB cluster are applied during the next maintenance window.</p> <p>The <code>ApplyImmediately</code> parameter only affects the <code>EnableIAMDatabaseAuthentication</code>, <code>MasterUserPassword</code>, and <code>NewDBClusterIdentifier</code> values. If the <code>ApplyImmediately</code> parameter is disabled, then changes to the <code>EnableIAMDatabaseAuthentication</code>, <code>MasterUserPassword</code>, and <code>NewDBClusterIdentifier</code> values are applied during the next maintenance window. All other changes are applied immediately, regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p>By default, this parameter is disabled.</p>
     pub apply_immediately: Option<bool>,
-    /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
+    /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <note> <p>Currently, Backtrack is only supported for Aurora MySQL DB clusters.</p> </note> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
     pub backtrack_window: Option<i64>,
     /// <p><p>The number of days for which automated backups are retained. You must specify a minimum value of 1.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 1 to 35</p> </li> </ul></p>
     pub backup_retention_period: Option<i64>,
@@ -11791,6 +11826,8 @@ pub struct ModifyDBClusterMessage {
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
+    /// <p>A value that indicates whether to enable write operations to be forwarded from this cluster to the primary cluster in an Aurora global database. The resulting changes are replicated back to this cluster. This parameter only applies to DB clusters that are secondary clusters in an Aurora global database. By default, Aurora disallows write operations for secondary clusters.</p>
+    pub enable_global_write_forwarding: Option<bool>,
     /// <p>A value that indicates whether to enable the HTTP endpoint for an Aurora Serverless DB cluster. By default, the HTTP endpoint is disabled.</p> <p>When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html">Using the Data API for Aurora Serverless</a> in the <i>Amazon Aurora User Guide</i>.</p>
     pub enable_http_endpoint: Option<bool>,
     /// <p>A value that indicates whether to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts. By default, mapping is disabled.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/UsingWithRDS.IAMDBAuth.html"> IAM Database Authentication</a> in the <i>Amazon Aurora User Guide.</i> </p>
@@ -11876,6 +11913,12 @@ impl ModifyDBClusterMessageSerializer {
         }
         if let Some(ref field_value) = obj.domain_iam_role_name {
             params.put(&format!("{}{}", prefix, "DomainIAMRoleName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.enable_global_write_forwarding {
+            params.put(
+                &format!("{}{}", prefix, "EnableGlobalWriteForwarding"),
+                &field_value,
+            );
         }
         if let Some(ref field_value) = obj.enable_http_endpoint {
             params.put(&format!("{}{}", prefix, "EnableHttpEndpoint"), &field_value);
@@ -11993,7 +12036,7 @@ impl ModifyDBClusterResultDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterSnapshotAttributeMessage {
-    /// <p>The name of the DB cluster snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB cluster snapshot, set this value to <code>restore</code>.</p>
+    /// <p><p>The name of the DB cluster snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB cluster snapshot, set this value to <code>restore</code>.</p> <note> <p>To view the list of attributes available to modify, use the <a>DescribeDBClusterSnapshotAttributes</a> API action.</p> </note></p>
     pub attribute_name: String,
     /// <p>The identifier for the DB cluster snapshot to modify the attributes for.</p>
     pub db_cluster_snapshot_identifier: String,
@@ -12106,7 +12149,7 @@ pub struct ModifyDBInstanceMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>The Active Directory directory ID to move the DB instance to. Specify <code>none</code> to remove the instance from its current domain. The domain must be created prior to this operation. Currently, only Microsoft SQL Server and Oracle DB instances can be created in an Active Directory Domain. </p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p>
+    /// <p>The Active Directory directory ID to move the DB instance to. Specify <code>none</code> to remove the instance from its current domain. The domain must be created prior to this operation. Currently, only Microsoft SQL Server and Oracle DB instances can be created in an Active Directory Domain. </p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub domain: Option<String>,
     /// <p>The name of the IAM role to use when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
@@ -12146,7 +12189,7 @@ pub struct ModifyDBInstanceMessage {
     pub processor_features: Option<Vec<ProcessorFeature>>,
     /// <p>A value that specifies the order in which an Aurora Replica is promoted to the primary instance after a failure of the existing primary instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html#Aurora.Managing.FaultTolerance"> Fault Tolerance for an Aurora DB Cluster</a> in the <i>Amazon Aurora User Guide</i>. </p> <p>Default: 1</p> <p>Valid Values: 0 - 15</p>
     pub promotion_tier: Option<i64>,
-    /// <p>A value that indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible, it is an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. When the DB instance isn't publicly accessible, it is an internal instance with a DNS name that resolves to a private IP address. </p> <p> <code>PubliclyAccessible</code> only applies to DB instances in a VPC. The DB instance must be part of a public subnet and <code>PubliclyAccessible</code> must be enabled for it to be publicly accessible. </p> <p>Changes to the <code>PubliclyAccessible</code> parameter are applied immediately regardless of the value of the <code>ApplyImmediately</code> parameter.</p>
+    /// <p>A value that indicates whether the DB instance is publicly accessible. </p> <p>When the DB instance is publicly accessible, its DNS endpoint resolves to the private IP address from within the DB instance's VPC, and to the public IP address from outside of the DB instance's VPC. Access to the DB instance is ultimately controlled by the security group it uses, and that public access is not permitted if the security group assigned to the DB instance doesn't permit it.</p> <p>When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.</p> <p> <code>PubliclyAccessible</code> only applies to DB instances in a VPC. The DB instance must be part of a public subnet and <code>PubliclyAccessible</code> must be enabled for it to be publicly accessible. </p> <p>Changes to the <code>PubliclyAccessible</code> parameter are applied immediately regardless of the value of the <code>ApplyImmediately</code> parameter.</p>
     pub publicly_accessible: Option<bool>,
     /// <p>Specifies the storage type to be associated with the DB instance. </p> <p>If you specify Provisioned IOPS (<code>io1</code>), you must also include a value for the <code>Iops</code> parameter. </p> <p>If you choose to migrate your DB instance from using standard storage to using Provisioned IOPS, or from using Provisioned IOPS to using standard storage, the process can take time. The duration of the migration depends on several factors such as database load, storage size, storage type (standard or Provisioned IOPS), amount of IOPS provisioned (if any), and the number of prior scale storage operations. Typical migration times are under 24 hours, but the process can take up to several days in some cases. During the migration, the DB instance is available for use, but might experience performance degradation. While the migration takes place, nightly backups for the instance are suspended. No other Amazon RDS operations can take place for the instance, including modifying the instance, rebooting the instance, deleting the instance, creating a read replica for the instance, and creating a DB snapshot of the instance. </p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p>Default: <code>io1</code> if the <code>Iops</code> parameter is specified, otherwise <code>gp2</code> </p>
     pub storage_type: Option<String>,
@@ -12587,7 +12630,7 @@ impl ModifyDBProxyTargetGroupResponseDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBSnapshotAttributeMessage {
-    /// <p>The name of the DB snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB snapshot, set this value to <code>restore</code>.</p>
+    /// <p><p>The name of the DB snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB snapshot, set this value to <code>restore</code>.</p> <note> <p>To view the list of attributes available to modify, use the <a>DescribeDBSnapshotAttributes</a> API action.</p> </note></p>
     pub attribute_name: String,
     /// <p>The identifier for the DB snapshot to modify the attributes for.</p>
     pub db_snapshot_identifier: String,
@@ -13956,6 +13999,8 @@ pub struct OrderableDBInstanceOption {
     pub min_storage_size: Option<i64>,
     /// <p>Indicates whether a DB instance is Multi-AZ capable.</p>
     pub multi_az_capable: Option<bool>,
+    /// <p>Whether a DB instance supports RDS on Outposts.</p> <p>For more information about RDS on Outposts, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html">Amazon RDS on AWS Outposts</a> in the <i>Amazon RDS User Guide.</i> </p>
+    pub outpost_capable: Option<bool>,
     /// <p>Indicates whether a DB instance can have a read replica.</p>
     pub read_replica_capable: Option<bool>,
     /// <p>Indicates the storage type for a DB instance.</p>
@@ -14071,6 +14116,10 @@ impl OrderableDBInstanceOptionDeserializer {
                     "MultiAZCapable" => {
                         obj.multi_az_capable =
                             Some(BooleanDeserializer::deserialize("MultiAZCapable", stack)?);
+                    }
+                    "OutpostCapable" => {
+                        obj.outpost_capable =
+                            Some(BooleanDeserializer::deserialize("OutpostCapable", stack)?);
                     }
                     "ReadReplicaCapable" => {
                         obj.read_replica_capable = Some(BooleanDeserializer::deserialize(
@@ -14200,6 +14249,33 @@ impl OrderableDBInstanceOptionsMessageDeserializer {
                 Ok(())
             },
         )
+    }
+}
+/// <p>A data type that represents an Outpost.</p> <p>For more information about RDS on Outposts, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html">Amazon RDS on AWS Outposts</a> in the <i>Amazon RDS User Guide.</i> </p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct Outpost {
+    /// <p>The Amazon Resource Name (ARN) of the Outpost.</p>
+    pub arn: Option<String>,
+}
+
+#[allow(dead_code)]
+struct OutpostDeserializer;
+impl OutpostDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Outpost, XmlParseError> {
+        deserialize_elements::<_, Outpost, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = Some(StringDeserializer::deserialize("Arn", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 /// <p> This data type is used as a request parameter in the <code>ModifyDBParameterGroup</code> and <code>ResetDBParameterGroup</code> actions. </p> <p>This data type is used as a response element in the <code>DescribeEngineDefaultParameters</code> and <code>DescribeDBParameters</code> actions.</p>
@@ -15967,7 +16043,7 @@ impl ResourcePendingMaintenanceActionsDeserializer {
 pub struct RestoreDBClusterFromS3Message {
     /// <p>A list of Availability Zones (AZs) where instances in the restored DB cluster can be created.</p>
     pub availability_zones: Option<Vec<String>>,
-    /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
+    /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <note> <p>Currently, Backtrack is only supported for Aurora MySQL DB clusters.</p> </note> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
     pub backtrack_window: Option<i64>,
     /// <p><p>The number of days for which automated backups of the restored DB cluster are retained. You must specify a minimum value of 1.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 1 to 35</p> </li> </ul></p>
     pub backup_retention_period: Option<i64>,
@@ -15975,7 +16051,7 @@ pub struct RestoreDBClusterFromS3Message {
     pub character_set_name: Option<String>,
     /// <p>A value that indicates whether to copy all tags from the restored DB cluster to snapshots of the restored DB cluster. The default is not to copy them.</p>
     pub copy_tags_to_snapshot: Option<bool>,
-    /// <p>The name of the DB cluster to create from the source data in the Amazon S3 bucket. This parameter is isn't case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Can't end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>
+    /// <p>The name of the DB cluster to create from the source data in the Amazon S3 bucket. This parameter isn't case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Can't end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>
     pub db_cluster_identifier: String,
     /// <p><p>The name of the DB cluster parameter group to associate with the restored DB cluster. If this argument is omitted, <code>default.aurora5.6</code> is used. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: Option<String>,
@@ -16019,7 +16095,7 @@ pub struct RestoreDBClusterFromS3Message {
     pub s3_prefix: Option<String>,
     /// <p>The identifier for the database engine that was backed up to create the files stored in the Amazon S3 bucket. </p> <p>Valid values: <code>mysql</code> </p>
     pub source_engine: String,
-    /// <p>The version of the database that the backup files were created from.</p> <p>MySQL version 5.5 and 5.6 are supported. </p> <p>Example: <code>5.6.22</code> </p>
+    /// <p>The version of the database that the backup files were created from.</p> <p>MySQL versions 5.5, 5.6, and 5.7 are supported. </p> <p>Example: <code>5.6.40</code> </p>
     pub source_engine_version: String,
     /// <p>A value that indicates whether the restored DB cluster is encrypted.</p>
     pub storage_encrypted: Option<bool>,
@@ -16198,7 +16274,7 @@ impl RestoreDBClusterFromS3ResultDeserializer {
 pub struct RestoreDBClusterFromSnapshotMessage {
     /// <p>Provides the list of Availability Zones (AZs) where instances in the restored DB cluster can be created.</p>
     pub availability_zones: Option<Vec<String>>,
-    /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
+    /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <note> <p>Currently, Backtrack is only supported for Aurora MySQL DB clusters.</p> </note> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
     pub backtrack_window: Option<i64>,
     /// <p>A value that indicates whether to copy all tags from the restored DB cluster to snapshots of the restored DB cluster. The default is not to copy them.</p>
     pub copy_tags_to_snapshot: Option<bool>,
@@ -16376,7 +16452,7 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDBClusterToPointInTimeMessage {
-    /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
+    /// <p><p>The target backtrack window, in seconds. To disable backtracking, set this value to 0.</p> <note> <p>Currently, Backtrack is only supported for Aurora MySQL DB clusters.</p> </note> <p>Default: 0</p> <p>Constraints:</p> <ul> <li> <p>If specified, this value must be set to a number from 0 to 259,200 (72 hours).</p> </li> </ul></p>
     pub backtrack_window: Option<i64>,
     /// <p>A value that indicates whether to copy all tags from the restored DB cluster to snapshots of the restored DB cluster. The default is not to copy them.</p>
     pub copy_tags_to_snapshot: Option<bool>,
@@ -16557,7 +16633,7 @@ pub struct RestoreDBInstanceFromDBSnapshotMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>Specify the Active Directory directory ID to restore the DB instance in. The domain must be created prior to this operation. Currently, only Microsoft SQL Server and Oracle DB instances can be created in an Active Directory Domain. </p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p>
+    /// <p>Specify the Active Directory directory ID to restore the DB instance in. The domain must be created prior to this operation. Currently, only Microsoft SQL Server and Oracle DB instances can be created in an Active Directory Domain. </p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
@@ -16579,7 +16655,7 @@ pub struct RestoreDBInstanceFromDBSnapshotMessage {
     pub port: Option<i64>,
     /// <p>The number of CPU cores and the number of threads per core for the DB instance class of the DB instance.</p>
     pub processor_features: Option<Vec<ProcessorFeature>>,
-    /// <p>A value that indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible, it is an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. When the DB instance isn't publicly accessible, it is an internal instance with a DNS name that resolves to a private IP address. For more information, see <a>CreateDBInstance</a>.</p>
+    /// <p>A value that indicates whether the DB instance is publicly accessible.</p> <p>When the DB instance is publicly accessible, its DNS endpoint resolves to the private IP address from within the DB instance's VPC, and to the public IP address from outside of the DB instance's VPC. Access to the DB instance is ultimately controlled by the security group it uses, and that public access is not permitted if the security group assigned to the DB instance doesn't permit it.</p> <p>When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.</p> <p>For more information, see <a>CreateDBInstance</a>.</p>
     pub publicly_accessible: Option<bool>,
     /// <p>Specifies the storage type to be associated with the DB instance.</p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p> If you specify <code>io1</code>, you must also include a value for the <code>Iops</code> parameter. </p> <p> Default: <code>io1</code> if the <code>Iops</code> parameter is specified, otherwise <code>gp2</code> </p>
     pub storage_type: Option<String>,
@@ -16816,7 +16892,7 @@ pub struct RestoreDBInstanceFromS3Message {
     pub preferred_maintenance_window: Option<String>,
     /// <p>The number of CPU cores and the number of threads per core for the DB instance class of the DB instance.</p>
     pub processor_features: Option<Vec<ProcessorFeature>>,
-    /// <p>A value that indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible, it is an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. When the DB instance isn't publicly accessible, it is an internal instance with a DNS name that resolves to a private IP address. For more information, see <a>CreateDBInstance</a>.</p>
+    /// <p>A value that indicates whether the DB instance is publicly accessible.</p> <p>When the DB instance is publicly accessible, its DNS endpoint resolves to the private IP address from within the DB instance's VPC, and to the public IP address from outside of the DB instance's VPC. Access to the DB instance is ultimately controlled by the security group it uses, and that public access is not permitted if the security group assigned to the DB instance doesn't permit it.</p> <p>When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.</p> <p>For more information, see <a>CreateDBInstance</a>.</p>
     pub publicly_accessible: Option<bool>,
     /// <p>The name of your Amazon S3 bucket that contains your database backup file. </p>
     pub s3_bucket_name: String,
@@ -16826,7 +16902,7 @@ pub struct RestoreDBInstanceFromS3Message {
     pub s3_prefix: Option<String>,
     /// <p>The name of the engine of your source database. </p> <p>Valid Values: <code>mysql</code> </p>
     pub source_engine: String,
-    /// <p>The engine version of your source database. </p> <p>Valid Values: <code>5.6</code> </p>
+    /// <p>The version of the database that the backup files were created from.</p> <p>MySQL versions 5.6 and 5.7 are supported. </p> <p>Example: <code>5.6.40</code> </p>
     pub source_engine_version: String,
     /// <p>A value that indicates whether the new DB instance is encrypted or not. </p>
     pub storage_encrypted: Option<bool>,
@@ -17078,7 +17154,7 @@ pub struct RestoreDBInstanceToPointInTimeMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html"> Deleting a DB Instance</a>. </p>
     pub deletion_protection: Option<bool>,
-    /// <p>Specify the Active Directory directory ID to restore the DB instance in. The domain must be created prior to this operation. Currently, only Microsoft SQL Server and Oracle DB instances can be created in an Active Directory Domain. </p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p>
+    /// <p>Specify the Active Directory directory ID to restore the DB instance in. The domain must be created prior to this operation. Currently, only Microsoft SQL Server and Oracle DB instances can be created in an Active Directory Domain. </p> <p>For Microsoft SQL Server DB instances, Amazon RDS can use Windows Authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_SQLServerWinAuth.html"> Using Windows Authentication with an Amazon RDS DB Instance Running Microsoft SQL Server</a> in the <i>Amazon RDS User Guide</i>.</p> <p>For Oracle DB instances, Amazon RDS can use Kerberos authentication to authenticate users that connect to the DB instance. For more information, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/oracle-kerberos.html"> Using Kerberos Authentication with Amazon RDS for Oracle</a> in the <i>Amazon RDS User Guide</i>.</p>
     pub domain: Option<String>,
     /// <p>Specify the name of the IAM role to be used when making API calls to the Directory Service.</p>
     pub domain_iam_role_name: Option<String>,
@@ -17100,7 +17176,7 @@ pub struct RestoreDBInstanceToPointInTimeMessage {
     pub port: Option<i64>,
     /// <p>The number of CPU cores and the number of threads per core for the DB instance class of the DB instance.</p>
     pub processor_features: Option<Vec<ProcessorFeature>>,
-    /// <p>A value that indicates whether the DB instance is publicly accessible. When the DB instance is publicly accessible, it is an Internet-facing instance with a publicly resolvable DNS name, which resolves to a public IP address. When the DB instance isn't publicly accessible, it is an internal instance with a DNS name that resolves to a private IP address. For more information, see <a>CreateDBInstance</a>.</p>
+    /// <p>A value that indicates whether the DB instance is publicly accessible.</p> <p>When the DB instance is publicly accessible, its DNS endpoint resolves to the private IP address from within the DB instance's VPC, and to the public IP address from outside of the DB instance's VPC. Access to the DB instance is ultimately controlled by the security group it uses, and that public access is not permitted if the security group assigned to the DB instance doesn't permit it.</p> <p>When the DB instance isn't publicly accessible, it is an internal DB instance with a DNS name that resolves to a private IP address.</p> <p>For more information, see <a>CreateDBInstance</a>.</p>
     pub publicly_accessible: Option<bool>,
     /// <p>The date and time to restore from.</p> <p>Valid Values: Value must be a time in Universal Coordinated Time (UTC) format</p> <p>Constraints:</p> <ul> <li> <p>Must be before the latest restorable time for the DB instance</p> </li> <li> <p>Can't be specified if the <code>UseLatestRestorableTime</code> parameter is enabled</p> </li> </ul> <p>Example: <code>2009-09-07T23:45:00Z</code> </p>
     pub restore_time: Option<String>,
@@ -18107,14 +18183,16 @@ impl StringSensitiveDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
-/// <p> This data type is used as a response element in the <code>DescribeDBSubnetGroups</code> action. </p>
+/// <p> This data type is used as a response element for the <code>DescribeDBSubnetGroups</code> operation. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Subnet {
     pub subnet_availability_zone: Option<AvailabilityZone>,
-    /// <p>Specifies the identifier of the subnet.</p>
+    /// <p>The identifier of the subnet.</p>
     pub subnet_identifier: Option<String>,
-    /// <p>Specifies the status of the subnet.</p>
+    /// <p>If the subnet is associated with an Outpost, this value specifies the Outpost.</p> <p>For more information about RDS on Outposts, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-on-outposts.html">Amazon RDS on AWS Outposts</a> in the <i>Amazon RDS User Guide.</i> </p>
+    pub subnet_outpost: Option<Outpost>,
+    /// <p>The status of the subnet.</p>
     pub subnet_status: Option<String>,
 }
 
@@ -18134,6 +18212,10 @@ impl SubnetDeserializer {
                 "SubnetIdentifier" => {
                     obj.subnet_identifier =
                         Some(StringDeserializer::deserialize("SubnetIdentifier", stack)?);
+                }
+                "SubnetOutpost" => {
+                    obj.subnet_outpost =
+                        Some(OutpostDeserializer::deserialize("SubnetOutpost", stack)?);
                 }
                 "SubnetStatus" => {
                     obj.subnet_status =
@@ -18350,7 +18432,7 @@ impl TargetGroupListDeserializer {
         })
     }
 }
-/// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Information about the connection health of an RDS Proxy target.</p></p>
+/// <p>Information about the connection health of an RDS Proxy target.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct TargetHealth {
@@ -18511,7 +18593,7 @@ impl UpgradeTargetDeserializer {
         })
     }
 }
-/// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Specifies the details of authentication used by a proxy to log in as a specific database user.</p></p>
+/// <p>Specifies the details of authentication used by a proxy to log in as a specific database user.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UserAuthConfig {
@@ -18554,7 +18636,7 @@ impl UserAuthConfigSerializer {
     }
 }
 
-/// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Returns the details of authentication used by a proxy to log in as a specific database user.</p></p>
+/// <p>Returns the details of authentication used by a proxy to log in as a specific database user.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UserAuthConfigInfo {
@@ -18901,6 +18983,14 @@ impl VpnDetailsDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[allow(dead_code)]
+struct WriteForwardingStatusDeserializer;
+impl WriteForwardingStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// Errors returned by AddRoleToDBCluster
@@ -25192,12 +25282,16 @@ pub enum ModifyDBInstanceError {
     DomainNotFoundFault(String),
     /// <p>The specified DB instance class isn't available in the specified Availability Zone.</p>
     InsufficientDBInstanceCapacityFault(String),
+    /// <p>The requested operation can't be performed while the cluster is in this state.</p>
+    InvalidDBClusterStateFault(String),
     /// <p>The DB instance isn't in a valid state.</p>
     InvalidDBInstanceStateFault(String),
     /// <p>The state of the DB security group doesn't allow deletion.</p>
     InvalidDBSecurityGroupStateFault(String),
     /// <p>The DB subnet group doesn't cover all Availability Zones after it's created because of users' change.</p>
     InvalidVPCNetworkStateFault(String),
+    /// <p>An error occurred accessing an AWS KMS key.</p>
+    KMSKeyNotAccessibleFault(String),
     /// <p>The specified option group could not be found.</p>
     OptionGroupNotFoundFault(String),
     /// <p>Provisioned IOPS not available in the specified Availability Zone.</p>
@@ -25276,6 +25370,11 @@ impl ModifyDBInstanceError {
                             ),
                         )
                     }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::InvalidDBClusterStateFault(parsed_error.message),
+                        )
+                    }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::InvalidDBInstanceStateFault(
@@ -25295,6 +25394,11 @@ impl ModifyDBInstanceError {
                             ModifyDBInstanceError::InvalidVPCNetworkStateFault(
                                 parsed_error.message,
                             ),
+                        )
+                    }
+                    "KMSKeyNotAccessibleFault" => {
+                        return RusotoError::Service(
+                            ModifyDBInstanceError::KMSKeyNotAccessibleFault(parsed_error.message),
                         )
                     }
                     "OptionGroupNotFoundFault" => {
@@ -25360,11 +25464,13 @@ impl fmt::Display for ModifyDBInstanceError {
             ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(ref cause) => {
                 write!(f, "{}", cause)
             }
+            ModifyDBInstanceError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
             ModifyDBInstanceError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
             ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(ref cause) => {
                 write!(f, "{}", cause)
             }
             ModifyDBInstanceError::InvalidVPCNetworkStateFault(ref cause) => write!(f, "{}", cause),
+            ModifyDBInstanceError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
             ModifyDBInstanceError::OptionGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
             ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(ref cause) => {
                 write!(f, "{}", cause)
@@ -29061,7 +29167,7 @@ pub trait Rds {
         RusotoError<AuthorizeDBSecurityGroupIngressError>,
     >;
 
-    /// <p><p>Backtracks a DB cluster to a specific time, without creating a new DB cluster.</p> <p>For more information on backtracking, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Backtrack.html"> Backtracking an Aurora DB Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p>Backtracks a DB cluster to a specific time, without creating a new DB cluster.</p> <p>For more information on backtracking, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Backtrack.html"> Backtracking an Aurora DB Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora MySQL DB clusters.</p> </note></p>
     async fn backtrack_db_cluster(
         &self,
         input: BacktrackDBClusterMessage,
@@ -29151,7 +29257,7 @@ pub trait Rds {
         input: CreateDBParameterGroupMessage,
     ) -> Result<CreateDBParameterGroupResult, RusotoError<CreateDBParameterGroupError>>;
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Creates a new DB proxy.</p></p>
+    /// <p>Creates a new DB proxy.</p>
     async fn create_db_proxy(
         &self,
         input: CreateDBProxyRequest,
@@ -29181,7 +29287,7 @@ pub trait Rds {
         input: CreateEventSubscriptionMessage,
     ) -> Result<CreateEventSubscriptionResult, RusotoError<CreateEventSubscriptionError>>;
 
-    /// <p><p> </p> <p> Creates an Aurora global database spread across multiple regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p> Creates an Aurora global database spread across multiple regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn create_global_cluster(
         &self,
         input: CreateGlobalClusterMessage,
@@ -29244,7 +29350,7 @@ pub trait Rds {
         input: DeleteDBParameterGroupMessage,
     ) -> Result<(), RusotoError<DeleteDBParameterGroupError>>;
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Deletes an existing proxy.</p></p>
+    /// <p>Deletes an existing proxy.</p>
     async fn delete_db_proxy(
         &self,
         input: DeleteDBProxyRequest,
@@ -29292,7 +29398,7 @@ pub trait Rds {
         input: DeleteOptionGroupMessage,
     ) -> Result<(), RusotoError<DeleteOptionGroupError>>;
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Remove the association between one or more <code>DBProxyTarget</code> data structures and a <code>DBProxyTargetGroup</code>.</p></p>
+    /// <p>Remove the association between one or more <code>DBProxyTarget</code> data structures and a <code>DBProxyTargetGroup</code>.</p>
     async fn deregister_db_proxy_targets(
         &self,
         input: DeregisterDBProxyTargetsRequest,
@@ -29316,7 +29422,7 @@ pub trait Rds {
         input: DescribeCustomAvailabilityZonesMessage,
     ) -> Result<CustomAvailabilityZoneMessage, RusotoError<DescribeCustomAvailabilityZonesError>>;
 
-    /// <p><p>Returns information about backtracks for a DB cluster.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p>Returns information about backtracks for a DB cluster.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora MySQL DB clusters.</p> </note></p>
     async fn describe_db_cluster_backtracks(
         &self,
         input: DescribeDBClusterBacktracksMessage,
@@ -29400,19 +29506,19 @@ pub trait Rds {
         input: DescribeDBParametersMessage,
     ) -> Result<DBParameterGroupDetails, RusotoError<DescribeDBParametersError>>;
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Returns information about DB proxies.</p></p>
+    /// <p>Returns information about DB proxies.</p>
     async fn describe_db_proxies(
         &self,
         input: DescribeDBProxiesRequest,
     ) -> Result<DescribeDBProxiesResponse, RusotoError<DescribeDBProxiesError>>;
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Returns information about DB proxy target groups, represented by <code>DBProxyTargetGroup</code> data structures.</p></p>
+    /// <p>Returns information about DB proxy target groups, represented by <code>DBProxyTargetGroup</code> data structures.</p>
     async fn describe_db_proxy_target_groups(
         &self,
         input: DescribeDBProxyTargetGroupsRequest,
     ) -> Result<DescribeDBProxyTargetGroupsResponse, RusotoError<DescribeDBProxyTargetGroupsError>>;
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Returns information about <code>DBProxyTarget</code> objects. This API supports pagination.</p></p>
+    /// <p>Returns information about <code>DBProxyTarget</code> objects. This API supports pagination.</p>
     async fn describe_db_proxy_targets(
         &self,
         input: DescribeDBProxyTargetsRequest,
@@ -29607,7 +29713,7 @@ pub trait Rds {
         input: ModifyDBClusterParameterGroupMessage,
     ) -> Result<DBClusterParameterGroupNameMessage, RusotoError<ModifyDBClusterParameterGroupError>>;
 
-    /// <p><p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don&#39;t want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can&#39;t use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot public or private, use the <code>DescribeDBClusterSnapshotAttributes</code> API action.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts.</p> <note> <p>Don&#39;t add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don&#39;t want available to all AWS accounts.</p> </note> <p>If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can&#39;t use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot is public or private, use the <a>DescribeDBClusterSnapshotAttributes</a> API action. The accounts are returned as values for the <code>restore</code> attribute.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn modify_db_cluster_snapshot_attribute(
         &self,
         input: ModifyDBClusterSnapshotAttributeMessage,
@@ -29628,13 +29734,13 @@ pub trait Rds {
         input: ModifyDBParameterGroupMessage,
     ) -> Result<DBParameterGroupNameMessage, RusotoError<ModifyDBParameterGroupError>>;
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Changes the settings for an existing DB proxy.</p></p>
+    /// <p>Changes the settings for an existing DB proxy.</p>
     async fn modify_db_proxy(
         &self,
         input: ModifyDBProxyRequest,
     ) -> Result<ModifyDBProxyResponse, RusotoError<ModifyDBProxyError>>;
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Modifies the properties of a <code>DBProxyTargetGroup</code>.</p></p>
+    /// <p>Modifies the properties of a <code>DBProxyTargetGroup</code>.</p>
     async fn modify_db_proxy_target_group(
         &self,
         input: ModifyDBProxyTargetGroupRequest,
@@ -29646,7 +29752,7 @@ pub trait Rds {
         input: ModifyDBSnapshotMessage,
     ) -> Result<ModifyDBSnapshotResult, RusotoError<ModifyDBSnapshotError>>;
 
-    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts. If the manual DB snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <code>DescribeDBSnapshotAttributes</code> API action.</p>
+    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts.</p> <note> <p>Don't add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts.</p> </note> <p>If the manual DB snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <a>DescribeDBSnapshotAttributes</a> API action. The accounts are returned as values for the <code>restore</code> attribute.</p>
     async fn modify_db_snapshot_attribute(
         &self,
         input: ModifyDBSnapshotAttributeMessage,
@@ -29703,7 +29809,7 @@ pub trait Rds {
         input: RebootDBInstanceMessage,
     ) -> Result<RebootDBInstanceResult, RusotoError<RebootDBInstanceError>>;
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Associate one or more <code>DBProxyTarget</code> data structures with a <code>DBProxyTargetGroup</code>.</p></p>
+    /// <p>Associate one or more <code>DBProxyTarget</code> data structures with a <code>DBProxyTargetGroup</code>.</p>
     async fn register_db_proxy_targets(
         &self,
         input: RegisterDBProxyTargetsRequest,
@@ -30053,7 +30159,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><p>Backtracks a DB cluster to a specific time, without creating a new DB cluster.</p> <p>For more information on backtracking, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Backtrack.html"> Backtracking an Aurora DB Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p>Backtracks a DB cluster to a specific time, without creating a new DB cluster.</p> <p>For more information on backtracking, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Backtrack.html"> Backtracking an Aurora DB Cluster</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora MySQL DB clusters.</p> </note></p>
     async fn backtrack_db_cluster(
         &self,
         input: BacktrackDBClusterMessage,
@@ -30537,7 +30643,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Creates a new DB proxy.</p></p>
+    /// <p>Creates a new DB proxy.</p>
     async fn create_db_proxy(
         &self,
         input: CreateDBProxyRequest,
@@ -30698,7 +30804,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><p> </p> <p> Creates an Aurora global database spread across multiple regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p> Creates an Aurora global database spread across multiple regions. The global database contains a single primary cluster with read-write capability, and a read-only secondary cluster that receives data from the primary cluster through high-speed replication performed by the Aurora storage subsystem. </p> <p> You can create a global database that is initially empty, and then add a primary cluster and a secondary cluster to it. Or you can specify an existing Aurora cluster during the create operation, and this cluster becomes the primary cluster of the global database. </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn create_global_cluster(
         &self,
         input: CreateGlobalClusterMessage,
@@ -30998,7 +31104,7 @@ impl Rds for RdsClient {
         Ok(())
     }
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Deletes an existing proxy.</p></p>
+    /// <p>Deletes an existing proxy.</p>
     async fn delete_db_proxy(
         &self,
         input: DeleteDBProxyRequest,
@@ -31217,7 +31323,7 @@ impl Rds for RdsClient {
         Ok(())
     }
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Remove the association between one or more <code>DBProxyTarget</code> data structures and a <code>DBProxyTargetGroup</code>.</p></p>
+    /// <p>Remove the association between one or more <code>DBProxyTarget</code> data structures and a <code>DBProxyTargetGroup</code>.</p>
     async fn deregister_db_proxy_targets(
         &self,
         input: DeregisterDBProxyTargetsRequest,
@@ -31337,7 +31443,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><p>Returns information about backtracks for a DB cluster.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p>Returns information about backtracks for a DB cluster.</p> <p>For more information on Amazon Aurora, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"> What Is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide.</i> </p> <note> <p>This action only applies to Aurora MySQL DB clusters.</p> </note></p>
     async fn describe_db_cluster_backtracks(
         &self,
         input: DescribeDBClusterBacktracksMessage,
@@ -31778,7 +31884,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Returns information about DB proxies.</p></p>
+    /// <p>Returns information about DB proxies.</p>
     async fn describe_db_proxies(
         &self,
         input: DescribeDBProxiesRequest,
@@ -31811,7 +31917,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Returns information about DB proxy target groups, represented by <code>DBProxyTargetGroup</code> data structures.</p></p>
+    /// <p>Returns information about DB proxy target groups, represented by <code>DBProxyTargetGroup</code> data structures.</p>
     async fn describe_db_proxy_target_groups(
         &self,
         input: DescribeDBProxyTargetGroupsRequest,
@@ -31845,7 +31951,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Returns information about <code>DBProxyTarget</code> objects. This API supports pagination.</p></p>
+    /// <p>Returns information about <code>DBProxyTarget</code> objects. This API supports pagination.</p>
     async fn describe_db_proxy_targets(
         &self,
         input: DescribeDBProxyTargetsRequest,
@@ -32847,7 +32953,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don&#39;t want available to all AWS accounts. If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can&#39;t use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot public or private, use the <code>DescribeDBClusterSnapshotAttributes</code> API action.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
+    /// <p><p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual DB cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB cluster snapshot. Use the value <code>all</code> to make the manual DB cluster snapshot public, which means that it can be copied or restored by all AWS accounts.</p> <note> <p>Don&#39;t add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don&#39;t want available to all AWS accounts.</p> </note> <p>If a manual DB cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can&#39;t use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB cluster snapshot, or whether a manual DB cluster snapshot is public or private, use the <a>DescribeDBClusterSnapshotAttributes</a> API action. The accounts are returned as values for the <code>restore</code> attribute.</p> <note> <p>This action only applies to Aurora DB clusters.</p> </note></p>
     async fn modify_db_cluster_snapshot_attribute(
         &self,
         input: ModifyDBClusterSnapshotAttributeMessage,
@@ -32950,7 +33056,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Changes the settings for an existing DB proxy.</p></p>
+    /// <p>Changes the settings for an existing DB proxy.</p>
     async fn modify_db_proxy(
         &self,
         input: ModifyDBProxyRequest,
@@ -32981,7 +33087,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Modifies the properties of a <code>DBProxyTargetGroup</code>.</p></p>
+    /// <p>Modifies the properties of a <code>DBProxyTargetGroup</code>.</p>
     async fn modify_db_proxy_target_group(
         &self,
         input: ModifyDBProxyTargetGroupRequest,
@@ -33045,7 +33151,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts. If the manual DB snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <code>DescribeDBSnapshotAttributes</code> API action.</p>
+    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB snapshot.</p> <p>To share a manual DB snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code> and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual DB snapshot. Uses the value <code>all</code> to make the manual DB snapshot public, which means it can be copied or restored by all AWS accounts.</p> <note> <p>Don't add the <code>all</code> value for any manual DB snapshots that contain private information that you don't want available to all AWS accounts.</p> </note> <p>If the manual DB snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p> <p>To view which AWS accounts have access to copy or restore a manual DB snapshot, or whether a manual DB snapshot public or private, use the <a>DescribeDBSnapshotAttributes</a> API action. The accounts are returned as values for the <code>restore</code> attribute.</p>
     async fn modify_db_snapshot_attribute(
         &self,
         input: ModifyDBSnapshotAttributeMessage,
@@ -33345,7 +33451,7 @@ impl Rds for RdsClient {
         Ok(result)
     }
 
-    /// <p><note> <p>This is prerelease documentation for the RDS Database Proxy feature in preview release. It is subject to change.</p> </note> <p>Associate one or more <code>DBProxyTarget</code> data structures with a <code>DBProxyTargetGroup</code>.</p></p>
+    /// <p>Associate one or more <code>DBProxyTarget</code> data structures with a <code>DBProxyTargetGroup</code>.</p>
     async fn register_db_proxy_targets(
         &self,
         input: RegisterDBProxyTargetsRequest,

@@ -433,7 +433,7 @@ impl Sso for SsoClient {
 
         request.set_endpoint_prefix("portal.sso".to_string());
 
-        request.add_header("x-amz-sso_bearer_token", &input.access_token);
+        request.add_header("x-amz-sso_bearer_token", &input.access_token.to_string());
         let mut params = Params::new();
         params.put("account_id", &input.account_id);
         params.put("role_name", &input.role_name);
@@ -469,7 +469,7 @@ impl Sso for SsoClient {
 
         request.set_endpoint_prefix("portal.sso".to_string());
 
-        request.add_header("x-amz-sso_bearer_token", &input.access_token);
+        request.add_header("x-amz-sso_bearer_token", &input.access_token.to_string());
         let mut params = Params::new();
         params.put("account_id", &input.account_id);
         if let Some(ref x) = input.max_results {
@@ -510,7 +510,7 @@ impl Sso for SsoClient {
 
         request.set_endpoint_prefix("portal.sso".to_string());
 
-        request.add_header("x-amz-sso_bearer_token", &input.access_token);
+        request.add_header("x-amz-sso_bearer_token", &input.access_token.to_string());
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("max_result", x);
@@ -547,7 +547,7 @@ impl Sso for SsoClient {
 
         request.set_endpoint_prefix("portal.sso".to_string());
 
-        request.add_header("x-amz-sso_bearer_token", &input.access_token);
+        request.add_header("x-amz-sso_bearer_token", &input.access_token.to_string());
 
         let mut response = self
             .client

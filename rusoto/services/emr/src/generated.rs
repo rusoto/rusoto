@@ -401,6 +401,10 @@ pub struct Cluster {
     #[serde(rename = "KerberosAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kerberos_attributes: Option<KerberosAttributes>,
+    /// <p> The AWS KMS customer master key (CMK) used for encrypting log files. This attribute is only available with EMR version 5.30.0 and later, excluding EMR 6.0.0. </p>
+    #[serde(rename = "LogEncryptionKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_encryption_kms_key_id: Option<String>,
     /// <p>The path to the Amazon S3 location where logs for this cluster are stored.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -575,7 +579,11 @@ pub struct ComputeLimits {
     /// <p> The upper boundary of EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. Managed scaling activities are not allowed beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
     #[serde(rename = "MaximumCapacityUnits")]
     pub maximum_capacity_units: i64,
-    /// <p> The upper boundary of on-demand EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. The on-demand units are not allowed to scale beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    /// <p> The upper boundary of EC2 units for core node type in a cluster. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. The core units are not allowed to scale beyond this boundary. The parameter is used to split capacity allocation between core and task nodes. </p>
+    #[serde(rename = "MaximumCoreCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_core_capacity_units: Option<i64>,
+    /// <p> The upper boundary of On-Demand EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. The On-Demand units are not allowed to scale beyond this boundary. The parameter is used to split capacity allocation between On-Demand and Spot instances. </p>
     #[serde(rename = "MaximumOnDemandCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_on_demand_capacity_units: Option<i64>,
@@ -1079,12 +1087,17 @@ pub struct InstanceFleetModifyConfig {
     pub target_spot_capacity: Option<i64>,
 }
 
-/// <p><p>The launch specification for Spot instances in the fleet, which determines the defined duration and provisioning timeout behavior.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
+/// <p><p>The launch specification for Spot instances in the fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand and Spot instance allocation strategies are available in Amazon EMR version 5.12.1 and later.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InstanceFleetProvisioningSpecifications {
-    /// <p>The launch specification for Spot instances in the fleet, which determines the defined duration and provisioning timeout behavior.</p>
+    /// <p><p> The launch specification for On-Demand instances in the instance fleet, which determines the allocation strategy. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand instances allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
+    #[serde(rename = "OnDemandSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_demand_specification: Option<OnDemandProvisioningSpecification>,
+    /// <p>The launch specification for Spot instances in the fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p>
     #[serde(rename = "SpotSpecification")]
-    pub spot_specification: SpotProvisioningSpecification,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spot_specification: Option<SpotProvisioningSpecification>,
 }
 
 /// <p><p>Provides status change reason details for the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
@@ -1539,6 +1552,10 @@ pub struct JobFlowDetail {
     #[serde(rename = "JobFlowRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_flow_role: Option<String>,
+    /// <p>The AWS KMS customer master key (CMK) used for encrypting log files. This attribute is only available with EMR version 5.30.0 and later, excluding EMR 6.0.0.</p>
+    #[serde(rename = "LogEncryptionKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_encryption_kms_key_id: Option<String>,
     /// <p>The location in Amazon S3 where log files for the job are stored.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2048,6 +2065,14 @@ pub struct ModifyInstanceGroupsInput {
     pub instance_groups: Option<Vec<InstanceGroupModifyConfig>>,
 }
 
+/// <p><p> The launch specification for On-Demand instances in the instance fleet, which determines the allocation strategy. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand instances allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OnDemandProvisioningSpecification {
+    /// <p> Specifies the strategy to use in launching On-Demand instance fleets. Currently, the only option is lowest-price (the default), which launches the lowest price first. </p>
+    #[serde(rename = "AllocationStrategy")]
+    pub allocation_strategy: String,
+}
+
 /// <p>The Amazon EC2 Availability Zone configuration of the cluster (job flow).</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PlacementType {
@@ -2226,6 +2251,10 @@ pub struct RunJobFlowInput {
     #[serde(rename = "KerberosAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kerberos_attributes: Option<KerberosAttributes>,
+    /// <p>The AWS KMS customer master key (CMK) used for encrypting log files. If a value is not provided, the logs will remain encrypted by AES-256. This attribute is only available with EMR version 5.30.0 and later, excluding EMR 6.0.0.</p>
+    #[serde(rename = "LogEncryptionKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_encryption_kms_key_id: Option<String>,
     /// <p>The location in Amazon S3 to write the log files of the job flow. If a value is not provided, logs are not created.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2425,9 +2454,13 @@ pub struct SimpleScalingPolicyConfiguration {
     pub scaling_adjustment: i64,
 }
 
-/// <p><p>The launch specification for Spot instances in the instance fleet, which determines the defined duration and provisioning timeout behavior.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
+/// <p><p>The launch specification for Spot instances in the instance fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. Spot instance allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpotProvisioningSpecification {
+    /// <p> Specifies the strategy to use in launching Spot instance fleets. Currently, the only option is capacity-optimized (the default), which launches instances from Spot instance pools with optimal capacity for the number of instances that are launching. </p>
+    #[serde(rename = "AllocationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allocation_strategy: Option<String>,
     /// <p>The defined duration for Spot instances (also known as Spot blocks) in minutes. When specified, the Spot instance does not terminate before the defined duration expires, and defined duration pricing for Spot instances applies. Valid values are 60, 120, 180, 240, 300, or 360. The duration period starts as soon as a Spot instance receives its instance ID. At the end of the duration, Amazon EC2 marks the Spot instance for termination and provides a Spot instance termination notice, which gives the instance a two-minute warning before it terminates. </p>
     #[serde(rename = "BlockDurationMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
