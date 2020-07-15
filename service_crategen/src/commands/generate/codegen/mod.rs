@@ -754,6 +754,10 @@ fn generate_struct_fields<P: GenerateProtocol>(
             // See https://github.com/rusoto/rusoto/issues/1419 for more information
             if service.name() == "CodePipeline" && shape_name == "ActionRevision" && name == "revision_change_id" || name == "created" {
                 lines.push(format!("pub {}: Option<{}>,", name, rs_type))
+            // In the official documentation the field startedAt is required but responses lack for the field on certain situations.
+            // See https://github.com/rusoto/rusoto/issues/1736 and https://github.com/boto/botocore/issues/2030 for more information.
+            } else if service.name() == "AWS Batch" && shape_name == "JobDetail" && name == "started_at" {
+                lines.push(format!("pub {}: Option<{}>,", name, rs_type))
             // In pratice, Lex can return null values for slots that are not filled. The documentation
             // does not mention that the slot values themselves can be null.
             } else if service.name() == "Amazon Lex Runtime Service"  && shape_name == "PostTextResponse" && name == "slots"{

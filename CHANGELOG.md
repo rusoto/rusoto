@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extract common generated code into utility functions to improve compile times
 - Allow creating a ProfileProvider with only the profile
 - CDATA sections are now treated like strings
+- Fix incorrect type definition for `rusoto_batch::JobDetail`
 
 ## [0.44.0] - 2020-06-01
 
