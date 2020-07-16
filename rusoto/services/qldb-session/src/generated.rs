@@ -20,22 +20,49 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl QldbSessionClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "qldb", &self.region, request_uri);
+        request.set_endpoint_prefix("session.qldb".to_string());
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Contains the details of the transaction to abort.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortTransactionRequest {}
 
 /// <p>Contains the details of the aborted transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AbortTransactionResult {}
 
 /// <p>Contains the details of the transaction to commit.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CommitTransactionRequest {
     /// <p>Specifies the commit digest for the transaction to commit. For every active transaction, the commit digest must be passed. QLDB validates <code>CommitDigest</code> and rejects the commit with an error if the digest computed on the client does not match the digest computed by QLDB.</p>
@@ -46,13 +73,13 @@ pub struct CommitTransactionRequest {
         default
     )]
     pub commit_digest: bytes::Bytes,
-    /// <p>Specifies the transaction id of the transaction to commit.</p>
+    /// <p>Specifies the transaction ID of the transaction to commit.</p>
     #[serde(rename = "TransactionId")]
     pub transaction_id: String,
 }
 
 /// <p>Contains the details of the committed transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommitTransactionResult {
     /// <p>The commit digest of the committed transaction.</p>
@@ -64,24 +91,24 @@ pub struct CommitTransactionResult {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub commit_digest: Option<bytes::Bytes>,
-    /// <p>The transaction id of the committed transaction.</p>
+    /// <p>The transaction ID of the committed transaction.</p>
     #[serde(rename = "TransactionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transaction_id: Option<String>,
 }
 
 /// <p>Specifies a request to end the session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EndSessionRequest {}
 
 /// <p>Contains the details of the ended session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EndSessionResult {}
 
 /// <p>Specifies a request to execute a statement.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecuteStatementRequest {
     /// <p>Specifies the parameters for the parameterized statement in the request.</p>
@@ -91,13 +118,13 @@ pub struct ExecuteStatementRequest {
     /// <p>Specifies the statement of the request.</p>
     #[serde(rename = "Statement")]
     pub statement: String,
-    /// <p>Specifies the transaction id of the request.</p>
+    /// <p>Specifies the transaction ID of the request.</p>
     #[serde(rename = "TransactionId")]
     pub transaction_id: String,
 }
 
 /// <p>Contains the details of the executed statement.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteStatementResult {
     /// <p>Contains the details of the first fetched page.</p>
@@ -107,19 +134,19 @@ pub struct ExecuteStatementResult {
 }
 
 /// <p>Specifies the details of the page to be fetched.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FetchPageRequest {
     /// <p>Specifies the next page token of the page to be fetched.</p>
     #[serde(rename = "NextPageToken")]
     pub next_page_token: String,
-    /// <p>Specifies the transaction id of the page to be fetched.</p>
+    /// <p>Specifies the transaction ID of the page to be fetched.</p>
     #[serde(rename = "TransactionId")]
     pub transaction_id: String,
 }
 
 /// <p>Contains the page that was fetched.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FetchPageResult {
     /// <p>Contains details of the fetched page.</p>
@@ -129,7 +156,7 @@ pub struct FetchPageResult {
 }
 
 /// <p>Contains details of the fetched page.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Page {
     /// <p>The token of the next page.</p>
@@ -142,7 +169,7 @@ pub struct Page {
     pub values: Option<Vec<ValueHolder>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendCommandRequest {
     /// <p>Command to abort the current transaction.</p>
@@ -179,7 +206,7 @@ pub struct SendCommandRequest {
     pub start_transaction: Option<StartTransactionRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendCommandResult {
     /// <p>Contains the details of the aborted transaction.</p>
@@ -212,8 +239,8 @@ pub struct SendCommandResult {
     pub start_transaction: Option<StartTransactionResult>,
 }
 
-/// <p>Specifies a request to start a a new session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+/// <p>Specifies a request to start a new session.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSessionRequest {
     /// <p>The name of the ledger to start a new session against.</p>
@@ -222,7 +249,7 @@ pub struct StartSessionRequest {
 }
 
 /// <p>Contains the details of the started session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSessionResult {
     /// <p>Session token of the started session. This <code>SessionToken</code> is required for every subsequent command that is issued during the current session.</p>
@@ -232,24 +259,24 @@ pub struct StartSessionResult {
 }
 
 /// <p>Specifies a request to start a transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTransactionRequest {}
 
 /// <p>Contains the details of the started transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTransactionResult {
-    /// <p>The transaction id of the started transaction.</p>
+    /// <p>The transaction ID of the started transaction.</p>
     #[serde(rename = "TransactionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transaction_id: Option<String>,
 }
 
-/// <p>A structure that can contains values in multiple encoding formats.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+/// <p>A structure that can contain an Amazon Ion value in multiple encoding formats.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ValueHolder {
-    /// <p>An Amazon Ion binary value contained in a <code>ValueHolder</code> structure. </p>
+    /// <p>An Amazon Ion binary value contained in a <code>ValueHolder</code> structure.</p>
     #[serde(rename = "IonBinary")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -258,7 +285,7 @@ pub struct ValueHolder {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ion_binary: Option<bytes::Bytes>,
-    /// <p>An Amazon Ion plaintext value contained in a <code>ValueHolder</code> structure. </p>
+    /// <p>An Amazon Ion plaintext value contained in a <code>ValueHolder</code> structure.</p>
     #[serde(rename = "IonText")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ion_text: Option<String>,
@@ -269,11 +296,11 @@ pub struct ValueHolder {
 pub enum SendCommandError {
     /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
     BadRequest(String),
-    /// <p>Returned if the session doesn't exist anymore because it timed-out or expired.</p>
+    /// <p>Returned if the session doesn't exist anymore because it timed out or expired.</p>
     InvalidSession(String),
     /// <p>Returned if a resource limit such as number of active sessions is exceeded.</p>
     LimitExceeded(String),
-    /// <p>Returned when a transaction cannot be written to the journal due to a failure in the verification phase of Optimistic Concurrency Control.</p>
+    /// <p>Returned when a transaction cannot be written to the journal due to a failure in the verification phase of <i>optimistic concurrency control</i> (OCC).</p>
     OccConflict(String),
     /// <p>Returned when the rate of requests exceeds the allowed throughput.</p>
     RateExceeded(String),
@@ -321,7 +348,7 @@ impl Error for SendCommandError {}
 /// Trait representing the capabilities of the QLDB Session API. QLDB Session clients implement this trait.
 #[async_trait]
 pub trait QldbSession {
-    /// <p>Sends a command to an Amazon QLDB ledger.</p>
+    /// <p><p>Sends a command to an Amazon QLDB ledger.</p> <note> <p>Instead of interacting directly with this API, we recommend that you use the Amazon QLDB Driver or the QLDB Shell to execute data transactions on a ledger.</p> <ul> <li> <p>If you are working with an AWS SDK, use the QLDB Driver. The driver provides a high-level abstraction layer above this <code>qldbsession</code> data plane and manages <code>SendCommand</code> API calls for you. For information and a list of supported programming languages, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-driver.html">Getting started with the driver</a> in the <i>Amazon QLDB Developer Guide</i>.</p> </li> <li> <p>If you are working with the AWS Command Line Interface (AWS CLI), use the QLDB Shell. The shell is a command line interface that uses the QLDB Driver to interact with a ledger. For information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/data-shell.html">Accessing Amazon QLDB using the QLDB Shell</a>.</p> </li> </ul> </note></p>
     async fn send_command(
         &self,
         input: SendCommandRequest,
@@ -367,30 +394,21 @@ impl QldbSessionClient {
 
 #[async_trait]
 impl QldbSession for QldbSessionClient {
-    /// <p>Sends a command to an Amazon QLDB ledger.</p>
+    /// <p><p>Sends a command to an Amazon QLDB ledger.</p> <note> <p>Instead of interacting directly with this API, we recommend that you use the Amazon QLDB Driver or the QLDB Shell to execute data transactions on a ledger.</p> <ul> <li> <p>If you are working with an AWS SDK, use the QLDB Driver. The driver provides a high-level abstraction layer above this <code>qldbsession</code> data plane and manages <code>SendCommand</code> API calls for you. For information and a list of supported programming languages, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-driver.html">Getting started with the driver</a> in the <i>Amazon QLDB Developer Guide</i>.</p> </li> <li> <p>If you are working with the AWS Command Line Interface (AWS CLI), use the QLDB Shell. The shell is a command line interface that uses the QLDB Driver to interact with a ledger. For information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/data-shell.html">Accessing Amazon QLDB using the QLDB Shell</a>.</p> </li> </ul> </note></p>
     async fn send_command(
         &self,
         input: SendCommandRequest,
     ) -> Result<SendCommandResult, RusotoError<SendCommandError>> {
-        let mut request = SignedRequest::new("POST", "qldb", &self.region, "/");
-        request.set_endpoint_prefix("session.qldb".to_string());
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "QLDBSession.SendCommand");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SendCommandResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendCommandError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SendCommandError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SendCommandResult, _>()
     }
 }

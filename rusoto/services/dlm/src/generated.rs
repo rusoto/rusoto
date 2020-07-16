@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLifecyclePolicyRequest {
     /// <p>A description of the lifecycle policy. The characters ^[0-9A-Za-z _-]+$ are supported.</p>
@@ -46,7 +46,7 @@ pub struct CreateLifecyclePolicyRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLifecyclePolicyResponse {
     /// <p>The identifier of the lifecycle policy.</p>
@@ -55,23 +55,29 @@ pub struct CreateLifecyclePolicyResponse {
     pub policy_id: Option<String>,
 }
 
-/// <p>Specifies when to create snapshots of EBS volumes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+/// <p>Specifies when to create snapshots of EBS volumes.</p> <p>You must specify either a Cron expression or an interval, interval unit, and start time. You cannot specify both.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CreateRule {
+    /// <p>The schedule, as a Cron expression. The schedule interval must be between 1 hour and 1 year. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions">Cron expressions</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
+    #[serde(rename = "CronExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cron_expression: Option<String>,
     /// <p>The interval between snapshots. The supported values are 1, 2, 3, 4, 6, 8, 12, and 24.</p>
     #[serde(rename = "Interval")]
-    pub interval: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interval: Option<i64>,
     /// <p>The interval unit.</p>
     #[serde(rename = "IntervalUnit")]
-    pub interval_unit: String,
-    /// <p>The time, in UTC, to start the operation. The supported format is hh:mm.</p> <p>The operation occurs within a one-hour window following the specified time.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interval_unit: Option<String>,
+    /// <p>The time, in UTC, to start the operation. The supported format is hh:mm.</p> <p>The operation occurs within a one-hour window following the specified time. If you do not specify a time, Amazon DLM selects a time within the next 24 hours.</p>
     #[serde(rename = "Times")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub times: Option<Vec<String>>,
 }
 
 /// <p>Specifies the retention rule for cross-Region snapshot copies.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CrossRegionCopyRetainRule {
     /// <p>The amount of time to retain each snapshot. The maximum is 100 years. This is equivalent to 1200 months, 5200 weeks, or 36500 days.</p>
     #[serde(rename = "Interval")]
@@ -84,7 +90,7 @@ pub struct CrossRegionCopyRetainRule {
 }
 
 /// <p>Specifies a rule for cross-Region snapshot copies.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CrossRegionCopyRule {
     /// <p>The Amazon Resource Name (ARN) of the AWS KMS customer master key (CMK) to use for EBS encryption. If this parameter is not specified, your AWS managed CMK for EBS is used.</p>
     #[serde(rename = "CmkArn")]
@@ -106,7 +112,7 @@ pub struct CrossRegionCopyRule {
     pub target_region: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLifecyclePolicyRequest {
     /// <p>The identifier of the lifecycle policy.</p>
@@ -114,12 +120,12 @@ pub struct DeleteLifecyclePolicyRequest {
     pub policy_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLifecyclePolicyResponse {}
 
 /// <p>Specifies a rule for enabling fast snapshot restore. You can enable fast snapshot restore based on either a count or a time interval.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FastRestoreRule {
     /// <p>The Availability Zones in which to enable fast snapshot restore.</p>
     #[serde(rename = "AvailabilityZones")]
@@ -138,7 +144,7 @@ pub struct FastRestoreRule {
     pub interval_unit: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePoliciesRequest {
     /// <p>The identifiers of the data lifecycle policies.</p>
@@ -163,7 +169,7 @@ pub struct GetLifecyclePoliciesRequest {
     pub target_tags: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLifecyclePoliciesResponse {
     /// <p>Summary information about the lifecycle policies.</p>
@@ -172,7 +178,7 @@ pub struct GetLifecyclePoliciesResponse {
     pub policies: Option<Vec<LifecyclePolicySummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLifecyclePolicyRequest {
     /// <p>The identifier of the lifecycle policy.</p>
@@ -180,7 +186,7 @@ pub struct GetLifecyclePolicyRequest {
     pub policy_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLifecyclePolicyResponse {
     /// <p>Detailed information about the lifecycle policy.</p>
@@ -190,7 +196,7 @@ pub struct GetLifecyclePolicyResponse {
 }
 
 /// <p>Detailed information about a lifecycle policy.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LifecyclePolicy {
     /// <p>The local date and time when the lifecycle policy was created.</p>
@@ -236,7 +242,7 @@ pub struct LifecyclePolicy {
 }
 
 /// <p>Summary information about a lifecycle policy.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LifecyclePolicySummary {
     /// <p>The description of the lifecycle policy.</p>
@@ -257,7 +263,7 @@ pub struct LifecyclePolicySummary {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -265,7 +271,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>Information about the tags.</p>
@@ -275,7 +281,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Specifies optional parameters to add to a policy. The set of valid parameters depends on the combination of policy type and resource type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Parameters {
     /// <p>[EBS Snapshot Management – Instance policies only] Indicates whether to exclude the root volume from snapshots created using <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateSnapshots.html">CreateSnapshots</a>. The default is false.</p>
     #[serde(rename = "ExcludeBootVolume")]
@@ -284,7 +290,7 @@ pub struct Parameters {
 }
 
 /// <p>Specifies the configuration of a lifecycle policy.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PolicyDetails {
     /// <p>A set of optional parameters for the policy. </p>
     #[serde(rename = "Parameters")]
@@ -294,7 +300,7 @@ pub struct PolicyDetails {
     #[serde(rename = "PolicyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_type: Option<String>,
-    /// <p>The resource type.</p>
+    /// <p>The resource type. Use VOLUME to create snapshots of individual volumes or use INSTANCE to create multi-volume snapshots from the volumes for an instance.</p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
@@ -309,7 +315,7 @@ pub struct PolicyDetails {
 }
 
 /// <p>Specifies the retention rule for a lifecycle policy. You can retain snapshots based on either a count or a time interval.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RetainRule {
     /// <p>The number of snapshots to retain for each volume, up to a maximum of 1000.</p>
     #[serde(rename = "Count")]
@@ -326,7 +332,7 @@ pub struct RetainRule {
 }
 
 /// <p>Specifies a backup schedule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Schedule {
     /// <p>Copy all user-defined tags on a source volume to snapshots of the volume created by this policy.</p>
     #[serde(rename = "CopyTags")]
@@ -363,7 +369,7 @@ pub struct Schedule {
 }
 
 /// <p>Specifies a tag for a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The tag key.</p>
     #[serde(rename = "Key")]
@@ -373,7 +379,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -384,11 +390,11 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -399,11 +405,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLifecyclePolicyRequest {
     /// <p>A description of the lifecycle policy.</p>
@@ -427,7 +433,7 @@ pub struct UpdateLifecyclePolicyRequest {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLifecyclePolicyResponse {}
 
@@ -889,6 +895,7 @@ impl DlmClient {
 #[async_trait]
 impl Dlm for DlmClient {
     /// <p>Creates a policy to manage the lifecycle of the specified AWS resources. You can create up to 100 lifecycle policies.</p>
+    #[allow(unused_mut)]
     async fn create_lifecycle_policy(
         &self,
         input: CreateLifecyclePolicyRequest,
@@ -907,7 +914,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateLifecyclePolicyResponse, _>()?;
 
@@ -919,6 +926,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Deletes the specified lifecycle policy and halts the automated operations that the policy specified.</p>
+    #[allow(unused_mut)]
     async fn delete_lifecycle_policy(
         &self,
         input: DeleteLifecyclePolicyRequest,
@@ -934,7 +942,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteLifecyclePolicyResponse, _>()?;
 
@@ -946,6 +954,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Gets summary information about all or the specified data lifecycle policies.</p> <p>To get complete information about a policy, use <a>GetLifecyclePolicy</a>.</p>
+    #[allow(unused_mut)]
     async fn get_lifecycle_policies(
         &self,
         input: GetLifecyclePoliciesRequest,
@@ -987,7 +996,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetLifecyclePoliciesResponse, _>()?;
 
@@ -999,6 +1008,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Gets detailed information about the specified lifecycle policy.</p>
+    #[allow(unused_mut)]
     async fn get_lifecycle_policy(
         &self,
         input: GetLifecyclePolicyRequest,
@@ -1014,7 +1024,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetLifecyclePolicyResponse, _>()?;
 
@@ -1026,6 +1036,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Lists the tags for the specified resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -1041,7 +1052,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -1053,6 +1064,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Adds the specified tags to the specified resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -1071,7 +1083,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -1083,6 +1095,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Removes the specified tags from the specified resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -1104,7 +1117,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -1116,6 +1129,7 @@ impl Dlm for DlmClient {
     }
 
     /// <p>Updates the specified lifecycle policy.</p>
+    #[allow(unused_mut)]
     async fn update_lifecycle_policy(
         &self,
         input: UpdateLifecyclePolicyRequest,
@@ -1134,7 +1148,7 @@ impl Dlm for DlmClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateLifecyclePolicyResponse, _>()?;
 

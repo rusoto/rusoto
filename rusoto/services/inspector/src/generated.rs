@@ -20,11 +20,37 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl InspectorClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "inspector", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddAttributesToFindingsRequest {
     /// <p>The array of attributes that you want to assign to specified findings.</p>
@@ -35,7 +61,7 @@ pub struct AddAttributesToFindingsRequest {
     pub finding_arns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddAttributesToFindingsResponse {
     /// <p>Attribute details that cannot be described. An error code is provided for each failed item.</p>
@@ -44,7 +70,7 @@ pub struct AddAttributesToFindingsResponse {
 }
 
 /// <p>Used in the exception error that is thrown if you start an assessment run for an assessment target that includes an EC2 instance that is already participating in another started assessment run.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct AgentAlreadyRunningAssessment {
     /// <p>ID of the agent that is running on an EC2 instance that is already participating in another started assessment run.</p>
     pub agent_id: String,
@@ -53,7 +79,7 @@ pub struct AgentAlreadyRunningAssessment {
 }
 
 /// <p>Contains information about an Amazon Inspector agent. This data type is used as a request parameter in the <a>ListAssessmentRunAgents</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AgentFilter {
     /// <p>The detailed health state of the agent. Values can be set to <b>IDLE</b>, <b>RUNNING</b>, <b>SHUTDOWN</b>, <b>UNHEALTHY</b>, <b>THROTTLED</b>, and <b>UNKNOWN</b>. </p>
@@ -65,7 +91,7 @@ pub struct AgentFilter {
 }
 
 /// <p>Used as a response element in the <a>PreviewAgents</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AgentPreview {
     /// <p>The health status of the Amazon Inspector Agent.</p>
@@ -102,7 +128,7 @@ pub struct AgentPreview {
 }
 
 /// <p>A snapshot of an Amazon Inspector assessment run that contains the findings of the assessment run .</p> <p>Used as the response element in the <a>DescribeAssessmentRuns</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentRun {
     /// <p>The ARN of the assessment run.</p>
@@ -155,7 +181,7 @@ pub struct AssessmentRun {
 }
 
 /// <p>Contains information about an Amazon Inspector agent. This data type is used as a response element in the <a>ListAssessmentRunAgents</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentRunAgent {
     /// <p>The current health state of the agent.</p>
@@ -184,7 +210,7 @@ pub struct AssessmentRunAgent {
 }
 
 /// <p>Used as the request parameter in the <a>ListAssessmentRuns</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssessmentRunFilter {
     /// <p>For a record to match a filter, the value that is specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>completedAt</b> property of the <a>AssessmentRun</a> data type.</p>
@@ -218,7 +244,7 @@ pub struct AssessmentRunFilter {
 }
 
 /// <p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentRunNotification {
     /// <p>The date of the notification.</p>
@@ -245,7 +271,7 @@ pub struct AssessmentRunNotification {
 }
 
 /// <p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentRunStateChange {
     /// <p>The assessment run state.</p>
@@ -257,7 +283,7 @@ pub struct AssessmentRunStateChange {
 }
 
 /// <p>Contains information about an Amazon Inspector application. This data type is used as the response element in the <a>DescribeAssessmentTargets</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentTarget {
     /// <p>The ARN that specifies the Amazon Inspector assessment target.</p>
@@ -279,7 +305,7 @@ pub struct AssessmentTarget {
 }
 
 /// <p>Used as the request parameter in the <a>ListAssessmentTargets</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssessmentTargetFilter {
     /// <p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTargetName</b> property of the <a>AssessmentTarget</a> data type.</p>
@@ -289,7 +315,7 @@ pub struct AssessmentTargetFilter {
 }
 
 /// <p>Contains information about an Amazon Inspector assessment template. This data type is used as the response element in the <a>DescribeAssessmentTemplates</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentTemplate {
     /// <p>The ARN of the assessment template.</p>
@@ -323,7 +349,7 @@ pub struct AssessmentTemplate {
 }
 
 /// <p>Used as the request parameter in the <a>ListAssessmentTemplates</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssessmentTemplateFilter {
     /// <p>For a record to match a filter, the value specified for this data type property must inclusively match any value between the specified minimum and maximum values of the <b>durationInSeconds</b> property of the <a>AssessmentTemplate</a> data type.</p>
@@ -341,7 +367,7 @@ pub struct AssessmentTemplateFilter {
 }
 
 /// <p>A collection of attributes of the host from which the finding is generated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssetAttributes {
     /// <p>The ID of the agent that is installed on the EC2 instance where the finding is generated.</p>
@@ -378,7 +404,7 @@ pub struct AssetAttributes {
 }
 
 /// <p>This data type is used as a request parameter in the <a>AddAttributesToFindings</a> and <a>CreateAssessmentTemplate</a> actions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Attribute {
     /// <p>The attribute key.</p>
     #[serde(rename = "key")]
@@ -389,7 +415,7 @@ pub struct Attribute {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssessmentTargetRequest {
     /// <p>The user-defined name that identifies the assessment target that you want to create. The name must be unique within the AWS account.</p>
@@ -401,7 +427,7 @@ pub struct CreateAssessmentTargetRequest {
     pub resource_group_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssessmentTargetResponse {
     /// <p>The ARN that specifies the assessment target that is created.</p>
@@ -409,7 +435,7 @@ pub struct CreateAssessmentTargetResponse {
     pub assessment_target_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssessmentTemplateRequest {
     /// <p>The ARN that specifies the assessment target for which you want to create the assessment template.</p>
@@ -430,7 +456,7 @@ pub struct CreateAssessmentTemplateRequest {
     pub user_attributes_for_findings: Option<Vec<Attribute>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssessmentTemplateResponse {
     /// <p>The ARN that specifies the assessment template that is created.</p>
@@ -438,7 +464,7 @@ pub struct CreateAssessmentTemplateResponse {
     pub assessment_template_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateExclusionsPreviewRequest {
     /// <p>The ARN that specifies the assessment template for which you want to create an exclusions preview.</p>
@@ -446,7 +472,7 @@ pub struct CreateExclusionsPreviewRequest {
     pub assessment_template_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateExclusionsPreviewResponse {
     /// <p>Specifies the unique identifier of the requested exclusions preview. You can use the unique identifier to retrieve the exclusions preview when running the GetExclusionsPreview API.</p>
@@ -454,7 +480,7 @@ pub struct CreateExclusionsPreviewResponse {
     pub preview_token: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceGroupRequest {
     /// <p>A collection of keys and an array of possible values, '[{"key":"key1","values":["Value1","Value2"]},{"key":"Key2","values":["Value3"]}]'.</p> <p>For example,'[{"key":"Name","values":["TestEC2Instance"]}]'.</p>
@@ -462,7 +488,7 @@ pub struct CreateResourceGroupRequest {
     pub resource_group_tags: Vec<ResourceGroupTag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceGroupResponse {
     /// <p>The ARN that specifies the resource group that is created.</p>
@@ -470,7 +496,7 @@ pub struct CreateResourceGroupResponse {
     pub resource_group_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentRunRequest {
     /// <p>The ARN that specifies the assessment run that you want to delete.</p>
@@ -478,7 +504,7 @@ pub struct DeleteAssessmentRunRequest {
     pub assessment_run_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentTargetRequest {
     /// <p>The ARN that specifies the assessment target that you want to delete.</p>
@@ -486,7 +512,7 @@ pub struct DeleteAssessmentTargetRequest {
     pub assessment_target_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssessmentTemplateRequest {
     /// <p>The ARN that specifies the assessment template that you want to delete.</p>
@@ -494,7 +520,7 @@ pub struct DeleteAssessmentTemplateRequest {
     pub assessment_template_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentRunsRequest {
     /// <p>The ARN that specifies the assessment run that you want to describe.</p>
@@ -502,7 +528,7 @@ pub struct DescribeAssessmentRunsRequest {
     pub assessment_run_arns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssessmentRunsResponse {
     /// <p>Information about the assessment run.</p>
@@ -513,7 +539,7 @@ pub struct DescribeAssessmentRunsResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentTargetsRequest {
     /// <p>The ARNs that specifies the assessment targets that you want to describe.</p>
@@ -521,7 +547,7 @@ pub struct DescribeAssessmentTargetsRequest {
     pub assessment_target_arns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssessmentTargetsResponse {
     /// <p>Information about the assessment targets.</p>
@@ -532,14 +558,14 @@ pub struct DescribeAssessmentTargetsResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssessmentTemplatesRequest {
     #[serde(rename = "assessmentTemplateArns")]
     pub assessment_template_arns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssessmentTemplatesResponse {
     /// <p>Information about the assessment templates.</p>
@@ -550,7 +576,7 @@ pub struct DescribeAssessmentTemplatesResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCrossAccountAccessRoleResponse {
     /// <p>The date when the cross-account access role was registered.</p>
@@ -564,7 +590,7 @@ pub struct DescribeCrossAccountAccessRoleResponse {
     pub valid: bool,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeExclusionsRequest {
     /// <p>The list of ARNs that specify the exclusions that you want to describe.</p>
@@ -576,7 +602,7 @@ pub struct DescribeExclusionsRequest {
     pub locale: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExclusionsResponse {
     /// <p>Information about the exclusions.</p>
@@ -587,7 +613,7 @@ pub struct DescribeExclusionsResponse {
     pub failed_items: ::std::collections::HashMap<String, FailedItemDetails>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFindingsRequest {
     /// <p>The ARN that specifies the finding that you want to describe.</p>
@@ -599,7 +625,7 @@ pub struct DescribeFindingsRequest {
     pub locale: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFindingsResponse {
     /// <p>Finding details that cannot be described. An error code is provided for each failed item.</p>
@@ -610,7 +636,7 @@ pub struct DescribeFindingsResponse {
     pub findings: Vec<Finding>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceGroupsRequest {
     /// <p>The ARN that specifies the resource group that you want to describe.</p>
@@ -618,7 +644,7 @@ pub struct DescribeResourceGroupsRequest {
     pub resource_group_arns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourceGroupsResponse {
     /// <p>Resource group details that cannot be described. An error code is provided for each failed item.</p>
@@ -629,7 +655,7 @@ pub struct DescribeResourceGroupsResponse {
     pub resource_groups: Vec<ResourceGroup>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRulesPackagesRequest {
     /// <p>The locale that you want to translate a rules package description into.</p>
@@ -641,7 +667,7 @@ pub struct DescribeRulesPackagesRequest {
     pub rules_package_arns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRulesPackagesResponse {
     /// <p>Rules package details that cannot be described. An error code is provided for each failed item.</p>
@@ -653,7 +679,7 @@ pub struct DescribeRulesPackagesResponse {
 }
 
 /// <p>This data type is used in the <a>AssessmentTemplateFilter</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DurationRange {
     /// <p>The maximum value of the duration range. Must be less than or equal to 604800 seconds (1 week).</p>
@@ -667,7 +693,7 @@ pub struct DurationRange {
 }
 
 /// <p>This data type is used in the <a>Subscription</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventSubscription {
     /// <p>The event for which Amazon Simple Notification Service (SNS) notifications are sent.</p>
@@ -679,7 +705,7 @@ pub struct EventSubscription {
 }
 
 /// <p>Contains information about what was excluded from an assessment run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Exclusion {
     /// <p>The ARN that specifies the exclusion.</p>
@@ -704,7 +730,7 @@ pub struct Exclusion {
 }
 
 /// <p>Contains information about what is excluded from an assessment run given the current state of the assessment template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExclusionPreview {
     /// <p>The system-defined attributes for the exclusion preview.</p>
@@ -726,7 +752,7 @@ pub struct ExclusionPreview {
 }
 
 /// <p>Includes details about the failed items.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedItemDetails {
     /// <p>The status code of a failed item.</p>
@@ -738,7 +764,7 @@ pub struct FailedItemDetails {
 }
 
 /// <p>Contains information about an Amazon Inspector finding. This data type is used as the response element in the <a>DescribeFindings</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Finding {
     /// <p>The ARN that specifies the finding.</p>
@@ -811,7 +837,7 @@ pub struct Finding {
 }
 
 /// <p>This data type is used as a request parameter in the <a>ListFindings</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FindingFilter {
     /// <p>For a record to match a filter, one of the values that is specified for this data type property must be the exact match of the value of the <b>agentId</b> property of the <a>Finding</a> data type.</p>
@@ -848,7 +874,7 @@ pub struct FindingFilter {
     pub user_attributes: Option<Vec<Attribute>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssessmentReportRequest {
     /// <p>The ARN that specifies the assessment run for which you want to generate a report.</p>
@@ -862,7 +888,7 @@ pub struct GetAssessmentReportRequest {
     pub report_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssessmentReportResponse {
     /// <p>Specifies the status of the request to generate an assessment report. </p>
@@ -874,7 +900,7 @@ pub struct GetAssessmentReportResponse {
     pub url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExclusionsPreviewRequest {
     /// <p>The ARN that specifies the assessment template for which the exclusions preview was requested.</p>
@@ -897,7 +923,7 @@ pub struct GetExclusionsPreviewRequest {
     pub preview_token: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExclusionsPreviewResponse {
     /// <p>Information about the exclusions included in the preview.</p>
@@ -913,7 +939,7 @@ pub struct GetExclusionsPreviewResponse {
     pub preview_status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTelemetryMetadataRequest {
     /// <p>The ARN that specifies the assessment run that has the telemetry data that you want to obtain.</p>
@@ -921,7 +947,7 @@ pub struct GetTelemetryMetadataRequest {
     pub assessment_run_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTelemetryMetadataResponse {
     /// <p>Telemetry details.</p>
@@ -930,7 +956,7 @@ pub struct GetTelemetryMetadataResponse {
 }
 
 /// <p>This data type is used in the <a>Finding</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InspectorServiceAttributes {
     /// <p>The ARN of the assessment run during which the finding is generated.</p>
@@ -946,7 +972,7 @@ pub struct InspectorServiceAttributes {
     pub schema_version: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentRunAgentsRequest {
     /// <p>The ARN that specifies the assessment run whose agents you want to list.</p>
@@ -966,7 +992,7 @@ pub struct ListAssessmentRunAgentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentRunAgentsResponse {
     /// <p>A list of ARNs that specifies the agents returned by the action.</p>
@@ -978,7 +1004,7 @@ pub struct ListAssessmentRunAgentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentRunsRequest {
     /// <p>The ARNs that specify the assessment templates whose assessment runs you want to list.</p>
@@ -999,7 +1025,7 @@ pub struct ListAssessmentRunsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentRunsResponse {
     /// <p>A list of ARNs that specifies the assessment runs that are returned by the action.</p>
@@ -1011,7 +1037,7 @@ pub struct ListAssessmentRunsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentTargetsRequest {
     /// <p>You can use this parameter to specify a subset of data to be included in the action's response.</p> <p>For a record to match a filter, all specified filter attributes must match. When multiple values are specified for a filter attribute, any of the values can match.</p>
@@ -1028,7 +1054,7 @@ pub struct ListAssessmentTargetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentTargetsResponse {
     /// <p>A list of ARNs that specifies the assessment targets that are returned by the action.</p>
@@ -1040,7 +1066,7 @@ pub struct ListAssessmentTargetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssessmentTemplatesRequest {
     /// <p>A list of ARNs that specifies the assessment targets whose assessment templates you want to list.</p>
@@ -1061,7 +1087,7 @@ pub struct ListAssessmentTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentTemplatesResponse {
     /// <p>A list of ARNs that specifies the assessment templates returned by the action.</p>
@@ -1073,7 +1099,7 @@ pub struct ListAssessmentTemplatesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventSubscriptionsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
@@ -1090,7 +1116,7 @@ pub struct ListEventSubscriptionsRequest {
     pub resource_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventSubscriptionsResponse {
     /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
@@ -1102,7 +1128,7 @@ pub struct ListEventSubscriptionsResponse {
     pub subscriptions: Vec<Subscription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListExclusionsRequest {
     /// <p>The ARN of the assessment run that generated the exclusions that you want to list.</p>
@@ -1118,7 +1144,7 @@ pub struct ListExclusionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListExclusionsResponse {
     /// <p>A list of exclusions' ARNs returned by the action.</p>
@@ -1130,7 +1156,7 @@ pub struct ListExclusionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsRequest {
     /// <p>The ARNs of the assessment runs that generate the findings that you want to list.</p>
@@ -1151,7 +1177,7 @@ pub struct ListFindingsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsResponse {
     /// <p>A list of ARNs that specifies the findings returned by the action.</p>
@@ -1163,7 +1189,7 @@ pub struct ListFindingsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRulesPackagesRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
@@ -1176,7 +1202,7 @@ pub struct ListRulesPackagesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRulesPackagesResponse {
     /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
@@ -1188,7 +1214,7 @@ pub struct ListRulesPackagesResponse {
     pub rules_package_arns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN that specifies the assessment template whose tags you want to list.</p>
@@ -1196,7 +1222,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A collection of key and value pairs.</p>
@@ -1205,7 +1231,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Contains information about the network interfaces interacting with an EC2 instance. This data type is used as one of the elements of the <a>AssetAttributes</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>The IP addresses associated with the network interface.</p>
@@ -1250,7 +1276,7 @@ pub struct NetworkInterface {
     pub vpc_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PreviewAgentsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
@@ -1266,7 +1292,7 @@ pub struct PreviewAgentsRequest {
     pub preview_agents_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PreviewAgentsResponse {
     /// <p>The resulting list of agents.</p>
@@ -1279,7 +1305,7 @@ pub struct PreviewAgentsResponse {
 }
 
 /// <p>Contains information about a private IP address associated with a network interface. This data type is used as a response element in the <a>DescribeFindings</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrivateIp {
     /// <p>The DNS name of the private IP address.</p>
@@ -1292,7 +1318,7 @@ pub struct PrivateIp {
     pub private_ip_address: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterCrossAccountAccessRoleRequest {
     /// <p>The ARN of the IAM role that grants Amazon Inspector access to AWS Services needed to perform security assessments. </p>
@@ -1300,7 +1326,7 @@ pub struct RegisterCrossAccountAccessRoleRequest {
     pub role_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAttributesFromFindingsRequest {
     /// <p>The array of attribute keys that you want to remove from specified findings.</p>
@@ -1311,7 +1337,7 @@ pub struct RemoveAttributesFromFindingsRequest {
     pub finding_arns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveAttributesFromFindingsResponse {
     /// <p>Attributes details that cannot be described. An error code is provided for each failed item.</p>
@@ -1320,7 +1346,7 @@ pub struct RemoveAttributesFromFindingsResponse {
 }
 
 /// <p>Contains information about a resource group. The resource group defines a set of tags that, when queried, identify the AWS resources that make up the assessment target. This data type is used as the response element in the <a>DescribeResourceGroups</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceGroup {
     /// <p>The ARN of the resource group.</p>
@@ -1335,7 +1361,7 @@ pub struct ResourceGroup {
 }
 
 /// <p>This data type is used as one of the elements of the <a>ResourceGroup</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceGroupTag {
     /// <p>A tag key.</p>
     #[serde(rename = "key")]
@@ -1347,7 +1373,7 @@ pub struct ResourceGroupTag {
 }
 
 /// <p>Contains information about an Amazon Inspector rules package. This data type is used as the response element in the <a>DescribeRulesPackages</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RulesPackage {
     /// <p>The ARN of the rules package.</p>
@@ -1369,7 +1395,7 @@ pub struct RulesPackage {
 }
 
 /// <p>This data type contains key-value pairs that identify various Amazon resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Scope {
     /// <p>The type of the scope.</p>
@@ -1383,7 +1409,7 @@ pub struct Scope {
 }
 
 /// <p>Contains information about a security group associated with a network interface. This data type is used as one of the elements of the <a>NetworkInterface</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityGroup {
     /// <p>The ID of the security group.</p>
@@ -1396,7 +1422,7 @@ pub struct SecurityGroup {
     pub group_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTagsForResourceRequest {
     /// <p>The ARN of the assessment template that you want to set tags to.</p>
@@ -1408,7 +1434,7 @@ pub struct SetTagsForResourceRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartAssessmentRunRequest {
     /// <p>You can specify the name for the assessment run. The name must be unique for the assessment template whose ARN is used to start the assessment run.</p>
@@ -1420,7 +1446,7 @@ pub struct StartAssessmentRunRequest {
     pub assessment_template_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAssessmentRunResponse {
     /// <p>The ARN of the assessment run that has been started.</p>
@@ -1428,7 +1454,7 @@ pub struct StartAssessmentRunResponse {
     pub assessment_run_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopAssessmentRunRequest {
     /// <p>The ARN of the assessment run that you want to stop.</p>
@@ -1440,7 +1466,7 @@ pub struct StopAssessmentRunRequest {
     pub stop_action: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeToEventRequest {
     /// <p>The event for which you want to receive SNS notifications.</p>
@@ -1455,7 +1481,7 @@ pub struct SubscribeToEventRequest {
 }
 
 /// <p>This data type is used as a response element in the <a>ListEventSubscriptions</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Subscription {
     /// <p>The list of existing event subscriptions.</p>
@@ -1470,7 +1496,7 @@ pub struct Subscription {
 }
 
 /// <p>A key and value pair. This data type is used as a request parameter in the <a>SetTagsForResource</a> action and a response element in the <a>ListTagsForResource</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>A tag key.</p>
     #[serde(rename = "key")]
@@ -1482,7 +1508,7 @@ pub struct Tag {
 }
 
 /// <p>The metadata about the Amazon Inspector application data metrics collected by the agent. This data type is used as the response element in the <a>GetTelemetryMetadata</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TelemetryMetadata {
     /// <p>The count of messages that the agent sends to the Amazon Inspector service.</p>
@@ -1498,7 +1524,7 @@ pub struct TelemetryMetadata {
 }
 
 /// <p>This data type is used in the <a>AssessmentRunFilter</a> data type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TimestampRange {
     /// <p>The minimum value of the timestamp range.</p>
@@ -1511,7 +1537,7 @@ pub struct TimestampRange {
     pub end_date: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnsubscribeFromEventRequest {
     /// <p>The event for which you want to stop receiving SNS notifications.</p>
@@ -1525,7 +1551,7 @@ pub struct UnsubscribeFromEventRequest {
     pub topic_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssessmentTargetRequest {
     /// <p>The ARN of the assessment target that you want to update.</p>
@@ -3832,27 +3858,18 @@ impl Inspector for InspectorClient {
         &self,
         input: AddAttributesToFindingsRequest,
     ) -> Result<AddAttributesToFindingsResponse, RusotoError<AddAttributesToFindingsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.AddAttributesToFindings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AddAttributesToFindingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddAttributesToFindingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AddAttributesToFindingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AddAttributesToFindingsResponse, _>()
     }
 
     /// <p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, this action also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html"> Amazon Inspector Assessment Targets</a>.</p>
@@ -3860,27 +3877,18 @@ impl Inspector for InspectorClient {
         &self,
         input: CreateAssessmentTargetRequest,
     ) -> Result<CreateAssessmentTargetResponse, RusotoError<CreateAssessmentTargetError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.CreateAssessmentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAssessmentTargetResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAssessmentTargetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAssessmentTargetError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateAssessmentTargetResponse, _>()
     }
 
     /// <p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target. If the <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_slr.html">service-linked role</a> isn’t already registered, this action also creates and registers a service-linked role to grant Amazon Inspector access to AWS Services needed to perform security assessments.</p>
@@ -3888,27 +3896,18 @@ impl Inspector for InspectorClient {
         &self,
         input: CreateAssessmentTemplateRequest,
     ) -> Result<CreateAssessmentTemplateResponse, RusotoError<CreateAssessmentTemplateError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.CreateAssessmentTemplate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAssessmentTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAssessmentTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateAssessmentTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateAssessmentTemplateResponse, _>()
     }
 
     /// <p>Starts the generation of an exclusions preview for the specified assessment template. The exclusions preview lists the potential exclusions (ExclusionPreview) that Inspector can detect before it runs the assessment. </p>
@@ -3916,27 +3915,18 @@ impl Inspector for InspectorClient {
         &self,
         input: CreateExclusionsPreviewRequest,
     ) -> Result<CreateExclusionsPreviewResponse, RusotoError<CreateExclusionsPreviewError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.CreateExclusionsPreview");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateExclusionsPreviewResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateExclusionsPreviewError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateExclusionsPreviewError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateExclusionsPreviewResponse, _>()
     }
 
     /// <p>Creates a resource group using the specified set of tags (key and value pairs) that are used to select the EC2 instances to be included in an Amazon Inspector assessment target. The created resource group is then used to create an Amazon Inspector assessment target. For more information, see <a>CreateAssessmentTarget</a>.</p>
@@ -3944,27 +3934,17 @@ impl Inspector for InspectorClient {
         &self,
         input: CreateResourceGroupRequest,
     ) -> Result<CreateResourceGroupResponse, RusotoError<CreateResourceGroupError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.CreateResourceGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateResourceGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateResourceGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateResourceGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateResourceGroupResponse, _>()
     }
 
     /// <p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>
@@ -3972,26 +3952,16 @@ impl Inspector for InspectorClient {
         &self,
         input: DeleteAssessmentRunRequest,
     ) -> Result<(), RusotoError<DeleteAssessmentRunError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.DeleteAssessmentRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAssessmentRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAssessmentRunError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the assessment target that is specified by the ARN of the assessment target.</p>
@@ -3999,26 +3969,16 @@ impl Inspector for InspectorClient {
         &self,
         input: DeleteAssessmentTargetRequest,
     ) -> Result<(), RusotoError<DeleteAssessmentTargetError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.DeleteAssessmentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAssessmentTargetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAssessmentTargetError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the assessment template that is specified by the ARN of the assessment template.</p>
@@ -4026,26 +3986,16 @@ impl Inspector for InspectorClient {
         &self,
         input: DeleteAssessmentTemplateRequest,
     ) -> Result<(), RusotoError<DeleteAssessmentTemplateError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.DeleteAssessmentTemplate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAssessmentTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAssessmentTemplateError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Describes the assessment runs that are specified by the ARNs of the assessment runs.</p>
@@ -4053,27 +4003,18 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeAssessmentRunsRequest,
     ) -> Result<DescribeAssessmentRunsResponse, RusotoError<DescribeAssessmentRunsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.DescribeAssessmentRuns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAssessmentRunsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAssessmentRunsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAssessmentRunsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAssessmentRunsResponse, _>()
     }
 
     /// <p>Describes the assessment targets that are specified by the ARNs of the assessment targets.</p>
@@ -4082,27 +4023,18 @@ impl Inspector for InspectorClient {
         input: DescribeAssessmentTargetsRequest,
     ) -> Result<DescribeAssessmentTargetsResponse, RusotoError<DescribeAssessmentTargetsError>>
     {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.DescribeAssessmentTargets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAssessmentTargetsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAssessmentTargetsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAssessmentTargetsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAssessmentTargetsResponse, _>()
     }
 
     /// <p>Describes the assessment templates that are specified by the ARNs of the assessment templates.</p>
@@ -4111,9 +4043,7 @@ impl Inspector for InspectorClient {
         input: DescribeAssessmentTemplatesRequest,
     ) -> Result<DescribeAssessmentTemplatesResponse, RusotoError<DescribeAssessmentTemplatesError>>
     {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "InspectorService.DescribeAssessmentTemplates",
@@ -4121,20 +4051,13 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAssessmentTemplatesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAssessmentTemplatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAssessmentTemplatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAssessmentTemplatesResponse, _>()
     }
 
     /// <p>Describes the IAM role that enables Amazon Inspector to access your AWS account.</p>
@@ -4144,29 +4067,20 @@ impl Inspector for InspectorClient {
         DescribeCrossAccountAccessRoleResponse,
         RusotoError<DescribeCrossAccountAccessRoleError>,
     > {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "InspectorService.DescribeCrossAccountAccessRole",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCrossAccountAccessRoleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeCrossAccountAccessRoleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeCrossAccountAccessRoleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeCrossAccountAccessRoleResponse, _>()
     }
 
     /// <p>Describes the exclusions that are specified by the exclusions' ARNs.</p>
@@ -4174,27 +4088,17 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeExclusionsRequest,
     ) -> Result<DescribeExclusionsResponse, RusotoError<DescribeExclusionsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.DescribeExclusions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeExclusionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeExclusionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeExclusionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeExclusionsResponse, _>()
     }
 
     /// <p>Describes the findings that are specified by the ARNs of the findings.</p>
@@ -4202,27 +4106,17 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeFindingsRequest,
     ) -> Result<DescribeFindingsResponse, RusotoError<DescribeFindingsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.DescribeFindings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeFindingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeFindingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeFindingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeFindingsResponse, _>()
     }
 
     /// <p>Describes the resource groups that are specified by the ARNs of the resource groups.</p>
@@ -4230,27 +4124,18 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeResourceGroupsRequest,
     ) -> Result<DescribeResourceGroupsResponse, RusotoError<DescribeResourceGroupsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.DescribeResourceGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeResourceGroupsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeResourceGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeResourceGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeResourceGroupsResponse, _>()
     }
 
     /// <p>Describes the rules packages that are specified by the ARNs of the rules packages.</p>
@@ -4258,27 +4143,18 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeRulesPackagesRequest,
     ) -> Result<DescribeRulesPackagesResponse, RusotoError<DescribeRulesPackagesError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.DescribeRulesPackages");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRulesPackagesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRulesPackagesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeRulesPackagesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRulesPackagesResponse, _>()
     }
 
     /// <p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>
@@ -4286,27 +4162,17 @@ impl Inspector for InspectorClient {
         &self,
         input: GetAssessmentReportRequest,
     ) -> Result<GetAssessmentReportResponse, RusotoError<GetAssessmentReportError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.GetAssessmentReport");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAssessmentReportResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAssessmentReportError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAssessmentReportError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAssessmentReportResponse, _>()
     }
 
     /// <p>Retrieves the exclusions preview (a list of ExclusionPreview objects) specified by the preview token. You can obtain the preview token by running the CreateExclusionsPreview API.</p>
@@ -4314,27 +4180,18 @@ impl Inspector for InspectorClient {
         &self,
         input: GetExclusionsPreviewRequest,
     ) -> Result<GetExclusionsPreviewResponse, RusotoError<GetExclusionsPreviewError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.GetExclusionsPreview");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetExclusionsPreviewResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetExclusionsPreviewError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetExclusionsPreviewError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetExclusionsPreviewResponse, _>()
     }
 
     /// <p>Information about the data that is collected for the specified assessment run.</p>
@@ -4342,27 +4199,18 @@ impl Inspector for InspectorClient {
         &self,
         input: GetTelemetryMetadataRequest,
     ) -> Result<GetTelemetryMetadataResponse, RusotoError<GetTelemetryMetadataError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.GetTelemetryMetadata");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTelemetryMetadataResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTelemetryMetadataError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTelemetryMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetTelemetryMetadataResponse, _>()
     }
 
     /// <p>Lists the agents of the assessment runs that are specified by the ARNs of the assessment runs.</p>
@@ -4370,27 +4218,18 @@ impl Inspector for InspectorClient {
         &self,
         input: ListAssessmentRunAgentsRequest,
     ) -> Result<ListAssessmentRunAgentsResponse, RusotoError<ListAssessmentRunAgentsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.ListAssessmentRunAgents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAssessmentRunAgentsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssessmentRunAgentsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAssessmentRunAgentsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAssessmentRunAgentsResponse, _>()
     }
 
     /// <p>Lists the assessment runs that correspond to the assessment templates that are specified by the ARNs of the assessment templates.</p>
@@ -4398,27 +4237,17 @@ impl Inspector for InspectorClient {
         &self,
         input: ListAssessmentRunsRequest,
     ) -> Result<ListAssessmentRunsResponse, RusotoError<ListAssessmentRunsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.ListAssessmentRuns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAssessmentRunsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssessmentRunsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAssessmentRunsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListAssessmentRunsResponse, _>()
     }
 
     /// <p>Lists the ARNs of the assessment targets within this AWS account. For more information about assessment targets, see <a href="https://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html">Amazon Inspector Assessment Targets</a>.</p>
@@ -4426,27 +4255,18 @@ impl Inspector for InspectorClient {
         &self,
         input: ListAssessmentTargetsRequest,
     ) -> Result<ListAssessmentTargetsResponse, RusotoError<ListAssessmentTargetsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.ListAssessmentTargets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAssessmentTargetsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssessmentTargetsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAssessmentTargetsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAssessmentTargetsResponse, _>()
     }
 
     /// <p>Lists the assessment templates that correspond to the assessment targets that are specified by the ARNs of the assessment targets.</p>
@@ -4454,27 +4274,18 @@ impl Inspector for InspectorClient {
         &self,
         input: ListAssessmentTemplatesRequest,
     ) -> Result<ListAssessmentTemplatesResponse, RusotoError<ListAssessmentTemplatesError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.ListAssessmentTemplates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAssessmentTemplatesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssessmentTemplatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAssessmentTemplatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAssessmentTemplatesResponse, _>()
     }
 
     /// <p>Lists all the event subscriptions for the assessment template that is specified by the ARN of the assessment template. For more information, see <a>SubscribeToEvent</a> and <a>UnsubscribeFromEvent</a>.</p>
@@ -4482,27 +4293,18 @@ impl Inspector for InspectorClient {
         &self,
         input: ListEventSubscriptionsRequest,
     ) -> Result<ListEventSubscriptionsResponse, RusotoError<ListEventSubscriptionsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.ListEventSubscriptions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEventSubscriptionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEventSubscriptionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListEventSubscriptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListEventSubscriptionsResponse, _>()
     }
 
     /// <p>List exclusions that are generated by the assessment run.</p>
@@ -4510,26 +4312,17 @@ impl Inspector for InspectorClient {
         &self,
         input: ListExclusionsRequest,
     ) -> Result<ListExclusionsResponse, RusotoError<ListExclusionsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.ListExclusions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListExclusionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListExclusionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListExclusionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListExclusionsResponse, _>()
     }
 
     /// <p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>
@@ -4537,26 +4330,17 @@ impl Inspector for InspectorClient {
         &self,
         input: ListFindingsRequest,
     ) -> Result<ListFindingsResponse, RusotoError<ListFindingsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.ListFindings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListFindingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListFindingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListFindingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListFindingsResponse, _>()
     }
 
     /// <p>Lists all available Amazon Inspector rules packages.</p>
@@ -4564,27 +4348,17 @@ impl Inspector for InspectorClient {
         &self,
         input: ListRulesPackagesRequest,
     ) -> Result<ListRulesPackagesResponse, RusotoError<ListRulesPackagesError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.ListRulesPackages");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRulesPackagesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRulesPackagesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRulesPackagesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListRulesPackagesResponse, _>()
     }
 
     /// <p>Lists all tags associated with an assessment template.</p>
@@ -4592,27 +4366,17 @@ impl Inspector for InspectorClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
     /// <p>Previews the agents installed on the EC2 instances that are part of the specified assessment target.</p>
@@ -4620,26 +4384,17 @@ impl Inspector for InspectorClient {
         &self,
         input: PreviewAgentsRequest,
     ) -> Result<PreviewAgentsResponse, RusotoError<PreviewAgentsError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.PreviewAgents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PreviewAgentsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PreviewAgentsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PreviewAgentsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PreviewAgentsResponse, _>()
     }
 
     /// <p>Registers the IAM role that grants Amazon Inspector access to AWS Services needed to perform security assessments.</p>
@@ -4647,9 +4402,7 @@ impl Inspector for InspectorClient {
         &self,
         input: RegisterCrossAccountAccessRoleRequest,
     ) -> Result<(), RusotoError<RegisterCrossAccountAccessRoleError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "InspectorService.RegisterCrossAccountAccessRole",
@@ -4657,19 +4410,11 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterCrossAccountAccessRoleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RegisterCrossAccountAccessRoleError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes entire attributes (key and value pairs) from the findings that are specified by the ARNs of the findings where an attribute with the specified key exists.</p>
@@ -4678,9 +4423,7 @@ impl Inspector for InspectorClient {
         input: RemoveAttributesFromFindingsRequest,
     ) -> Result<RemoveAttributesFromFindingsResponse, RusotoError<RemoveAttributesFromFindingsError>>
     {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "InspectorService.RemoveAttributesFromFindings",
@@ -4688,20 +4431,13 @@ impl Inspector for InspectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveAttributesFromFindingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveAttributesFromFindingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RemoveAttributesFromFindingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RemoveAttributesFromFindingsResponse, _>()
     }
 
     /// <p>Sets tags (key and value pairs) to the assessment template that is specified by the ARN of the assessment template.</p>
@@ -4709,26 +4445,16 @@ impl Inspector for InspectorClient {
         &self,
         input: SetTagsForResourceRequest,
     ) -> Result<(), RusotoError<SetTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.SetTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SetTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SetTagsForResourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Starts the assessment run specified by the ARN of the assessment template. For this API to function properly, you must not exceed the limit of running up to 500 concurrent agents per AWS account.</p>
@@ -4736,27 +4462,17 @@ impl Inspector for InspectorClient {
         &self,
         input: StartAssessmentRunRequest,
     ) -> Result<StartAssessmentRunResponse, RusotoError<StartAssessmentRunError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.StartAssessmentRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartAssessmentRunResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartAssessmentRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartAssessmentRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartAssessmentRunResponse, _>()
     }
 
     /// <p>Stops the assessment run that is specified by the ARN of the assessment run.</p>
@@ -4764,26 +4480,16 @@ impl Inspector for InspectorClient {
         &self,
         input: StopAssessmentRunRequest,
     ) -> Result<(), RusotoError<StopAssessmentRunError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.StopAssessmentRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopAssessmentRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopAssessmentRunError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Enables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>
@@ -4791,26 +4497,16 @@ impl Inspector for InspectorClient {
         &self,
         input: SubscribeToEventRequest,
     ) -> Result<(), RusotoError<SubscribeToEventError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.SubscribeToEvent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SubscribeToEventError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SubscribeToEventError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Disables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>
@@ -4818,26 +4514,16 @@ impl Inspector for InspectorClient {
         &self,
         input: UnsubscribeFromEventRequest,
     ) -> Result<(), RusotoError<UnsubscribeFromEventError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.UnsubscribeFromEvent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UnsubscribeFromEventError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UnsubscribeFromEventError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the assessment target that is specified by the ARN of the assessment target.</p> <p>If resourceGroupArn is not specified, all EC2 instances in the current AWS account and region are included in the assessment target.</p>
@@ -4845,25 +4531,15 @@ impl Inspector for InspectorClient {
         &self,
         input: UpdateAssessmentTargetRequest,
     ) -> Result<(), RusotoError<UpdateAssessmentTargetError>> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "InspectorService.UpdateAssessmentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateAssessmentTargetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateAssessmentTargetError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 }

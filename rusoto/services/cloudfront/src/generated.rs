@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree, write_characters_element,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -34,12 +34,26 @@ use serde::Serialize;
 use std::io::Write;
 use std::str::FromStr;
 use xml;
-use xml::reader::ParserConfig;
 use xml::EventReader;
 use xml::EventWriter;
 
+impl CloudFrontClient {
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 /// <p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ActiveTrustedSigners {
     /// <p>Enabled is <code>true</code> if any of the AWS accounts listed in the <code>TrustedSigners</code> complex type for this distribution have active CloudFront key pairs. If not, <code>Enabled</code> is <code>false</code>.</p>
@@ -78,7 +92,7 @@ impl ActiveTrustedSignersDeserializer {
     }
 }
 /// <p>AWS services in China customers must file for an Internet Content Provider (ICP) recordal if they want to serve content publicly on an alternate domain name, also known as a CNAME, that they've added to CloudFront. AliasICPRecordal provides the ICP recordal status for CNAMEs associated with distributions. The status is returned in the CloudFront response; you can't configure it yourself.</p> <p>For more information about ICP recordals, see <a href="https://docs.amazonaws.cn/en_us/aws/latest/userguide/accounts-and-credentials.html"> Signup, Accounts, and Credentials</a> in <i>Getting Started with AWS services in China</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AliasICPRecordal {
     /// <p>A domain name associated with a distribution. </p>
@@ -173,7 +187,7 @@ impl AliasListSerializer {
 }
 
 /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Aliases {
@@ -223,18 +237,13 @@ impl AliasesSerializer {
         if let Some(ref value) = obj.items {
             &AliasListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A complex type that controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin. There are three choices:</p> <ul> <li> <p>CloudFront forwards only <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront forwards only <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> <li> <p>CloudFront forwards <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests.</p> </li> </ul> <p>If you pick the third choice, you may need to restrict access to your Amazon S3 bucket or to your custom origin so users can't perform operations that you don't want them to. For example, you might not want users to have permissions to delete objects from your origin.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AllowedMethods {
@@ -291,12 +300,7 @@ impl AllowedMethodsSerializer {
             &CachedMethodsSerializer::serialize(&mut writer, "CachedMethods", value)?;
         }
         MethodsListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -345,11 +349,7 @@ struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -364,17 +364,12 @@ impl BooleanSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
-/// <p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to distribute objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current limit on the number of cache behaviors that you can add to a distribution, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p> <p>If you don't want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don't include an empty <code>CacheBehavior</code> element, or CloudFront returns a <code>MalformedXML</code> error.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behaviors</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+/// <p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to serve objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current quota (formerly known as limit) on the number of cache behaviors that you can add to a distribution, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you don’t want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don’t include an empty <code>CacheBehavior</code> element because this is invalid.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behavior Settings</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CacheBehavior {
@@ -383,7 +378,7 @@ pub struct CacheBehavior {
     pub compress: Option<bool>,
     /// <p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub default_ttl: Option<i64>,
-    /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for a cache behavior or for the default cache behavior in your distribution.</p>
+    /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for this cache behavior.</p>
     pub field_level_encryption_id: Option<String>,
     /// <p>A complex type that specifies how CloudFront handles query strings, cookies, and HTTP headers.</p>
     pub forwarded_values: ForwardedValues,
@@ -397,11 +392,11 @@ pub struct CacheBehavior {
     pub path_pattern: String,
     /// <p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>
     pub smooth_streaming: Option<bool>,
-    /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior in your distribution.</p>
+    /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when they match this cache behavior.</p>
     pub target_origin_id: String,
-    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>. </p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
+    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content with Signed URLs and Signed Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>. </p> <p>If you don’t want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it’s currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
     pub trusted_signers: TrustedSigners,
-    /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects&#39; cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
+    /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-viewers-to-cloudfront.html">Requiring HTTPS Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects’ cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing Cache Expiration</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
     pub viewer_protocol_policy: String,
 }
 
@@ -494,30 +489,13 @@ impl CacheBehaviorSerializer {
             &AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethods", value)?;
         }
         if let Some(ref value) = obj.compress {
-            writer.write(xml::writer::XmlEvent::start_element("Compress"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Compress", &value.to_string())?;
         }
         if let Some(ref value) = obj.default_ttl {
-            writer.write(xml::writer::XmlEvent::start_element("DefaultTTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "DefaultTTL", &value.to_string())?;
         }
         if let Some(ref value) = obj.field_level_encryption_id {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "FieldLevelEncryptionId",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "FieldLevelEncryptionId", &value.to_string())?;
         }
         ForwardedValuesSerializer::serialize(
             &mut writer,
@@ -532,46 +510,20 @@ impl CacheBehaviorSerializer {
             )?;
         }
         if let Some(ref value) = obj.max_ttl {
-            writer.write(xml::writer::XmlEvent::start_element("MaxTTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "MaxTTL", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("MinTTL"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.min_ttl
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("PathPattern"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.path_pattern
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "MinTTL", &obj.min_ttl.to_string())?;
+        write_characters_element(writer, "PathPattern", &obj.path_pattern.to_string())?;
         if let Some(ref value) = obj.smooth_streaming {
-            writer.write(xml::writer::XmlEvent::start_element("SmoothStreaming"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "SmoothStreaming", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("TargetOriginId"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.target_origin_id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "TargetOriginId", &obj.target_origin_id.to_string())?;
         TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", &obj.trusted_signers)?;
-        writer.write(xml::writer::XmlEvent::start_element("ViewerProtocolPolicy"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.viewer_protocol_policy
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(
+            writer,
+            "ViewerProtocolPolicy",
+            &obj.viewer_protocol_policy.to_string(),
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -619,7 +571,7 @@ impl CacheBehaviorListSerializer {
 }
 
 /// <p>A complex type that contains zero or more <code>CacheBehavior</code> elements. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CacheBehaviors {
@@ -669,18 +621,13 @@ impl CacheBehaviorsSerializer {
         if let Some(ref value) = obj.items {
             &CacheBehaviorListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A complex type that controls whether CloudFront caches the response to requests using the specified HTTP methods. There are two choices:</p> <ul> <li> <p>CloudFront caches responses to <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront caches responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> </ul> <p>If you pick the second choice for your Amazon S3 Origin, you may need to forward Access-Control-Request-Method, Access-Control-Request-Headers, and Origin headers for the responses to be cached correctly. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CachedMethods {
@@ -727,18 +674,13 @@ impl CachedMethodsSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         MethodsListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>CloudFront origin access identity.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloudFrontOriginAccessIdentity {
     /// <p>The current configuration information for the identity. </p>
@@ -785,7 +727,7 @@ impl CloudFrontOriginAccessIdentityDeserializer {
     }
 }
 /// <p>Origin access identity configuration. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/CloudFront/identity ID/config</code> resource. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudFrontOriginAccessIdentityConfig {
@@ -835,24 +777,14 @@ impl CloudFrontOriginAccessIdentityConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.caller_reference
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.comment
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "Comment", &obj.comment.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Lists the origin access identities for CloudFront.Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/origin-access-identity/cloudfront</code> resource. The response includes a <code>CloudFrontOriginAccessIdentityList</code> element with zero or more <code>CloudFrontOriginAccessIdentitySummary</code> child elements. By default, your entire list of origin access identities is returned in one single page. If the list is long, you can paginate it using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloudFrontOriginAccessIdentityList {
     /// <p>A flag that indicates whether more origin access identities remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more items in the list.</p>
@@ -913,7 +845,7 @@ impl CloudFrontOriginAccessIdentityListDeserializer {
     }
 }
 /// <p>Summary of the information about a CloudFront origin access identity.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CloudFrontOriginAccessIdentitySummary {
     /// <p>The comment for this origin access identity, as originally specified when created.</p>
@@ -982,11 +914,7 @@ struct CommentTypeDeserializer;
 impl CommentTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1001,17 +929,12 @@ impl CommentTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A field-level encryption content type profile. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContentTypeProfile {
@@ -1061,32 +984,17 @@ impl ContentTypeProfileSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("ContentType"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.content_type
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Format"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.format
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "ContentType", &obj.content_type.to_string())?;
+        write_characters_element(writer, "Format", &obj.format.to_string())?;
         if let Some(ref value) = obj.profile_id {
-            writer.write(xml::writer::XmlEvent::start_element("ProfileId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ProfileId", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>The configuration for a field-level encryption content type-profile mapping. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContentTypeProfileConfig {
@@ -1146,14 +1054,11 @@ impl ContentTypeProfileConfigSerializer {
         if let Some(ref value) = obj.content_type_profiles {
             &ContentTypeProfilesSerializer::serialize(&mut writer, "ContentTypeProfiles", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element(
+        write_characters_element(
+            writer,
             "ForwardWhenContentTypeIsUnknown",
-        ))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.forward_when_content_type_is_unknown
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+            &obj.forward_when_content_type_is_unknown.to_string(),
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -1201,7 +1106,7 @@ impl ContentTypeProfileListSerializer {
 }
 
 /// <p>Field-level encryption content type-profile. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContentTypeProfiles {
@@ -1251,12 +1156,7 @@ impl ContentTypeProfilesSerializer {
         if let Some(ref value) = obj.items {
             &ContentTypeProfileListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -1301,7 +1201,7 @@ impl CookieNameListSerializer {
 }
 
 /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html"> Caching Content Based on Request Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CookieNames {
@@ -1351,18 +1251,13 @@ impl CookieNamesSerializer {
         if let Some(ref value) = obj.items {
             &CookieNameListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">Caching Content Based on Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CookiePreference {
@@ -1410,12 +1305,7 @@ impl CookiePreferenceSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Forward"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.forward
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Forward", &obj.forward.to_string())?;
         if let Some(ref value) = obj.whitelisted_names {
             &CookieNamesSerializer::serialize(&mut writer, "WhitelistedNames", value)?;
         }
@@ -1424,7 +1314,7 @@ impl CookiePreferenceSerializer {
 }
 
 /// <p>The request to create a new origin access identity (OAI). An origin access identity is a special CloudFront user that you can associate with Amazon S3 origins, so that you can secure all or just some of your Amazon S3 content. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html"> Restricting Access to Amazon S3 Content by Using an Origin Access Identity</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFrontOriginAccessIdentityRequest {
     /// <p>The current configuration information for the identity.</p>
@@ -1432,14 +1322,14 @@ pub struct CreateCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
     /// <p>The current version of the origin access identity created.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new origin access identity just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/origin-access-identity/cloudfront/E74FTE3AJFJ256A</code>.</p>
+    /// <p>The fully qualified URI of the new origin access identity just created.</p>
     pub location: Option<String>,
 }
 
@@ -1463,7 +1353,7 @@ impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to create a new distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionRequest {
     /// <p>The distribution's configuration information.</p>
@@ -1471,14 +1361,14 @@ pub struct CreateDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDistributionResult {
     /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
     /// <p>The current version of the distribution created.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/distribution/EDFDVBD632BHDS5</code>.</p>
+    /// <p>The fully qualified URI of the new distribution resource just created.</p>
     pub location: Option<String>,
 }
 
@@ -1500,7 +1390,7 @@ impl CreateDistributionResultDeserializer {
     }
 }
 /// <p>The request to create a new distribution with tags. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionWithTagsRequest {
     /// <p>The distribution's configuration information. </p>
@@ -1508,14 +1398,14 @@ pub struct CreateDistributionWithTagsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateDistributionWithTagsResult {
     /// <p>The distribution's information. </p>
     pub distribution: Option<Distribution>,
     /// <p>The current version of the distribution created.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/distribution/EDFDVBD632BHDS5</code>. </p>
+    /// <p>The fully qualified URI of the new distribution resource just created.</p>
     pub location: Option<String>,
 }
 
@@ -1536,21 +1426,21 @@ impl CreateDistributionWithTagsResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFieldLevelEncryptionConfigRequest {
     /// <p>The request to create a new field-level encryption configuration.</p>
     pub field_level_encryption_config: FieldLevelEncryptionConfig,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFieldLevelEncryptionConfigResult {
     /// <p>The current version of the field level encryption configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
     /// <p>Returned when you create a new field-level encryption configuration.</p>
     pub field_level_encryption: Option<FieldLevelEncryption>,
-    /// <p>The fully qualified URI of the new configuration resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/field-level-encryption-config/EDFDVBD632BHDS5</code>.</p>
+    /// <p>The fully qualified URI of the new configuration resource just created.</p>
     pub location: Option<String>,
 }
 
@@ -1571,21 +1461,21 @@ impl CreateFieldLevelEncryptionConfigResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFieldLevelEncryptionProfileRequest {
     /// <p>The request to create a field-level encryption profile.</p>
     pub field_level_encryption_profile_config: FieldLevelEncryptionProfileConfig,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateFieldLevelEncryptionProfileResult {
     /// <p>The current version of the field level encryption profile. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
     /// <p>Returned when you create a new field-level encryption profile.</p>
     pub field_level_encryption_profile: Option<FieldLevelEncryptionProfile>,
-    /// <p>The fully qualified URI of the new profile resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/field-level-encryption-profile/EDFDVBD632BHDS5</code>.</p>
+    /// <p>The fully qualified URI of the new profile resource just created.</p>
     pub location: Option<String>,
 }
 
@@ -1609,7 +1499,7 @@ impl CreateFieldLevelEncryptionProfileResultDeserializer {
     }
 }
 /// <p>The request to create an invalidation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInvalidationRequest {
     /// <p>The distribution's id.</p>
@@ -1619,7 +1509,7 @@ pub struct CreateInvalidationRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateInvalidationResult {
     /// <p>The invalidation's information.</p>
@@ -1645,19 +1535,19 @@ impl CreateInvalidationResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublicKeyRequest {
     /// <p>The request to add a public key to CloudFront.</p>
     pub public_key_config: PublicKeyConfig,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePublicKeyResult {
     /// <p>The current version of the public key. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new public key resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/cloudfront-public-key/EDFDVBD632BHDS5</code>.</p>
+    /// <p>The fully qualified URI of the new public key resource just created.</p>
     pub location: Option<String>,
     /// <p>Returned when you add a public key.</p>
     pub public_key: Option<PublicKey>,
@@ -1678,7 +1568,7 @@ impl CreatePublicKeyResultDeserializer {
     }
 }
 /// <p>The request to create a new streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamingDistributionRequest {
     /// <p>The streaming distribution's configuration information.</p>
@@ -1686,12 +1576,12 @@ pub struct CreateStreamingDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStreamingDistributionResult {
     /// <p>The current version of the streaming distribution created.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new streaming distribution resource just created. For example: <code>https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>
+    /// <p>The fully qualified URI of the new streaming distribution resource just created.</p>
     pub location: Option<String>,
     /// <p>The streaming distribution's information.</p>
     pub streaming_distribution: Option<StreamingDistribution>,
@@ -1715,7 +1605,7 @@ impl CreateStreamingDistributionResultDeserializer {
     }
 }
 /// <p>The request to create a new streaming distribution with tags.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStreamingDistributionWithTagsRequest {
     /// <p> The streaming distribution's configuration information. </p>
@@ -1723,12 +1613,12 @@ pub struct CreateStreamingDistributionWithTagsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStreamingDistributionWithTagsResult {
     /// <p>The current version of the distribution created.</p>
     pub e_tag: Option<String>,
-    /// <p>The fully qualified URI of the new streaming distribution resource just created. For example:<code> https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>
+    /// <p>The fully qualified URI of the new streaming distribution resource just created.</p>
     pub location: Option<String>,
     /// <p>The streaming distribution's information. </p>
     pub streaming_distribution: Option<StreamingDistribution>,
@@ -1752,7 +1642,7 @@ impl CreateStreamingDistributionWithTagsResultDeserializer {
     }
 }
 /// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer. </p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomErrorResponse {
@@ -1811,34 +1701,14 @@ impl CustomErrorResponseSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.error_caching_min_ttl {
-            writer.write(xml::writer::XmlEvent::start_element("ErrorCachingMinTTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ErrorCachingMinTTL", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("ErrorCode"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.error_code
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "ErrorCode", &obj.error_code.to_string())?;
         if let Some(ref value) = obj.response_code {
-            writer.write(xml::writer::XmlEvent::start_element("ResponseCode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ResponseCode", &value.to_string())?;
         }
         if let Some(ref value) = obj.response_page_path {
-            writer.write(xml::writer::XmlEvent::start_element("ResponsePagePath"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ResponsePagePath", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1887,7 +1757,7 @@ impl CustomErrorResponseListSerializer {
 }
 
 /// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.</p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomErrorResponses {
@@ -1937,18 +1807,13 @@ impl CustomErrorResponsesSerializer {
         if let Some(ref value) = obj.items {
             &CustomErrorResponseListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A complex type that contains the list of Custom Headers for each origin. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomHeaders {
@@ -1998,32 +1863,27 @@ impl CustomHeadersSerializer {
         if let Some(ref value) = obj.items {
             &OriginCustomHeadersListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-/// <p>A custom origin or an Amazon S3 bucket configured as a website endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+/// <p>A custom origin. A custom origin is any origin that is <i>not</i> an Amazon S3 bucket, with one exception. An Amazon S3 bucket that is <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">configured with static website hosting</a> <i>is</i> a custom origin.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CustomOriginConfig {
-    /// <p>The HTTP port the custom origin listens on.</p>
+    /// <p>The HTTP port that CloudFront uses to connect to the origin. Specify the HTTP port that the origin listens on.</p>
     pub http_port: i64,
-    /// <p>The HTTPS port the custom origin listens on.</p>
+    /// <p>The HTTPS port that CloudFront uses to connect to the origin. Specify the HTTPS port that the origin listens on.</p>
     pub https_port: i64,
-    /// <p>You can create a custom keep-alive timeout. All timeout units are in seconds. The default keep-alive timeout is 5 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 1 second; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>.</p>
+    /// <p>Specifies how long, in seconds, CloudFront persists its connection to the origin. The minimum timeout is 1 second, the maximum is 60 seconds, and the default (if you don’t specify otherwise) is 5 seconds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginKeepaliveTimeout">Origin Keep-alive Timeout</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_keepalive_timeout: Option<i64>,
-    /// <p>The origin protocol policy to apply to your origin.</p>
+    /// <p><p>Specifies the protocol (HTTP or HTTPS) that CloudFront uses to connect to the origin. Valid values are:</p> <ul> <li> <p> <code>http-only</code> – CloudFront always uses HTTP to connect to the origin.</p> </li> <li> <p> <code>match-viewer</code> – CloudFront connects to the origin using the same protocol that the viewer used to connect to CloudFront.</p> </li> <li> <p> <code>https-only</code> – CloudFront always uses HTTPS to connect to the origin.</p> </li> </ul></p>
     pub origin_protocol_policy: String,
-    /// <p>You can create a custom origin read timeout. All timeout units are in seconds. The default origin read timeout is 30 seconds, but you can configure custom timeout lengths using the CloudFront API. The minimum timeout length is 4 seconds; the maximum is 60 seconds.</p> <p>If you need to increase the maximum time limit, contact the <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>.</p>
+    /// <p>Specifies how long, in seconds, CloudFront waits for a response from the origin. This is also known as the <i>origin response timeout</i>. The minimum timeout is 1 second, the maximum is 60 seconds, and the default (if you don’t specify otherwise) is 30 seconds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginResponseTimeout">Origin Response Timeout</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_read_timeout: Option<i64>,
-    /// <p>The SSL/TLS protocols that you want CloudFront to use when communicating with your origin over HTTPS.</p>
+    /// <p>Specifies the minimum SSL/TLS protocol that CloudFront uses when connecting to your origin over HTTPS. Valid values include <code>SSLv3</code>, <code>TLSv1</code>, <code>TLSv1.1</code>, and <code>TLSv1.2</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginSSLProtocols">Minimum Origin SSL Protocol</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_ssl_protocols: Option<OriginSslProtocols>,
 }
 
@@ -2086,41 +1946,18 @@ impl CustomOriginConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("HTTPPort"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.http_port
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("HTTPSPort"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.https_port
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "HTTPPort", &obj.http_port.to_string())?;
+        write_characters_element(writer, "HTTPSPort", &obj.https_port.to_string())?;
         if let Some(ref value) = obj.origin_keepalive_timeout {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "OriginKeepaliveTimeout",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "OriginKeepaliveTimeout", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("OriginProtocolPolicy"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.origin_protocol_policy
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(
+            writer,
+            "OriginProtocolPolicy",
+            &obj.origin_protocol_policy.to_string(),
+        )?;
         if let Some(ref value) = obj.origin_read_timeout {
-            writer.write(xml::writer::XmlEvent::start_element("OriginReadTimeout"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "OriginReadTimeout", &value.to_string())?;
         }
         if let Some(ref value) = obj.origin_ssl_protocols {
             &OriginSslProtocolsSerializer::serialize(&mut writer, "OriginSslProtocols", value)?;
@@ -2129,8 +1966,8 @@ impl CustomOriginConfigSerializer {
     }
 }
 
-/// <p>A complex type that describes the default cache behavior if you don't specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+/// <p>A complex type that describes the default cache behavior if you don’t specify a <code>CacheBehavior</code> element or if request URLs don’t match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefaultCacheBehavior {
@@ -2139,7 +1976,7 @@ pub struct DefaultCacheBehavior {
     pub compress: Option<bool>,
     /// <p>The default amount of time that you want objects to stay in CloudFront caches before CloudFront forwards another request to your origin to determine whether the object has been updated. The value that you specify applies only when your origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub default_ttl: Option<i64>,
-    /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for a cache behavior or for the default cache behavior in your distribution.</p>
+    /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for the default cache behavior.</p>
     pub field_level_encryption_id: Option<String>,
     /// <p>A complex type that specifies how CloudFront handles query strings, cookies, and HTTP headers.</p>
     pub forwarded_values: ForwardedValues,
@@ -2151,11 +1988,11 @@ pub struct DefaultCacheBehavior {
     pub min_ttl: i64,
     /// <p>Indicates whether you want to distribute media files in the Microsoft Smooth Streaming format using the origin that is associated with this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. If you specify <code>true</code> for <code>SmoothStreaming</code>, you can still distribute other content using this cache behavior if the content matches the value of <code>PathPattern</code>. </p>
     pub smooth_streaming: Option<bool>,
-    /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when a request matches the path pattern either for a cache behavior or for the default cache behavior in your distribution.</p>
+    /// <p>The value of <code>ID</code> for the origin that you want CloudFront to route requests to when they use the default cache behavior.</p>
     pub target_origin_id: String,
-    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i> Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
+    /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content with Signed URLs and Signed Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>If you don’t want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it’s currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
     pub trusted_signers: TrustedSigners,
-    /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects&#39; cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
+    /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-viewers-to-cloudfront.html">Requiring HTTPS Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects’ cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing Cache Expiration</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
     pub viewer_protocol_policy: String,
 }
 
@@ -2245,30 +2082,13 @@ impl DefaultCacheBehaviorSerializer {
             &AllowedMethodsSerializer::serialize(&mut writer, "AllowedMethods", value)?;
         }
         if let Some(ref value) = obj.compress {
-            writer.write(xml::writer::XmlEvent::start_element("Compress"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Compress", &value.to_string())?;
         }
         if let Some(ref value) = obj.default_ttl {
-            writer.write(xml::writer::XmlEvent::start_element("DefaultTTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "DefaultTTL", &value.to_string())?;
         }
         if let Some(ref value) = obj.field_level_encryption_id {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "FieldLevelEncryptionId",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "FieldLevelEncryptionId", &value.to_string())?;
         }
         ForwardedValuesSerializer::serialize(
             &mut writer,
@@ -2283,46 +2103,25 @@ impl DefaultCacheBehaviorSerializer {
             )?;
         }
         if let Some(ref value) = obj.max_ttl {
-            writer.write(xml::writer::XmlEvent::start_element("MaxTTL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "MaxTTL", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("MinTTL"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.min_ttl
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "MinTTL", &obj.min_ttl.to_string())?;
         if let Some(ref value) = obj.smooth_streaming {
-            writer.write(xml::writer::XmlEvent::start_element("SmoothStreaming"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "SmoothStreaming", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("TargetOriginId"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.target_origin_id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "TargetOriginId", &obj.target_origin_id.to_string())?;
         TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", &obj.trusted_signers)?;
-        writer.write(xml::writer::XmlEvent::start_element("ViewerProtocolPolicy"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.viewer_protocol_policy
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(
+            writer,
+            "ViewerProtocolPolicy",
+            &obj.viewer_protocol_policy.to_string(),
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Deletes a origin access identity.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCloudFrontOriginAccessIdentityRequest {
     /// <p>The origin access identity's ID.</p>
@@ -2332,7 +2131,7 @@ pub struct DeleteCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>This action deletes a web distribution. To delete a web distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete a web distribution using the CloudFront API:</b> </p> <ol> <li> <p>Disable the web distribution </p> </li> <li> <p>Submit a <code>GET Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution.</p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Distribution</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 6.</p> </li> <li> <p>Review the response to your <code>DELETE Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDistributionRequest {
     /// <p>The distribution ID. </p>
@@ -2341,7 +2140,7 @@ pub struct DeleteDistributionRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFieldLevelEncryptionConfigRequest {
     /// <p>The ID of the configuration you want to delete from CloudFront.</p>
@@ -2350,7 +2149,7 @@ pub struct DeleteFieldLevelEncryptionConfigRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFieldLevelEncryptionProfileRequest {
     /// <p>Request the ID of the profile you want to delete from CloudFront.</p>
@@ -2359,7 +2158,7 @@ pub struct DeleteFieldLevelEncryptionProfileRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublicKeyRequest {
     /// <p>The ID of the public key you want to remove from CloudFront.</p>
@@ -2369,7 +2168,7 @@ pub struct DeletePublicKeyRequest {
 }
 
 /// <p>The request to delete a streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStreamingDistributionRequest {
     /// <p>The distribution ID. </p>
@@ -2379,7 +2178,7 @@ pub struct DeleteStreamingDistributionRequest {
 }
 
 /// <p>A distribution tells CloudFront where you want content to be delivered from, and the details about how to track and manage content delivery.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Distribution {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
@@ -2454,7 +2253,7 @@ impl DistributionDeserializer {
     }
 }
 /// <p>A distribution configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DistributionConfig {
@@ -2604,18 +2403,8 @@ impl DistributionConfigSerializer {
         if let Some(ref value) = obj.cache_behaviors {
             &CacheBehaviorsSerializer::serialize(&mut writer, "CacheBehaviors", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.caller_reference
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.comment
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "Comment", &obj.comment.to_string())?;
         if let Some(ref value) = obj.custom_error_responses {
             &CustomErrorResponsesSerializer::serialize(&mut writer, "CustomErrorResponses", value)?;
         }
@@ -2625,34 +2414,14 @@ impl DistributionConfigSerializer {
             &obj.default_cache_behavior,
         )?;
         if let Some(ref value) = obj.default_root_object {
-            writer.write(xml::writer::XmlEvent::start_element("DefaultRootObject"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "DefaultRootObject", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.enabled
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         if let Some(ref value) = obj.http_version {
-            writer.write(xml::writer::XmlEvent::start_element("HttpVersion"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "HttpVersion", &value.to_string())?;
         }
         if let Some(ref value) = obj.is_ipv6_enabled {
-            writer.write(xml::writer::XmlEvent::start_element("IsIPV6Enabled"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "IsIPV6Enabled", &value.to_string())?;
         }
         if let Some(ref value) = obj.logging {
             &LoggingConfigSerializer::serialize(&mut writer, "Logging", value)?;
@@ -2662,12 +2431,7 @@ impl DistributionConfigSerializer {
         }
         OriginsSerializer::serialize(&mut writer, "Origins", &obj.origins)?;
         if let Some(ref value) = obj.price_class {
-            writer.write(xml::writer::XmlEvent::start_element("PriceClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "PriceClass", &value.to_string())?;
         }
         if let Some(ref value) = obj.restrictions {
             &RestrictionsSerializer::serialize(&mut writer, "Restrictions", value)?;
@@ -2676,19 +2440,14 @@ impl DistributionConfigSerializer {
             &ViewerCertificateSerializer::serialize(&mut writer, "ViewerCertificate", value)?;
         }
         if let Some(ref value) = obj.web_acl_id {
-            writer.write(xml::writer::XmlEvent::start_element("WebACLId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "WebACLId", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A distribution Configuration and a list of tags to be associated with the distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DistributionConfigWithTags {
     /// <p>A distribution configuration.</p>
@@ -2720,7 +2479,7 @@ impl DistributionConfigWithTagsSerializer {
 }
 
 /// <p>A distribution list.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DistributionList {
     /// <p>A flag that indicates whether more distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list.</p>
@@ -2774,7 +2533,7 @@ impl DistributionListDeserializer {
     }
 }
 /// <p>A summary of the information about a CloudFront distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DistributionSummary {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
@@ -2932,7 +2691,7 @@ impl DistributionSummaryListDeserializer {
     }
 }
 /// <p>Complex data type for field-level encryption profiles that includes all of the encryption entities. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EncryptionEntities {
@@ -2982,18 +2741,13 @@ impl EncryptionEntitiesSerializer {
         if let Some(ref value) = obj.items {
             &EncryptionEntityListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Complex data type for field-level encryption profiles that includes the encryption key and field pattern specifications. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EncryptionEntity {
@@ -3045,18 +2799,8 @@ impl EncryptionEntitySerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         FieldPatternsSerializer::serialize(&mut writer, "FieldPatterns", &obj.field_patterns)?;
-        writer.write(xml::writer::XmlEvent::start_element("ProviderId"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.provider_id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("PublicKeyId"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.public_key_id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "ProviderId", &obj.provider_id.to_string())?;
+        write_characters_element(writer, "PublicKeyId", &obj.public_key_id.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3108,11 +2852,7 @@ struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3127,17 +2867,12 @@ impl EventTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A complex data type that includes the profile configurations and other options specified for field-level encryption. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryption {
     /// <p>A complex data type that includes the profile configurations specified for field-level encryption. </p>
@@ -3179,7 +2914,7 @@ impl FieldLevelEncryptionDeserializer {
     }
 }
 /// <p>A complex data type that includes the profile configurations specified for field-level encryption. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FieldLevelEncryptionConfig {
@@ -3247,19 +2982,9 @@ impl FieldLevelEncryptionConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.caller_reference
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
         if let Some(ref value) = obj.comment {
-            writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Comment", &value.to_string())?;
         }
         if let Some(ref value) = obj.content_type_profile_config {
             &ContentTypeProfileConfigSerializer::serialize(
@@ -3280,7 +3005,7 @@ impl FieldLevelEncryptionConfigSerializer {
 }
 
 /// <p>List of field-level encrpytion configurations.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionList {
     /// <p>An array of field-level encryption items.</p>
@@ -3331,7 +3056,7 @@ impl FieldLevelEncryptionListDeserializer {
     }
 }
 /// <p>A complex data type for field-level encryption profiles.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionProfile {
     /// <p>A complex data type that includes the profile name and the encryption entities for the field-level encryption profile.</p>
@@ -3377,7 +3102,7 @@ impl FieldLevelEncryptionProfileDeserializer {
     }
 }
 /// <p>A complex data type of profiles for the field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FieldLevelEncryptionProfileConfig {
@@ -3440,37 +3165,22 @@ impl FieldLevelEncryptionProfileConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.caller_reference
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
         if let Some(ref value) = obj.comment {
-            writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Comment", &value.to_string())?;
         }
         EncryptionEntitiesSerializer::serialize(
             &mut writer,
             "EncryptionEntities",
             &obj.encryption_entities,
         )?;
-        writer.write(xml::writer::XmlEvent::start_element("Name"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Name", &obj.name.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>List of field-level encryption profiles.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionProfileList {
     /// <p>The field-level encryption profile items.</p>
@@ -3521,7 +3231,7 @@ impl FieldLevelEncryptionProfileListDeserializer {
     }
 }
 /// <p>The field-level encryption profile summary.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionProfileSummary {
     /// <p>An optional comment for the field-level encryption profile summary.</p>
@@ -3597,7 +3307,7 @@ impl FieldLevelEncryptionProfileSummaryListDeserializer {
     }
 }
 /// <p>A summary of a field-level encryption item.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionSummary {
     /// <p>An optional comment about the field-level encryption item.</p>
@@ -3717,7 +3427,7 @@ impl FieldPatternListSerializer {
 }
 
 /// <p>A complex data type that includes the field patterns to match for field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FieldPatterns {
@@ -3767,12 +3477,7 @@ impl FieldPatternsSerializer {
         if let Some(ref value) = obj.items {
             &FieldPatternListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3782,11 +3487,7 @@ struct FormatDeserializer;
 impl FormatDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3801,17 +3502,12 @@ impl FormatSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A complex type that specifies how CloudFront handles query strings, cookies, and HTTP headers.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ForwardedValues {
@@ -3874,12 +3570,7 @@ impl ForwardedValuesSerializer {
         if let Some(ref value) = obj.headers {
             &HeadersSerializer::serialize(&mut writer, "Headers", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("QueryString"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.query_string
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "QueryString", &obj.query_string.to_string())?;
         if let Some(ref value) = obj.query_string_cache_keys {
             &QueryStringCacheKeysSerializer::serialize(&mut writer, "QueryStringCacheKeys", value)?;
         }
@@ -3888,7 +3579,7 @@ impl ForwardedValuesSerializer {
 }
 
 /// <p>A complex type that controls the countries in which your content is distributed. CloudFront determines the location of your users using <code>MaxMind</code> GeoIP databases. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GeoRestriction {
@@ -3944,18 +3635,8 @@ impl GeoRestrictionSerializer {
         if let Some(ref value) = obj.items {
             &LocationListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("RestrictionType"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.restriction_type
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
+        write_characters_element(writer, "RestrictionType", &obj.restriction_type.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3965,11 +3646,7 @@ struct GeoRestrictionTypeDeserializer;
 impl GeoRestrictionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3984,17 +3661,12 @@ impl GeoRestrictionTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>The origin access identity's configuration information. For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CloudFrontOriginAccessIdentityConfig.html">CloudFrontOriginAccessIdentityConfig</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
     /// <p>The identity's ID. </p>
@@ -4002,7 +3674,7 @@ pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCloudFrontOriginAccessIdentityConfigResult {
     /// <p>The origin access identity's configuration information. </p>
@@ -4031,7 +3703,7 @@ impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
     }
 }
 /// <p>The request to get an origin access identity's information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFrontOriginAccessIdentityRequest {
     /// <p>The identity's ID.</p>
@@ -4039,7 +3711,7 @@ pub struct GetCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
@@ -4068,7 +3740,7 @@ impl GetCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to get a distribution configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionConfigRequest {
     /// <p>The distribution's ID. If the ID is empty, an empty distribution configuration is returned.</p>
@@ -4076,7 +3748,7 @@ pub struct GetDistributionConfigRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDistributionConfigResult {
     /// <p>The distribution's configuration information.</p>
@@ -4103,7 +3775,7 @@ impl GetDistributionConfigResultDeserializer {
     }
 }
 /// <p>The request to get a distribution's information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionRequest {
     /// <p>The distribution's ID. If the ID is empty, an empty distribution configuration is returned.</p>
@@ -4111,7 +3783,7 @@ pub struct GetDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetDistributionResult {
     /// <p>The distribution's information.</p>
@@ -4137,14 +3809,14 @@ impl GetDistributionResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionConfigRequest {
     /// <p>Request the ID for the field-level encryption configuration information.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionConfigResult {
     /// <p>The current version of the field level encryption configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4172,14 +3844,14 @@ impl GetFieldLevelEncryptionConfigResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionProfileConfigRequest {
     /// <p>Get the ID for the field-level encryption profile configuration information.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionProfileConfigResult {
     /// <p>The current version of the field-level encryption profile configuration result. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4207,14 +3879,14 @@ impl GetFieldLevelEncryptionProfileConfigResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionProfileRequest {
     /// <p>Get the ID for the field-level encryption profile information.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionProfileResult {
     /// <p>The current version of the field level encryption profile. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4242,14 +3914,14 @@ impl GetFieldLevelEncryptionProfileResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFieldLevelEncryptionRequest {
     /// <p>Request the ID for the field-level encryption configuration information.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetFieldLevelEncryptionResult {
     /// <p>The current version of the field level encryption configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4276,7 +3948,7 @@ impl GetFieldLevelEncryptionResultDeserializer {
     }
 }
 /// <p>The request to get an invalidation's information. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvalidationRequest {
     /// <p>The distribution's ID.</p>
@@ -4286,7 +3958,7 @@ pub struct GetInvalidationRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetInvalidationResult {
     /// <p>The invalidation's information. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/InvalidationDatatype.html">Invalidation Complex Type</a>. </p>
@@ -4310,14 +3982,14 @@ impl GetInvalidationResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyConfigRequest {
     /// <p>Request the ID for the public key configuration.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicKeyConfigResult {
     /// <p>The current version of the public key configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4343,14 +4015,14 @@ impl GetPublicKeyConfigResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicKeyRequest {
     /// <p>Request the ID for the public key.</p>
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicKeyResult {
     /// <p>The current version of the public key. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4374,7 +4046,7 @@ impl GetPublicKeyResultDeserializer {
     }
 }
 /// <p>To request to get a streaming distribution configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStreamingDistributionConfigRequest {
     /// <p>The streaming distribution's ID.</p>
@@ -4382,7 +4054,7 @@ pub struct GetStreamingDistributionConfigRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStreamingDistributionConfigResult {
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>. </p>
@@ -4411,7 +4083,7 @@ impl GetStreamingDistributionConfigResultDeserializer {
     }
 }
 /// <p>The request to get a streaming distribution's information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStreamingDistributionRequest {
     /// <p>The streaming distribution's ID.</p>
@@ -4419,7 +4091,7 @@ pub struct GetStreamingDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetStreamingDistributionResult {
     /// <p>The current version of the streaming distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -4485,7 +4157,7 @@ impl HeaderListSerializer {
 }
 
 /// <p>A complex type that specifies the request headers, if any, that you want CloudFront to base caching on for this cache behavior. </p> <p>For the headers that you specify, CloudFront caches separate versions of a specified object based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>product</code> header that has a value of either <code>acme</code> or <code>apex</code>, and you configure CloudFront to cache your content based on values in the <code>product</code> header. CloudFront forwards the <code>product</code> header to the origin and caches the response from the origin once for each header value. For more information about caching based on header values, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html">How CloudFront Forwards and Caches Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Headers {
@@ -4535,12 +4207,7 @@ impl HeadersSerializer {
         if let Some(ref value) = obj.items {
             &HeaderListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -4550,11 +4217,7 @@ struct HttpVersionDeserializer;
 impl HttpVersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4569,12 +4232,7 @@ impl HttpVersionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4583,11 +4241,7 @@ struct ICPRecordalStatusDeserializer;
 impl ICPRecordalStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4595,11 +4249,7 @@ struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -4614,17 +4264,12 @@ impl IntegerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
 /// <p>An invalidation. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Invalidation {
     /// <p>The date and time the invalidation request was first made. </p>
@@ -4667,7 +4312,7 @@ impl InvalidationDeserializer {
     }
 }
 /// <p>An invalidation batch.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvalidationBatch {
@@ -4713,19 +4358,14 @@ impl InvalidationBatchSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.caller_reference
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
         PathsSerializer::serialize(&mut writer, "Paths", &obj.paths)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>The <code>InvalidationList</code> complex type describes the list of invalidation objects. For more information about invalidation, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html">Invalidating Objects (Web Distributions Only)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InvalidationList {
     /// <p>A flag that indicates whether more invalidation batch requests remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more invalidation batches in the list.</p>
@@ -4779,7 +4419,7 @@ impl InvalidationListDeserializer {
     }
 }
 /// <p>A summary of an invalidation request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InvalidationSummary {
     /// <p>The time that an invalidation request was created.</p>
@@ -4841,11 +4481,7 @@ struct ItemSelectionDeserializer;
 impl ItemSelectionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4860,12 +4496,7 @@ impl ItemSelectionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4888,7 +4519,7 @@ impl KeyPairIdListDeserializer {
     }
 }
 /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ActiveTrustedSigners.html">ActiveTrustedSigners</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct KeyPairIds {
     /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ActiveTrustedSigners.html">ActiveTrustedSigners</a>.</p>
@@ -4926,11 +4557,7 @@ struct LambdaFunctionARNDeserializer;
 impl LambdaFunctionARNDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4945,17 +4572,12 @@ impl LambdaFunctionARNSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A complex type that contains a Lambda function association.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionAssociation {
@@ -5011,26 +4633,15 @@ impl LambdaFunctionAssociationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("EventType"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.event_type
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "EventType", &obj.event_type.to_string())?;
         if let Some(ref value) = obj.include_body {
-            writer.write(xml::writer::XmlEvent::start_element("IncludeBody"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "IncludeBody", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("LambdaFunctionARN"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.lambda_function_arn
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(
+            writer,
+            "LambdaFunctionARN",
+            &obj.lambda_function_arn.to_string(),
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -5082,7 +4693,7 @@ impl LambdaFunctionAssociationListSerializer {
 }
 
 /// <p>A complex type that specifies a list of Lambda functions associations for a cache behavior.</p> <p>If you want to invoke one or more Lambda functions triggered by requests that match the <code>PathPattern</code> of the cache behavior, specify the applicable values for <code>Quantity</code> and <code>Items</code>. Note that there can be up to 4 <code>LambdaFunctionAssociation</code> items in this list (one for each possible value of <code>EventType</code>) and each <code>EventType</code> can be associated with the Lambda function only once.</p> <p>If you don't want to invoke any Lambda functions for the requests that match <code>PathPattern</code>, specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionAssociations {
@@ -5136,18 +4747,13 @@ impl LambdaFunctionAssociationsSerializer {
         if let Some(ref value) = obj.items {
             &LambdaFunctionAssociationListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>The request to list origin access identities. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCloudFrontOriginAccessIdentitiesRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of origin access identities. The results include identities in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last identity on that page).</p>
@@ -5157,7 +4763,7 @@ pub struct ListCloudFrontOriginAccessIdentitiesRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListCloudFrontOriginAccessIdentitiesResult {
     /// <p>The <code>CloudFrontOriginAccessIdentityList</code> type. </p>
@@ -5184,7 +4790,7 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
     }
 }
 /// <p>The request to list distributions that are associated with a specified AWS WAF web ACL. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsByWebACLIdRequest {
     /// <p>Use <code>Marker</code> and <code>MaxItems</code> to control pagination of results. If you have more than <code>MaxItems</code> distributions that satisfy the request, the response includes a <code>NextMarker</code> element. To get the next page of results, submit another request. For the value of <code>Marker</code>, specify the value of <code>NextMarker</code> from the last response. (For the first request, omit <code>Marker</code>.) </p>
@@ -5196,7 +4802,7 @@ pub struct ListDistributionsByWebACLIdRequest {
 }
 
 /// <p>The response to a request to list the distributions that are associated with a specified AWS WAF web ACL. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsByWebACLIdResult {
     /// <p>The <code>DistributionList</code> type. </p>
@@ -5221,7 +4827,7 @@ impl ListDistributionsByWebACLIdResultDeserializer {
     }
 }
 /// <p>The request to list your distributions. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionsRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of distributions. The results include distributions in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last distribution on that page).</p>
@@ -5231,7 +4837,7 @@ pub struct ListDistributionsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDistributionsResult {
     /// <p>The <code>DistributionList</code> type. </p>
@@ -5255,7 +4861,7 @@ impl ListDistributionsResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFieldLevelEncryptionConfigsRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of configurations. The results include configurations in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last configuration on that page). </p>
@@ -5264,7 +4870,7 @@ pub struct ListFieldLevelEncryptionConfigsRequest {
     pub max_items: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListFieldLevelEncryptionConfigsResult {
     /// <p>Returns a list of all field-level encryption configurations that have been created in CloudFront for this account.</p>
@@ -5288,7 +4894,7 @@ impl ListFieldLevelEncryptionConfigsResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFieldLevelEncryptionProfilesRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of profiles. The results include profiles in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last profile on that page). </p>
@@ -5297,7 +4903,7 @@ pub struct ListFieldLevelEncryptionProfilesRequest {
     pub max_items: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListFieldLevelEncryptionProfilesResult {
     /// <p>Returns a list of the field-level encryption profiles that have been created in CloudFront for this account.</p>
@@ -5324,7 +4930,7 @@ impl ListFieldLevelEncryptionProfilesResultDeserializer {
     }
 }
 /// <p>The request to list invalidations. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvalidationsRequest {
     /// <p>The distribution's ID.</p>
@@ -5336,7 +4942,7 @@ pub struct ListInvalidationsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListInvalidationsResult {
     /// <p>Information about invalidation batches. </p>
@@ -5360,7 +4966,7 @@ impl ListInvalidationsResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublicKeysRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of public keys. The results include public keys in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last public key on that page). </p>
@@ -5369,7 +4975,7 @@ pub struct ListPublicKeysRequest {
     pub max_items: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPublicKeysResult {
     /// <p>Returns a list of all public keys that have been added to CloudFront for this account.</p>
@@ -5394,7 +5000,7 @@ impl ListPublicKeysResultDeserializer {
     }
 }
 /// <p>The request to list your streaming distributions. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStreamingDistributionsRequest {
     /// <p>The value that you provided for the <code>Marker</code> request parameter.</p>
@@ -5404,7 +5010,7 @@ pub struct ListStreamingDistributionsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListStreamingDistributionsResult {
     /// <p>The <code>StreamingDistributionList</code> type. </p>
@@ -5429,7 +5035,7 @@ impl ListStreamingDistributionsResultDeserializer {
     }
 }
 /// <p> The request to list tags for a CloudFront resource.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
@@ -5437,7 +5043,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p> The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListTagsForResourceResult {
     /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
@@ -5498,7 +5104,7 @@ impl LocationListSerializer {
 }
 
 /// <p>A complex type that controls whether access logs are written for the distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoggingConfig {
@@ -5554,30 +5160,10 @@ impl LoggingConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Bucket"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.bucket
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.enabled
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("IncludeCookies"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.include_cookies
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
+        write_characters_element(writer, "IncludeCookies", &obj.include_cookies.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -5587,11 +5173,7 @@ struct LongDeserializer;
 impl LongDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -5606,12 +5188,7 @@ impl LongSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -5620,11 +5197,7 @@ struct MethodDeserializer;
 impl MethodDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5639,12 +5212,7 @@ impl MethodSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5692,11 +5260,7 @@ struct MinimumProtocolVersionDeserializer;
 impl MinimumProtocolVersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5711,31 +5275,30 @@ impl MinimumProtocolVersionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
-/// <p>A complex type that describes the Amazon S3 bucket, HTTP server (for example, a web server), Amazon MediaStore, or other server from which CloudFront gets your files. This can also be an origin group, if you've created an origin group. You must specify at least one origin or origin group.</p> <p>For the current limit on the number of origins or origin groups that you can specify for a distribution, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+/// <p>An origin.</p> <p>An origin is the location where content is stored, and from which CloudFront gets content to serve to viewers. To specify an origin:</p> <ul> <li> <p>Use the <code>S3OriginConfig</code> type to specify an Amazon S3 bucket that is <i> <b>not</b> </i> configured with static website hosting.</p> </li> <li> <p>Use the <code>CustomOriginConfig</code> type to specify various other kinds of content containers or HTTP servers, including:</p> <ul> <li> <p>An Amazon S3 bucket that is configured with static website hosting</p> </li> <li> <p>An Elastic Load Balancing load balancer</p> </li> <li> <p>An AWS Elemental MediaPackage origin</p> </li> <li> <p>An AWS Elemental MediaStore container</p> </li> <li> <p>Any other HTTP server, running on an Amazon EC2 instance or any other kind of host</p> </li> </ul> </li> </ul> <p>For the current maximum number of origins that you can specify per distribution, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html#limits-web-distributions">General Quotas on Web Distributions</a> in the <i>Amazon CloudFront Developer Guide</i> (quotas were formerly referred to as limits).</p>
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Origin {
-    /// <p>A complex type that contains names and values for the custom headers that you want.</p>
+    /// <p>The number of times that CloudFront attempts to connect to the origin. The minimum number is 1, the maximum is 3, and the default (if you don’t specify otherwise) is 3.</p> <p>For a custom origin (including an Amazon S3 bucket that’s configured with static website hosting), this value also specifies the number of times that CloudFront attempts to get a response from the origin, in the case of an <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginResponseTimeout">Origin Response Timeout</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#origin-connection-attempts">Origin Connection Attempts</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub connection_attempts: Option<i64>,
+    /// <p>The number of seconds that CloudFront waits when trying to establish a connection to the origin. The minimum timeout is 1 second, the maximum is 10 seconds, and the default (if you don’t specify otherwise) is 10 seconds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#origin-connection-timeout">Origin Connection Timeout</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub connection_timeout: Option<i64>,
+    /// <p>A list of HTTP header names and values that CloudFront adds to requests it sends to the origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html">Adding Custom Headers to Origin Requests</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub custom_headers: Option<CustomHeaders>,
-    /// <p>A complex type that contains information about a custom origin. If the origin is an Amazon S3 bucket, use the <code>S3OriginConfig</code> element instead.</p>
+    /// <p>Use this type to specify an origin that is a content container or HTTP server, including an Amazon S3 bucket that is configured with static website hosting. To specify an Amazon S3 bucket that is <i> <b>not</b> </i> configured with static website hosting, use the <code>S3OriginConfig</code> type instead.</p>
     pub custom_origin_config: Option<CustomOriginConfig>,
-    /// <p><p> <b>Amazon S3 origins</b>: The DNS name of the Amazon S3 bucket from which you want CloudFront to get objects for this origin, for example, <code>myawsbucket.s3.amazonaws.com</code>. If you set up your bucket to be configured as a website endpoint, enter the Amazon S3 static website hosting endpoint for the bucket.</p> <p>For more information about specifying this value for different types of origins, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesDomainName">Origin Domain Name</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>Constraints for Amazon S3 origins: </p> <ul> <li> <p>If you configured Amazon S3 Transfer Acceleration for your bucket, don&#39;t specify the <code>s3-accelerate</code> endpoint for <code>DomainName</code>.</p> </li> <li> <p>The bucket name must be between 3 and 63 characters long (inclusive).</p> </li> <li> <p>The bucket name must contain only lowercase characters, numbers, periods, underscores, and dashes.</p> </li> <li> <p>The bucket name must not contain adjacent periods.</p> </li> </ul> <p> <b>Custom Origins</b>: The DNS domain name for the HTTP server from which you want CloudFront to get objects for this origin, for example, <code>www.example.com</code>. </p> <p>Constraints for custom origins:</p> <ul> <li> <p> <code>DomainName</code> must be a valid DNS name that contains only a-z, A-Z, 0-9, dot (.), hyphen (-), or underscore (_) characters.</p> </li> <li> <p>The name cannot exceed 128 characters.</p> </li> </ul></p>
+    /// <p>The domain name for the origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesDomainName">Origin Domain Name</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub domain_name: String,
-    /// <p>A unique identifier for the origin or origin group. The value of <code>Id</code> must be unique within the distribution.</p> <p>When you specify the value of <code>TargetOriginId</code> for the default cache behavior or for another cache behavior, you indicate the origin to which you want the cache behavior to route requests by specifying the value of the <code>Id</code> element for that origin. When a request matches the path pattern for that cache behavior, CloudFront routes the request to the specified origin. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behavior Settings</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    /// <p>A unique identifier for the origin. This value must be unique within the distribution.</p> <p>Use this value to specify the <code>TargetOriginId</code> in a <code>CacheBehavior</code> or <code>DefaultCacheBehavior</code>.</p>
     pub id: String,
-    /// <p>An optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin. When you include the <code>OriginPath</code> element, specify the directory name, beginning with a <code>/</code>. CloudFront appends the directory name to the value of <code>DomainName</code>, for example, <code>example.com/production</code>. Do not include a <code>/</code> at the end of the directory name.</p> <p>For example, suppose you've specified the following values for your distribution:</p> <ul> <li> <p> <code>DomainName</code>: An Amazon S3 bucket named <code>myawsbucket</code>.</p> </li> <li> <p> <code>OriginPath</code>: <code>/production</code> </p> </li> <li> <p> <code>CNAME</code>: <code>example.com</code> </p> </li> </ul> <p>When a user enters <code>example.com/index.html</code> in a browser, CloudFront sends a request to Amazon S3 for <code>myawsbucket/production/index.html</code>.</p> <p>When a user enters <code>example.com/acme/index.html</code> in a browser, CloudFront sends a request to Amazon S3 for <code>myawsbucket/production/acme/index.html</code>.</p>
+    /// <p>An optional path that CloudFront appends to the origin domain name when CloudFront requests content from the origin.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginPath">Origin Path</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_path: Option<String>,
-    /// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>
+    /// <p>Use this type to specify an origin that is an Amazon S3 bucket that is <i> <b>not</b> </i> configured with static website hosting. To specify any other type of origin, including an Amazon S3 bucket that is configured with static website hosting, use the <code>CustomOriginConfig</code> type instead.</p>
     pub s3_origin_config: Option<S3OriginConfig>,
 }
 
@@ -5746,6 +5309,18 @@ impl OriginDeserializer {
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Origin, XmlParseError> {
         deserialize_elements::<_, Origin, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "ConnectionAttempts" => {
+                    obj.connection_attempts = Some(IntegerDeserializer::deserialize(
+                        "ConnectionAttempts",
+                        stack,
+                    )?);
+                }
+                "ConnectionTimeout" => {
+                    obj.connection_timeout = Some(IntegerDeserializer::deserialize(
+                        "ConnectionTimeout",
+                        stack,
+                    )?);
+                }
                 "CustomHeaders" => {
                     obj.custom_headers = Some(CustomHeadersDeserializer::deserialize(
                         "CustomHeaders",
@@ -5792,31 +5367,22 @@ impl OriginSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.connection_attempts {
+            write_characters_element(writer, "ConnectionAttempts", &value.to_string())?;
+        }
+        if let Some(ref value) = obj.connection_timeout {
+            write_characters_element(writer, "ConnectionTimeout", &value.to_string())?;
+        }
         if let Some(ref value) = obj.custom_headers {
             &CustomHeadersSerializer::serialize(&mut writer, "CustomHeaders", value)?;
         }
         if let Some(ref value) = obj.custom_origin_config {
             &CustomOriginConfigSerializer::serialize(&mut writer, "CustomOriginConfig", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("DomainName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.domain_name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "DomainName", &obj.domain_name.to_string())?;
+        write_characters_element(writer, "Id", &obj.id.to_string())?;
         if let Some(ref value) = obj.origin_path {
-            writer.write(xml::writer::XmlEvent::start_element("OriginPath"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "OriginPath", &value.to_string())?;
         }
         if let Some(ref value) = obj.s3_origin_config {
             &S3OriginConfigSerializer::serialize(&mut writer, "S3OriginConfig", value)?;
@@ -5826,7 +5392,7 @@ impl OriginSerializer {
 }
 
 /// <p>A complex type that contains <code>HeaderName</code> and <code>HeaderValue</code> elements, if any, for this distribution. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginCustomHeader {
@@ -5871,18 +5437,8 @@ impl OriginCustomHeaderSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("HeaderName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.header_name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("HeaderValue"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.header_value
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "HeaderName", &obj.header_name.to_string())?;
+        write_characters_element(writer, "HeaderValue", &obj.header_value.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -5930,7 +5486,7 @@ impl OriginCustomHeadersListSerializer {
 }
 
 /// <p>An origin group includes two origins (a primary origin and a second origin to failover to) and a failover criteria that you specify. You create an origin group to support origin failover in CloudFront. When you create or update a distribution, you can specifiy the origin group instead of a single origin, and CloudFront will failover from the primary origin to the second origin under the failover conditions that you've chosen.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroup {
@@ -5988,19 +5544,14 @@ impl OriginGroupSerializer {
             "FailoverCriteria",
             &obj.failover_criteria,
         )?;
-        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Id", &obj.id.to_string())?;
         OriginGroupMembersSerializer::serialize(&mut writer, "Members", &obj.members)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A complex data type that includes information about the failover criteria for an origin group, including the status codes for which CloudFront will failover from the primary origin to the second origin.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroupFailoverCriteria {
@@ -6090,7 +5641,7 @@ impl OriginGroupListSerializer {
 }
 
 /// <p>An origin in an origin group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroupMember {
@@ -6130,12 +5681,7 @@ impl OriginGroupMemberSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("OriginId"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.origin_id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "OriginId", &obj.origin_id.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6183,7 +5729,7 @@ impl OriginGroupMemberListSerializer {
 }
 
 /// <p>A complex data type for the origins included in an origin group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroupMembers {
@@ -6232,18 +5778,13 @@ impl OriginGroupMembersSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         OriginGroupMemberListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A complex data type for the origin groups specified for a distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginGroups {
@@ -6293,12 +5834,7 @@ impl OriginGroupsSerializer {
         if let Some(ref value) = obj.items {
             &OriginGroupListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6347,11 +5883,7 @@ struct OriginProtocolPolicyDeserializer;
 impl OriginProtocolPolicyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6366,17 +5898,12 @@ impl OriginProtocolPolicySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A complex type that contains information about the SSL/TLS protocols that CloudFront can use when establishing an HTTPS connection with your origin. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginSslProtocols {
@@ -6423,18 +5950,13 @@ impl OriginSslProtocolsSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         SslProtocolsListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A complex type that contains information about origins and origin groups for this distribution. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Origins {
@@ -6481,12 +6003,7 @@ impl OriginsSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         OriginListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6531,7 +6048,7 @@ impl PathListSerializer {
 }
 
 /// <p>A complex type that contains information about the objects that you want to invalidate. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects">Specifying the Objects to Invalidate</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Paths {
@@ -6578,12 +6095,7 @@ impl PathsSerializer {
         if let Some(ref value) = obj.items {
             &PathListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6593,11 +6105,7 @@ struct PriceClassDeserializer;
 impl PriceClassDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6612,17 +6120,12 @@ impl PriceClassSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A complex data type of public keys you add to CloudFront to use with features like field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKey {
     /// <p>A time you added a public key to CloudFront.</p>
@@ -6660,7 +6163,7 @@ impl PublicKeyDeserializer {
     }
 }
 /// <p>Information about a public key you add to CloudFront to use with features like field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublicKeyConfig {
@@ -6716,38 +6219,18 @@ impl PublicKeyConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.caller_reference
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
         if let Some(ref value) = obj.comment {
-            writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Comment", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("EncodedKey"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.encoded_key
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Name"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "EncodedKey", &obj.encoded_key.to_string())?;
+        write_characters_element(writer, "Name", &obj.name.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A list of public keys you've added to CloudFront to use with features like field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKeyList {
     /// <p>An array of information about a public key you add to CloudFront to use with features like field-level encryption.</p>
@@ -6791,7 +6274,7 @@ impl PublicKeyListDeserializer {
     }
 }
 /// <p>A complex data type for public key information. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKeySummary {
     /// <p> Comment for public key information summary. </p>
@@ -6859,7 +6342,7 @@ impl PublicKeySummaryListDeserializer {
     }
 }
 /// <p>Query argument-profile mapping for field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryArgProfile {
@@ -6904,24 +6387,14 @@ impl QueryArgProfileSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("ProfileId"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.profile_id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("QueryArg"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.query_arg
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "ProfileId", &obj.profile_id.to_string())?;
+        write_characters_element(writer, "QueryArg", &obj.query_arg.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Configuration for query argument-profile mapping for field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryArgProfileConfig {
@@ -6973,14 +6446,11 @@ impl QueryArgProfileConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element(
+        write_characters_element(
+            writer,
             "ForwardWhenQueryArgProfileIsUnknown",
-        ))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.forward_when_query_arg_profile_is_unknown
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+            &obj.forward_when_query_arg_profile_is_unknown.to_string(),
+        )?;
         if let Some(ref value) = obj.query_arg_profiles {
             &QueryArgProfilesSerializer::serialize(&mut writer, "QueryArgProfiles", value)?;
         }
@@ -7031,7 +6501,7 @@ impl QueryArgProfileListSerializer {
 }
 
 /// <p>Query argument-profile mapping for field-level encryption.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryArgProfiles {
@@ -7081,18 +6551,13 @@ impl QueryArgProfilesSerializer {
         if let Some(ref value) = obj.items {
             &QueryArgProfileListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A complex type that contains information about the query string parameters that you want CloudFront to use for caching for a cache behavior. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryStringCacheKeys {
@@ -7142,12 +6607,7 @@ impl QueryStringCacheKeysSerializer {
         if let Some(ref value) = obj.items {
             &QueryStringCacheKeysListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7202,17 +6662,12 @@ impl ResourceARNSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Restrictions {
@@ -7259,7 +6714,7 @@ impl RestrictionsSerializer {
 }
 
 /// <p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Origin {
@@ -7305,24 +6760,18 @@ impl S3OriginSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("DomainName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.domain_name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("OriginAccessIdentity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.origin_access_identity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "DomainName", &obj.domain_name.to_string())?;
+        write_characters_element(
+            writer,
+            "OriginAccessIdentity",
+            &obj.origin_access_identity.to_string(),
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-/// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+/// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin or an S3 bucket that is configured as a website endpoint, use the <code>CustomOriginConfig</code> element instead.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3OriginConfig {
@@ -7363,12 +6812,11 @@ impl S3OriginConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("OriginAccessIdentity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.origin_access_identity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(
+            writer,
+            "OriginAccessIdentity",
+            &obj.origin_access_identity.to_string(),
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7378,11 +6826,7 @@ struct SSLSupportMethodDeserializer;
 impl SSLSupportMethodDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7397,17 +6841,12 @@ impl SSLSupportMethodSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A complex type that lists the AWS accounts that were included in the <code>TrustedSigners</code> complex type, as well as their active CloudFront key pair IDs, if any. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Signer {
     /// <p><p>An AWS account that is included in the <code>TrustedSigners</code> complex type for this distribution. Valid values include:</p> <ul> <li> <p> <code>self</code>, which is the AWS account used to create the distribution.</p> </li> <li> <p>An AWS account number.</p> </li> </ul></p>
@@ -7460,11 +6899,7 @@ struct SslProtocolDeserializer;
 impl SslProtocolDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7479,12 +6914,7 @@ impl SslProtocolSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7567,7 +6997,7 @@ impl StatusCodeListSerializer {
 }
 
 /// <p>A complex data type for the status codes that you specify that, when returned by a primary origin, trigger CloudFront to failover to a second origin.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StatusCodes {
@@ -7614,18 +7044,13 @@ impl StatusCodesSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         StatusCodeListSerializer::serialize(&mut writer, "Items", &obj.items)?;
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A streaming distribution tells CloudFront where you want RTMP content to be delivered from, and the details about how to track and manage content delivery.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StreamingDistribution {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
@@ -7692,7 +7117,7 @@ impl StreamingDistributionDeserializer {
     }
 }
 /// <p>The RTMP distribution's configuration information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamingDistributionConfig {
@@ -7779,34 +7204,14 @@ impl StreamingDistributionConfigSerializer {
         if let Some(ref value) = obj.aliases {
             &AliasesSerializer::serialize(&mut writer, "Aliases", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("CallerReference"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.caller_reference
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Comment"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.comment
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.enabled
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "CallerReference", &obj.caller_reference.to_string())?;
+        write_characters_element(writer, "Comment", &obj.comment.to_string())?;
+        write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         if let Some(ref value) = obj.logging {
             &StreamingLoggingConfigSerializer::serialize(&mut writer, "Logging", value)?;
         }
         if let Some(ref value) = obj.price_class {
-            writer.write(xml::writer::XmlEvent::start_element("PriceClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "PriceClass", &value.to_string())?;
         }
         S3OriginSerializer::serialize(&mut writer, "S3Origin", &obj.s3_origin)?;
         TrustedSignersSerializer::serialize(&mut writer, "TrustedSigners", &obj.trusted_signers)?;
@@ -7815,7 +7220,7 @@ impl StreamingDistributionConfigSerializer {
 }
 
 /// <p>A streaming distribution Configuration and a list of tags to be associated with the streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamingDistributionConfigWithTags {
     /// <p>A streaming distribution Configuration.</p>
@@ -7847,7 +7252,7 @@ impl StreamingDistributionConfigWithTagsSerializer {
 }
 
 /// <p>A streaming distribution list. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StreamingDistributionList {
     /// <p>A flag that indicates whether more streaming distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list. </p>
@@ -7908,7 +7313,7 @@ impl StreamingDistributionListDeserializer {
     }
 }
 /// <p> A summary of the information for a CloudFront streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StreamingDistributionSummary {
     /// <p> The ARN (Amazon Resource Name) for the streaming distribution. For example: <code>arn:aws:cloudfront::123456789012:streaming-distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
@@ -8012,7 +7417,7 @@ impl StreamingDistributionSummaryListDeserializer {
     }
 }
 /// <p>A complex type that controls whether access logs are written for this streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamingLoggingConfig {
@@ -8062,24 +7467,9 @@ impl StreamingLoggingConfigSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Bucket"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.bucket
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.enabled
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
+        write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
+        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -8089,11 +7479,7 @@ struct StringDeserializer;
 impl StringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8108,17 +7494,12 @@ impl StringSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p> A complex type that contains <code>Tag</code> key and <code>Tag</code> value.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
@@ -8160,19 +7541,9 @@ impl TagSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Key"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.key
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Key", &obj.key.to_string())?;
         if let Some(ref value) = obj.value {
-            writer.write(xml::writer::XmlEvent::start_element("Value"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Value", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -8183,11 +7554,7 @@ struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8202,12 +7569,7 @@ impl TagKeySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8232,7 +7594,7 @@ impl TagKeyListSerializer {
 }
 
 /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagKeys {
     /// <p> A complex type that contains <code>Tag</code> key elements.</p>
@@ -8298,7 +7660,7 @@ impl TagListSerializer {
 }
 
 /// <p> The request to add tags to a CloudFront resource.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
@@ -8312,11 +7674,7 @@ struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8331,17 +7689,12 @@ impl TagValueSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tags {
@@ -8392,15 +7745,11 @@ struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i> Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p> <p>For more information about updating the distribution configuration, see <a href="https://docs.aws.amazon.com/cloudfront/latest/APIReference/DistributionConfig.html">DistributionConfig</a> in the <i>Amazon CloudFront API Reference</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TrustedSigners {
@@ -8452,27 +7801,17 @@ impl TrustedSignersSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.enabled
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Enabled", &obj.enabled.to_string())?;
         if let Some(ref value) = obj.items {
             &AwsAccountNumberListSerializer::serialize(&mut writer, "Items", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Quantity"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.quantity
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p> The request to remove tags from a CloudFront resource.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
@@ -8482,7 +7821,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>The request to update an origin access identity.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCloudFrontOriginAccessIdentityRequest {
     /// <p>The identity's configuration information.</p>
@@ -8494,7 +7833,7 @@ pub struct UpdateCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
@@ -8523,7 +7862,7 @@ impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to update a distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDistributionRequest {
     /// <p>The distribution's configuration information.</p>
@@ -8535,7 +7874,7 @@ pub struct UpdateDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateDistributionResult {
     /// <p>The distribution's information.</p>
@@ -8561,7 +7900,7 @@ impl UpdateDistributionResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFieldLevelEncryptionConfigRequest {
     /// <p>Request to update a field-level encryption configuration. </p>
@@ -8572,7 +7911,7 @@ pub struct UpdateFieldLevelEncryptionConfigRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateFieldLevelEncryptionConfigResult {
     /// <p>The value of the <code>ETag</code> header that you received when updating the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -8598,7 +7937,7 @@ impl UpdateFieldLevelEncryptionConfigResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFieldLevelEncryptionProfileRequest {
     /// <p>Request to update a field-level encryption profile. </p>
@@ -8609,7 +7948,7 @@ pub struct UpdateFieldLevelEncryptionProfileRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateFieldLevelEncryptionProfileResult {
     /// <p>The result of the field-level encryption profile request. </p>
@@ -8637,7 +7976,7 @@ impl UpdateFieldLevelEncryptionProfileResultDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePublicKeyRequest {
     /// <p>ID of the public key to be updated.</p>
@@ -8648,7 +7987,7 @@ pub struct UpdatePublicKeyRequest {
     pub public_key_config: PublicKeyConfig,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdatePublicKeyResult {
     /// <p>The current version of the update public key result. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -8672,7 +8011,7 @@ impl UpdatePublicKeyResultDeserializer {
     }
 }
 /// <p>The request to update a streaming distribution.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStreamingDistributionRequest {
     /// <p>The streaming distribution's id.</p>
@@ -8684,7 +8023,7 @@ pub struct UpdateStreamingDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UpdateStreamingDistributionResult {
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
@@ -8710,8 +8049,8 @@ impl UpdateStreamingDistributionResultDeserializer {
         })
     }
 }
-/// <p>A complex type that determines the distribution’s SSL/TLS configuration for communicating with viewers.</p> <p>If the distribution doesn’t use <code>Aliases</code> (also known as alternate domain names or CNAMEs)—that is, if the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>—set <code>CloudFrontDefaultCertificate</code> to <code>true</code> and leave all other fields empty.</p> <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), use the fields in this type to specify the following settings:</p> <ul> <li> <p>Which viewers the distribution accepts HTTPS connections from: only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a> (recommended), or all viewers including those that don’t support SNI.</p> <ul> <li> <p>To accept HTTPS connections from only viewers that support SNI, set <code>SSLSupportMethod</code> to <code>sni-only</code>. This is recommended. Most browsers and clients released after 2010 support SNI. </p> </li> <li> <p>To accept HTTPS connections from all viewers, including those that don’t support SNI, set <code>SSLSupportMethod</code> to <code>vip</code>. This is not recommended, and results in additional monthly charges from CloudFront. </p> </li> </ul> </li> <li> <p>The minimum SSL/TLS protocol version that the distribution can use to communicate with viewers. To specify a minimum version, choose a value for <code>MinimumProtocolVersion</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </li> <li> <p>The location of the SSL/TLS certificate, <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html">AWS Certificate Manager (ACM)</a> (recommended) or <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">AWS Identity and Access Management (AWS IAM)</a>. You specify the location by setting a value in one of the following fields (not both):</p> <ul> <li> <p> <code>ACMCertificateArn</code> </p> </li> <li> <p> <code>IAMCertificateId</code> </p> </li> </ul> </li> </ul> <p>All distributions support HTTPS connections from viewers. To require viewers to use HTTPS only, or to redirect them from HTTP to HTTPS, use <code>ViewerProtocolPolicy</code> in the <code>CacheBehavior</code> or <code>DefaultCacheBehavior</code>. To specify how CloudFront should use SSL/TLS to communicate with your custom origin, use <code>CustomOriginConfig</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https.html">Using HTTPS with CloudFront</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-alternate-domain-names.html"> Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+/// <p>A complex type that determines the distribution’s SSL/TLS configuration for communicating with viewers.</p> <p>If the distribution doesn’t use <code>Aliases</code> (also known as alternate domain names or CNAMEs)—that is, if the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>—set <code>CloudFrontDefaultCertificate</code> to <code>true</code> and leave all other fields empty.</p> <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), use the fields in this type to specify the following settings:</p> <ul> <li> <p>Which viewers the distribution accepts HTTPS connections from: only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a> (recommended), or all viewers including those that don’t support SNI.</p> <ul> <li> <p>To accept HTTPS connections from only viewers that support SNI, set <code>SSLSupportMethod</code> to <code>sni-only</code>. This is recommended. Most browsers and clients support SNI. </p> </li> <li> <p>To accept HTTPS connections from all viewers, including those that don’t support SNI, set <code>SSLSupportMethod</code> to <code>vip</code>. This is not recommended, and results in additional monthly charges from CloudFront. </p> </li> </ul> </li> <li> <p>The minimum SSL/TLS protocol version that the distribution can use to communicate with viewers. To specify a minimum version, choose a value for <code>MinimumProtocolVersion</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </li> <li> <p>The location of the SSL/TLS certificate, <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html">AWS Certificate Manager (ACM)</a> (recommended) or <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">AWS Identity and Access Management (AWS IAM)</a>. You specify the location by setting a value in one of the following fields (not both):</p> <ul> <li> <p> <code>ACMCertificateArn</code> </p> </li> <li> <p> <code>IAMCertificateId</code> </p> </li> </ul> </li> </ul> <p>All distributions support HTTPS connections from viewers. To require viewers to use HTTPS only, or to redirect them from HTTP to HTTPS, use <code>ViewerProtocolPolicy</code> in the <code>CacheBehavior</code> or <code>DefaultCacheBehavior</code>. To specify how CloudFront should use SSL/TLS to communicate with your custom origin, use <code>CustomOriginConfig</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https.html">Using HTTPS with CloudFront</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-alternate-domain-names.html"> Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ViewerCertificate {
@@ -8721,9 +8060,9 @@ pub struct ViewerCertificate {
     pub cloud_front_default_certificate: Option<bool>,
     /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">AWS Identity and Access Management (AWS IAM)</a>, provide the ID of the IAM certificate.</p> <p>If you specify an IAM certificate ID, you must also specify values for <code>MinimumProtocolVerison</code> and <code>SSLSupportMethod</code>. </p>
     pub iam_certificate_id: Option<String>,
-    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify the security policy that you want CloudFront to use for HTTPS connections with viewers. The security policy determines two settings:</p> <ul> <li> <p>The minimum SSL/TLS protocol that CloudFront can use to communicate with viewers.</p> </li> <li> <p>The ciphers that CloudFront can use to encrypt the content that it returns to viewers.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers">Supported Protocols and Ciphers Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>On the CloudFront console, this setting is called <b>Security Policy</b>.</p> </note> <p>We recommend that you specify <code>TLSv1.2_2018</code> unless your viewers are using browsers or devices that don’t support TLSv1.2.</p> <p>When you’re using SNI only (you set <code>SSLSupportMethod</code> to <code>sni-only</code>), you must specify <code>TLSv1</code> or higher. </p> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code> (you set <code>CloudFrontDefaultCertificate</code> to <code>true</code>), CloudFront automatically sets the security policy to <code>TLSv1</code> regardless of the value that you set here.</p>
+    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify the security policy that you want CloudFront to use for HTTPS connections with viewers. The security policy determines two settings:</p> <ul> <li> <p>The minimum SSL/TLS protocol that CloudFront can use to communicate with viewers.</p> </li> <li> <p>The ciphers that CloudFront can use to encrypt the content that it returns to viewers.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers">Supported Protocols and Ciphers Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>On the CloudFront console, this setting is called <b>Security Policy</b>.</p> </note> <p>When you’re using SNI only (you set <code>SSLSupportMethod</code> to <code>sni-only</code>), you must specify <code>TLSv1</code> or higher. </p> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code> (you set <code>CloudFrontDefaultCertificate</code> to <code>true</code>), CloudFront automatically sets the security policy to <code>TLSv1</code> regardless of the value that you set here.</p>
     pub minimum_protocol_version: Option<String>,
-    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify which viewers the distribution accepts HTTPS connections from.</p> <ul> <li> <p> <code>sni-only</code> – The distribution accepts HTTPS connections from only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a>. This is recommended. Most browsers and clients released after 2010 support SNI.</p> </li> <li> <p> <code>vip</code> – The distribution accepts HTTPS connections from all viewers including those that don’t support SNI. This is not recommended, and results in additional monthly charges from CloudFront.</p> </li> </ul> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>, don’t set a value for this field.</p>
+    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify which viewers the distribution accepts HTTPS connections from.</p> <ul> <li> <p> <code>sni-only</code> – The distribution accepts HTTPS connections from only viewers that support <a href="https://en.wikipedia.org/wiki/Server_Name_Indication">server name indication (SNI)</a>. This is recommended. Most browsers and clients support SNI.</p> </li> <li> <p> <code>vip</code> – The distribution accepts HTTPS connections from all viewers including those that don’t support SNI. This is not recommended, and results in additional monthly charges from CloudFront.</p> </li> </ul> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>, don’t set a value for this field.</p>
     pub ssl_support_method: Option<String>,
 }
 
@@ -8784,48 +8123,19 @@ impl ViewerCertificateSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.acm_certificate_arn {
-            writer.write(xml::writer::XmlEvent::start_element("ACMCertificateArn"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ACMCertificateArn", &value.to_string())?;
         }
         if let Some(ref value) = obj.cloud_front_default_certificate {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "CloudFrontDefaultCertificate",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "CloudFrontDefaultCertificate", &value.to_string())?;
         }
         if let Some(ref value) = obj.iam_certificate_id {
-            writer.write(xml::writer::XmlEvent::start_element("IAMCertificateId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "IAMCertificateId", &value.to_string())?;
         }
         if let Some(ref value) = obj.minimum_protocol_version {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "MinimumProtocolVersion",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "MinimumProtocolVersion", &value.to_string())?;
         }
         if let Some(ref value) = obj.ssl_support_method {
-            writer.write(xml::writer::XmlEvent::start_element("SSLSupportMethod"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "SSLSupportMethod", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -8836,11 +8146,7 @@ struct ViewerProtocolPolicyDeserializer;
 impl ViewerProtocolPolicyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8855,12 +8161,7 @@ impl ViewerProtocolPolicySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8871,7 +8172,7 @@ pub enum CreateCloudFrontOriginAccessIdentityError {
     CloudFrontOriginAccessIdentityAlreadyExists(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>This operation requires a body. Ensure that the body is present and the <code>Content-Type</code> header is set.</p>
     MissingBody(String),
@@ -8900,7 +8201,7 @@ impl CreateCloudFrontOriginAccessIdentityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8930,7 +8231,7 @@ pub enum CreateDistributionError {
     IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The default root object file name is too big or contains an invalid character.</p>
     InvalidDefaultRootObject(String),
@@ -9029,7 +8330,7 @@ impl CreateDistributionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9098,7 +8399,7 @@ pub enum CreateDistributionWithTagsError {
     IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The default root object file name is too big or contains an invalid character.</p>
     InvalidDefaultRootObject(String),
@@ -9201,7 +8502,7 @@ impl CreateDistributionWithTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9265,7 +8566,7 @@ pub enum CreateFieldLevelEncryptionConfigError {
     FieldLevelEncryptionConfigAlreadyExists(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The specified profile for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionProfile(String),
@@ -9300,7 +8601,7 @@ impl CreateFieldLevelEncryptionConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9329,7 +8630,7 @@ pub enum CreateFieldLevelEncryptionProfileError {
     FieldLevelEncryptionProfileSizeExceeded(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
@@ -9362,7 +8663,7 @@ impl CreateFieldLevelEncryptionProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9391,7 +8692,7 @@ pub enum CreateInvalidationError {
     BatchTooLarge(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>This operation requires a body. Ensure that the body is present and the <code>Content-Type</code> header is set.</p>
     MissingBody(String),
@@ -9457,7 +8758,7 @@ impl CreateInvalidationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9481,7 +8782,7 @@ impl Error for CreateInvalidationError {}
 /// Errors returned by CreatePublicKey
 #[derive(Debug, PartialEq)]
 pub enum CreatePublicKeyError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The specified public key already exists.</p>
     PublicKeyAlreadyExists(String),
@@ -9523,7 +8824,7 @@ impl CreatePublicKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9547,7 +8848,7 @@ pub enum CreateStreamingDistributionError {
     CNAMEAlreadyExists(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
     InvalidOrigin(String),
@@ -9664,7 +8965,7 @@ impl CreateStreamingDistributionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9713,7 +9014,7 @@ pub enum CreateStreamingDistributionWithTagsError {
     CNAMEAlreadyExists(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
     InvalidOrigin(String),
@@ -9756,7 +9057,7 @@ impl CreateStreamingDistributionWithTagsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9818,7 +9119,7 @@ pub enum DeleteCloudFrontOriginAccessIdentityError {
     InvalidIfMatchVersion(String),
     /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -9843,7 +9144,7 @@ impl DeleteCloudFrontOriginAccessIdentityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9881,7 +9182,7 @@ pub enum DeleteDistributionError {
     InvalidIfMatchVersion(String),
     /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -9929,7 +9230,7 @@ impl DeleteDistributionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9957,7 +9258,7 @@ pub enum DeleteFieldLevelEncryptionConfigError {
     InvalidIfMatchVersion(String),
     /// <p>The specified configuration for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionConfig(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -10017,7 +9318,7 @@ impl DeleteFieldLevelEncryptionConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10055,7 +9356,7 @@ pub enum DeleteFieldLevelEncryptionProfileError {
     InvalidIfMatchVersion(String),
     /// <p>The specified profile for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionProfile(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -10111,7 +9412,7 @@ impl DeleteFieldLevelEncryptionProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10147,7 +9448,7 @@ pub enum DeletePublicKeyError {
     InvalidIfMatchVersion(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The specified public key is in use. </p>
     PublicKeyInUse(String),
@@ -10197,7 +9498,7 @@ impl DeletePublicKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10223,7 +9524,7 @@ pub enum DeleteStreamingDistributionError {
     InvalidIfMatchVersion(String),
     /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The specified CloudFront distribution is not disabled. You must disable the distribution before you can delete it.</p>
     StreamingDistributionNotDisabled(String),
@@ -10283,7 +9584,7 @@ impl DeleteStreamingDistributionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10338,7 +9639,7 @@ impl GetCloudFrontOriginAccessIdentityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10386,7 +9687,7 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10442,7 +9743,7 @@ impl GetDistributionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10494,7 +9795,7 @@ impl GetDistributionConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10548,7 +9849,7 @@ impl GetFieldLevelEncryptionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10606,7 +9907,7 @@ impl GetFieldLevelEncryptionConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10664,7 +9965,7 @@ impl GetFieldLevelEncryptionProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10710,7 +10011,7 @@ impl GetFieldLevelEncryptionProfileConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10773,7 +10074,7 @@ impl GetInvalidationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10826,7 +10127,7 @@ impl GetPublicKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10878,7 +10179,7 @@ impl GetPublicKeyConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10932,7 +10233,7 @@ impl GetStreamingDistributionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10990,7 +10291,7 @@ impl GetStreamingDistributionConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11009,7 +10310,7 @@ impl Error for GetStreamingDistributionConfigError {}
 /// Errors returned by ListCloudFrontOriginAccessIdentities
 #[derive(Debug, PartialEq)]
 pub enum ListCloudFrontOriginAccessIdentitiesError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11041,7 +10342,7 @@ impl ListCloudFrontOriginAccessIdentitiesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11059,7 +10360,7 @@ impl Error for ListCloudFrontOriginAccessIdentitiesError {}
 /// Errors returned by ListDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11087,7 +10388,7 @@ impl ListDistributionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11103,7 +10404,7 @@ impl Error for ListDistributionsError {}
 /// Errors returned by ListDistributionsByWebACLId
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsByWebACLIdError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>A web ACL ID specified is not valid. To specify a web ACL created using the latest version of AWS WAF, use the ACL ARN, for example <code>arn:aws:wafv2:us-east-1:123456789012:global/webacl/ExampleWebACL/473e64fd-f30b-4765-81a0-62ad96dd167a</code>. To specify a web ACL created using AWS WAF Classic, use the ACL ID, for example <code>473e64fd-f30b-4765-81a0-62ad96dd167a</code>.</p>
     InvalidWebACLId(String),
@@ -11140,7 +10441,7 @@ impl ListDistributionsByWebACLIdError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11157,7 +10458,7 @@ impl Error for ListDistributionsByWebACLIdError {}
 /// Errors returned by ListFieldLevelEncryptionConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListFieldLevelEncryptionConfigsError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11189,7 +10490,7 @@ impl ListFieldLevelEncryptionConfigsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11207,7 +10508,7 @@ impl Error for ListFieldLevelEncryptionConfigsError {}
 /// Errors returned by ListFieldLevelEncryptionProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListFieldLevelEncryptionProfilesError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11239,7 +10540,7 @@ impl ListFieldLevelEncryptionProfilesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11259,7 +10560,7 @@ impl Error for ListFieldLevelEncryptionProfilesError {}
 pub enum ListInvalidationsError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
@@ -11299,7 +10600,7 @@ impl ListInvalidationsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11317,7 +10618,7 @@ impl Error for ListInvalidationsError {}
 /// Errors returned by ListPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListPublicKeysError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11345,7 +10646,7 @@ impl ListPublicKeysError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11361,7 +10662,7 @@ impl Error for ListPublicKeysError {}
 /// Errors returned by ListStreamingDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListStreamingDistributionsError {
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
 }
 
@@ -11391,7 +10692,7 @@ impl ListStreamingDistributionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11409,7 +10710,7 @@ impl Error for ListStreamingDistributionsError {}
 pub enum ListTagsForResourceError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The tagging specified is not valid.</p>
     InvalidTagging(String),
@@ -11456,7 +10757,7 @@ impl ListTagsForResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11477,7 +10778,7 @@ impl Error for ListTagsForResourceError {}
 pub enum TagResourceError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The tagging specified is not valid.</p>
     InvalidTagging(String),
@@ -11524,7 +10825,7 @@ impl TagResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11545,7 +10846,7 @@ impl Error for TagResourceError {}
 pub enum UntagResourceError {
     /// <p>Access denied.</p>
     AccessDenied(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The tagging specified is not valid.</p>
     InvalidTagging(String),
@@ -11592,7 +10893,7 @@ impl UntagResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11617,7 +10918,7 @@ pub enum UpdateCloudFrontOriginAccessIdentityError {
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
@@ -11625,7 +10926,7 @@ pub enum UpdateCloudFrontOriginAccessIdentityError {
     MissingBody(String),
     /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -11650,7 +10951,7 @@ impl UpdateCloudFrontOriginAccessIdentityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11699,7 +11000,7 @@ pub enum UpdateDistributionError {
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The default root object file name is too big or contains an invalid character.</p>
     InvalidDefaultRootObject(String),
@@ -11747,7 +11048,7 @@ pub enum UpdateDistributionError {
     NoSuchFieldLevelEncryptionConfig(String),
     /// <p>No origin exists with the specified <code>Origin Id</code>. </p>
     NoSuchOrigin(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>You cannot create more cache behaviors for the distribution.</p>
     TooManyCacheBehaviors(String),
@@ -11798,7 +11099,7 @@ impl UpdateDistributionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11863,7 +11164,7 @@ pub enum UpdateFieldLevelEncryptionConfigError {
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
@@ -11871,7 +11172,7 @@ pub enum UpdateFieldLevelEncryptionConfigError {
     NoSuchFieldLevelEncryptionConfig(String),
     /// <p>The specified profile for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionProfile(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>No profile specified for the field-level encryption query argument.</p>
     QueryArgProfileEmpty(String),
@@ -11902,7 +11203,7 @@ impl UpdateFieldLevelEncryptionConfigError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -11938,7 +11239,7 @@ pub enum UpdateFieldLevelEncryptionProfileError {
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
@@ -11946,7 +11247,7 @@ pub enum UpdateFieldLevelEncryptionProfileError {
     NoSuchFieldLevelEncryptionProfile(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The maximum number of encryption entities for field-level encryption have been created.</p>
     TooManyFieldLevelEncryptionEncryptionEntities(String),
@@ -11975,7 +11276,7 @@ impl UpdateFieldLevelEncryptionProfileError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12008,13 +11309,13 @@ pub enum UpdatePublicKeyError {
     CannotChangeImmutablePublicKeyFields(String),
     /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
     IllegalUpdate(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -12074,7 +11375,7 @@ impl UpdatePublicKeyError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12106,7 +11407,7 @@ pub enum UpdateStreamingDistributionError {
     IllegalUpdate(String),
     /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> don't match.</p>
     InconsistentQuantities(String),
-    /// <p>The argument is invalid.</p>
+    /// <p>An argument is invalid.</p>
     InvalidArgument(String),
     /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
@@ -12116,7 +11417,7 @@ pub enum UpdateStreamingDistributionError {
     MissingBody(String),
     /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
-    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>Your request contains more CNAMEs than are allowed per distribution.</p>
     TooManyStreamingDistributionCNAMEs(String),
@@ -12230,7 +11531,7 @@ impl UpdateStreamingDistributionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -12653,42 +11954,23 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateCloudFrontOriginAccessIdentityError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                CreateCloudFrontOriginAccessIdentityError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateCloudFrontOriginAccessIdentityResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
@@ -12711,38 +11993,17 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateDistributionError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateDistributionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateDistributionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                CreateDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
@@ -12769,40 +12030,17 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateDistributionWithTagsError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateDistributionWithTagsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateDistributionWithTagsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateDistributionWithTagsResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateDistributionWithTagsResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
@@ -12828,42 +12066,20 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateFieldLevelEncryptionConfigError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                CreateFieldLevelEncryptionConfigError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateFieldLevelEncryptionConfigResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateFieldLevelEncryptionConfigResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateFieldLevelEncryptionConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
@@ -12889,42 +12105,20 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateFieldLevelEncryptionProfileError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                CreateFieldLevelEncryptionProfileError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateFieldLevelEncryptionProfileResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateFieldLevelEncryptionProfileResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateFieldLevelEncryptionProfileResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
@@ -12950,34 +12144,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateInvalidationError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateInvalidationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateInvalidationResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                CreateInvalidationResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateInvalidationResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
@@ -13000,37 +12176,17 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreatePublicKeyError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreatePublicKeyError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreatePublicKeyResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreatePublicKeyResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreatePublicKeyResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
@@ -13054,40 +12210,17 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateStreamingDistributionError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateStreamingDistributionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateStreamingDistributionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateStreamingDistributionResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateStreamingDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
@@ -13116,42 +12249,23 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateStreamingDistributionWithTagsError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                CreateStreamingDistributionWithTagsError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateStreamingDistributionWithTagsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CreateStreamingDistributionWithTagsResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateStreamingDistributionWithTagsResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
@@ -13168,21 +12282,14 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteCloudFrontOriginAccessIdentityError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                DeleteCloudFrontOriginAccessIdentityError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13198,19 +12305,11 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteDistributionError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteDistributionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13226,21 +12325,14 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteFieldLevelEncryptionConfigError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                DeleteFieldLevelEncryptionConfigError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13259,21 +12351,14 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteFieldLevelEncryptionProfileError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                DeleteFieldLevelEncryptionProfileError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13289,19 +12374,11 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeletePublicKeyError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeletePublicKeyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13317,19 +12394,11 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteStreamingDistributionError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteStreamingDistributionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -13352,38 +12421,19 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetCloudFrontOriginAccessIdentityError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                GetCloudFrontOriginAccessIdentityError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetCloudFrontOriginAccessIdentityResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetCloudFrontOriginAccessIdentityResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13404,38 +12454,22 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetCloudFrontOriginAccessIdentityConfigError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                GetCloudFrontOriginAccessIdentityConfigError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetCloudFrontOriginAccessIdentityConfigResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetCloudFrontOriginAccessIdentityConfigResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13450,33 +12484,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetDistributionError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetDistributionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetDistributionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13491,34 +12508,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetDistributionConfigError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetDistributionConfigError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetDistributionConfigResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetDistributionConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetDistributionConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13533,36 +12532,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetFieldLevelEncryptionError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetFieldLevelEncryptionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetFieldLevelEncryptionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetFieldLevelEncryptionResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetFieldLevelEncryptionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13581,36 +12560,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetFieldLevelEncryptionConfigError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetFieldLevelEncryptionConfigError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetFieldLevelEncryptionConfigResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetFieldLevelEncryptionConfigResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetFieldLevelEncryptionConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13631,36 +12590,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetFieldLevelEncryptionProfileError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetFieldLevelEncryptionProfileError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetFieldLevelEncryptionProfileResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetFieldLevelEncryptionProfileResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetFieldLevelEncryptionProfileResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13681,38 +12620,22 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetFieldLevelEncryptionProfileConfigError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                GetFieldLevelEncryptionProfileConfigError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetFieldLevelEncryptionProfileConfigResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetFieldLevelEncryptionProfileConfigResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetFieldLevelEncryptionProfileConfigResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13731,29 +12654,15 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetInvalidationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetInvalidationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetInvalidationResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetInvalidationResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetInvalidationResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -13769,33 +12678,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetPublicKeyError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetPublicKeyError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetPublicKeyResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetPublicKeyResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetPublicKeyResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13810,34 +12702,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetPublicKeyConfigError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetPublicKeyConfigError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetPublicKeyConfigResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetPublicKeyConfigResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetPublicKeyConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13852,36 +12726,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetStreamingDistributionError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetStreamingDistributionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetStreamingDistributionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetStreamingDistributionResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetStreamingDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13902,36 +12756,16 @@ impl CloudFront for CloudFrontClient {
         let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetStreamingDistributionConfigError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetStreamingDistributionConfigError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetStreamingDistributionConfigResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetStreamingDistributionConfigResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetStreamingDistributionConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -13958,34 +12792,21 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListCloudFrontOriginAccessIdentitiesError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                ListCloudFrontOriginAccessIdentitiesError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListCloudFrontOriginAccessIdentitiesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListCloudFrontOriginAccessIdentitiesResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14010,30 +12831,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListDistributionsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListDistributionsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListDistributionsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListDistributionsResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListDistributionsResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14062,32 +12868,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListDistributionsByWebACLIdError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListDistributionsByWebACLIdError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListDistributionsByWebACLIdResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListDistributionsByWebACLIdResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListDistributionsByWebACLIdResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14115,34 +12904,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListFieldLevelEncryptionConfigsError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, ListFieldLevelEncryptionConfigsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListFieldLevelEncryptionConfigsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListFieldLevelEncryptionConfigsResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListFieldLevelEncryptionConfigsResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14170,34 +12940,18 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListFieldLevelEncryptionProfilesError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                ListFieldLevelEncryptionProfilesError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListFieldLevelEncryptionProfilesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListFieldLevelEncryptionProfilesResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListFieldLevelEncryptionProfilesResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14225,30 +12979,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListInvalidationsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListInvalidationsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListInvalidationsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListInvalidationsResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListInvalidationsResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14273,29 +13012,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListPublicKeysError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListPublicKeysError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListPublicKeysResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListPublicKeysResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListPublicKeysResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14321,32 +13046,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListStreamingDistributionsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListStreamingDistributionsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListStreamingDistributionsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListStreamingDistributionsResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListStreamingDistributionsResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14366,30 +13074,15 @@ impl CloudFront for CloudFrontClient {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTagsForResourceError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListTagsForResourceResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListTagsForResourceResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListTagsForResourceResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -14413,14 +13106,8 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(TagResourceError::from_response(response));
-        }
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -14445,14 +13132,8 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UntagResourceError::from_response(response));
-        }
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -14474,9 +13155,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut writer = EventWriter::new(Vec::new());
         CloudFrontOriginAccessIdentityConfigSerializer::serialize(
@@ -14487,38 +13166,22 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateCloudFrontOriginAccessIdentityError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                UpdateCloudFrontOriginAccessIdentityError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateCloudFrontOriginAccessIdentityResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateCloudFrontOriginAccessIdentityResultDeserializer::deserialize(
+                actual_tag_name,
+                stack,
+            )
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -14532,9 +13195,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut writer = EventWriter::new(Vec::new());
         DistributionConfigSerializer::serialize(
@@ -14545,34 +13206,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateDistributionError::from_response(response));
-        }
+            .sign_and_dispatch(request, UpdateDistributionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateDistributionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                UpdateDistributionResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -14592,9 +13235,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut writer = EventWriter::new(Vec::new());
         FieldLevelEncryptionConfigSerializer::serialize(
@@ -14605,38 +13246,19 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateFieldLevelEncryptionConfigError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                UpdateFieldLevelEncryptionConfigError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateFieldLevelEncryptionConfigResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UpdateFieldLevelEncryptionConfigResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateFieldLevelEncryptionConfigResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -14656,9 +13278,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut writer = EventWriter::new(Vec::new());
         FieldLevelEncryptionProfileConfigSerializer::serialize(
@@ -14669,38 +13289,19 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateFieldLevelEncryptionProfileError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                UpdateFieldLevelEncryptionProfileError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateFieldLevelEncryptionProfileResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UpdateFieldLevelEncryptionProfileResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateFieldLevelEncryptionProfileResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -14714,9 +13315,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut writer = EventWriter::new(Vec::new());
         PublicKeyConfigSerializer::serialize(
@@ -14727,33 +13326,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdatePublicKeyError::from_response(response));
-        }
+            .sign_and_dispatch(request, UpdatePublicKeyError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdatePublicKeyResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UpdatePublicKeyResultDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdatePublicKeyResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 
@@ -14771,9 +13353,7 @@ impl CloudFront for CloudFrontClient {
 
         let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
 
         let mut writer = EventWriter::new(Vec::new());
         StreamingDistributionConfigSerializer::serialize(
@@ -14784,36 +13364,16 @@ impl CloudFront for CloudFrontClient {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateStreamingDistributionError::from_response(response));
-        }
+            .sign_and_dispatch(request, UpdateStreamingDistributionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UpdateStreamingDistributionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UpdateStreamingDistributionResultDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateStreamingDistributionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
         Ok(result)
     }
 }

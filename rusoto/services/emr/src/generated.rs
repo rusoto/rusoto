@@ -20,11 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl EmrClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "elasticmapreduce", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddInstanceFleetInput {
     /// <p>The unique identifier of the cluster.</p>
@@ -35,7 +62,7 @@ pub struct AddInstanceFleetInput {
     pub instance_fleet: InstanceFleetConfig,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddInstanceFleetOutput {
     /// <p>The Amazon Resource Name of the cluster.</p>
@@ -53,7 +80,7 @@ pub struct AddInstanceFleetOutput {
 }
 
 /// <p>Input to an AddInstanceGroups call.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddInstanceGroupsInput {
     /// <p>Instance groups to add.</p>
@@ -65,7 +92,7 @@ pub struct AddInstanceGroupsInput {
 }
 
 /// <p>Output from an AddInstanceGroups call.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddInstanceGroupsOutput {
     /// <p>The Amazon Resource Name of the cluster.</p>
@@ -83,7 +110,7 @@ pub struct AddInstanceGroupsOutput {
 }
 
 /// <p> The input argument to the <a>AddJobFlowSteps</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddJobFlowStepsInput {
     /// <p>A string that uniquely identifies the job flow. This identifier is returned by <a>RunJobFlow</a> and can also be obtained from <a>ListClusters</a>. </p>
@@ -95,7 +122,7 @@ pub struct AddJobFlowStepsInput {
 }
 
 /// <p> The output for the <a>AddJobFlowSteps</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddJobFlowStepsOutput {
     /// <p>The identifiers of the list of steps added to the job flow.</p>
@@ -105,7 +132,7 @@ pub struct AddJobFlowStepsOutput {
 }
 
 /// <p>This input identifies a cluster and a list of tags to attach.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsInput {
     /// <p>The Amazon EMR resource identifier to which tags will be added. This value must be a cluster identifier.</p>
@@ -117,12 +144,12 @@ pub struct AddTagsInput {
 }
 
 /// <p>This output indicates the result of adding tags to a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsOutput {}
 
 /// <p>With Amazon EMR release version 4.0 and later, the only accepted parameter is the application name. To pass arguments to applications, you use configuration classifications specified using configuration JSON objects. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html">Configuring Applications</a>.</p> <p>With earlier Amazon EMR releases, the application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Application {
     /// <p>This option is for advanced users only. This is meta information about third-party applications that third-party vendors use for testing purposes.</p>
     #[serde(rename = "AdditionalInfo")]
@@ -143,7 +170,7 @@ pub struct Application {
 }
 
 /// <p>An automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. An automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric. See <a>PutAutoScalingPolicy</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AutoScalingPolicy {
     /// <p>The upper and lower EC2 instance limits for an automatic scaling policy. Automatic scaling activity will not cause an instance group to grow above or below these limits.</p>
@@ -155,7 +182,7 @@ pub struct AutoScalingPolicy {
 }
 
 /// <p>An automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric. See <a>PutAutoScalingPolicy</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingPolicyDescription {
     /// <p>The upper and lower EC2 instance limits for an automatic scaling policy. Automatic scaling activity will not cause an instance group to grow above or below these limits.</p>
@@ -173,7 +200,7 @@ pub struct AutoScalingPolicyDescription {
 }
 
 /// <p>The reason for an <a>AutoScalingPolicyStatus</a> change.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingPolicyStateChangeReason {
     /// <p>The code indicating the reason for the change in status.<code>USER_REQUEST</code> indicates that the scaling policy status was changed by a user. <code>PROVISION_FAILURE</code> indicates that the status change was because the policy failed to provision. <code>CLEANUP_FAILURE</code> indicates an error.</p>
@@ -187,7 +214,7 @@ pub struct AutoScalingPolicyStateChangeReason {
 }
 
 /// <p>The status of an automatic scaling policy. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingPolicyStatus {
     /// <p>Indicates the status of the automatic scaling policy.</p>
@@ -201,7 +228,7 @@ pub struct AutoScalingPolicyStatus {
 }
 
 /// <p>A configuration for Amazon EMR block public access. When <code>BlockPublicSecurityGroupRules</code> is set to <code>true</code>, Amazon EMR prevents cluster creation if one of the cluster's security groups has a rule that allows inbound traffic from 0.0.0.0/0 or ::/0 on a port, unless the port is specified as an exception using <code>PermittedPublicSecurityGroupRuleRanges</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BlockPublicAccessConfiguration {
     /// <p>Indicates whether EMR block public access is enabled (<code>true</code>) or disabled (<code>false</code>). By default, the value is <code>false</code> for accounts that have created EMR clusters before July 2019. For accounts created after this, the default is <code>true</code>.</p>
     #[serde(rename = "BlockPublicSecurityGroupRules")]
@@ -213,7 +240,7 @@ pub struct BlockPublicAccessConfiguration {
 }
 
 /// <p>Properties that describe the AWS principal that created the <code>BlockPublicAccessConfiguration</code> using the <code>PutBlockPublicAccessConfiguration</code> action as well as the date and time that the configuration was created. Each time a configuration for block public access is updated, Amazon EMR updates this metadata.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BlockPublicAccessConfigurationMetadata {
     /// <p>The Amazon Resource Name that created or last modified the configuration.</p>
@@ -225,7 +252,7 @@ pub struct BlockPublicAccessConfigurationMetadata {
 }
 
 /// <p>Configuration of a bootstrap action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BootstrapActionConfig {
     /// <p>The name of the bootstrap action.</p>
     #[serde(rename = "Name")]
@@ -236,7 +263,7 @@ pub struct BootstrapActionConfig {
 }
 
 /// <p>Reports the configuration of a bootstrap action in a cluster (job flow).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BootstrapActionDetail {
     /// <p>A description of the bootstrap action.</p>
@@ -246,7 +273,7 @@ pub struct BootstrapActionDetail {
 }
 
 /// <p>Specification of the status of a CancelSteps request. Available only in Amazon EMR version 4.8.0 and later, excluding version 5.0.0.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelStepsInfo {
     /// <p>The reason for the failure if the CancelSteps request fails.</p>
@@ -264,7 +291,7 @@ pub struct CancelStepsInfo {
 }
 
 /// <p>The input argument to the <a>CancelSteps</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelStepsInput {
     /// <p>The <code>ClusterID</code> for which specified steps will be canceled. Use <a>RunJobFlow</a> and <a>ListClusters</a> to get ClusterIDs. </p>
@@ -280,7 +307,7 @@ pub struct CancelStepsInput {
 }
 
 /// <p> The output for the <a>CancelSteps</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelStepsOutput {
     /// <p>A list of <a>CancelStepsInfo</a>, which shows the status of specified cancel requests for each <code>StepID</code> specified.</p>
@@ -290,7 +317,7 @@ pub struct CancelStepsOutput {
 }
 
 /// <p>The definition of a CloudWatch metric alarm, which determines when an automatic scaling activity is triggered. When the defined alarm conditions are satisfied, scaling activity begins.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchAlarmDefinition {
     /// <p>Determines how the metric specified by <code>MetricName</code> is compared to the value specified by <code>Threshold</code>.</p>
     #[serde(rename = "ComparisonOperator")]
@@ -327,7 +354,7 @@ pub struct CloudWatchAlarmDefinition {
 }
 
 /// <p>The detailed description of the cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Cluster {
     /// <p>The applications installed on this cluster.</p>
@@ -374,6 +401,10 @@ pub struct Cluster {
     #[serde(rename = "KerberosAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kerberos_attributes: Option<KerberosAttributes>,
+    /// <p> The AWS KMS customer master key (CMK) used for encrypting log files. This attribute is only available with EMR version 5.30.0 and later, excluding EMR 6.0.0. </p>
+    #[serde(rename = "LogEncryptionKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_encryption_kms_key_id: Option<String>,
     /// <p>The path to the Amazon S3 location where logs for this cluster are stored.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -445,7 +476,7 @@ pub struct Cluster {
 }
 
 /// <p>The reason that the cluster changed to its current state.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClusterStateChangeReason {
     /// <p>The programmatic code for the state change reason.</p>
@@ -459,7 +490,7 @@ pub struct ClusterStateChangeReason {
 }
 
 /// <p>The detailed status of the cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClusterStatus {
     /// <p>The current state of the cluster.</p>
@@ -477,7 +508,7 @@ pub struct ClusterStatus {
 }
 
 /// <p>The summary description of the cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClusterSummary {
     /// <p>The Amazon Resource Name of the cluster.</p>
@@ -507,7 +538,7 @@ pub struct ClusterSummary {
 }
 
 /// <p>Represents the timeline of the cluster's lifecycle.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClusterTimeline {
     /// <p>The creation date and time of the cluster.</p>
@@ -525,7 +556,7 @@ pub struct ClusterTimeline {
 }
 
 /// <p>An entity describing an executable that runs on a cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Command {
     /// <p>Arguments for Amazon EMR to pass to the command for execution.</p>
@@ -543,12 +574,16 @@ pub struct Command {
 }
 
 /// <p> The EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster can not be above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ComputeLimits {
     /// <p> The upper boundary of EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. Managed scaling activities are not allowed beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
     #[serde(rename = "MaximumCapacityUnits")]
     pub maximum_capacity_units: i64,
-    /// <p> The upper boundary of on-demand EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. The on-demand units are not allowed to scale beyond this boundary. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
+    /// <p> The upper boundary of EC2 units for core node type in a cluster. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. The core units are not allowed to scale beyond this boundary. The parameter is used to split capacity allocation between core and task nodes. </p>
+    #[serde(rename = "MaximumCoreCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_core_capacity_units: Option<i64>,
+    /// <p> The upper boundary of On-Demand EC2 units. It is measured through VCPU cores or instances for instance groups and measured through units for instance fleets. The On-Demand units are not allowed to scale beyond this boundary. The parameter is used to split capacity allocation between On-Demand and Spot instances. </p>
     #[serde(rename = "MaximumOnDemandCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_on_demand_capacity_units: Option<i64>,
@@ -561,7 +596,7 @@ pub struct ComputeLimits {
 }
 
 /// <p><note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>An optional configuration specification to be used when provisioning cluster instances, which can include configurations for applications and software bundled with Amazon EMR. A configuration consists of a classification, properties, and optional nested configurations. A classification refers to an application-specific configuration file. Properties are the settings you want to change in that file. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html">Configuring Applications</a>.</p></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Configuration {
     /// <p>The classification within a configuration.</p>
     #[serde(rename = "Classification")]
@@ -577,7 +612,7 @@ pub struct Configuration {
     pub properties: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSecurityConfigurationInput {
     /// <p>The name of the security configuration.</p>
@@ -588,7 +623,7 @@ pub struct CreateSecurityConfigurationInput {
     pub security_configuration: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSecurityConfigurationOutput {
     /// <p>The date and time the security configuration was created.</p>
@@ -599,7 +634,7 @@ pub struct CreateSecurityConfigurationOutput {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSecurityConfigurationInput {
     /// <p>The name of the security configuration.</p>
@@ -607,12 +642,12 @@ pub struct DeleteSecurityConfigurationInput {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSecurityConfigurationOutput {}
 
 /// <p>This input determines which cluster to describe.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterInput {
     /// <p>The identifier of the cluster to describe.</p>
@@ -621,7 +656,7 @@ pub struct DescribeClusterInput {
 }
 
 /// <p>This output contains the description of the cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClusterOutput {
     /// <p>This output contains the details for the requested cluster.</p>
@@ -631,7 +666,7 @@ pub struct DescribeClusterOutput {
 }
 
 /// <p> The input for the <a>DescribeJobFlows</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobFlowsInput {
     /// <p>Return only job flows created after this date and time.</p>
@@ -653,7 +688,7 @@ pub struct DescribeJobFlowsInput {
 }
 
 /// <p> The output for the <a>DescribeJobFlows</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobFlowsOutput {
     /// <p>A list of job flows matching the parameters supplied.</p>
@@ -662,7 +697,7 @@ pub struct DescribeJobFlowsOutput {
     pub job_flows: Option<Vec<JobFlowDetail>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSecurityConfigurationInput {
     /// <p>The name of the security configuration.</p>
@@ -670,7 +705,7 @@ pub struct DescribeSecurityConfigurationInput {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSecurityConfigurationOutput {
     /// <p>The date and time the security configuration was created</p>
@@ -688,7 +723,7 @@ pub struct DescribeSecurityConfigurationOutput {
 }
 
 /// <p>This input determines which step to describe.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeStepInput {
     /// <p>The identifier of the cluster with steps to describe.</p>
@@ -700,7 +735,7 @@ pub struct DescribeStepInput {
 }
 
 /// <p>This output contains the description of the cluster step.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStepOutput {
     /// <p>The step details for the requested step identifier.</p>
@@ -710,7 +745,7 @@ pub struct DescribeStepOutput {
 }
 
 /// <p>Configuration of requested EBS block device associated with the instance group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EbsBlockDevice {
     /// <p>The device name that is exposed to the instance, such as /dev/sdh.</p>
@@ -724,7 +759,7 @@ pub struct EbsBlockDevice {
 }
 
 /// <p>Configuration of requested EBS block device associated with the instance group with count of volumes that will be associated to every instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EbsBlockDeviceConfig {
     /// <p>EBS volume specifications such as volume type, IOPS, and size (GiB) that will be requested for the EBS volume attached to an EC2 instance in the cluster.</p>
@@ -737,7 +772,7 @@ pub struct EbsBlockDeviceConfig {
 }
 
 /// <p>The Amazon EBS configuration of a cluster instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EbsConfiguration {
     /// <p>An array of Amazon EBS volume specifications attached to a cluster instance.</p>
@@ -751,7 +786,7 @@ pub struct EbsConfiguration {
 }
 
 /// <p>EBS block device that's attached to an EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EbsVolume {
     /// <p>The device name that is exposed to the instance, such as /dev/sdh.</p>
@@ -765,7 +800,7 @@ pub struct EbsVolume {
 }
 
 /// <p>Provides information about the EC2 instances in a cluster grouped by category. For example, key name, subnet ID, IAM instance profile, and so on.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Ec2InstanceAttributes {
     /// <p>A list of additional Amazon EC2 security group IDs for the master node.</p>
@@ -815,7 +850,7 @@ pub struct Ec2InstanceAttributes {
 }
 
 /// <p>The details of the step failure. The service attempts to detect the root cause for many common failures.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailureDetails {
     /// <p>The path to the log file where the step failure root cause was originally recorded.</p>
@@ -832,11 +867,11 @@ pub struct FailureDetails {
     pub reason: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlockPublicAccessConfigurationInput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlockPublicAccessConfigurationOutput {
     /// <p><p>A configuration for Amazon EMR block public access. The configuration applies to all clusters created in your account for the current Region. The configuration specifies whether block public access is enabled. If block public access is enabled, security groups associated with the cluster cannot have rules that allow inbound traffic from 0.0.0.0/0 or ::/0 on a port, unless the port is specified as an exception using <code>PermittedPublicSecurityGroupRuleRanges</code> in the <code>BlockPublicAccessConfiguration</code>. By default, Port 22 (SSH) is an exception, and public access is allowed on this port. You can change this by updating the block public access configuration to remove the exception.</p> <note> <p>For accounts that created clusters in a Region before November 25, 2019, block public access is disabled by default in that Region. To use this feature, you must manually enable and configure it. For accounts that did not create an EMR cluster in a Region before this date, block public access is enabled by default in that Region.</p> </note></p>
@@ -847,7 +882,7 @@ pub struct GetBlockPublicAccessConfigurationOutput {
     pub block_public_access_configuration_metadata: BlockPublicAccessConfigurationMetadata,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetManagedScalingPolicyInput {
     /// <p> Specifies the ID of the cluster for which the managed scaling policy will be fetched. </p>
@@ -855,7 +890,7 @@ pub struct GetManagedScalingPolicyInput {
     pub cluster_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetManagedScalingPolicyOutput {
     /// <p> Specifies the managed scaling policy that is attached to an Amazon EMR cluster. </p>
@@ -865,7 +900,7 @@ pub struct GetManagedScalingPolicyOutput {
 }
 
 /// <p>A job flow step consisting of a JAR file whose main function will be executed. The main function submits a job for Hadoop to execute and waits for the job to finish or fail.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HadoopJarStepConfig {
     /// <p>A list of command line arguments passed to the JAR file's main function when executed.</p>
     #[serde(rename = "Args")]
@@ -885,7 +920,7 @@ pub struct HadoopJarStepConfig {
 }
 
 /// <p>A cluster step consisting of a JAR file whose main function will be executed. The main function submits a job for Hadoop to execute and waits for the job to finish or fail.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HadoopStepConfig {
     /// <p>The list of command line arguments to pass to the JAR file's main function for execution.</p>
@@ -907,7 +942,7 @@ pub struct HadoopStepConfig {
 }
 
 /// <p>Represents an EC2 instance provisioned as part of cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Instance {
     /// <p>The list of EBS volumes that are attached to this instance.</p>
@@ -961,7 +996,7 @@ pub struct Instance {
 }
 
 /// <p><p>Describes an instance fleet, which is a group of EC2 instances that host a particular node type (master, core, or task) in an Amazon EMR cluster. Instance fleets can consist of a mix of instance types and On-Demand and Spot instances, which are provisioned to meet a defined target capacity. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceFleet {
     /// <p>The unique identifier of the instance fleet.</p>
@@ -1007,7 +1042,7 @@ pub struct InstanceFleet {
 }
 
 /// <p><p>The configuration that defines an instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceFleetConfig {
     /// <p>The node type that the instance fleet hosts. Valid values are MASTER,CORE,and TASK.</p>
@@ -1036,7 +1071,7 @@ pub struct InstanceFleetConfig {
 }
 
 /// <p><p>Configuration parameters for an instance fleet modification request.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceFleetModifyConfig {
     /// <p>A unique identifier for the instance fleet.</p>
@@ -1052,16 +1087,21 @@ pub struct InstanceFleetModifyConfig {
     pub target_spot_capacity: Option<i64>,
 }
 
-/// <p><p>The launch specification for Spot instances in the fleet, which determines the defined duration and provisioning timeout behavior.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+/// <p><p>The launch specification for Spot instances in the fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand and Spot instance allocation strategies are available in Amazon EMR version 5.12.1 and later.</p> </note></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InstanceFleetProvisioningSpecifications {
-    /// <p>The launch specification for Spot instances in the fleet, which determines the defined duration and provisioning timeout behavior.</p>
+    /// <p><p> The launch specification for On-Demand instances in the instance fleet, which determines the allocation strategy. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand instances allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
+    #[serde(rename = "OnDemandSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_demand_specification: Option<OnDemandProvisioningSpecification>,
+    /// <p>The launch specification for Spot instances in the fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p>
     #[serde(rename = "SpotSpecification")]
-    pub spot_specification: SpotProvisioningSpecification,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spot_specification: Option<SpotProvisioningSpecification>,
 }
 
 /// <p><p>Provides status change reason details for the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceFleetStateChangeReason {
     /// <p>A code corresponding to the reason the state change occurred.</p>
@@ -1075,7 +1115,7 @@ pub struct InstanceFleetStateChangeReason {
 }
 
 /// <p><p>The status of the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceFleetStatus {
     /// <p><p>A code representing the instance fleet status.</p> <ul> <li> <p> <code>PROVISIONING</code>—The instance fleet is provisioning EC2 resources and is not yet ready to run jobs.</p> </li> <li> <p> <code>BOOTSTRAPPING</code>—EC2 instances and other resources have been provisioned and the bootstrap actions specified for the instances are underway.</p> </li> <li> <p> <code>RUNNING</code>—EC2 instances and other resources are running. They are either executing jobs or waiting to execute jobs.</p> </li> <li> <p> <code>RESIZING</code>—A resize operation is underway. EC2 instances are either being added or removed.</p> </li> <li> <p> <code>SUSPENDED</code>—A resize operation could not complete. Existing EC2 instances are running, but instances can&#39;t be added or removed.</p> </li> <li> <p> <code>TERMINATING</code>—The instance fleet is terminating EC2 instances.</p> </li> <li> <p> <code>TERMINATED</code>—The instance fleet is no longer active, and all EC2 instances have been terminated.</p> </li> </ul></p>
@@ -1093,7 +1133,7 @@ pub struct InstanceFleetStatus {
 }
 
 /// <p><p>Provides historical timestamps for the instance fleet, including the time of creation, the time it became ready to run jobs, and the time of termination.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceFleetTimeline {
     /// <p>The time and date the instance fleet was created.</p>
@@ -1111,7 +1151,7 @@ pub struct InstanceFleetTimeline {
 }
 
 /// <p>This entity represents an instance group, which is a group of instances that have common purpose. For example, CORE instance group is used for HDFS.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceGroup {
     /// <p>An automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric. See PutAutoScalingPolicy.</p>
@@ -1185,7 +1225,7 @@ pub struct InstanceGroup {
 }
 
 /// <p>Configuration defining a new instance group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceGroupConfig {
     /// <p>An automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric. See <a>PutAutoScalingPolicy</a>.</p>
@@ -1224,7 +1264,7 @@ pub struct InstanceGroupConfig {
 }
 
 /// <p>Detailed information about an instance group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceGroupDetail {
     /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%.</p>
@@ -1279,7 +1319,7 @@ pub struct InstanceGroupDetail {
 }
 
 /// <p>Modify the size or configurations of an instance group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceGroupModifyConfig {
     /// <p>A list of new or modified configurations to apply for an instance group.</p>
@@ -1304,7 +1344,7 @@ pub struct InstanceGroupModifyConfig {
 }
 
 /// <p>The status change reason details for the instance group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceGroupStateChangeReason {
     /// <p>The programmable code for the state change reason.</p>
@@ -1318,7 +1358,7 @@ pub struct InstanceGroupStateChangeReason {
 }
 
 /// <p>The details of the instance group status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceGroupStatus {
     /// <p>The current state of the instance group.</p>
@@ -1336,7 +1376,7 @@ pub struct InstanceGroupStatus {
 }
 
 /// <p>The timeline of the instance group lifecycle.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceGroupTimeline {
     /// <p>The creation date and time of the instance group.</p>
@@ -1354,7 +1394,7 @@ pub struct InstanceGroupTimeline {
 }
 
 /// <p>Custom policy for requesting termination protection or termination of specific instances when shrinking an instance group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InstanceResizePolicy {
     /// <p>Decommissioning timeout override for the specific list of instances to be terminated.</p>
     #[serde(rename = "InstanceTerminationTimeout")]
@@ -1371,7 +1411,7 @@ pub struct InstanceResizePolicy {
 }
 
 /// <p>The details of the status change reason for the instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceStateChangeReason {
     /// <p>The programmable code for the state change reason.</p>
@@ -1385,7 +1425,7 @@ pub struct InstanceStateChangeReason {
 }
 
 /// <p>The instance status details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceStatus {
     /// <p>The current state of the instance.</p>
@@ -1403,7 +1443,7 @@ pub struct InstanceStatus {
 }
 
 /// <p>The timeline of the instance lifecycle.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceTimeline {
     /// <p>The creation date and time of the instance.</p>
@@ -1421,7 +1461,7 @@ pub struct InstanceTimeline {
 }
 
 /// <p><p>An instance type configuration for each instance type in an instance fleet, which determines the EC2 instances Amazon EMR attempts to provision to fulfill On-Demand and Spot target capacities. There can be a maximum of 5 instance type configurations in a fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceTypeConfig {
     /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%. </p>
@@ -1450,7 +1490,7 @@ pub struct InstanceTypeConfig {
 }
 
 /// <p><p>The configuration specification for each instance type in an instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceTypeSpecification {
     /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD.</p>
@@ -1484,7 +1524,7 @@ pub struct InstanceTypeSpecification {
 }
 
 /// <p>A description of a cluster (job flow).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobFlowDetail {
     /// <p>Applies only to Amazon EMR AMI versions 3.x and 2.x. For Amazon EMR releases 4.0 and later, <code>ReleaseLabel</code> is used. To specify a custom AMI, use <code>CustomAmiID</code>.</p>
@@ -1512,6 +1552,10 @@ pub struct JobFlowDetail {
     #[serde(rename = "JobFlowRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_flow_role: Option<String>,
+    /// <p>The AWS KMS customer master key (CMK) used for encrypting log files. This attribute is only available with EMR version 5.30.0 and later, excluding EMR 6.0.0.</p>
+    #[serde(rename = "LogEncryptionKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_encryption_kms_key_id: Option<String>,
     /// <p>The location in Amazon S3 where log files for the job are stored.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1542,7 +1586,7 @@ pub struct JobFlowDetail {
 }
 
 /// <p>Describes the status of the cluster (job flow).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobFlowExecutionStatusDetail {
     /// <p>The creation date and time of the job flow.</p>
@@ -1570,7 +1614,7 @@ pub struct JobFlowExecutionStatusDetail {
 }
 
 /// <p>A description of the Amazon EC2 instance on which the cluster (job flow) runs. A valid JobFlowInstancesConfig must contain either InstanceGroups or InstanceFleets, which is the recommended configuration. They cannot be used together. You may also have MasterInstanceType, SlaveInstanceType, and InstanceCount (all three must be present), but we don't recommend this configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JobFlowInstancesConfig {
     /// <p>A list of additional Amazon EC2 security group IDs for the master node.</p>
@@ -1644,7 +1688,7 @@ pub struct JobFlowInstancesConfig {
 }
 
 /// <p>Specify the type of Amazon EC2 instances that the cluster (job flow) runs on.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobFlowInstancesDetail {
     /// <p>The name of an Amazon EC2 key pair that can be used to ssh to the master node.</p>
@@ -1699,7 +1743,7 @@ pub struct JobFlowInstancesDetail {
 }
 
 /// <p>Attributes for Kerberos configuration when Kerberos authentication is enabled using a security configuration. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html">Use Kerberos Authentication</a> in the <i>EMR Management Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KerberosAttributes {
     /// <p>The Active Directory password for <code>ADDomainJoinUser</code>.</p>
     #[serde(rename = "ADDomainJoinPassword")]
@@ -1722,7 +1766,7 @@ pub struct KerberosAttributes {
 }
 
 /// <p>A key value pair.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KeyValue {
     /// <p>The unique identifier of a key value pair.</p>
     #[serde(rename = "Key")]
@@ -1735,7 +1779,7 @@ pub struct KeyValue {
 }
 
 /// <p>This input determines which bootstrap actions to retrieve.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBootstrapActionsInput {
     /// <p>The cluster identifier for the bootstrap actions to list.</p>
@@ -1748,7 +1792,7 @@ pub struct ListBootstrapActionsInput {
 }
 
 /// <p>This output contains the bootstrap actions detail.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBootstrapActionsOutput {
     /// <p>The bootstrap actions associated with the cluster.</p>
@@ -1762,7 +1806,7 @@ pub struct ListBootstrapActionsOutput {
 }
 
 /// <p>This input determines how the ListClusters action filters the list of clusters that it returns.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClustersInput {
     /// <p>The cluster state filters to apply when listing clusters.</p>
@@ -1784,7 +1828,7 @@ pub struct ListClustersInput {
 }
 
 /// <p>This contains a ClusterSummaryList with the cluster details; for example, the cluster IDs, names, and status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListClustersOutput {
     /// <p>The list of clusters for the account based on the given filters.</p>
@@ -1797,7 +1841,7 @@ pub struct ListClustersOutput {
     pub marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceFleetsInput {
     /// <p>The unique identifier of the cluster.</p>
@@ -1809,7 +1853,7 @@ pub struct ListInstanceFleetsInput {
     pub marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstanceFleetsOutput {
     /// <p>The list of instance fleets for the cluster and given filters.</p>
@@ -1823,7 +1867,7 @@ pub struct ListInstanceFleetsOutput {
 }
 
 /// <p>This input determines which instance groups to retrieve.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceGroupsInput {
     /// <p>The identifier of the cluster for which to list the instance groups.</p>
@@ -1836,7 +1880,7 @@ pub struct ListInstanceGroupsInput {
 }
 
 /// <p>This input determines which instance groups to retrieve.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstanceGroupsOutput {
     /// <p>The list of instance groups for the cluster and given filters.</p>
@@ -1850,7 +1894,7 @@ pub struct ListInstanceGroupsOutput {
 }
 
 /// <p>This input determines which instances to list.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstancesInput {
     /// <p>The identifier of the cluster for which to list the instances.</p>
@@ -1883,7 +1927,7 @@ pub struct ListInstancesInput {
 }
 
 /// <p>This output contains the list of instances.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstancesOutput {
     /// <p>The list of instances for the cluster and given filters.</p>
@@ -1896,7 +1940,7 @@ pub struct ListInstancesOutput {
     pub marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityConfigurationsInput {
     /// <p>The pagination token that indicates the set of results to retrieve.</p>
@@ -1905,7 +1949,7 @@ pub struct ListSecurityConfigurationsInput {
     pub marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSecurityConfigurationsOutput {
     /// <p>A pagination token that indicates the next set of results to retrieve. Include the marker in the next ListSecurityConfiguration call to retrieve the next page of results, if required.</p>
@@ -1919,7 +1963,7 @@ pub struct ListSecurityConfigurationsOutput {
 }
 
 /// <p>This input determines which steps to list.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListStepsInput {
     /// <p>The identifier of the cluster for which to list the steps.</p>
@@ -1940,7 +1984,7 @@ pub struct ListStepsInput {
 }
 
 /// <p>This output contains the list of steps returned in reverse order. This means that the last step is the first element in the list.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStepsOutput {
     /// <p>The pagination token that indicates the next set of results to retrieve.</p>
@@ -1954,7 +1998,7 @@ pub struct ListStepsOutput {
 }
 
 /// <p> Managed scaling policy for an Amazon EMR cluster. The policy specifies the limits for resources that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ManagedScalingPolicy {
     /// <p> The EC2 unit limits for a managed scaling policy. The managed scaling activity of a cluster is not allowed to go above or below these limits. The limit only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
     #[serde(rename = "ComputeLimits")]
@@ -1963,7 +2007,7 @@ pub struct ManagedScalingPolicy {
 }
 
 /// <p>A CloudWatch dimension, which is specified using a <code>Key</code> (known as a <code>Name</code> in CloudWatch), <code>Value</code> pair. By default, Amazon EMR uses one dimension whose <code>Key</code> is <code>JobFlowID</code> and <code>Value</code> is a variable representing the cluster ID, which is <code>${emr.clusterId}</code>. This enables the rule to bootstrap when the cluster ID becomes available.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetricDimension {
     /// <p>The dimension name.</p>
     #[serde(rename = "Key")]
@@ -1975,7 +2019,7 @@ pub struct MetricDimension {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterInput {
     /// <p>The unique identifier of the cluster.</p>
@@ -1987,7 +2031,7 @@ pub struct ModifyClusterInput {
     pub step_concurrency_level: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyClusterOutput {
     /// <p>The number of steps that can be executed concurrently.</p>
@@ -1996,7 +2040,7 @@ pub struct ModifyClusterOutput {
     pub step_concurrency_level: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyInstanceFleetInput {
     /// <p>The unique identifier of the cluster.</p>
@@ -2008,7 +2052,7 @@ pub struct ModifyInstanceFleetInput {
 }
 
 /// <p>Change the size of some instance groups.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyInstanceGroupsInput {
     /// <p>The ID of the cluster to which the instance group belongs.</p>
@@ -2021,8 +2065,16 @@ pub struct ModifyInstanceGroupsInput {
     pub instance_groups: Option<Vec<InstanceGroupModifyConfig>>,
 }
 
+/// <p><p> The launch specification for On-Demand instances in the instance fleet, which determines the allocation strategy. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. On-Demand instances allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OnDemandProvisioningSpecification {
+    /// <p> Specifies the strategy to use in launching On-Demand instance fleets. Currently, the only option is lowest-price (the default), which launches the lowest price first. </p>
+    #[serde(rename = "AllocationStrategy")]
+    pub allocation_strategy: String,
+}
+
 /// <p>The Amazon EC2 Availability Zone configuration of the cluster (job flow).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PlacementType {
     /// <p>The Amazon EC2 Availability Zone for the cluster. <code>AvailabilityZone</code> is used for uniform instance groups, while <code>AvailabilityZones</code> (plural) is used for instance fleets.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -2035,7 +2087,7 @@ pub struct PlacementType {
 }
 
 /// <p>A list of port ranges that are permitted to allow inbound traffic from all public IP addresses. To specify a single port, use the same value for <code>MinRange</code> and <code>MaxRange</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PortRange {
     /// <p>The smallest port number in a specified range of port numbers.</p>
     #[serde(rename = "MaxRange")]
@@ -2046,7 +2098,7 @@ pub struct PortRange {
     pub min_range: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAutoScalingPolicyInput {
     /// <p>Specifies the definition of the automatic scaling policy.</p>
@@ -2060,7 +2112,7 @@ pub struct PutAutoScalingPolicyInput {
     pub instance_group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAutoScalingPolicyOutput {
     /// <p>The automatic scaling policy definition.</p>
@@ -2081,7 +2133,7 @@ pub struct PutAutoScalingPolicyOutput {
     pub instance_group_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBlockPublicAccessConfigurationInput {
     /// <p><p>A configuration for Amazon EMR block public access. The configuration applies to all clusters created in your account for the current Region. The configuration specifies whether block public access is enabled. If block public access is enabled, security groups associated with the cluster cannot have rules that allow inbound traffic from 0.0.0.0/0 or ::/0 on a port, unless the port is specified as an exception using <code>PermittedPublicSecurityGroupRuleRanges</code> in the <code>BlockPublicAccessConfiguration</code>. By default, Port 22 (SSH) is an exception, and public access is allowed on this port. You can change this by updating <code>BlockPublicSecurityGroupRules</code> to remove the exception.</p> <note> <p>For accounts that created clusters in a Region before November 25, 2019, block public access is disabled by default in that Region. To use this feature, you must manually enable and configure it. For accounts that did not create an EMR cluster in a Region before this date, block public access is enabled by default in that Region.</p> </note></p>
@@ -2089,11 +2141,11 @@ pub struct PutBlockPublicAccessConfigurationInput {
     pub block_public_access_configuration: BlockPublicAccessConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutBlockPublicAccessConfigurationOutput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutManagedScalingPolicyInput {
     /// <p> Specifies the ID of an EMR cluster where the managed scaling policy is attached. </p>
@@ -2104,11 +2156,11 @@ pub struct PutManagedScalingPolicyInput {
     pub managed_scaling_policy: ManagedScalingPolicy,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutManagedScalingPolicyOutput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveAutoScalingPolicyInput {
     /// <p>Specifies the ID of a cluster. The instance group to which the automatic scaling policy is applied is within this cluster.</p>
@@ -2119,11 +2171,11 @@ pub struct RemoveAutoScalingPolicyInput {
     pub instance_group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveAutoScalingPolicyOutput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveManagedScalingPolicyInput {
     /// <p> Specifies the ID of the cluster from which the managed scaling policy will be removed. </p>
@@ -2131,12 +2183,12 @@ pub struct RemoveManagedScalingPolicyInput {
     pub cluster_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveManagedScalingPolicyOutput {}
 
 /// <p>This input identifies a cluster and a list of tags to remove.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsInput {
     /// <p>The Amazon EMR resource identifier from which tags will be removed. This value must be a cluster identifier.</p>
@@ -2148,12 +2200,12 @@ pub struct RemoveTagsInput {
 }
 
 /// <p>This output indicates the result of removing tags from a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveTagsOutput {}
 
 /// <p> Input to the <a>RunJobFlow</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunJobFlowInput {
     /// <p>A JSON string for selecting additional features.</p>
@@ -2199,6 +2251,10 @@ pub struct RunJobFlowInput {
     #[serde(rename = "KerberosAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kerberos_attributes: Option<KerberosAttributes>,
+    /// <p>The AWS KMS customer master key (CMK) used for encrypting log files. If a value is not provided, the logs will remain encrypted by AES-256. This attribute is only available with EMR version 5.30.0 and later, excluding EMR 6.0.0.</p>
+    #[serde(rename = "LogEncryptionKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_encryption_kms_key_id: Option<String>,
     /// <p>The location in Amazon S3 to write the log files of the job flow. If a value is not provided, logs are not created.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2257,7 +2313,7 @@ pub struct RunJobFlowInput {
 }
 
 /// <p> The result of the <a>RunJobFlow</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RunJobFlowOutput {
     /// <p>The Amazon Resource Name of the cluster.</p>
@@ -2271,7 +2327,7 @@ pub struct RunJobFlowOutput {
 }
 
 /// <p>The type of adjustment the automatic scaling activity makes when triggered, and the periodicity of the adjustment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScalingAction {
     /// <p>Not available for instance groups. Instance groups use the market type specified for the group.</p>
     #[serde(rename = "Market")]
@@ -2283,7 +2339,7 @@ pub struct ScalingAction {
 }
 
 /// <p>The upper and lower EC2 instance limits for an automatic scaling policy. Automatic scaling activities triggered by automatic scaling rules will not cause an instance group to grow above or below these limits.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScalingConstraints {
     /// <p>The upper boundary of EC2 instances in an instance group beyond which scaling activities are not allowed to grow. Scale-out activities will not add instances beyond this boundary.</p>
     #[serde(rename = "MaxCapacity")]
@@ -2294,7 +2350,7 @@ pub struct ScalingConstraints {
 }
 
 /// <p>A scale-in or scale-out rule that defines scaling activity, including the CloudWatch metric alarm that triggers activity, how EC2 instances are added or removed, and the periodicity of adjustments. The automatic scaling policy for an instance group can comprise one or more automatic scaling rules.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScalingRule {
     /// <p>The conditions that trigger an automatic scaling activity.</p>
     #[serde(rename = "Action")]
@@ -2312,7 +2368,7 @@ pub struct ScalingRule {
 }
 
 /// <p>The conditions that trigger an automatic scaling activity.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScalingTrigger {
     /// <p>The definition of a CloudWatch metric alarm. When the defined alarm conditions are met along with other trigger parameters, scaling activity begins.</p>
     #[serde(rename = "CloudWatchAlarmDefinition")]
@@ -2320,7 +2376,7 @@ pub struct ScalingTrigger {
 }
 
 /// <p>Configuration of the script to run during a bootstrap action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ScriptBootstrapActionConfig {
     /// <p>A list of command line arguments to pass to the bootstrap action script.</p>
     #[serde(rename = "Args")]
@@ -2332,7 +2388,7 @@ pub struct ScriptBootstrapActionConfig {
 }
 
 /// <p>The creation date and time, and name, of a security configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityConfigurationSummary {
     /// <p>The date and time the security configuration was created.</p>
@@ -2346,7 +2402,7 @@ pub struct SecurityConfigurationSummary {
 }
 
 /// <p> The input argument to the <a>TerminationProtection</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTerminationProtectionInput {
     /// <p> A list of strings that uniquely identify the clusters to protect. This identifier is returned by <a>RunJobFlow</a> and can also be obtained from <a>DescribeJobFlows</a> . </p>
@@ -2358,7 +2414,7 @@ pub struct SetTerminationProtectionInput {
 }
 
 /// <p>The input to the SetVisibleToAllUsers action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetVisibleToAllUsersInput {
     /// <p>The unique identifier of the job flow (cluster).</p>
@@ -2370,7 +2426,7 @@ pub struct SetVisibleToAllUsersInput {
 }
 
 /// <p>Policy for customizing shrink operations. Allows configuration of decommissioning timeout and targeted instance shrinking.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ShrinkPolicy {
     /// <p>The desired timeout for decommissioning an instance. Overrides the default YARN decommissioning timeout.</p>
     #[serde(rename = "DecommissionTimeout")]
@@ -2383,7 +2439,7 @@ pub struct ShrinkPolicy {
 }
 
 /// <p>An automatic scaling configuration, which describes how the policy adds or removes instances, the cooldown period, and the number of EC2 instances that will be added each time the CloudWatch metric alarm condition is satisfied.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SimpleScalingPolicyConfiguration {
     /// <p>The way in which EC2 instances are added (if <code>ScalingAdjustment</code> is a positive number) or terminated (if <code>ScalingAdjustment</code> is a negative number) each time the scaling activity is triggered. <code>CHANGE_IN_CAPACITY</code> is the default. <code>CHANGE_IN_CAPACITY</code> indicates that the EC2 instance count increments or decrements by <code>ScalingAdjustment</code>, which should be expressed as an integer. <code>PERCENT_CHANGE_IN_CAPACITY</code> indicates the instance count increments or decrements by the percentage specified by <code>ScalingAdjustment</code>, which should be expressed as an integer. For example, 20 indicates an increase in 20% increments of cluster capacity. <code>EXACT_CAPACITY</code> indicates the scaling activity results in an instance group with the number of EC2 instances specified by <code>ScalingAdjustment</code>, which should be expressed as a positive integer.</p>
     #[serde(rename = "AdjustmentType")]
@@ -2398,9 +2454,13 @@ pub struct SimpleScalingPolicyConfiguration {
     pub scaling_adjustment: i64,
 }
 
-/// <p><p>The launch specification for Spot instances in the instance fleet, which determines the defined duration and provisioning timeout behavior.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+/// <p><p>The launch specification for Spot instances in the instance fleet, which determines the defined duration, provisioning timeout behavior, and allocation strategy.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. Spot instance allocation strategy is available in Amazon EMR version 5.12.1 and later.</p> </note></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpotProvisioningSpecification {
+    /// <p> Specifies the strategy to use in launching Spot instance fleets. Currently, the only option is capacity-optimized (the default), which launches instances from Spot instance pools with optimal capacity for the number of instances that are launching. </p>
+    #[serde(rename = "AllocationStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allocation_strategy: Option<String>,
     /// <p>The defined duration for Spot instances (also known as Spot blocks) in minutes. When specified, the Spot instance does not terminate before the defined duration expires, and defined duration pricing for Spot instances applies. Valid values are 60, 120, 180, 240, 300, or 360. The duration period starts as soon as a Spot instance receives its instance ID. At the end of the duration, Amazon EC2 marks the Spot instance for termination and provides a Spot instance termination notice, which gives the instance a two-minute warning before it terminates. </p>
     #[serde(rename = "BlockDurationMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2414,7 +2474,7 @@ pub struct SpotProvisioningSpecification {
 }
 
 /// <p>This represents a step in a cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Step {
     /// <p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is provided for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>
@@ -2440,7 +2500,7 @@ pub struct Step {
 }
 
 /// <p>Specification of a cluster (job flow) step.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StepConfig {
     /// <p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is provided for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>
     #[serde(rename = "ActionOnFailure")]
@@ -2455,7 +2515,7 @@ pub struct StepConfig {
 }
 
 /// <p>Combines the execution state and configuration of a step.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StepDetail {
     /// <p>The description of the step status.</p>
@@ -2467,7 +2527,7 @@ pub struct StepDetail {
 }
 
 /// <p>The execution state of a step.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StepExecutionStatusDetail {
     /// <p>The creation date and time of the step.</p>
@@ -2491,7 +2551,7 @@ pub struct StepExecutionStatusDetail {
 }
 
 /// <p>The details of the step state change reason.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StepStateChangeReason {
     /// <p>The programmable code for the state change reason. Note: Currently, the service provides no code for the state change.</p>
@@ -2505,7 +2565,7 @@ pub struct StepStateChangeReason {
 }
 
 /// <p>The execution status details of the cluster step.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StepStatus {
     /// <p>The details for the step failure including reason, message, and log file path where the root cause was identified.</p>
@@ -2527,7 +2587,7 @@ pub struct StepStatus {
 }
 
 /// <p>The summary of the cluster step.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StepSummary {
     /// <p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is available for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>
@@ -2553,7 +2613,7 @@ pub struct StepSummary {
 }
 
 /// <p>The timeline of the cluster step lifecycle.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StepTimeline {
     /// <p>The date and time when the cluster step was created.</p>
@@ -2571,7 +2631,7 @@ pub struct StepTimeline {
 }
 
 /// <p>The list of supported product configurations which allow user-supplied arguments. EMR accepts these arguments and forwards them to the corresponding installation script as bootstrap action arguments.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SupportedProductConfig {
     /// <p>The list of user-supplied arguments.</p>
@@ -2585,7 +2645,7 @@ pub struct SupportedProductConfig {
 }
 
 /// <p>A key/value pair containing user-defined metadata that you can associate with an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>A user-defined key, which is the minimum required information for a valid tag. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag </a>. </p>
     #[serde(rename = "Key")]
@@ -2598,7 +2658,7 @@ pub struct Tag {
 }
 
 /// <p> Input to the <a>TerminateJobFlows</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateJobFlowsInput {
     /// <p>A list of job flows to be shutdown.</p>
@@ -2607,7 +2667,7 @@ pub struct TerminateJobFlowsInput {
 }
 
 /// <p>EBS volume specifications such as volume type, IOPS, and size (GiB) that will be requested for the EBS volume attached to an EC2 instance in the cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VolumeSpecification {
     /// <p>The number of I/O operations per second (IOPS) that the volume supports.</p>
     #[serde(rename = "Iops")]
@@ -4000,26 +4060,17 @@ impl Emr for EmrClient {
         &self,
         input: AddInstanceFleetInput,
     ) -> Result<AddInstanceFleetOutput, RusotoError<AddInstanceFleetError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.AddInstanceFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddInstanceFleetOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddInstanceFleetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AddInstanceFleetError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AddInstanceFleetOutput, _>()
     }
 
     /// <p>Adds one or more instance groups to a running cluster.</p>
@@ -4027,26 +4078,17 @@ impl Emr for EmrClient {
         &self,
         input: AddInstanceGroupsInput,
     ) -> Result<AddInstanceGroupsOutput, RusotoError<AddInstanceGroupsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.AddInstanceGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddInstanceGroupsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddInstanceGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AddInstanceGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AddInstanceGroupsOutput, _>()
     }
 
     /// <p>AddJobFlowSteps adds new steps to a running cluster. A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using SSH to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>A step specifies the location of a JAR file stored either on the master node of the cluster or in Amazon S3. Each step is performed by the main function of the main class of the JAR file. The main class can be specified either in the manifest of the JAR or by using the MainFunction parameter of the step.</p> <p>Amazon EMR executes each step in the order listed. For a step to be considered complete, the main function must exit with a zero exit code and all Hadoop jobs started while the step was running must have completed and run successfully.</p> <p>You can only add steps to a cluster that is in one of the following states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>
@@ -4054,26 +4096,17 @@ impl Emr for EmrClient {
         &self,
         input: AddJobFlowStepsInput,
     ) -> Result<AddJobFlowStepsOutput, RusotoError<AddJobFlowStepsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.AddJobFlowSteps");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddJobFlowStepsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddJobFlowStepsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AddJobFlowStepsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AddJobFlowStepsOutput, _>()
     }
 
     /// <p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p>
@@ -4081,26 +4114,17 @@ impl Emr for EmrClient {
         &self,
         input: AddTagsInput,
     ) -> Result<AddTagsOutput, RusotoError<AddTagsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.AddTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AddTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AddTagsOutput, _>()
     }
 
     /// <p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>
@@ -4108,26 +4132,17 @@ impl Emr for EmrClient {
         &self,
         input: CancelStepsInput,
     ) -> Result<CancelStepsOutput, RusotoError<CancelStepsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.CancelSteps");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CancelStepsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CancelStepsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CancelStepsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CancelStepsOutput, _>()
     }
 
     /// <p>Creates a security configuration, which is stored in the service and can be specified when a cluster is created.</p>
@@ -4136,9 +4151,7 @@ impl Emr for EmrClient {
         input: CreateSecurityConfigurationInput,
     ) -> Result<CreateSecurityConfigurationOutput, RusotoError<CreateSecurityConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.CreateSecurityConfiguration",
@@ -4146,20 +4159,13 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSecurityConfigurationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSecurityConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSecurityConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateSecurityConfigurationOutput, _>()
     }
 
     /// <p>Deletes a security configuration.</p>
@@ -4168,9 +4174,7 @@ impl Emr for EmrClient {
         input: DeleteSecurityConfigurationInput,
     ) -> Result<DeleteSecurityConfigurationOutput, RusotoError<DeleteSecurityConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.DeleteSecurityConfiguration",
@@ -4178,20 +4182,13 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSecurityConfigurationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSecurityConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSecurityConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteSecurityConfigurationOutput, _>()
     }
 
     /// <p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. </p>
@@ -4199,26 +4196,17 @@ impl Emr for EmrClient {
         &self,
         input: DescribeClusterInput,
     ) -> Result<DescribeClusterOutput, RusotoError<DescribeClusterError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.DescribeCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeClusterOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeClusterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClusterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeClusterOutput, _>()
     }
 
     /// <p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>
@@ -4226,26 +4214,17 @@ impl Emr for EmrClient {
         &self,
         input: DescribeJobFlowsInput,
     ) -> Result<DescribeJobFlowsOutput, RusotoError<DescribeJobFlowsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.DescribeJobFlows");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeJobFlowsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeJobFlowsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeJobFlowsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeJobFlowsOutput, _>()
     }
 
     /// <p>Provides the details of a security configuration by returning the configuration JSON.</p>
@@ -4254,9 +4233,7 @@ impl Emr for EmrClient {
         input: DescribeSecurityConfigurationInput,
     ) -> Result<DescribeSecurityConfigurationOutput, RusotoError<DescribeSecurityConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.DescribeSecurityConfiguration",
@@ -4264,20 +4241,13 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSecurityConfigurationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSecurityConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeSecurityConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeSecurityConfigurationOutput, _>()
     }
 
     /// <p>Provides more detail about the cluster step.</p>
@@ -4285,26 +4255,17 @@ impl Emr for EmrClient {
         &self,
         input: DescribeStepInput,
     ) -> Result<DescribeStepOutput, RusotoError<DescribeStepError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.DescribeStep");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeStepOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeStepError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeStepError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeStepOutput, _>()
     }
 
     /// <p>Returns the Amazon EMR block public access configuration for your AWS account in the current Region. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/configure-block-public-access.html">Configure Block Public Access for Amazon EMR</a> in the <i>Amazon EMR Management Guide</i>.</p>
@@ -4314,31 +4275,23 @@ impl Emr for EmrClient {
         GetBlockPublicAccessConfigurationOutput,
         RusotoError<GetBlockPublicAccessConfigurationError>,
     > {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.GetBlockPublicAccessConfiguration",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetBlockPublicAccessConfigurationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBlockPublicAccessConfigurationError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetBlockPublicAccessConfigurationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetBlockPublicAccessConfigurationOutput, _>()
     }
 
     /// <p> Fetches the attached managed scaling policy for an Amazon EMR cluster. </p>
@@ -4346,27 +4299,18 @@ impl Emr for EmrClient {
         &self,
         input: GetManagedScalingPolicyInput,
     ) -> Result<GetManagedScalingPolicyOutput, RusotoError<GetManagedScalingPolicyError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.GetManagedScalingPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetManagedScalingPolicyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetManagedScalingPolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetManagedScalingPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetManagedScalingPolicyOutput, _>()
     }
 
     /// <p>Provides information about the bootstrap actions associated with a cluster.</p>
@@ -4374,27 +4318,17 @@ impl Emr for EmrClient {
         &self,
         input: ListBootstrapActionsInput,
     ) -> Result<ListBootstrapActionsOutput, RusotoError<ListBootstrapActionsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.ListBootstrapActions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBootstrapActionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBootstrapActionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListBootstrapActionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListBootstrapActionsOutput, _>()
     }
 
     /// <p>Provides the status of all clusters visible to this AWS account. Allows you to filter the list of clusters based on certain criteria; for example, filtering by cluster creation date and time or by status. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListClusters calls.</p>
@@ -4402,26 +4336,17 @@ impl Emr for EmrClient {
         &self,
         input: ListClustersInput,
     ) -> Result<ListClustersOutput, RusotoError<ListClustersError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.ListClusters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListClustersOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListClustersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListClustersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListClustersOutput, _>()
     }
 
     /// <p><p>Lists all available details about the instance fleets in a cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
@@ -4429,27 +4354,17 @@ impl Emr for EmrClient {
         &self,
         input: ListInstanceFleetsInput,
     ) -> Result<ListInstanceFleetsOutput, RusotoError<ListInstanceFleetsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.ListInstanceFleets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInstanceFleetsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInstanceFleetsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListInstanceFleetsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListInstanceFleetsOutput, _>()
     }
 
     /// <p>Provides all available details about the instance groups in a cluster.</p>
@@ -4457,27 +4372,17 @@ impl Emr for EmrClient {
         &self,
         input: ListInstanceGroupsInput,
     ) -> Result<ListInstanceGroupsOutput, RusotoError<ListInstanceGroupsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.ListInstanceGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInstanceGroupsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInstanceGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListInstanceGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListInstanceGroupsOutput, _>()
     }
 
     /// <p>Provides information for all active EC2 instances and EC2 instances terminated in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the following states are considered active: AWAITING_FULFILLMENT, PROVISIONING, BOOTSTRAPPING, RUNNING.</p>
@@ -4485,26 +4390,17 @@ impl Emr for EmrClient {
         &self,
         input: ListInstancesInput,
     ) -> Result<ListInstancesOutput, RusotoError<ListInstancesError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.ListInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListInstancesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListInstancesOutput, _>()
     }
 
     /// <p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>
@@ -4513,9 +4409,7 @@ impl Emr for EmrClient {
         input: ListSecurityConfigurationsInput,
     ) -> Result<ListSecurityConfigurationsOutput, RusotoError<ListSecurityConfigurationsError>>
     {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.ListSecurityConfigurations",
@@ -4523,20 +4417,13 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSecurityConfigurationsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSecurityConfigurationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSecurityConfigurationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListSecurityConfigurationsOutput, _>()
     }
 
     /// <p>Provides a list of steps for the cluster in reverse order unless you specify <code>stepIds</code> with the request of filter by <code>StepStates</code>. You can specify a maximum of ten <code>stepIDs</code>.</p>
@@ -4544,26 +4431,17 @@ impl Emr for EmrClient {
         &self,
         input: ListStepsInput,
     ) -> Result<ListStepsOutput, RusotoError<ListStepsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.ListSteps");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListStepsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListStepsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListStepsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListStepsOutput, _>()
     }
 
     /// <p>Modifies the number of steps that can be executed concurrently for the cluster specified using ClusterID.</p>
@@ -4571,26 +4449,17 @@ impl Emr for EmrClient {
         &self,
         input: ModifyClusterInput,
     ) -> Result<ModifyClusterOutput, RusotoError<ModifyClusterError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.ModifyCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ModifyClusterOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyClusterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyClusterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ModifyClusterOutput, _>()
     }
 
     /// <p><p>Modifies the target On-Demand and target Spot capacities for the instance fleet with the specified InstanceFleetID within the cluster specified using ClusterID. The call either succeeds or fails atomically.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
@@ -4598,26 +4467,16 @@ impl Emr for EmrClient {
         &self,
         input: ModifyInstanceFleetInput,
     ) -> Result<(), RusotoError<ModifyInstanceFleetError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.ModifyInstanceFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyInstanceFleetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyInstanceFleetError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>ModifyInstanceGroups modifies the number of nodes and configuration settings of an instance group. The input parameters include the new target instance count for the group and the instance group ID. The call will either succeed or fail atomically.</p>
@@ -4625,26 +4484,16 @@ impl Emr for EmrClient {
         &self,
         input: ModifyInstanceGroupsInput,
     ) -> Result<(), RusotoError<ModifyInstanceGroupsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.ModifyInstanceGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyInstanceGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyInstanceGroupsError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates or updates an automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric.</p>
@@ -4652,27 +4501,17 @@ impl Emr for EmrClient {
         &self,
         input: PutAutoScalingPolicyInput,
     ) -> Result<PutAutoScalingPolicyOutput, RusotoError<PutAutoScalingPolicyError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.PutAutoScalingPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutAutoScalingPolicyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutAutoScalingPolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutAutoScalingPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutAutoScalingPolicyOutput, _>()
     }
 
     /// <p>Creates or updates an Amazon EMR block public access configuration for your AWS account in the current Region. For more information see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/configure-block-public-access.html">Configure Block Public Access for Amazon EMR</a> in the <i>Amazon EMR Management Guide</i>.</p>
@@ -4683,9 +4522,7 @@ impl Emr for EmrClient {
         PutBlockPublicAccessConfigurationOutput,
         RusotoError<PutBlockPublicAccessConfigurationError>,
     > {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.PutBlockPublicAccessConfiguration",
@@ -4693,22 +4530,16 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutBlockPublicAccessConfigurationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutBlockPublicAccessConfigurationError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                PutBlockPublicAccessConfigurationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutBlockPublicAccessConfigurationOutput, _>()
     }
 
     /// <p> Creates or updates a managed scaling policy for an Amazon EMR cluster. The managed scaling policy defines the limits for resources, such as EC2 instances that can be added or terminated from a cluster. The policy only applies to the core and task nodes. The master node cannot be scaled after initial configuration. </p>
@@ -4716,27 +4547,18 @@ impl Emr for EmrClient {
         &self,
         input: PutManagedScalingPolicyInput,
     ) -> Result<PutManagedScalingPolicyOutput, RusotoError<PutManagedScalingPolicyError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.PutManagedScalingPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutManagedScalingPolicyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutManagedScalingPolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutManagedScalingPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutManagedScalingPolicyOutput, _>()
     }
 
     /// <p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>
@@ -4744,27 +4566,18 @@ impl Emr for EmrClient {
         &self,
         input: RemoveAutoScalingPolicyInput,
     ) -> Result<RemoveAutoScalingPolicyOutput, RusotoError<RemoveAutoScalingPolicyError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.RemoveAutoScalingPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveAutoScalingPolicyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveAutoScalingPolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RemoveAutoScalingPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RemoveAutoScalingPolicyOutput, _>()
     }
 
     /// <p> Removes a managed scaling policy from a specified EMR cluster. </p>
@@ -4773,9 +4586,7 @@ impl Emr for EmrClient {
         input: RemoveManagedScalingPolicyInput,
     ) -> Result<RemoveManagedScalingPolicyOutput, RusotoError<RemoveManagedScalingPolicyError>>
     {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.RemoveManagedScalingPolicy",
@@ -4783,20 +4594,13 @@ impl Emr for EmrClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RemoveManagedScalingPolicyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveManagedScalingPolicyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RemoveManagedScalingPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RemoveManagedScalingPolicyOutput, _>()
     }
 
     /// <p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>
@@ -4804,26 +4608,17 @@ impl Emr for EmrClient {
         &self,
         input: RemoveTagsInput,
     ) -> Result<RemoveTagsOutput, RusotoError<RemoveTagsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.RemoveTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RemoveTagsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RemoveTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RemoveTagsOutput, _>()
     }
 
     /// <p><p>RunJobFlow creates and starts running a new cluster (job flow). The cluster runs the steps specified. After the steps complete, the cluster stops and the HDFS partition is lost. To prevent loss of data, configure the last step of the job flow to store results in Amazon S3. If the <a>JobFlowInstancesConfig</a> <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to <code>TRUE</code>, the cluster transitions to the WAITING state rather than shutting down after the steps have completed. </p> <p>For additional protection, you can set the <a>JobFlowInstancesConfig</a> <code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the cluster and prevent it from being terminated by API call, user intervention, or in the event of a job flow error.</p> <p>A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>For long running clusters, we recommend that you periodically store your results.</p> <note> <p>The instance fleets configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow request can contain InstanceFleets parameters or InstanceGroups parameters, but not both.</p> </note></p>
@@ -4831,26 +4626,17 @@ impl Emr for EmrClient {
         &self,
         input: RunJobFlowInput,
     ) -> Result<RunJobFlowOutput, RusotoError<RunJobFlowError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.RunJobFlow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RunJobFlowOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RunJobFlowError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RunJobFlowError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RunJobFlowOutput, _>()
     }
 
     /// <p>SetTerminationProtection locks a cluster (job flow) so the EC2 instances in the cluster cannot be terminated by user intervention, an API call, or in the event of a job-flow error. The cluster still terminates upon successful completion of the job flow. Calling <code>SetTerminationProtection</code> on a cluster is similar to calling the Amazon EC2 <code>DisableAPITermination</code> API on all EC2 instances in a cluster.</p> <p> <code>SetTerminationProtection</code> is used to prevent accidental termination of a cluster and to ensure that in the event of an error, the instances persist so that you can recover any data stored in their ephemeral instance storage.</p> <p> To terminate a cluster that has been locked by setting <code>SetTerminationProtection</code> to <code>true</code>, you must first unlock the job flow by a subsequent call to <code>SetTerminationProtection</code> in which you set the value to <code>false</code>. </p> <p> For more information, see<a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html">Managing Cluster Termination</a> in the <i>Amazon EMR Management Guide</i>. </p>
@@ -4858,26 +4644,16 @@ impl Emr for EmrClient {
         &self,
         input: SetTerminationProtectionInput,
     ) -> Result<(), RusotoError<SetTerminationProtectionError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.SetTerminationProtection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SetTerminationProtectionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SetTerminationProtectionError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Sets the <a>Cluster$VisibleToAllUsers</a> value, which determines whether the cluster is visible to all IAM users of the AWS account associated with the cluster. Only the IAM user who created the cluster or the AWS account root user can call this action. The default value, <code>true</code>, indicates that all IAM users in the AWS account can perform cluster actions if they have the proper IAM policy permissions. If set to <code>false</code>, only the IAM user that created the cluster can perform actions. This action works on running clusters. You can override the default <code>true</code> setting when you create a cluster by using the <code>VisibleToAllUsers</code> parameter with <code>RunJobFlow</code>.</p>
@@ -4885,26 +4661,16 @@ impl Emr for EmrClient {
         &self,
         input: SetVisibleToAllUsersInput,
     ) -> Result<(), RusotoError<SetVisibleToAllUsersError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.SetVisibleToAllUsers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SetVisibleToAllUsersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SetVisibleToAllUsersError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the cluster is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the cluster was created.</p> <p>The maximum number of clusters allowed is 10. The call to <code>TerminateJobFlows</code> is asynchronous. Depending on the configuration of the cluster, it may take up to 1-5 minutes for the cluster to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>
@@ -4912,25 +4678,15 @@ impl Emr for EmrClient {
         &self,
         input: TerminateJobFlowsInput,
     ) -> Result<(), RusotoError<TerminateJobFlowsError>> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "ElasticMapReduce.TerminateJobFlows");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TerminateJobFlowsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TerminateJobFlowsError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 }

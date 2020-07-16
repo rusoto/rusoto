@@ -39,29 +39,21 @@ impl GenerateProtocol for QueryGenerator {
                 {documentation}
                 {method_signature} {{
                     let mut request = SignedRequest::new(\"{http_method}\", \"{endpoint_prefix}\", &self.region, \"{request_uri}\");
-                    let mut params = Params::new();
-
-                    params.put(\"Action\", \"{operation_name}\");
-                    params.put(\"Version\", \"{api_version}\");
+                    let params = self.new_params(\"{operation_name}\");
                     {serialize_input}
                     {set_input_params}
 
-                    let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
-                    if !response.status.is_success() {{
-                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-                        return Err({error_type}::from_response(response));
-                    }}
+                    let response = self.sign_and_dispatch(request, {error_type}::from_response).await?;
 
                     {parse_payload}
                 }}
                 ",
-                     api_version = service.api_version(),
                      documentation = generate_documentation(operation),
                      error_type = error_type_name(service, operation_name),
                      http_method = &operation.http.method,
                      endpoint_prefix = service.endpoint_prefix(),
                      parse_payload =
-                         xml_payload_parser::generate_response_parser(service, operation, false, ""),
+                         xml_payload_parser::generate_response_parser(service, operation, false, "drop(response);"),
                      method_signature = generate_method_signature(operation_name, operation, service),
                      operation_name = &operation.name,
                      request_uri = &operation.http.request_uri,
@@ -71,22 +63,55 @@ impl GenerateProtocol for QueryGenerator {
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
+    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         writeln!(writer,
                  "use std::str::FromStr;
             use xml::EventReader;
-            use xml::reader::ParserConfig;
             use rusoto_core::param::{{Params, ServiceParams}};
+            use rusoto_core::request::HttpResponse;
             use rusoto_core::signature::SignedRequest;
             use rusoto_core::proto::xml::util::{{Next, Peek, XmlParseError, XmlResponse}};
-            use rusoto_core::proto::xml::util::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name, deserialize_elements}};
+            use rusoto_core::proto::xml::util::{{self as xml_util, find_start_element, skip_tree, deserialize_elements}};
             use rusoto_core::proto::xml::error::*;
             use serde_urlencoded;
             #[cfg(feature = \"serialize_structs\")]
             use serde::Serialize;
             #[cfg(feature = \"deserialize_structs\")]
             use serde::Deserialize;
-            ")
+            ")?;
+
+        writeln!(
+            writer,
+            "
+            impl {type_name} {{
+                fn new_params(&self, operation_name: &str) -> Params {{
+                    let mut params = Params::new();
+
+                    params.put(\"Action\", operation_name);
+                    params.put(\"Version\", \"{api_version}\");
+
+                    params
+                }}
+
+
+                async fn sign_and_dispatch<E>(
+                    &self,
+                    request: SignedRequest,
+                    from_response: fn (BufferedHttpResponse) -> RusotoError<E>,
+                ) -> Result<HttpResponse, RusotoError<E>> {{
+                    let mut response = self.client.sign_and_dispatch(request).await?;
+                    if !response.status.is_success() {{
+                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                        return Err(from_response(response));
+                    }}
+
+                    Ok(response)
+                }}
+            }}
+            ",
+            type_name = service.client_type_name(),
+            api_version = service.api_version(),
+        )
     }
 
     fn generate_serializer(
@@ -136,7 +161,8 @@ impl GenerateProtocol for QueryGenerator {
 pub fn generate_method_input_serialization(operation: &Operation) -> String {
     if operation.input.is_some() {
         format!(
-            "{input_type}Serializer::serialize(&mut params, \"\", &input);",
+            "let mut params = params;
+            {input_type}Serializer::serialize(&mut params, \"\", &input);",
             input_type = operation.input.as_ref().unwrap().shape,
         )
     } else {

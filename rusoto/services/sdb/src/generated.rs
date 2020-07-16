@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,11 +33,35 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
 
+impl SimpleDbClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2009-04-15");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 /// <p></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Attribute {
@@ -163,7 +187,7 @@ impl AttributeNameListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteAttributesRequest {
     /// <p>The name of the domain in which the attributes are being deleted.</p>
@@ -190,7 +214,7 @@ impl BatchDeleteAttributesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutAttributesRequest {
     /// <p>The name of the domain in which the attributes are being stored.</p>
@@ -217,7 +241,7 @@ impl BatchPutAttributesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainRequest {
     /// <p>The name of the domain to create. The name can range between 3 and 255 characters and can contain the following characters: a-z, A-Z, 0-9, &#39;_&#39;, &#39;-&#39;, and &#39;.&#39;.</p>
@@ -237,7 +261,7 @@ impl CreateDomainRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletableItem {
     pub attributes: Option<Vec<Attribute>>,
@@ -275,7 +299,7 @@ impl DeletableItemListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAttributesRequest {
     /// <p>A list of Attributes. Similar to columns on a spreadsheet, attributes represent categories of data that can be assigned to items.</p>
@@ -316,7 +340,7 @@ impl DeleteAttributesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainRequest {
     /// <p>The name of the domain to delete.</p>
@@ -336,7 +360,7 @@ impl DeleteDomainRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DomainMetadataRequest {
     /// <p>The name of the domain for which to display the metadata of.</p>
@@ -356,7 +380,7 @@ impl DomainMetadataRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DomainMetadataResult {
     /// <p>The number of unique attribute names in the domain.</p>
@@ -453,7 +477,7 @@ impl DomainNameListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAttributesRequest {
     /// <p>The names of the attributes.</p>
@@ -490,7 +514,7 @@ impl GetAttributesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetAttributesResult {
     /// <p>The list of attributes returned by the operation.</p>
@@ -523,15 +547,11 @@ struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Item {
     /// <p></p>
@@ -596,7 +616,7 @@ impl ItemListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
     /// <p>The maximum number of domain names you want returned. The range is 1 to 100. The default setting is 100.</p>
@@ -623,7 +643,7 @@ impl ListDomainsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListDomainsResult {
     /// <p>A list of domain names that match the expression.</p>
@@ -661,14 +681,10 @@ struct LongDeserializer;
 impl LongDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAttributesRequest {
     /// <p>The list of attributes.</p>
@@ -708,7 +724,7 @@ impl PutAttributesRequestSerializer {
 }
 
 /// <p></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceableAttribute {
     /// <p>The name of the replaceable attribute.</p>
@@ -748,7 +764,7 @@ impl ReplaceableAttributeListSerializer {
 }
 
 /// <p></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceableItem {
     /// <p>The list of attributes for a replaceable item.</p>
@@ -786,7 +802,7 @@ impl ReplaceableItemListSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectRequest {
     /// <p>Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read.</p>
@@ -819,7 +835,7 @@ impl SelectRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SelectResult {
     /// <p>A list of items that match the select expression.</p>
@@ -857,15 +873,11 @@ struct StringDeserializer;
 impl StringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p> Specifies the conditions under which data should be updated. If an update condition is specified for a request, the data will only be updated if the condition is satisfied. For example, if an attribute with a specific name and value exists, or if a specific attribute doesn't exist. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCondition {
     /// <p>A value specifying whether or not the specified attribute must exist with the specified value in order for the update condition to be satisfied. Specify <code>true</code> if the attribute must exist for the update condition to be satisfied. Specify <code>false</code> if the attribute should not exist in order for the update condition to be satisfied.</p>
@@ -920,7 +932,7 @@ impl BatchDeleteAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1028,7 +1040,7 @@ impl BatchPutAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1102,7 +1114,7 @@ impl CreateDomainError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1169,7 +1181,7 @@ impl DeleteAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1216,7 +1228,7 @@ impl DeleteDomainError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1267,7 +1279,7 @@ impl DomainMetadataError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1326,7 +1338,7 @@ impl GetAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1379,7 +1391,7 @@ impl ListDomainsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1468,7 +1480,7 @@ impl PutAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1574,7 +1586,7 @@ impl SelectError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -1701,23 +1713,15 @@ impl SimpleDb for SimpleDbClient {
         input: BatchDeleteAttributesRequest,
     ) -> Result<(), RusotoError<BatchDeleteAttributesError>> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "BatchDeleteAttributes");
-        params.put("Version", "2009-04-15");
+        let params = self.new_params("BatchDeleteAttributes");
+        let mut params = params;
         BatchDeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(BatchDeleteAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDeleteAttributesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -1729,23 +1733,15 @@ impl SimpleDb for SimpleDbClient {
         input: BatchPutAttributesRequest,
     ) -> Result<(), RusotoError<BatchPutAttributesError>> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "BatchPutAttributes");
-        params.put("Version", "2009-04-15");
+        let params = self.new_params("BatchPutAttributes");
+        let mut params = params;
         BatchPutAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(BatchPutAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchPutAttributesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -1757,23 +1753,15 @@ impl SimpleDb for SimpleDbClient {
         input: CreateDomainRequest,
     ) -> Result<(), RusotoError<CreateDomainError>> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateDomain");
-        params.put("Version", "2009-04-15");
+        let params = self.new_params("CreateDomain");
+        let mut params = params;
         CreateDomainRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateDomainError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDomainError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -1785,23 +1773,15 @@ impl SimpleDb for SimpleDbClient {
         input: DeleteAttributesRequest,
     ) -> Result<(), RusotoError<DeleteAttributesError>> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteAttributes");
-        params.put("Version", "2009-04-15");
+        let params = self.new_params("DeleteAttributes");
+        let mut params = params;
         DeleteAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAttributesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -1813,23 +1793,15 @@ impl SimpleDb for SimpleDbClient {
         input: DeleteDomainRequest,
     ) -> Result<(), RusotoError<DeleteDomainError>> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteDomain");
-        params.put("Version", "2009-04-15");
+        let params = self.new_params("DeleteDomain");
+        let mut params = params;
         DeleteDomainRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteDomainError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDomainError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -1841,43 +1813,28 @@ impl SimpleDb for SimpleDbClient {
         input: DomainMetadataRequest,
     ) -> Result<DomainMetadataResult, RusotoError<DomainMetadataError>> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DomainMetadata");
-        params.put("Version", "2009-04-15");
+        let params = self.new_params("DomainMetadata");
+        let mut params = params;
         DomainMetadataRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DomainMetadataError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DomainMetadataError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DomainMetadataResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                DomainMetadataResultDeserializer::deserialize("DomainMetadataResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DomainMetadataResultDeserializer::deserialize("DomainMetadataResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -1887,43 +1844,28 @@ impl SimpleDb for SimpleDbClient {
         input: GetAttributesRequest,
     ) -> Result<GetAttributesResult, RusotoError<GetAttributesError>> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "GetAttributes");
-        params.put("Version", "2009-04-15");
+        let params = self.new_params("GetAttributes");
+        let mut params = params;
         GetAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetAttributesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result =
-                GetAttributesResultDeserializer::deserialize("GetAttributesResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetAttributesResultDeserializer::deserialize("GetAttributesResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -1933,42 +1875,27 @@ impl SimpleDb for SimpleDbClient {
         input: ListDomainsRequest,
     ) -> Result<ListDomainsResult, RusotoError<ListDomainsError>> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListDomains");
-        params.put("Version", "2009-04-15");
+        let params = self.new_params("ListDomains");
+        let mut params = params;
         ListDomainsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListDomainsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDomainsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListDomainsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListDomainsResultDeserializer::deserialize("ListDomainsResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListDomainsResultDeserializer::deserialize("ListDomainsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -1978,23 +1905,15 @@ impl SimpleDb for SimpleDbClient {
         input: PutAttributesRequest,
     ) -> Result<(), RusotoError<PutAttributesError>> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "PutAttributes");
-        params.put("Version", "2009-04-15");
+        let params = self.new_params("PutAttributes");
+        let mut params = params;
         PutAttributesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, PutAttributesError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -2003,42 +1922,27 @@ impl SimpleDb for SimpleDbClient {
     /// <p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>
     async fn select(&self, input: SelectRequest) -> Result<SelectResult, RusotoError<SelectError>> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "Select");
-        params.put("Version", "2009-04-15");
+        let params = self.new_params("Select");
+        let mut params = params;
         SelectRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SelectError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SelectError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SelectResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = SelectResultDeserializer::deserialize("SelectResult", &mut stack)?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = SelectResultDeserializer::deserialize("SelectResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

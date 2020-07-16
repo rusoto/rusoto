@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>An object that defines a message that contains text formatted using Amazon Pinpoint Voice Instructions markup.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CallInstructionsMessageType {
     /// <p>The language to use when delivering the message. For a complete list of supported languages, see the Amazon Polly Developer Guide.</p>
@@ -35,7 +35,7 @@ pub struct CallInstructionsMessageType {
 }
 
 /// <p>An object that contains information about an event destination that sends data to Amazon CloudWatch Logs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchLogsDestination {
     /// <p>The Amazon Resource Name (ARN) of an Amazon Identity and Access Management (IAM) role that is able to write event data to an Amazon CloudWatch destination.</p>
     #[serde(rename = "IamRoleArn")]
@@ -48,7 +48,7 @@ pub struct CloudWatchLogsDestination {
 }
 
 /// <p>Create a new event destination in a configuration set.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetEventDestinationRequest {
     /// <p>ConfigurationSetName</p>
@@ -64,12 +64,12 @@ pub struct CreateConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An empty object that indicates that the event destination was created successfully.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationSetEventDestinationResponse {}
 
 /// <p>A request to create a new configuration set.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationSetRequest {
     /// <p>The name that you want to give the configuration set.</p>
@@ -79,11 +79,11 @@ pub struct CreateConfigurationSetRequest {
 }
 
 /// <p>An empty object that indicates that the configuration set was successfully created.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationSetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetEventDestinationRequest {
     /// <p>ConfigurationSetName</p>
@@ -95,11 +95,11 @@ pub struct DeleteConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An empty object that indicates that the event destination was deleted successfully.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConfigurationSetEventDestinationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationSetRequest {
     /// <p>ConfigurationSetName</p>
@@ -108,12 +108,12 @@ pub struct DeleteConfigurationSetRequest {
 }
 
 /// <p>An empty object that indicates that the configuration set was deleted successfully.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConfigurationSetResponse {}
 
 /// <p>An object that defines an event destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventDestination {
     #[serde(rename = "CloudWatchLogsDestination")]
@@ -139,7 +139,7 @@ pub struct EventDestination {
 }
 
 /// <p>An object that defines a single event destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EventDestinationDefinition {
     #[serde(rename = "CloudWatchLogsDestination")]
@@ -160,7 +160,7 @@ pub struct EventDestinationDefinition {
     pub sns_destination: Option<SnsDestination>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationSetEventDestinationsRequest {
     /// <p>ConfigurationSetName</p>
@@ -169,7 +169,7 @@ pub struct GetConfigurationSetEventDestinationsRequest {
 }
 
 /// <p>An object that contains information about an event destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigurationSetEventDestinationsResponse {
     #[serde(rename = "EventDestinations")]
@@ -178,7 +178,7 @@ pub struct GetConfigurationSetEventDestinationsResponse {
 }
 
 /// <p>An object that contains information about an event destination that sends data to Amazon Kinesis Data Firehose.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KinesisFirehoseDestination {
     /// <p>The Amazon Resource Name (ARN) of an IAM role that can write data to an Amazon Kinesis Data Firehose stream.</p>
     #[serde(rename = "DeliveryStreamArn")]
@@ -191,7 +191,7 @@ pub struct KinesisFirehoseDestination {
 }
 
 /// <p>An object that defines a message that contains unformatted text.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PlainTextMessageType {
     /// <p>The language to use when delivering the message. For a complete list of supported languages, see the Amazon Polly Developer Guide.</p>
@@ -209,7 +209,7 @@ pub struct PlainTextMessageType {
 }
 
 /// <p>An object that defines a message that contains SSML-formatted text.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SSMLMessageType {
     /// <p>The language to use when delivering the message. For a complete list of supported languages, see the Amazon Polly Developer Guide.</p>
@@ -227,7 +227,7 @@ pub struct SSMLMessageType {
 }
 
 /// <p>SendVoiceMessageRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendVoiceMessageRequest {
     /// <p>The phone number that appears on recipients&#39; devices when they receive the message.</p>
@@ -252,7 +252,7 @@ pub struct SendVoiceMessageRequest {
 }
 
 /// <p>An object that that contains the Message ID of a Voice message that was sent successfully.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendVoiceMessageResponse {
     /// <p>A unique identifier for the voice message.</p>
@@ -262,7 +262,7 @@ pub struct SendVoiceMessageResponse {
 }
 
 /// <p>An object that contains information about an event destination that sends data to Amazon SNS.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SnsDestination {
     /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic that you want to publish events to.</p>
     #[serde(rename = "TopicArn")]
@@ -271,7 +271,7 @@ pub struct SnsDestination {
 }
 
 /// <p>UpdateConfigurationSetEventDestinationRequest</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationSetEventDestinationRequest {
     /// <p>ConfigurationSetName</p>
@@ -286,12 +286,12 @@ pub struct UpdateConfigurationSetEventDestinationRequest {
 }
 
 /// <p>An empty object that indicates that the event destination was updated successfully.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConfigurationSetEventDestinationResponse {}
 
 /// <p>An object that contains a voice message and information about the recipient that you want to send it to.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VoiceMessageContent {
     #[serde(rename = "CallInstructionsMessage")]
@@ -845,6 +845,7 @@ impl PinpointSmsVoiceClient {
 #[async_trait]
 impl PinpointSmsVoice for PinpointSmsVoiceClient {
     /// <p>Create a new configuration set. After you create the configuration set, you can add one or more event destinations to it.</p>
+    #[allow(unused_mut)]
     async fn create_configuration_set(
         &self,
         input: CreateConfigurationSetRequest,
@@ -864,7 +865,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateConfigurationSetResponse, _>()?;
 
@@ -876,6 +877,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Create a new event destination in a configuration set.</p>
+    #[allow(unused_mut)]
     async fn create_configuration_set_event_destination(
         &self,
         input: CreateConfigurationSetEventDestinationRequest,
@@ -901,7 +903,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateConfigurationSetEventDestinationResponse, _>()?;
 
@@ -915,6 +917,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Deletes an existing configuration set.</p>
+    #[allow(unused_mut)]
     async fn delete_configuration_set(
         &self,
         input: DeleteConfigurationSetRequest,
@@ -935,7 +938,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteConfigurationSetResponse, _>()?;
 
@@ -947,6 +950,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Deletes an event destination in a configuration set.</p>
+    #[allow(unused_mut)]
     async fn delete_configuration_set_event_destination(
         &self,
         input: DeleteConfigurationSetEventDestinationRequest,
@@ -967,7 +971,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteConfigurationSetEventDestinationResponse, _>()?;
 
@@ -981,6 +985,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Obtain information about an event destination, including the types of events it reports, the Amazon Resource Name (ARN) of the destination, and the name of the event destination.</p>
+    #[allow(unused_mut)]
     async fn get_configuration_set_event_destinations(
         &self,
         input: GetConfigurationSetEventDestinationsRequest,
@@ -1004,7 +1009,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetConfigurationSetEventDestinationsResponse, _>()?;
 
@@ -1018,6 +1023,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Create a new voice message and send it to a recipient&#39;s phone number.</p>
+    #[allow(unused_mut)]
     async fn send_voice_message(
         &self,
         input: SendVoiceMessageRequest,
@@ -1037,7 +1043,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SendVoiceMessageResponse, _>()?;
 
@@ -1049,6 +1055,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
     }
 
     /// <p>Update an event destination in a configuration set. An event destination is a location that you publish information about your voice calls to. For example, you can log an event to an Amazon CloudWatch destination when a call fails.</p>
+    #[allow(unused_mut)]
     async fn update_configuration_set_event_destination(
         &self,
         input: UpdateConfigurationSetEventDestinationRequest,
@@ -1071,7 +1078,7 @@ impl PinpointSmsVoice for PinpointSmsVoiceClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateConfigurationSetEventDestinationResponse, _>()?;
 

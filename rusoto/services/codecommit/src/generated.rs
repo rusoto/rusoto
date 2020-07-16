@@ -20,12 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl CodeCommitClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "codecommit", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Returns information about a specific approval on a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Approval {
     /// <p>The state of the approval, APPROVE or REVOKE. REVOKE states are not stored.</p>
@@ -39,7 +65,7 @@ pub struct Approval {
 }
 
 /// <p>Returns information about an approval rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApprovalRule {
     /// <p>The content of the approval rule.</p>
@@ -77,7 +103,7 @@ pub struct ApprovalRule {
 }
 
 /// <p>Returns information about an event for an approval rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApprovalRuleEventMetadata {
     /// <p>The content of the approval rule.</p>
@@ -95,7 +121,7 @@ pub struct ApprovalRuleEventMetadata {
 }
 
 /// <p>Returns information about an override event for approval rules for a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApprovalRuleOverriddenEventMetadata {
     /// <p>The status of the override event.</p>
@@ -109,7 +135,7 @@ pub struct ApprovalRuleOverriddenEventMetadata {
 }
 
 /// <p>Returns information about an approval rule template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApprovalRuleTemplate {
     /// <p>The content of the approval rule template.</p>
@@ -147,7 +173,7 @@ pub struct ApprovalRuleTemplate {
 }
 
 /// <p>Returns information about a change in the approval state for a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApprovalStateChangedEventMetadata {
     /// <p>The approval status for the pull request.</p>
@@ -160,7 +186,7 @@ pub struct ApprovalStateChangedEventMetadata {
     pub revision_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateApprovalRuleTemplateWithRepositoryInput {
     /// <p>The name for the approval rule template. </p>
@@ -172,7 +198,7 @@ pub struct AssociateApprovalRuleTemplateWithRepositoryInput {
 }
 
 /// <p>Returns information about errors in a BatchAssociateApprovalRuleTemplateWithRepositories operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeCommitBatchAssociateApprovalRuleTemplateWithRepositoriesError {
     /// <p>An error code that specifies whether the repository name was not valid or not found.</p>
@@ -189,7 +215,7 @@ pub struct CodeCommitBatchAssociateApprovalRuleTemplateWithRepositoriesError {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchAssociateApprovalRuleTemplateWithRepositoriesInput {
     /// <p>The name of the template you want to associate with one or more repositories.</p>
@@ -200,7 +226,7 @@ pub struct BatchAssociateApprovalRuleTemplateWithRepositoriesInput {
     pub repository_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAssociateApprovalRuleTemplateWithRepositoriesOutput {
     /// <p>A list of names of the repositories that have been associated with the template.</p>
@@ -212,7 +238,7 @@ pub struct BatchAssociateApprovalRuleTemplateWithRepositoriesOutput {
 }
 
 /// <p>Returns information about errors in a BatchDescribeMergeConflicts operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeCommitBatchDescribeMergeConflictsError {
     /// <p>The name of the exception.</p>
@@ -226,7 +252,7 @@ pub struct CodeCommitBatchDescribeMergeConflictsError {
     pub message: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDescribeMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
@@ -267,7 +293,7 @@ pub struct BatchDescribeMergeConflictsInput {
     pub source_commit_specifier: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDescribeMergeConflictsOutput {
     /// <p>The commit ID of the merge base.</p>
@@ -294,7 +320,7 @@ pub struct BatchDescribeMergeConflictsOutput {
 }
 
 /// <p>Returns information about errors in a BatchDisassociateApprovalRuleTemplateFromRepositories operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeCommitBatchDisassociateApprovalRuleTemplateFromRepositoriesError {
     /// <p>An error code that specifies whether the repository name was not valid or not found.</p>
@@ -311,7 +337,7 @@ pub struct CodeCommitBatchDisassociateApprovalRuleTemplateFromRepositoriesError 
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDisassociateApprovalRuleTemplateFromRepositoriesInput {
     /// <p>The name of the template that you want to disassociate from one or more repositories.</p>
@@ -322,7 +348,7 @@ pub struct BatchDisassociateApprovalRuleTemplateFromRepositoriesInput {
     pub repository_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDisassociateApprovalRuleTemplateFromRepositoriesOutput {
     /// <p>A list of repository names that have had their association with the template removed.</p>
@@ -334,7 +360,7 @@ pub struct BatchDisassociateApprovalRuleTemplateFromRepositoriesOutput {
 }
 
 /// <p>Returns information about errors in a BatchGetCommits operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeCommitBatchGetCommitsError {
     /// <p>A commit ID that either could not be found or was not in a valid format.</p>
@@ -351,7 +377,7 @@ pub struct CodeCommitBatchGetCommitsError {
     pub error_message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetCommitsInput {
     /// <p><p>The full commit IDs of the commits to get information about.</p> <note> <p>You must supply the full SHA IDs of each commit. You cannot use shortened SHA IDs.</p> </note></p>
@@ -362,7 +388,7 @@ pub struct BatchGetCommitsInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetCommitsOutput {
     /// <p>An array of commit data type objects, each of which contains information about a specified commit.</p>
@@ -376,7 +402,7 @@ pub struct BatchGetCommitsOutput {
 }
 
 /// <p>Represents the input of a batch get repositories operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetRepositoriesInput {
     /// <p><p>The names of the repositories to get information about.</p> <note> <p>The length constraint limit is for each string in the array. The array itself can be empty.</p> </note></p>
@@ -385,7 +411,7 @@ pub struct BatchGetRepositoriesInput {
 }
 
 /// <p>Represents the output of a batch get repositories operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetRepositoriesOutput {
     /// <p>A list of repositories returned by the batch get repositories operation.</p>
@@ -399,7 +425,7 @@ pub struct BatchGetRepositoriesOutput {
 }
 
 /// <p>Returns information about a specific Git blob object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BlobMetadata {
     /// <p>The full ID of the blob.</p>
@@ -417,7 +443,7 @@ pub struct BlobMetadata {
 }
 
 /// <p>Returns information about a branch.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BranchInfo {
     /// <p>The name of the branch.</p>
@@ -431,13 +457,17 @@ pub struct BranchInfo {
 }
 
 /// <p>Returns information about a specific comment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Comment {
     /// <p>The Amazon Resource Name (ARN) of the person who posted the comment.</p>
     #[serde(rename = "authorArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author_arn: Option<String>,
+    /// <p>The emoji reactions to a comment, if any, submitted by the user whose credentials are associated with the call to the API.</p>
+    #[serde(rename = "callerReactions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caller_reactions: Option<Vec<String>>,
     /// <p>A unique, client-generated idempotency token that, when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request returns information about the initial request that used that token.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -466,10 +496,14 @@ pub struct Comment {
     #[serde(rename = "lastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
+    /// <p>A string to integer map that represents the number of individual users who have responded to a comment with the specified reactions.</p>
+    #[serde(rename = "reactionCounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reaction_counts: Option<::std::collections::HashMap<String, i64>>,
 }
 
 /// <p>Returns information about comments on the comparison between two commits.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommentsForComparedCommit {
     /// <p>The full blob ID of the commit used to establish the after of the comparison.</p>
@@ -503,7 +537,7 @@ pub struct CommentsForComparedCommit {
 }
 
 /// <p>Returns information about comments on a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommentsForPullRequest {
     /// <p>The full blob ID of the file on which you want to comment on the source commit.</p>
@@ -541,7 +575,7 @@ pub struct CommentsForPullRequest {
 }
 
 /// <p>Returns information about a specific commit.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Commit {
     /// <p>Any other data associated with the specified commit.</p>
@@ -575,7 +609,7 @@ pub struct Commit {
 }
 
 /// <p>Information about conflicts in a merge operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Conflict {
     /// <p>Metadata about a conflict in a merge operation.</p>
@@ -589,7 +623,7 @@ pub struct Conflict {
 }
 
 /// <p>Information about the metadata for a conflict in a merge operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConflictMetadata {
     /// <p>A boolean value indicating whether there are conflicts in the content of a file.</p>
@@ -635,7 +669,7 @@ pub struct ConflictMetadata {
 }
 
 /// <p>If AUTOMERGE is the conflict resolution strategy, a list of inputs to use when resolving conflicts during a merge.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConflictResolution {
     /// <p>Files to be deleted as part of the merge conflict resolution.</p>
@@ -652,10 +686,10 @@ pub struct ConflictResolution {
     pub set_file_modes: Option<Vec<SetFileModeEntry>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApprovalRuleTemplateInput {
-    /// <p><p>The content of the approval rule that is created on pull requests in associated repositories. If you specify one or more destination references (branches), approval rules are created in an associated repository only if their destination references (branches) match those specified in the template.</p> <note> <p>When you create the content of the approval rule template, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following are counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/iam/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    /// <p><p>The content of the approval rule that is created on pull requests in associated repositories. If you specify one or more destination references (branches), approval rules are created in an associated repository only if their destination references (branches) match those specified in the template.</p> <note> <p>When you create the content of the approval rule template, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following are counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/IAM/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
     #[serde(rename = "approvalRuleTemplateContent")]
     pub approval_rule_template_content: String,
     /// <p>The description of the approval rule template. Consider providing a description that explains what this template does and when it might be appropriate to associate it with repositories.</p>
@@ -667,7 +701,7 @@ pub struct CreateApprovalRuleTemplateInput {
     pub approval_rule_template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApprovalRuleTemplateOutput {
     /// <p>The content and structure of the created approval rule template.</p>
@@ -676,7 +710,7 @@ pub struct CreateApprovalRuleTemplateOutput {
 }
 
 /// <p>Represents the input of a create branch operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBranchInput {
     /// <p>The name of the new branch to create.</p>
@@ -690,7 +724,7 @@ pub struct CreateBranchInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCommitInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
@@ -733,7 +767,7 @@ pub struct CreateCommitInput {
     pub set_file_modes: Option<Vec<SetFileModeEntry>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCommitOutput {
     /// <p>The full commit ID of the commit that contains your committed file changes.</p>
@@ -758,10 +792,10 @@ pub struct CreateCommitOutput {
     pub tree_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePullRequestApprovalRuleInput {
-    /// <p><p>The content of the approval rule, including the number of approvals needed and the structure of an approval pool defined for approvals, if any. For more information about approval pools, see the AWS CodeCommit User Guide.</p> <note> <p>When you create the content of the approval rule, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following would be counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/iam/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    /// <p><p>The content of the approval rule, including the number of approvals needed and the structure of an approval pool defined for approvals, if any. For more information about approval pools, see the AWS CodeCommit User Guide.</p> <note> <p>When you create the content of the approval rule, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following would be counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/IAM/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
     #[serde(rename = "approvalRuleContent")]
     pub approval_rule_content: String,
     /// <p>The name for the approval rule.</p>
@@ -772,7 +806,7 @@ pub struct CreatePullRequestApprovalRuleInput {
     pub pull_request_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePullRequestApprovalRuleOutput {
     /// <p>Information about the created approval rule.</p>
@@ -780,7 +814,7 @@ pub struct CreatePullRequestApprovalRuleOutput {
     pub approval_rule: ApprovalRule,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePullRequestInput {
     /// <p><p>A unique, client-generated idempotency token that, when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request returns information about the initial request that used that token.</p> <note> <p>The AWS SDKs prepopulate client request tokens. If you are using an AWS SDK, an idempotency token is created for you.</p> </note></p>
@@ -799,7 +833,7 @@ pub struct CreatePullRequestInput {
     pub title: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePullRequestOutput {
     /// <p>Information about the newly created pull request.</p>
@@ -808,7 +842,7 @@ pub struct CreatePullRequestOutput {
 }
 
 /// <p>Represents the input of a create repository operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRepositoryInput {
     /// <p><p>A comment or description about the new repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.</p> </note></p>
@@ -825,7 +859,7 @@ pub struct CreateRepositoryInput {
 }
 
 /// <p>Represents the output of a create repository operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRepositoryOutput {
     /// <p>Information about the newly created repository.</p>
@@ -834,7 +868,7 @@ pub struct CreateRepositoryOutput {
     pub repository_metadata: Option<RepositoryMetadata>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUnreferencedMergeCommitInput {
     /// <p>The name of the author who created the unreferenced commit. This information is used as both the author and committer for the commit.</p>
@@ -879,7 +913,7 @@ pub struct CreateUnreferencedMergeCommitInput {
     pub source_commit_specifier: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUnreferencedMergeCommitOutput {
     /// <p>The full commit ID of the commit that contains your merge results.</p>
@@ -892,7 +926,7 @@ pub struct CreateUnreferencedMergeCommitOutput {
     pub tree_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApprovalRuleTemplateInput {
     /// <p>The name of the approval rule template to delete.</p>
@@ -900,7 +934,7 @@ pub struct DeleteApprovalRuleTemplateInput {
     pub approval_rule_template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApprovalRuleTemplateOutput {
     /// <p>The system-generated ID of the deleted approval rule template. If the template has been previously deleted, the only response is a 200 OK.</p>
@@ -909,7 +943,7 @@ pub struct DeleteApprovalRuleTemplateOutput {
 }
 
 /// <p>Represents the input of a delete branch operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBranchInput {
     /// <p>The name of the branch to delete.</p>
@@ -921,7 +955,7 @@ pub struct DeleteBranchInput {
 }
 
 /// <p>Represents the output of a delete branch operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBranchOutput {
     /// <p>Information about the branch deleted by the operation, including the branch name and the commit ID that was the tip of the branch.</p>
@@ -930,7 +964,7 @@ pub struct DeleteBranchOutput {
     pub deleted_branch: Option<BranchInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCommentContentInput {
     /// <p>The unique, system-generated ID of the comment. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
@@ -938,7 +972,7 @@ pub struct DeleteCommentContentInput {
     pub comment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCommentContentOutput {
     /// <p>Information about the comment you just deleted.</p>
@@ -948,7 +982,7 @@ pub struct DeleteCommentContentOutput {
 }
 
 /// <p>A file that is deleted as part of a commit.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileEntry {
     /// <p>The full path of the file to be deleted, including the name of the file.</p>
@@ -956,7 +990,7 @@ pub struct DeleteFileEntry {
     pub file_path: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFileInput {
     /// <p>The name of the branch where the commit that deletes the file is made.</p>
@@ -989,7 +1023,7 @@ pub struct DeleteFileInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFileOutput {
     /// <p>The blob ID removed from the tree as part of deleting the file.</p>
@@ -1006,7 +1040,7 @@ pub struct DeleteFileOutput {
     pub tree_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePullRequestApprovalRuleInput {
     /// <p>The name of the approval rule you want to delete.</p>
@@ -1017,7 +1051,7 @@ pub struct DeletePullRequestApprovalRuleInput {
     pub pull_request_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePullRequestApprovalRuleOutput {
     /// <p><p>The ID of the deleted approval rule. </p> <note> <p>If the approval rule was deleted in an earlier API call, the response is 200 OK without content.</p> </note></p>
@@ -1026,7 +1060,7 @@ pub struct DeletePullRequestApprovalRuleOutput {
 }
 
 /// <p>Represents the input of a delete repository operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRepositoryInput {
     /// <p>The name of the repository to delete.</p>
@@ -1035,7 +1069,7 @@ pub struct DeleteRepositoryInput {
 }
 
 /// <p>Represents the output of a delete repository operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRepositoryOutput {
     /// <p>The ID of the repository that was deleted.</p>
@@ -1044,7 +1078,7 @@ pub struct DeleteRepositoryOutput {
     pub repository_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
@@ -1080,7 +1114,7 @@ pub struct DescribeMergeConflictsInput {
     pub source_commit_specifier: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMergeConflictsOutput {
     /// <p>The commit ID of the merge base.</p>
@@ -1105,7 +1139,7 @@ pub struct DescribeMergeConflictsOutput {
     pub source_commit_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePullRequestEventsInput {
     /// <p>The Amazon Resource Name (ARN) of the user whose actions resulted in the event. Examples include updating the pull request with more commits or changing the status of a pull request.</p>
@@ -1129,7 +1163,7 @@ pub struct DescribePullRequestEventsInput {
     pub pull_request_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePullRequestEventsOutput {
     /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
@@ -1142,7 +1176,7 @@ pub struct DescribePullRequestEventsOutput {
 }
 
 /// <p>Returns information about a set of differences for a commit specifier.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Difference {
     /// <p>Information about an <code>afterBlob</code> data type object, including the ID, the file mode permission code, and the path.</p>
@@ -1159,7 +1193,7 @@ pub struct Difference {
     pub change_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateApprovalRuleTemplateFromRepositoryInput {
     /// <p>The name of the approval rule template to disassociate from a specified repository.</p>
@@ -1170,7 +1204,7 @@ pub struct DisassociateApprovalRuleTemplateFromRepositoryInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EvaluatePullRequestApprovalRulesInput {
     /// <p>The system-generated ID of the pull request you want to evaluate.</p>
@@ -1181,7 +1215,7 @@ pub struct EvaluatePullRequestApprovalRulesInput {
     pub revision_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluatePullRequestApprovalRulesOutput {
     /// <p>The result of the evaluation, including the names of the rules whose conditions have been met (if any), the names of the rules whose conditions have not been met (if any), whether the pull request is in the approved state, and whether the pull request approval rule has been set aside by an override. </p>
@@ -1190,7 +1224,7 @@ pub struct EvaluatePullRequestApprovalRulesOutput {
 }
 
 /// <p>Returns information about the approval rules applied to a pull request and whether conditions have been met.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Evaluation {
     /// <p>The names of the approval rules that have not had their conditions met.</p>
@@ -1212,7 +1246,7 @@ pub struct Evaluation {
 }
 
 /// <p>Returns information about a file in a repository.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct File {
     /// <p>The fully qualified path to the file in the repository.</p>
@@ -1234,7 +1268,7 @@ pub struct File {
 }
 
 /// <p>A file to be added, updated, or deleted as part of a commit.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FileMetadata {
     /// <p>The full path to the file to be added or updated, including the name of the file.</p>
@@ -1252,7 +1286,7 @@ pub struct FileMetadata {
 }
 
 /// <p>Information about file modes in a merge or pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FileModes {
     /// <p>The file mode of a file in the base of a merge or pull request.</p>
@@ -1270,7 +1304,7 @@ pub struct FileModes {
 }
 
 /// <p>Information about the size of files in a merge or pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FileSizes {
     /// <p>The size of a file in the base of a merge or pull request.</p>
@@ -1288,7 +1322,7 @@ pub struct FileSizes {
 }
 
 /// <p>Returns information about a folder in a repository.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Folder {
     /// <p>The fully qualified path of the folder in the repository.</p>
@@ -1305,7 +1339,7 @@ pub struct Folder {
     pub tree_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApprovalRuleTemplateInput {
     /// <p>The name of the approval rule template for which you want to get information.</p>
@@ -1313,7 +1347,7 @@ pub struct GetApprovalRuleTemplateInput {
     pub approval_rule_template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApprovalRuleTemplateOutput {
     /// <p>The content and structure of the approval rule template.</p>
@@ -1322,7 +1356,7 @@ pub struct GetApprovalRuleTemplateOutput {
 }
 
 /// <p>Represents the input of a get blob operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlobInput {
     /// <p>The ID of the blob, which is its SHA-1 pointer.</p>
@@ -1334,7 +1368,7 @@ pub struct GetBlobInput {
 }
 
 /// <p>Represents the output of a get blob operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlobOutput {
     /// <p>The content of the blob, usually a file.</p>
@@ -1348,7 +1382,7 @@ pub struct GetBlobOutput {
 }
 
 /// <p>Represents the input of a get branch operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBranchInput {
     /// <p>The name of the branch for which you want to retrieve information.</p>
@@ -1362,7 +1396,7 @@ pub struct GetBranchInput {
 }
 
 /// <p>Represents the output of a get branch operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBranchOutput {
     /// <p>The name of the branch.</p>
@@ -1371,7 +1405,7 @@ pub struct GetBranchOutput {
     pub branch: Option<BranchInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentInput {
     /// <p>The unique, system-generated ID of the comment. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
@@ -1379,7 +1413,7 @@ pub struct GetCommentInput {
     pub comment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommentOutput {
     /// <p>The contents of the comment.</p>
@@ -1388,7 +1422,39 @@ pub struct GetCommentOutput {
     pub comment: Option<Comment>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCommentReactionsInput {
+    /// <p>The ID of the comment for which you want to get reactions information.</p>
+    #[serde(rename = "commentId")]
+    pub comment_id: String,
+    /// <p>A non-zero, non-negative integer used to limit the number of returned results. The default is the same as the allowed maximum, 1,000.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An enumeration token that, when provided in a request, returns the next batch of the results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Optional. The Amazon Resource Name (ARN) of the user or identity for which you want to get reaction information.</p>
+    #[serde(rename = "reactionUserArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reaction_user_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetCommentReactionsOutput {
+    /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of reactions to the specified comment.</p>
+    #[serde(rename = "reactionsForComment")]
+    pub reactions_for_comment: Vec<ReactionForComment>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentsForComparedCommitInput {
     /// <p>To establish the directionality of the comparison, the full commit ID of the after commit.</p>
@@ -1411,7 +1477,7 @@ pub struct GetCommentsForComparedCommitInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommentsForComparedCommitOutput {
     /// <p>A list of comment objects on the compared commit.</p>
@@ -1424,7 +1490,7 @@ pub struct GetCommentsForComparedCommitOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommentsForPullRequestInput {
     /// <p>The full commit ID of the commit in the source branch that was the tip of the branch at the time the comment was made.</p>
@@ -1452,7 +1518,7 @@ pub struct GetCommentsForPullRequestInput {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommentsForPullRequestOutput {
     /// <p>An array of comment objects on the pull request.</p>
@@ -1466,7 +1532,7 @@ pub struct GetCommentsForPullRequestOutput {
 }
 
 /// <p>Represents the input of a get commit operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCommitInput {
     /// <p>The commit ID. Commit IDs are the full SHA ID of the commit.</p>
@@ -1478,7 +1544,7 @@ pub struct GetCommitInput {
 }
 
 /// <p>Represents the output of a get commit operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommitOutput {
     /// <p>A commit data type object that contains information about the specified commit.</p>
@@ -1486,7 +1552,7 @@ pub struct GetCommitOutput {
     pub commit: Commit,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDifferencesInput {
     /// <p>A non-zero, non-negative integer used to limit the number of returned results.</p>
@@ -1517,7 +1583,7 @@ pub struct GetDifferencesInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDifferencesOutput {
     /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
@@ -1530,7 +1596,7 @@ pub struct GetDifferencesOutput {
     pub differences: Option<Vec<Difference>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFileInput {
     /// <p>The fully quaified reference that identifies the commit that contains the file. For example, you can specify a full commit ID, a tag, a branch name, or a reference such as refs/heads/master. If none is provided, the head commit is used.</p>
@@ -1545,7 +1611,7 @@ pub struct GetFileInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFileOutput {
     /// <p>The blob ID of the object that represents the file content.</p>
@@ -1573,7 +1639,7 @@ pub struct GetFileOutput {
     pub file_size: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFolderInput {
     /// <p>A fully qualified reference used to identify a commit that contains the version of the folder's content to return. A fully qualified reference can be a commit ID, branch name, tag, or reference such as HEAD. If no specifier is provided, the folder content is returned as it exists in the HEAD commit.</p>
@@ -1588,7 +1654,7 @@ pub struct GetFolderInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFolderOutput {
     /// <p>The full commit ID used as a reference for the returned version of the folder content.</p>
@@ -1619,7 +1685,7 @@ pub struct GetFolderOutput {
     pub tree_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeCommitInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
@@ -1641,7 +1707,7 @@ pub struct GetMergeCommitInput {
     pub source_commit_specifier: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMergeCommitOutput {
     /// <p>The commit ID of the merge base.</p>
@@ -1662,7 +1728,7 @@ pub struct GetMergeCommitOutput {
     pub source_commit_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeConflictsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
@@ -1695,7 +1761,7 @@ pub struct GetMergeConflictsInput {
     pub source_commit_specifier: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMergeConflictsOutput {
     /// <p>The commit ID of the merge base.</p>
@@ -1720,7 +1786,7 @@ pub struct GetMergeConflictsOutput {
     pub source_commit_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMergeOptionsInput {
     /// <p>The level of conflict detail to use. If unspecified, the default FILE_LEVEL is used, which returns a not-mergeable result if the same file has differences in both branches. If LINE_LEVEL is specified, a conflict is considered not mergeable if the same file in both branches has differences on the same line.</p>
@@ -1742,7 +1808,7 @@ pub struct GetMergeOptionsInput {
     pub source_commit_specifier: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMergeOptionsOutput {
     /// <p>The commit ID of the merge base.</p>
@@ -1759,7 +1825,7 @@ pub struct GetMergeOptionsOutput {
     pub source_commit_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestApprovalStatesInput {
     /// <p>The system-generated ID for the pull request.</p>
@@ -1770,7 +1836,7 @@ pub struct GetPullRequestApprovalStatesInput {
     pub revision_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPullRequestApprovalStatesOutput {
     /// <p>Information about users who have approved the pull request.</p>
@@ -1779,7 +1845,7 @@ pub struct GetPullRequestApprovalStatesOutput {
     pub approvals: Option<Vec<Approval>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
@@ -1787,7 +1853,7 @@ pub struct GetPullRequestInput {
     pub pull_request_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPullRequestOutput {
     /// <p>Information about the specified pull request.</p>
@@ -1795,7 +1861,7 @@ pub struct GetPullRequestOutput {
     pub pull_request: PullRequest,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPullRequestOverrideStateInput {
     /// <p>The ID of the pull request for which you want to get information about whether approval rules have been set aside (overridden).</p>
@@ -1806,7 +1872,7 @@ pub struct GetPullRequestOverrideStateInput {
     pub revision_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPullRequestOverrideStateOutput {
     /// <p>A Boolean value that indicates whether a pull request has had its rules set aside (TRUE) or whether all approval rules still apply (FALSE).</p>
@@ -1820,7 +1886,7 @@ pub struct GetPullRequestOverrideStateOutput {
 }
 
 /// <p>Represents the input of a get repository operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryInput {
     /// <p>The name of the repository to get information about.</p>
@@ -1829,7 +1895,7 @@ pub struct GetRepositoryInput {
 }
 
 /// <p>Represents the output of a get repository operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRepositoryOutput {
     /// <p>Information about the repository.</p>
@@ -1839,7 +1905,7 @@ pub struct GetRepositoryOutput {
 }
 
 /// <p>Represents the input of a get repository triggers operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRepositoryTriggersInput {
     /// <p>The name of the repository for which the trigger is configured.</p>
@@ -1848,7 +1914,7 @@ pub struct GetRepositoryTriggersInput {
 }
 
 /// <p>Represents the output of a get repository triggers operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRepositoryTriggersOutput {
     /// <p>The system-generated unique ID for the trigger.</p>
@@ -1862,7 +1928,7 @@ pub struct GetRepositoryTriggersOutput {
 }
 
 /// <p>Information about whether a file is binary or textual in a merge or pull request operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IsBinaryFile {
     /// <p>The binary or non-binary status of a file in the base of a merge or pull request.</p>
@@ -1879,7 +1945,7 @@ pub struct IsBinaryFile {
     pub source: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApprovalRuleTemplatesInput {
     /// <p>A non-zero, non-negative integer used to limit the number of returned results.</p>
@@ -1892,7 +1958,7 @@ pub struct ListApprovalRuleTemplatesInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApprovalRuleTemplatesOutput {
     /// <p>The names of all the approval rule templates found in the AWS Region for your AWS account.</p>
@@ -1905,7 +1971,7 @@ pub struct ListApprovalRuleTemplatesOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssociatedApprovalRuleTemplatesForRepositoryInput {
     /// <p>A non-zero, non-negative integer used to limit the number of returned results.</p>
@@ -1921,7 +1987,7 @@ pub struct ListAssociatedApprovalRuleTemplatesForRepositoryInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociatedApprovalRuleTemplatesForRepositoryOutput {
     /// <p>The names of all approval rule templates associated with the repository.</p>
@@ -1935,7 +2001,7 @@ pub struct ListAssociatedApprovalRuleTemplatesForRepositoryOutput {
 }
 
 /// <p>Represents the input of a list branches operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBranchesInput {
     /// <p>An enumeration token that allows the operation to batch the results.</p>
@@ -1948,7 +2014,7 @@ pub struct ListBranchesInput {
 }
 
 /// <p>Represents the output of a list branches operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBranchesOutput {
     /// <p>The list of branch names.</p>
@@ -1961,7 +2027,7 @@ pub struct ListBranchesOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPullRequestsInput {
     /// <p>Optional. The Amazon Resource Name (ARN) of the user who created the pull request. If used, this filters the results to pull requests created by that user.</p>
@@ -1985,7 +2051,7 @@ pub struct ListPullRequestsInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPullRequestsOutput {
     /// <p>An enumeration token that allows the operation to batch the next results of the operation.</p>
@@ -1997,7 +2063,7 @@ pub struct ListPullRequestsOutput {
     pub pull_request_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRepositoriesForApprovalRuleTemplateInput {
     /// <p>The name of the approval rule template for which you want to list repositories that are associated with that template.</p>
@@ -2013,7 +2079,7 @@ pub struct ListRepositoriesForApprovalRuleTemplateInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRepositoriesForApprovalRuleTemplateOutput {
     /// <p>An enumeration token that allows the operation to batch the next results of the operation.</p>
@@ -2027,7 +2093,7 @@ pub struct ListRepositoriesForApprovalRuleTemplateOutput {
 }
 
 /// <p>Represents the input of a list repositories operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRepositoriesInput {
     /// <p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>
@@ -2045,7 +2111,7 @@ pub struct ListRepositoriesInput {
 }
 
 /// <p>Represents the output of a list repositories operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRepositoriesOutput {
     /// <p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>
@@ -2058,7 +2124,7 @@ pub struct ListRepositoriesOutput {
     pub repositories: Option<Vec<RepositoryNameIdPair>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>An enumeration token that, when provided in a request, returns the next batch of the results.</p>
@@ -2070,7 +2136,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>An enumeration token that allows the operation to batch the next results of the operation.</p>
@@ -2084,7 +2150,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 /// <p>Returns information about the location of a change or comment in the comparison between two commits or a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Location {
     /// <p>The name of the file being compared, including its extension and subdirectory, if any.</p>
     #[serde(rename = "filePath")]
@@ -2100,7 +2166,7 @@ pub struct Location {
     pub relative_file_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesByFastForwardInput {
     /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit (for example, a branch name or a full commit ID).</p>
@@ -2118,7 +2184,7 @@ pub struct MergeBranchesByFastForwardInput {
     pub target_branch: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeBranchesByFastForwardOutput {
     /// <p>The commit ID of the merge in the destination or target branch.</p>
@@ -2131,7 +2197,7 @@ pub struct MergeBranchesByFastForwardOutput {
     pub tree_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesBySquashInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
@@ -2177,7 +2243,7 @@ pub struct MergeBranchesBySquashInput {
     pub target_branch: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeBranchesBySquashOutput {
     /// <p>The commit ID of the merge in the destination or target branch.</p>
@@ -2190,7 +2256,7 @@ pub struct MergeBranchesBySquashOutput {
     pub tree_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergeBranchesByThreeWayInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
@@ -2236,7 +2302,7 @@ pub struct MergeBranchesByThreeWayInput {
     pub target_branch: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeBranchesByThreeWayOutput {
     /// <p>The commit ID of the merge in the destination or target branch.</p>
@@ -2250,7 +2316,7 @@ pub struct MergeBranchesByThreeWayOutput {
 }
 
 /// <p>Information about merge hunks in a merge or pull request operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeHunk {
     /// <p>Information about the merge hunk in the base of a merge or pull request.</p>
@@ -2272,7 +2338,7 @@ pub struct MergeHunk {
 }
 
 /// <p>Information about the details of a merge hunk that contains a conflict in a merge or pull request operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeHunkDetail {
     /// <p>The end position of the hunk in the merge result.</p>
@@ -2290,7 +2356,7 @@ pub struct MergeHunkDetail {
 }
 
 /// <p>Returns information about a merge or potential merge between a source reference and a destination reference in a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeMetadata {
     /// <p>A Boolean value indicating whether the merge has been made.</p>
@@ -2312,7 +2378,7 @@ pub struct MergeMetadata {
 }
 
 /// <p>Information about the file operation conflicts in a merge operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeOperations {
     /// <p>The operation on a file in the destination of a merge or pull request.</p>
@@ -2325,7 +2391,7 @@ pub struct MergeOperations {
     pub source: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestByFastForwardInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
@@ -2340,7 +2406,7 @@ pub struct MergePullRequestByFastForwardInput {
     pub source_commit_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergePullRequestByFastForwardOutput {
     /// <p>Information about the specified pull request, including the merge.</p>
@@ -2349,7 +2415,7 @@ pub struct MergePullRequestByFastForwardOutput {
     pub pull_request: Option<PullRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestBySquashInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
@@ -2392,7 +2458,7 @@ pub struct MergePullRequestBySquashInput {
     pub source_commit_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergePullRequestBySquashOutput {
     #[serde(rename = "pullRequest")]
@@ -2400,7 +2466,7 @@ pub struct MergePullRequestBySquashOutput {
     pub pull_request: Option<PullRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MergePullRequestByThreeWayInput {
     /// <p>The name of the author who created the commit. This information is used as both the author and committer for the commit.</p>
@@ -2443,7 +2509,7 @@ pub struct MergePullRequestByThreeWayInput {
     pub source_commit_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergePullRequestByThreeWayOutput {
     #[serde(rename = "pullRequest")]
@@ -2452,7 +2518,7 @@ pub struct MergePullRequestByThreeWayOutput {
 }
 
 /// <p>Information about the type of an object in a merge operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ObjectTypes {
     /// <p>The type of the object in the base commit of the merge.</p>
@@ -2470,7 +2536,7 @@ pub struct ObjectTypes {
 }
 
 /// <p>Returns information about the template that created the approval rule for a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OriginApprovalRuleTemplate {
     /// <p>The ID of the template that created the approval rule.</p>
@@ -2483,7 +2549,7 @@ pub struct OriginApprovalRuleTemplate {
     pub approval_rule_template_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OverridePullRequestApprovalRulesInput {
     /// <p>Whether you want to set aside approval rule requirements for the pull request (OVERRIDE) or revoke a previous override and apply approval rule requirements (REVOKE). REVOKE status is not stored.</p>
@@ -2497,7 +2563,7 @@ pub struct OverridePullRequestApprovalRulesInput {
     pub revision_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentForComparedCommitInput {
     /// <p>To establish the directionality of the comparison, the full commit ID of the after commit.</p>
@@ -2523,7 +2589,7 @@ pub struct PostCommentForComparedCommitInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostCommentForComparedCommitOutput {
     /// <p>In the directionality you established, the blob ID of the after blob.</p>
@@ -2556,7 +2622,7 @@ pub struct PostCommentForComparedCommitOutput {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentForPullRequestInput {
     /// <p>The full commit ID of the commit in the source branch that is the current tip of the branch for the pull request when you post the comment.</p>
@@ -2584,7 +2650,7 @@ pub struct PostCommentForPullRequestInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostCommentForPullRequestOutput {
     /// <p>In the directionality of the pull request, the blob ID of the after blob.</p>
@@ -2621,7 +2687,7 @@ pub struct PostCommentForPullRequestOutput {
     pub repository_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PostCommentReplyInput {
     /// <p>A unique, client-generated idempotency token that, when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request returns information about the initial request that used that token.</p>
@@ -2636,7 +2702,7 @@ pub struct PostCommentReplyInput {
     pub in_reply_to: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostCommentReplyOutput {
     /// <p>Information about the reply to a comment.</p>
@@ -2646,7 +2712,7 @@ pub struct PostCommentReplyOutput {
 }
 
 /// <p>Returns information about a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequest {
     /// <p>The approval rules applied to the pull request.</p>
@@ -2696,7 +2762,7 @@ pub struct PullRequest {
 }
 
 /// <p>Metadata about the pull request that is used when comparing the pull request source with its destination.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestCreatedEventMetadata {
     /// <p>The commit ID of the tip of the branch specified as the destination branch when the pull request was created.</p>
@@ -2718,7 +2784,7 @@ pub struct PullRequestCreatedEventMetadata {
 }
 
 /// <p>Returns information about a pull request event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestEvent {
     /// <p>The Amazon Resource Name (ARN) of the user whose actions resulted in the event. Examples include updating the pull request with more commits or changing the status of a pull request.</p>
@@ -2770,7 +2836,7 @@ pub struct PullRequestEvent {
 }
 
 /// <p>Returns information about the change in the merge state for a pull request event. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestMergedStateChangedEventMetadata {
     /// <p>The name of the branch that the pull request is merged into.</p>
@@ -2788,7 +2854,7 @@ pub struct PullRequestMergedStateChangedEventMetadata {
 }
 
 /// <p>Information about an update to the source branch of a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestSourceReferenceUpdatedEventMetadata {
     /// <p>The full commit ID of the commit in the source branch that was the tip of the branch at the time the pull request was updated.</p>
@@ -2810,7 +2876,7 @@ pub struct PullRequestSourceReferenceUpdatedEventMetadata {
 }
 
 /// <p>Information about a change to the status of a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestStatusChangedEventMetadata {
     /// <p>The changed status of the pull request.</p>
@@ -2820,7 +2886,7 @@ pub struct PullRequestStatusChangedEventMetadata {
 }
 
 /// <p>Returns information about a pull request target.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestTarget {
     /// <p>The full commit ID that is the tip of the destination branch. This is the commit where the pull request was or will be merged.</p>
@@ -2853,8 +2919,19 @@ pub struct PullRequestTarget {
     pub source_reference: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutCommentReactionInput {
+    /// <p>The ID of the comment to which you want to add or update a reaction.</p>
+    #[serde(rename = "commentId")]
+    pub comment_id: String,
+    /// <p>The emoji reaction you want to add or update. To remove a reaction, provide a value of blank or null. You can also provide the value of none. For information about emoji reaction values supported in AWS CodeCommit, see the <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/how-to-commit-comment.html#emoji-reaction-table">AWS CodeCommit User Guide</a>.</p>
+    #[serde(rename = "reactionValue")]
+    pub reaction_value: String,
+}
+
 /// <p>Information about a file added or updated as part of a commit.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFileEntry {
     /// <p>The content of the file, if a source file is not specified.</p>
@@ -2879,7 +2956,7 @@ pub struct PutFileEntry {
     pub source_file: Option<SourceFileSpecifier>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutFileInput {
     /// <p>The name of the branch where you want to add or update the file. If this is an empty repository, this branch is created.</p>
@@ -2921,7 +2998,7 @@ pub struct PutFileInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutFileOutput {
     /// <p>The ID of the blob, which is its SHA-1 pointer.</p>
@@ -2936,7 +3013,7 @@ pub struct PutFileOutput {
 }
 
 /// <p>Represents the input of a put repository triggers operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRepositoryTriggersInput {
     /// <p>The name of the repository where you want to create or update the trigger.</p>
@@ -2948,7 +3025,7 @@ pub struct PutRepositoryTriggersInput {
 }
 
 /// <p>Represents the output of a put repository triggers operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRepositoryTriggersOutput {
     /// <p>The system-generated unique ID for the create or update operation.</p>
@@ -2957,8 +3034,44 @@ pub struct PutRepositoryTriggersOutput {
     pub configuration_id: Option<String>,
 }
 
+/// <p>Information about the reaction values provided by users on a comment.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReactionForComment {
+    /// <p>The reaction for a specified comment.</p>
+    #[serde(rename = "reaction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reaction: Option<ReactionValueFormats>,
+    /// <p>The Amazon Resource Names (ARNs) of users who have provided reactions to the comment.</p>
+    #[serde(rename = "reactionUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reaction_users: Option<Vec<String>>,
+    /// <p>A numerical count of users who reacted with the specified emoji whose identities have been subsequently deleted from IAM. While these IAM users or roles no longer exist, the reactions might still appear in total reaction counts.</p>
+    #[serde(rename = "reactionsFromDeletedUsersCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reactions_from_deleted_users_count: Option<i64>,
+}
+
+/// <p>Information about the values for reactions to a comment. AWS CodeCommit supports a limited set of reactions.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReactionValueFormats {
+    /// <p>The Emoji Version 1.0 graphic of the reaction. These graphics are interpreted slightly differently on different operating systems.</p>
+    #[serde(rename = "emoji")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub emoji: Option<String>,
+    /// <p>The emoji short code for the reaction. Short codes are interpreted slightly differently on different operating systems. </p>
+    #[serde(rename = "shortCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub short_code: Option<String>,
+    /// <p>The Unicode codepoint for the reaction.</p>
+    #[serde(rename = "unicode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unicode: Option<String>,
+}
+
 /// <p>Information about a replacement content entry in the conflict of a merge or pull request operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplaceContentEntry {
     /// <p>The base-64 encoded content to use when the replacement type is USE_NEW_CONTENT.</p>
@@ -2983,7 +3096,7 @@ pub struct ReplaceContentEntry {
 }
 
 /// <p>Information about a repository.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RepositoryMetadata {
     /// <p>The Amazon Resource Name (ARN) of the repository.</p>
@@ -3029,7 +3142,7 @@ pub struct RepositoryMetadata {
 }
 
 /// <p>Information about a repository name and ID.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RepositoryNameIdPair {
     /// <p>The ID associated with the repository.</p>
@@ -3043,7 +3156,7 @@ pub struct RepositoryNameIdPair {
 }
 
 /// <p>Information about a trigger for a repository.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RepositoryTrigger {
     /// <p><p>The branches to be included in the trigger configuration. If you specify an empty array, the trigger applies to all branches.</p> <note> <p>Although no content is required in the array, you must include the array itself.</p> </note></p>
     #[serde(rename = "branches")]
@@ -3065,7 +3178,7 @@ pub struct RepositoryTrigger {
 }
 
 /// <p>A trigger failed to run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RepositoryTriggerExecutionFailure {
     /// <p>Message information about the trigger that did not run.</p>
@@ -3079,7 +3192,7 @@ pub struct RepositoryTriggerExecutionFailure {
 }
 
 /// <p>Information about the file mode changes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetFileModeEntry {
     /// <p>The file mode for the file.</p>
@@ -3091,7 +3204,7 @@ pub struct SetFileModeEntry {
 }
 
 /// <p>Information about a source file that is part of changes made in a commit.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SourceFileSpecifier {
     /// <p>The full path to the file, including the name of the file.</p>
@@ -3104,7 +3217,7 @@ pub struct SourceFileSpecifier {
 }
 
 /// <p>Returns information about a submodule reference in a repository folder.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubModule {
     /// <p>The fully qualified path to the folder that contains the reference to the submodule.</p>
@@ -3122,7 +3235,7 @@ pub struct SubModule {
 }
 
 /// <p>Returns information about a symbolic link in a repository folder.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SymbolicLink {
     /// <p>The fully qualified path to the folder that contains the symbolic link.</p>
@@ -3143,7 +3256,7 @@ pub struct SymbolicLink {
     pub relative_path: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to which you want to add or update tags.</p>
@@ -3155,7 +3268,7 @@ pub struct TagResourceInput {
 }
 
 /// <p>Returns information about a target for a pull request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Target {
     /// <p>The branch of the repository where the pull request changes are merged. Also known as the destination branch.</p>
@@ -3171,7 +3284,7 @@ pub struct Target {
 }
 
 /// <p>Represents the input of a test repository triggers operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestRepositoryTriggersInput {
     /// <p>The name of the repository in which to test the triggers.</p>
@@ -3183,7 +3296,7 @@ pub struct TestRepositoryTriggersInput {
 }
 
 /// <p>Represents the output of a test repository triggers operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestRepositoryTriggersOutput {
     /// <p>The list of triggers that were not tested. This list provides the names of the triggers that could not be tested, separated by commas.</p>
@@ -3196,7 +3309,7 @@ pub struct TestRepositoryTriggersOutput {
     pub successful_executions: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>The Amazon Resource Name (ARN) of the resource to which you want to remove tags.</p>
@@ -3207,7 +3320,7 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateContentInput {
     /// <p>The name of the approval rule template where you want to update the content of the rule. </p>
@@ -3222,14 +3335,14 @@ pub struct UpdateApprovalRuleTemplateContentInput {
     pub new_rule_content: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApprovalRuleTemplateContentOutput {
     #[serde(rename = "approvalRuleTemplate")]
     pub approval_rule_template: ApprovalRuleTemplate,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateDescriptionInput {
     /// <p>The updated description of the approval rule template.</p>
@@ -3240,7 +3353,7 @@ pub struct UpdateApprovalRuleTemplateDescriptionInput {
     pub approval_rule_template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApprovalRuleTemplateDescriptionOutput {
     /// <p>The structure and content of the updated approval rule template.</p>
@@ -3248,7 +3361,7 @@ pub struct UpdateApprovalRuleTemplateDescriptionOutput {
     pub approval_rule_template: ApprovalRuleTemplate,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApprovalRuleTemplateNameInput {
     /// <p>The new name you want to apply to the approval rule template.</p>
@@ -3259,7 +3372,7 @@ pub struct UpdateApprovalRuleTemplateNameInput {
     pub old_approval_rule_template_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApprovalRuleTemplateNameOutput {
     /// <p>The structure and content of the updated approval rule template.</p>
@@ -3267,7 +3380,7 @@ pub struct UpdateApprovalRuleTemplateNameOutput {
     pub approval_rule_template: ApprovalRuleTemplate,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCommentInput {
     /// <p>The system-generated ID of the comment you want to update. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
@@ -3278,7 +3391,7 @@ pub struct UpdateCommentInput {
     pub content: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCommentOutput {
     /// <p>Information about the updated comment.</p>
@@ -3288,7 +3401,7 @@ pub struct UpdateCommentOutput {
 }
 
 /// <p>Represents the input of an update default branch operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDefaultBranchInput {
     /// <p>The name of the branch to set as the default.</p>
@@ -3299,7 +3412,7 @@ pub struct UpdateDefaultBranchInput {
     pub repository_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestApprovalRuleContentInput {
     /// <p>The name of the approval rule you want to update.</p>
@@ -3309,7 +3422,7 @@ pub struct UpdatePullRequestApprovalRuleContentInput {
     #[serde(rename = "existingRuleContentSha256")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub existing_rule_content_sha_256: Option<String>,
-    /// <p><p>The updated content for the approval rule.</p> <note> <p>When you update the content of the approval rule, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following are counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/iam/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    /// <p><p>The updated content for the approval rule.</p> <note> <p>When you update the content of the approval rule, you can specify approvers in an approval pool in one of two ways:</p> <ul> <li> <p> <b>CodeCommitApprovers</b>: This option only requires an AWS account and a resource. It can be used for both IAM users and federated access users whose name matches the provided resource name. This is a very powerful option that offers a great deal of flexibility. For example, if you specify the AWS account <i>123456789012</i> and <i>Mary<em>Major</i>, all of the following are counted as approvals coming from that user:</p> <ul> <li> <p>An IAM user in the account (arn:aws:iam::<i>123456789012</i>:user/<i>Mary</em>Major</i>)</p> </li> <li> <p>A federated user identified in IAM as Mary<em>Major (arn:aws:sts::<i>123456789012</i>:federated-user/<i>Mary</em>Major</i>)</p> </li> </ul> <p>This option does not recognize an active session of someone assuming the role of CodeCommitReview with a role session name of <i>Mary<em>Major</i> (arn:aws:sts::<i>123456789012</i>:assumed-role/CodeCommitReview/<i>Mary</em>Major</i>) unless you include a wildcard (*Mary<em>Major).</p> </li> <li> <p> <b>Fully qualified ARN</b>: This option allows you to specify the fully qualified Amazon Resource Name (ARN) of the IAM user or role. </p> </li> </ul> <p>For more information about IAM ARNs, wildcards, and formats, see &lt;a href=&quot;https://docs.aws.amazon.com/IAM/latest/UserGuide/reference</em>identifiers.html&quot;&gt;IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> </note></p>
     #[serde(rename = "newRuleContent")]
     pub new_rule_content: String,
     /// <p>The system-generated ID of the pull request.</p>
@@ -3317,7 +3430,7 @@ pub struct UpdatePullRequestApprovalRuleContentInput {
     pub pull_request_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestApprovalRuleContentOutput {
     /// <p>Information about the updated approval rule.</p>
@@ -3325,7 +3438,7 @@ pub struct UpdatePullRequestApprovalRuleContentOutput {
     pub approval_rule: ApprovalRule,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestApprovalStateInput {
     /// <p>The approval state to associate with the user on the pull request.</p>
@@ -3339,7 +3452,7 @@ pub struct UpdatePullRequestApprovalStateInput {
     pub revision_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestDescriptionInput {
     /// <p>The updated content of the description for the pull request. This content replaces the existing description.</p>
@@ -3350,7 +3463,7 @@ pub struct UpdatePullRequestDescriptionInput {
     pub pull_request_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestDescriptionOutput {
     /// <p>Information about the updated pull request.</p>
@@ -3358,7 +3471,7 @@ pub struct UpdatePullRequestDescriptionOutput {
     pub pull_request: PullRequest,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestStatusInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
@@ -3369,7 +3482,7 @@ pub struct UpdatePullRequestStatusInput {
     pub pull_request_status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestStatusOutput {
     /// <p>Information about the pull request.</p>
@@ -3377,7 +3490,7 @@ pub struct UpdatePullRequestStatusOutput {
     pub pull_request: PullRequest,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePullRequestTitleInput {
     /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
@@ -3388,7 +3501,7 @@ pub struct UpdatePullRequestTitleInput {
     pub title: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestTitleOutput {
     /// <p>Information about the updated pull request.</p>
@@ -3397,7 +3510,7 @@ pub struct UpdatePullRequestTitleOutput {
 }
 
 /// <p>Represents the input of an update repository description operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRepositoryDescriptionInput {
     /// <p>The new comment or description for the specified repository. Repository descriptions are limited to 1,000 characters.</p>
@@ -3410,7 +3523,7 @@ pub struct UpdateRepositoryDescriptionInput {
 }
 
 /// <p>Represents the input of an update repository description operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRepositoryNameInput {
     /// <p>The new name for the repository.</p>
@@ -3422,7 +3535,7 @@ pub struct UpdateRepositoryNameInput {
 }
 
 /// <p>Information about the user who made a specified commit.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserInfo {
     /// <p>The date when the specified commit was commited, in timestamp format with GMT offset.</p>
@@ -4188,7 +4301,7 @@ impl Error for CreateApprovalRuleTemplateError {}
 /// Errors returned by CreateBranch
 #[derive(Debug, PartialEq)]
 pub enum CreateBranchError {
-    /// <p>The specified branch name already exists.</p>
+    /// <p>Cannot create the branch with the specified name because the commit conflicts with an existing branch with the same name. Branch names must be unique.</p>
     BranchNameExists(String),
     /// <p>A branch name is required, but was not specified.</p>
     BranchNameRequired(String),
@@ -6942,6 +7055,16 @@ pub enum GetCommentError {
     CommentDoesNotExist(String),
     /// <p>The comment ID is missing or null. A comment ID is required.</p>
     CommentIdRequired(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
     /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
     InvalidCommentId(String),
 }
@@ -6958,6 +7081,25 @@ impl GetCommentError {
                 }
                 "CommentIdRequiredException" => {
                     return RusotoError::Service(GetCommentError::CommentIdRequired(err.msg))
+                }
+                "EncryptionIntegrityChecksFailedException" => {
+                    return RusotoError::Service(GetCommentError::EncryptionIntegrityChecksFailed(
+                        err.msg,
+                    ))
+                }
+                "EncryptionKeyAccessDeniedException" => {
+                    return RusotoError::Service(GetCommentError::EncryptionKeyAccessDenied(
+                        err.msg,
+                    ))
+                }
+                "EncryptionKeyDisabledException" => {
+                    return RusotoError::Service(GetCommentError::EncryptionKeyDisabled(err.msg))
+                }
+                "EncryptionKeyNotFoundException" => {
+                    return RusotoError::Service(GetCommentError::EncryptionKeyNotFound(err.msg))
+                }
+                "EncryptionKeyUnavailableException" => {
+                    return RusotoError::Service(GetCommentError::EncryptionKeyUnavailable(err.msg))
                 }
                 "InvalidCommentIdException" => {
                     return RusotoError::Service(GetCommentError::InvalidCommentId(err.msg))
@@ -6976,11 +7118,94 @@ impl fmt::Display for GetCommentError {
             GetCommentError::CommentDeleted(ref cause) => write!(f, "{}", cause),
             GetCommentError::CommentDoesNotExist(ref cause) => write!(f, "{}", cause),
             GetCommentError::CommentIdRequired(ref cause) => write!(f, "{}", cause),
+            GetCommentError::EncryptionIntegrityChecksFailed(ref cause) => write!(f, "{}", cause),
+            GetCommentError::EncryptionKeyAccessDenied(ref cause) => write!(f, "{}", cause),
+            GetCommentError::EncryptionKeyDisabled(ref cause) => write!(f, "{}", cause),
+            GetCommentError::EncryptionKeyNotFound(ref cause) => write!(f, "{}", cause),
+            GetCommentError::EncryptionKeyUnavailable(ref cause) => write!(f, "{}", cause),
             GetCommentError::InvalidCommentId(ref cause) => write!(f, "{}", cause),
         }
     }
 }
 impl Error for GetCommentError {}
+/// Errors returned by GetCommentReactions
+#[derive(Debug, PartialEq)]
+pub enum GetCommentReactionsError {
+    /// <p>This comment has already been deleted. You cannot edit or delete a deleted comment.</p>
+    CommentDeleted(String),
+    /// <p>No comment exists with the provided ID. Verify that you have used the correct ID, and then try again.</p>
+    CommentDoesNotExist(String),
+    /// <p>The comment ID is missing or null. A comment ID is required.</p>
+    CommentIdRequired(String),
+    /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
+    InvalidCommentId(String),
+    /// <p>The specified continuation token is not valid.</p>
+    InvalidContinuationToken(String),
+    /// <p>The specified number of maximum results is not valid.</p>
+    InvalidMaxResults(String),
+    /// <p>The Amazon Resource Name (ARN) of the user or identity is not valid.</p>
+    InvalidReactionUserArn(String),
+}
+
+impl GetCommentReactionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCommentReactionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "CommentDeletedException" => {
+                    return RusotoError::Service(GetCommentReactionsError::CommentDeleted(err.msg))
+                }
+                "CommentDoesNotExistException" => {
+                    return RusotoError::Service(GetCommentReactionsError::CommentDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "CommentIdRequiredException" => {
+                    return RusotoError::Service(GetCommentReactionsError::CommentIdRequired(
+                        err.msg,
+                    ))
+                }
+                "InvalidCommentIdException" => {
+                    return RusotoError::Service(GetCommentReactionsError::InvalidCommentId(
+                        err.msg,
+                    ))
+                }
+                "InvalidContinuationTokenException" => {
+                    return RusotoError::Service(
+                        GetCommentReactionsError::InvalidContinuationToken(err.msg),
+                    )
+                }
+                "InvalidMaxResultsException" => {
+                    return RusotoError::Service(GetCommentReactionsError::InvalidMaxResults(
+                        err.msg,
+                    ))
+                }
+                "InvalidReactionUserArnException" => {
+                    return RusotoError::Service(GetCommentReactionsError::InvalidReactionUserArn(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetCommentReactionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCommentReactionsError::CommentDeleted(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::CommentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::CommentIdRequired(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::InvalidCommentId(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::InvalidContinuationToken(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::InvalidMaxResults(ref cause) => write!(f, "{}", cause),
+            GetCommentReactionsError::InvalidReactionUserArn(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetCommentReactionsError {}
 /// Errors returned by GetCommentsForComparedCommit
 #[derive(Debug, PartialEq)]
 pub enum GetCommentsForComparedCommitError {
@@ -12113,6 +12338,82 @@ impl fmt::Display for PostCommentReplyError {
     }
 }
 impl Error for PostCommentReplyError {}
+/// Errors returned by PutCommentReaction
+#[derive(Debug, PartialEq)]
+pub enum PutCommentReactionError {
+    /// <p>This comment has already been deleted. You cannot edit or delete a deleted comment.</p>
+    CommentDeleted(String),
+    /// <p>No comment exists with the provided ID. Verify that you have used the correct ID, and then try again.</p>
+    CommentDoesNotExist(String),
+    /// <p>The comment ID is missing or null. A comment ID is required.</p>
+    CommentIdRequired(String),
+    /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
+    InvalidCommentId(String),
+    /// <p>The value of the reaction is not valid. For more information, see the <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit User Guide</a>.</p>
+    InvalidReactionValue(String),
+    /// <p>The number of reactions has been exceeded. Reactions are limited to one reaction per user for each individual comment ID.</p>
+    ReactionLimitExceeded(String),
+    /// <p>A reaction value is required. </p>
+    ReactionValueRequired(String),
+}
+
+impl PutCommentReactionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutCommentReactionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "CommentDeletedException" => {
+                    return RusotoError::Service(PutCommentReactionError::CommentDeleted(err.msg))
+                }
+                "CommentDoesNotExistException" => {
+                    return RusotoError::Service(PutCommentReactionError::CommentDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "CommentIdRequiredException" => {
+                    return RusotoError::Service(PutCommentReactionError::CommentIdRequired(
+                        err.msg,
+                    ))
+                }
+                "InvalidCommentIdException" => {
+                    return RusotoError::Service(PutCommentReactionError::InvalidCommentId(err.msg))
+                }
+                "InvalidReactionValueException" => {
+                    return RusotoError::Service(PutCommentReactionError::InvalidReactionValue(
+                        err.msg,
+                    ))
+                }
+                "ReactionLimitExceededException" => {
+                    return RusotoError::Service(PutCommentReactionError::ReactionLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ReactionValueRequiredException" => {
+                    return RusotoError::Service(PutCommentReactionError::ReactionValueRequired(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutCommentReactionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutCommentReactionError::CommentDeleted(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::CommentDoesNotExist(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::CommentIdRequired(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::InvalidCommentId(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::InvalidReactionValue(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::ReactionLimitExceeded(ref cause) => write!(f, "{}", cause),
+            PutCommentReactionError::ReactionValueRequired(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutCommentReactionError {}
 /// Errors returned by PutFile
 #[derive(Debug, PartialEq)]
 pub enum PutFileError {
@@ -14377,19 +14678,25 @@ pub trait CodeCommit {
         input: GetBranchInput,
     ) -> Result<GetBranchOutput, RusotoError<GetBranchError>>;
 
-    /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
+    /// <p><p>Returns the content of a comment made on a change, file, or commit in a repository. </p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comment(
         &self,
         input: GetCommentInput,
     ) -> Result<GetCommentOutput, RusotoError<GetCommentError>>;
 
-    /// <p>Returns information about comments made on the comparison between two commits.</p>
+    /// <p>Returns information about reactions to a specified comment ID. Reactions from users who have been deleted will not be included in the count.</p>
+    async fn get_comment_reactions(
+        &self,
+        input: GetCommentReactionsInput,
+    ) -> Result<GetCommentReactionsOutput, RusotoError<GetCommentReactionsError>>;
+
+    /// <p><p>Returns information about comments made on the comparison between two commits.</p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comments_for_compared_commit(
         &self,
         input: GetCommentsForComparedCommitInput,
     ) -> Result<GetCommentsForComparedCommitOutput, RusotoError<GetCommentsForComparedCommitError>>;
 
-    /// <p>Returns comments made on a pull request.</p>
+    /// <p><p>Returns comments made on a pull request.</p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comments_for_pull_request(
         &self,
         input: GetCommentsForPullRequestInput,
@@ -14575,6 +14882,12 @@ pub trait CodeCommit {
         input: PostCommentReplyInput,
     ) -> Result<PostCommentReplyOutput, RusotoError<PostCommentReplyError>>;
 
+    /// <p>Adds or updates a reaction to a specified comment for the user whose identity is used to make the request. You can only add or update a reaction for yourself. You cannot add, modify, or delete a reaction for another user.</p>
+    async fn put_comment_reaction(
+        &self,
+        input: PutCommentReactionInput,
+    ) -> Result<(), RusotoError<PutCommentReactionError>>;
+
     /// <p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>
     async fn put_file(
         &self,
@@ -14734,9 +15047,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: AssociateApprovalRuleTemplateWithRepositoryInput,
     ) -> Result<(), RusotoError<AssociateApprovalRuleTemplateWithRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.AssociateApprovalRuleTemplateWithRepository",
@@ -14744,19 +15055,14 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateApprovalRuleTemplateWithRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AssociateApprovalRuleTemplateWithRepositoryError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates an association between an approval rule template and one or more specified repositories. </p>
@@ -14767,9 +15073,7 @@ impl CodeCommit for CodeCommitClient {
         BatchAssociateApprovalRuleTemplateWithRepositoriesOutput,
         RusotoError<BatchAssociateApprovalRuleTemplateWithRepositoriesError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.BatchAssociateApprovalRuleTemplateWithRepositories",
@@ -14777,20 +15081,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchAssociateApprovalRuleTemplateWithRepositoriesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchAssociateApprovalRuleTemplateWithRepositoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                BatchAssociateApprovalRuleTemplateWithRepositoriesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchAssociateApprovalRuleTemplateWithRepositoriesOutput, _>()
     }
 
     /// <p>Returns information about one or more merge conflicts in the attempted merge of two commit specifiers using the squash or three-way merge strategy.</p>
@@ -14799,9 +15099,7 @@ impl CodeCommit for CodeCommitClient {
         input: BatchDescribeMergeConflictsInput,
     ) -> Result<BatchDescribeMergeConflictsOutput, RusotoError<BatchDescribeMergeConflictsError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.BatchDescribeMergeConflicts",
@@ -14809,20 +15107,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDescribeMergeConflictsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDescribeMergeConflictsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDescribeMergeConflictsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDescribeMergeConflictsOutput, _>()
     }
 
     /// <p>Removes the association between an approval rule template and one or more specified repositories. </p>
@@ -14833,9 +15124,7 @@ impl CodeCommit for CodeCommitClient {
         BatchDisassociateApprovalRuleTemplateFromRepositoriesOutput,
         RusotoError<BatchDisassociateApprovalRuleTemplateFromRepositoriesError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.BatchDisassociateApprovalRuleTemplateFromRepositories",
@@ -14843,20 +15132,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDisassociateApprovalRuleTemplateFromRepositoriesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDisassociateApprovalRuleTemplateFromRepositoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                BatchDisassociateApprovalRuleTemplateFromRepositoriesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDisassociateApprovalRuleTemplateFromRepositoriesOutput, _>()
     }
 
     /// <p>Returns information about the contents of one or more commits in a repository.</p>
@@ -14864,26 +15149,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: BatchGetCommitsInput,
     ) -> Result<BatchGetCommitsOutput, RusotoError<BatchGetCommitsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.BatchGetCommits");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchGetCommitsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetCommitsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetCommitsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetCommitsOutput, _>()
     }
 
     /// <p><p>Returns information about one or more repositories.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.</p> </note></p>
@@ -14891,27 +15167,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: BatchGetRepositoriesInput,
     ) -> Result<BatchGetRepositoriesOutput, RusotoError<BatchGetRepositoriesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.BatchGetRepositories");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetRepositoriesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetRepositoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetRepositoriesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetRepositoriesOutput, _>()
     }
 
     /// <p>Creates a template for approval rules that can then be associated with one or more repositories in your AWS account. When you associate a template with a repository, AWS CodeCommit creates an approval rule that matches the conditions of the template for all pull requests that meet the conditions of the template. For more information, see <a>AssociateApprovalRuleTemplateWithRepository</a>.</p>
@@ -14920,9 +15186,7 @@ impl CodeCommit for CodeCommitClient {
         input: CreateApprovalRuleTemplateInput,
     ) -> Result<CreateApprovalRuleTemplateOutput, RusotoError<CreateApprovalRuleTemplateError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.CreateApprovalRuleTemplate",
@@ -14930,20 +15194,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateApprovalRuleTemplateOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApprovalRuleTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateApprovalRuleTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateApprovalRuleTemplateOutput, _>()
     }
 
     /// <p><p>Creates a branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
@@ -14951,26 +15208,16 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreateBranchInput,
     ) -> Result<(), RusotoError<CreateBranchError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateBranchError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateBranchError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates a commit for a repository on the tip of a specified branch.</p>
@@ -14978,26 +15225,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreateCommitInput,
     ) -> Result<CreateCommitOutput, RusotoError<CreateCommitError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateCommit");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateCommitOutput, _>()
     }
 
     /// <p>Creates a pull request in the specified repository.</p>
@@ -15005,26 +15243,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreatePullRequestInput,
     ) -> Result<CreatePullRequestOutput, RusotoError<CreatePullRequestError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.CreatePullRequest");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreatePullRequestOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePullRequestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePullRequestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreatePullRequestOutput, _>()
     }
 
     /// <p>Creates an approval rule for a pull request.</p>
@@ -15033,9 +15262,7 @@ impl CodeCommit for CodeCommitClient {
         input: CreatePullRequestApprovalRuleInput,
     ) -> Result<CreatePullRequestApprovalRuleOutput, RusotoError<CreatePullRequestApprovalRuleError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.CreatePullRequestApprovalRule",
@@ -15043,20 +15270,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreatePullRequestApprovalRuleOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreatePullRequestApprovalRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePullRequestApprovalRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreatePullRequestApprovalRuleOutput, _>()
     }
 
     /// <p>Creates a new, empty repository.</p>
@@ -15064,26 +15284,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreateRepositoryInput,
     ) -> Result<CreateRepositoryOutput, RusotoError<CreateRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateRepositoryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateRepositoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateRepositoryOutput, _>()
     }
 
     /// <p><p>Creates an unreferenced commit that represents the result of merging two branches using a specified merge strategy. This can help you determine the outcome of a potential merge. This API cannot be used with the fast-forward merge strategy because that strategy does not create a merge commit.</p> <note> <p>This unreferenced merge commit can only be accessed using the GetCommit API or through git commands such as git fetch. To retrieve this commit, you must specify its commit ID or otherwise reference it.</p> </note></p>
@@ -15092,9 +15303,7 @@ impl CodeCommit for CodeCommitClient {
         input: CreateUnreferencedMergeCommitInput,
     ) -> Result<CreateUnreferencedMergeCommitOutput, RusotoError<CreateUnreferencedMergeCommitError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.CreateUnreferencedMergeCommit",
@@ -15102,20 +15311,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateUnreferencedMergeCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUnreferencedMergeCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateUnreferencedMergeCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateUnreferencedMergeCommitOutput, _>()
     }
 
     /// <p>Deletes a specified approval rule template. Deleting a template does not remove approval rules on pull requests already created with the template.</p>
@@ -15124,9 +15326,7 @@ impl CodeCommit for CodeCommitClient {
         input: DeleteApprovalRuleTemplateInput,
     ) -> Result<DeleteApprovalRuleTemplateOutput, RusotoError<DeleteApprovalRuleTemplateError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.DeleteApprovalRuleTemplate",
@@ -15134,20 +15334,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteApprovalRuleTemplateOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApprovalRuleTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteApprovalRuleTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteApprovalRuleTemplateOutput, _>()
     }
 
     /// <p>Deletes a branch from a repository, unless that branch is the default branch for the repository. </p>
@@ -15155,26 +15348,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteBranchInput,
     ) -> Result<DeleteBranchOutput, RusotoError<DeleteBranchError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteBranchOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteBranchError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteBranchError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteBranchOutput, _>()
     }
 
     /// <p>Deletes the content of a comment made on a change, file, or commit in a repository.</p>
@@ -15182,27 +15366,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteCommentContentInput,
     ) -> Result<DeleteCommentContentOutput, RusotoError<DeleteCommentContentError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteCommentContent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteCommentContentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteCommentContentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteCommentContentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteCommentContentOutput, _>()
     }
 
     /// <p>Deletes a specified file from a specified branch. A commit is created on the branch that contains the revision. The file still exists in the commits earlier to the commit that contains the deletion.</p>
@@ -15210,26 +15384,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteFileInput,
     ) -> Result<DeleteFileOutput, RusotoError<DeleteFileError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteFile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteFileOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteFileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteFileOutput, _>()
     }
 
     /// <p>Deletes an approval rule from a specified pull request. Approval rules can be deleted from a pull request only if the pull request is open, and if the approval rule was created specifically for a pull request and not generated from an approval rule template associated with the repository where the pull request was created. You cannot delete an approval rule from a merged or closed pull request.</p>
@@ -15238,9 +15403,7 @@ impl CodeCommit for CodeCommitClient {
         input: DeletePullRequestApprovalRuleInput,
     ) -> Result<DeletePullRequestApprovalRuleOutput, RusotoError<DeletePullRequestApprovalRuleError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.DeletePullRequestApprovalRule",
@@ -15248,20 +15411,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeletePullRequestApprovalRuleOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePullRequestApprovalRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePullRequestApprovalRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeletePullRequestApprovalRuleOutput, _>()
     }
 
     /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID is returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository fail.</p> </important></p>
@@ -15269,26 +15425,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteRepositoryInput,
     ) -> Result<DeleteRepositoryOutput, RusotoError<DeleteRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteRepositoryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRepositoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteRepositoryOutput, _>()
     }
 
     /// <p>Returns information about one or more merge conflicts in the attempted merge of two commit specifiers using the squash or three-way merge strategy. If the merge option for the attempted merge is specified as FAST_FORWARD_MERGE, an exception is thrown.</p>
@@ -15296,27 +15443,18 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DescribeMergeConflictsInput,
     ) -> Result<DescribeMergeConflictsOutput, RusotoError<DescribeMergeConflictsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.DescribeMergeConflicts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeMergeConflictsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeMergeConflictsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeMergeConflictsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeMergeConflictsOutput, _>()
     }
 
     /// <p>Returns information about one or more pull request events.</p>
@@ -15324,9 +15462,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DescribePullRequestEventsInput,
     ) -> Result<DescribePullRequestEventsOutput, RusotoError<DescribePullRequestEventsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.DescribePullRequestEvents",
@@ -15334,20 +15470,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePullRequestEventsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePullRequestEventsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePullRequestEventsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePullRequestEventsOutput, _>()
     }
 
     /// <p>Removes the association between a template and a repository so that approval rules based on the template are not automatically created when pull requests are created in the specified repository. This does not delete any approval rules previously created for pull requests through the template association.</p>
@@ -15355,9 +15484,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DisassociateApprovalRuleTemplateFromRepositoryInput,
     ) -> Result<(), RusotoError<DisassociateApprovalRuleTemplateFromRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.DisassociateApprovalRuleTemplateFromRepository",
@@ -15365,19 +15492,14 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateApprovalRuleTemplateFromRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisassociateApprovalRuleTemplateFromRepositoryError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Evaluates whether a pull request has met all the conditions specified in its associated approval rules.</p>
@@ -15388,9 +15510,7 @@ impl CodeCommit for CodeCommitClient {
         EvaluatePullRequestApprovalRulesOutput,
         RusotoError<EvaluatePullRequestApprovalRulesError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.EvaluatePullRequestApprovalRules",
@@ -15398,22 +15518,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<EvaluatePullRequestApprovalRulesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(EvaluatePullRequestApprovalRulesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                EvaluatePullRequestApprovalRulesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<EvaluatePullRequestApprovalRulesOutput, _>()
     }
 
     /// <p>Returns information about a specified approval rule template.</p>
@@ -15421,9 +15535,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetApprovalRuleTemplateInput,
     ) -> Result<GetApprovalRuleTemplateOutput, RusotoError<GetApprovalRuleTemplateError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetApprovalRuleTemplate",
@@ -15431,20 +15543,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetApprovalRuleTemplateOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetApprovalRuleTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetApprovalRuleTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetApprovalRuleTemplateOutput, _>()
     }
 
     /// <p>Returns the base-64 encoded content of an individual blob in a repository.</p>
@@ -15452,26 +15557,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetBlobInput,
     ) -> Result<GetBlobOutput, RusotoError<GetBlobError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBlob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetBlobOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBlobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetBlobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetBlobOutput, _>()
     }
 
     /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
@@ -15479,64 +15575,62 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetBranchInput,
     ) -> Result<GetBranchOutput, RusotoError<GetBranchError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetBranchOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetBranchError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetBranchError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetBranchOutput, _>()
     }
 
-    /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
+    /// <p><p>Returns the content of a comment made on a change, file, or commit in a repository. </p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comment(
         &self,
         input: GetCommentInput,
     ) -> Result<GetCommentOutput, RusotoError<GetCommentError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetComment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetCommentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCommentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCommentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCommentOutput, _>()
     }
 
-    /// <p>Returns information about comments made on the comparison between two commits.</p>
+    /// <p>Returns information about reactions to a specified comment ID. Reactions from users who have been deleted will not be included in the count.</p>
+    async fn get_comment_reactions(
+        &self,
+        input: GetCommentReactionsInput,
+    ) -> Result<GetCommentReactionsOutput, RusotoError<GetCommentReactionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodeCommit_20150413.GetCommentReactions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetCommentReactionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCommentReactionsOutput, _>()
+    }
+
+    /// <p><p>Returns information about comments made on the comparison between two commits.</p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comments_for_compared_commit(
         &self,
         input: GetCommentsForComparedCommitInput,
     ) -> Result<GetCommentsForComparedCommitOutput, RusotoError<GetCommentsForComparedCommitError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetCommentsForComparedCommit",
@@ -15544,30 +15638,21 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCommentsForComparedCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCommentsForComparedCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCommentsForComparedCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetCommentsForComparedCommitOutput, _>()
     }
 
-    /// <p>Returns comments made on a pull request.</p>
+    /// <p><p>Returns comments made on a pull request.</p> <note> <p>Reaction counts might include numbers from user identities who were deleted after the reaction was made. For a count of reactions from active identities, use GetCommentReactions.</p> </note></p>
     async fn get_comments_for_pull_request(
         &self,
         input: GetCommentsForPullRequestInput,
     ) -> Result<GetCommentsForPullRequestOutput, RusotoError<GetCommentsForPullRequestError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetCommentsForPullRequest",
@@ -15575,20 +15660,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetCommentsForPullRequestOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCommentsForPullRequestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCommentsForPullRequestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetCommentsForPullRequestOutput, _>()
     }
 
     /// <p>Returns information about a commit, including commit message and committer information.</p>
@@ -15596,26 +15674,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetCommitInput,
     ) -> Result<GetCommitOutput, RusotoError<GetCommitError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetCommit");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCommitOutput, _>()
     }
 
     /// <p>Returns information about the differences in a valid commit specifier (such as a branch, tag, HEAD, commit ID, or other fully qualified reference). Results can be limited to a specified path.</p>
@@ -15623,26 +15692,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetDifferencesInput,
     ) -> Result<GetDifferencesOutput, RusotoError<GetDifferencesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetDifferences");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDifferencesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDifferencesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDifferencesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDifferencesOutput, _>()
     }
 
     /// <p>Returns the base-64 encoded contents of a specified file and its metadata.</p>
@@ -15650,26 +15710,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetFileInput,
     ) -> Result<GetFileOutput, RusotoError<GetFileError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetFile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetFileOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetFileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetFileOutput, _>()
     }
 
     /// <p>Returns the contents of a specified folder in a repository.</p>
@@ -15677,26 +15728,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetFolderInput,
     ) -> Result<GetFolderOutput, RusotoError<GetFolderError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetFolder");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetFolderOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFolderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetFolderError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetFolderOutput, _>()
     }
 
     /// <p>Returns information about a specified merge commit.</p>
@@ -15704,26 +15746,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetMergeCommitInput,
     ) -> Result<GetMergeCommitOutput, RusotoError<GetMergeCommitError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetMergeCommit");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMergeCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMergeCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMergeCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMergeCommitOutput, _>()
     }
 
     /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
@@ -15731,26 +15764,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetMergeConflictsInput,
     ) -> Result<GetMergeConflictsOutput, RusotoError<GetMergeConflictsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetMergeConflicts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMergeConflictsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMergeConflictsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMergeConflictsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMergeConflictsOutput, _>()
     }
 
     /// <p>Returns information about the merge options available for merging two specified branches. For details about why a merge option is not available, use GetMergeConflicts or DescribeMergeConflicts.</p>
@@ -15758,26 +15782,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetMergeOptionsInput,
     ) -> Result<GetMergeOptionsOutput, RusotoError<GetMergeOptionsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetMergeOptions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetMergeOptionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMergeOptionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMergeOptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetMergeOptionsOutput, _>()
     }
 
     /// <p>Gets information about a pull request in a specified repository.</p>
@@ -15785,26 +15800,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetPullRequestInput,
     ) -> Result<GetPullRequestOutput, RusotoError<GetPullRequestError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetPullRequest");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetPullRequestOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPullRequestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPullRequestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPullRequestOutput, _>()
     }
 
     /// <p>Gets information about the approval states for a specified pull request. Approval states only apply to pull requests that have one or more approval rules applied to them.</p>
@@ -15813,9 +15819,7 @@ impl CodeCommit for CodeCommitClient {
         input: GetPullRequestApprovalStatesInput,
     ) -> Result<GetPullRequestApprovalStatesOutput, RusotoError<GetPullRequestApprovalStatesError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetPullRequestApprovalStates",
@@ -15823,20 +15827,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPullRequestApprovalStatesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPullRequestApprovalStatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPullRequestApprovalStatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetPullRequestApprovalStatesOutput, _>()
     }
 
     /// <p>Returns information about whether approval rules have been set aside (overridden) for a pull request, and if so, the Amazon Resource Name (ARN) of the user or identity that overrode the rules and their requirements for the pull request.</p>
@@ -15845,9 +15842,7 @@ impl CodeCommit for CodeCommitClient {
         input: GetPullRequestOverrideStateInput,
     ) -> Result<GetPullRequestOverrideStateOutput, RusotoError<GetPullRequestOverrideStateError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetPullRequestOverrideState",
@@ -15855,20 +15850,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetPullRequestOverrideStateOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPullRequestOverrideStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPullRequestOverrideStateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetPullRequestOverrideStateOutput, _>()
     }
 
     /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.</p> </note></p>
@@ -15876,26 +15864,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetRepositoryInput,
     ) -> Result<GetRepositoryOutput, RusotoError<GetRepositoryError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetRepositoryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRepositoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRepositoryOutput, _>()
     }
 
     /// <p>Gets information about triggers configured for a repository.</p>
@@ -15903,27 +15882,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetRepositoryTriggersInput,
     ) -> Result<GetRepositoryTriggersOutput, RusotoError<GetRepositoryTriggersError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepositoryTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRepositoryTriggersOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRepositoryTriggersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRepositoryTriggersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRepositoryTriggersOutput, _>()
     }
 
     /// <p>Lists all approval rule templates in the specified AWS Region in your AWS account. If an AWS Region is not specified, the AWS Region where you are signed in is used.</p>
@@ -15931,9 +15900,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListApprovalRuleTemplatesInput,
     ) -> Result<ListApprovalRuleTemplatesOutput, RusotoError<ListApprovalRuleTemplatesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.ListApprovalRuleTemplates",
@@ -15941,20 +15908,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApprovalRuleTemplatesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApprovalRuleTemplatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListApprovalRuleTemplatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListApprovalRuleTemplatesOutput, _>()
     }
 
     /// <p>Lists all approval rule templates that are associated with a specified repository.</p>
@@ -15965,9 +15925,7 @@ impl CodeCommit for CodeCommitClient {
         ListAssociatedApprovalRuleTemplatesForRepositoryOutput,
         RusotoError<ListAssociatedApprovalRuleTemplatesForRepositoryError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.ListAssociatedApprovalRuleTemplatesForRepository",
@@ -15975,20 +15933,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAssociatedApprovalRuleTemplatesForRepositoryOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssociatedApprovalRuleTemplatesForRepositoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListAssociatedApprovalRuleTemplatesForRepositoryError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAssociatedApprovalRuleTemplatesForRepositoryOutput, _>()
     }
 
     /// <p>Gets information about one or more branches in a repository.</p>
@@ -15996,26 +15950,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListBranchesInput,
     ) -> Result<ListBranchesOutput, RusotoError<ListBranchesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.ListBranches");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListBranchesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBranchesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListBranchesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListBranchesOutput, _>()
     }
 
     /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
@@ -16023,26 +15968,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListPullRequestsInput,
     ) -> Result<ListPullRequestsOutput, RusotoError<ListPullRequestsError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.ListPullRequests");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListPullRequestsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPullRequestsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPullRequestsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListPullRequestsOutput, _>()
     }
 
     /// <p>Gets information about one or more repositories.</p>
@@ -16050,26 +15986,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListRepositoriesInput,
     ) -> Result<ListRepositoriesOutput, RusotoError<ListRepositoriesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.ListRepositories");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListRepositoriesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRepositoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRepositoriesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListRepositoriesOutput, _>()
     }
 
     /// <p>Lists all repositories associated with the specified approval rule template.</p>
@@ -16080,9 +16007,7 @@ impl CodeCommit for CodeCommitClient {
         ListRepositoriesForApprovalRuleTemplateOutput,
         RusotoError<ListRepositoriesForApprovalRuleTemplateError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.ListRepositoriesForApprovalRuleTemplate",
@@ -16090,22 +16015,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRepositoriesForApprovalRuleTemplateOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRepositoriesForApprovalRuleTemplateError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListRepositoriesForApprovalRuleTemplateError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListRepositoriesForApprovalRuleTemplateOutput, _>()
     }
 
     /// <p>Gets information about AWS tags for a specified Amazon Resource Name (ARN) in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the<i> AWS CodeCommit User Guide</i>.</p>
@@ -16113,27 +16032,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceOutput, _>()
     }
 
     /// <p>Merges two branches using the fast-forward merge strategy.</p>
@@ -16142,9 +16051,7 @@ impl CodeCommit for CodeCommitClient {
         input: MergeBranchesByFastForwardInput,
     ) -> Result<MergeBranchesByFastForwardOutput, RusotoError<MergeBranchesByFastForwardError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergeBranchesByFastForward",
@@ -16152,20 +16059,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergeBranchesByFastForwardOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergeBranchesByFastForwardError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergeBranchesByFastForwardError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<MergeBranchesByFastForwardOutput, _>()
     }
 
     /// <p>Merges two branches using the squash merge strategy.</p>
@@ -16173,27 +16073,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: MergeBranchesBySquashInput,
     ) -> Result<MergeBranchesBySquashOutput, RusotoError<MergeBranchesBySquashError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.MergeBranchesBySquash");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergeBranchesBySquashOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergeBranchesBySquashError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergeBranchesBySquashError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<MergeBranchesBySquashOutput, _>()
     }
 
     /// <p>Merges two specified branches using the three-way merge strategy.</p>
@@ -16201,9 +16091,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: MergeBranchesByThreeWayInput,
     ) -> Result<MergeBranchesByThreeWayOutput, RusotoError<MergeBranchesByThreeWayError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergeBranchesByThreeWay",
@@ -16211,20 +16099,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergeBranchesByThreeWayOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergeBranchesByThreeWayError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergeBranchesByThreeWayError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<MergeBranchesByThreeWayOutput, _>()
     }
 
     /// <p>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge strategy. If the merge is successful, it closes the pull request.</p>
@@ -16233,9 +16114,7 @@ impl CodeCommit for CodeCommitClient {
         input: MergePullRequestByFastForwardInput,
     ) -> Result<MergePullRequestByFastForwardOutput, RusotoError<MergePullRequestByFastForwardError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergePullRequestByFastForward",
@@ -16243,20 +16122,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergePullRequestByFastForwardOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergePullRequestByFastForwardError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergePullRequestByFastForwardError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<MergePullRequestByFastForwardOutput, _>()
     }
 
     /// <p>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the squash merge strategy. If the merge is successful, it closes the pull request.</p>
@@ -16264,9 +16136,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: MergePullRequestBySquashInput,
     ) -> Result<MergePullRequestBySquashOutput, RusotoError<MergePullRequestBySquashError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergePullRequestBySquash",
@@ -16274,20 +16144,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergePullRequestBySquashOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergePullRequestBySquashError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergePullRequestBySquashError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<MergePullRequestBySquashOutput, _>()
     }
 
     /// <p>Attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the three-way merge strategy. If the merge is successful, it closes the pull request.</p>
@@ -16296,9 +16159,7 @@ impl CodeCommit for CodeCommitClient {
         input: MergePullRequestByThreeWayInput,
     ) -> Result<MergePullRequestByThreeWayOutput, RusotoError<MergePullRequestByThreeWayError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergePullRequestByThreeWay",
@@ -16306,20 +16167,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<MergePullRequestByThreeWayOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MergePullRequestByThreeWayError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MergePullRequestByThreeWayError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<MergePullRequestByThreeWayOutput, _>()
     }
 
     /// <p>Sets aside (overrides) all approval rule requirements for a specified pull request.</p>
@@ -16327,9 +16181,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: OverridePullRequestApprovalRulesInput,
     ) -> Result<(), RusotoError<OverridePullRequestApprovalRulesError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.OverridePullRequestApprovalRules",
@@ -16337,21 +16189,14 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(OverridePullRequestApprovalRulesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                OverridePullRequestApprovalRulesError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Posts a comment on the comparison between two commits.</p>
@@ -16360,9 +16205,7 @@ impl CodeCommit for CodeCommitClient {
         input: PostCommentForComparedCommitInput,
     ) -> Result<PostCommentForComparedCommitOutput, RusotoError<PostCommentForComparedCommitError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.PostCommentForComparedCommit",
@@ -16370,20 +16213,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PostCommentForComparedCommitOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PostCommentForComparedCommitError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PostCommentForComparedCommitError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PostCommentForComparedCommitOutput, _>()
     }
 
     /// <p>Posts a comment on a pull request.</p>
@@ -16391,9 +16227,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PostCommentForPullRequestInput,
     ) -> Result<PostCommentForPullRequestOutput, RusotoError<PostCommentForPullRequestError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.PostCommentForPullRequest",
@@ -16401,20 +16235,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PostCommentForPullRequestOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PostCommentForPullRequestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PostCommentForPullRequestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PostCommentForPullRequestOutput, _>()
     }
 
     /// <p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>
@@ -16422,26 +16249,34 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PostCommentReplyInput,
     ) -> Result<PostCommentReplyOutput, RusotoError<PostCommentReplyError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.PostCommentReply");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PostCommentReplyOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PostCommentReplyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PostCommentReplyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PostCommentReplyOutput, _>()
+    }
+
+    /// <p>Adds or updates a reaction to a specified comment for the user whose identity is used to make the request. You can only add or update a reaction for yourself. You cannot add, modify, or delete a reaction for another user.</p>
+    async fn put_comment_reaction(
+        &self,
+        input: PutCommentReactionInput,
+    ) -> Result<(), RusotoError<PutCommentReactionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodeCommit_20150413.PutCommentReaction");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, PutCommentReactionError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>
@@ -16449,26 +16284,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PutFileInput,
     ) -> Result<PutFileOutput, RusotoError<PutFileError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.PutFile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutFileOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutFileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutFileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutFileOutput, _>()
     }
 
     /// <p>Replaces all triggers for a repository. Used to create or delete triggers.</p>
@@ -16476,27 +16302,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PutRepositoryTriggersInput,
     ) -> Result<PutRepositoryTriggersOutput, RusotoError<PutRepositoryTriggersError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.PutRepositoryTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutRepositoryTriggersOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRepositoryTriggersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRepositoryTriggersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutRepositoryTriggersOutput, _>()
     }
 
     /// <p>Adds or updates tags for a resource in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the <i>AWS CodeCommit User Guide</i>.</p>
@@ -16504,26 +16320,16 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: TagResourceInput,
     ) -> Result<(), RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Tests the functionality of repository triggers by sending information to the trigger target. If real data is available in the repository, the test sends data from the last commit. If no data is available, sample data is generated.</p>
@@ -16531,27 +16337,18 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: TestRepositoryTriggersInput,
     ) -> Result<TestRepositoryTriggersOutput, RusotoError<TestRepositoryTriggersError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.TestRepositoryTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<TestRepositoryTriggersOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TestRepositoryTriggersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TestRepositoryTriggersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<TestRepositoryTriggersOutput, _>()
     }
 
     /// <p>Removes tags for a resource in AWS CodeCommit. For a list of valid resources in AWS CodeCommit, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/auth-and-access-control-iam-access-control-identity-based.html#arn-formats">CodeCommit Resources and Operations</a> in the <i>AWS CodeCommit User Guide</i>.</p>
@@ -16559,26 +16356,16 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UntagResourceInput,
     ) -> Result<(), RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the content of an approval rule template. You can change the number of required approvals, the membership of the approval rule, and whether an approval pool is defined.</p>
@@ -16589,9 +16376,7 @@ impl CodeCommit for CodeCommitClient {
         UpdateApprovalRuleTemplateContentOutput,
         RusotoError<UpdateApprovalRuleTemplateContentError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdateApprovalRuleTemplateContent",
@@ -16599,22 +16384,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApprovalRuleTemplateContentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApprovalRuleTemplateContentError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateApprovalRuleTemplateContentError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateApprovalRuleTemplateContentOutput, _>()
     }
 
     /// <p>Updates the description for a specified approval rule template.</p>
@@ -16625,9 +16404,7 @@ impl CodeCommit for CodeCommitClient {
         UpdateApprovalRuleTemplateDescriptionOutput,
         RusotoError<UpdateApprovalRuleTemplateDescriptionError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdateApprovalRuleTemplateDescription",
@@ -16635,22 +16412,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApprovalRuleTemplateDescriptionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApprovalRuleTemplateDescriptionError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateApprovalRuleTemplateDescriptionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateApprovalRuleTemplateDescriptionOutput, _>()
     }
 
     /// <p>Updates the name of a specified approval rule template.</p>
@@ -16661,9 +16432,7 @@ impl CodeCommit for CodeCommitClient {
         UpdateApprovalRuleTemplateNameOutput,
         RusotoError<UpdateApprovalRuleTemplateNameError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdateApprovalRuleTemplateName",
@@ -16671,20 +16440,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateApprovalRuleTemplateNameOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApprovalRuleTemplateNameError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateApprovalRuleTemplateNameError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateApprovalRuleTemplateNameOutput, _>()
     }
 
     /// <p>Replaces the contents of a comment.</p>
@@ -16692,26 +16454,17 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateCommentInput,
     ) -> Result<UpdateCommentOutput, RusotoError<UpdateCommentError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateComment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateCommentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateCommentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateCommentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateCommentOutput, _>()
     }
 
     /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
@@ -16719,26 +16472,16 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateDefaultBranchInput,
     ) -> Result<(), RusotoError<UpdateDefaultBranchError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateDefaultBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDefaultBranchError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDefaultBranchError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates the structure of an approval rule created specifically for a pull request. For example, you can change the number of required approvers and the approval pool for approvers. </p>
@@ -16749,9 +16492,7 @@ impl CodeCommit for CodeCommitClient {
         UpdatePullRequestApprovalRuleContentOutput,
         RusotoError<UpdatePullRequestApprovalRuleContentError>,
     > {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestApprovalRuleContent",
@@ -16759,22 +16500,16 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePullRequestApprovalRuleContentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePullRequestApprovalRuleContentError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdatePullRequestApprovalRuleContentError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdatePullRequestApprovalRuleContentOutput, _>()
     }
 
     /// <p>Updates the state of a user's approval on a pull request. The user is derived from the signed-in account when the request is made.</p>
@@ -16782,9 +16517,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdatePullRequestApprovalStateInput,
     ) -> Result<(), RusotoError<UpdatePullRequestApprovalStateError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestApprovalState",
@@ -16792,19 +16525,11 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePullRequestApprovalStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePullRequestApprovalStateError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Replaces the contents of the description of a pull request.</p>
@@ -16813,9 +16538,7 @@ impl CodeCommit for CodeCommitClient {
         input: UpdatePullRequestDescriptionInput,
     ) -> Result<UpdatePullRequestDescriptionOutput, RusotoError<UpdatePullRequestDescriptionError>>
     {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestDescription",
@@ -16823,20 +16546,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePullRequestDescriptionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePullRequestDescriptionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePullRequestDescriptionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdatePullRequestDescriptionOutput, _>()
     }
 
     /// <p>Updates the status of a pull request. </p>
@@ -16844,9 +16560,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdatePullRequestStatusInput,
     ) -> Result<UpdatePullRequestStatusOutput, RusotoError<UpdatePullRequestStatusError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestStatus",
@@ -16854,20 +16568,13 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePullRequestStatusOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePullRequestStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePullRequestStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdatePullRequestStatusOutput, _>()
     }
 
     /// <p>Replaces the title of a pull request.</p>
@@ -16875,27 +16582,18 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdatePullRequestTitleInput,
     ) -> Result<UpdatePullRequestTitleOutput, RusotoError<UpdatePullRequestTitleError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdatePullRequestTitle");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdatePullRequestTitleOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdatePullRequestTitleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdatePullRequestTitleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdatePullRequestTitleOutput, _>()
     }
 
     /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.</p> </note></p>
@@ -16903,9 +16601,7 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateRepositoryDescriptionInput,
     ) -> Result<(), RusotoError<UpdateRepositoryDescriptionError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdateRepositoryDescription",
@@ -16913,19 +16609,11 @@ impl CodeCommit for CodeCommitClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRepositoryDescriptionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRepositoryDescriptionError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Renames a repository. The repository name must be unique across the calling AWS account. Repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. The suffix .git is prohibited. For more information about the limits on repository names, see <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">Limits</a> in the AWS CodeCommit User Guide.</p>
@@ -16933,25 +16621,15 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateRepositoryNameInput,
     ) -> Result<(), RusotoError<UpdateRepositoryNameError>> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateRepositoryName");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRepositoryNameError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRepositoryNameError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 }

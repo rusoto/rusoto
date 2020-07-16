@@ -19,12 +19,13 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateDomainRequest {
     /// <p>The ARN of an issued ACM certificate that is valid for the domain being associated.</p>
@@ -42,11 +43,11 @@ pub struct AssociateDomainRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDomainResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateWebsiteAuthorizationProviderRequest {
     /// <p>The authorization provider type.</p>
@@ -61,7 +62,7 @@ pub struct AssociateWebsiteAuthorizationProviderRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateWebsiteAuthorizationProviderResponse {
     /// <p>A unique identifier for the authorization provider.</p>
@@ -70,7 +71,7 @@ pub struct AssociateWebsiteAuthorizationProviderResponse {
     pub authorization_provider_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateWebsiteCertificateAuthorityRequest {
     /// <p>The root certificate of the CA.</p>
@@ -85,7 +86,7 @@ pub struct AssociateWebsiteCertificateAuthorityRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateWebsiteCertificateAuthorityResponse {
     /// <p>A unique identifier for the CA.</p>
@@ -94,7 +95,7 @@ pub struct AssociateWebsiteCertificateAuthorityResponse {
     pub website_ca_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFleetRequest {
     /// <p>The fleet name to display.</p>
@@ -108,18 +109,22 @@ pub struct CreateFleetRequest {
     #[serde(rename = "OptimizeForEndUserLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub optimize_for_end_user_location: Option<bool>,
+    /// <p> The tags to add to the resource. A tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFleetResponse {
-    /// <p>The ARN of the fleet.</p>
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
     #[serde(rename = "FleetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFleetRequest {
     /// <p>The ARN of the fleet.</p>
@@ -127,11 +132,11 @@ pub struct DeleteFleetRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFleetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAuditStreamConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
@@ -139,7 +144,7 @@ pub struct DescribeAuditStreamConfigurationRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuditStreamConfigurationResponse {
     /// <p>The ARN of the Amazon Kinesis data stream that will receive the audit events.</p>
@@ -148,7 +153,7 @@ pub struct DescribeAuditStreamConfigurationResponse {
     pub audit_stream_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCompanyNetworkConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
@@ -156,7 +161,7 @@ pub struct DescribeCompanyNetworkConfigurationRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCompanyNetworkConfigurationResponse {
     /// <p>The security groups associated with access to the provided subnets.</p>
@@ -173,7 +178,7 @@ pub struct DescribeCompanyNetworkConfigurationResponse {
     pub vpc_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDevicePolicyConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
@@ -181,7 +186,7 @@ pub struct DescribeDevicePolicyConfigurationRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDevicePolicyConfigurationResponse {
     /// <p>The certificate chain, including intermediate certificates and the root certificate authority certificate used to issue device certificates.</p>
@@ -190,7 +195,7 @@ pub struct DescribeDevicePolicyConfigurationResponse {
     pub device_ca_certificate: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeviceRequest {
     /// <p>A unique identifier for a registered user's device.</p>
@@ -201,7 +206,7 @@ pub struct DescribeDeviceRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeviceResponse {
     /// <p>The date that the device first signed in to Amazon WorkLink.</p>
@@ -242,7 +247,7 @@ pub struct DescribeDeviceResponse {
     pub username: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDomainRequest {
     /// <p>The name of the domain.</p>
@@ -253,7 +258,7 @@ pub struct DescribeDomainRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDomainResponse {
     /// <p>The ARN of an issued ACM certificate that is valid for the domain being associated.</p>
@@ -278,15 +283,15 @@ pub struct DescribeDomainResponse {
     pub domain_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetMetadataRequest {
-    /// <p>The ARN of the fleet.</p>
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
     #[serde(rename = "FleetArn")]
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetMetadataResponse {
     /// <p>The identifier used by users to sign in to the Amazon WorkLink app.</p>
@@ -317,9 +322,13 @@ pub struct DescribeFleetMetadataResponse {
     #[serde(rename = "OptimizeForEndUserLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub optimize_for_end_user_location: Option<bool>,
+    /// <p>The tags attached to the resource. A tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIdentityProviderConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
@@ -327,7 +336,7 @@ pub struct DescribeIdentityProviderConfigurationRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIdentityProviderConfigurationResponse {
     /// <p>The SAML metadata document provided by the user’s identity provider.</p>
@@ -344,7 +353,7 @@ pub struct DescribeIdentityProviderConfigurationResponse {
     pub service_provider_saml_metadata: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWebsiteCertificateAuthorityRequest {
     /// <p>The ARN of the fleet.</p>
@@ -355,7 +364,7 @@ pub struct DescribeWebsiteCertificateAuthorityRequest {
     pub website_ca_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWebsiteCertificateAuthorityResponse {
     /// <p>The root certificate of the certificate authority.</p>
@@ -373,7 +382,7 @@ pub struct DescribeWebsiteCertificateAuthorityResponse {
 }
 
 /// <p>The summary of devices.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceSummary {
     /// <p>The ID of the device.</p>
@@ -386,7 +395,7 @@ pub struct DeviceSummary {
     pub device_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateDomainRequest {
     /// <p>The name of the domain.</p>
@@ -397,11 +406,11 @@ pub struct DisassociateDomainRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDomainResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateWebsiteAuthorizationProviderRequest {
     /// <p>A unique identifier for the authorization provider.</p>
@@ -412,11 +421,11 @@ pub struct DisassociateWebsiteAuthorizationProviderRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateWebsiteAuthorizationProviderResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateWebsiteCertificateAuthorityRequest {
     /// <p>The ARN of the fleet.</p>
@@ -427,12 +436,12 @@ pub struct DisassociateWebsiteCertificateAuthorityRequest {
     pub website_ca_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateWebsiteCertificateAuthorityResponse {}
 
 /// <p>The summary of the domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainSummary {
     /// <p>The time that the domain was created.</p>
@@ -451,7 +460,7 @@ pub struct DomainSummary {
 }
 
 /// <p>The summary of the fleet.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FleetSummary {
     /// <p>The identifier used by users to sign into the Amazon WorkLink app.</p>
@@ -462,11 +471,11 @@ pub struct FleetSummary {
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The name to display.</p>
+    /// <p>The name of the fleet to display.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The ARN of the fleet.</p>
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
     #[serde(rename = "FleetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_arn: Option<String>,
@@ -482,9 +491,13 @@ pub struct FleetSummary {
     #[serde(rename = "LastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<f64>,
+    /// <p>The tags attached to the resource. A tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
     /// <p>The ARN of the fleet.</p>
@@ -500,7 +513,7 @@ pub struct ListDevicesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResponse {
     /// <p>Information about the devices.</p>
@@ -513,7 +526,7 @@ pub struct ListDevicesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsRequest {
     /// <p>The ARN of the fleet.</p>
@@ -529,7 +542,7 @@ pub struct ListDomainsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainsResponse {
     /// <p>Information about the domains.</p>
@@ -542,7 +555,7 @@ pub struct ListDomainsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFleetsRequest {
     /// <p>The maximum number of results to be included in the next page.</p>
@@ -555,7 +568,7 @@ pub struct ListFleetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFleetsResponse {
     /// <p>The summary list of the fleets.</p>
@@ -568,7 +581,24 @@ pub struct ListFleetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tags attached to the resource. A tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebsiteAuthorizationProvidersRequest {
     /// <p>The ARN of the fleet.</p>
@@ -584,7 +614,7 @@ pub struct ListWebsiteAuthorizationProvidersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebsiteAuthorizationProvidersResponse {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
@@ -597,7 +627,7 @@ pub struct ListWebsiteAuthorizationProvidersResponse {
     pub website_authorization_providers: Option<Vec<WebsiteAuthorizationProviderSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWebsiteCertificateAuthoritiesRequest {
     /// <p>The ARN of the fleet.</p>
@@ -613,7 +643,7 @@ pub struct ListWebsiteCertificateAuthoritiesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebsiteCertificateAuthoritiesResponse {
     /// <p>The pagination token used to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
@@ -626,7 +656,7 @@ pub struct ListWebsiteCertificateAuthoritiesResponse {
     pub website_certificate_authorities: Option<Vec<WebsiteCaSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreDomainAccessRequest {
     /// <p>The name of the domain.</p>
@@ -637,11 +667,11 @@ pub struct RestoreDomainAccessRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreDomainAccessResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeDomainAccessRequest {
     /// <p>The name of the domain.</p>
@@ -652,11 +682,11 @@ pub struct RevokeDomainAccessRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokeDomainAccessResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SignOutUserRequest {
     /// <p>The ARN of the fleet.</p>
@@ -667,11 +697,41 @@ pub struct SignOutUserRequest {
     pub username: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SignOutUserResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags to add to the resource. A tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The list of tag keys to remove from the resource.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuditStreamConfigurationRequest {
     /// <p>The ARN of the Amazon Kinesis data stream that receives the audit events.</p>
@@ -683,11 +743,11 @@ pub struct UpdateAuditStreamConfigurationRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuditStreamConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCompanyNetworkConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
@@ -704,11 +764,11 @@ pub struct UpdateCompanyNetworkConfigurationRequest {
     pub vpc_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCompanyNetworkConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevicePolicyConfigurationRequest {
     /// <p>The certificate chain, including intermediate certificates and the root certificate authority certificate used to issue device certificates.</p>
@@ -720,11 +780,11 @@ pub struct UpdateDevicePolicyConfigurationRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDevicePolicyConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainMetadataRequest {
     /// <p>The name to display.</p>
@@ -739,11 +799,11 @@ pub struct UpdateDomainMetadataRequest {
     pub fleet_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainMetadataResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFleetMetadataRequest {
     /// <p>The fleet name to display. The existing DisplayName is unset if null is passed.</p>
@@ -759,11 +819,11 @@ pub struct UpdateFleetMetadataRequest {
     pub optimize_for_end_user_location: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFleetMetadataResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIdentityProviderConfigurationRequest {
     /// <p>The ARN of the fleet.</p>
@@ -778,12 +838,12 @@ pub struct UpdateIdentityProviderConfigurationRequest {
     pub identity_provider_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIdentityProviderConfigurationResponse {}
 
 /// <p>The summary of the website authorization provider.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WebsiteAuthorizationProviderSummary {
     /// <p>A unique identifier for the authorization provider.</p>
@@ -804,7 +864,7 @@ pub struct WebsiteAuthorizationProviderSummary {
 }
 
 /// <p>The summary of the certificate authority (CA).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WebsiteCaSummary {
     /// <p>The time when the CA was added.</p>
@@ -2000,6 +2060,8 @@ pub enum ListDomainsError {
     InternalServerError(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
     /// <p>The number of requests exceeds the limit.</p>
     TooManyRequests(String),
     /// <p>You are not authorized to perform this action.</p>
@@ -2015,6 +2077,9 @@ impl ListDomainsError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(ListDomainsError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListDomainsError::ResourceNotFound(err.msg))
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(ListDomainsError::TooManyRequests(err.msg))
@@ -2035,6 +2100,7 @@ impl fmt::Display for ListDomainsError {
         match *self {
             ListDomainsError::InternalServerError(ref cause) => write!(f, "{}", cause),
             ListDomainsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListDomainsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             ListDomainsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
             ListDomainsError::Unauthorized(ref cause) => write!(f, "{}", cause),
         }
@@ -2089,6 +2155,36 @@ impl fmt::Display for ListFleetsError {
     }
 }
 impl Error for ListFleetsError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by ListWebsiteAuthorizationProviders
 #[derive(Debug, PartialEq)]
 pub enum ListWebsiteAuthorizationProvidersError {
@@ -2399,6 +2495,66 @@ impl fmt::Display for SignOutUserError {
     }
 }
 impl Error for SignOutUserError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(TagResourceError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateAuditStreamConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuditStreamConfigurationError {
@@ -2961,6 +3117,12 @@ pub trait Worklink {
         input: ListFleetsRequest,
     ) -> Result<ListFleetsResponse, RusotoError<ListFleetsError>>;
 
+    /// <p>Retrieves a list of tags for the specified resource.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Retrieves a list of website authorization providers associated with a specified fleet.</p>
     async fn list_website_authorization_providers(
         &self,
@@ -2996,6 +3158,18 @@ pub trait Worklink {
         &self,
         input: SignOutUserRequest,
     ) -> Result<SignOutUserResponse, RusotoError<SignOutUserError>>;
+
+    /// <p>Adds or overwrites one or more tags for the specified resource, such as a fleet. Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes one or more tags from the specified resource.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates the audit stream configuration for the fleet.</p>
     async fn update_audit_stream_configuration(
@@ -3086,6 +3260,7 @@ impl WorklinkClient {
 #[async_trait]
 impl Worklink for WorklinkClient {
     /// <p>Specifies a domain to be associated to Amazon WorkLink.</p>
+    #[allow(unused_mut)]
     async fn associate_domain(
         &self,
         input: AssociateDomainRequest,
@@ -3104,7 +3279,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateDomainResponse, _>()?;
 
@@ -3116,6 +3291,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Associates a website authorization provider with a specified fleet. This is used to authorize users against associated websites in the company network.</p>
+    #[allow(unused_mut)]
     async fn associate_website_authorization_provider(
         &self,
         input: AssociateWebsiteAuthorizationProviderRequest,
@@ -3137,7 +3313,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateWebsiteAuthorizationProviderResponse, _>()?;
 
@@ -3151,6 +3327,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Imports the root certificate of a certificate authority (CA) used to obtain TLS certificates used by associated websites within the company network.</p>
+    #[allow(unused_mut)]
     async fn associate_website_certificate_authority(
         &self,
         input: AssociateWebsiteCertificateAuthorityRequest,
@@ -3172,7 +3349,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateWebsiteCertificateAuthorityResponse, _>()?;
 
@@ -3186,6 +3363,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Creates a fleet. A fleet consists of resources and the configuration that delivers associated websites to authorized users who download and set up the Amazon WorkLink app.</p>
+    #[allow(unused_mut)]
     async fn create_fleet(
         &self,
         input: CreateFleetRequest,
@@ -3204,7 +3382,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateFleetResponse, _>()?;
 
@@ -3216,6 +3394,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Deletes a fleet. Prevents users from accessing previously associated websites. </p>
+    #[allow(unused_mut)]
     async fn delete_fleet(
         &self,
         input: DeleteFleetRequest,
@@ -3234,7 +3413,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteFleetResponse, _>()?;
 
@@ -3246,6 +3425,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Describes the configuration for delivering audit streams to the customer account.</p>
+    #[allow(unused_mut)]
     async fn describe_audit_stream_configuration(
         &self,
         input: DescribeAuditStreamConfigurationRequest,
@@ -3267,7 +3447,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeAuditStreamConfigurationResponse, _>()?;
 
@@ -3281,6 +3461,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Describes the networking configuration to access the internal websites associated with the specified fleet.</p>
+    #[allow(unused_mut)]
     async fn describe_company_network_configuration(
         &self,
         input: DescribeCompanyNetworkConfigurationRequest,
@@ -3302,7 +3483,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeCompanyNetworkConfigurationResponse, _>()?;
 
@@ -3316,6 +3497,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Provides information about a user's device.</p>
+    #[allow(unused_mut)]
     async fn describe_device(
         &self,
         input: DescribeDeviceRequest,
@@ -3334,7 +3516,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDeviceResponse, _>()?;
 
@@ -3346,6 +3528,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Describes the device policy configuration for the specified fleet.</p>
+    #[allow(unused_mut)]
     async fn describe_device_policy_configuration(
         &self,
         input: DescribeDevicePolicyConfigurationRequest,
@@ -3367,7 +3550,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDevicePolicyConfigurationResponse, _>()?;
 
@@ -3381,6 +3564,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Provides information about the domain.</p>
+    #[allow(unused_mut)]
     async fn describe_domain(
         &self,
         input: DescribeDomainRequest,
@@ -3399,7 +3583,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDomainResponse, _>()?;
 
@@ -3411,6 +3595,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Provides basic information for the specified fleet, excluding identity provider, networking, and device configuration details.</p>
+    #[allow(unused_mut)]
     async fn describe_fleet_metadata(
         &self,
         input: DescribeFleetMetadataRequest,
@@ -3429,7 +3614,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeFleetMetadataResponse, _>()?;
 
@@ -3441,6 +3626,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Describes the identity provider configuration of the specified fleet.</p>
+    #[allow(unused_mut)]
     async fn describe_identity_provider_configuration(
         &self,
         input: DescribeIdentityProviderConfigurationRequest,
@@ -3462,7 +3648,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeIdentityProviderConfigurationResponse, _>()?;
 
@@ -3476,6 +3662,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Provides information about the certificate authority.</p>
+    #[allow(unused_mut)]
     async fn describe_website_certificate_authority(
         &self,
         input: DescribeWebsiteCertificateAuthorityRequest,
@@ -3497,7 +3684,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeWebsiteCertificateAuthorityResponse, _>()?;
 
@@ -3511,6 +3698,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Disassociates a domain from Amazon WorkLink. End users lose the ability to access the domain with Amazon WorkLink. </p>
+    #[allow(unused_mut)]
     async fn disassociate_domain(
         &self,
         input: DisassociateDomainRequest,
@@ -3529,7 +3717,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateDomainResponse, _>()?;
 
@@ -3541,6 +3729,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Disassociates a website authorization provider from a specified fleet. After the disassociation, users can't load any associated websites that require this authorization provider.</p>
+    #[allow(unused_mut)]
     async fn disassociate_website_authorization_provider(
         &self,
         input: DisassociateWebsiteAuthorizationProviderRequest,
@@ -3562,7 +3751,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateWebsiteAuthorizationProviderResponse, _>()?;
 
@@ -3574,6 +3763,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Removes a certificate authority (CA).</p>
+    #[allow(unused_mut)]
     async fn disassociate_website_certificate_authority(
         &self,
         input: DisassociateWebsiteCertificateAuthorityRequest,
@@ -3595,7 +3785,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateWebsiteCertificateAuthorityResponse, _>()?;
 
@@ -3609,6 +3799,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Retrieves a list of devices registered with the specified fleet.</p>
+    #[allow(unused_mut)]
     async fn list_devices(
         &self,
         input: ListDevicesRequest,
@@ -3627,7 +3818,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDevicesResponse, _>()?;
 
@@ -3639,6 +3830,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Retrieves a list of domains associated to a specified fleet.</p>
+    #[allow(unused_mut)]
     async fn list_domains(
         &self,
         input: ListDomainsRequest,
@@ -3657,7 +3849,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDomainsResponse, _>()?;
 
@@ -3669,6 +3861,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Retrieves a list of fleets for the current account and Region.</p>
+    #[allow(unused_mut)]
     async fn list_fleets(
         &self,
         input: ListFleetsRequest,
@@ -3687,7 +3880,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListFleetsResponse, _>()?;
 
@@ -3698,7 +3891,36 @@ impl Worklink for WorklinkClient {
         }
     }
 
+    /// <p>Retrieves a list of tags for the specified resource.</p>
+    #[allow(unused_mut)]
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/json".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves a list of website authorization providers associated with a specified fleet.</p>
+    #[allow(unused_mut)]
     async fn list_website_authorization_providers(
         &self,
         input: ListWebsiteAuthorizationProvidersRequest,
@@ -3720,7 +3942,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListWebsiteAuthorizationProvidersResponse, _>()?;
 
@@ -3734,6 +3956,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Retrieves a list of certificate authorities added for the current account and Region.</p>
+    #[allow(unused_mut)]
     async fn list_website_certificate_authorities(
         &self,
         input: ListWebsiteCertificateAuthoritiesRequest,
@@ -3755,7 +3978,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListWebsiteCertificateAuthoritiesResponse, _>()?;
 
@@ -3769,6 +3992,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Moves a domain to ACTIVE status if it was in the INACTIVE status.</p>
+    #[allow(unused_mut)]
     async fn restore_domain_access(
         &self,
         input: RestoreDomainAccessRequest,
@@ -3787,7 +4011,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RestoreDomainAccessResponse, _>()?;
 
@@ -3799,6 +4023,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Moves a domain to INACTIVE status if it was in the ACTIVE status.</p>
+    #[allow(unused_mut)]
     async fn revoke_domain_access(
         &self,
         input: RevokeDomainAccessRequest,
@@ -3817,7 +4042,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RevokeDomainAccessResponse, _>()?;
 
@@ -3829,6 +4054,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Signs the user out from all of their devices. The user can sign in again if they have valid credentials.</p>
+    #[allow(unused_mut)]
     async fn sign_out_user(
         &self,
         input: SignOutUserRequest,
@@ -3847,7 +4073,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SignOutUserResponse, _>()?;
 
@@ -3858,7 +4084,73 @@ impl Worklink for WorklinkClient {
         }
     }
 
+    /// <p>Adds or overwrites one or more tags for the specified resource, such as a fleet. Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p>
+    #[allow(unused_mut)]
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/json".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes one or more tags from the specified resource.</p>
+    #[allow(unused_mut)]
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/json".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UntagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
+        }
+    }
+
     /// <p>Updates the audit stream configuration for the fleet.</p>
+    #[allow(unused_mut)]
     async fn update_audit_stream_configuration(
         &self,
         input: UpdateAuditStreamConfigurationRequest,
@@ -3880,7 +4172,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateAuditStreamConfigurationResponse, _>()?;
 
@@ -3892,6 +4184,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates the company network configuration for the fleet.</p>
+    #[allow(unused_mut)]
     async fn update_company_network_configuration(
         &self,
         input: UpdateCompanyNetworkConfigurationRequest,
@@ -3913,7 +4206,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateCompanyNetworkConfigurationResponse, _>()?;
 
@@ -3927,6 +4220,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates the device policy configuration for the fleet.</p>
+    #[allow(unused_mut)]
     async fn update_device_policy_configuration(
         &self,
         input: UpdateDevicePolicyConfigurationRequest,
@@ -3948,7 +4242,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDevicePolicyConfigurationResponse, _>()?;
 
@@ -3962,6 +4256,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates domain metadata, such as DisplayName.</p>
+    #[allow(unused_mut)]
     async fn update_domain_metadata(
         &self,
         input: UpdateDomainMetadataRequest,
@@ -3980,7 +4275,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDomainMetadataResponse, _>()?;
 
@@ -3992,6 +4287,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates fleet metadata, such as DisplayName.</p>
+    #[allow(unused_mut)]
     async fn update_fleet_metadata(
         &self,
         input: UpdateFleetMetadataRequest,
@@ -4010,7 +4306,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFleetMetadataResponse, _>()?;
 
@@ -4022,6 +4318,7 @@ impl Worklink for WorklinkClient {
     }
 
     /// <p>Updates the identity provider configuration for the fleet.</p>
+    #[allow(unused_mut)]
     async fn update_identity_provider_configuration(
         &self,
         input: UpdateIdentityProviderConfigurationRequest,
@@ -4043,7 +4340,7 @@ impl Worklink for WorklinkClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateIdentityProviderConfigurationResponse, _>()?;
 

@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelSigningProfileRequest {
     /// <p>The name of the signing profile to be canceled.</p>
@@ -33,7 +33,7 @@ pub struct CancelSigningProfileRequest {
     pub profile_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSigningJobRequest {
     /// <p>The ID of the signing job on input.</p>
@@ -41,7 +41,7 @@ pub struct DescribeSigningJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSigningJobResponse {
     /// <p>Date and time that the signing job was completed.</p>
@@ -99,7 +99,7 @@ pub struct DescribeSigningJobResponse {
 }
 
 /// <p>Points to an <code>S3Destination</code> object that contains information about your S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Destination {
     /// <p>The <code>S3Destination</code> object.</p>
@@ -109,7 +109,7 @@ pub struct Destination {
 }
 
 /// <p>The encryption algorithm options that are available to a code signing job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EncryptionAlgorithmOptions {
     /// <p>The set of accepted encryption algorithms that are allowed in a code signing job.</p>
@@ -120,7 +120,7 @@ pub struct EncryptionAlgorithmOptions {
     pub default_value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSigningPlatformRequest {
     /// <p>The ID of the target signing platform.</p>
@@ -128,7 +128,7 @@ pub struct GetSigningPlatformRequest {
     pub platform_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSigningPlatformResponse {
     /// <p>The category type of the target signing platform.</p>
@@ -165,7 +165,7 @@ pub struct GetSigningPlatformResponse {
     pub target: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSigningProfileRequest {
     /// <p>The name of the target signing profile.</p>
@@ -173,7 +173,7 @@ pub struct GetSigningProfileRequest {
     pub profile_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSigningProfileResponse {
     /// <p>The Amazon Resource Name (ARN) for the signing profile.</p>
@@ -211,7 +211,7 @@ pub struct GetSigningProfileResponse {
 }
 
 /// <p>The hash algorithms that are available to a code signing job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HashAlgorithmOptions {
     /// <p>The set of accepted hash algorithms allowed in a code signing job.</p>
@@ -222,7 +222,7 @@ pub struct HashAlgorithmOptions {
     pub default_value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSigningJobsRequest {
     /// <p>Specifies the maximum number of items to return in the response. Use this parameter when paginating results. If additional items exist beyond the number you specify, the <code>nextToken</code> element is set in the response. Use the <code>nextToken</code> value in a subsequent request to retrieve additional items. </p>
@@ -247,7 +247,7 @@ pub struct ListSigningJobsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSigningJobsResponse {
     /// <p>A list of your signing jobs.</p>
@@ -260,7 +260,7 @@ pub struct ListSigningJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSigningPlatformsRequest {
     /// <p>The category type of a signing platform.</p>
@@ -285,7 +285,7 @@ pub struct ListSigningPlatformsRequest {
     pub target: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSigningPlatformsResponse {
     /// <p>Value for specifying the next set of paginated results to return.</p>
@@ -298,7 +298,7 @@ pub struct ListSigningPlatformsResponse {
     pub platforms: Option<Vec<SigningPlatform>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSigningProfilesRequest {
     /// <p>Designates whether to include profiles with the status of <code>CANCELED</code>.</p>
@@ -315,7 +315,7 @@ pub struct ListSigningProfilesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSigningProfilesResponse {
     /// <p>Value for specifying the next set of paginated results to return.</p>
@@ -328,7 +328,7 @@ pub struct ListSigningProfilesResponse {
     pub profiles: Option<Vec<SigningProfile>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the signing profile.</p>
@@ -336,7 +336,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A list of tags associated with the signing profile.</p>
@@ -345,7 +345,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSigningProfileRequest {
     /// <p>A subfield of <code>platform</code>. This specifies any different configuration options that you want to apply to the chosen platform (such as a different <code>hash-algorithm</code> or <code>signing-algorithm</code>).</p>
@@ -371,7 +371,7 @@ pub struct PutSigningProfileRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSigningProfileResponse {
     /// <p>The Amazon Resource Name (ARN) of the signing profile created.</p>
@@ -381,7 +381,7 @@ pub struct PutSigningProfileResponse {
 }
 
 /// <p>The name and prefix of the S3 bucket where code signing saves your signed objects.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Destination {
     /// <p>Name of the S3 bucket.</p>
@@ -395,7 +395,7 @@ pub struct S3Destination {
 }
 
 /// <p>The S3 bucket name and key where code signing saved your signed code image.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3SignedObject {
     /// <p>Name of the S3 bucket.</p>
@@ -409,7 +409,7 @@ pub struct S3SignedObject {
 }
 
 /// <p>Information about the S3 bucket where you saved your unsigned code.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Source {
     /// <p>Name of the S3 bucket.</p>
     #[serde(rename = "bucketName")]
@@ -423,7 +423,7 @@ pub struct S3Source {
 }
 
 /// <p>Points to an <code>S3SignedObject</code> object that contains information about your signed code image.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SignedObject {
     /// <p>The <code>S3SignedObject</code>.</p>
@@ -433,7 +433,7 @@ pub struct SignedObject {
 }
 
 /// <p>The configuration of a code signing operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SigningConfiguration {
     /// <p>The encryption algorithm options that are available for a code signing job.</p>
@@ -445,7 +445,7 @@ pub struct SigningConfiguration {
 }
 
 /// <p>A signing configuration that overrides the default encryption or hash algorithm of a signing job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SigningConfigurationOverrides {
     /// <p>A specified override of the default encryption algorithm that is used in a code signing job.</p>
     #[serde(rename = "encryptionAlgorithm")]
@@ -458,7 +458,7 @@ pub struct SigningConfigurationOverrides {
 }
 
 /// <p>The image format of a code signing platform or profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SigningImageFormat {
     /// <p>The default format of a code signing image.</p>
@@ -470,7 +470,7 @@ pub struct SigningImageFormat {
 }
 
 /// <p>Contains information about a signing job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SigningJob {
     /// <p>The date and time that the signing job was created.</p>
@@ -500,7 +500,7 @@ pub struct SigningJob {
 }
 
 /// <p>The ACM certificate that is used to sign your code.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SigningMaterial {
     /// <p>The Amazon Resource Name (ARN) of the certificates that is used to sign your code.</p>
     #[serde(rename = "certificateArn")]
@@ -508,7 +508,7 @@ pub struct SigningMaterial {
 }
 
 /// <p>Contains information about the signing configurations and parameters that are used to perform a code signing job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SigningPlatform {
     /// <p>The category of a code signing platform.</p>
@@ -545,7 +545,7 @@ pub struct SigningPlatform {
 }
 
 /// <p>Any overrides that are applied to the signing configuration of a code signing platform.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SigningPlatformOverrides {
     /// <p>A signing configuration that overrides the default encryption or hash algorithm of a signing job.</p>
     #[serde(rename = "signingConfiguration")]
@@ -558,7 +558,7 @@ pub struct SigningPlatformOverrides {
 }
 
 /// <p>Contains information about the ACM certificates and code signing configuration parameters that can be used by a given code signing user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SigningProfile {
     /// <p>The Amazon Resource Name (ARN) for the signing profile.</p>
@@ -592,7 +592,7 @@ pub struct SigningProfile {
 }
 
 /// <p>An <code>S3Source</code> object that contains information about the S3 bucket where you saved your unsigned code.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Source {
     /// <p>The <code>S3Source</code> object.</p>
     #[serde(rename = "s3")]
@@ -600,7 +600,7 @@ pub struct Source {
     pub s_3: Option<S3Source>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSigningJobRequest {
     /// <p>String that identifies the signing request. All calls after the first that use this token return the same response as the first call.</p>
@@ -618,7 +618,7 @@ pub struct StartSigningJobRequest {
     pub source: Source,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSigningJobResponse {
     /// <p>The ID of your signing job.</p>
@@ -627,7 +627,7 @@ pub struct StartSigningJobResponse {
     pub job_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the signing profile.</p>
@@ -638,11 +638,11 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the signing profile.</p>
@@ -653,7 +653,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
@@ -1323,6 +1323,7 @@ impl SignerClient {
 #[async_trait]
 impl Signer for SignerClient {
     /// <p>Changes the state of an <code>ACTIVE</code> signing profile to <code>CANCELED</code>. A canceled profile is still viewable with the <code>ListSigningProfiles</code> operation, but it cannot perform new signing jobs, and is deleted two years after cancelation.</p>
+    #[allow(unused_mut)]
     async fn cancel_signing_profile(
         &self,
         input: CancelSigningProfileRequest,
@@ -1341,7 +1342,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -1352,6 +1353,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Returns information about a specific code signing job. You specify the job by using the <code>jobId</code> value that is returned by the <a>StartSigningJob</a> operation. </p>
+    #[allow(unused_mut)]
     async fn describe_signing_job(
         &self,
         input: DescribeSigningJobRequest,
@@ -1367,7 +1369,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSigningJobResponse, _>()?;
 
@@ -1379,6 +1381,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Returns information on a specific signing platform.</p>
+    #[allow(unused_mut)]
     async fn get_signing_platform(
         &self,
         input: GetSigningPlatformRequest,
@@ -1397,7 +1400,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSigningPlatformResponse, _>()?;
 
@@ -1409,6 +1412,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Returns information on a specific signing profile.</p>
+    #[allow(unused_mut)]
     async fn get_signing_profile(
         &self,
         input: GetSigningProfileRequest,
@@ -1427,7 +1431,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSigningProfileResponse, _>()?;
 
@@ -1439,6 +1443,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Lists all your signing jobs. You can use the <code>maxResults</code> parameter to limit the number of signing jobs that are returned in the response. If additional jobs remain to be listed, code signing returns a <code>nextToken</code> value. Use this value in subsequent calls to <code>ListSigningJobs</code> to fetch the remaining values. You can continue calling <code>ListSigningJobs</code> with your <code>maxResults</code> parameter and with new values that code signing returns in the <code>nextToken</code> parameter until all of your signing jobs have been returned. </p>
+    #[allow(unused_mut)]
     async fn list_signing_jobs(
         &self,
         input: ListSigningJobsRequest,
@@ -1472,7 +1477,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSigningJobsResponse, _>()?;
 
@@ -1484,6 +1489,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Lists all signing platforms available in code signing that match the request parameters. If additional jobs remain to be listed, code signing returns a <code>nextToken</code> value. Use this value in subsequent calls to <code>ListSigningJobs</code> to fetch the remaining values. You can continue calling <code>ListSigningJobs</code> with your <code>maxResults</code> parameter and with new values that code signing returns in the <code>nextToken</code> parameter until all of your signing jobs have been returned.</p>
+    #[allow(unused_mut)]
     async fn list_signing_platforms(
         &self,
         input: ListSigningPlatformsRequest,
@@ -1517,7 +1523,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSigningPlatformsResponse, _>()?;
 
@@ -1529,6 +1535,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Lists all available signing profiles in your AWS account. Returns only profiles with an <code>ACTIVE</code> status unless the <code>includeCanceled</code> request field is set to <code>true</code>. If additional jobs remain to be listed, code signing returns a <code>nextToken</code> value. Use this value in subsequent calls to <code>ListSigningJobs</code> to fetch the remaining values. You can continue calling <code>ListSigningJobs</code> with your <code>maxResults</code> parameter and with new values that code signing returns in the <code>nextToken</code> parameter until all of your signing jobs have been returned.</p>
+    #[allow(unused_mut)]
     async fn list_signing_profiles(
         &self,
         input: ListSigningProfilesRequest,
@@ -1556,7 +1563,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSigningProfilesResponse, _>()?;
 
@@ -1568,6 +1575,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Returns a list of the tags associated with a signing profile resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -1583,7 +1591,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -1595,6 +1603,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Creates a signing profile. A signing profile is a code signing template that can be used to carry out a pre-defined signing job. For more information, see <a href="http://docs.aws.amazon.com/signer/latest/developerguide/gs-profile.html">http://docs.aws.amazon.com/signer/latest/developerguide/gs-profile.html</a> </p>
+    #[allow(unused_mut)]
     async fn put_signing_profile(
         &self,
         input: PutSigningProfileRequest,
@@ -1616,7 +1625,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutSigningProfileResponse, _>()?;
 
@@ -1628,6 +1637,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Initiates a signing job to be performed on the code provided. Signing jobs are viewable by the <code>ListSigningJobs</code> operation for two years after they are performed. Note the following requirements: </p> <ul> <li> <p> You must create an Amazon S3 source bucket. For more information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html">Create a Bucket</a> in the <i>Amazon S3 Getting Started Guide</i>. </p> </li> <li> <p>Your S3 source bucket must be version enabled.</p> </li> <li> <p>You must create an S3 destination bucket. Code signing uses your S3 destination bucket to write your signed code.</p> </li> <li> <p>You specify the name of the source and destination buckets when calling the <code>StartSigningJob</code> operation.</p> </li> <li> <p>You must also specify a request token that identifies your request to code signing.</p> </li> </ul> <p>You can call the <a>DescribeSigningJob</a> and the <a>ListSigningJobs</a> actions after you call <code>StartSigningJob</code>.</p> <p>For a Java example that shows how to use this action, see <a href="http://docs.aws.amazon.com/acm/latest/userguide/">http://docs.aws.amazon.com/acm/latest/userguide/</a> </p>
+    #[allow(unused_mut)]
     async fn start_signing_job(
         &self,
         input: StartSigningJobRequest,
@@ -1646,7 +1656,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartSigningJobResponse, _>()?;
 
@@ -1658,6 +1668,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Adds one or more tags to a signing profile. Tags are labels that you can use to identify and organize your AWS resources. Each tag consists of a key and an optional value. To specify the signing profile, use its Amazon Resource Name (ARN). To specify the tag, use a key-value pair.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -1676,7 +1687,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -1688,6 +1699,7 @@ impl Signer for SignerClient {
     }
 
     /// <p>Removes one or more tags from a signing profile. To remove the tags, specify a list of tag keys.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -1709,7 +1721,7 @@ impl Signer for SignerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 

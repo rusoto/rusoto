@@ -108,10 +108,13 @@ impl<'b> Service<'b> {
             | "AWS IoT Data Plane"
             | "Amazon SageMaker Runtime"
             | "Amazon WorkMail Message Flow"
-            | "SSO"
-            | "Amazon EBS" => false,
+            | "SSO" => false,
             _ => true,
         }
+    }
+
+    pub fn has_event_streams(&self) -> bool {
+        self.shapes().values().into_iter().any(|s| s.eventstream())
     }
 
     pub fn get_dependencies(&self) -> BTreeMap<String, cargo::Dependency> {

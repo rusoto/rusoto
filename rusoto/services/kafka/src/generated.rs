@@ -27,7 +27,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 /// <pre><code>        &lt;p&gt;Specifies the EBS volume upgrade information. The broker identifier must be set to the keyword ALL. This means the changes apply to all the brokers in the cluster.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BrokerEBSVolumeInfo {
     /// <pre><code>        &lt;p&gt;The ID of the broker to update.&lt;/p&gt;
     /// </code></pre>
@@ -39,7 +39,7 @@ pub struct BrokerEBSVolumeInfo {
     pub volume_size_gb: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BrokerLogs {
     #[serde(rename = "CloudWatchLogs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -54,7 +54,7 @@ pub struct BrokerLogs {
 
 /// <pre><code>        &lt;p&gt;Describes the setup to be used for Kafka broker nodes in the cluster.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BrokerNodeGroupInfo {
     /// <pre><code>        &lt;p&gt;The distribution of broker nodes across Availability Zones. This is an optional parameter. If you don&#39;t specify it, Amazon MSK gives it the value DEFAULT. You can also explicitly set this parameter to the value DEFAULT. No other values are currently allowed.&lt;/p&gt;
     /// &lt;p&gt;Amazon MSK distributes the broker nodes evenly across the Availability Zones that correspond to the subnets you provide when you create the cluster.&lt;/p&gt;
@@ -86,7 +86,7 @@ pub struct BrokerNodeGroupInfo {
 
 /// <pre><code>        &lt;p&gt;BrokerNodeInfo&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BrokerNodeInfo {
     /// <pre><code>        &lt;p&gt;The attached elastic network interface of the broker.&lt;/p&gt;
@@ -123,7 +123,7 @@ pub struct BrokerNodeInfo {
 
 /// <pre><code>        &lt;p&gt;Information about the current software installed on the cluster.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BrokerSoftwareInfo {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the configuration used for the cluster. This field isn&#39;t visible in this preview release.&lt;/p&gt;
@@ -145,7 +145,7 @@ pub struct BrokerSoftwareInfo {
 
 /// <pre><code>        &lt;p&gt;Includes all client authentication information.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ClientAuthentication {
     /// <pre><code>        &lt;p&gt;Details for ClientAuthentication using TLS.&lt;/p&gt;
     /// </code></pre>
@@ -154,7 +154,7 @@ pub struct ClientAuthentication {
     pub tls: Option<Tls>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CloudWatchLogs {
     #[serde(rename = "Enabled")]
     pub enabled: bool,
@@ -165,7 +165,7 @@ pub struct CloudWatchLogs {
 
 /// <pre><code>        &lt;p&gt;Returns information about a cluster.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClusterInfo {
     /// <pre><code>        &lt;p&gt;Arn of active cluster operation.&lt;/p&gt;
@@ -253,7 +253,7 @@ pub struct ClusterInfo {
 
 /// <pre><code>        &lt;p&gt;Returns information about a cluster operation.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClusterOperationInfo {
     /// <pre><code>        &lt;p&gt;The ID of the API request that triggered this operation.&lt;/p&gt;
@@ -291,6 +291,11 @@ pub struct ClusterOperationInfo {
     #[serde(rename = "OperationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_state: Option<String>,
+    /// <pre><code>        &lt;p&gt;Steps completed during the operation.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "OperationSteps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_steps: Option<Vec<ClusterOperationStep>>,
     /// <pre><code>        &lt;p&gt;Type of the cluster operation.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "OperationType")]
@@ -308,9 +313,55 @@ pub struct ClusterOperationInfo {
     pub target_cluster_info: Option<MutableClusterInfo>,
 }
 
+/// <pre><code>        &lt;p&gt;Step taken during a cluster operation.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ClusterOperationStep {
+    /// <pre><code>        &lt;p&gt;Information about the step and its status.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "StepInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_info: Option<ClusterOperationStepInfo>,
+    /// <pre><code>        &lt;p&gt;The name of the step.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "StepName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_name: Option<String>,
+}
+
+/// <pre><code>        &lt;p&gt;State information about the operation step.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ClusterOperationStepInfo {
+    /// <pre><code>        &lt;p&gt;The steps current status.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "StepStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_status: Option<String>,
+}
+
+/// <pre><code>        &lt;p&gt;Contains source Kafka versions and compatible target Kafka versions.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CompatibleKafkaVersion {
+    /// <pre><code>        &lt;p&gt;A Kafka version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "SourceVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_version: Option<String>,
+    /// <pre><code>        &lt;p&gt;A list of Kafka versions.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "TargetVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_versions: Option<Vec<String>>,
+}
+
 /// <pre><code>        &lt;p&gt;Represents an MSK Configuration.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Configuration {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the configuration.&lt;/p&gt;
@@ -341,7 +392,7 @@ pub struct Configuration {
 
 /// <pre><code>        &lt;p&gt;Specifies the configuration to use for the brokers.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfigurationInfo {
     /// <pre><code>        &lt;p&gt;ARN of the configuration to use.&lt;/p&gt;
     /// </code></pre>
@@ -355,7 +406,7 @@ pub struct ConfigurationInfo {
 
 /// <pre><code>        &lt;p&gt;Describes a configuration revision.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationRevision {
     /// <pre><code>        &lt;p&gt;The time when the configuration revision was created.&lt;/p&gt;
@@ -373,7 +424,7 @@ pub struct ConfigurationRevision {
     pub revision: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
     /// <pre><code>        &lt;p&gt;Information about the broker nodes in the cluster.&lt;/p&gt;
@@ -427,7 +478,7 @@ pub struct CreateClusterRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateClusterResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
@@ -447,7 +498,7 @@ pub struct CreateClusterResponse {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationRequest {
     /// <pre><code>        &lt;p&gt;The description of the configuration.&lt;/p&gt;
@@ -458,7 +509,8 @@ pub struct CreateConfigurationRequest {
     /// <pre><code>        &lt;p&gt;The versions of Apache Kafka with which you can use this MSK configuration.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "KafkaVersions")]
-    pub kafka_versions: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kafka_versions: Option<Vec<String>>,
     /// <pre><code>        &lt;p&gt;The name of the configuration.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "Name")]
@@ -475,7 +527,7 @@ pub struct CreateConfigurationRequest {
     pub server_properties: bytes::Bytes,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConfigurationResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the configuration.&lt;/p&gt;
@@ -500,7 +552,7 @@ pub struct CreateConfigurationResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClusterRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
@@ -514,7 +566,7 @@ pub struct DeleteClusterRequest {
     pub current_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteClusterResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
@@ -529,7 +581,7 @@ pub struct DeleteClusterResponse {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterOperationRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the MSK cluster operation.&lt;/p&gt;
@@ -538,7 +590,7 @@ pub struct DescribeClusterOperationRequest {
     pub cluster_operation_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClusterOperationResponse {
     /// <pre><code>        &lt;p&gt;Cluster operation information&lt;/p&gt;
@@ -548,7 +600,7 @@ pub struct DescribeClusterOperationResponse {
     pub cluster_operation_info: Option<ClusterOperationInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClusterRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
@@ -557,7 +609,7 @@ pub struct DescribeClusterRequest {
     pub cluster_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClusterResponse {
     /// <pre><code>        &lt;p&gt;The cluster information.&lt;/p&gt;
@@ -567,7 +619,7 @@ pub struct DescribeClusterResponse {
     pub cluster_info: Option<ClusterInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies an MSK configuration and all of its revisions.&lt;/p&gt;
@@ -576,7 +628,7 @@ pub struct DescribeConfigurationRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the configuration.&lt;/p&gt;
@@ -611,7 +663,7 @@ pub struct DescribeConfigurationResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRevisionRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies an MSK configuration and all of its revisions.&lt;/p&gt;
@@ -624,7 +676,7 @@ pub struct DescribeConfigurationRevisionRequest {
     pub revision: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRevisionResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the configuration.&lt;/p&gt;
@@ -662,7 +714,7 @@ pub struct DescribeConfigurationRevisionResponse {
 
 /// <pre><code>        &lt;p&gt;Contains information about the EBS storage volumes attached to Kafka broker nodes.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EBSStorageInfo {
     /// <pre><code>        &lt;p&gt;The size in GiB of the EBS volume for the data drive on each broker node.&lt;/p&gt;
     /// </code></pre>
@@ -673,7 +725,7 @@ pub struct EBSStorageInfo {
 
 /// <pre><code>        &lt;p&gt;The data-volume encryption details.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionAtRest {
     /// <pre><code>        &lt;p&gt;The ARN of the AWS KMS key for encrypting data at rest. If you don&#39;t specify a KMS key, MSK creates one for you and uses it.&lt;/p&gt;
     /// </code></pre>
@@ -683,7 +735,7 @@ pub struct EncryptionAtRest {
 
 /// <pre><code>        &lt;p&gt;The settings for encrypting data in transit.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionInTransit {
     /// <pre><code>        &lt;p&gt;Indicates the encryption setting for data in transit between clients and brokers. The following are the possible values.&lt;/p&gt;
     /// &lt;p&gt;
@@ -707,7 +759,7 @@ pub struct EncryptionInTransit {
 
 /// <pre><code>        &lt;p&gt;Includes encryption-related information, such as the AWS KMS key used for encrypting data at rest and whether you want MSK to encrypt your data in transit.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionInfo {
     /// <pre><code>        &lt;p&gt;The data-volume encryption details.&lt;/p&gt;
     /// </code></pre>
@@ -723,7 +775,7 @@ pub struct EncryptionInfo {
 
 /// <pre><code>        &lt;p&gt;Returns information about an error state of the cluster.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorInfo {
     /// <pre><code>        &lt;p&gt;A number describing the error programmatically.&lt;/p&gt;
@@ -738,7 +790,7 @@ pub struct ErrorInfo {
     pub error_string: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Firehose {
     #[serde(rename = "DeliveryStream")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -747,7 +799,7 @@ pub struct Firehose {
     pub enabled: bool,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBootstrapBrokersRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
@@ -756,7 +808,7 @@ pub struct GetBootstrapBrokersRequest {
     pub cluster_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBootstrapBrokersResponse {
     /// <pre><code>        &lt;p&gt;A string containing one or more hostname:port pairs.&lt;/p&gt;
@@ -771,9 +823,29 @@ pub struct GetBootstrapBrokersResponse {
     pub bootstrap_broker_string_tls: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCompatibleKafkaVersionsRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster check.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetCompatibleKafkaVersionsResponse {
+    /// <pre><code>        &lt;p&gt;A list of CompatibleKafkaVersion objects.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "CompatibleKafkaVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compatible_kafka_versions: Option<Vec<CompatibleKafkaVersion>>,
+}
+
 /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JmxExporter {
     /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
@@ -784,7 +856,7 @@ pub struct JmxExporter {
 
 /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JmxExporterInfo {
     /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
@@ -793,7 +865,7 @@ pub struct JmxExporterInfo {
     pub enabled_in_broker: bool,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KafkaVersion {
     #[serde(rename = "Status")]
@@ -804,7 +876,7 @@ pub struct KafkaVersion {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClusterOperationsRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
@@ -824,7 +896,7 @@ pub struct ListClusterOperationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListClusterOperationsResponse {
     /// <pre><code>        &lt;p&gt;An array of cluster operation information objects.&lt;/p&gt;
@@ -839,7 +911,7 @@ pub struct ListClusterOperationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListClustersRequest {
     /// <pre><code>        &lt;p&gt;Specify a prefix of the name of the clusters that you want to list. The service lists all the clusters whose names start with this prefix.&lt;/p&gt;
@@ -860,7 +932,7 @@ pub struct ListClustersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListClustersResponse {
     /// <pre><code>        &lt;p&gt;Information on each of the MSK clusters in the response.&lt;/p&gt;
@@ -876,7 +948,7 @@ pub struct ListClustersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationRevisionsRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies an MSK configuration and all of its revisions.&lt;/p&gt;
@@ -896,7 +968,7 @@ pub struct ListConfigurationRevisionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationRevisionsResponse {
     /// <pre><code>        &lt;p&gt;Paginated results marker.&lt;/p&gt;
@@ -911,7 +983,7 @@ pub struct ListConfigurationRevisionsResponse {
     pub revisions: Option<Vec<ConfigurationRevision>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationsRequest {
     /// <pre><code>        &lt;p&gt;The maximum number of results to return in the response. If there are more results, the response includes a NextToken parameter.&lt;/p&gt;
@@ -927,7 +999,7 @@ pub struct ListConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigurationsResponse {
     /// <pre><code>        &lt;p&gt;An array of MSK configurations.&lt;/p&gt;
@@ -943,7 +1015,7 @@ pub struct ListConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKafkaVersionsRequest {
     /// <pre><code>        &lt;p&gt;The maximum number of results to return in the response. If there are more results, the response includes a NextToken parameter.&lt;/p&gt;
@@ -958,7 +1030,7 @@ pub struct ListKafkaVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListKafkaVersionsResponse {
     #[serde(rename = "KafkaVersions")]
@@ -969,7 +1041,7 @@ pub struct ListKafkaVersionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNodesRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
@@ -989,7 +1061,7 @@ pub struct ListNodesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNodesResponse {
     /// <pre><code>        &lt;p&gt;The paginated results marker. When the result of a ListNodes operation is truncated, the call returns NextToken in the response.
@@ -1005,7 +1077,7 @@ pub struct ListNodesResponse {
     pub node_info_list: Option<Vec<NodeInfo>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the resource that&#39;s associated with the tags.&lt;/p&gt;
@@ -1014,7 +1086,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <pre><code>        &lt;p&gt;The key-value pair for the resource tag.&lt;/p&gt;
@@ -1024,7 +1096,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LoggingInfo {
     #[serde(rename = "BrokerLogs")]
     pub broker_logs: BrokerLogs,
@@ -1032,7 +1104,7 @@ pub struct LoggingInfo {
 
 /// <pre><code>        &lt;p&gt;Information about cluster attributes that can be updated via update APIs.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MutableClusterInfo {
     /// <pre><code>        &lt;p&gt;Specifies the size of the EBS volume and the ID of the associated broker.&lt;/p&gt;
@@ -1050,6 +1122,11 @@ pub struct MutableClusterInfo {
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_monitoring: Option<String>,
+    /// <pre><code>        &lt;p&gt;The Kafka version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "KafkaVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kafka_version: Option<String>,
     #[serde(rename = "LoggingInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_info: Option<LoggingInfo>,
@@ -1067,7 +1144,7 @@ pub struct MutableClusterInfo {
 
 /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the Node Exporter.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeExporter {
     /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the Node Exporter.&lt;/p&gt;
@@ -1078,7 +1155,7 @@ pub struct NodeExporter {
 
 /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the Node Exporter.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NodeExporterInfo {
     /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the Node Exporter.&lt;/p&gt;
@@ -1089,7 +1166,7 @@ pub struct NodeExporterInfo {
 
 /// <pre><code>        &lt;p&gt;The node information object.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeInfo {
     /// <pre><code>        &lt;p&gt;The start time.&lt;/p&gt;
@@ -1126,7 +1203,7 @@ pub struct NodeInfo {
 
 /// <pre><code>        &lt;p&gt;JMX and Node monitoring for the MSK cluster.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpenMonitoring {
     /// <pre><code>        &lt;p&gt;Prometheus settings.&lt;/p&gt;
@@ -1137,7 +1214,7 @@ pub struct OpenMonitoring {
 
 /// <pre><code>        &lt;p&gt;JMX and Node monitoring for the MSK cluster.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OpenMonitoringInfo {
     /// <pre><code>        &lt;p&gt;Prometheus settings.&lt;/p&gt;
@@ -1148,7 +1225,7 @@ pub struct OpenMonitoringInfo {
 
 /// <pre><code>        &lt;p&gt;Prometheus settings.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Prometheus {
     /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
@@ -1165,7 +1242,7 @@ pub struct Prometheus {
 
 /// <pre><code>        &lt;p&gt;Prometheus settings.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PrometheusInfo {
     /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
@@ -1180,7 +1257,7 @@ pub struct PrometheusInfo {
     pub node_exporter: Option<NodeExporterInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3 {
     #[serde(rename = "Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1192,7 +1269,7 @@ pub struct S3 {
     pub prefix: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StateInfo {
     #[serde(rename = "Code")]
@@ -1205,7 +1282,7 @@ pub struct StateInfo {
 
 /// <pre><code>        &lt;p&gt;Contains information about storage volumes attached to MSK broker nodes.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StorageInfo {
     /// <pre><code>        &lt;p&gt;EBS volume information.&lt;/p&gt;
     /// </code></pre>
@@ -1214,7 +1291,7 @@ pub struct StorageInfo {
     pub ebs_storage_info: Option<EBSStorageInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the resource that&#39;s associated with the tags.&lt;/p&gt;
@@ -1229,7 +1306,7 @@ pub struct TagResourceRequest {
 
 /// <pre><code>        &lt;p&gt;Details for client authentication using TLS.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tls {
     /// <pre><code>        &lt;p&gt;List of ACM Certificate Authority ARNs.&lt;/p&gt;
     /// </code></pre>
@@ -1238,7 +1315,7 @@ pub struct Tls {
     pub certificate_authority_arn_list: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the resource that&#39;s associated with the tags.&lt;/p&gt;
@@ -1270,7 +1347,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBrokerCountRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
@@ -1287,7 +1364,7 @@ pub struct UpdateBrokerCountRequest {
     pub target_number_of_broker_nodes: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBrokerCountResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
@@ -1302,7 +1379,7 @@ pub struct UpdateBrokerCountResponse {
     pub cluster_operation_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBrokerStorageRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
@@ -1319,7 +1396,7 @@ pub struct UpdateBrokerStorageRequest {
     pub target_broker_ebs_volume_info: Vec<BrokerEBSVolumeInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBrokerStorageResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
@@ -1334,7 +1411,7 @@ pub struct UpdateBrokerStorageResponse {
     pub cluster_operation_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClusterConfigurationRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
@@ -1351,7 +1428,7 @@ pub struct UpdateClusterConfigurationRequest {
     pub current_version: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterConfigurationResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
@@ -1366,8 +1443,45 @@ pub struct UpdateClusterConfigurationResponse {
     pub cluster_operation_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateClusterKafkaVersionRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster to be updated.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    pub cluster_arn: String,
+    /// <pre><code>        &lt;p&gt;The custom configuration that should be applied on the new version of cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ConfigurationInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_info: Option<ConfigurationInfo>,
+    /// <pre><code>        &lt;p&gt;Current cluster version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "CurrentVersion")]
+    pub current_version: String,
+    /// <pre><code>        &lt;p&gt;Target Kafka version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "TargetKafkaVersion")]
+    pub target_kafka_version: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateClusterKafkaVersionResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster operation.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterOperationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_operation_arn: Option<String>,
+}
+
 /// <p>Request body for UpdateMonitoring.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMonitoringRequest {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
@@ -1393,7 +1507,7 @@ pub struct UpdateMonitoringRequest {
     pub open_monitoring: Option<OpenMonitoringInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMonitoringResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
@@ -1410,7 +1524,7 @@ pub struct UpdateMonitoringResponse {
 
 /// <pre><code>        &lt;p&gt;Zookeeper node information.&lt;/p&gt;
 /// </code></pre>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ZookeeperNodeInfo {
     /// <pre><code>        &lt;p&gt;The attached elastic network interface of the broker.&lt;/p&gt;
@@ -1979,6 +2093,97 @@ impl fmt::Display for GetBootstrapBrokersError {
     }
 }
 impl Error for GetBootstrapBrokersError {}
+/// Errors returned by GetCompatibleKafkaVersions
+#[derive(Debug, PartialEq)]
+pub enum GetCompatibleKafkaVersionsError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    TooManyRequests(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl GetCompatibleKafkaVersionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetCompatibleKafkaVersionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetCompatibleKafkaVersionsError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(GetCompatibleKafkaVersionsError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        GetCompatibleKafkaVersionsError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetCompatibleKafkaVersionsError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        GetCompatibleKafkaVersionsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetCompatibleKafkaVersionsError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetCompatibleKafkaVersionsError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetCompatibleKafkaVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCompatibleKafkaVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetCompatibleKafkaVersionsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            GetCompatibleKafkaVersionsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCompatibleKafkaVersionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetCompatibleKafkaVersionsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetCompatibleKafkaVersionsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            GetCompatibleKafkaVersionsError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetCompatibleKafkaVersionsError {}
 /// Errors returned by ListClusterOperations
 #[derive(Debug, PartialEq)]
 pub enum ListClusterOperationsError {
@@ -2681,6 +2886,91 @@ impl fmt::Display for UpdateClusterConfigurationError {
     }
 }
 impl Error for UpdateClusterConfigurationError {}
+/// Errors returned by UpdateClusterKafkaVersion
+#[derive(Debug, PartialEq)]
+pub enum UpdateClusterKafkaVersionError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    TooManyRequests(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl UpdateClusterKafkaVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterKafkaVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateClusterKafkaVersionError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateClusterKafkaVersionError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        UpdateClusterKafkaVersionError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateClusterKafkaVersionError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        UpdateClusterKafkaVersionError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateClusterKafkaVersionError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateClusterKafkaVersionError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateClusterKafkaVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateClusterKafkaVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateClusterKafkaVersionError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateClusterKafkaVersionError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateClusterKafkaVersionError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateClusterKafkaVersionError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateClusterKafkaVersionError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateClusterKafkaVersionError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateClusterKafkaVersionError {}
 /// Errors returned by UpdateMonitoring
 #[derive(Debug, PartialEq)]
 pub enum UpdateMonitoringError {
@@ -2804,6 +3094,13 @@ pub trait Kafka {
         input: GetBootstrapBrokersRequest,
     ) -> Result<GetBootstrapBrokersResponse, RusotoError<GetBootstrapBrokersError>>;
 
+    /// <pre><code>        &lt;p&gt;Gets the Apache Kafka versions to which you can update the MSK cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn get_compatible_kafka_versions(
+        &self,
+        input: GetCompatibleKafkaVersionsRequest,
+    ) -> Result<GetCompatibleKafkaVersionsResponse, RusotoError<GetCompatibleKafkaVersionsError>>;
+
     /// <pre><code>        &lt;p&gt;Returns a list of all the operations that have been performed on the specified MSK cluster.&lt;/p&gt;
     /// </code></pre>
     async fn list_cluster_operations(
@@ -2888,6 +3185,13 @@ pub trait Kafka {
         input: UpdateClusterConfigurationRequest,
     ) -> Result<UpdateClusterConfigurationResponse, RusotoError<UpdateClusterConfigurationError>>;
 
+    /// <pre><code>        &lt;p&gt;Updates the Apache Kafka version for the cluster.&lt;/p&gt;
+    /// </code></pre>
+    async fn update_cluster_kafka_version(
+        &self,
+        input: UpdateClusterKafkaVersionRequest,
+    ) -> Result<UpdateClusterKafkaVersionResponse, RusotoError<UpdateClusterKafkaVersionError>>;
+
     /// <pre><code>        &lt;p&gt;Updates the monitoring settings for the cluster. You can use this operation to specify which Apache Kafka metrics you want Amazon MSK to send to Amazon CloudWatch. You can also specify settings for open monitoring with Prometheus.&lt;/p&gt;
     /// </code></pre>
     async fn update_monitoring(
@@ -2937,6 +3241,7 @@ impl KafkaClient {
 impl Kafka for KafkaClient {
     /// <pre><code>        &lt;p&gt;Creates a new MSK cluster.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn create_cluster(
         &self,
         input: CreateClusterRequest,
@@ -2955,7 +3260,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateClusterResponse, _>()?;
 
@@ -2968,6 +3273,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Creates a new MSK configuration.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn create_configuration(
         &self,
         input: CreateConfigurationRequest,
@@ -2986,7 +3292,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateConfigurationResponse, _>()?;
 
@@ -2999,6 +3305,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Deletes the MSK cluster specified by the Amazon Resource Name (ARN) in the request.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn delete_cluster(
         &self,
         input: DeleteClusterRequest,
@@ -3023,7 +3330,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteClusterResponse, _>()?;
 
@@ -3036,6 +3343,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a description of the MSK cluster whose Amazon Resource Name (ARN) is specified in the request.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn describe_cluster(
         &self,
         input: DescribeClusterRequest,
@@ -3054,7 +3362,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeClusterResponse, _>()?;
 
@@ -3067,6 +3375,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a description of the cluster operation specified by the ARN.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn describe_cluster_operation(
         &self,
         input: DescribeClusterOperationRequest,
@@ -3085,7 +3394,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeClusterOperationResponse, _>()?;
 
@@ -3098,6 +3407,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a description of this MSK configuration.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn describe_configuration(
         &self,
         input: DescribeConfigurationRequest,
@@ -3113,7 +3423,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeConfigurationResponse, _>()?;
 
@@ -3126,6 +3436,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a description of this revision of the configuration.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn describe_configuration_revision(
         &self,
         input: DescribeConfigurationRevisionRequest,
@@ -3148,7 +3459,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeConfigurationRevisionResponse, _>()?;
 
@@ -3161,6 +3472,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;A list of brokers that a client application can use to bootstrap.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn get_bootstrap_brokers(
         &self,
         input: GetBootstrapBrokersRequest,
@@ -3179,7 +3491,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBootstrapBrokersResponse, _>()?;
 
@@ -3190,8 +3502,45 @@ impl Kafka for KafkaClient {
         }
     }
 
+    /// <pre><code>        &lt;p&gt;Gets the Apache Kafka versions to which you can update the MSK cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[allow(unused_mut)]
+    async fn get_compatible_kafka_versions(
+        &self,
+        input: GetCompatibleKafkaVersionsRequest,
+    ) -> Result<GetCompatibleKafkaVersionsResponse, RusotoError<GetCompatibleKafkaVersionsError>>
+    {
+        let request_uri = "/v1/compatible-kafka-versions";
+
+        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.cluster_arn {
+            params.put("clusterArn", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetCompatibleKafkaVersionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetCompatibleKafkaVersionsError::from_response(response))
+        }
+    }
+
     /// <pre><code>        &lt;p&gt;Returns a list of all the operations that have been performed on the specified MSK cluster.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_cluster_operations(
         &self,
         input: ListClusterOperationsRequest,
@@ -3219,7 +3568,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListClusterOperationsResponse, _>()?;
 
@@ -3232,6 +3581,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK clusters in the current Region.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_clusters(
         &self,
         input: ListClustersRequest,
@@ -3259,7 +3609,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListClustersResponse, _>()?;
 
@@ -3272,6 +3622,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK configurations in this Region.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_configuration_revisions(
         &self,
         input: ListConfigurationRevisionsRequest,
@@ -3297,7 +3648,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListConfigurationRevisionsResponse, _>()?;
 
@@ -3310,6 +3661,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of all the MSK configurations in this Region.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
@@ -3334,7 +3686,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListConfigurationsResponse, _>()?;
 
@@ -3347,6 +3699,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of Kafka versions.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_kafka_versions(
         &self,
         input: ListKafkaVersionsRequest,
@@ -3371,7 +3724,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListKafkaVersionsResponse, _>()?;
 
@@ -3384,6 +3737,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of the broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_nodes(
         &self,
         input: ListNodesRequest,
@@ -3411,7 +3765,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListNodesResponse, _>()?;
 
@@ -3424,6 +3778,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Returns a list of the tags associated with the specified resource.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3439,7 +3794,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -3452,6 +3807,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Adds tags to the specified MSK resource.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3470,7 +3826,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3482,6 +3838,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Removes the tags associated with the keys that are provided in the query.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3503,7 +3860,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3515,6 +3872,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Updates the number of broker nodes in the cluster.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn update_broker_count(
         &self,
         input: UpdateBrokerCountRequest,
@@ -3536,7 +3894,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateBrokerCountResponse, _>()?;
 
@@ -3549,6 +3907,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Updates the EBS storage associated with MSK brokers.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn update_broker_storage(
         &self,
         input: UpdateBrokerStorageRequest,
@@ -3570,7 +3929,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateBrokerStorageResponse, _>()?;
 
@@ -3583,6 +3942,7 @@ impl Kafka for KafkaClient {
 
     /// <pre><code>        &lt;p&gt;Updates the cluster with the configuration that is specified in the request body.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn update_cluster_configuration(
         &self,
         input: UpdateClusterConfigurationRequest,
@@ -3605,7 +3965,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateClusterConfigurationResponse, _>()?;
 
@@ -3616,8 +3976,45 @@ impl Kafka for KafkaClient {
         }
     }
 
+    /// <pre><code>        &lt;p&gt;Updates the Apache Kafka version for the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[allow(unused_mut)]
+    async fn update_cluster_kafka_version(
+        &self,
+        input: UpdateClusterKafkaVersionRequest,
+    ) -> Result<UpdateClusterKafkaVersionResponse, RusotoError<UpdateClusterKafkaVersionError>>
+    {
+        let request_uri = format!(
+            "/v1/clusters/{cluster_arn}/version",
+            cluster_arn = input.cluster_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateClusterKafkaVersionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateClusterKafkaVersionError::from_response(response))
+        }
+    }
+
     /// <pre><code>        &lt;p&gt;Updates the monitoring settings for the cluster. You can use this operation to specify which Apache Kafka metrics you want Amazon MSK to send to Amazon CloudWatch. You can also specify settings for open monitoring with Prometheus.&lt;/p&gt;
     /// </code></pre>
+    #[allow(unused_mut)]
     async fn update_monitoring(
         &self,
         input: UpdateMonitoringRequest,
@@ -3639,7 +4036,7 @@ impl Kafka for KafkaClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateMonitoringResponse, _>()?;
 

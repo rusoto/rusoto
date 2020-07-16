@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A policy type that defines the voting rules for the network. The rules decide if a proposal is approved. Approval may be based on criteria such as the percentage of <code>YES</code> votes and the duration of the proposal. The policy applies to all proposals and is specified when the network is created.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ApprovalThresholdPolicy {
     /// <p>The duration from the time that a proposal is created until it expires. If members cast neither the required number of <code>YES</code> votes to approve the proposal nor the number of <code>NO</code> votes required to reject it before the duration expires, the proposal is <code>EXPIRED</code> and <code>ProposalActions</code> are not carried out.</p>
     #[serde(rename = "ProposalDurationInHours")]
@@ -42,7 +42,7 @@ pub struct ApprovalThresholdPolicy {
     pub threshold_percentage: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMemberInput {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the operation. An idempotent operation completes no more than one time. This identifier is required only if you make a service request directly using an HTTP client. It is generated automatically if you use an AWS SDK or the AWS CLI.</p>
@@ -59,7 +59,7 @@ pub struct CreateMemberInput {
     pub network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMemberOutput {
     /// <p>The unique identifier of the member.</p>
@@ -68,7 +68,7 @@ pub struct CreateMemberOutput {
     pub member_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkInput {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the operation. An idempotent operation completes no more than one time. This identifier is required only if you make a service request directly using an HTTP client. It is generated automatically if you use an AWS SDK or the AWS CLI.</p>
@@ -99,7 +99,7 @@ pub struct CreateNetworkInput {
     pub voting_policy: VotingPolicy,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNetworkOutput {
     /// <p>The unique identifier for the first member within the network.</p>
@@ -112,7 +112,7 @@ pub struct CreateNetworkOutput {
     pub network_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNodeInput {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the operation. An idempotent operation completes no more than one time. This identifier is required only if you make a service request directly using an HTTP client. It is generated automatically if you use an AWS SDK or the AWS CLI.</p>
@@ -129,7 +129,7 @@ pub struct CreateNodeInput {
     pub node_configuration: NodeConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNodeOutput {
     /// <p>The unique identifier of the node.</p>
@@ -138,7 +138,7 @@ pub struct CreateNodeOutput {
     pub node_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProposalInput {
     /// <p>The type of actions proposed, such as inviting a member or removing a member. The types of <code>Actions</code> in a proposal are mutually exclusive. For example, a proposal with <code>Invitations</code> actions cannot also contain <code>Removals</code> actions.</p>
@@ -159,7 +159,7 @@ pub struct CreateProposalInput {
     pub network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProposalOutput {
     /// <p>The unique identifier of the proposal.</p>
@@ -168,7 +168,7 @@ pub struct CreateProposalOutput {
     pub proposal_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMemberInput {
     /// <p>The unique identifier of the member to remove.</p>
@@ -179,11 +179,11 @@ pub struct DeleteMemberInput {
     pub network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMemberOutput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNodeInput {
     /// <p>The unique identifier of the member that owns this node.</p>
@@ -197,11 +197,11 @@ pub struct DeleteNodeInput {
     pub node_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNodeOutput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMemberInput {
     /// <p>The unique identifier of the member.</p>
@@ -212,7 +212,7 @@ pub struct GetMemberInput {
     pub network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMemberOutput {
     /// <p>The properties of a member.</p>
@@ -221,7 +221,7 @@ pub struct GetMemberOutput {
     pub member: Option<Member>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNetworkInput {
     /// <p>The unique identifier of the network to get information about.</p>
@@ -229,7 +229,7 @@ pub struct GetNetworkInput {
     pub network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNetworkOutput {
     /// <p>An object containing network configuration parameters.</p>
@@ -238,7 +238,7 @@ pub struct GetNetworkOutput {
     pub network: Option<Network>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNodeInput {
     /// <p>The unique identifier of the member that owns the node.</p>
@@ -252,7 +252,7 @@ pub struct GetNodeInput {
     pub node_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNodeOutput {
     /// <p>Properties of the node configuration.</p>
@@ -261,7 +261,7 @@ pub struct GetNodeOutput {
     pub node: Option<Node>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProposalInput {
     /// <p>The unique identifier of the network for which the proposal is made.</p>
@@ -272,7 +272,7 @@ pub struct GetProposalInput {
     pub proposal_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProposalOutput {
     /// <p>Information about a proposal.</p>
@@ -282,7 +282,7 @@ pub struct GetProposalOutput {
 }
 
 /// <p>An invitation to an AWS account to create a member and join the network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Invitation {
     /// <p>The date and time that the invitation was created.</p>
@@ -307,14 +307,14 @@ pub struct Invitation {
 }
 
 /// <p>An action to invite a specific AWS account to create a member and join the network. The <code>InviteAction</code> is carried out when a <code>Proposal</code> is <code>APPROVED</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InviteAction {
     /// <p>The AWS account ID to invite.</p>
     #[serde(rename = "Principal")]
     pub principal: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsInput {
     /// <p>The maximum number of invitations to return.</p>
@@ -327,7 +327,7 @@ pub struct ListInvitationsInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInvitationsOutput {
     /// <p>The invitations for the network.</p>
@@ -340,7 +340,7 @@ pub struct ListInvitationsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersInput {
     /// <p>An optional Boolean value. If provided, the request is limited either to members that the current AWS account owns (<code>true</code>) or that other AWS accounts own (<code>false</code>). If omitted, all members are listed.</p>
@@ -368,7 +368,7 @@ pub struct ListMembersInput {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMembersOutput {
     /// <p>An array of <code>MemberSummary</code> objects. Each object contains details about a network member.</p>
@@ -381,7 +381,7 @@ pub struct ListMembersOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNetworksInput {
     /// <p>An optional framework specifier. If provided, only networks of this framework type are listed.</p>
@@ -406,7 +406,7 @@ pub struct ListNetworksInput {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNetworksOutput {
     /// <p>An array of <code>NetworkSummary</code> objects that contain configuration properties for each network.</p>
@@ -419,7 +419,7 @@ pub struct ListNetworksOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNodesInput {
     /// <p>The maximum number of nodes to list.</p>
@@ -442,7 +442,7 @@ pub struct ListNodesInput {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNodesOutput {
     /// <p>The pagination token that indicates the next set of results to retrieve.</p>
@@ -455,7 +455,7 @@ pub struct ListNodesOutput {
     pub nodes: Option<Vec<NodeSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProposalVotesInput {
     /// <p> The maximum number of votes to return. </p>
@@ -474,7 +474,7 @@ pub struct ListProposalVotesInput {
     pub proposal_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProposalVotesOutput {
     /// <p> The pagination token that indicates the next set of results to retrieve. </p>
@@ -487,7 +487,7 @@ pub struct ListProposalVotesOutput {
     pub proposal_votes: Option<Vec<VoteSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProposalsInput {
     /// <p> The maximum number of proposals to return. </p>
@@ -503,7 +503,7 @@ pub struct ListProposalsInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProposalsOutput {
     /// <p>The pagination token that indicates the next set of results to retrieve.</p>
@@ -517,7 +517,7 @@ pub struct ListProposalsOutput {
 }
 
 /// <p>A configuration for logging events.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LogConfiguration {
     /// <p>Indicates whether logging is enabled.</p>
     #[serde(rename = "Enabled")]
@@ -526,7 +526,7 @@ pub struct LogConfiguration {
 }
 
 /// <p>A collection of log configurations.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LogConfigurations {
     /// <p>Parameters for publishing logs to Amazon CloudWatch Logs.</p>
     #[serde(rename = "Cloudwatch")]
@@ -535,7 +535,7 @@ pub struct LogConfigurations {
 }
 
 /// <p>Member configuration properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Member {
     /// <p>The date and time that the member was created.</p>
@@ -573,7 +573,7 @@ pub struct Member {
 }
 
 /// <p>Configuration properties of the member.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MemberConfiguration {
     /// <p>An optional description of the member.</p>
@@ -593,7 +593,7 @@ pub struct MemberConfiguration {
 }
 
 /// <p>Attributes of Hyperledger Fabric for a member in a Managed Blockchain network using the Hyperledger Fabric framework.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberFabricAttributes {
     /// <p>The user name for the initial administrator user for the member.</p>
@@ -607,7 +607,7 @@ pub struct MemberFabricAttributes {
 }
 
 /// <p>Configuration properties for Hyperledger Fabric for a member in a Managed Blockchain network using the Hyperledger Fabric framework.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MemberFabricConfiguration {
     /// <p>The password for the member's initial administrative user. The <code>AdminPassword</code> must be at least eight characters long and no more than 32 characters. It must contain at least one uppercase letter, one lowercase letter, and one digit. It cannot have a single quote(‘), double quote(“), forward slash(/), backward slash(\), @, or a space.</p>
@@ -619,7 +619,7 @@ pub struct MemberFabricConfiguration {
 }
 
 /// <p>Configuration properties for logging events associated with a member of a Managed Blockchain network using the Hyperledger Fabric framework.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MemberFabricLogPublishingConfiguration {
     /// <p>Configuration properties for logging events associated with a member's Certificate Authority (CA). CA logs help you determine when a member in your account joins the network, or when new peers register with a member CA.</p>
     #[serde(rename = "CaLogs")]
@@ -628,7 +628,7 @@ pub struct MemberFabricLogPublishingConfiguration {
 }
 
 /// <p>Attributes relevant to a member for the blockchain framework that the Managed Blockchain network uses.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberFrameworkAttributes {
     /// <p>Attributes of Hyperledger Fabric relevant to a member on a Managed Blockchain network that uses Hyperledger Fabric.</p>
@@ -638,7 +638,7 @@ pub struct MemberFrameworkAttributes {
 }
 
 /// <p>Configuration properties relevant to a member for the blockchain framework that the Managed Blockchain network uses.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MemberFrameworkConfiguration {
     /// <p>Attributes of Hyperledger Fabric for a member on a Managed Blockchain network that uses Hyperledger Fabric.</p>
@@ -648,7 +648,7 @@ pub struct MemberFrameworkConfiguration {
 }
 
 /// <p>Configuration properties for logging events associated with a member of a Managed Blockchain network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MemberLogPublishingConfiguration {
     /// <p>Configuration properties for logging events associated with a member of a Managed Blockchain network using the Hyperledger Fabric framework.</p>
     #[serde(rename = "Fabric")]
@@ -657,7 +657,7 @@ pub struct MemberLogPublishingConfiguration {
 }
 
 /// <p>A summary of configuration properties for a member.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberSummary {
     /// <p>The date and time that the member was created.</p>
@@ -687,7 +687,7 @@ pub struct MemberSummary {
 }
 
 /// <p>Network configuration properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Network {
     /// <p>The date and time that the network was created.</p>
@@ -733,7 +733,7 @@ pub struct Network {
 }
 
 /// <p>Attributes of Hyperledger Fabric for a network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkFabricAttributes {
     /// <p>The edition of Amazon Managed Blockchain that Hyperledger Fabric uses. For more information, see <a href="http://aws.amazon.com/managed-blockchain/pricing/">Amazon Managed Blockchain Pricing</a>.</p>
@@ -747,7 +747,7 @@ pub struct NetworkFabricAttributes {
 }
 
 /// <p>Hyperledger Fabric configuration properties for the network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NetworkFabricConfiguration {
     /// <p>The edition of Amazon Managed Blockchain that the network uses. For more information, see <a href="http://aws.amazon.com/managed-blockchain/pricing/">Amazon Managed Blockchain Pricing</a>.</p>
@@ -756,7 +756,7 @@ pub struct NetworkFabricConfiguration {
 }
 
 /// <p>Attributes relevant to the network for the blockchain framework that the network uses.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkFrameworkAttributes {
     /// <p>Attributes of Hyperledger Fabric for a Managed Blockchain network that uses Hyperledger Fabric.</p>
@@ -766,7 +766,7 @@ pub struct NetworkFrameworkAttributes {
 }
 
 /// <p> Configuration properties relevant to the network for the blockchain framework that the network uses. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NetworkFrameworkConfiguration {
     /// <p> Hyperledger Fabric configuration properties for a Managed Blockchain network that uses Hyperledger Fabric. </p>
@@ -776,7 +776,7 @@ pub struct NetworkFrameworkConfiguration {
 }
 
 /// <p>A summary of network configuration properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkSummary {
     /// <p>The date and time that the network was created.</p>
@@ -810,7 +810,7 @@ pub struct NetworkSummary {
 }
 
 /// <p>Configuration properties of a peer node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Node {
     /// <p>The Availability Zone in which the node exists.</p>
@@ -852,7 +852,7 @@ pub struct Node {
 }
 
 /// <p>Configuration properties of a peer node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NodeConfiguration {
     /// <p>The Availability Zone in which the node exists.</p>
@@ -868,7 +868,7 @@ pub struct NodeConfiguration {
 }
 
 /// <p>Attributes of Hyperledger Fabric for a peer node on a Managed Blockchain network that uses Hyperledger Fabric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeFabricAttributes {
     /// <p>The endpoint that identifies the peer node for all services except peer channel-based event services.</p>
@@ -882,7 +882,7 @@ pub struct NodeFabricAttributes {
 }
 
 /// <p>Configuration properties for logging events associated with a peer node owned by a member in a Managed Blockchain network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NodeFabricLogPublishingConfiguration {
     /// <p>Configuration properties for logging events associated with chaincode execution on a peer node. Chaincode logs contain the results of instantiating, invoking, and querying the chaincode. A peer can run multiple instances of chaincode. When enabled, a log stream is created for all chaincodes, with an individual log stream for each chaincode.</p>
     #[serde(rename = "ChaincodeLogs")]
@@ -895,7 +895,7 @@ pub struct NodeFabricLogPublishingConfiguration {
 }
 
 /// <p>Attributes relevant to a peer node on a Managed Blockchain network for the blockchain framework that the network uses.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeFrameworkAttributes {
     /// <p>Attributes of Hyperledger Fabric for a peer node on a Managed Blockchain network that uses Hyperledger Fabric.</p>
@@ -905,7 +905,7 @@ pub struct NodeFrameworkAttributes {
 }
 
 /// <p>Configuration properties for logging events associated with a peer node owned by a member in a Managed Blockchain network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NodeLogPublishingConfiguration {
     /// <p>Configuration properties for logging events associated with a node that is owned by a member of a Managed Blockchain network using the Hyperledger Fabric framework.</p>
     #[serde(rename = "Fabric")]
@@ -914,7 +914,7 @@ pub struct NodeLogPublishingConfiguration {
 }
 
 /// <p>A summary of configuration properties for a peer node.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeSummary {
     /// <p>The Availability Zone in which the node exists.</p>
@@ -940,7 +940,7 @@ pub struct NodeSummary {
 }
 
 /// <p>Properties of a proposal on a Managed Blockchain network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Proposal {
     /// <p>The actions to perform on the network if the proposal is <code>APPROVED</code>.</p>
@@ -994,7 +994,7 @@ pub struct Proposal {
 }
 
 /// <p> The actions to carry out if a proposal is <code>APPROVED</code>. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProposalActions {
     /// <p> The actions to perform for an <code>APPROVED</code> proposal to invite an AWS account to create a member and join the network. </p>
     #[serde(rename = "Invitations")]
@@ -1007,7 +1007,7 @@ pub struct ProposalActions {
 }
 
 /// <p>Properties of a proposal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProposalSummary {
     /// <p> The date and time that the proposal was created. </p>
@@ -1040,7 +1040,7 @@ pub struct ProposalSummary {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectInvitationInput {
     /// <p>The unique identifier of the invitation to reject.</p>
@@ -1048,19 +1048,19 @@ pub struct RejectInvitationInput {
     pub invitation_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectInvitationOutput {}
 
 /// <p>An action to remove a member from a Managed Blockchain network as the result of a removal proposal that is <code>APPROVED</code>. The member and all associated resources are deleted from the network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemoveAction {
     /// <p>The unique identifier of the member to remove.</p>
     #[serde(rename = "MemberId")]
     pub member_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMemberInput {
     /// <p>Configuration properties for publishing to Amazon CloudWatch Logs.</p>
@@ -1075,11 +1075,11 @@ pub struct UpdateMemberInput {
     pub network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMemberOutput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNodeInput {
     /// <p>Configuration properties for publishing to Amazon CloudWatch Logs.</p>
@@ -1097,11 +1097,11 @@ pub struct UpdateNodeInput {
     pub node_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNodeOutput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VoteOnProposalInput {
     /// <p> The unique identifier of the network. </p>
@@ -1118,12 +1118,12 @@ pub struct VoteOnProposalInput {
     pub voter_member_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VoteOnProposalOutput {}
 
 /// <p> Properties of an individual vote that a member cast for a proposal. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VoteSummary {
     /// <p> The unique identifier of the member that cast the vote. </p>
@@ -1141,7 +1141,7 @@ pub struct VoteSummary {
 }
 
 /// <p> The voting rules for the network to decide if a proposal is accepted </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VotingPolicy {
     /// <p>Defines the rules for the network for voting on proposals, such as the percentage of <code>YES</code> votes required for the proposal to be approved and the duration of the proposal. The policy applies to all proposals and is specified when the network is created.</p>
     #[serde(rename = "ApprovalThresholdPolicy")]
@@ -2455,6 +2455,7 @@ impl ManagedBlockchainClient {
 #[async_trait]
 impl ManagedBlockchain for ManagedBlockchainClient {
     /// <p>Creates a member within a Managed Blockchain network.</p>
+    #[allow(unused_mut)]
     async fn create_member(
         &self,
         input: CreateMemberInput,
@@ -2477,7 +2478,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateMemberOutput, _>()?;
 
@@ -2489,6 +2490,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Creates a new blockchain network using Amazon Managed Blockchain.</p>
+    #[allow(unused_mut)]
     async fn create_network(
         &self,
         input: CreateNetworkInput,
@@ -2508,7 +2510,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateNetworkOutput, _>()?;
 
@@ -2520,6 +2522,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Creates a peer node in a member.</p>
+    #[allow(unused_mut)]
     async fn create_node(
         &self,
         input: CreateNodeInput,
@@ -2543,7 +2546,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateNodeOutput, _>()?;
 
@@ -2555,6 +2558,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Creates a proposal for a change to the network that other members of the network can vote on, for example, a proposal to add a new member to the network. Any member can create a proposal.</p>
+    #[allow(unused_mut)]
     async fn create_proposal(
         &self,
         input: CreateProposalInput,
@@ -2577,7 +2581,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateProposalOutput, _>()?;
 
@@ -2589,6 +2593,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Deletes a member. Deleting a member removes the member and all associated resources from the network. <code>DeleteMember</code> can only be called for a specified <code>MemberId</code> if the principal performing the action is associated with the AWS account that owns the member. In all other cases, the <code>DeleteMember</code> action is carried out as the result of an approved proposal to remove a member. If <code>MemberId</code> is the last member in a network specified by the last AWS account, the network is deleted also.</p>
+    #[allow(unused_mut)]
     async fn delete_member(
         &self,
         input: DeleteMemberInput,
@@ -2609,7 +2614,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteMemberOutput, _>()?;
 
@@ -2621,6 +2626,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Deletes a peer node from a member that your AWS account owns. All data on the node is lost and cannot be recovered.</p>
+    #[allow(unused_mut)]
     async fn delete_node(
         &self,
         input: DeleteNodeInput,
@@ -2642,7 +2648,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteNodeOutput, _>()?;
 
@@ -2654,6 +2660,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns detailed information about a member.</p>
+    #[allow(unused_mut)]
     async fn get_member(
         &self,
         input: GetMemberInput,
@@ -2674,7 +2681,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetMemberOutput, _>()?;
 
@@ -2686,6 +2693,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns detailed information about a network.</p>
+    #[allow(unused_mut)]
     async fn get_network(
         &self,
         input: GetNetworkInput,
@@ -2702,7 +2710,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetNetworkOutput, _>()?;
 
@@ -2714,6 +2722,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns detailed information about a peer node.</p>
+    #[allow(unused_mut)]
     async fn get_node(
         &self,
         input: GetNodeInput,
@@ -2735,7 +2744,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetNodeOutput, _>()?;
 
@@ -2747,6 +2756,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns detailed information about a proposal.</p>
+    #[allow(unused_mut)]
     async fn get_proposal(
         &self,
         input: GetProposalInput,
@@ -2767,7 +2777,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetProposalOutput, _>()?;
 
@@ -2779,6 +2789,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns a listing of all invitations made on the specified network.</p>
+    #[allow(unused_mut)]
     async fn list_invitations(
         &self,
         input: ListInvitationsInput,
@@ -2804,7 +2815,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInvitationsOutput, _>()?;
 
@@ -2816,6 +2827,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns a listing of the members in a network and properties of their configurations.</p>
+    #[allow(unused_mut)]
     async fn list_members(
         &self,
         input: ListMembersInput,
@@ -2853,7 +2865,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMembersOutput, _>()?;
 
@@ -2865,6 +2877,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns information about the networks in which the current AWS account has members.</p>
+    #[allow(unused_mut)]
     async fn list_networks(
         &self,
         input: ListNetworksInput,
@@ -2899,7 +2912,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListNetworksOutput, _>()?;
 
@@ -2911,6 +2924,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns information about the nodes within a network.</p>
+    #[allow(unused_mut)]
     async fn list_nodes(
         &self,
         input: ListNodesInput,
@@ -2943,7 +2957,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ListNodesOutput, _>()?;
 
@@ -2955,6 +2969,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns the listing of votes for a specified proposal, including the value of each vote and the unique identifier of the member that cast the vote.</p>
+    #[allow(unused_mut)]
     async fn list_proposal_votes(
         &self,
         input: ListProposalVotesInput,
@@ -2984,7 +2999,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProposalVotesOutput, _>()?;
 
@@ -2996,6 +3011,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Returns a listing of proposals for the network.</p>
+    #[allow(unused_mut)]
     async fn list_proposals(
         &self,
         input: ListProposalsInput,
@@ -3024,7 +3040,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProposalsOutput, _>()?;
 
@@ -3036,6 +3052,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Rejects an invitation to join a network. This action can be called by a principal in an AWS account that has received an invitation to create a member and join a network.</p>
+    #[allow(unused_mut)]
     async fn reject_invitation(
         &self,
         input: RejectInvitationInput,
@@ -3055,7 +3072,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RejectInvitationOutput, _>()?;
 
@@ -3067,6 +3084,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Updates a member configuration with new parameters.</p>
+    #[allow(unused_mut)]
     async fn update_member(
         &self,
         input: UpdateMemberInput,
@@ -3090,7 +3108,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateMemberOutput, _>()?;
 
@@ -3102,6 +3120,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Updates a node configuration with new parameters.</p>
+    #[allow(unused_mut)]
     async fn update_node(
         &self,
         input: UpdateNodeInput,
@@ -3126,7 +3145,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateNodeOutput, _>()?;
 
@@ -3138,6 +3157,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
     }
 
     /// <p>Casts a vote for a specified <code>ProposalId</code> on behalf of a member. The member to vote as, specified by <code>VoterMemberId</code>, must be in the same AWS account as the principal that calls the action.</p>
+    #[allow(unused_mut)]
     async fn vote_on_proposal(
         &self,
         input: VoteOnProposalInput,
@@ -3161,7 +3181,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<VoteOnProposalOutput, _>()?;
 

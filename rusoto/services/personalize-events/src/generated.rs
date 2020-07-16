@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Represents user interaction event information sent using the <code>PutEvents</code> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Event {
     /// <p>An ID associated with the event. If an event ID is not provided, Amazon Personalize generates a unique ID for the event. An event ID is not used as an input to the model. Amazon Personalize uses the event ID to distinquish unique events. Any subsequent events after the first with the same event ID are not used in model training.</p>
@@ -43,7 +43,7 @@ pub struct Event {
     pub sent_at: f64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsRequest {
     /// <p>A list of event data from the session.</p>
@@ -138,6 +138,7 @@ impl PersonalizeEventsClient {
 #[async_trait]
 impl PersonalizeEvents for PersonalizeEventsClient {
     /// <p>Records user interaction event data.</p>
+    #[allow(unused_mut)]
     async fn put_events(&self, input: PutEventsRequest) -> Result<(), RusotoError<PutEventsError>> {
         let request_uri = "/events";
 
@@ -154,7 +155,7 @@ impl PersonalizeEvents for PersonalizeEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

@@ -26,9 +26,13 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Contains detailed information about a backup job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupJob {
+    /// <p>The account ID that owns the backup job.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
     /// <p>Uniquely identifies a request to AWS Backup to back up a resource.</p>
     #[serde(rename = "BackupJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -100,7 +104,7 @@ pub struct BackupJob {
 }
 
 /// <p>Contains an optional backup plan display name and an array of <code>BackupRule</code> objects, each of which specifies a backup rule. Each rule in a backup plan is a separate scheduled task and can back up a different selection of AWS resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupPlan {
     /// <p>The display name of a backup plan.</p>
@@ -112,10 +116,10 @@ pub struct BackupPlan {
 }
 
 /// <p>Contains an optional backup plan display name and an array of <code>BackupRule</code> objects, each of which specifies a backup rule. Each rule in a backup plan is a separate scheduled task and can back up a different selection of AWS resources. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BackupPlanInput {
-    /// <p>The display name of a backup plan.</p>
+    /// <p>The optional display name of a backup plan.</p>
     #[serde(rename = "BackupPlanName")]
     pub backup_plan_name: String,
     /// <p>An array of <code>BackupRule</code> objects, each of which specifies a scheduled task that is used to back up a selection of resources.</p>
@@ -124,7 +128,7 @@ pub struct BackupPlanInput {
 }
 
 /// <p>An object specifying metadata associated with a backup plan template.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupPlanTemplatesListMember {
     /// <p>Uniquely identifies a stored backup plan template.</p>
@@ -138,7 +142,7 @@ pub struct BackupPlanTemplatesListMember {
 }
 
 /// <p>Contains metadata about a backup plan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupPlansListMember {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup plan; for example, <code>arn:aws:backup:us-east-1:123456789012:plan:8F81F553-3A74-4A3F-B93D-B3360DC80C50</code>.</p>
@@ -176,7 +180,7 @@ pub struct BackupPlansListMember {
 }
 
 /// <p>Specifies a scheduled task used to back up a selection of resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupRule {
     /// <p>A value in minutes after a backup job is successfully started before it must be completed or it will be canceled by AWS Backup. This value is optional.</p>
@@ -216,7 +220,7 @@ pub struct BackupRule {
 }
 
 /// <p>Specifies a scheduled task used to back up a selection of resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BackupRuleInput {
     /// <p>A value in minutes after a backup job is successfully started before it must be completed or it will be canceled by AWS Backup. This value is optional.</p>
@@ -252,7 +256,7 @@ pub struct BackupRuleInput {
 }
 
 /// <p>Used to specify a set of resources to a backup plan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BackupSelection {
     /// <p>The ARN of the IAM role that AWS Backup uses to authenticate when restoring the target resource; for example, <code>arn:aws:iam::123456789012:role/S3Access</code>.</p>
     #[serde(rename = "IamRoleArn")]
@@ -271,7 +275,7 @@ pub struct BackupSelection {
 }
 
 /// <p>Contains metadata about a <code>BackupSelection</code> object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupSelectionsListMember {
     /// <p>Uniquely identifies a backup plan.</p>
@@ -301,7 +305,7 @@ pub struct BackupSelectionsListMember {
 }
 
 /// <p>Contains metadata about a backup vault.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupVaultListMember {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup vault; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
@@ -331,7 +335,7 @@ pub struct BackupVaultListMember {
 }
 
 /// <p>Contains <code>DeleteAt</code> and <code>MoveToColdStorageAt</code> timestamps, which are used to specify a lifecycle for a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define.</p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CalculatedLifecycle {
     /// <p>A timestamp that specifies when to delete a recovery point.</p>
@@ -345,7 +349,7 @@ pub struct CalculatedLifecycle {
 }
 
 /// <p>Contains an array of triplets made up of a condition type (such as <code>STRINGEQUALS</code>), a key, and a value. Conditions are used to filter resources in a selection that is assigned to a backup plan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Condition {
     /// <p>The key in a key-value pair. For example, in <code>"ec2:ResourceTag/Department": "accounting"</code>, <code>"ec2:ResourceTag/Department"</code> is the key.</p>
     #[serde(rename = "ConditionKey")]
@@ -359,7 +363,7 @@ pub struct Condition {
 }
 
 /// <p>The details of the copy operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CopyAction {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies the destination backup vault for the copied backup. For example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
     #[serde(rename = "DestinationBackupVaultArn")]
@@ -370,14 +374,18 @@ pub struct CopyAction {
 }
 
 /// <p>Contains detailed information about a copy job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopyJob {
+    /// <p>The account ID that owns the copy job.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
     /// <p>The size, in bytes, of a copy job.</p>
     #[serde(rename = "BackupSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_size_in_bytes: Option<i64>,
-    /// <p>The date and time a copy job is completed, in Unix format and Coordinated Universal Time (UTC). The value of CompletionDate is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM. </p>
+    /// <p>The date and time a copy job is completed, in Unix format and Coordinated Universal Time (UTC). The value of <code>CompletionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "CompletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_date: Option<f64>,
@@ -388,7 +396,7 @@ pub struct CopyJob {
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<RecoveryPointCreator>,
-    /// <p>The date and time a copy job is created, in Unix format and Coordinated Universal Time (UTC). The value of CreationDate is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM. </p>
+    /// <p>The date and time a copy job is created, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
@@ -430,7 +438,7 @@ pub struct CopyJob {
     pub status_message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupPlanInput {
     /// <p>Specifies the body of a backup plan. Includes a <code>BackupPlanName</code> and one or more sets of <code>Rules</code>.</p>
@@ -446,7 +454,7 @@ pub struct CreateBackupPlanInput {
     pub creator_request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupPlanOutput {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup plan; for example, <code>arn:aws:backup:us-east-1:123456789012:plan:8F81F553-3A74-4A3F-B93D-B3360DC80C50</code>.</p>
@@ -467,7 +475,7 @@ pub struct CreateBackupPlanOutput {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupSelectionInput {
     /// <p>Uniquely identifies the backup plan to be associated with the selection of resources.</p>
@@ -482,7 +490,7 @@ pub struct CreateBackupSelectionInput {
     pub creator_request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupSelectionOutput {
     /// <p>Uniquely identifies a backup plan.</p>
@@ -499,7 +507,7 @@ pub struct CreateBackupSelectionOutput {
     pub selection_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupVaultInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -519,7 +527,7 @@ pub struct CreateBackupVaultInput {
     pub encryption_key_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupVaultOutput {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup vault; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
@@ -536,7 +544,7 @@ pub struct CreateBackupVaultOutput {
     pub creation_date: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupPlanInput {
     /// <p>Uniquely identifies a backup plan.</p>
@@ -544,7 +552,7 @@ pub struct DeleteBackupPlanInput {
     pub backup_plan_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBackupPlanOutput {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup plan; for example, <code>arn:aws:backup:us-east-1:123456789012:plan:8F81F553-3A74-4A3F-B93D-B3360DC80C50</code>.</p>
@@ -555,7 +563,7 @@ pub struct DeleteBackupPlanOutput {
     #[serde(rename = "BackupPlanId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_plan_id: Option<String>,
-    /// <p>The date and time a backup plan is deleted, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The date and time a backup plan is deleted, in Unix format and Coordinated Universal Time (UTC). The value of <code>DeletionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "DeletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_date: Option<f64>,
@@ -565,7 +573,7 @@ pub struct DeleteBackupPlanOutput {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupSelectionInput {
     /// <p>Uniquely identifies a backup plan.</p>
@@ -576,7 +584,7 @@ pub struct DeleteBackupSelectionInput {
     pub selection_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupVaultAccessPolicyInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -584,7 +592,7 @@ pub struct DeleteBackupVaultAccessPolicyInput {
     pub backup_vault_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupVaultInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -592,7 +600,7 @@ pub struct DeleteBackupVaultInput {
     pub backup_vault_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBackupVaultNotificationsInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -600,7 +608,7 @@ pub struct DeleteBackupVaultNotificationsInput {
     pub backup_vault_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRecoveryPointInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -611,7 +619,7 @@ pub struct DeleteRecoveryPointInput {
     pub recovery_point_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupJobInput {
     /// <p>Uniquely identifies a request to AWS Backup to back up a resource.</p>
@@ -619,9 +627,13 @@ pub struct DescribeBackupJobInput {
     pub backup_job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupJobOutput {
+    /// <p>Returns the account ID that owns the backup job.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
     /// <p>Uniquely identifies a request to AWS Backup to back up a resource.</p>
     #[serde(rename = "BackupJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -642,7 +654,7 @@ pub struct DescribeBackupJobOutput {
     #[serde(rename = "BytesTransferred")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bytes_transferred: Option<i64>,
-    /// <p>The date and time that a job to create a backup job is completed, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The date and time that a job to create a backup job is completed, in Unix format and Coordinated Universal Time (UTC). The value of <code>CompletionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "CompletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_date: Option<f64>,
@@ -692,7 +704,7 @@ pub struct DescribeBackupJobOutput {
     pub status_message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBackupVaultInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -700,7 +712,7 @@ pub struct DescribeBackupVaultInput {
     pub backup_vault_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupVaultOutput {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup vault; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
@@ -729,7 +741,7 @@ pub struct DescribeBackupVaultOutput {
     pub number_of_recovery_points: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCopyJobInput {
     /// <p>Uniquely identifies a copy job.</p>
@@ -737,7 +749,7 @@ pub struct DescribeCopyJobInput {
     pub copy_job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCopyJobOutput {
     /// <p>Contains detailed information about a copy job.</p>
@@ -746,7 +758,7 @@ pub struct DescribeCopyJobOutput {
     pub copy_job: Option<CopyJob>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProtectedResourceInput {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a resource. The format of the ARN depends on the resource type.</p>
@@ -754,7 +766,7 @@ pub struct DescribeProtectedResourceInput {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProtectedResourceOutput {
     /// <p>The date and time that a resource was last backed up, in Unix format and Coordinated Universal Time (UTC). The value of <code>LastBackupTime</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
@@ -771,7 +783,7 @@ pub struct DescribeProtectedResourceOutput {
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRecoveryPointInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -782,7 +794,7 @@ pub struct DescribeRecoveryPointInput {
     pub recovery_point_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRecoveryPointOutput {
     /// <p>The size, in bytes, of a backup.</p>
@@ -855,11 +867,11 @@ pub struct DescribeRecoveryPointOutput {
     pub storage_class: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRegionSettingsInput {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRegionSettingsOutput {
     /// <p>Returns a list of all services along with the opt-in preferences in the region.</p>
@@ -868,7 +880,7 @@ pub struct DescribeRegionSettingsOutput {
     pub resource_type_opt_in_preference: Option<::std::collections::HashMap<String, bool>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRestoreJobInput {
     /// <p>Uniquely identifies the job that restores a recovery point.</p>
@@ -876,9 +888,13 @@ pub struct DescribeRestoreJobInput {
     pub restore_job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRestoreJobOutput {
+    /// <p>Returns the account ID that owns the restore job.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
     /// <p>The size, in bytes, of the restored resource.</p>
     #[serde(rename = "BackupSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -911,6 +927,10 @@ pub struct DescribeRestoreJobOutput {
     #[serde(rename = "RecoveryPointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recovery_point_arn: Option<String>,
+    /// <p>Returns metadata associated with a restore job listed by resource type.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
     /// <p>Uniquely identifies the job that restores a recovery point.</p>
     #[serde(rename = "RestoreJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -919,13 +939,13 @@ pub struct DescribeRestoreJobOutput {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>A detailed message explaining the status of a job to restore a recovery point.</p>
+    /// <p>A message showing the status of a job to restore a recovery point.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportBackupPlanTemplateInput {
     /// <p>Uniquely identifies a backup plan.</p>
@@ -933,7 +953,7 @@ pub struct ExportBackupPlanTemplateInput {
     pub backup_plan_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportBackupPlanTemplateOutput {
     /// <p><p>The body of a backup plan template in JSON format.</p> <note> <p>This is a signed JSON document that cannot be modified before being passed to <code>GetBackupPlanFromJSON.</code> </p> </note></p>
@@ -942,7 +962,7 @@ pub struct ExportBackupPlanTemplateOutput {
     pub backup_plan_template_json: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupPlanFromJSONInput {
     /// <p>A customer-supplied backup plan document in JSON format.</p>
@@ -950,7 +970,7 @@ pub struct GetBackupPlanFromJSONInput {
     pub backup_plan_template_json: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupPlanFromJSONOutput {
     /// <p>Specifies the body of a backup plan. Includes a <code>BackupPlanName</code> and one or more sets of <code>Rules</code>.</p>
@@ -959,7 +979,7 @@ pub struct GetBackupPlanFromJSONOutput {
     pub backup_plan: Option<BackupPlan>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupPlanFromTemplateInput {
     /// <p>Uniquely identifies a stored backup plan template.</p>
@@ -967,7 +987,7 @@ pub struct GetBackupPlanFromTemplateInput {
     pub backup_plan_template_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupPlanFromTemplateOutput {
     /// <p>Returns the body of a backup plan based on the target template, including the name, rules, and backup vault of the plan.</p>
@@ -976,7 +996,7 @@ pub struct GetBackupPlanFromTemplateOutput {
     pub backup_plan_document: Option<BackupPlan>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupPlanInput {
     /// <p>Uniquely identifies a backup plan.</p>
@@ -988,7 +1008,7 @@ pub struct GetBackupPlanInput {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupPlanOutput {
     /// <p>Specifies the body of a backup plan. Includes a <code>BackupPlanName</code> and one or more sets of <code>Rules</code>.</p>
@@ -1011,7 +1031,7 @@ pub struct GetBackupPlanOutput {
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
-    /// <p>The date and time that a backup plan is deleted, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The date and time that a backup plan is deleted, in Unix format and Coordinated Universal Time (UTC). The value of <code>DeletionDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "DeletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_date: Option<f64>,
@@ -1025,7 +1045,7 @@ pub struct GetBackupPlanOutput {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupSelectionInput {
     /// <p>Uniquely identifies a backup plan.</p>
@@ -1036,7 +1056,7 @@ pub struct GetBackupSelectionInput {
     pub selection_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupSelectionOutput {
     /// <p>Uniquely identifies a backup plan.</p>
@@ -1061,7 +1081,7 @@ pub struct GetBackupSelectionOutput {
     pub selection_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupVaultAccessPolicyInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -1069,7 +1089,7 @@ pub struct GetBackupVaultAccessPolicyInput {
     pub backup_vault_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupVaultAccessPolicyOutput {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup vault; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
@@ -1086,7 +1106,7 @@ pub struct GetBackupVaultAccessPolicyOutput {
     pub policy: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBackupVaultNotificationsInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -1094,7 +1114,7 @@ pub struct GetBackupVaultNotificationsInput {
     pub backup_vault_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBackupVaultNotificationsOutput {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup vault; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
@@ -1115,7 +1135,7 @@ pub struct GetBackupVaultNotificationsOutput {
     pub sns_topic_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecoveryPointRestoreMetadataInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -1126,7 +1146,7 @@ pub struct GetRecoveryPointRestoreMetadataInput {
     pub recovery_point_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecoveryPointRestoreMetadataOutput {
     /// <p>An ARN that uniquely identifies a backup vault; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
@@ -1143,17 +1163,17 @@ pub struct GetRecoveryPointRestoreMetadataOutput {
     pub restore_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSupportedResourceTypesOutput {
-    /// <p><p>Contains a string with the supported AWS resource types:</p> <ul> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>DDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> </ul></p>
+    /// <p><p>Contains a string with the supported AWS resource types:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
 }
 
 /// <p>Contains an array of <code>Transition</code> objects specifying how long in days before a recovery point transitions to cold storage or is deleted.</p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, on the console, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Lifecycle {
     /// <p>Specifies the number of days after creation that a recovery point is deleted. Must be greater than 90 days plus <code>MoveToColdStorageAfterDays</code>.</p>
     #[serde(rename = "DeleteAfterDays")]
@@ -1165,9 +1185,13 @@ pub struct Lifecycle {
     pub move_to_cold_storage_after_days: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupJobsInput {
+    /// <p>The account ID to list the jobs from. Returns only backup jobs associated with the specified account ID.</p>
+    #[serde(rename = "ByAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_account_id: Option<String>,
     /// <p>Returns only backup jobs that will be stored in the specified backup vault. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
     #[serde(rename = "ByBackupVaultName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1184,7 +1208,7 @@ pub struct ListBackupJobsInput {
     #[serde(rename = "ByResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_arn: Option<String>,
-    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
+    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ByResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_type: Option<String>,
@@ -1202,7 +1226,7 @@ pub struct ListBackupJobsInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupJobsOutput {
     /// <p>An array of structures containing metadata about your backup jobs returned in JSON format.</p>
@@ -1215,7 +1239,7 @@ pub struct ListBackupJobsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupPlanTemplatesInput {
     /// <p>The maximum number of items to be returned.</p>
@@ -1228,7 +1252,7 @@ pub struct ListBackupPlanTemplatesInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupPlanTemplatesOutput {
     /// <p>An array of template list items containing metadata about your saved templates.</p>
@@ -1241,7 +1265,7 @@ pub struct ListBackupPlanTemplatesOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupPlanVersionsInput {
     /// <p>Uniquely identifies a backup plan.</p>
@@ -1257,7 +1281,7 @@ pub struct ListBackupPlanVersionsInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupPlanVersionsOutput {
     /// <p>An array of version list items containing metadata about your backup plans.</p>
@@ -1270,7 +1294,7 @@ pub struct ListBackupPlanVersionsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupPlansInput {
     /// <p>A Boolean value with a default value of <code>FALSE</code> that returns deleted backup plans when set to <code>TRUE</code>.</p>
@@ -1287,7 +1311,7 @@ pub struct ListBackupPlansInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupPlansOutput {
     /// <p>An array of backup plan list items containing metadata about your saved backup plans.</p>
@@ -1300,7 +1324,7 @@ pub struct ListBackupPlansOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupSelectionsInput {
     /// <p>Uniquely identifies a backup plan.</p>
@@ -1316,7 +1340,7 @@ pub struct ListBackupSelectionsInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupSelectionsOutput {
     /// <p>An array of backup selection list items containing metadata about each resource in the list.</p>
@@ -1329,7 +1353,7 @@ pub struct ListBackupSelectionsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupVaultsInput {
     /// <p>The maximum number of items to be returned.</p>
@@ -1342,7 +1366,7 @@ pub struct ListBackupVaultsInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBackupVaultsOutput {
     /// <p>An array of backup vault list members containing vault metadata, including Amazon Resource Name (ARN), display name, creation date, number of saved recovery points, and encryption information if the resources saved in the backup vault are encrypted.</p>
@@ -1355,9 +1379,13 @@ pub struct ListBackupVaultsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCopyJobsInput {
+    /// <p>The account ID to list the jobs from. Returns only copy jobs associated with the specified account ID.</p>
+    #[serde(rename = "ByAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_account_id: Option<String>,
     /// <p>Returns only copy jobs that were created after the specified date.</p>
     #[serde(rename = "ByCreatedAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1374,7 +1402,7 @@ pub struct ListCopyJobsInput {
     #[serde(rename = "ByResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_arn: Option<String>,
-    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
+    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ByResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_type: Option<String>,
@@ -1392,7 +1420,7 @@ pub struct ListCopyJobsInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCopyJobsOutput {
     /// <p>An array of structures containing metadata about your copy jobs returned in JSON format. </p>
@@ -1405,7 +1433,7 @@ pub struct ListCopyJobsOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProtectedResourcesInput {
     /// <p>The maximum number of items to be returned.</p>
@@ -1418,7 +1446,7 @@ pub struct ListProtectedResourcesInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProtectedResourcesOutput {
     /// <p>The next item following a partial list of returned items. For example, if a request is made to return <code>maxResults</code> number of items, <code>NextToken</code> allows you to return more items in your list starting at the location pointed to by the next token.</p>
@@ -1431,7 +1459,7 @@ pub struct ListProtectedResourcesOutput {
     pub results: Option<Vec<ProtectedResource>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecoveryPointsByBackupVaultInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -1467,7 +1495,7 @@ pub struct ListRecoveryPointsByBackupVaultInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecoveryPointsByBackupVaultOutput {
     /// <p>The next item following a partial list of returned items. For example, if a request is made to return <code>maxResults</code> number of items, <code>NextToken</code> allows you to return more items in your list starting at the location pointed to by the next token.</p>
@@ -1480,7 +1508,7 @@ pub struct ListRecoveryPointsByBackupVaultOutput {
     pub recovery_points: Option<Vec<RecoveryPointByBackupVault>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecoveryPointsByResourceInput {
     /// <p>The maximum number of items to be returned.</p>
@@ -1496,7 +1524,7 @@ pub struct ListRecoveryPointsByResourceInput {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecoveryPointsByResourceOutput {
     /// <p>The next item following a partial list of returned items. For example, if a request is made to return <code>maxResults</code> number of items, <code>NextToken</code> allows you to return more items in your list starting at the location pointed to by the next token.</p>
@@ -1509,9 +1537,25 @@ pub struct ListRecoveryPointsByResourceOutput {
     pub recovery_points: Option<Vec<RecoveryPointByResource>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRestoreJobsInput {
+    /// <p>The account ID to list the jobs from. Returns only restore jobs associated with the specified account ID.</p>
+    #[serde(rename = "ByAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_account_id: Option<String>,
+    /// <p>Returns only restore jobs that were created after the specified date.</p>
+    #[serde(rename = "ByCreatedAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_created_after: Option<f64>,
+    /// <p>Returns only restore jobs that were created before the specified date.</p>
+    #[serde(rename = "ByCreatedBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_created_before: Option<f64>,
+    /// <p>Returns only restore jobs associated with the specified job status.</p>
+    #[serde(rename = "ByStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub by_status: Option<String>,
     /// <p>The maximum number of items to be returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1522,7 +1566,7 @@ pub struct ListRestoreJobsInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRestoreJobsOutput {
     /// <p>The next item following a partial list of returned items. For example, if a request is made to return <code>maxResults</code> number of items, <code>NextToken</code> allows you to return more items in your list starting at the location pointed to by the next token.</p>
@@ -1535,7 +1579,7 @@ pub struct ListRestoreJobsOutput {
     pub restore_jobs: Option<Vec<RestoreJobsListMember>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsInput {
     /// <p>The maximum number of items to be returned.</p>
@@ -1551,7 +1595,7 @@ pub struct ListTagsInput {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsOutput {
     /// <p>The next item following a partial list of returned items. For example, if a request is made to return <code>maxResults</code> number of items, <code>NextToken</code> allows you to return more items in your list starting at the location pointed to by the next token.</p>
@@ -1565,7 +1609,7 @@ pub struct ListTagsOutput {
 }
 
 /// <p>A structure that contains information about a backed-up resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProtectedResource {
     /// <p>The date and time a resource was last backed up, in Unix format and Coordinated Universal Time (UTC). The value of <code>LastBackupTime</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
@@ -1582,7 +1626,7 @@ pub struct ProtectedResource {
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBackupVaultAccessPolicyInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -1594,7 +1638,7 @@ pub struct PutBackupVaultAccessPolicyInput {
     pub policy: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBackupVaultNotificationsInput {
     /// <p>An array of events that indicate the status of jobs to back up resources to the backup vault.</p>
@@ -1609,7 +1653,7 @@ pub struct PutBackupVaultNotificationsInput {
 }
 
 /// <p>Contains detailed information about the recovery points stored in a backup vault.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecoveryPointByBackupVault {
     /// <p>The size, in bytes, of a backup.</p>
@@ -1679,7 +1723,7 @@ pub struct RecoveryPointByBackupVault {
 }
 
 /// <p>Contains detailed information about a saved recovery point.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecoveryPointByResource {
     /// <p>The size, in bytes, of a backup.</p>
@@ -1709,7 +1753,7 @@ pub struct RecoveryPointByResource {
 }
 
 /// <p>Contains information about the backup plan and rule that AWS Backup used to initiate the recovery point backup.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecoveryPointCreator {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup plan; for example, <code>arn:aws:backup:us-east-1:123456789012:plan:8F81F553-3A74-4A3F-B93D-B3360DC80C50</code>.</p>
@@ -1731,9 +1775,13 @@ pub struct RecoveryPointCreator {
 }
 
 /// <p>Contains metadata about a restore job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreJobsListMember {
+    /// <p>The account ID that owns the restore job.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
     /// <p>The size, in bytes, of the restored resource.</p>
     #[serde(rename = "BackupSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1766,6 +1814,10 @@ pub struct RestoreJobsListMember {
     #[serde(rename = "RecoveryPointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recovery_point_arn: Option<String>,
+    /// <p>The resource type of the listed restore jobs; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
     /// <p>Uniquely identifies the job that restores a recovery point.</p>
     #[serde(rename = "RestoreJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1780,7 +1832,7 @@ pub struct RestoreJobsListMember {
     pub status_message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartBackupJobInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -1814,7 +1866,7 @@ pub struct StartBackupJobInput {
     pub start_window_minutes: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartBackupJobOutput {
     /// <p>Uniquely identifies a request to AWS Backup to back up a resource.</p>
@@ -1831,7 +1883,7 @@ pub struct StartBackupJobOutput {
     pub recovery_point_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartCopyJobInput {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a destination backup vault to copy to; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
@@ -1855,7 +1907,7 @@ pub struct StartCopyJobInput {
     pub source_backup_vault_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartCopyJobOutput {
     /// <p>Uniquely identifies a copy job.</p>
@@ -1868,7 +1920,7 @@ pub struct StartCopyJobOutput {
     pub creation_date: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRestoreJobInput {
     /// <p>The Amazon Resource Name (ARN) of the IAM role that AWS Backup uses to create the target recovery point; for example, <code>arn:aws:iam::123456789012:role/S3Access</code>.</p>
@@ -1884,13 +1936,13 @@ pub struct StartRestoreJobInput {
     /// <p>An ARN that uniquely identifies a recovery point; for example, <code>arn:aws:backup:us-east-1:123456789012:recovery-point:1EB3B5E7-9EB0-435A-A80B-108B488B0D45</code>.</p>
     #[serde(rename = "RecoveryPointArn")]
     pub recovery_point_arn: String,
-    /// <p><p>Starts a job to restore a recovery point for one of the following resources:</p> <ul> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>DDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> </ul></p>
+    /// <p><p>Starts a job to restore a recovery point for one of the following resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartRestoreJobOutput {
     /// <p>Uniquely identifies the job that restores a recovery point.</p>
@@ -1899,7 +1951,7 @@ pub struct StartRestoreJobOutput {
     pub restore_job_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopBackupJobInput {
     /// <p>Uniquely identifies a request to AWS Backup to back up a resource.</p>
@@ -1907,7 +1959,7 @@ pub struct StopBackupJobInput {
     pub backup_job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p>An ARN that uniquely identifies a resource. The format of the ARN depends on the type of the tagged resource.</p>
@@ -1918,7 +1970,7 @@ pub struct TagResourceInput {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p>An ARN that uniquely identifies a resource. The format of the ARN depends on the type of the tagged resource.</p>
@@ -1929,7 +1981,7 @@ pub struct UntagResourceInput {
     pub tag_key_list: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBackupPlanInput {
     /// <p>Specifies the body of a backup plan. Includes a <code>BackupPlanName</code> and one or more sets of <code>Rules</code>.</p>
@@ -1940,7 +1992,7 @@ pub struct UpdateBackupPlanInput {
     pub backup_plan_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBackupPlanOutput {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a backup plan; for example, <code>arn:aws:backup:us-east-1:123456789012:plan:8F81F553-3A74-4A3F-B93D-B3360DC80C50</code>.</p>
@@ -1961,7 +2013,7 @@ pub struct UpdateBackupPlanOutput {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRecoveryPointLifecycleInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
@@ -1976,7 +2028,7 @@ pub struct UpdateRecoveryPointLifecycleInput {
     pub recovery_point_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRecoveryPointLifecycleOutput {
     /// <p>An ARN that uniquely identifies a backup vault; for example, <code>arn:aws:backup:us-east-1:123456789012:vault:aBackupVault</code>.</p>
@@ -1997,7 +2049,7 @@ pub struct UpdateRecoveryPointLifecycleOutput {
     pub recovery_point_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRegionSettingsInput {
     /// <p>Updates the list of services along with the opt-in preferences for the region.</p>
@@ -3445,8 +3497,6 @@ impl Error for GetSupportedResourceTypesError {}
 pub enum ListBackupJobsError {
     /// <p>Indicates that something is wrong with a parameter's value. For example, the value is out of range.</p>
     InvalidParameterValue(String),
-    /// <p>Indicates that something is wrong with the input to the request. For example, a parameter is of the wrong type.</p>
-    InvalidRequest(String),
     /// <p>The request failed due to a temporary failure of the server.</p>
     ServiceUnavailable(String),
 }
@@ -3459,9 +3509,6 @@ impl ListBackupJobsError {
                     return RusotoError::Service(ListBackupJobsError::InvalidParameterValue(
                         err.msg,
                     ))
-                }
-                "InvalidRequestException" => {
-                    return RusotoError::Service(ListBackupJobsError::InvalidRequest(err.msg))
                 }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(ListBackupJobsError::ServiceUnavailable(err.msg))
@@ -3478,7 +3525,6 @@ impl fmt::Display for ListBackupJobsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ListBackupJobsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
-            ListBackupJobsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             ListBackupJobsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -4769,7 +4815,7 @@ pub trait Backup {
         input: DescribeRecoveryPointInput,
     ) -> Result<DescribeRecoveryPointOutput, RusotoError<DescribeRecoveryPointError>>;
 
-    /// <p>Returns the current service opt-in settings for the region. If the service has a value set to true, AWS Backup will attempt to protect that service's resources in this region, when included in an on-demand backup or scheduled backup plan. If the value is set to false for a service, AWS Backup will not attempt to protect that service's resources in this region.</p>
+    /// <p>Returns the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
     async fn describe_region_settings(
         &self,
     ) -> Result<DescribeRegionSettingsOutput, RusotoError<DescribeRegionSettingsError>>;
@@ -4971,7 +5017,7 @@ pub trait Backup {
         input: UpdateRecoveryPointLifecycleInput,
     ) -> Result<UpdateRecoveryPointLifecycleOutput, RusotoError<UpdateRecoveryPointLifecycleError>>;
 
-    /// <p>Updates the current service opt-in settings for the region. If the service has a value set to true, AWS Backup will attempt to protect that service's resources in this region, when included in an on-demand backup or scheduled backup plan. If the value is set to false for a service, AWS Backup will not attempt to protect that service's resources in this region.</p>
+    /// <p>Updates the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
     async fn update_region_settings(
         &self,
         input: UpdateRegionSettingsInput,
@@ -5018,6 +5064,7 @@ impl BackupClient {
 #[async_trait]
 impl Backup for BackupClient {
     /// <p>Backup plans are documents that contain information that AWS Backup uses to schedule tasks that create recovery points of resources.</p> <p>If you call <code>CreateBackupPlan</code> with a plan that already exists, an <code>AlreadyExistsException</code> is returned.</p>
+    #[allow(unused_mut)]
     async fn create_backup_plan(
         &self,
         input: CreateBackupPlanInput,
@@ -5036,7 +5083,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateBackupPlanOutput, _>()?;
 
@@ -5048,6 +5095,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Creates a JSON document that specifies a set of resources to assign to a backup plan. Resources can be included by specifying patterns for a <code>ListOfTags</code> and selected <code>Resources</code>. </p> <p>For example, consider the following patterns:</p> <ul> <li> <p> <code>Resources: "arn:aws:ec2:region:account-id:volume/volume-id"</code> </p> </li> <li> <p> <code>ConditionKey:"department"</code> </p> <p> <code>ConditionValue:"finance"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> <li> <p> <code>ConditionKey:"importance"</code> </p> <p> <code>ConditionValue:"critical"</code> </p> <p> <code>ConditionType:"STRINGEQUALS"</code> </p> </li> </ul> <p>Using these patterns would back up all Amazon Elastic Block Store (Amazon EBS) volumes that are tagged as <code>"department=finance"</code>, <code>"importance=critical"</code>, in addition to an EBS volume with the specified volume Id.</p> <p>Resources and conditions are additive in that all resources that match the pattern are selected. This shouldn't be confused with a logical AND, where all conditions must match. The matching patterns are logically 'put together using the OR operator. In other words, all patterns that match are selected for backup.</p>
+    #[allow(unused_mut)]
     async fn create_backup_selection(
         &self,
         input: CreateBackupSelectionInput,
@@ -5069,7 +5117,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateBackupSelectionOutput, _>()?;
 
@@ -5081,6 +5129,7 @@ impl Backup for BackupClient {
     }
 
     /// <p><p>Creates a logical container where backups are stored. A <code>CreateBackupVault</code> request includes a name, optionally one or more resource tags, an encryption key, and a request ID.</p> <note> <p>Sensitive data, such as passport numbers, should not be included the name of a backup vault.</p> </note></p>
+    #[allow(unused_mut)]
     async fn create_backup_vault(
         &self,
         input: CreateBackupVaultInput,
@@ -5102,7 +5151,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateBackupVaultOutput, _>()?;
 
@@ -5114,6 +5163,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes a backup plan. A backup plan can only be deleted after all associated selections of resources have been deleted. Deleting a backup plan deletes the current version of a backup plan. Previous versions, if any, will still exist.</p>
+    #[allow(unused_mut)]
     async fn delete_backup_plan(
         &self,
         input: DeleteBackupPlanInput,
@@ -5132,7 +5182,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteBackupPlanOutput, _>()?;
 
@@ -5144,6 +5194,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes the resource selection associated with a backup plan that is specified by the <code>SelectionId</code>.</p>
+    #[allow(unused_mut)]
     async fn delete_backup_selection(
         &self,
         input: DeleteBackupSelectionInput,
@@ -5163,7 +5214,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5174,6 +5225,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes the backup vault identified by its name. A vault can be deleted only if it is empty.</p>
+    #[allow(unused_mut)]
     async fn delete_backup_vault(
         &self,
         input: DeleteBackupVaultInput,
@@ -5192,7 +5244,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5203,6 +5255,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes the policy document that manages permissions on a backup vault.</p>
+    #[allow(unused_mut)]
     async fn delete_backup_vault_access_policy(
         &self,
         input: DeleteBackupVaultAccessPolicyInput,
@@ -5221,7 +5274,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5232,6 +5285,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes event notifications for the specified backup vault.</p>
+    #[allow(unused_mut)]
     async fn delete_backup_vault_notifications(
         &self,
         input: DeleteBackupVaultNotificationsInput,
@@ -5250,7 +5304,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5261,6 +5315,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Deletes the recovery point specified by a recovery point ID.</p>
+    #[allow(unused_mut)]
     async fn delete_recovery_point(
         &self,
         input: DeleteRecoveryPointInput,
@@ -5280,7 +5335,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -5291,6 +5346,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata associated with creating a backup of a resource.</p>
+    #[allow(unused_mut)]
     async fn describe_backup_job(
         &self,
         input: DescribeBackupJobInput,
@@ -5309,7 +5365,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeBackupJobOutput, _>()?;
 
@@ -5321,6 +5377,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata about a backup vault specified by its name.</p>
+    #[allow(unused_mut)]
     async fn describe_backup_vault(
         &self,
         input: DescribeBackupVaultInput,
@@ -5339,7 +5396,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeBackupVaultOutput, _>()?;
 
@@ -5351,6 +5408,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata associated with creating a copy of a resource.</p>
+    #[allow(unused_mut)]
     async fn describe_copy_job(
         &self,
         input: DescribeCopyJobInput,
@@ -5366,7 +5424,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeCopyJobOutput, _>()?;
 
@@ -5378,6 +5436,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns information about a saved resource, including the last time it was backed up, its Amazon Resource Name (ARN), and the AWS service type of the saved resource.</p>
+    #[allow(unused_mut)]
     async fn describe_protected_resource(
         &self,
         input: DescribeProtectedResourceInput,
@@ -5396,7 +5455,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeProtectedResourceOutput, _>()?;
 
@@ -5408,6 +5467,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata associated with a recovery point, including ID, status, encryption, and lifecycle.</p>
+    #[allow(unused_mut)]
     async fn describe_recovery_point(
         &self,
         input: DescribeRecoveryPointInput,
@@ -5427,7 +5487,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRecoveryPointOutput, _>()?;
 
@@ -5438,7 +5498,8 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Returns the current service opt-in settings for the region. If the service has a value set to true, AWS Backup will attempt to protect that service's resources in this region, when included in an on-demand backup or scheduled backup plan. If the value is set to false for a service, AWS Backup will not attempt to protect that service's resources in this region.</p>
+    /// <p>Returns the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
+    #[allow(unused_mut)]
     async fn describe_region_settings(
         &self,
     ) -> Result<DescribeRegionSettingsOutput, RusotoError<DescribeRegionSettingsError>> {
@@ -5453,7 +5514,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRegionSettingsOutput, _>()?;
 
@@ -5465,6 +5526,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata associated with a restore job that is specified by a job ID.</p>
+    #[allow(unused_mut)]
     async fn describe_restore_job(
         &self,
         input: DescribeRestoreJobInput,
@@ -5483,7 +5545,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRestoreJobOutput, _>()?;
 
@@ -5495,6 +5557,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the backup plan that is specified by the plan ID as a backup template.</p>
+    #[allow(unused_mut)]
     async fn export_backup_plan_template(
         &self,
         input: ExportBackupPlanTemplateInput,
@@ -5513,7 +5576,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ExportBackupPlanTemplateOutput, _>()?;
 
@@ -5525,6 +5588,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the body of a backup plan in JSON format, in addition to plan metadata.</p>
+    #[allow(unused_mut)]
     async fn get_backup_plan(
         &self,
         input: GetBackupPlanInput,
@@ -5549,7 +5613,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupPlanOutput, _>()?;
 
@@ -5561,6 +5625,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns a valid JSON document specifying a backup plan or an error.</p>
+    #[allow(unused_mut)]
     async fn get_backup_plan_from_json(
         &self,
         input: GetBackupPlanFromJSONInput,
@@ -5579,7 +5644,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupPlanFromJSONOutput, _>()?;
 
@@ -5591,6 +5656,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the template specified by its <code>templateId</code> as a backup plan.</p>
+    #[allow(unused_mut)]
     async fn get_backup_plan_from_template(
         &self,
         input: GetBackupPlanFromTemplateInput,
@@ -5609,7 +5675,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupPlanFromTemplateOutput, _>()?;
 
@@ -5621,6 +5687,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns selection metadata and a document in JSON format that specifies a list of resources that are associated with a backup plan.</p>
+    #[allow(unused_mut)]
     async fn get_backup_selection(
         &self,
         input: GetBackupSelectionInput,
@@ -5640,7 +5707,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupSelectionOutput, _>()?;
 
@@ -5652,6 +5719,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the access policy document that is associated with the named backup vault.</p>
+    #[allow(unused_mut)]
     async fn get_backup_vault_access_policy(
         &self,
         input: GetBackupVaultAccessPolicyInput,
@@ -5671,7 +5739,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupVaultAccessPolicyOutput, _>()?;
 
@@ -5683,6 +5751,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns event notifications for the specified backup vault.</p>
+    #[allow(unused_mut)]
     async fn get_backup_vault_notifications(
         &self,
         input: GetBackupVaultNotificationsInput,
@@ -5702,7 +5771,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetBackupVaultNotificationsOutput, _>()?;
 
@@ -5714,6 +5783,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns a set of metadata key-value pairs that were used to create the backup.</p>
+    #[allow(unused_mut)]
     async fn get_recovery_point_restore_metadata(
         &self,
         input: GetRecoveryPointRestoreMetadataInput,
@@ -5732,7 +5802,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRecoveryPointRestoreMetadataOutput, _>()?;
 
@@ -5746,6 +5816,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns the AWS resource types supported by AWS Backup.</p>
+    #[allow(unused_mut)]
     async fn get_supported_resource_types(
         &self,
     ) -> Result<GetSupportedResourceTypesOutput, RusotoError<GetSupportedResourceTypesError>> {
@@ -5760,7 +5831,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSupportedResourceTypesOutput, _>()?;
 
@@ -5772,6 +5843,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata about your backup jobs.</p>
+    #[allow(unused_mut)]
     async fn list_backup_jobs(
         &self,
         input: ListBackupJobsInput,
@@ -5782,6 +5854,9 @@ impl Backup for BackupClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.by_account_id {
+            params.put("accountId", x);
+        }
         if let Some(ref x) = input.by_backup_vault_name {
             params.put("backupVaultName", x);
         }
@@ -5814,7 +5889,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupJobsOutput, _>()?;
 
@@ -5826,6 +5901,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata of your saved backup plan templates, including the template ID, name, and the creation and deletion dates.</p>
+    #[allow(unused_mut)]
     async fn list_backup_plan_templates(
         &self,
         input: ListBackupPlanTemplatesInput,
@@ -5850,7 +5926,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupPlanTemplatesOutput, _>()?;
 
@@ -5862,6 +5938,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns version metadata of your backup plans, including Amazon Resource Names (ARNs), backup plan IDs, creation and deletion dates, plan names, and version IDs.</p>
+    #[allow(unused_mut)]
     async fn list_backup_plan_versions(
         &self,
         input: ListBackupPlanVersionsInput,
@@ -5889,7 +5966,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupPlanVersionsOutput, _>()?;
 
@@ -5901,6 +5978,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata of your saved backup plans, including Amazon Resource Names (ARNs), plan IDs, creation and deletion dates, version IDs, plan names, and creator request IDs.</p>
+    #[allow(unused_mut)]
     async fn list_backup_plans(
         &self,
         input: ListBackupPlansInput,
@@ -5928,7 +6006,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupPlansOutput, _>()?;
 
@@ -5940,6 +6018,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns an array containing metadata of the resources associated with the target backup plan.</p>
+    #[allow(unused_mut)]
     async fn list_backup_selections(
         &self,
         input: ListBackupSelectionsInput,
@@ -5967,7 +6046,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupSelectionsOutput, _>()?;
 
@@ -5979,6 +6058,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns a list of recovery point storage containers along with information about them.</p>
+    #[allow(unused_mut)]
     async fn list_backup_vaults(
         &self,
         input: ListBackupVaultsInput,
@@ -6003,7 +6083,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBackupVaultsOutput, _>()?;
 
@@ -6015,6 +6095,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns metadata about your copy jobs.</p>
+    #[allow(unused_mut)]
     async fn list_copy_jobs(
         &self,
         input: ListCopyJobsInput,
@@ -6025,6 +6106,9 @@ impl Backup for BackupClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.by_account_id {
+            params.put("accountId", x);
+        }
         if let Some(ref x) = input.by_created_after {
             params.put("createdAfter", x);
         }
@@ -6057,7 +6141,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListCopyJobsOutput, _>()?;
 
@@ -6069,6 +6153,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns an array of resources successfully backed up by AWS Backup, including the time the resource was saved, an Amazon Resource Name (ARN) of the resource, and a resource type.</p>
+    #[allow(unused_mut)]
     async fn list_protected_resources(
         &self,
         input: ListProtectedResourcesInput,
@@ -6093,7 +6178,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProtectedResourcesOutput, _>()?;
 
@@ -6105,6 +6190,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns detailed information about the recovery points stored in a backup vault.</p>
+    #[allow(unused_mut)]
     async fn list_recovery_points_by_backup_vault(
         &self,
         input: ListRecoveryPointsByBackupVaultInput,
@@ -6150,7 +6236,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRecoveryPointsByBackupVaultOutput, _>()?;
 
@@ -6164,6 +6250,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns detailed information about recovery points of the type specified by a resource Amazon Resource Name (ARN).</p>
+    #[allow(unused_mut)]
     async fn list_recovery_points_by_resource(
         &self,
         input: ListRecoveryPointsByResourceInput,
@@ -6192,7 +6279,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRecoveryPointsByResourceOutput, _>()?;
 
@@ -6204,6 +6291,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Returns a list of jobs that AWS Backup initiated to restore a saved resource, including metadata about the recovery process.</p>
+    #[allow(unused_mut)]
     async fn list_restore_jobs(
         &self,
         input: ListRestoreJobsInput,
@@ -6214,6 +6302,18 @@ impl Backup for BackupClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.by_account_id {
+            params.put("accountId", x);
+        }
+        if let Some(ref x) = input.by_created_after {
+            params.put("createdAfter", x);
+        }
+        if let Some(ref x) = input.by_created_before {
+            params.put("createdBefore", x);
+        }
+        if let Some(ref x) = input.by_status {
+            params.put("status", x);
+        }
         if let Some(ref x) = input.max_results {
             params.put("maxResults", x);
         }
@@ -6228,7 +6328,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRestoreJobsOutput, _>()?;
 
@@ -6240,6 +6340,7 @@ impl Backup for BackupClient {
     }
 
     /// <p><p>Returns a list of key-value pairs assigned to a target recovery point, backup plan, or backup vault.</p> <note> <p> <code>ListTags</code> are currently only supported with Amazon EFS backups.</p> </note></p>
+    #[allow(unused_mut)]
     async fn list_tags(
         &self,
         input: ListTagsInput,
@@ -6264,7 +6365,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ListTagsOutput, _>()?;
 
@@ -6276,6 +6377,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Sets a resource-based policy that is used to manage access permissions on the target backup vault. Requires a backup vault name and an access policy document in JSON format.</p>
+    #[allow(unused_mut)]
     async fn put_backup_vault_access_policy(
         &self,
         input: PutBackupVaultAccessPolicyInput,
@@ -6297,7 +6399,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -6308,6 +6410,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Turns on notifications on a backup vault for the specified topic and events.</p>
+    #[allow(unused_mut)]
     async fn put_backup_vault_notifications(
         &self,
         input: PutBackupVaultNotificationsInput,
@@ -6329,7 +6432,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -6340,6 +6443,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Starts a job to create a one-time backup of the specified resource.</p>
+    #[allow(unused_mut)]
     async fn start_backup_job(
         &self,
         input: StartBackupJobInput,
@@ -6358,7 +6462,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartBackupJobOutput, _>()?;
 
@@ -6370,6 +6474,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Starts a job to create a one-time copy of the specified resource.</p>
+    #[allow(unused_mut)]
     async fn start_copy_job(
         &self,
         input: StartCopyJobInput,
@@ -6388,7 +6493,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartCopyJobOutput, _>()?;
 
@@ -6400,6 +6505,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN). </p> <p>If the resource ARN is included in the request, then the last complete backup of that resource is recovered. If the ARN of a recovery point is supplied, then that recovery point is restored.</p>
+    #[allow(unused_mut)]
     async fn start_restore_job(
         &self,
         input: StartRestoreJobInput,
@@ -6418,7 +6524,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartRestoreJobOutput, _>()?;
 
@@ -6430,6 +6536,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Attempts to cancel a job to create a one-time backup of a resource.</p>
+    #[allow(unused_mut)]
     async fn stop_backup_job(
         &self,
         input: StopBackupJobInput,
@@ -6448,7 +6555,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -6459,6 +6566,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Assigns a set of key-value pairs to a recovery point, backup plan, or backup vault identified by an Amazon Resource Name (ARN).</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -6477,7 +6585,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -6488,6 +6596,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Removes a set of key-value pairs from a recovery point, backup plan, or backup vault identified by an Amazon Resource Name (ARN)</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceInput,
@@ -6506,7 +6615,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -6517,6 +6626,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Replaces the body of a saved backup plan identified by its <code>backupPlanId</code> with the input document in JSON format. The new version is uniquely identified by a <code>VersionId</code>.</p>
+    #[allow(unused_mut)]
     async fn update_backup_plan(
         &self,
         input: UpdateBackupPlanInput,
@@ -6538,7 +6648,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateBackupPlanOutput, _>()?;
 
@@ -6550,6 +6660,7 @@ impl Backup for BackupClient {
     }
 
     /// <p>Sets the transition lifecycle of a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
+    #[allow(unused_mut)]
     async fn update_recovery_point_lifecycle(
         &self,
         input: UpdateRecoveryPointLifecycleInput,
@@ -6573,7 +6684,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRecoveryPointLifecycleOutput, _>()?;
 
@@ -6584,7 +6695,8 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Updates the current service opt-in settings for the region. If the service has a value set to true, AWS Backup will attempt to protect that service's resources in this region, when included in an on-demand backup or scheduled backup plan. If the value is set to false for a service, AWS Backup will not attempt to protect that service's resources in this region.</p>
+    /// <p>Updates the current service opt-in settings for the Region. If the service has a value set to <code>true</code>, AWS Backup attempts to protect that service's resources in this Region, when included in an on-demand backup or scheduled backup plan. If the value is set to <code>false</code> for a service, AWS Backup does not attempt to protect that service's resources in this Region.</p>
+    #[allow(unused_mut)]
     async fn update_region_settings(
         &self,
         input: UpdateRegionSettingsInput,
@@ -6603,7 +6715,7 @@ impl Backup for BackupClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

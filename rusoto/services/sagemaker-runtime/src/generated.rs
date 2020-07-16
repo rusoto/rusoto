@@ -23,14 +23,14 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvokeEndpointInput {
     /// <p>The desired MIME type of the inference in the response.</p>
     #[serde(rename = "Accept")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept: Option<String>,
-    /// <p>Provides input data, in the format specified in the <code>ContentType</code> request header. Amazon SageMaker passes all of the data in the body to the model. </p> <p>For information about the format of the request body, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats—Inference</a>.</p>
+    /// <p>Provides input data, in the format specified in the <code>ContentType</code> request header. Amazon SageMaker passes all of the data in the body to the model. </p> <p>For information about the format of the request body, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats-Inference</a>.</p>
     #[serde(rename = "Body")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -49,15 +49,19 @@ pub struct InvokeEndpointInput {
     /// <p>The name of the endpoint that you specified when you created the endpoint using the <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> API. </p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
-    /// <p>Specifies the model to be requested for an inference when invoking a multi-model endpoint. </p>
+    /// <p>The model to request for inference when invoking a multi-model endpoint. </p>
     #[serde(rename = "TargetModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_model: Option<String>,
+    /// <p>Specify the production variant to send the inference request to when invoking an endpoint that is running two or more variants. Note that this parameter overrides the default behavior for the endpoint, which is to distribute the invocation traffic based on the variant weights.</p>
+    #[serde(rename = "TargetVariant")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_variant: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct InvokeEndpointOutput {
-    /// <p>Includes the inference provided by the model.</p> <p>For information about the format of the response body, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats—Inference</a>.</p>
+    /// <p>Includes the inference provided by the model.</p> <p>For information about the format of the response body, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats-Inference</a>.</p>
     pub body: bytes::Bytes,
     /// <p>The MIME type of the inference returned in the response body.</p>
     pub content_type: Option<String>,
@@ -165,6 +169,7 @@ impl SageMakerRuntimeClient {
 #[async_trait]
 impl SageMakerRuntime for SageMakerRuntimeClient {
     /// <p><p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p> <p>Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p> <p>Calls to <code>InvokeEndpoint</code> are authenticated by using AWS Signature Version 4. For information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a> in the <i>Amazon S3 API Reference</i>.</p> <p>A customer&#39;s model containers must respond to requests within 60 seconds. The model itself can have a maximum processing time of 60 seconds before responding to the /invocations. If your model is going to take 50-60 seconds of processing time, the SDK socket timeout should be set to be 70 seconds.</p> <note> <p>Endpoints are scoped to an individual account, and are not public. The URL does not contain the account ID, but Amazon SageMaker determines the account ID from the authentication token that is supplied by the caller.</p> </note></p>
+    #[allow(unused_mut)]
     async fn invoke_endpoint(
         &self,
         input: InvokeEndpointInput,
@@ -182,25 +187,17 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
         request.set_endpoint_prefix("runtime.sagemaker".to_string());
         let encoded = Some(input.body.to_owned());
         request.set_payload(encoded);
-
-        if let Some(ref accept) = input.accept {
-            request.add_header("Accept", &accept.to_string());
-        }
-
-        if let Some(ref content_type) = input.content_type {
-            request.add_header("Content-Type", &content_type.to_string());
-        }
-
-        if let Some(ref custom_attributes) = input.custom_attributes {
-            request.add_header(
-                "X-Amzn-SageMaker-Custom-Attributes",
-                &custom_attributes.to_string(),
-            );
-        }
-
-        if let Some(ref target_model) = input.target_model {
-            request.add_header("X-Amzn-SageMaker-Target-Model", &target_model.to_string());
-        }
+        request.add_optional_header("Accept", input.accept.as_ref());
+        request.add_optional_header("Content-Type", input.content_type.as_ref());
+        request.add_optional_header(
+            "X-Amzn-SageMaker-Custom-Attributes",
+            input.custom_attributes.as_ref(),
+        );
+        request.add_optional_header("X-Amzn-SageMaker-Target-Model", input.target_model.as_ref());
+        request.add_optional_header(
+            "X-Amzn-SageMaker-Target-Variant",
+            input.target_variant.as_ref(),
+        );
 
         let mut response = self
             .client
@@ -208,27 +205,17 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = InvokeEndpointOutput::default();
             result.body = response.body;
 
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
-            if let Some(custom_attributes) =
-                response.headers.get("X-Amzn-SageMaker-Custom-Attributes")
-            {
-                let value = custom_attributes.to_owned();
-                result.custom_attributes = Some(value)
-            };
-            if let Some(invoked_production_variant) =
-                response.headers.get("x-Amzn-Invoked-Production-Variant")
-            {
-                let value = invoked_production_variant.to_owned();
-                result.invoked_production_variant = Some(value)
-            };
+            result.content_type = response.headers.remove("Content-Type");
+            result.custom_attributes = response
+                .headers
+                .remove("X-Amzn-SageMaker-Custom-Attributes");
+            result.invoked_production_variant =
+                response.headers.remove("x-Amzn-Invoked-Production-Variant");
 
             Ok(result)
         } else {

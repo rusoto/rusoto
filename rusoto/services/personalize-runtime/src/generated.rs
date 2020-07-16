@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPersonalizedRankingRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign to use for generating the personalized ranking.</p>
@@ -42,7 +42,7 @@ pub struct GetPersonalizedRankingRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPersonalizedRankingResponse {
     /// <p>A list of items in order of most likely interest to the user. The maximum is 500.</p>
@@ -51,7 +51,7 @@ pub struct GetPersonalizedRankingResponse {
     pub personalized_ranking: Option<Vec<PredictedItem>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecommendationsRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign to use for getting recommendations.</p>
@@ -61,6 +61,10 @@ pub struct GetRecommendationsRequest {
     #[serde(rename = "context")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The ARN of the filter to apply to the returned recommendations. For more information, see Using Filters with Amazon Personalize.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
     /// <p>The item ID to provide recommendations for.</p> <p>Required for <code>RELATED_ITEMS</code> recipe type.</p>
     #[serde(rename = "itemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -75,7 +79,7 @@ pub struct GetRecommendationsRequest {
     pub user_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecommendationsResponse {
     /// <p>A list of recommendations sorted in ascending order by prediction score. There can be a maximum of 500 items in the list.</p>
@@ -85,14 +89,14 @@ pub struct GetRecommendationsResponse {
 }
 
 /// <p>An object that identifies an item.</p> <p>The and APIs return a list of <code>PredictedItem</code>s.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PredictedItem {
     /// <p>The recommended item ID.</p>
     #[serde(rename = "itemId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_id: Option<String>,
-    /// <p>A numeric representation of the model's certainty in the item's suitability. For more information on scoring logic, see <a>how-scores-work</a>.</p>
+    /// <p>A numeric representation of the model's certainty that the item will be the next user selection. For more information on scoring logic, see <a>how-scores-work</a>.</p>
     #[serde(rename = "score")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub score: Option<f64>,
@@ -228,6 +232,7 @@ impl PersonalizeRuntimeClient {
 #[async_trait]
 impl PersonalizeRuntime for PersonalizeRuntimeClient {
     /// <p><p>Re-ranks a list of recommended items for the given user. The first item in the list is deemed the most likely item to be of interest to the user.</p> <note> <p>The solution backing the campaign must have been created using a recipe of type PERSONALIZED_RANKING.</p> </note></p>
+    #[allow(unused_mut)]
     async fn get_personalized_ranking(
         &self,
         input: GetPersonalizedRankingRequest,
@@ -247,7 +252,7 @@ impl PersonalizeRuntime for PersonalizeRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPersonalizedRankingResponse, _>()?;
 
@@ -259,6 +264,7 @@ impl PersonalizeRuntime for PersonalizeRuntimeClient {
     }
 
     /// <p><p>Returns a list of recommended items. The required input depends on the recipe type used to create the solution backing the campaign, as follows:</p> <ul> <li> <p>RELATED<em>ITEMS - <code>itemId</code> required, <code>userId</code> not used</p> </li> <li> <p>USER</em>PERSONALIZATION - <code>itemId</code> optional, <code>userId</code> required</p> </li> </ul> <note> <p>Campaigns that are backed by a solution created using a recipe of type PERSONALIZED_RANKING use the API.</p> </note></p>
+    #[allow(unused_mut)]
     async fn get_recommendations(
         &self,
         input: GetRecommendationsRequest,
@@ -278,7 +284,7 @@ impl PersonalizeRuntime for PersonalizeRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRecommendationsResponse, _>()?;
 

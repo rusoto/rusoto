@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDescribeSimulationJobRequest {
     /// <p>A list of Amazon Resource Names (ARNs) of simulation jobs to describe.</p>
@@ -33,7 +33,7 @@ pub struct BatchDescribeSimulationJobRequest {
     pub jobs: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDescribeSimulationJobResponse {
     /// <p>A list of simulation jobs.</p>
@@ -47,7 +47,7 @@ pub struct BatchDescribeSimulationJobResponse {
 }
 
 /// <p>Information about the batch policy.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BatchPolicy {
     /// <p>The number of active simulation jobs create as part of the batch that can be in an active state at the same time. </p> <p>Active states include: <code>Pending</code>,<code>Preparing</code>, <code>Running</code>, <code>Restarting</code>, <code>RunningFailed</code> and <code>Terminating</code>. All other states are terminal states. </p>
     #[serde(rename = "maxConcurrency")]
@@ -59,7 +59,7 @@ pub struct BatchPolicy {
     pub timeout_in_seconds: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelDeploymentJobRequest {
     /// <p>The deployment job ARN to cancel.</p>
@@ -67,11 +67,11 @@ pub struct CancelDeploymentJobRequest {
     pub job: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelDeploymentJobResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelSimulationJobBatchRequest {
     /// <p>The id of the batch to cancel.</p>
@@ -79,11 +79,11 @@ pub struct CancelSimulationJobBatchRequest {
     pub batch: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelSimulationJobBatchResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelSimulationJobRequest {
     /// <p>The simulation job ARN to cancel.</p>
@@ -91,12 +91,12 @@ pub struct CancelSimulationJobRequest {
     pub job: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelSimulationJobResponse {}
 
 /// <p>Compute information for the simulation job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Compute {
     /// <p>The simulation unit limit. Your simulation is allocated CPU and memory proportional to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB of memory. You are only billed for the SU utilization you consume up to the maximim value provided. </p>
     #[serde(rename = "simulationUnitLimit")]
@@ -105,7 +105,7 @@ pub struct Compute {
 }
 
 /// <p>Compute information for the simulation job</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComputeResponse {
     /// <p>The simulation unit limit. Your simulation is allocated CPU and memory proportional to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB of memory. You are only billed for the SU utilization you consume up to the maximim value provided. </p>
@@ -114,7 +114,7 @@ pub struct ComputeResponse {
     pub simulation_unit_limit: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentJobRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -136,7 +136,7 @@ pub struct CreateDeploymentJobRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the deployment job.</p>
@@ -177,7 +177,7 @@ pub struct CreateDeploymentJobResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFleetRequest {
     /// <p>The name of the fleet.</p>
@@ -189,7 +189,7 @@ pub struct CreateFleetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFleetResponse {
     /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
@@ -210,7 +210,7 @@ pub struct CreateFleetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRobotApplicationRequest {
     /// <p>The name of the robot application.</p>
@@ -228,7 +228,7 @@ pub struct CreateRobotApplicationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRobotApplicationResponse {
     /// <p>The Amazon Resource Name (ARN) of the robot application.</p>
@@ -265,7 +265,7 @@ pub struct CreateRobotApplicationResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRobotApplicationVersionRequest {
     /// <p>The application information for the robot application.</p>
@@ -277,7 +277,7 @@ pub struct CreateRobotApplicationVersionRequest {
     pub current_revision_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRobotApplicationVersionResponse {
     /// <p>The Amazon Resource Name (ARN) of the robot application.</p>
@@ -310,7 +310,7 @@ pub struct CreateRobotApplicationVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRobotRequest {
     /// <p>The target architecture of the robot.</p>
@@ -328,7 +328,7 @@ pub struct CreateRobotRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRobotResponse {
     /// <p>The target architecture of the robot.</p>
@@ -357,7 +357,7 @@ pub struct CreateRobotResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSimulationApplicationRequest {
     /// <p>The name of the simulation application.</p>
@@ -382,7 +382,7 @@ pub struct CreateSimulationApplicationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSimulationApplicationResponse {
     /// <p>The Amazon Resource Name (ARN) of the simulation application.</p>
@@ -427,7 +427,7 @@ pub struct CreateSimulationApplicationResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSimulationApplicationVersionRequest {
     /// <p>The application information for the simulation application.</p>
@@ -439,7 +439,7 @@ pub struct CreateSimulationApplicationVersionRequest {
     pub current_revision_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSimulationApplicationVersionResponse {
     /// <p>The Amazon Resource Name (ARN) of the simulation application.</p>
@@ -480,7 +480,7 @@ pub struct CreateSimulationApplicationVersionResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSimulationJobRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -531,7 +531,7 @@ pub struct CreateSimulationJobRequest {
     pub vpc_config: Option<VPCConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSimulationJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the simulation job.</p>
@@ -609,7 +609,7 @@ pub struct CreateSimulationJobResponse {
 }
 
 /// <p>Information about a data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSource {
     /// <p>The name of the data source.</p>
@@ -627,7 +627,7 @@ pub struct DataSource {
 }
 
 /// <p>Information about a data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSourceConfig {
     /// <p>The name of the data source.</p>
     #[serde(rename = "name")]
@@ -640,7 +640,7 @@ pub struct DataSourceConfig {
     pub s_3_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFleetRequest {
     /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
@@ -648,11 +648,11 @@ pub struct DeleteFleetRequest {
     pub fleet: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFleetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRobotApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the the robot application.</p>
@@ -664,11 +664,11 @@ pub struct DeleteRobotApplicationRequest {
     pub application_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRobotApplicationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRobotRequest {
     /// <p>The Amazon Resource Name (ARN) of the robot.</p>
@@ -676,11 +676,11 @@ pub struct DeleteRobotRequest {
     pub robot: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRobotResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSimulationApplicationRequest {
     /// <p>The application information for the simulation application to delete.</p>
@@ -692,12 +692,12 @@ pub struct DeleteSimulationApplicationRequest {
     pub application_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSimulationApplicationResponse {}
 
 /// <p>Information about a deployment application configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeploymentApplicationConfig {
     /// <p>The Amazon Resource Name (ARN) of the robot application.</p>
     #[serde(rename = "application")]
@@ -711,7 +711,7 @@ pub struct DeploymentApplicationConfig {
 }
 
 /// <p>Information about a deployment configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeploymentConfig {
     /// <p>The percentage of robots receiving the deployment at the same time.</p>
     #[serde(rename = "concurrentDeploymentPercentage")]
@@ -732,7 +732,7 @@ pub struct DeploymentConfig {
 }
 
 /// <p>Information about a deployment job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentJob {
     /// <p>The Amazon Resource Name (ARN) of the deployment job.</p>
@@ -770,7 +770,7 @@ pub struct DeploymentJob {
 }
 
 /// <p>Configuration information for a deployment launch.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeploymentLaunchConfig {
     /// <p>An array of key/value pairs specifying environment variables for the robot application</p>
     #[serde(rename = "environmentVariables")]
@@ -792,7 +792,7 @@ pub struct DeploymentLaunchConfig {
     pub pre_launch_file: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterRobotRequest {
     /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
@@ -803,7 +803,7 @@ pub struct DeregisterRobotRequest {
     pub robot: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterRobotResponse {
     /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
@@ -816,7 +816,7 @@ pub struct DeregisterRobotResponse {
     pub robot: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeploymentJobRequest {
     /// <p>The Amazon Resource Name (ARN) of the deployment job.</p>
@@ -824,7 +824,7 @@ pub struct DescribeDeploymentJobRequest {
     pub job: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeploymentJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the deployment job.</p>
@@ -869,7 +869,7 @@ pub struct DescribeDeploymentJobResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFleetRequest {
     /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
@@ -877,7 +877,7 @@ pub struct DescribeFleetRequest {
     pub fleet: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetResponse {
     /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
@@ -914,7 +914,7 @@ pub struct DescribeFleetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRobotApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the robot application.</p>
@@ -926,7 +926,7 @@ pub struct DescribeRobotApplicationRequest {
     pub application_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRobotApplicationResponse {
     /// <p>The Amazon Resource Name (ARN) of the robot application.</p>
@@ -963,7 +963,7 @@ pub struct DescribeRobotApplicationResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRobotRequest {
     /// <p>The Amazon Resource Name (ARN) of the robot to be described.</p>
@@ -971,7 +971,7 @@ pub struct DescribeRobotRequest {
     pub robot: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRobotResponse {
     /// <p>The target architecture of the robot application.</p>
@@ -1016,7 +1016,7 @@ pub struct DescribeRobotResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSimulationApplicationRequest {
     /// <p>The application information for the simulation application.</p>
@@ -1028,7 +1028,7 @@ pub struct DescribeSimulationApplicationRequest {
     pub application_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSimulationApplicationResponse {
     /// <p>The Amazon Resource Name (ARN) of the robot simulation application.</p>
@@ -1073,7 +1073,7 @@ pub struct DescribeSimulationApplicationResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSimulationJobBatchRequest {
     /// <p>The id of the batch to describe.</p>
@@ -1081,7 +1081,7 @@ pub struct DescribeSimulationJobBatchRequest {
     pub batch: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSimulationJobBatchResponse {
     /// <p>The Amazon Resource Name (ARN) of the batch.</p>
@@ -1134,7 +1134,7 @@ pub struct DescribeSimulationJobBatchResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSimulationJobRequest {
     /// <p>The Amazon Resource Name (ARN) of the simulation job to be described.</p>
@@ -1142,7 +1142,7 @@ pub struct DescribeSimulationJobRequest {
     pub job: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSimulationJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the simulation job.</p>
@@ -1232,7 +1232,7 @@ pub struct DescribeSimulationJobResponse {
 }
 
 /// <p>Information about a failed create simulation job request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedCreateSimulationJobRequest {
     /// <p>The time, in milliseconds since the epoch, when the simulation job batch failed.</p>
@@ -1254,7 +1254,7 @@ pub struct FailedCreateSimulationJobRequest {
 }
 
 /// <p>Information about a filter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The name of the filter.</p>
@@ -1268,7 +1268,7 @@ pub struct Filter {
 }
 
 /// <p>Information about a fleet.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Fleet {
     /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
@@ -1298,7 +1298,7 @@ pub struct Fleet {
 }
 
 /// <p>Information about a launch configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LaunchConfig {
     /// <p>The environment variables for the application launch.</p>
     #[serde(rename = "environmentVariables")]
@@ -1320,7 +1320,7 @@ pub struct LaunchConfig {
     pub stream_ui: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentJobsRequest {
     /// <p>Optional filters to limit results.</p> <p>The filter names <code>status</code> and <code>fleetName</code> are supported. When filtering, you must use the complete value of the filtered item. You can use up to three filters, but they must be for the same named item. For example, if you are looking for items with the status <code>InProgress</code> or the status <code>Pending</code>.</p>
@@ -1337,7 +1337,7 @@ pub struct ListDeploymentJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentJobsResponse {
     /// <p>A list of deployment jobs that meet the criteria of the request.</p>
@@ -1350,7 +1350,7 @@ pub struct ListDeploymentJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFleetsRequest {
     /// <p>Optional filters to limit results.</p> <p>The filter name <code>name</code> is supported. When filtering, you must use the complete value of the filtered item. You can use up to three filters.</p>
@@ -1367,7 +1367,7 @@ pub struct ListFleetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFleetsResponse {
     /// <p>A list of fleet details meeting the request criteria.</p>
@@ -1380,7 +1380,7 @@ pub struct ListFleetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRobotApplicationsRequest {
     /// <p>Optional filters to limit results.</p> <p>The filter name <code>name</code> is supported. When filtering, you must use the complete value of the filtered item. You can use up to three filters.</p>
@@ -1401,7 +1401,7 @@ pub struct ListRobotApplicationsRequest {
     pub version_qualifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRobotApplicationsResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListRobotApplications</code> request. When the results of a <code>ListRobotApplications</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
@@ -1414,7 +1414,7 @@ pub struct ListRobotApplicationsResponse {
     pub robot_application_summaries: Option<Vec<RobotApplicationSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRobotsRequest {
     /// <p>Optional filters to limit results.</p> <p>The filter names <code>status</code> and <code>fleetName</code> are supported. When filtering, you must use the complete value of the filtered item. You can use up to three filters, but they must be for the same named item. For example, if you are looking for items with the status <code>Registered</code> or the status <code>Available</code>.</p>
@@ -1431,7 +1431,7 @@ pub struct ListRobotsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRobotsResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListRobots</code> request. When the results of a <code>ListRobot</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
@@ -1444,7 +1444,7 @@ pub struct ListRobotsResponse {
     pub robots: Option<Vec<Robot>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSimulationApplicationsRequest {
     /// <p>Optional list of filters to limit results.</p> <p>The filter name <code>name</code> is supported. When filtering, you must use the complete value of the filtered item. You can use up to three filters.</p>
@@ -1465,7 +1465,7 @@ pub struct ListSimulationApplicationsRequest {
     pub version_qualifier: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSimulationApplicationsResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListSimulationApplications</code> request. When the results of a <code>ListRobot</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
@@ -1478,7 +1478,7 @@ pub struct ListSimulationApplicationsResponse {
     pub simulation_application_summaries: Option<Vec<SimulationApplicationSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSimulationJobBatchesRequest {
     /// <p>Optional filters to limit results.</p>
@@ -1495,7 +1495,7 @@ pub struct ListSimulationJobBatchesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSimulationJobBatchesResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListSimulationJobBatches</code> request. When the results of a <code>ListSimulationJobBatches</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
@@ -1508,7 +1508,7 @@ pub struct ListSimulationJobBatchesResponse {
     pub simulation_job_batch_summaries: Option<Vec<SimulationJobBatchSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSimulationJobsRequest {
     /// <p>Optional filters to limit results.</p> <p>The filter names <code>status</code> and <code>simulationApplicationName</code> and <code>robotApplicationName</code> are supported. When filtering, you must use the complete value of the filtered item. You can use up to three filters, but they must be for the same named item. For example, if you are looking for items with the status <code>Preparing</code> or the status <code>Running</code>.</p>
@@ -1525,7 +1525,7 @@ pub struct ListSimulationJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSimulationJobsResponse {
     /// <p>The <code>nextToken</code> value to include in a future <code>ListSimulationJobs</code> request. When the results of a <code>ListRobot</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return. </p>
@@ -1537,7 +1537,7 @@ pub struct ListSimulationJobsResponse {
     pub simulation_job_summaries: Vec<SimulationJobSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The AWS RoboMaker Amazon Resource Name (ARN) with tags to be listed.</p>
@@ -1545,7 +1545,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The list of all tags added to the specified resource.</p>
@@ -1555,7 +1555,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>The logging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LoggingConfig {
     /// <p>A boolean indicating whether to record all ROS topics.</p>
     #[serde(rename = "recordAllRosTopics")]
@@ -1563,7 +1563,7 @@ pub struct LoggingConfig {
 }
 
 /// <p>Describes a network interface.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>The ID of the network interface.</p>
@@ -1581,7 +1581,7 @@ pub struct NetworkInterface {
 }
 
 /// <p>The output location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputLocation {
     /// <p>The S3 bucket for output.</p>
     #[serde(rename = "s3Bucket")]
@@ -1594,7 +1594,7 @@ pub struct OutputLocation {
 }
 
 /// <p>Configuration information for port forwarding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PortForwardingConfig {
     /// <p>The port mappings for the configuration.</p>
     #[serde(rename = "portMappings")]
@@ -1603,7 +1603,7 @@ pub struct PortForwardingConfig {
 }
 
 /// <p>An object representing a port mapping.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PortMapping {
     /// <p>The port number on the application.</p>
     #[serde(rename = "applicationPort")]
@@ -1618,7 +1618,7 @@ pub struct PortMapping {
 }
 
 /// <p>Information about the progress of a deployment job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProgressDetail {
     /// <p><p>The current progress status.</p> <dl> <dt>Validating</dt> <dd> <p>Validating the deployment.</p> </dd> <dt>DownloadingExtracting</dt> <dd> <p>Downloading and extracting the bundle on the robot.</p> </dd> <dt>ExecutingPreLaunch</dt> <dd> <p>Executing pre-launch script(s) if provided.</p> </dd> <dt>Launching</dt> <dd> <p>Launching the robot application.</p> </dd> <dt>ExecutingPostLaunch</dt> <dd> <p>Executing post-launch script(s) if provided.</p> </dd> <dt>Finished</dt> <dd> <p>Deployment is complete.</p> </dd> </dl></p>
@@ -1639,7 +1639,7 @@ pub struct ProgressDetail {
     pub target_resource: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterRobotRequest {
     /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
@@ -1650,7 +1650,7 @@ pub struct RegisterRobotRequest {
     pub robot: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterRobotResponse {
     /// <p>The Amazon Resource Name (ARN) of the fleet that the robot will join.</p>
@@ -1664,7 +1664,7 @@ pub struct RegisterRobotResponse {
 }
 
 /// <p>Information about a rendering engine.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RenderingEngine {
     /// <p>The name of the rendering engine.</p>
     #[serde(rename = "name")]
@@ -1676,7 +1676,7 @@ pub struct RenderingEngine {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestartSimulationJobRequest {
     /// <p>The Amazon Resource Name (ARN) of the simulation job.</p>
@@ -1684,12 +1684,12 @@ pub struct RestartSimulationJobRequest {
     pub job: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestartSimulationJobResponse {}
 
 /// <p>Information about a robot.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Robot {
     /// <p>The architecture of the robot.</p>
@@ -1731,7 +1731,7 @@ pub struct Robot {
 }
 
 /// <p>Application configuration information for a robot.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RobotApplicationConfig {
     /// <p>The application information for the robot application.</p>
     #[serde(rename = "application")]
@@ -1746,7 +1746,7 @@ pub struct RobotApplicationConfig {
 }
 
 /// <p>Summary information for a robot application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RobotApplicationSummary {
     /// <p>The Amazon Resource Name (ARN) of the robot.</p>
@@ -1772,7 +1772,7 @@ pub struct RobotApplicationSummary {
 }
 
 /// <p>Information about a robot deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RobotDeployment {
     /// <p>The robot deployment Amazon Resource Name (ARN).</p>
@@ -1806,7 +1806,7 @@ pub struct RobotDeployment {
 }
 
 /// <p>Information about a robot software suite (ROS distribution).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RobotSoftwareSuite {
     /// <p>The name of the robot software suite (ROS distribution).</p>
     #[serde(rename = "name")]
@@ -1819,7 +1819,7 @@ pub struct RobotSoftwareSuite {
 }
 
 /// <p>Information about S3 keys.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3KeyOutput {
     /// <p>The etag for the object.</p>
@@ -1833,7 +1833,7 @@ pub struct S3KeyOutput {
 }
 
 /// <p>Information about an S3 object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Object {
     /// <p>The bucket containing the object.</p>
     #[serde(rename = "bucket")]
@@ -1848,7 +1848,7 @@ pub struct S3Object {
 }
 
 /// <p>Information about a simulation application configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SimulationApplicationConfig {
     /// <p>The application information for the simulation application.</p>
     #[serde(rename = "application")]
@@ -1863,7 +1863,7 @@ pub struct SimulationApplicationConfig {
 }
 
 /// <p>Summary information for a simulation application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SimulationApplicationSummary {
     /// <p>The Amazon Resource Name (ARN) of the simulation application.</p>
@@ -1893,7 +1893,7 @@ pub struct SimulationApplicationSummary {
 }
 
 /// <p>Information about a simulation job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SimulationJob {
     /// <p>The Amazon Resource Name (ARN) of the simulation job.</p>
@@ -1983,7 +1983,7 @@ pub struct SimulationJob {
 }
 
 /// <p>Information about a simulation job batch.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SimulationJobBatchSummary {
     /// <p>The Amazon Resource Name (ARN) of the batch.</p>
@@ -2017,7 +2017,7 @@ pub struct SimulationJobBatchSummary {
 }
 
 /// <p>Information about a simulation job request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SimulationJobRequest {
     /// <p>Compute information for the simulation job</p>
     #[serde(rename = "compute")]
@@ -2066,7 +2066,7 @@ pub struct SimulationJobRequest {
 }
 
 /// <p>Summary information for a simulation job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SimulationJobSummary {
     /// <p>The Amazon Resource Name (ARN) of the simulation job.</p>
@@ -2100,7 +2100,7 @@ pub struct SimulationJobSummary {
 }
 
 /// <p>Information about a simulation software suite.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SimulationSoftwareSuite {
     /// <p>The name of the simulation software suite.</p>
     #[serde(rename = "name")]
@@ -2113,7 +2113,7 @@ pub struct SimulationSoftwareSuite {
 }
 
 /// <p>Information about a source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Source {
     /// <p>The taget processor architecture for the application.</p>
@@ -2135,7 +2135,7 @@ pub struct Source {
 }
 
 /// <p>Information about a source configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SourceConfig {
     /// <p>The target processor architecture for the application.</p>
@@ -2152,7 +2152,7 @@ pub struct SourceConfig {
     pub s_3_key: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSimulationJobBatchRequest {
     /// <p>The batch policy.</p>
@@ -2172,7 +2172,7 @@ pub struct StartSimulationJobBatchRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSimulationJobBatchResponse {
     /// <p>The Amazon Resource Name (arn) of the batch.</p>
@@ -2221,7 +2221,7 @@ pub struct StartSimulationJobBatchResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SyncDeploymentJobRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -2232,7 +2232,7 @@ pub struct SyncDeploymentJobRequest {
     pub fleet: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SyncDeploymentJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the synchronization request.</p>
@@ -2269,7 +2269,7 @@ pub struct SyncDeploymentJobResponse {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the AWS RoboMaker resource you are tagging.</p>
@@ -2280,11 +2280,11 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the AWS RoboMaker resource you are removing tags.</p>
@@ -2295,11 +2295,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRobotApplicationRequest {
     /// <p>The application information for the robot application.</p>
@@ -2317,7 +2317,7 @@ pub struct UpdateRobotApplicationRequest {
     pub sources: Vec<SourceConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRobotApplicationResponse {
     /// <p>The Amazon Resource Name (ARN) of the updated robot application.</p>
@@ -2350,7 +2350,7 @@ pub struct UpdateRobotApplicationResponse {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSimulationApplicationRequest {
     /// <p>The application information for the simulation application.</p>
@@ -2375,7 +2375,7 @@ pub struct UpdateSimulationApplicationRequest {
     pub sources: Vec<SourceConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSimulationApplicationResponse {
     /// <p>The Amazon Resource Name (ARN) of the updated simulation application.</p>
@@ -2417,7 +2417,7 @@ pub struct UpdateSimulationApplicationResponse {
 }
 
 /// <p>If your simulation job accesses resources in a VPC, you provide this parameter identifying the list of security group IDs and subnet IDs. These must belong to the same VPC. You must provide at least one security group and two subnet IDs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VPCConfig {
     /// <p>A boolean indicating whether to assign a public IP address.</p>
     #[serde(rename = "assignPublicIp")]
@@ -2433,7 +2433,7 @@ pub struct VPCConfig {
 }
 
 /// <p>VPC configuration associated with your simulation job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VPCConfigResponse {
     /// <p>A boolean indicating if a public IP was assigned.</p>
@@ -4959,6 +4959,7 @@ impl RobomakerClient {
 #[async_trait]
 impl Robomaker for RobomakerClient {
     /// <p>Describes one or more simulation jobs.</p>
+    #[allow(unused_mut)]
     async fn batch_describe_simulation_job(
         &self,
         input: BatchDescribeSimulationJobRequest,
@@ -4978,7 +4979,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchDescribeSimulationJobResponse, _>()?;
 
@@ -4990,6 +4991,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Cancels the specified deployment job.</p>
+    #[allow(unused_mut)]
     async fn cancel_deployment_job(
         &self,
         input: CancelDeploymentJobRequest,
@@ -5008,7 +5010,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelDeploymentJobResponse, _>()?;
 
@@ -5020,6 +5022,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Cancels the specified simulation job.</p>
+    #[allow(unused_mut)]
     async fn cancel_simulation_job(
         &self,
         input: CancelSimulationJobRequest,
@@ -5038,7 +5041,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelSimulationJobResponse, _>()?;
 
@@ -5050,6 +5053,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Cancels a simulation job batch. When you cancel a simulation job batch, you are also cancelling all of the active simulation jobs created as part of the batch. </p>
+    #[allow(unused_mut)]
     async fn cancel_simulation_job_batch(
         &self,
         input: CancelSimulationJobBatchRequest,
@@ -5068,7 +5072,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelSimulationJobBatchResponse, _>()?;
 
@@ -5080,6 +5084,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p><p>Deploys a specific version of a robot application to robots in a fleet.</p> <p>The robot application must have a numbered <code>applicationVersion</code> for consistency reasons. To create a new version, use <code>CreateRobotApplicationVersion</code> or see <a href="https://docs.aws.amazon.com/robomaker/latest/dg/create-robot-application-version.html">Creating a Robot Application Version</a>. </p> <note> <p>After 90 days, deployment jobs expire and will be deleted. They will no longer be accessible. </p> </note></p>
+    #[allow(unused_mut)]
     async fn create_deployment_job(
         &self,
         input: CreateDeploymentJobRequest,
@@ -5098,7 +5103,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDeploymentJobResponse, _>()?;
 
@@ -5110,6 +5115,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a fleet, a logical group of robots running the same robot application.</p>
+    #[allow(unused_mut)]
     async fn create_fleet(
         &self,
         input: CreateFleetRequest,
@@ -5128,7 +5134,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateFleetResponse, _>()?;
 
@@ -5140,6 +5146,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a robot.</p>
+    #[allow(unused_mut)]
     async fn create_robot(
         &self,
         input: CreateRobotRequest,
@@ -5158,7 +5165,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRobotResponse, _>()?;
 
@@ -5170,6 +5177,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a robot application. </p>
+    #[allow(unused_mut)]
     async fn create_robot_application(
         &self,
         input: CreateRobotApplicationRequest,
@@ -5188,7 +5196,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRobotApplicationResponse, _>()?;
 
@@ -5200,6 +5208,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a version of a robot application.</p>
+    #[allow(unused_mut)]
     async fn create_robot_application_version(
         &self,
         input: CreateRobotApplicationVersionRequest,
@@ -5221,7 +5230,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRobotApplicationVersionResponse, _>()?;
 
@@ -5233,6 +5242,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a simulation application.</p>
+    #[allow(unused_mut)]
     async fn create_simulation_application(
         &self,
         input: CreateSimulationApplicationRequest,
@@ -5252,7 +5262,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSimulationApplicationResponse, _>()?;
 
@@ -5264,6 +5274,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Creates a simulation application with a specific revision id.</p>
+    #[allow(unused_mut)]
     async fn create_simulation_application_version(
         &self,
         input: CreateSimulationApplicationVersionRequest,
@@ -5285,7 +5296,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSimulationApplicationVersionResponse, _>()?;
 
@@ -5299,6 +5310,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p><p>Creates a simulation job.</p> <note> <p>After 90 days, simulation jobs expire and will be deleted. They will no longer be accessible. </p> </note></p>
+    #[allow(unused_mut)]
     async fn create_simulation_job(
         &self,
         input: CreateSimulationJobRequest,
@@ -5317,7 +5329,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSimulationJobResponse, _>()?;
 
@@ -5329,6 +5341,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Deletes a fleet.</p>
+    #[allow(unused_mut)]
     async fn delete_fleet(
         &self,
         input: DeleteFleetRequest,
@@ -5347,7 +5360,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteFleetResponse, _>()?;
 
@@ -5359,6 +5372,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Deletes a robot.</p>
+    #[allow(unused_mut)]
     async fn delete_robot(
         &self,
         input: DeleteRobotRequest,
@@ -5377,7 +5391,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteRobotResponse, _>()?;
 
@@ -5389,6 +5403,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Deletes a robot application.</p>
+    #[allow(unused_mut)]
     async fn delete_robot_application(
         &self,
         input: DeleteRobotApplicationRequest,
@@ -5407,7 +5422,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteRobotApplicationResponse, _>()?;
 
@@ -5419,6 +5434,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Deletes a simulation application.</p>
+    #[allow(unused_mut)]
     async fn delete_simulation_application(
         &self,
         input: DeleteSimulationApplicationRequest,
@@ -5438,7 +5454,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteSimulationApplicationResponse, _>()?;
 
@@ -5450,6 +5466,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Deregisters a robot.</p>
+    #[allow(unused_mut)]
     async fn deregister_robot(
         &self,
         input: DeregisterRobotRequest,
@@ -5468,7 +5485,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeregisterRobotResponse, _>()?;
 
@@ -5480,6 +5497,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a deployment job.</p>
+    #[allow(unused_mut)]
     async fn describe_deployment_job(
         &self,
         input: DescribeDeploymentJobRequest,
@@ -5498,7 +5516,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDeploymentJobResponse, _>()?;
 
@@ -5510,6 +5528,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a fleet.</p>
+    #[allow(unused_mut)]
     async fn describe_fleet(
         &self,
         input: DescribeFleetRequest,
@@ -5528,7 +5547,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeFleetResponse, _>()?;
 
@@ -5540,6 +5559,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a robot.</p>
+    #[allow(unused_mut)]
     async fn describe_robot(
         &self,
         input: DescribeRobotRequest,
@@ -5558,7 +5578,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRobotResponse, _>()?;
 
@@ -5570,6 +5590,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a robot application.</p>
+    #[allow(unused_mut)]
     async fn describe_robot_application(
         &self,
         input: DescribeRobotApplicationRequest,
@@ -5588,7 +5609,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeRobotApplicationResponse, _>()?;
 
@@ -5600,6 +5621,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a simulation application.</p>
+    #[allow(unused_mut)]
     async fn describe_simulation_application(
         &self,
         input: DescribeSimulationApplicationRequest,
@@ -5621,7 +5643,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSimulationApplicationResponse, _>()?;
 
@@ -5633,6 +5655,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a simulation job.</p>
+    #[allow(unused_mut)]
     async fn describe_simulation_job(
         &self,
         input: DescribeSimulationJobRequest,
@@ -5651,7 +5674,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSimulationJobResponse, _>()?;
 
@@ -5663,6 +5686,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Describes a simulation job batch.</p>
+    #[allow(unused_mut)]
     async fn describe_simulation_job_batch(
         &self,
         input: DescribeSimulationJobBatchRequest,
@@ -5682,7 +5706,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeSimulationJobBatchResponse, _>()?;
 
@@ -5694,6 +5718,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of deployment jobs for a fleet. You can optionally provide filters to retrieve specific deployment jobs. </p>
+    #[allow(unused_mut)]
     async fn list_deployment_jobs(
         &self,
         input: ListDeploymentJobsRequest,
@@ -5712,7 +5737,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDeploymentJobsResponse, _>()?;
 
@@ -5724,6 +5749,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of fleets. You can optionally provide filters to retrieve specific fleets. </p>
+    #[allow(unused_mut)]
     async fn list_fleets(
         &self,
         input: ListFleetsRequest,
@@ -5742,7 +5768,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListFleetsResponse, _>()?;
 
@@ -5754,6 +5780,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of robot application. You can optionally provide filters to retrieve specific robot applications.</p>
+    #[allow(unused_mut)]
     async fn list_robot_applications(
         &self,
         input: ListRobotApplicationsRequest,
@@ -5772,7 +5799,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRobotApplicationsResponse, _>()?;
 
@@ -5784,6 +5811,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of robots. You can optionally provide filters to retrieve specific robots.</p>
+    #[allow(unused_mut)]
     async fn list_robots(
         &self,
         input: ListRobotsRequest,
@@ -5802,7 +5830,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRobotsResponse, _>()?;
 
@@ -5814,6 +5842,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of simulation applications. You can optionally provide filters to retrieve specific simulation applications. </p>
+    #[allow(unused_mut)]
     async fn list_simulation_applications(
         &self,
         input: ListSimulationApplicationsRequest,
@@ -5833,7 +5862,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSimulationApplicationsResponse, _>()?;
 
@@ -5845,6 +5874,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list simulation job batches. You can optionally provide filters to retrieve specific simulation batch jobs. </p>
+    #[allow(unused_mut)]
     async fn list_simulation_job_batches(
         &self,
         input: ListSimulationJobBatchesRequest,
@@ -5863,7 +5893,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSimulationJobBatchesResponse, _>()?;
 
@@ -5875,6 +5905,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Returns a list of simulation jobs. You can optionally provide filters to retrieve specific simulation jobs. </p>
+    #[allow(unused_mut)]
     async fn list_simulation_jobs(
         &self,
         input: ListSimulationJobsRequest,
@@ -5893,7 +5924,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSimulationJobsResponse, _>()?;
 
@@ -5905,6 +5936,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Lists all tags on a AWS RoboMaker resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -5920,7 +5952,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -5932,6 +5964,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Registers a robot with a fleet.</p>
+    #[allow(unused_mut)]
     async fn register_robot(
         &self,
         input: RegisterRobotRequest,
@@ -5950,7 +5983,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RegisterRobotResponse, _>()?;
 
@@ -5962,6 +5995,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Restarts a running simulation job.</p>
+    #[allow(unused_mut)]
     async fn restart_simulation_job(
         &self,
         input: RestartSimulationJobRequest,
@@ -5980,7 +6014,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RestartSimulationJobResponse, _>()?;
 
@@ -5992,6 +6026,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Starts a new simulation job batch. The batch is defined using one or more <code>SimulationJobRequest</code> objects. </p>
+    #[allow(unused_mut)]
     async fn start_simulation_job_batch(
         &self,
         input: StartSimulationJobBatchRequest,
@@ -6010,7 +6045,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartSimulationJobBatchResponse, _>()?;
 
@@ -6022,6 +6057,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Syncrhonizes robots in a fleet to the latest deployment. This is helpful if robots were added after a deployment.</p>
+    #[allow(unused_mut)]
     async fn sync_deployment_job(
         &self,
         input: SyncDeploymentJobRequest,
@@ -6040,7 +6076,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SyncDeploymentJobResponse, _>()?;
 
@@ -6052,6 +6088,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Adds or edits tags for a AWS RoboMaker resource.</p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty strings. </p> <p>For information about the rules that apply to tag keys and tag values, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -6070,7 +6107,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -6082,6 +6119,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Removes the specified tags from the specified AWS RoboMaker resource.</p> <p>To remove a tag, specify the tag key. To change the tag value of an existing tag key, use <a href="https://docs.aws.amazon.com/robomaker/latest/dg/API_TagResource.html"> <code>TagResource</code> </a>. </p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -6103,7 +6141,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -6115,6 +6153,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Updates a robot application.</p>
+    #[allow(unused_mut)]
     async fn update_robot_application(
         &self,
         input: UpdateRobotApplicationRequest,
@@ -6133,7 +6172,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRobotApplicationResponse, _>()?;
 
@@ -6145,6 +6184,7 @@ impl Robomaker for RobomakerClient {
     }
 
     /// <p>Updates a simulation application.</p>
+    #[allow(unused_mut)]
     async fn update_simulation_application(
         &self,
         input: UpdateSimulationApplicationRequest,
@@ -6164,7 +6204,7 @@ impl Robomaker for RobomakerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateSimulationApplicationResponse, _>()?;
 

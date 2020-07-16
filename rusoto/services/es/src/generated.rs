@@ -25,8 +25,27 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>Container for the parameters to the <code><a>AcceptInboundCrossClusterSearchConnection</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AcceptInboundCrossClusterSearchConnectionRequest {
+    /// <p>The id of the inbound connection that you want to accept.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    pub cross_cluster_search_connection_id: String,
+}
+
+/// <p>The result of a <code><a>AcceptInboundCrossClusterSearchConnection</a></code> operation. Contains details of accepted inbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AcceptInboundCrossClusterSearchConnectionResponse {
+    /// <p>Specifies the <code><a>InboundCrossClusterSearchConnection</a></code> of accepted inbound connection. </p>
+    #[serde(rename = "CrossClusterSearchConnection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection: Option<InboundCrossClusterSearchConnection>,
+}
+
 /// <p>The configured access rules for the domain's document and search endpoints, and the current status of those rules.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccessPoliciesStatus {
     /// <p>The access policy configured for the Elasticsearch domain. Access policies may be resource-based, IP-based, or IAM-based. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-access-policies" target="_blank"> Configuring Access Policies</a>for more information.</p>
@@ -38,7 +57,7 @@ pub struct AccessPoliciesStatus {
 }
 
 /// <p>Container for the parameters to the <code><a>AddTags</a></code> operation. Specify the tags that you want to attach to the Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsRequest {
     /// <p> Specify the <code>ARN</code> for which you want to add the tags.</p>
@@ -50,7 +69,7 @@ pub struct AddTagsRequest {
 }
 
 /// <p> List of limits that are specific to a given InstanceType and for each of it's <code> <a>InstanceRole</a> </code> . </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdditionalLimit {
     /// <p> Name of Additional Limit is specific to a given InstanceType and for each of it's <code> <a>InstanceRole</a> </code> etc. <br/> Attributes and their details: <br/> <ul> <li>MaximumNumberOfDataNodesSupported</li> This attribute will be present in Master node only to specify how much data nodes upto which given <code> <a>ESPartitionInstanceType</a> </code> can support as master node. <li>MaximumNumberOfDataNodesWithoutMasterNode</li> This attribute will be present in Data node only to specify how much data nodes of given <code> <a>ESPartitionInstanceType</a> </code> upto which you don't need any master nodes to govern them. </ul> </p>
@@ -64,7 +83,7 @@ pub struct AdditionalLimit {
 }
 
 /// <p> Status of the advanced options for the specified Elasticsearch domain. Currently, the following advanced options are available:</p> <ul> <li>Option to allow references to indices in an HTTP request body. Must be <code>false</code> when configuring access to individual sub-resources. By default, the value is <code>true</code>. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-advanced-options" target="_blank">Configuration Advanced Options</a> for more information.</li> <li>Option to specify the percentage of heap space that is allocated to field data. By default, this setting is unbounded.</li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-advanced-options">Configuring Advanced Options</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdvancedOptionsStatus {
     /// <p> Specifies the status of advanced options for the specified Elasticsearch domain.</p>
@@ -76,7 +95,7 @@ pub struct AdvancedOptionsStatus {
 }
 
 /// <p>Specifies the advanced security configuration: whether advanced security is enabled, whether the internal database option is enabled.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdvancedSecurityOptions {
     /// <p>True if advanced security is enabled.</p>
@@ -90,7 +109,7 @@ pub struct AdvancedSecurityOptions {
 }
 
 /// <p>Specifies the advanced security configuration: whether advanced security is enabled, whether the internal database option is enabled, master username and password (if internal database is enabled), and master user ARN (if IAM is enabled).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AdvancedSecurityOptionsInput {
     /// <p>True if advanced security is enabled.</p>
@@ -108,7 +127,7 @@ pub struct AdvancedSecurityOptionsInput {
 }
 
 /// <p> Specifies the status of advanced security options for the specified Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdvancedSecurityOptionsStatus {
     /// <p> Specifies advanced security options for the specified Elasticsearch domain.</p>
@@ -120,7 +139,7 @@ pub struct AdvancedSecurityOptionsStatus {
 }
 
 /// <p> Container for request parameters to <code> <a>AssociatePackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePackageRequest {
     /// <p>Name of the domain that you want to associate the package with.</p>
@@ -132,7 +151,7 @@ pub struct AssociatePackageRequest {
 }
 
 /// <p> Container for response returned by <code> <a>AssociatePackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatePackageResponse {
     /// <p><code>DomainPackageDetails</code></p>
@@ -142,7 +161,7 @@ pub struct AssociatePackageResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>CancelElasticsearchServiceSoftwareUpdate</a></code> operation. Specifies the name of the Elasticsearch domain that you wish to cancel a service software update on.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelElasticsearchServiceSoftwareUpdateRequest {
     /// <p>The name of the domain that you want to stop the latest service software update on.</p>
@@ -151,7 +170,7 @@ pub struct CancelElasticsearchServiceSoftwareUpdateRequest {
 }
 
 /// <p>The result of a <code>CancelElasticsearchServiceSoftwareUpdate</code> operation. Contains the status of the update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelElasticsearchServiceSoftwareUpdateResponse {
     /// <p>The current status of the Elasticsearch service software update.</p>
@@ -161,7 +180,7 @@ pub struct CancelElasticsearchServiceSoftwareUpdateResponse {
 }
 
 /// <p>Options to specify the Cognito user and identity pools for Kibana authentication. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html" target="_blank">Amazon Cognito Authentication for Kibana</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CognitoOptions {
     /// <p>Specifies the option to enable Cognito for Kibana authentication.</p>
     #[serde(rename = "Enabled")]
@@ -182,7 +201,7 @@ pub struct CognitoOptions {
 }
 
 /// <p>Status of the Cognito options for the specified Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CognitoOptionsStatus {
     /// <p>Specifies the Cognito options for the specified Elasticsearch domain.</p>
@@ -194,7 +213,7 @@ pub struct CognitoOptionsStatus {
 }
 
 /// <p> A map from an <code> <a>ElasticsearchVersion</a> </code> to a list of compatible <code> <a>ElasticsearchVersion</a> </code> s to which the domain can be upgraded. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CompatibleVersionsMap {
     /// <p>The current version of Elasticsearch on which a domain is.</p>
@@ -206,7 +225,7 @@ pub struct CompatibleVersionsMap {
     pub target_versions: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateElasticsearchDomainRequest {
     /// <p> IAM access policy as a JSON-formatted string.</p>
@@ -267,7 +286,7 @@ pub struct CreateElasticsearchDomainRequest {
 }
 
 /// <p>The result of a <code>CreateElasticsearchDomain</code> operation. Contains the status of the newly created Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateElasticsearchDomainResponse {
     /// <p>The status of the newly created Elasticsearch domain. </p>
@@ -276,8 +295,49 @@ pub struct CreateElasticsearchDomainResponse {
     pub domain_status: Option<ElasticsearchDomainStatus>,
 }
 
+/// <p>Container for the parameters to the <code><a>CreateOutboundCrossClusterSearchConnection</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateOutboundCrossClusterSearchConnectionRequest {
+    /// <p>Specifies the connection alias that will be used by the customer for this connection.</p>
+    #[serde(rename = "ConnectionAlias")]
+    pub connection_alias: String,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the destination Elasticsearch domain.</p>
+    #[serde(rename = "DestinationDomainInfo")]
+    pub destination_domain_info: DomainInformation,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the source Elasticsearch domain.</p>
+    #[serde(rename = "SourceDomainInfo")]
+    pub source_domain_info: DomainInformation,
+}
+
+/// <p>The result of a <code><a>CreateOutboundCrossClusterSearchConnection</a></code> request. Contains the details of the newly created cross-cluster search connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateOutboundCrossClusterSearchConnectionResponse {
+    /// <p>Specifies the connection alias provided during the create connection request.</p>
+    #[serde(rename = "ConnectionAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_alias: Option<String>,
+    /// <p>Specifies the <code><a>OutboundCrossClusterSearchConnectionStatus</a></code> for the newly created connection.</p>
+    #[serde(rename = "ConnectionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_status: Option<OutboundCrossClusterSearchConnectionStatus>,
+    /// <p>Unique id for the created outbound connection, which is used for subsequent operations on connection.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection_id: Option<String>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the destination Elasticsearch domain.</p>
+    #[serde(rename = "DestinationDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_domain_info: Option<DomainInformation>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the source Elasticsearch domain.</p>
+    #[serde(rename = "SourceDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_domain_info: Option<DomainInformation>,
+}
+
 /// <p> Container for request parameters to <code> <a>CreatePackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePackageRequest {
     /// <p>Description of the package.</p>
@@ -296,7 +356,7 @@ pub struct CreatePackageRequest {
 }
 
 /// <p> Container for response returned by <code> <a>CreatePackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePackageResponse {
     /// <p>Information about the package <code>PackageDetails</code>.</p>
@@ -306,7 +366,7 @@ pub struct CreatePackageResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>DeleteElasticsearchDomain</a></code> operation. Specifies the name of the Elasticsearch domain that you want to delete.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteElasticsearchDomainRequest {
     /// <p>The name of the Elasticsearch domain that you want to permanently delete.</p>
@@ -315,7 +375,7 @@ pub struct DeleteElasticsearchDomainRequest {
 }
 
 /// <p>The result of a <code>DeleteElasticsearchDomain</code> request. Contains the status of the pending deletion, or no status if the domain and all of its resources have been deleted.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteElasticsearchDomainResponse {
     /// <p>The status of the Elasticsearch domain being deleted.</p>
@@ -324,8 +384,46 @@ pub struct DeleteElasticsearchDomainResponse {
     pub domain_status: Option<ElasticsearchDomainStatus>,
 }
 
+/// <p>Container for the parameters to the <code><a>DeleteInboundCrossClusterSearchConnection</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteInboundCrossClusterSearchConnectionRequest {
+    /// <p>The id of the inbound connection that you want to permanently delete.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    pub cross_cluster_search_connection_id: String,
+}
+
+/// <p>The result of a <code><a>DeleteInboundCrossClusterSearchConnection</a></code> operation. Contains details of deleted inbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteInboundCrossClusterSearchConnectionResponse {
+    /// <p>Specifies the <code><a>InboundCrossClusterSearchConnection</a></code> of deleted inbound connection. </p>
+    #[serde(rename = "CrossClusterSearchConnection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection: Option<InboundCrossClusterSearchConnection>,
+}
+
+/// <p>Container for the parameters to the <code><a>DeleteOutboundCrossClusterSearchConnection</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteOutboundCrossClusterSearchConnectionRequest {
+    /// <p>The id of the outbound connection that you want to permanently delete.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    pub cross_cluster_search_connection_id: String,
+}
+
+/// <p>The result of a <code><a>DeleteOutboundCrossClusterSearchConnection</a></code> operation. Contains details of deleted outbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteOutboundCrossClusterSearchConnectionResponse {
+    /// <p>Specifies the <code><a>OutboundCrossClusterSearchConnection</a></code> of deleted outbound connection. </p>
+    #[serde(rename = "CrossClusterSearchConnection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection: Option<OutboundCrossClusterSearchConnection>,
+}
+
 /// <p> Container for request parameters to <code> <a>DeletePackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePackageRequest {
     /// <p>Internal ID of the package that you want to delete. Use <code>DescribePackages</code> to find this value.</p>
@@ -334,7 +432,7 @@ pub struct DeletePackageRequest {
 }
 
 /// <p> Container for response parameters to <code> <a>DeletePackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePackageResponse {
     /// <p><code>PackageDetails</code></p>
@@ -344,7 +442,7 @@ pub struct DeletePackageResponse {
 }
 
 /// <p> Container for the parameters to the <code>DescribeElasticsearchDomainConfig</code> operation. Specifies the domain name for which you want configuration information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticsearchDomainConfigRequest {
     /// <p>The Elasticsearch domain that you want to get information about.</p>
@@ -353,7 +451,7 @@ pub struct DescribeElasticsearchDomainConfigRequest {
 }
 
 /// <p>The result of a <code>DescribeElasticsearchDomainConfig</code> request. Contains the configuration information of the requested domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticsearchDomainConfigResponse {
     /// <p>The configuration information of the domain requested in the <code>DescribeElasticsearchDomainConfig</code> request.</p>
@@ -362,7 +460,7 @@ pub struct DescribeElasticsearchDomainConfigResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>DescribeElasticsearchDomain</a></code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticsearchDomainRequest {
     /// <p>The name of the Elasticsearch domain for which you want information.</p>
@@ -371,7 +469,7 @@ pub struct DescribeElasticsearchDomainRequest {
 }
 
 /// <p>The result of a <code>DescribeElasticsearchDomain</code> request. Contains the status of the domain specified in the request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticsearchDomainResponse {
     /// <p>The current status of the Elasticsearch domain.</p>
@@ -380,7 +478,7 @@ pub struct DescribeElasticsearchDomainResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>DescribeElasticsearchDomains</a></code> operation. By default, the API returns the status of all Elasticsearch domains.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticsearchDomainsRequest {
     /// <p>The Elasticsearch domains for which you want information.</p>
@@ -389,7 +487,7 @@ pub struct DescribeElasticsearchDomainsRequest {
 }
 
 /// <p>The result of a <code>DescribeElasticsearchDomains</code> request. Contains the status of the specified domains or all domains owned by the account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticsearchDomainsResponse {
     /// <p>The status of the domains requested in the <code>DescribeElasticsearchDomains</code> request.</p>
@@ -398,7 +496,7 @@ pub struct DescribeElasticsearchDomainsResponse {
 }
 
 /// <p> Container for the parameters to <code> <a>DescribeElasticsearchInstanceTypeLimits</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeElasticsearchInstanceTypeLimitsRequest {
     /// <p> DomainName represents the name of the Domain that we are trying to modify. This should be present only if we are querying for Elasticsearch <code> <a>Limits</a> </code> for existing domain. </p>
@@ -414,7 +512,7 @@ pub struct DescribeElasticsearchInstanceTypeLimitsRequest {
 }
 
 /// <p> Container for the parameters received from <code> <a>DescribeElasticsearchInstanceTypeLimits</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeElasticsearchInstanceTypeLimitsResponse {
     #[serde(rename = "LimitsByRole")]
@@ -422,8 +520,72 @@ pub struct DescribeElasticsearchInstanceTypeLimitsResponse {
     pub limits_by_role: Option<::std::collections::HashMap<String, Limits>>,
 }
 
+/// <p>Container for the parameters to the <code><a>DescribeInboundCrossClusterSearchConnections</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeInboundCrossClusterSearchConnectionsRequest {
+    /// <p> A list of filters used to match properties for inbound cross-cluster search connection. Available <code><a>Filter</a></code> names for this operation are: <ul> <li>cross-cluster-search-connection-id</li> <li>source-domain-info.domain-name</li> <li>source-domain-info.owner-id</li> <li>source-domain-info.region</li> <li>destination-domain-info.domain-name</li> </ul> </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> NextToken is sent in case the earlier API call results contain the NextToken. It is used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>The result of a <code><a>DescribeInboundCrossClusterSearchConnections</a></code> request. Contains the list of connections matching the filter criteria.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeInboundCrossClusterSearchConnectionsResponse {
+    /// <p>Consists of list of <code><a>InboundCrossClusterSearchConnection</a></code> matching the specified filter criteria.</p>
+    #[serde(rename = "CrossClusterSearchConnections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connections: Option<Vec<InboundCrossClusterSearchConnection>>,
+    /// <p>If more results are available and NextToken is present, make the next request to the same API with the received NextToken to paginate the remaining results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Container for the parameters to the <code><a>DescribeOutboundCrossClusterSearchConnections</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeOutboundCrossClusterSearchConnectionsRequest {
+    /// <p> A list of filters used to match properties for outbound cross-cluster search connection. Available <code><a>Filter</a></code> names for this operation are: <ul> <li>cross-cluster-search-connection-id</li> <li>destination-domain-info.domain-name</li> <li>destination-domain-info.owner-id</li> <li>destination-domain-info.region</li> <li>source-domain-info.domain-name</li> </ul> </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> NextToken is sent in case the earlier API call results contain the NextToken. It is used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>The result of a <code><a>DescribeOutboundCrossClusterSearchConnections</a></code> request. Contains the list of connections matching the filter criteria.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeOutboundCrossClusterSearchConnectionsResponse {
+    /// <p>Consists of list of <code><a>OutboundCrossClusterSearchConnection</a></code> matching the specified filter criteria.</p>
+    #[serde(rename = "CrossClusterSearchConnections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connections: Option<Vec<OutboundCrossClusterSearchConnection>>,
+    /// <p>If more results are available and NextToken is present, make the next request to the same API with the received NextToken to paginate the remaining results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>Filter to apply in <code>DescribePackage</code> response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePackagesFilter {
     /// <p>Any field from <code>PackageDetails</code>.</p>
@@ -437,7 +599,7 @@ pub struct DescribePackagesFilter {
 }
 
 /// <p> Container for request parameters to <code> <a>DescribePackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePackagesRequest {
     /// <p>Only returns packages that match the <code>DescribePackagesFilterList</code> values.</p>
@@ -455,7 +617,7 @@ pub struct DescribePackagesRequest {
 }
 
 /// <p> Container for response returned by <code> <a>DescribePackages</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePackagesResponse {
     #[serde(rename = "NextToken")]
@@ -468,7 +630,7 @@ pub struct DescribePackagesResponse {
 }
 
 /// <p>Container for parameters to <code>DescribeReservedElasticsearchInstanceOfferings</code></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedElasticsearchInstanceOfferingsRequest {
     /// <p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>
@@ -486,7 +648,7 @@ pub struct DescribeReservedElasticsearchInstanceOfferingsRequest {
 }
 
 /// <p>Container for results from <code>DescribeReservedElasticsearchInstanceOfferings</code></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReservedElasticsearchInstanceOfferingsResponse {
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
@@ -501,7 +663,7 @@ pub struct DescribeReservedElasticsearchInstanceOfferingsResponse {
 }
 
 /// <p>Container for parameters to <code>DescribeReservedElasticsearchInstances</code></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeReservedElasticsearchInstancesRequest {
     /// <p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>
@@ -519,7 +681,7 @@ pub struct DescribeReservedElasticsearchInstancesRequest {
 }
 
 /// <p>Container for results from <code>DescribeReservedElasticsearchInstances</code></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeReservedElasticsearchInstancesResponse {
     /// <p>Provides an identifier to allow retrieval of paginated results.</p>
@@ -533,7 +695,7 @@ pub struct DescribeReservedElasticsearchInstancesResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>DissociatePackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DissociatePackageRequest {
     /// <p>Name of the domain that you want to associate the package with.</p>
@@ -545,7 +707,7 @@ pub struct DissociatePackageRequest {
 }
 
 /// <p> Container for response returned by <code> <a>DissociatePackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DissociatePackageResponse {
     /// <p><code>DomainPackageDetails</code></p>
@@ -555,7 +717,7 @@ pub struct DissociatePackageResponse {
 }
 
 /// <p>Options to configure endpoint for the Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DomainEndpointOptions {
     /// <p>Specify if only HTTPS endpoint should be enabled for the Elasticsearch domain.</p>
     #[serde(rename = "EnforceHTTPS")]
@@ -568,7 +730,7 @@ pub struct DomainEndpointOptions {
 }
 
 /// <p>The configured endpoint options for the domain and their current status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainEndpointOptionsStatus {
     /// <p>Options to configure endpoint for the Elasticsearch domain.</p>
@@ -579,7 +741,7 @@ pub struct DomainEndpointOptionsStatus {
     pub status: OptionStatus,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainInfo {
     /// <p> Specifies the <code>DomainName</code>.</p>
@@ -588,8 +750,20 @@ pub struct DomainInfo {
     pub domain_name: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DomainInformation {
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    #[serde(rename = "OwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+    #[serde(rename = "Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
+}
+
 /// <p>Information on a package that is associated with a domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainPackageDetails {
     /// <p>Name of the domain you've associated a package with.</p>
@@ -627,7 +801,7 @@ pub struct DomainPackageDetails {
 }
 
 /// <p>Options to enable, disable, and specify the properties of EBS storage volumes. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-ebs" target="_blank"> Configuring EBS-based Storage</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EBSOptions {
     /// <p>Specifies whether EBS-based storage is enabled.</p>
     #[serde(rename = "EBSEnabled")]
@@ -648,7 +822,7 @@ pub struct EBSOptions {
 }
 
 /// <p> Status of the EBS options for the specified Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EBSOptionsStatus {
     /// <p> Specifies the EBS options for the specified Elasticsearch domain.</p>
@@ -660,7 +834,7 @@ pub struct EBSOptionsStatus {
 }
 
 /// <p>Specifies the configuration for the domain cluster, such as the type and number of instances.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ElasticsearchClusterConfig {
     /// <p>Total number of dedicated master nodes, active and on standby, for the cluster.</p>
     #[serde(rename = "DedicatedMasterCount")]
@@ -705,7 +879,7 @@ pub struct ElasticsearchClusterConfig {
 }
 
 /// <p> Specifies the configuration status for the specified Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ElasticsearchClusterConfigStatus {
     /// <p> Specifies the cluster configuration for the specified Elasticsearch domain.</p>
@@ -717,7 +891,7 @@ pub struct ElasticsearchClusterConfigStatus {
 }
 
 /// <p>The configuration of an Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ElasticsearchDomainConfig {
     /// <p>IAM access policy as a JSON-formatted string.</p>
@@ -775,7 +949,7 @@ pub struct ElasticsearchDomainConfig {
 }
 
 /// <p>The current status of an Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ElasticsearchDomainStatus {
     /// <p>The Amazon resource name (ARN) of an Elasticsearch domain. See <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/index.html?Using_Identifiers.html" target="_blank">Identifiers for IAM Entities</a> in <i>Using AWS Identity and Access Management</i> for more information.</p>
@@ -868,7 +1042,7 @@ pub struct ElasticsearchDomainStatus {
 }
 
 /// <p> Status of the Elasticsearch version options for the specified Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ElasticsearchVersionStatus {
     /// <p> Specifies the Elasticsearch version for the specified Elasticsearch domain.</p>
@@ -880,7 +1054,7 @@ pub struct ElasticsearchVersionStatus {
 }
 
 /// <p>Specifies the Encryption At Rest Options.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionAtRestOptions {
     /// <p>Specifies the option to enable Encryption At Rest.</p>
     #[serde(rename = "Enabled")]
@@ -893,7 +1067,7 @@ pub struct EncryptionAtRestOptions {
 }
 
 /// <p> Status of the Encryption At Rest options for the specified Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EncryptionAtRestOptionsStatus {
     /// <p> Specifies the Encryption At Rest options for the specified Elasticsearch domain.</p>
@@ -904,7 +1078,7 @@ pub struct EncryptionAtRestOptionsStatus {
     pub status: OptionStatus,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorDetails {
     #[serde(rename = "ErrorMessage")]
@@ -915,8 +1089,22 @@ pub struct ErrorDetails {
     pub error_type: Option<String>,
 }
 
+/// <p> A filter used to limit results when describing inbound or outbound cross-cluster search connections. Multiple values can be specified per filter. A cross-cluster search connection must match at least one of the specified values for it to be returned from an operation. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct Filter {
+    /// <p> Specifies the name of the filter. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p> Contains one or more values for the filter. </p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
+}
+
 /// <p> Container for request parameters to <code> <a>GetCompatibleElasticsearchVersions</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCompatibleElasticsearchVersionsRequest {
     #[serde(rename = "DomainName")]
@@ -925,7 +1113,7 @@ pub struct GetCompatibleElasticsearchVersionsRequest {
 }
 
 /// <p> Container for response returned by <code> <a>GetCompatibleElasticsearchVersions</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCompatibleElasticsearchVersionsResponse {
     /// <p> A map of compatible Elasticsearch versions returned as part of the <code> <a>GetCompatibleElasticsearchVersions</a> </code> operation. </p>
@@ -935,7 +1123,7 @@ pub struct GetCompatibleElasticsearchVersionsResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>GetUpgradeHistory</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUpgradeHistoryRequest {
     #[serde(rename = "DomainName")]
@@ -949,7 +1137,7 @@ pub struct GetUpgradeHistoryRequest {
 }
 
 /// <p> Container for response returned by <code> <a>GetUpgradeHistory</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUpgradeHistoryResponse {
     /// <p>Pagination token that needs to be supplied to the next call to get the next page of results</p>
@@ -963,7 +1151,7 @@ pub struct GetUpgradeHistoryResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>GetUpgradeStatus</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUpgradeStatusRequest {
     #[serde(rename = "DomainName")]
@@ -971,7 +1159,7 @@ pub struct GetUpgradeStatusRequest {
 }
 
 /// <p> Container for response returned by <code> <a>GetUpgradeStatus</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUpgradeStatusResponse {
     /// <p> One of 4 statuses that a step can go through returned as part of the <code> <a>GetUpgradeStatusResponse</a> </code> object. The status can take one of the following values: <ul> <li>In Progress</li> <li>Succeeded</li> <li>Succeeded with Issues</li> <li>Failed</li> </ul> </p>
@@ -988,8 +1176,44 @@ pub struct GetUpgradeStatusResponse {
     pub upgrade_step: Option<String>,
 }
 
+/// <p>Specifies details of an inbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InboundCrossClusterSearchConnection {
+    /// <p>Specifies the <code><a>InboundCrossClusterSearchConnectionStatus</a></code> for the outbound connection.</p>
+    #[serde(rename = "ConnectionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_status: Option<InboundCrossClusterSearchConnectionStatus>,
+    /// <p>Specifies the connection id for the inbound cross-cluster search connection.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection_id: Option<String>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the destination Elasticsearch domain.</p>
+    #[serde(rename = "DestinationDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_domain_info: Option<DomainInformation>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the source Elasticsearch domain.</p>
+    #[serde(rename = "SourceDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_domain_info: Option<DomainInformation>,
+}
+
+/// <p>Specifies the coonection status of an inbound cross-cluster search connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InboundCrossClusterSearchConnectionStatus {
+    /// <p>Specifies verbose information for the inbound connection status.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p><p>The state code for inbound connection. This can be one of the following:</p> <ul> <li>PENDING_ACCEPTANCE: Inbound connection is not yet accepted by destination domain owner.</li> <li>APPROVED: Inbound connection is pending acceptance by destination domain owner.</li> <li>REJECTING: Inbound connection rejection is in process.</li> <li>REJECTED: Inbound connection is rejected.</li> <li>DELETING: Inbound connection deletion is in progress.</li> <li>DELETED: Inbound connection is deleted and cannot be used further.</li> </ul></p>
+    #[serde(rename = "StatusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+}
+
 /// <p> InstanceCountLimits represents the limits on number of instances that be created in Amazon Elasticsearch for given InstanceType. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceCountLimits {
     #[serde(rename = "MaximumInstanceCount")]
@@ -1001,7 +1225,7 @@ pub struct InstanceCountLimits {
 }
 
 /// <p>InstanceLimits represents the list of instance related attributes that are available for given InstanceType. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceLimits {
     #[serde(rename = "InstanceCountLimits")]
@@ -1010,7 +1234,7 @@ pub struct InstanceLimits {
 }
 
 /// <p> Limits for given InstanceType and for each of it's role. <br/> Limits contains following <code> <a>StorageTypes,</a> </code> <code> <a>InstanceLimits</a> </code> and <code> <a>AdditionalLimits</a> </code> </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Limits {
     /// <p> List of additional limits that are specific to a given InstanceType and for each of it's <code> <a>InstanceRole</a> </code> . </p>
@@ -1027,7 +1251,7 @@ pub struct Limits {
 }
 
 /// <p>The result of a <code>ListDomainNames</code> operation. Contains the names of all Elasticsearch domains owned by this account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainNamesResponse {
     /// <p>List of Elasticsearch domain names.</p>
@@ -1037,7 +1261,7 @@ pub struct ListDomainNamesResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>ListDomainsForPackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDomainsForPackageRequest {
     /// <p>Limits results to a maximum number of domains.</p>
@@ -1054,7 +1278,7 @@ pub struct ListDomainsForPackageRequest {
 }
 
 /// <p> Container for response parameters to <code> <a>ListDomainsForPackage</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainsForPackageResponse {
     /// <p>List of <code>DomainPackageDetails</code> objects.</p>
@@ -1067,7 +1291,7 @@ pub struct ListDomainsForPackageResponse {
 }
 
 /// <p> Container for the parameters to the <code> <a>ListElasticsearchInstanceTypes</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListElasticsearchInstanceTypesRequest {
     /// <p>DomainName represents the name of the Domain that we are trying to modify. This should be present only if we are querying for list of available Elasticsearch instance types when modifying existing domain. </p>
@@ -1088,7 +1312,7 @@ pub struct ListElasticsearchInstanceTypesRequest {
 }
 
 /// <p> Container for the parameters returned by <code> <a>ListElasticsearchInstanceTypes</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListElasticsearchInstanceTypesResponse {
     /// <p> List of instance types supported by Amazon Elasticsearch service for given <code> <a>ElasticsearchVersion</a> </code> </p>
@@ -1102,7 +1326,7 @@ pub struct ListElasticsearchInstanceTypesResponse {
 }
 
 /// <p> Container for the parameters to the <code> <a>ListElasticsearchVersions</a> </code> operation. <p> Use <code> <a>MaxResults</a> </code> to control the maximum number of results to retrieve in a single call. </p> <p> Use <code> <a>NextToken</a> </code> in response to retrieve more results. If the received response does not contain a NextToken, then there are no more results to retrieve. </p> </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListElasticsearchVersionsRequest {
     /// <p> Set this value to limit the number of results returned. Value provided must be greater than 10 else it wont be honored. </p>
@@ -1115,7 +1339,7 @@ pub struct ListElasticsearchVersionsRequest {
 }
 
 /// <p> Container for the parameters for response received from <code> <a>ListElasticsearchVersions</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListElasticsearchVersionsResponse {
     #[serde(rename = "ElasticsearchVersions")]
@@ -1127,7 +1351,7 @@ pub struct ListElasticsearchVersionsResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>ListPackagesForDomain</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPackagesForDomainRequest {
     /// <p>The name of the domain for which you want to list associated packages.</p>
@@ -1144,7 +1368,7 @@ pub struct ListPackagesForDomainRequest {
 }
 
 /// <p> Container for response parameters to <code> <a>ListPackagesForDomain</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPackagesForDomainResponse {
     /// <p>List of <code>DomainPackageDetails</code> objects.</p>
@@ -1158,7 +1382,7 @@ pub struct ListPackagesForDomainResponse {
 }
 
 /// <p>Container for the parameters to the <code><a>ListTags</a></code> operation. Specify the <code>ARN</code> for the Elasticsearch domain to which the tags are attached that you want to view are attached.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsRequest {
     /// <p> Specify the <code>ARN</code> for the Elasticsearch domain to which the tags are attached that you want to view.</p>
@@ -1167,7 +1391,7 @@ pub struct ListTagsRequest {
 }
 
 /// <p>The result of a <code>ListTags</code> operation. Contains tags for all requested Elasticsearch domains.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResponse {
     /// <p> List of <code>Tag</code> for the requested Elasticsearch domain.</p>
@@ -1177,7 +1401,7 @@ pub struct ListTagsResponse {
 }
 
 /// <p>Log Publishing option that is set for given domain. <br/>Attributes and their details: <ul> <li>CloudWatchLogsLogGroupArn: ARN of the Cloudwatch log group to which log needs to be published.</li> <li>Enabled: Whether the log publishing for given log type is enabled or not</li> </ul> </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LogPublishingOption {
     #[serde(rename = "CloudWatchLogsLogGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1189,7 +1413,7 @@ pub struct LogPublishingOption {
 }
 
 /// <p>The configured log publishing options for the domain and their current status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LogPublishingOptionsStatus {
     /// <p>The log publishing options configured for the Elasticsearch domain.</p>
@@ -1203,7 +1427,7 @@ pub struct LogPublishingOptionsStatus {
 }
 
 /// <p>Credentials for the master user: username and password, ARN, or both.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MasterUserOptions {
     /// <p>ARN for the master user (if IAM is enabled).</p>
@@ -1221,7 +1445,7 @@ pub struct MasterUserOptions {
 }
 
 /// <p>Specifies the node-to-node encryption options.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NodeToNodeEncryptionOptions {
     /// <p>Specify true to enable node-to-node encryption.</p>
     #[serde(rename = "Enabled")]
@@ -1230,7 +1454,7 @@ pub struct NodeToNodeEncryptionOptions {
 }
 
 /// <p>Status of the node-to-node encryption options for the specified Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeToNodeEncryptionOptionsStatus {
     /// <p>Specifies the node-to-node encryption options for the specified Elasticsearch domain.</p>
@@ -1242,7 +1466,7 @@ pub struct NodeToNodeEncryptionOptionsStatus {
 }
 
 /// <p>Provides the current status of the entity.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OptionStatus {
     /// <p>Timestamp which tells the creation date for the entity.</p>
@@ -1264,8 +1488,48 @@ pub struct OptionStatus {
     pub update_version: Option<i64>,
 }
 
+/// <p>Specifies details of an outbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OutboundCrossClusterSearchConnection {
+    /// <p>Specifies the connection alias for the outbound cross-cluster search connection.</p>
+    #[serde(rename = "ConnectionAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_alias: Option<String>,
+    /// <p>Specifies the <code><a>OutboundCrossClusterSearchConnectionStatus</a></code> for the outbound connection.</p>
+    #[serde(rename = "ConnectionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_status: Option<OutboundCrossClusterSearchConnectionStatus>,
+    /// <p>Specifies the connection id for the outbound cross-cluster search connection.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection_id: Option<String>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the destination Elasticsearch domain.</p>
+    #[serde(rename = "DestinationDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_domain_info: Option<DomainInformation>,
+    /// <p>Specifies the <code><a>DomainInformation</a></code> for the source Elasticsearch domain.</p>
+    #[serde(rename = "SourceDomainInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_domain_info: Option<DomainInformation>,
+}
+
+/// <p>Specifies the connection status of an outbound cross-cluster search connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OutboundCrossClusterSearchConnectionStatus {
+    /// <p>Specifies verbose information for the outbound connection status.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p><p>The state code for outbound connection. This can be one of the following:</p> <ul> <li>VALIDATING: The outbound connection request is being validated.</li> <li>VALIDATION<em>FAILED: Validation failed for the connection request.</li> <li>PENDING</em>ACCEPTANCE: Outbound connection request is validated and is not yet accepted by destination domain owner.</li> <li>PROVISIONING: Outbound connection request is in process.</li> <li>ACTIVE: Outbound connection is active and ready to use.</li> <li>REJECTED: Outbound connection request is rejected by destination domain owner.</li> <li>DELETING: Outbound connection deletion is in progress.</li> <li>DELETED: Outbound connection is deleted and cannot be used further.</li> </ul></p>
+    #[serde(rename = "StatusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
+}
+
 /// <p>Basic information about a package.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PackageDetails {
     /// <p>Timestamp which tells creation date of the package.</p>
@@ -1299,7 +1563,7 @@ pub struct PackageDetails {
 }
 
 /// <p>The S3 location for importing the package specified as <code>S3BucketName</code> and <code>S3Key</code></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PackageSource {
     /// <p>Name of the bucket containing the package.</p>
@@ -1313,7 +1577,7 @@ pub struct PackageSource {
 }
 
 /// <p>Container for parameters to <code>PurchaseReservedElasticsearchInstanceOffering</code></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseReservedElasticsearchInstanceOfferingRequest {
     /// <p>The number of Elasticsearch instances to reserve.</p>
@@ -1329,7 +1593,7 @@ pub struct PurchaseReservedElasticsearchInstanceOfferingRequest {
 }
 
 /// <p>Represents the output of a <code>PurchaseReservedElasticsearchInstanceOffering</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PurchaseReservedElasticsearchInstanceOfferingResponse {
     /// <p>The customer-specified identifier used to track this reservation.</p>
@@ -1343,7 +1607,7 @@ pub struct PurchaseReservedElasticsearchInstanceOfferingResponse {
 }
 
 /// <p>Contains the specific price and frequency of a recurring charges for a reserved Elasticsearch instance, or for a reserved Elasticsearch instance offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecurringCharge {
     /// <p>The monetary amount of the recurring charge.</p>
@@ -1356,8 +1620,27 @@ pub struct RecurringCharge {
     pub recurring_charge_frequency: Option<String>,
 }
 
+/// <p>Container for the parameters to the <code><a>RejectInboundCrossClusterSearchConnection</a></code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RejectInboundCrossClusterSearchConnectionRequest {
+    /// <p>The id of the inbound connection that you want to reject.</p>
+    #[serde(rename = "CrossClusterSearchConnectionId")]
+    pub cross_cluster_search_connection_id: String,
+}
+
+/// <p>The result of a <code><a>RejectInboundCrossClusterSearchConnection</a></code> operation. Contains details of rejected inbound connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RejectInboundCrossClusterSearchConnectionResponse {
+    /// <p>Specifies the <code><a>InboundCrossClusterSearchConnection</a></code> of rejected inbound connection. </p>
+    #[serde(rename = "CrossClusterSearchConnection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cross_cluster_search_connection: Option<InboundCrossClusterSearchConnection>,
+}
+
 /// <p>Container for the parameters to the <code><a>RemoveTags</a></code> operation. Specify the <code>ARN</code> for the Elasticsearch domain from which you want to remove the specified <code>TagKey</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsRequest {
     /// <p>Specifies the <code>ARN</code> for the Elasticsearch domain from which you want to delete the specified tags.</p>
@@ -1369,7 +1652,7 @@ pub struct RemoveTagsRequest {
 }
 
 /// <p>Details of a reserved Elasticsearch instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReservedElasticsearchInstance {
     /// <p>The currency code for the reserved Elasticsearch instance offering.</p>
@@ -1427,7 +1710,7 @@ pub struct ReservedElasticsearchInstance {
 }
 
 /// <p>Details of a reserved Elasticsearch instance offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReservedElasticsearchInstanceOffering {
     /// <p>The currency code for the reserved Elasticsearch instance offering.</p>
@@ -1465,7 +1748,7 @@ pub struct ReservedElasticsearchInstanceOffering {
 }
 
 /// <p>The current options of an Elasticsearch domain service software options.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceSoftwareOptions {
     /// <p>Timestamp, in Epoch time, until which you can manually request a service software update. After this date, we automatically update your service software.</p>
@@ -1503,7 +1786,7 @@ pub struct ServiceSoftwareOptions {
 }
 
 /// <p>Specifies the time, in UTC format, when the service takes a daily automated snapshot of the specified Elasticsearch domain. Default value is <code>0</code> hours.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SnapshotOptions {
     /// <p>Specifies the time, in UTC format, when the service takes a daily automated snapshot of the specified Elasticsearch domain. Default value is <code>0</code> hours.</p>
     #[serde(rename = "AutomatedSnapshotStartHour")]
@@ -1512,7 +1795,7 @@ pub struct SnapshotOptions {
 }
 
 /// <p>Status of a daily automated snapshot.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SnapshotOptionsStatus {
     /// <p>Specifies the daily snapshot options specified for the Elasticsearch domain.</p>
@@ -1524,7 +1807,7 @@ pub struct SnapshotOptionsStatus {
 }
 
 /// <p>Container for the parameters to the <code><a>StartElasticsearchServiceSoftwareUpdate</a></code> operation. Specifies the name of the Elasticsearch domain that you wish to schedule a service software update on.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartElasticsearchServiceSoftwareUpdateRequest {
     /// <p>The name of the domain that you want to update to the latest service software.</p>
@@ -1533,7 +1816,7 @@ pub struct StartElasticsearchServiceSoftwareUpdateRequest {
 }
 
 /// <p>The result of a <code>StartElasticsearchServiceSoftwareUpdate</code> operation. Contains the status of the update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartElasticsearchServiceSoftwareUpdateResponse {
     /// <p>The current status of the Elasticsearch service software update.</p>
@@ -1543,7 +1826,7 @@ pub struct StartElasticsearchServiceSoftwareUpdateResponse {
 }
 
 /// <p>StorageTypes represents the list of storage related types and their attributes that are available for given InstanceType. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StorageType {
     #[serde(rename = "StorageSubTypeName")]
@@ -1559,7 +1842,7 @@ pub struct StorageType {
 }
 
 /// <p>Limits that are applicable for given storage type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StorageTypeLimit {
     /// <p> Name of storage limits that are applicable for given storage type. If <code> <a>StorageType</a> </code> is ebs, following storage options are applicable <ol> <li>MinimumVolumeSize</li> Minimum amount of volume size that is applicable for given storage type.It can be empty if it is not applicable. <li>MaximumVolumeSize</li> Maximum amount of volume size that is applicable for given storage type.It can be empty if it is not applicable. <li>MaximumIops</li> Maximum amount of Iops that is applicable for given storage type.It can be empty if it is not applicable. <li>MinimumIops</li> Minimum amount of Iops that is applicable for given storage type.It can be empty if it is not applicable. </ol> </p>
@@ -1573,7 +1856,7 @@ pub struct StorageTypeLimit {
 }
 
 /// <p>Specifies a key value pair for a resource tag.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>Specifies the <code>TagKey</code>, the name of the tag. Tag keys must be unique for the Elasticsearch domain to which they are attached.</p>
     #[serde(rename = "Key")]
@@ -1584,7 +1867,7 @@ pub struct Tag {
 }
 
 /// <p>Container for the parameters to the <code><a>UpdateElasticsearchDomain</a></code> operation. Specifies the type and number of instances in the domain cluster.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateElasticsearchDomainConfigRequest {
     /// <p>IAM access policy as a JSON-formatted string.</p>
@@ -1633,7 +1916,7 @@ pub struct UpdateElasticsearchDomainConfigRequest {
 }
 
 /// <p>The result of an <code>UpdateElasticsearchDomain</code> request. Contains the status of the Elasticsearch domain being updated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateElasticsearchDomainConfigResponse {
     /// <p>The status of the updated Elasticsearch domain. </p>
@@ -1642,7 +1925,7 @@ pub struct UpdateElasticsearchDomainConfigResponse {
 }
 
 /// <p> Container for request parameters to <code> <a>UpgradeElasticsearchDomain</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpgradeElasticsearchDomainRequest {
     #[serde(rename = "DomainName")]
@@ -1657,7 +1940,7 @@ pub struct UpgradeElasticsearchDomainRequest {
 }
 
 /// <p> Container for response returned by <code> <a>UpgradeElasticsearchDomain</a> </code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpgradeElasticsearchDomainResponse {
     #[serde(rename = "DomainName")]
@@ -1674,7 +1957,7 @@ pub struct UpgradeElasticsearchDomainResponse {
 }
 
 /// <p>History of the last 10 Upgrades and Upgrade Eligibility Checks.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpgradeHistory {
     /// <p>UTC Timestamp at which the Upgrade API call was made in "yyyy-MM-ddTHH:mm:ssZ" format.</p>
@@ -1696,7 +1979,7 @@ pub struct UpgradeHistory {
 }
 
 /// <p>Represents a single step of the Upgrade or Upgrade Eligibility Check workflow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpgradeStepItem {
     /// <p>A list of strings containing detailed information about the errors encountered in a particular step.</p>
@@ -1718,7 +2001,7 @@ pub struct UpgradeStepItem {
 }
 
 /// <p>Options to specify the subnets and security groups for VPC endpoint. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html" target="_blank"> VPC Endpoints for Amazon Elasticsearch Service Domains</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VPCDerivedInfo {
     /// <p>The availability zones for the Elasticsearch domain. Exists only if the domain was created with VPCOptions.</p>
@@ -1740,7 +2023,7 @@ pub struct VPCDerivedInfo {
 }
 
 /// <p> Status of the VPC options for the specified Elasticsearch domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VPCDerivedInfoStatus {
     /// <p> Specifies the VPC options for the specified Elasticsearch domain.</p>
@@ -1752,7 +2035,7 @@ pub struct VPCDerivedInfoStatus {
 }
 
 /// <p>Options to specify the subnets and security groups for VPC endpoint. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html" target="_blank"> VPC Endpoints for Amazon Elasticsearch Service Domains</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VPCOptions {
     /// <p>Specifies the security groups for VPC endpoint.</p>
@@ -1766,7 +2049,7 @@ pub struct VPCOptions {
 }
 
 /// <p>Specifies the zone awareness configuration for the domain cluster, such as the number of availability zones.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ZoneAwarenessConfig {
     /// <p>An integer value to indicate the number of availability zones for a domain when zone awareness is enabled. This should be equal to number of subnets if VPC endpoints is enabled</p>
     #[serde(rename = "AvailabilityZoneCount")]
@@ -1774,6 +2057,62 @@ pub struct ZoneAwarenessConfig {
     pub availability_zone_count: Option<i64>,
 }
 
+/// Errors returned by AcceptInboundCrossClusterSearchConnection
+#[derive(Debug, PartialEq)]
+pub enum AcceptInboundCrossClusterSearchConnectionError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>An exception for trying to create more than allowed resources or sub-resources. Gives http status code of 409.</p>
+    LimitExceeded(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl AcceptInboundCrossClusterSearchConnectionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AcceptInboundCrossClusterSearchConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        AcceptInboundCrossClusterSearchConnectionError::DisabledOperation(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        AcceptInboundCrossClusterSearchConnectionError::LimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        AcceptInboundCrossClusterSearchConnectionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AcceptInboundCrossClusterSearchConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AcceptInboundCrossClusterSearchConnectionError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptInboundCrossClusterSearchConnectionError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptInboundCrossClusterSearchConnectionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AcceptInboundCrossClusterSearchConnectionError {}
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
@@ -1994,6 +2333,74 @@ impl fmt::Display for CreateElasticsearchDomainError {
     }
 }
 impl Error for CreateElasticsearchDomainError {}
+/// Errors returned by CreateOutboundCrossClusterSearchConnection
+#[derive(Debug, PartialEq)]
+pub enum CreateOutboundCrossClusterSearchConnectionError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for trying to create more than allowed resources or sub-resources. Gives http status code of 409.</p>
+    LimitExceeded(String),
+    /// <p>An exception for creating a resource that already exists. Gives http status code of 400.</p>
+    ResourceAlreadyExists(String),
+}
+
+impl CreateOutboundCrossClusterSearchConnectionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateOutboundCrossClusterSearchConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        CreateOutboundCrossClusterSearchConnectionError::DisabledOperation(err.msg),
+                    )
+                }
+                "InternalException" => {
+                    return RusotoError::Service(
+                        CreateOutboundCrossClusterSearchConnectionError::Internal(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateOutboundCrossClusterSearchConnectionError::LimitExceeded(err.msg),
+                    )
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateOutboundCrossClusterSearchConnectionError::ResourceAlreadyExists(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateOutboundCrossClusterSearchConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateOutboundCrossClusterSearchConnectionError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOutboundCrossClusterSearchConnectionError::Internal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOutboundCrossClusterSearchConnectionError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateOutboundCrossClusterSearchConnectionError::ResourceAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateOutboundCrossClusterSearchConnectionError {}
 /// Errors returned by CreatePackage
 #[derive(Debug, PartialEq)]
 pub enum CreatePackageError {
@@ -2136,6 +2543,98 @@ impl fmt::Display for DeleteElasticsearchServiceRoleError {
     }
 }
 impl Error for DeleteElasticsearchServiceRoleError {}
+/// Errors returned by DeleteInboundCrossClusterSearchConnection
+#[derive(Debug, PartialEq)]
+pub enum DeleteInboundCrossClusterSearchConnectionError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteInboundCrossClusterSearchConnectionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteInboundCrossClusterSearchConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        DeleteInboundCrossClusterSearchConnectionError::DisabledOperation(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteInboundCrossClusterSearchConnectionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteInboundCrossClusterSearchConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteInboundCrossClusterSearchConnectionError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteInboundCrossClusterSearchConnectionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteInboundCrossClusterSearchConnectionError {}
+/// Errors returned by DeleteOutboundCrossClusterSearchConnection
+#[derive(Debug, PartialEq)]
+pub enum DeleteOutboundCrossClusterSearchConnectionError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteOutboundCrossClusterSearchConnectionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteOutboundCrossClusterSearchConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        DeleteOutboundCrossClusterSearchConnectionError::DisabledOperation(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteOutboundCrossClusterSearchConnectionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteOutboundCrossClusterSearchConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteOutboundCrossClusterSearchConnectionError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteOutboundCrossClusterSearchConnectionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteOutboundCrossClusterSearchConnectionError {}
 /// Errors returned by DeletePackage
 #[derive(Debug, PartialEq)]
 pub enum DeletePackageError {
@@ -2402,6 +2901,106 @@ impl fmt::Display for DescribeElasticsearchInstanceTypeLimitsError {
     }
 }
 impl Error for DescribeElasticsearchInstanceTypeLimitsError {}
+/// Errors returned by DescribeInboundCrossClusterSearchConnections
+#[derive(Debug, PartialEq)]
+pub enum DescribeInboundCrossClusterSearchConnectionsError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>The request processing has failed because of invalid pagination token provided by customer. Returns an HTTP status code of 400. </p>
+    InvalidPaginationToken(String),
+}
+
+impl DescribeInboundCrossClusterSearchConnectionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeInboundCrossClusterSearchConnectionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        DescribeInboundCrossClusterSearchConnectionsError::DisabledOperation(
+                            err.msg,
+                        ),
+                    )
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(
+                        DescribeInboundCrossClusterSearchConnectionsError::InvalidPaginationToken(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeInboundCrossClusterSearchConnectionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeInboundCrossClusterSearchConnectionsError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInboundCrossClusterSearchConnectionsError::InvalidPaginationToken(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeInboundCrossClusterSearchConnectionsError {}
+/// Errors returned by DescribeOutboundCrossClusterSearchConnections
+#[derive(Debug, PartialEq)]
+pub enum DescribeOutboundCrossClusterSearchConnectionsError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>The request processing has failed because of invalid pagination token provided by customer. Returns an HTTP status code of 400. </p>
+    InvalidPaginationToken(String),
+}
+
+impl DescribeOutboundCrossClusterSearchConnectionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOutboundCrossClusterSearchConnectionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        DescribeOutboundCrossClusterSearchConnectionsError::DisabledOperation(
+                            err.msg,
+                        ),
+                    )
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(
+                        DescribeOutboundCrossClusterSearchConnectionsError::InvalidPaginationToken(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeOutboundCrossClusterSearchConnectionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeOutboundCrossClusterSearchConnectionsError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeOutboundCrossClusterSearchConnectionsError::InvalidPaginationToken(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeOutboundCrossClusterSearchConnectionsError {}
 /// Errors returned by DescribePackages
 #[derive(Debug, PartialEq)]
 pub enum DescribePackagesError {
@@ -3124,6 +3723,52 @@ impl fmt::Display for PurchaseReservedElasticsearchInstanceOfferingError {
     }
 }
 impl Error for PurchaseReservedElasticsearchInstanceOfferingError {}
+/// Errors returned by RejectInboundCrossClusterSearchConnection
+#[derive(Debug, PartialEq)]
+pub enum RejectInboundCrossClusterSearchConnectionError {
+    /// <p>An error occured because the client wanted to access a not supported operation. Gives http status code of 409.</p>
+    DisabledOperation(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl RejectInboundCrossClusterSearchConnectionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RejectInboundCrossClusterSearchConnectionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DisabledOperationException" => {
+                    return RusotoError::Service(
+                        RejectInboundCrossClusterSearchConnectionError::DisabledOperation(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        RejectInboundCrossClusterSearchConnectionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RejectInboundCrossClusterSearchConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RejectInboundCrossClusterSearchConnectionError::DisabledOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RejectInboundCrossClusterSearchConnectionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for RejectInboundCrossClusterSearchConnectionError {}
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
@@ -3349,6 +3994,15 @@ impl Error for UpgradeElasticsearchDomainError {}
 /// Trait representing the capabilities of the Amazon Elasticsearch Service API. Amazon Elasticsearch Service clients implement this trait.
 #[async_trait]
 pub trait Es {
+    /// <p>Allows the destination domain owner to accept an inbound cross-cluster search connection request.</p>
+    async fn accept_inbound_cross_cluster_search_connection(
+        &self,
+        input: AcceptInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        AcceptInboundCrossClusterSearchConnectionResponse,
+        RusotoError<AcceptInboundCrossClusterSearchConnectionError>,
+    >;
+
     /// <p>Attaches tags to an existing Elasticsearch domain. Tags are a set of case-sensitive key value pairs. An Elasticsearch domain may have up to 10 tags. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-awsresorcetagging" target="_blank"> Tagging Amazon Elasticsearch Service Domains for more information.</a></p>
     async fn add_tags(&self, input: AddTagsRequest) -> Result<(), RusotoError<AddTagsError>>;
 
@@ -3373,6 +4027,15 @@ pub trait Es {
         input: CreateElasticsearchDomainRequest,
     ) -> Result<CreateElasticsearchDomainResponse, RusotoError<CreateElasticsearchDomainError>>;
 
+    /// <p>Creates a new cross-cluster search connection from a source domain to a destination domain.</p>
+    async fn create_outbound_cross_cluster_search_connection(
+        &self,
+        input: CreateOutboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        CreateOutboundCrossClusterSearchConnectionResponse,
+        RusotoError<CreateOutboundCrossClusterSearchConnectionError>,
+    >;
+
     /// <p>Create a package for use with Amazon ES domains.</p>
     async fn create_package(
         &self,
@@ -3389,6 +4052,24 @@ pub trait Es {
     async fn delete_elasticsearch_service_role(
         &self,
     ) -> Result<(), RusotoError<DeleteElasticsearchServiceRoleError>>;
+
+    /// <p>Allows the destination domain owner to delete an existing inbound cross-cluster search connection.</p>
+    async fn delete_inbound_cross_cluster_search_connection(
+        &self,
+        input: DeleteInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        DeleteInboundCrossClusterSearchConnectionResponse,
+        RusotoError<DeleteInboundCrossClusterSearchConnectionError>,
+    >;
+
+    /// <p>Allows the source domain owner to delete an existing outbound cross-cluster search connection.</p>
+    async fn delete_outbound_cross_cluster_search_connection(
+        &self,
+        input: DeleteOutboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        DeleteOutboundCrossClusterSearchConnectionResponse,
+        RusotoError<DeleteOutboundCrossClusterSearchConnectionError>,
+    >;
 
     /// <p>Delete the package.</p>
     async fn delete_package(
@@ -3424,6 +4105,24 @@ pub trait Es {
     ) -> Result<
         DescribeElasticsearchInstanceTypeLimitsResponse,
         RusotoError<DescribeElasticsearchInstanceTypeLimitsError>,
+    >;
+
+    /// <p>Lists all the inbound cross-cluster search connections for a destination domain.</p>
+    async fn describe_inbound_cross_cluster_search_connections(
+        &self,
+        input: DescribeInboundCrossClusterSearchConnectionsRequest,
+    ) -> Result<
+        DescribeInboundCrossClusterSearchConnectionsResponse,
+        RusotoError<DescribeInboundCrossClusterSearchConnectionsError>,
+    >;
+
+    /// <p>Lists all the outbound cross-cluster search connections for a source domain.</p>
+    async fn describe_outbound_cross_cluster_search_connections(
+        &self,
+        input: DescribeOutboundCrossClusterSearchConnectionsRequest,
+    ) -> Result<
+        DescribeOutboundCrossClusterSearchConnectionsResponse,
+        RusotoError<DescribeOutboundCrossClusterSearchConnectionsError>,
     >;
 
     /// <p>Describes all packages available to Amazon ES. Includes options for filtering, limiting the number of results, and pagination.</p>
@@ -3524,6 +4223,15 @@ pub trait Es {
         RusotoError<PurchaseReservedElasticsearchInstanceOfferingError>,
     >;
 
+    /// <p>Allows the destination domain owner to reject an inbound cross-cluster search connection request.</p>
+    async fn reject_inbound_cross_cluster_search_connection(
+        &self,
+        input: RejectInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        RejectInboundCrossClusterSearchConnectionResponse,
+        RusotoError<RejectInboundCrossClusterSearchConnectionError>,
+    >;
+
     /// <p>Removes the specified set of tags from the specified Elasticsearch domain.</p>
     async fn remove_tags(
         &self,
@@ -3594,7 +4302,42 @@ impl EsClient {
 
 #[async_trait]
 impl Es for EsClient {
+    /// <p>Allows the destination domain owner to accept an inbound cross-cluster search connection request.</p>
+    #[allow(unused_mut)]
+    async fn accept_inbound_cross_cluster_search_connection(
+        &self,
+        input: AcceptInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        AcceptInboundCrossClusterSearchConnectionResponse,
+        RusotoError<AcceptInboundCrossClusterSearchConnectionError>,
+    > {
+        let request_uri = format!(
+            "/2015-01-01/es/ccs/inboundConnection/{connection_id}/accept",
+            connection_id = input.cross_cluster_search_connection_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AcceptInboundCrossClusterSearchConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AcceptInboundCrossClusterSearchConnectionError::from_response(response))
+        }
+    }
+
     /// <p>Attaches tags to an existing Elasticsearch domain. Tags are a set of case-sensitive key value pairs. An Elasticsearch domain may have up to 10 tags. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-awsresorcetagging" target="_blank"> Tagging Amazon Elasticsearch Service Domains for more information.</a></p>
+    #[allow(unused_mut)]
     async fn add_tags(&self, input: AddTagsRequest) -> Result<(), RusotoError<AddTagsError>> {
         let request_uri = "/2015-01-01/tags";
 
@@ -3610,7 +4353,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3621,6 +4364,7 @@ impl Es for EsClient {
     }
 
     /// <p>Associates a package with an Amazon ES domain.</p>
+    #[allow(unused_mut)]
     async fn associate_package(
         &self,
         input: AssociatePackageRequest,
@@ -3640,7 +4384,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociatePackageResponse, _>()?;
 
@@ -3652,6 +4396,7 @@ impl Es for EsClient {
     }
 
     /// <p>Cancels a scheduled service software update for an Amazon ES domain. You can only perform this operation before the <code>AutomatedUpdateDate</code> and when the <code>UpdateStatus</code> is in the <code>PENDING_UPDATE</code> state.</p>
+    #[allow(unused_mut)]
     async fn cancel_elasticsearch_service_software_update(
         &self,
         input: CancelElasticsearchServiceSoftwareUpdateRequest,
@@ -3673,7 +4418,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelElasticsearchServiceSoftwareUpdateResponse, _>()?;
 
@@ -3685,6 +4430,7 @@ impl Es for EsClient {
     }
 
     /// <p>Creates a new Elasticsearch domain. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomains" target="_blank">Creating Elasticsearch Domains</a> in the <i>Amazon Elasticsearch Service Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_elasticsearch_domain(
         &self,
         input: CreateElasticsearchDomainRequest,
@@ -3704,7 +4450,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateElasticsearchDomainResponse, _>()?;
 
@@ -3715,7 +4461,42 @@ impl Es for EsClient {
         }
     }
 
+    /// <p>Creates a new cross-cluster search connection from a source domain to a destination domain.</p>
+    #[allow(unused_mut)]
+    async fn create_outbound_cross_cluster_search_connection(
+        &self,
+        input: CreateOutboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        CreateOutboundCrossClusterSearchConnectionResponse,
+        RusotoError<CreateOutboundCrossClusterSearchConnectionError>,
+    > {
+        let request_uri = "/2015-01-01/es/ccs/outboundConnection";
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateOutboundCrossClusterSearchConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateOutboundCrossClusterSearchConnectionError::from_response(response))
+        }
+    }
+
     /// <p>Create a package for use with Amazon ES domains.</p>
+    #[allow(unused_mut)]
     async fn create_package(
         &self,
         input: CreatePackageRequest,
@@ -3734,7 +4515,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePackageResponse, _>()?;
 
@@ -3746,6 +4527,7 @@ impl Es for EsClient {
     }
 
     /// <p>Permanently deletes the specified Elasticsearch domain and all of its data. Once a domain is deleted, it cannot be recovered.</p>
+    #[allow(unused_mut)]
     async fn delete_elasticsearch_domain(
         &self,
         input: DeleteElasticsearchDomainRequest,
@@ -3765,7 +4547,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteElasticsearchDomainResponse, _>()?;
 
@@ -3777,6 +4559,7 @@ impl Es for EsClient {
     }
 
     /// <p>Deletes the service-linked role that Elasticsearch Service uses to manage and maintain VPC domains. Role deletion will fail if any existing VPC domains use the role. You must delete any such Elasticsearch domains before deleting the role. See <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html#es-enabling-slr" target="_blank">Deleting Elasticsearch Service Role</a> in <i>VPC Endpoints for Amazon Elasticsearch Service Domains</i>.</p>
+    #[allow(unused_mut)]
     async fn delete_elasticsearch_service_role(
         &self,
     ) -> Result<(), RusotoError<DeleteElasticsearchServiceRoleError>> {
@@ -3791,7 +4574,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3801,7 +4584,76 @@ impl Es for EsClient {
         }
     }
 
+    /// <p>Allows the destination domain owner to delete an existing inbound cross-cluster search connection.</p>
+    #[allow(unused_mut)]
+    async fn delete_inbound_cross_cluster_search_connection(
+        &self,
+        input: DeleteInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        DeleteInboundCrossClusterSearchConnectionResponse,
+        RusotoError<DeleteInboundCrossClusterSearchConnectionError>,
+    > {
+        let request_uri = format!(
+            "/2015-01-01/es/ccs/inboundConnection/{connection_id}",
+            connection_id = input.cross_cluster_search_connection_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteInboundCrossClusterSearchConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteInboundCrossClusterSearchConnectionError::from_response(response))
+        }
+    }
+
+    /// <p>Allows the source domain owner to delete an existing outbound cross-cluster search connection.</p>
+    #[allow(unused_mut)]
+    async fn delete_outbound_cross_cluster_search_connection(
+        &self,
+        input: DeleteOutboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        DeleteOutboundCrossClusterSearchConnectionResponse,
+        RusotoError<DeleteOutboundCrossClusterSearchConnectionError>,
+    > {
+        let request_uri = format!(
+            "/2015-01-01/es/ccs/outboundConnection/{connection_id}",
+            connection_id = input.cross_cluster_search_connection_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteOutboundCrossClusterSearchConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteOutboundCrossClusterSearchConnectionError::from_response(response))
+        }
+    }
+
     /// <p>Delete the package.</p>
+    #[allow(unused_mut)]
     async fn delete_package(
         &self,
         input: DeletePackageRequest,
@@ -3820,7 +4672,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeletePackageResponse, _>()?;
 
@@ -3832,6 +4684,7 @@ impl Es for EsClient {
     }
 
     /// <p>Returns domain configuration information about the specified Elasticsearch domain, including the domain ID, domain endpoint, and domain ARN.</p>
+    #[allow(unused_mut)]
     async fn describe_elasticsearch_domain(
         &self,
         input: DescribeElasticsearchDomainRequest,
@@ -3851,7 +4704,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeElasticsearchDomainResponse, _>()?;
 
@@ -3863,6 +4716,7 @@ impl Es for EsClient {
     }
 
     /// <p>Provides cluster configuration information about the specified Elasticsearch domain, such as the state, creation date, update version, and update date for cluster options.</p>
+    #[allow(unused_mut)]
     async fn describe_elasticsearch_domain_config(
         &self,
         input: DescribeElasticsearchDomainConfigRequest,
@@ -3884,7 +4738,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeElasticsearchDomainConfigResponse, _>()?;
 
@@ -3898,6 +4752,7 @@ impl Es for EsClient {
     }
 
     /// <p>Returns domain configuration information about the specified Elasticsearch domains, including the domain ID, domain endpoint, and domain ARN.</p>
+    #[allow(unused_mut)]
     async fn describe_elasticsearch_domains(
         &self,
         input: DescribeElasticsearchDomainsRequest,
@@ -3917,7 +4772,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeElasticsearchDomainsResponse, _>()?;
 
@@ -3929,6 +4784,7 @@ impl Es for EsClient {
     }
 
     /// <p> Describe Elasticsearch Limits for a given InstanceType and ElasticsearchVersion. When modifying existing Domain, specify the <code> <a>DomainName</a> </code> to know what Limits are supported for modifying. </p>
+    #[allow(unused_mut)]
     async fn describe_elasticsearch_instance_type_limits(
         &self,
         input: DescribeElasticsearchInstanceTypeLimitsRequest,
@@ -3957,7 +4813,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeElasticsearchInstanceTypeLimitsResponse, _>()?;
 
@@ -3970,7 +4826,78 @@ impl Es for EsClient {
         }
     }
 
+    /// <p>Lists all the inbound cross-cluster search connections for a destination domain.</p>
+    #[allow(unused_mut)]
+    async fn describe_inbound_cross_cluster_search_connections(
+        &self,
+        input: DescribeInboundCrossClusterSearchConnectionsRequest,
+    ) -> Result<
+        DescribeInboundCrossClusterSearchConnectionsResponse,
+        RusotoError<DescribeInboundCrossClusterSearchConnectionsError>,
+    > {
+        let request_uri = "/2015-01-01/es/ccs/inboundConnection/search";
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeInboundCrossClusterSearchConnectionsResponse, _>(
+            )?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeInboundCrossClusterSearchConnectionsError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all the outbound cross-cluster search connections for a source domain.</p>
+    #[allow(unused_mut)]
+    async fn describe_outbound_cross_cluster_search_connections(
+        &self,
+        input: DescribeOutboundCrossClusterSearchConnectionsRequest,
+    ) -> Result<
+        DescribeOutboundCrossClusterSearchConnectionsResponse,
+        RusotoError<DescribeOutboundCrossClusterSearchConnectionsError>,
+    > {
+        let request_uri = "/2015-01-01/es/ccs/outboundConnection/search";
+
+        let mut request = SignedRequest::new("POST", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeOutboundCrossClusterSearchConnectionsResponse, _>(
+            )?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeOutboundCrossClusterSearchConnectionsError::from_response(response))
+        }
+    }
+
     /// <p>Describes all packages available to Amazon ES. Includes options for filtering, limiting the number of results, and pagination.</p>
+    #[allow(unused_mut)]
     async fn describe_packages(
         &self,
         input: DescribePackagesRequest,
@@ -3989,7 +4916,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribePackagesResponse, _>()?;
 
@@ -4001,6 +4928,7 @@ impl Es for EsClient {
     }
 
     /// <p>Lists available reserved Elasticsearch instance offerings.</p>
+    #[allow(unused_mut)]
     async fn describe_reserved_elasticsearch_instance_offerings(
         &self,
         input: DescribeReservedElasticsearchInstanceOfferingsRequest,
@@ -4031,7 +4959,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeReservedElasticsearchInstanceOfferingsResponse, _>(
             )?;
@@ -4044,6 +4972,7 @@ impl Es for EsClient {
     }
 
     /// <p>Returns information about reserved Elasticsearch instances for this account.</p>
+    #[allow(unused_mut)]
     async fn describe_reserved_elasticsearch_instances(
         &self,
         input: DescribeReservedElasticsearchInstancesRequest,
@@ -4074,7 +5003,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeReservedElasticsearchInstancesResponse, _>()?;
 
@@ -4088,6 +5017,7 @@ impl Es for EsClient {
     }
 
     /// <p>Dissociates a package from the Amazon ES domain.</p>
+    #[allow(unused_mut)]
     async fn dissociate_package(
         &self,
         input: DissociatePackageRequest,
@@ -4107,7 +5037,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DissociatePackageResponse, _>()?;
 
@@ -4119,6 +5049,7 @@ impl Es for EsClient {
     }
 
     /// <p> Returns a list of upgrade compatible Elastisearch versions. You can optionally pass a <code> <a>DomainName</a> </code> to get all upgrade compatible Elasticsearch versions for that specific domain. </p>
+    #[allow(unused_mut)]
     async fn get_compatible_elasticsearch_versions(
         &self,
         input: GetCompatibleElasticsearchVersionsRequest,
@@ -4143,7 +5074,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetCompatibleElasticsearchVersionsResponse, _>()?;
 
@@ -4157,6 +5088,7 @@ impl Es for EsClient {
     }
 
     /// <p>Retrieves the complete history of the last 10 upgrades that were performed on the domain.</p>
+    #[allow(unused_mut)]
     async fn get_upgrade_history(
         &self,
         input: GetUpgradeHistoryRequest,
@@ -4184,7 +5116,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetUpgradeHistoryResponse, _>()?;
 
@@ -4196,6 +5128,7 @@ impl Es for EsClient {
     }
 
     /// <p>Retrieves the latest status of the last upgrade or upgrade eligibility check that was performed on the domain.</p>
+    #[allow(unused_mut)]
     async fn get_upgrade_status(
         &self,
         input: GetUpgradeStatusRequest,
@@ -4214,7 +5147,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetUpgradeStatusResponse, _>()?;
 
@@ -4226,6 +5159,7 @@ impl Es for EsClient {
     }
 
     /// <p>Returns the name of all Elasticsearch domains owned by the current user's account. </p>
+    #[allow(unused_mut)]
     async fn list_domain_names(
         &self,
     ) -> Result<ListDomainNamesResponse, RusotoError<ListDomainNamesError>> {
@@ -4240,7 +5174,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDomainNamesResponse, _>()?;
 
@@ -4252,6 +5186,7 @@ impl Es for EsClient {
     }
 
     /// <p>Lists all Amazon ES domains associated with the package.</p>
+    #[allow(unused_mut)]
     async fn list_domains_for_package(
         &self,
         input: ListDomainsForPackageRequest,
@@ -4279,7 +5214,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDomainsForPackageResponse, _>()?;
 
@@ -4291,6 +5226,7 @@ impl Es for EsClient {
     }
 
     /// <p>List all Elasticsearch instance types that are supported for given ElasticsearchVersion</p>
+    #[allow(unused_mut)]
     async fn list_elasticsearch_instance_types(
         &self,
         input: ListElasticsearchInstanceTypesRequest,
@@ -4324,7 +5260,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListElasticsearchInstanceTypesResponse, _>()?;
 
@@ -4336,6 +5272,7 @@ impl Es for EsClient {
     }
 
     /// <p>List all supported Elasticsearch versions</p>
+    #[allow(unused_mut)]
     async fn list_elasticsearch_versions(
         &self,
         input: ListElasticsearchVersionsRequest,
@@ -4361,7 +5298,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListElasticsearchVersionsResponse, _>()?;
 
@@ -4373,6 +5310,7 @@ impl Es for EsClient {
     }
 
     /// <p>Lists all packages associated with the Amazon ES domain.</p>
+    #[allow(unused_mut)]
     async fn list_packages_for_domain(
         &self,
         input: ListPackagesForDomainRequest,
@@ -4400,7 +5338,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPackagesForDomainResponse, _>()?;
 
@@ -4412,6 +5350,7 @@ impl Es for EsClient {
     }
 
     /// <p>Returns all tags for the given Elasticsearch domain.</p>
+    #[allow(unused_mut)]
     async fn list_tags(
         &self,
         input: ListTagsRequest,
@@ -4431,7 +5370,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsResponse, _>()?;
 
@@ -4443,6 +5382,7 @@ impl Es for EsClient {
     }
 
     /// <p>Allows you to purchase reserved Elasticsearch instances.</p>
+    #[allow(unused_mut)]
     async fn purchase_reserved_elasticsearch_instance_offering(
         &self,
         input: PurchaseReservedElasticsearchInstanceOfferingRequest,
@@ -4464,7 +5404,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PurchaseReservedElasticsearchInstanceOfferingResponse, _>(
             )?;
@@ -4476,7 +5416,42 @@ impl Es for EsClient {
         }
     }
 
+    /// <p>Allows the destination domain owner to reject an inbound cross-cluster search connection request.</p>
+    #[allow(unused_mut)]
+    async fn reject_inbound_cross_cluster_search_connection(
+        &self,
+        input: RejectInboundCrossClusterSearchConnectionRequest,
+    ) -> Result<
+        RejectInboundCrossClusterSearchConnectionResponse,
+        RusotoError<RejectInboundCrossClusterSearchConnectionError>,
+    > {
+        let request_uri = format!(
+            "/2015-01-01/es/ccs/inboundConnection/{connection_id}/reject",
+            connection_id = input.cross_cluster_search_connection_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RejectInboundCrossClusterSearchConnectionResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RejectInboundCrossClusterSearchConnectionError::from_response(response))
+        }
+    }
+
     /// <p>Removes the specified set of tags from the specified Elasticsearch domain.</p>
+    #[allow(unused_mut)]
     async fn remove_tags(
         &self,
         input: RemoveTagsRequest,
@@ -4495,7 +5470,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -4506,6 +5481,7 @@ impl Es for EsClient {
     }
 
     /// <p>Schedules a service software update for an Amazon ES domain.</p>
+    #[allow(unused_mut)]
     async fn start_elasticsearch_service_software_update(
         &self,
         input: StartElasticsearchServiceSoftwareUpdateRequest,
@@ -4527,7 +5503,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartElasticsearchServiceSoftwareUpdateResponse, _>()?;
 
@@ -4541,6 +5517,7 @@ impl Es for EsClient {
     }
 
     /// <p>Modifies the cluster configuration of the specified Elasticsearch domain, setting as setting the instance type and the number of instances. </p>
+    #[allow(unused_mut)]
     async fn update_elasticsearch_domain_config(
         &self,
         input: UpdateElasticsearchDomainConfigRequest,
@@ -4565,7 +5542,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateElasticsearchDomainConfigResponse, _>()?;
 
@@ -4579,6 +5556,7 @@ impl Es for EsClient {
     }
 
     /// <p>Allows you to either upgrade your domain or perform an Upgrade eligibility check to a compatible Elasticsearch version.</p>
+    #[allow(unused_mut)]
     async fn upgrade_elasticsearch_domain(
         &self,
         input: UpgradeElasticsearchDomainRequest,
@@ -4598,7 +5576,7 @@ impl Es for EsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpgradeElasticsearchDomainResponse, _>()?;
 

@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree, write_characters_element,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -34,12 +34,27 @@ use serde::Serialize;
 use std::io::Write;
 use std::str::FromStr;
 use xml;
-use xml::reader::ParserConfig;
 use xml::EventReader;
 use xml::EventWriter;
 
+impl S3Client {
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+use rusoto_core::event_stream::{DeserializeEvent, EventStream};
 /// <p>Specifies the days since the initiation of an incomplete multipart upload that Amazon S3 will wait before permanently removing all parts of the upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config"> Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortIncompleteMultipartUpload {
@@ -88,18 +103,13 @@ impl AbortIncompleteMultipartUploadSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.days_after_initiation {
-            writer.write(xml::writer::XmlEvent::start_element("DaysAfterInitiation"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "DaysAfterInitiation", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AbortMultipartUploadOutput {
     pub request_charged: Option<String>,
@@ -113,16 +123,16 @@ impl AbortMultipartUploadOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AbortMultipartUploadOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = AbortMultipartUploadOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortMultipartUploadRequest {
     /// <p>The bucket name to which the upload was taking place. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -135,7 +145,7 @@ pub struct AbortMultipartUploadRequest {
 }
 
 /// <p>Configures the transfer acceleration state for an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Amazon S3 Transfer Acceleration</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccelerateConfiguration {
     /// <p>Specifies the transfer acceleration status of the bucket.</p>
@@ -155,19 +165,14 @@ impl AccelerateConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Status", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccessControlPolicy {
     /// <p>A list of grants.</p>
@@ -199,7 +204,7 @@ impl AccessControlPolicySerializer {
 }
 
 /// <p>A container for information about access control for replicas.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccessControlTranslation {
@@ -243,12 +248,7 @@ impl AccessControlTranslationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Owner"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.owner
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Owner", &obj.owner.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -258,11 +258,7 @@ struct AccountIdDeserializer;
 impl AccountIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -277,12 +273,7 @@ impl AccountIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -297,12 +288,7 @@ impl AllowQuotedRecordDelimiterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -311,11 +297,7 @@ struct AllowedHeaderDeserializer;
 impl AllowedHeaderDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -330,12 +312,7 @@ impl AllowedHeaderSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -391,11 +368,7 @@ struct AllowedMethodDeserializer;
 impl AllowedMethodDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -410,12 +383,7 @@ impl AllowedMethodSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -471,11 +439,7 @@ struct AllowedOriginDeserializer;
 impl AllowedOriginDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -490,12 +454,7 @@ impl AllowedOriginSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -547,7 +506,7 @@ impl AllowedOriginsSerializer {
 }
 
 /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates in any combination, and an object must match all of the predicates for the filter to apply.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsAndOperator {
@@ -595,12 +554,7 @@ impl AnalyticsAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -610,7 +564,7 @@ impl AnalyticsAndOperatorSerializer {
 }
 
 /// <p> Specifies the configuration and any analyses for the analytics filter of an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsConfiguration {
@@ -666,12 +620,7 @@ impl AnalyticsConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &AnalyticsFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Id", &obj.id.to_string())?;
         StorageClassAnalysisSerializer::serialize(
             &mut writer,
             "StorageClassAnalysis",
@@ -712,7 +661,7 @@ impl AnalyticsConfigurationListDeserializer {
     }
 }
 /// <p>Where to publish the analytics results.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsExportDestination {
@@ -770,7 +719,7 @@ impl AnalyticsExportDestinationSerializer {
 }
 
 /// <p>The filter used to describe a set of objects for analyses. A filter must have exactly one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided, all objects will be considered in any analysis.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsFilter {
@@ -824,12 +773,7 @@ impl AnalyticsFilterSerializer {
             &AnalyticsAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -843,11 +787,7 @@ struct AnalyticsIdDeserializer;
 impl AnalyticsIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -862,23 +802,18 @@ impl AnalyticsIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Contains information about where to publish the analytics results.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AnalyticsS3BucketDestination {
     /// <p>The Amazon Resource Name (ARN) of the bucket to which data is exported.</p>
     pub bucket: String,
-    /// <p>The account ID that owns the destination bucket. If no account ID is provided, the owner will not be validated prior to exporting data.</p>
+    /// <p><p>The account ID that owns the destination S3 bucket. If no account ID is provided, the owner is not validated before exporting data.</p> <note> <p> Although this value is optional, we strongly recommend that you set it to help prevent problems if the destination bucket ownership changes. </p> </note></p>
     pub bucket_account_id: Option<String>,
     /// <p>Specifies the file format used when exporting data to Amazon S3.</p>
     pub format: String,
@@ -935,33 +870,13 @@ impl AnalyticsS3BucketDestinationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Bucket"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.bucket
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
         if let Some(ref value) = obj.bucket_account_id {
-            writer.write(xml::writer::XmlEvent::start_element("BucketAccountId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "BucketAccountId", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Format"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.format
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Format", &obj.format.to_string())?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -972,11 +887,7 @@ struct AnalyticsS3ExportFileFormatDeserializer;
 impl AnalyticsS3ExportFileFormatDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -991,12 +902,7 @@ impl AnalyticsS3ExportFileFormatSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1009,11 +915,7 @@ impl BodyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?.into();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(s.into()))
     }
 }
 
@@ -1028,17 +930,16 @@ impl BodySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = String::from_utf8(obj.to_vec()).expect("Not a UTF-8 string")
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(
+            writer,
+            name,
+            std::str::from_utf8(obj).expect("Not a UTF-8 string"),
+        )
     }
 }
 
 /// <p> In terms of implementation, a Bucket is a resource. An Amazon S3 bucket name is globally unique, and the namespace is shared by all AWS accounts. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Bucket {
     /// <p>Date the bucket was created.</p>
@@ -1074,11 +975,7 @@ struct BucketAccelerateStatusDeserializer;
 impl BucketAccelerateStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1093,17 +990,12 @@ impl BucketAccelerateStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Specifies the lifecycle configuration for objects in an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BucketLifecycleConfiguration {
     /// <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
@@ -1132,11 +1024,7 @@ struct BucketLocationConstraintDeserializer;
 impl BucketLocationConstraintDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1151,17 +1039,12 @@ impl BucketLocationConstraintSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Container for logging status information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BucketLoggingStatus {
     pub logging_enabled: Option<LoggingEnabled>,
@@ -1191,11 +1074,7 @@ struct BucketLogsPermissionDeserializer;
 impl BucketLogsPermissionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1210,12 +1089,7 @@ impl BucketLogsPermissionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1224,11 +1098,7 @@ struct BucketNameDeserializer;
 impl BucketNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1243,12 +1113,7 @@ impl BucketNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1257,11 +1122,7 @@ struct BucketVersioningStatusDeserializer;
 impl BucketVersioningStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1276,12 +1137,7 @@ impl BucketVersioningStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1308,11 +1164,7 @@ struct BytesProcessedDeserializer;
 impl BytesProcessedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -1320,11 +1172,7 @@ struct BytesReturnedDeserializer;
 impl BytesReturnedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -1332,15 +1180,11 @@ struct BytesScannedDeserializer;
 impl BytesScannedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Describes the cross-origin access configuration for objects in an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling Cross-Origin Resource Sharing</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CORSConfiguration {
     /// <p>A set of origins and methods (cross-origin access that you want to allow). You can add up to 100 rules to the configuration.</p>
@@ -1365,7 +1209,7 @@ impl CORSConfigurationSerializer {
 }
 
 /// <p>Specifies a cross-origin access rule for an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CORSRule {
@@ -1449,12 +1293,7 @@ impl CORSRuleSerializer {
             &ExposeHeadersSerializer::serialize(&mut writer, "ExposeHeader", value)?;
         }
         if let Some(ref value) = obj.max_age_seconds {
-            writer.write(xml::writer::XmlEvent::start_element("MaxAgeSeconds"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "MaxAgeSeconds", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1508,7 +1347,7 @@ impl CORSRulesSerializer {
 }
 
 /// <p>Describes how an uncompressed comma-separated values (CSV)-formatted input object is formatted.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CSVInput {
     /// <p>Specifies that CSV field values may contain quoted record delimiters and such records should be allowed. Default value is FALSE. Setting this value to TRUE may lower performance.</p>
@@ -1540,69 +1379,32 @@ impl CSVInputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.allow_quoted_record_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "AllowQuotedRecordDelimiter",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "AllowQuotedRecordDelimiter", &value.to_string())?;
         }
         if let Some(ref value) = obj.comments {
-            writer.write(xml::writer::XmlEvent::start_element("Comments"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Comments", &value.to_string())?;
         }
         if let Some(ref value) = obj.field_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element("FieldDelimiter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "FieldDelimiter", &value.to_string())?;
         }
         if let Some(ref value) = obj.file_header_info {
-            writer.write(xml::writer::XmlEvent::start_element("FileHeaderInfo"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "FileHeaderInfo", &value.to_string())?;
         }
         if let Some(ref value) = obj.quote_character {
-            writer.write(xml::writer::XmlEvent::start_element("QuoteCharacter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "QuoteCharacter", &value.to_string())?;
         }
         if let Some(ref value) = obj.quote_escape_character {
-            writer.write(xml::writer::XmlEvent::start_element("QuoteEscapeCharacter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "QuoteEscapeCharacter", &value.to_string())?;
         }
         if let Some(ref value) = obj.record_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element("RecordDelimiter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Describes how uncompressed comma-separated values (CSV)-formatted results are formatted.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CSVOutput {
     /// <p>The value used to separate individual fields in a record. You can specify an arbitrary delimiter.</p>
@@ -1630,44 +1432,19 @@ impl CSVOutputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.field_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element("FieldDelimiter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "FieldDelimiter", &value.to_string())?;
         }
         if let Some(ref value) = obj.quote_character {
-            writer.write(xml::writer::XmlEvent::start_element("QuoteCharacter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "QuoteCharacter", &value.to_string())?;
         }
         if let Some(ref value) = obj.quote_escape_character {
-            writer.write(xml::writer::XmlEvent::start_element("QuoteEscapeCharacter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "QuoteEscapeCharacter", &value.to_string())?;
         }
         if let Some(ref value) = obj.quote_fields {
-            writer.write(xml::writer::XmlEvent::start_element("QuoteFields"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "QuoteFields", &value.to_string())?;
         }
         if let Some(ref value) = obj.record_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element("RecordDelimiter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1678,11 +1455,7 @@ struct CloudFunctionDeserializer;
 impl CloudFunctionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1697,17 +1470,12 @@ impl CloudFunctionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Container for specifying the AWS Lambda notification configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloudFunctionConfiguration {
@@ -1775,31 +1543,16 @@ impl CloudFunctionConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.cloud_function {
-            writer.write(xml::writer::XmlEvent::start_element("CloudFunction"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "CloudFunction", &value.to_string())?;
         }
         if let Some(ref value) = obj.events {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
         if let Some(ref value) = obj.invocation_role {
-            writer.write(xml::writer::XmlEvent::start_element("InvocationRole"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "InvocationRole", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -1810,11 +1563,7 @@ struct CloudFunctionInvocationRoleDeserializer;
 impl CloudFunctionInvocationRoleDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1829,12 +1578,7 @@ impl CloudFunctionInvocationRoleSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -1843,11 +1587,7 @@ struct CodeDeserializer;
 impl CodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -1862,17 +1602,12 @@ impl CommentsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Container for all (if there are any) keys between Prefix and the next occurrence of the string specified by a delimiter. CommonPrefixes lists keys that act like subdirectories in the directory specified by Prefix. For example, if the prefix is notes/ and the delimiter is a slash (/) as in notes/summer/july, the common prefix is notes/summer/. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CommonPrefix {
     /// <p>Container for the specified common prefix.</p>
@@ -1926,7 +1661,7 @@ impl CommonPrefixListDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CompleteMultipartUploadOutput {
     /// <p>The name of the bucket that contains the newly created object.</p>
@@ -1980,7 +1715,7 @@ impl CompleteMultipartUploadOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompleteMultipartUploadRequest {
     /// <p>Name of the bucket to which the multipart upload was initiated.</p>
@@ -1995,7 +1730,7 @@ pub struct CompleteMultipartUploadRequest {
 }
 
 /// <p>The container for the completed multipart upload details.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompletedMultipartUpload {
     /// <p>Array of CompletedPart data types.</p>
@@ -2022,7 +1757,7 @@ impl CompletedMultipartUploadSerializer {
 }
 
 /// <p>Details of the parts that were uploaded.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CompletedPart {
     /// <p>Entity tag returned when the part was uploaded.</p>
@@ -2044,20 +1779,10 @@ impl CompletedPartSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.e_tag {
-            writer.write(xml::writer::XmlEvent::start_element("ETag"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ETag", &value.to_string())?;
         }
         if let Some(ref value) = obj.part_number {
-            writer.write(xml::writer::XmlEvent::start_element("PartNumber"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "PartNumber", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -2092,17 +1817,12 @@ impl CompressionTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A container for describing a condition that must be met for the specified redirect to apply. For example, 1. If request is for pages in the <code>/docs</code> folder, redirect to the <code>/documents</code> folder. 2. If request results in HTTP error 4xx, redirect request to another host where you might process the error.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Condition {
@@ -2155,29 +1875,17 @@ impl ConditionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.http_error_code_returned_equals {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "HttpErrorCodeReturnedEquals",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "HttpErrorCodeReturnedEquals", &value.to_string())?;
         }
         if let Some(ref value) = obj.key_prefix_equals {
-            writer.write(xml::writer::XmlEvent::start_element("KeyPrefixEquals"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "KeyPrefixEquals", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ContinuationEvent {}
 
@@ -2189,16 +1897,16 @@ impl ContinuationEventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ContinuationEvent, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = ContinuationEvent::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyObjectOutput {
     /// <p>Container for all response elements.</p>
@@ -2239,7 +1947,7 @@ impl CopyObjectOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyObjectRequest {
     /// <p>The canned ACL to apply to the object.</p>
@@ -2318,7 +2026,7 @@ pub struct CopyObjectRequest {
 }
 
 /// <p>Container for all response elements.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyObjectResult {
     /// <p>Returns the ETag of the new object. The ETag reflects only changes to the contents of an object, not its metadata. The source and destination ETag is identical for a successfully copied object.</p>
@@ -2353,7 +2061,7 @@ impl CopyObjectResultDeserializer {
     }
 }
 /// <p>Container for all response elements.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CopyPartResult {
     /// <p>Entity tag of the object.</p>
@@ -2388,7 +2096,7 @@ impl CopyPartResultDeserializer {
     }
 }
 /// <p>The configuration information for the bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBucketConfiguration {
     /// <p>Specifies the Region where the bucket will be created. If you don't specify a Region, the bucket is created in the US East (N. Virginia) Region (us-east-1).</p>
@@ -2408,18 +2116,13 @@ impl CreateBucketConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.location_constraint {
-            writer.write(xml::writer::XmlEvent::start_element("LocationConstraint"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "LocationConstraint", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateBucketOutput {
     /// <p>Specifies the Region where the bucket will be created. If you are creating a bucket on the US East (N. Virginia) Region (us-east-1), you do not need to specify the location.</p>
@@ -2434,16 +2137,16 @@ impl CreateBucketOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateBucketOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = CreateBucketOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBucketRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
@@ -2466,7 +2169,7 @@ pub struct CreateBucketRequest {
     pub object_lock_enabled_for_bucket: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateMultipartUploadOutput {
     /// <p>If the bucket has a lifecycle rule configured with an action to abort incomplete multipart uploads and the prefix in the lifecycle rule matches the object name in the request, the response includes this header. The header indicates when the initiated multipart upload becomes eligible for an abort operation. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config"> Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a>.</p> <p>The response also includes the <code>x-amz-abort-rule-id</code> header that provides the ID of the lifecycle configuration rule that defines this action.</p>
@@ -2523,7 +2226,7 @@ impl CreateMultipartUploadOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMultipartUploadRequest {
     /// <p>The canned ACL to apply to the object.</p>
@@ -2586,11 +2289,7 @@ struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -2598,11 +2297,7 @@ struct DateDeserializer;
 impl DateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -2617,12 +2312,7 @@ impl DateSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -2631,11 +2321,7 @@ struct DaysDeserializer;
 impl DaysDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -2650,12 +2336,7 @@ impl DaysSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -2664,11 +2345,7 @@ struct DaysAfterInitiationDeserializer;
 impl DaysAfterInitiationDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -2683,17 +2360,12 @@ impl DaysAfterInitiationSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
 /// <p>The container element for specifying the default Object Lock retention settings for new objects placed in the specified bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefaultRetention {
@@ -2746,35 +2418,20 @@ impl DefaultRetentionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.days {
-            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.mode {
-            writer.write(xml::writer::XmlEvent::start_element("Mode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Mode", &value.to_string())?;
         }
         if let Some(ref value) = obj.years {
-            writer.write(xml::writer::XmlEvent::start_element("Years"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Years", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Container for the objects to delete.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Delete {
     /// <p>The objects to delete.</p>
@@ -2797,18 +2454,13 @@ impl DeleteSerializer {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         ObjectIdentifierListSerializer::serialize(&mut writer, "Object", &obj.objects)?;
         if let Some(ref value) = obj.quiet {
-            writer.write(xml::writer::XmlEvent::start_element("Quiet"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Quiet", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketAnalyticsConfigurationRequest {
     /// <p>The name of the bucket from which an analytics configuration is deleted.</p>
@@ -2817,21 +2469,21 @@ pub struct DeleteBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketCorsRequest {
     /// <p>Specifies the bucket whose <code>cors</code> configuration is being deleted.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketEncryptionRequest {
     /// <p>The name of the bucket containing the server-side encryption configuration to delete.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket containing the inventory configuration to delete.</p>
@@ -2840,14 +2492,14 @@ pub struct DeleteBucketInventoryConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketLifecycleRequest {
     /// <p>The bucket name of the lifecycle to delete.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket containing the metrics configuration to delete.</p>
@@ -2856,35 +2508,35 @@ pub struct DeleteBucketMetricsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketPolicyRequest {
     /// <p>The bucket name.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketReplicationRequest {
     /// <p> The bucket name. </p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketRequest {
     /// <p>Specifies the bucket being deleted.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketTaggingRequest {
     /// <p>The bucket that has the tag set to be removed.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBucketWebsiteRequest {
     /// <p>The bucket name for which you want to remove the website configuration. </p>
@@ -2896,15 +2548,11 @@ struct DeleteMarkerDeserializer;
 impl DeleteMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>Information about the delete marker.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteMarkerEntry {
     /// <p>Specifies whether the object is (true) or is not (false) the latest version of an object.</p>
@@ -2957,7 +2605,7 @@ impl DeleteMarkerEntryDeserializer {
     }
 }
 /// <p><p>Specifies whether Amazon S3 replicates the delete markers. If you specify a <code>Filter</code>, you must specify this element. However, in the latest version of replication configuration (when <code>Filter</code> is specified), Amazon S3 doesn&#39;t replicate delete markers. Therefore, the <code>DeleteMarkerReplication</code> element can contain only &lt;Status&gt;Disabled&lt;/Status&gt;. For an example configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-add-config.html#replication-config-min-rule-config">Basic Rule Configuration</a>. </p> <note> <p> If you don&#39;t specify the <code>Filter</code> element, Amazon S3 assumes that the replication configuration is the earlier version, V1. In the earlier version, Amazon S3 handled replication of delete markers differently. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-add-config.html#replication-backward-compat-considerations">Backward Compatibility</a>.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMarkerReplication {
@@ -3004,12 +2652,7 @@ impl DeleteMarkerReplicationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Status", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3020,11 +2663,7 @@ struct DeleteMarkerReplicationStatusDeserializer;
 impl DeleteMarkerReplicationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3039,12 +2678,7 @@ impl DeleteMarkerReplicationStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3053,11 +2687,7 @@ struct DeleteMarkerVersionIdDeserializer;
 impl DeleteMarkerVersionIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3088,7 +2718,7 @@ impl DeleteMarkersDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteObjectOutput {
     /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker.</p>
@@ -3106,16 +2736,16 @@ impl DeleteObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteObjectOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectRequest {
     /// <p>The bucket name of the bucket containing the object. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -3131,7 +2761,7 @@ pub struct DeleteObjectRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was removed from.</p>
@@ -3146,16 +2776,16 @@ impl DeleteObjectTaggingOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteObjectTaggingOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = DeleteObjectTaggingOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectTaggingRequest {
     /// <p>The bucket name containing the objects from which to remove the tags. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -3166,7 +2796,7 @@ pub struct DeleteObjectTaggingRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeleteObjectsOutput {
     /// <p>Container element for a successful delete. It identifies the object that was successfully deleted.</p>
@@ -3202,7 +2832,7 @@ impl DeleteObjectsOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteObjectsRequest {
     /// <p>The bucket name containing the objects to delete. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -3216,7 +2846,7 @@ pub struct DeleteObjectsRequest {
     pub request_payer: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublicAccessBlockRequest {
     /// <p>The Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to delete. </p>
@@ -3224,7 +2854,7 @@ pub struct DeletePublicAccessBlockRequest {
 }
 
 /// <p>Information about the deleted object.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeletedObject {
     /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker. In a simple DELETE, this header indicates whether (true) or not (false) a delete marker was created.</p>
@@ -3308,11 +2938,7 @@ struct DelimiterDeserializer;
 impl DelimiterDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3327,12 +2953,7 @@ impl DelimiterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3347,17 +2968,12 @@ impl DescriptionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Specifies information about where to publish analysis or configuration results for an Amazon S3 bucket and S3 Replication Time Control (S3 RTC).</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Destination {
@@ -3373,7 +2989,7 @@ pub struct Destination {
     pub metrics: Option<Metrics>,
     /// <p> A container specifying S3 Replication Time Control (S3 RTC), including whether S3 RTC is enabled and the time when all objects and operations on objects must be replicated. Must be specified together with a <code>Metrics</code> block. </p>
     pub replication_time: Option<ReplicationTime>,
-    /// <p> The storage class to use when replicating objects, such as standard or reduced redundancy. By default, Amazon S3 uses the storage class of the source object to create the object replica. </p> <p>For valid values, see the <code>StorageClass</code> element of the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT Bucket replication</a> action in the <i>Amazon Simple Storage Service API Reference</i>.</p>
+    /// <p> The storage class to use when replicating objects, such as S3 Standard or reduced redundancy. By default, Amazon S3 uses the storage class of the source object to create the object replica. </p> <p>For valid values, see the <code>StorageClass</code> element of the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT Bucket replication</a> action in the <i>Amazon Simple Storage Service API Reference</i>.</p>
     pub storage_class: Option<String>,
 }
 
@@ -3449,19 +3065,9 @@ impl DestinationSerializer {
             )?;
         }
         if let Some(ref value) = obj.account {
-            writer.write(xml::writer::XmlEvent::start_element("Account"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Account", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Bucket"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.bucket
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
         if let Some(ref value) = obj.encryption_configuration {
             &EncryptionConfigurationSerializer::serialize(
                 &mut writer,
@@ -3476,12 +3082,7 @@ impl DestinationSerializer {
             &ReplicationTimeSerializer::serialize(&mut writer, "ReplicationTime", value)?;
         }
         if let Some(ref value) = obj.storage_class {
-            writer.write(xml::writer::XmlEvent::start_element("StorageClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "StorageClass", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3492,11 +3093,7 @@ struct DisplayNameDeserializer;
 impl DisplayNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3511,12 +3108,7 @@ impl DisplayNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3525,11 +3117,7 @@ struct ETagDeserializer;
 impl ETagDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3544,12 +3132,7 @@ impl ETagSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3558,11 +3141,7 @@ struct EmailAddressDeserializer;
 impl EmailAddressDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3577,12 +3156,7 @@ impl EmailAddressSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3597,12 +3171,7 @@ impl EnableRequestProgressSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -3611,11 +3180,7 @@ struct EncodingTypeDeserializer;
 impl EncodingTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3630,17 +3195,12 @@ impl EncodingTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Contains the type of server-side encryption used.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Encryption {
     /// <p>The server-side encryption algorithm used when storing job results in Amazon S3 (for example, AES256, aws:kms).</p>
@@ -3663,34 +3223,19 @@ impl EncryptionSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("EncryptionType"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.encryption_type
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "EncryptionType", &obj.encryption_type.to_string())?;
         if let Some(ref value) = obj.kms_context {
-            writer.write(xml::writer::XmlEvent::start_element("KMSContext"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "KMSContext", &value.to_string())?;
         }
         if let Some(ref value) = obj.kms_key_id {
-            writer.write(xml::writer::XmlEvent::start_element("KMSKeyId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "KMSKeyId", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Specifies encryption-related information for an Amazon S3 bucket that is a destination for replicated objects.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EncryptionConfiguration {
@@ -3738,12 +3283,7 @@ impl EncryptionConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.replica_kms_key_id {
-            writer.write(xml::writer::XmlEvent::start_element("ReplicaKmsKeyID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ReplicaKmsKeyID", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -3760,17 +3300,12 @@ impl EndSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
 /// <p>A message that indicates the request is complete and no more messages will be sent. You should not assume that the request is complete until the client receives an <code>EndEvent</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EndEvent {}
 
@@ -3782,17 +3317,17 @@ impl EndEventDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EndEvent, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = EndEvent::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
 /// <p>Container for all error elements.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct S3Error {
     /// <p><p>The error code is a string that uniquely identifies an error condition. It is meant to be read and understood by programs that detect and handle errors by type. </p> <p class="title"> <b>Amazon S3 error codes</b> </p> <ul> <li> <ul> <li> <p> <i>Code:</i> AccessDenied </p> </li> <li> <p> <i>Description:</i> Access Denied</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> AccountProblem</p> </li> <li> <p> <i>Description:</i> There is a problem with your AWS account that prevents the operation from completing successfully. Contact AWS Support for further assistance.</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> AllAccessDisabled</p> </li> <li> <p> <i>Description:</i> All access to this Amazon S3 resource has been disabled. Contact AWS Support for further assistance.</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> AmbiguousGrantByEmailAddress</p> </li> <li> <p> <i>Description:</i> The email address you provided is associated with more than one account.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> AuthorizationHeaderMalformed</p> </li> <li> <p> <i>Description:</i> The authorization header you provided is invalid.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>HTTP Status Code:</i> N/A</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> BadDigest</p> </li> <li> <p> <i>Description:</i> The Content-MD5 you specified did not match what we received.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> BucketAlreadyExists</p> </li> <li> <p> <i>Description:</i> The requested bucket name is not available. The bucket namespace is shared by all users of the system. Please select a different name and try again.</p> </li> <li> <p> <i>HTTP Status Code:</i> 409 Conflict</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> BucketAlreadyOwnedByYou</p> </li> <li> <p> <i>Description:</i> The bucket you tried to create already exists, and you own it. Amazon S3 returns this error in all AWS Regions except in the North Virginia Region. For legacy compatibility, if you re-create an existing bucket that you already own in the North Virginia Region, Amazon S3 returns 200 OK and resets the bucket access control lists (ACLs).</p> </li> <li> <p> <i>Code:</i> 409 Conflict (in all Regions except the North Virginia Region) </p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> BucketNotEmpty</p> </li> <li> <p> <i>Description:</i> The bucket you tried to delete is not empty.</p> </li> <li> <p> <i>HTTP Status Code:</i> 409 Conflict</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> CredentialsNotSupported</p> </li> <li> <p> <i>Description:</i> This request does not support credentials.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> CrossLocationLoggingProhibited</p> </li> <li> <p> <i>Description:</i> Cross-location logging not allowed. Buckets in one geographic location cannot log information to a bucket in another location.</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> EntityTooSmall</p> </li> <li> <p> <i>Description:</i> Your proposed upload is smaller than the minimum allowed object size.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> EntityTooLarge</p> </li> <li> <p> <i>Description:</i> Your proposed upload exceeds the maximum allowed object size.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> ExpiredToken</p> </li> <li> <p> <i>Description:</i> The provided token has expired.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> IllegalVersioningConfigurationException </p> </li> <li> <p> <i>Description:</i> Indicates that the versioning configuration specified in the request is invalid.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> IncompleteBody</p> </li> <li> <p> <i>Description:</i> You did not provide the number of bytes specified by the Content-Length HTTP header</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> IncorrectNumberOfFilesInPostRequest</p> </li> <li> <p> <i>Description:</i> POST requires exactly one file upload per request.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InlineDataTooLarge</p> </li> <li> <p> <i>Description:</i> Inline data exceeds the maximum allowed size.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InternalError</p> </li> <li> <p> <i>Description:</i> We encountered an internal error. Please try again.</p> </li> <li> <p> <i>HTTP Status Code:</i> 500 Internal Server Error</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Server</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidAccessKeyId</p> </li> <li> <p> <i>Description:</i> The AWS access key ID you provided does not exist in our records.</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidAddressingHeader</p> </li> <li> <p> <i>Description:</i> You must specify the Anonymous role.</p> </li> <li> <p> <i>HTTP Status Code:</i> N/A</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidArgument</p> </li> <li> <p> <i>Description:</i> Invalid Argument</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidBucketName</p> </li> <li> <p> <i>Description:</i> The specified bucket is not valid.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidBucketState</p> </li> <li> <p> <i>Description:</i> The request is not valid with the current state of the bucket.</p> </li> <li> <p> <i>HTTP Status Code:</i> 409 Conflict</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidDigest</p> </li> <li> <p> <i>Description:</i> The Content-MD5 you specified is not valid.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidEncryptionAlgorithmError</p> </li> <li> <p> <i>Description:</i> The encryption request you specified is not valid. The valid value is AES256.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidLocationConstraint</p> </li> <li> <p> <i>Description:</i> The specified location constraint is not valid. For more information about Regions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro">How to Select a Region for Your Buckets</a>. </p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidObjectState</p> </li> <li> <p> <i>Description:</i> The operation is not valid for the current state of the object.</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidPart</p> </li> <li> <p> <i>Description:</i> One or more of the specified parts could not be found. The part might not have been uploaded, or the specified entity tag might not have matched the part&#39;s entity tag.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidPartOrder</p> </li> <li> <p> <i>Description:</i> The list of parts was not in ascending order. Parts list must be specified in order by part number.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidPayer</p> </li> <li> <p> <i>Description:</i> All access to this object has been disabled. Please contact AWS Support for further assistance.</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidPolicyDocument</p> </li> <li> <p> <i>Description:</i> The content of the form does not meet the conditions specified in the policy document.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidRange</p> </li> <li> <p> <i>Description:</i> The requested range cannot be satisfied.</p> </li> <li> <p> <i>HTTP Status Code:</i> 416 Requested Range Not Satisfiable</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidRequest</p> </li> <li> <p> <i>Description:</i> Please use AWS4-HMAC-SHA256.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>Code:</i> N/A</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidRequest</p> </li> <li> <p> <i>Description:</i> SOAP requests must be made over an HTTPS connection.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidRequest</p> </li> <li> <p> <i>Description:</i> Amazon S3 Transfer Acceleration is not supported for buckets with non-DNS compliant names.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>Code:</i> N/A</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidRequest</p> </li> <li> <p> <i>Description:</i> Amazon S3 Transfer Acceleration is not supported for buckets with periods (.) in their names.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>Code:</i> N/A</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidRequest</p> </li> <li> <p> <i>Description:</i> Amazon S3 Transfer Accelerate endpoint only supports virtual style requests.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>Code:</i> N/A</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidRequest</p> </li> <li> <p> <i>Description:</i> Amazon S3 Transfer Accelerate is not configured on this bucket.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>Code:</i> N/A</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidRequest</p> </li> <li> <p> <i>Description:</i> Amazon S3 Transfer Accelerate is disabled on this bucket.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>Code:</i> N/A</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidRequest</p> </li> <li> <p> <i>Description:</i> Amazon S3 Transfer Acceleration is not supported on this bucket. Contact AWS Support for more information.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>Code:</i> N/A</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidRequest</p> </li> <li> <p> <i>Description:</i> Amazon S3 Transfer Acceleration cannot be enabled on this bucket. Contact AWS Support for more information.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>Code:</i> N/A</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidSecurity</p> </li> <li> <p> <i>Description:</i> The provided security credentials are not valid.</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidSOAPRequest</p> </li> <li> <p> <i>Description:</i> The SOAP request body is invalid.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidStorageClass</p> </li> <li> <p> <i>Description:</i> The storage class you specified is not valid.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidTargetBucketForLogging</p> </li> <li> <p> <i>Description:</i> The target bucket for logging does not exist, is not owned by you, or does not have the appropriate grants for the log-delivery group. </p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidToken</p> </li> <li> <p> <i>Description:</i> The provided token is malformed or otherwise invalid.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> InvalidURI</p> </li> <li> <p> <i>Description:</i> Couldn&#39;t parse the specified URI.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> KeyTooLongError</p> </li> <li> <p> <i>Description:</i> Your key is too long.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MalformedACLError</p> </li> <li> <p> <i>Description:</i> The XML you provided was not well-formed or did not validate against our published schema.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MalformedPOSTRequest </p> </li> <li> <p> <i>Description:</i> The body of your POST request is not well-formed multipart/form-data.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MalformedXML</p> </li> <li> <p> <i>Description:</i> This happens when the user sends malformed XML (XML that doesn&#39;t conform to the published XSD) for the configuration. The error message is, &quot;The XML you provided was not well-formed or did not validate against our published schema.&quot; </p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MaxMessageLengthExceeded</p> </li> <li> <p> <i>Description:</i> Your request was too big.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MaxPostPreDataLengthExceededError</p> </li> <li> <p> <i>Description:</i> Your POST request fields preceding the upload file were too large.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MetadataTooLarge</p> </li> <li> <p> <i>Description:</i> Your metadata headers exceed the maximum allowed metadata size.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MethodNotAllowed</p> </li> <li> <p> <i>Description:</i> The specified method is not allowed against this resource.</p> </li> <li> <p> <i>HTTP Status Code:</i> 405 Method Not Allowed</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MissingAttachment</p> </li> <li> <p> <i>Description:</i> A SOAP attachment was expected, but none were found.</p> </li> <li> <p> <i>HTTP Status Code:</i> N/A</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MissingContentLength</p> </li> <li> <p> <i>Description:</i> You must provide the Content-Length HTTP header.</p> </li> <li> <p> <i>HTTP Status Code:</i> 411 Length Required</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MissingRequestBodyError</p> </li> <li> <p> <i>Description:</i> This happens when the user sends an empty XML document as a request. The error message is, &quot;Request body is empty.&quot; </p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MissingSecurityElement</p> </li> <li> <p> <i>Description:</i> The SOAP 1.1 request is missing a security element.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> MissingSecurityHeader</p> </li> <li> <p> <i>Description:</i> Your request is missing a required header.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> NoLoggingStatusForKey</p> </li> <li> <p> <i>Description:</i> There is no such thing as a logging status subresource for a key.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> NoSuchBucket</p> </li> <li> <p> <i>Description:</i> The specified bucket does not exist.</p> </li> <li> <p> <i>HTTP Status Code:</i> 404 Not Found</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> NoSuchBucketPolicy</p> </li> <li> <p> <i>Description:</i> The specified bucket does not have a bucket policy.</p> </li> <li> <p> <i>HTTP Status Code:</i> 404 Not Found</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> NoSuchKey</p> </li> <li> <p> <i>Description:</i> The specified key does not exist.</p> </li> <li> <p> <i>HTTP Status Code:</i> 404 Not Found</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> NoSuchLifecycleConfiguration</p> </li> <li> <p> <i>Description:</i> The lifecycle configuration does not exist. </p> </li> <li> <p> <i>HTTP Status Code:</i> 404 Not Found</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> NoSuchUpload</p> </li> <li> <p> <i>Description:</i> The specified multipart upload does not exist. The upload ID might be invalid, or the multipart upload might have been aborted or completed.</p> </li> <li> <p> <i>HTTP Status Code:</i> 404 Not Found</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> NoSuchVersion </p> </li> <li> <p> <i>Description:</i> Indicates that the version ID specified in the request does not match an existing version.</p> </li> <li> <p> <i>HTTP Status Code:</i> 404 Not Found</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> NotImplemented</p> </li> <li> <p> <i>Description:</i> A header you provided implies functionality that is not implemented.</p> </li> <li> <p> <i>HTTP Status Code:</i> 501 Not Implemented</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Server</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> NotSignedUp</p> </li> <li> <p> <i>Description:</i> Your account is not signed up for the Amazon S3 service. You must sign up before you can use Amazon S3. You can sign up at the following URL: https://aws.amazon.com/s3</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> OperationAborted</p> </li> <li> <p> <i>Description:</i> A conflicting conditional operation is currently in progress against this resource. Try again.</p> </li> <li> <p> <i>HTTP Status Code:</i> 409 Conflict</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> PermanentRedirect</p> </li> <li> <p> <i>Description:</i> The bucket you are attempting to access must be addressed using the specified endpoint. Send all future requests to this endpoint.</p> </li> <li> <p> <i>HTTP Status Code:</i> 301 Moved Permanently</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> PreconditionFailed</p> </li> <li> <p> <i>Description:</i> At least one of the preconditions you specified did not hold.</p> </li> <li> <p> <i>HTTP Status Code:</i> 412 Precondition Failed</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> Redirect</p> </li> <li> <p> <i>Description:</i> Temporary redirect.</p> </li> <li> <p> <i>HTTP Status Code:</i> 307 Moved Temporarily</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> RestoreAlreadyInProgress</p> </li> <li> <p> <i>Description:</i> Object restore is already in progress.</p> </li> <li> <p> <i>HTTP Status Code:</i> 409 Conflict</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> RequestIsNotMultiPartContent</p> </li> <li> <p> <i>Description:</i> Bucket POST must be of the enclosure-type multipart/form-data.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> RequestTimeout</p> </li> <li> <p> <i>Description:</i> Your socket connection to the server was not read from or written to within the timeout period.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> RequestTimeTooSkewed</p> </li> <li> <p> <i>Description:</i> The difference between the request time and the server&#39;s time is too large.</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> RequestTorrentOfBucketError</p> </li> <li> <p> <i>Description:</i> Requesting the torrent file of a bucket is not permitted.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> SignatureDoesNotMatch</p> </li> <li> <p> <i>Description:</i> The request signature we calculated does not match the signature you provided. Check your AWS secret access key and signing method. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html">REST Authentication</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/SOAPAuthentication.html">SOAP Authentication</a> for details.</p> </li> <li> <p> <i>HTTP Status Code:</i> 403 Forbidden</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> ServiceUnavailable</p> </li> <li> <p> <i>Description:</i> Reduce your request rate.</p> </li> <li> <p> <i>HTTP Status Code:</i> 503 Service Unavailable</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Server</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> SlowDown</p> </li> <li> <p> <i>Description:</i> Reduce your request rate.</p> </li> <li> <p> <i>HTTP Status Code:</i> 503 Slow Down</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Server</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> TemporaryRedirect</p> </li> <li> <p> <i>Description:</i> You are being redirected to the bucket while DNS updates.</p> </li> <li> <p> <i>HTTP Status Code:</i> 307 Moved Temporarily</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> TokenRefreshRequired</p> </li> <li> <p> <i>Description:</i> The provided token must be refreshed.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> TooManyBuckets</p> </li> <li> <p> <i>Description:</i> You have attempted to create more buckets than allowed.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> UnexpectedContent</p> </li> <li> <p> <i>Description:</i> This request does not support content.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> UnresolvableGrantByEmailAddress</p> </li> <li> <p> <i>Description:</i> The email address you provided does not match any account on record.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code:</i> UserKeyMustBeSpecified</p> </li> <li> <p> <i>Description:</i> The bucket POST must contain the specified field name. If it is specified, check the order of the fields.</p> </li> <li> <p> <i>HTTP Status Code:</i> 400 Bad Request</p> </li> <li> <p> <i>SOAP Fault Code Prefix:</i> Client</p> </li> </ul> </li> </ul> <p/></p>
@@ -3837,7 +3372,7 @@ impl S3ErrorDeserializer {
     }
 }
 /// <p>The error information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ErrorDocument {
@@ -3877,12 +3412,7 @@ impl ErrorDocumentSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Key"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.key
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Key", &obj.key.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -3920,11 +3450,7 @@ struct EventDeserializer;
 impl EventDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3939,12 +3465,7 @@ impl EventSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -3996,7 +3517,7 @@ impl EventListSerializer {
 }
 
 /// <p>Optional configuration to replicate existing source bucket objects. For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html#existing-object-replication">Replicating Existing Objects</a> in the <i>Amazon S3 Developer Guide</i>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExistingObjectReplication {
@@ -4042,12 +3563,7 @@ impl ExistingObjectReplicationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -4057,11 +3573,7 @@ struct ExistingObjectReplicationStatusDeserializer;
 impl ExistingObjectReplicationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4076,12 +3588,7 @@ impl ExistingObjectReplicationStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4090,11 +3597,7 @@ struct ExpirationStatusDeserializer;
 impl ExpirationStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4109,12 +3612,7 @@ impl ExpirationStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4123,11 +3621,7 @@ struct ExpiredObjectDeleteMarkerDeserializer;
 impl ExpiredObjectDeleteMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -4142,12 +3636,7 @@ impl ExpiredObjectDeleteMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -4156,11 +3645,7 @@ struct ExposeHeaderDeserializer;
 impl ExposeHeaderDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4175,12 +3660,7 @@ impl ExposeHeaderSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4242,12 +3722,7 @@ impl ExpressionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4262,12 +3737,7 @@ impl ExpressionTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4282,12 +3752,7 @@ impl FetchOwnerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -4302,12 +3767,7 @@ impl FieldDelimiterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4322,17 +3782,12 @@ impl FileHeaderInfoSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Specifies the Amazon S3 object key name to filter on and whether to filter on the suffix or prefix of the key name.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FilterRule {
@@ -4378,20 +3833,10 @@ impl FilterRuleSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.name {
-            writer.write(xml::writer::XmlEvent::start_element("Name"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Name", &value.to_string())?;
         }
         if let Some(ref value) = obj.value {
-            writer.write(xml::writer::XmlEvent::start_element("Value"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Value", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -4449,11 +3894,7 @@ struct FilterRuleNameDeserializer;
 impl FilterRuleNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4468,12 +3909,7 @@ impl FilterRuleNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -4482,11 +3918,7 @@ struct FilterRuleValueDeserializer;
 impl FilterRuleValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -4501,16 +3933,11 @@ impl FilterRuleValueSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketAccelerateConfigurationOutput {
     /// <p>The accelerate configuration of the bucket.</p>
@@ -4542,14 +3969,14 @@ impl GetBucketAccelerateConfigurationOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketAccelerateConfigurationRequest {
     /// <p>Name of the bucket for which the accelerate configuration is retrieved.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketAclOutput {
     /// <p>A list of grants.</p>
@@ -4582,14 +4009,14 @@ impl GetBucketAclOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketAclRequest {
     /// <p>Specifies the S3 bucket whose ACL is being requested.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketAnalyticsConfigurationOutput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
@@ -4613,7 +4040,7 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketAnalyticsConfigurationRequest {
     /// <p>The name of the bucket from which an analytics configuration is retrieved.</p>
@@ -4622,7 +4049,7 @@ pub struct GetBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketCorsOutput {
     /// <p>A set of origins and methods (cross-origin access that you want to allow). You can add up to 100 rules to the configuration.</p>
@@ -4650,14 +4077,14 @@ impl GetBucketCorsOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketCorsRequest {
     /// <p>The bucket name for which to get the cors configuration.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketEncryptionOutput {
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
@@ -4682,14 +4109,14 @@ impl GetBucketEncryptionOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketEncryptionRequest {
     /// <p>The name of the bucket from which the server-side encryption configuration is retrieved.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketInventoryConfigurationOutput {
     /// <p>Specifies the inventory configuration.</p>
@@ -4713,7 +4140,7 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket containing the inventory configuration to retrieve.</p>
@@ -4722,7 +4149,7 @@ pub struct GetBucketInventoryConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLifecycleConfigurationOutput {
     /// <p>Container for a lifecycle rule.</p>
@@ -4754,14 +4181,14 @@ impl GetBucketLifecycleConfigurationOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLifecycleConfigurationRequest {
     /// <p>The name of the bucket for which to get the lifecycle information.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLifecycleOutput {
     /// <p>Container for a lifecycle rule.</p>
@@ -4793,17 +4220,17 @@ impl GetBucketLifecycleOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLifecycleRequest {
     /// <p>The name of the bucket for which to get the lifecycle information.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLocationOutput {
-    /// <p>Specifies the Region where the bucket resides. For a list of all the Amazon S3 supported location constraints by Region, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a>.</p>
+    /// <p>Specifies the Region where the bucket resides. For a list of all the Amazon S3 supported location constraints by Region, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a>. Buckets in Region <code>us-east-1</code> have a LocationConstraint of <code>null</code>.</p>
     pub location_constraint: Option<String>,
 }
 
@@ -4823,14 +4250,14 @@ impl GetBucketLocationOutputDeserializer {
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLocationRequest {
     /// <p>The name of the bucket for which to get the location.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketLoggingOutput {
     pub logging_enabled: Option<LoggingEnabled>,
@@ -4858,14 +4285,14 @@ impl GetBucketLoggingOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketLoggingRequest {
     /// <p>The bucket name for which to get the logging information.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketMetricsConfigurationOutput {
     /// <p>Specifies the metrics configuration.</p>
@@ -4889,7 +4316,7 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket containing the metrics configuration to retrieve.</p>
@@ -4898,27 +4325,27 @@ pub struct GetBucketMetricsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketNotificationConfigurationRequest {
-    /// <p>Name of the bucket for which to get the notification configuration</p>
+    /// <p>Name of the bucket for which to get the notification configuration.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetBucketPolicyOutput {
     /// <p>The bucket policy as a JSON document.</p>
     pub policy: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketPolicyRequest {
     /// <p>The bucket name for which to get the bucket policy.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketPolicyStatusOutput {
     /// <p>The policy status for the specified bucket.</p>
@@ -4942,14 +4369,14 @@ impl GetBucketPolicyStatusOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketPolicyStatusRequest {
     /// <p>The name of the Amazon S3 bucket whose policy status you want to retrieve.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketReplicationOutput {
     pub replication_configuration: Option<ReplicationConfiguration>,
@@ -4972,14 +4399,14 @@ impl GetBucketReplicationOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketReplicationRequest {
     /// <p>The bucket name for which to get the replication information.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketRequestPaymentOutput {
     /// <p>Specifies who pays for the download and request fees.</p>
@@ -5009,14 +4436,14 @@ impl GetBucketRequestPaymentOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketRequestPaymentRequest {
     /// <p>The name of the bucket for which to get the payment request configuration</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketTaggingOutput {
     /// <p>Contains the tag set.</p>
@@ -5043,14 +4470,14 @@ impl GetBucketTaggingOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketTaggingRequest {
     /// <p>The name of the bucket for which to get the tagging information.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketVersioningOutput {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
@@ -5090,19 +4517,19 @@ impl GetBucketVersioningOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketVersioningRequest {
     /// <p>The name of the bucket for which to get the versioning information.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetBucketWebsiteOutput {
-    /// <p>The name of the error document for the website.</p>
+    /// <p>The object key name of the website error document to use for 4XX class errors.</p>
     pub error_document: Option<ErrorDocument>,
-    /// <p>The name of the index document for the website.</p>
+    /// <p>The name of the index document for the website (for example <code>index.html</code>).</p>
     pub index_document: Option<IndexDocument>,
     /// <p>Specifies the redirect behavior of all requests to a website endpoint of an Amazon S3 bucket.</p>
     pub redirect_all_requests_to: Option<RedirectAllRequestsTo>,
@@ -5150,14 +4577,14 @@ impl GetBucketWebsiteOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBucketWebsiteRequest {
     /// <p>The bucket name for which to get the website configuration.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectAclOutput {
     /// <p>A list of grants.</p>
@@ -5191,7 +4618,7 @@ impl GetObjectAclOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectAclRequest {
     /// <p>The bucket name that contains the object for which to get the ACL information. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -5203,7 +4630,7 @@ pub struct GetObjectAclRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectLegalHoldOutput {
     /// <p>The current Legal Hold status for the specified object.</p>
@@ -5227,7 +4654,7 @@ impl GetObjectLegalHoldOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectLegalHoldRequest {
     /// <p>The bucket name containing the object whose Legal Hold status you want to retrieve. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -5239,7 +4666,7 @@ pub struct GetObjectLegalHoldRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectLockConfigurationOutput {
     /// <p>The specified bucket's Object Lock configuration.</p>
@@ -5263,14 +4690,14 @@ impl GetObjectLockConfigurationOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectLockConfigurationRequest {
     /// <p>The bucket whose Object Lock configuration you want to retrieve.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug)]
+#[derive(Debug, Default)]
 pub struct GetObjectOutput {
     /// <p>Indicates that a range of bytes was specified.</p>
     pub accept_ranges: Option<String>,
@@ -5325,7 +4752,7 @@ pub struct GetObjectOutput {
     pub ssekms_key_id: Option<String>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// <p>Provides storage class information of the object. Amazon S3 returns this header for all objects except for Standard storage class objects.</p>
+    /// <p>Provides storage class information of the object. Amazon S3 returns this header for all objects except for S3 Standard storage class objects.</p>
     pub storage_class: Option<String>,
     /// <p>The number of tags, if any, on the object.</p>
     pub tag_count: Option<i64>,
@@ -5335,7 +4762,7 @@ pub struct GetObjectOutput {
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectRequest {
     /// <p>The bucket name containing the object. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -5352,7 +4779,7 @@ pub struct GetObjectRequest {
     pub key: String,
     /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' GET request for the part specified. Useful for downloading just a part of an object.</p>
     pub part_number: Option<i64>,
-    /// <p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, see <a href="">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35</a>.</p>
+    /// <p><p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, see <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35">https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35</a>.</p> <note> <p>Amazon S3 doesn&#39;t support retrieving multiple ranges of data per <code>GET</code> request.</p> </note></p>
     pub range: Option<String>,
     pub request_payer: Option<String>,
     /// <p>Sets the <code>Cache-Control</code> header of the response.</p>
@@ -5377,7 +4804,7 @@ pub struct GetObjectRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectRetentionOutput {
     /// <p>The container element for an object's retention settings.</p>
@@ -5401,7 +4828,7 @@ impl GetObjectRetentionOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectRetentionRequest {
     /// <p>The bucket name containing the object whose retention settings you want to retrieve. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -5413,7 +4840,7 @@ pub struct GetObjectRetentionRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetObjectTaggingOutput {
     /// <p>Contains the tag set.</p>
@@ -5442,7 +4869,7 @@ impl GetObjectTaggingOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectTaggingRequest {
     /// <p>The bucket name containing the object for which to get the tagging information. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -5453,14 +4880,14 @@ pub struct GetObjectTaggingRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug)]
+#[derive(Debug, Default)]
 pub struct GetObjectTorrentOutput {
     /// <p>A Bencoded dictionary as defined by the BitTorrent specification</p>
     pub body: Option<StreamingBody>,
     pub request_charged: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetObjectTorrentRequest {
     /// <p>The name of the bucket containing the object for which to get the torrent files.</p>
@@ -5470,7 +4897,7 @@ pub struct GetObjectTorrentRequest {
     pub request_payer: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetPublicAccessBlockOutput {
     /// <p>The <code>PublicAccessBlock</code> configuration currently in effect for this Amazon S3 bucket.</p>
@@ -5496,18 +4923,18 @@ impl GetPublicAccessBlockOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPublicAccessBlockRequest {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to retrieve. </p>
     pub bucket: String,
 }
 
-/// <p>Container for Glacier job parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+/// <p>Container for S3 Glacier job parameters.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GlacierJobParameters {
-    /// <p>Glacier retrieval tier at which the restore will be processed.</p>
+    /// <p>S3 Glacier retrieval tier at which the restore will be processed.</p>
     pub tier: String,
 }
 
@@ -5523,18 +4950,13 @@ impl GlacierJobParametersSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Tier"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.tier
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Tier", &obj.tier.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Container for grant information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Grant {
@@ -5581,25 +5003,20 @@ impl GrantSerializer {
             &GranteeSerializer::serialize(&mut writer, "Grantee", value)?;
         }
         if let Some(ref value) = obj.permission {
-            writer.write(xml::writer::XmlEvent::start_element("Permission"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Permission", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Container for the person being granted permissions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Grantee {
     /// <p>Screen name of the grantee.</p>
     pub display_name: Option<String>,
-    /// <p>Email address of the grantee.</p>
+    /// <p><p>Email address of the grantee.</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference.</p> </note></p>
     pub email_address: Option<String>,
     /// <p>The canonical user ID of the grantee.</p>
     pub id: Option<String>,
@@ -5658,42 +5075,17 @@ impl GranteeSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.display_name {
-            writer.write(xml::writer::XmlEvent::start_element("DisplayName"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "DisplayName", &value.to_string())?;
         }
         if let Some(ref value) = obj.email_address {
-            writer.write(xml::writer::XmlEvent::start_element("EmailAddress"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "EmailAddress", &value.to_string())?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ID", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("xsi:type"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.type_
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "xsi:type", &obj.type_.to_string())?;
         if let Some(ref value) = obj.uri {
-            writer.write(xml::writer::XmlEvent::start_element("URI"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "URI", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -5738,14 +5130,14 @@ impl GrantsSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HeadBucketRequest {
     /// <p>The bucket name.</p>
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct HeadObjectOutput {
     /// <p>Indicates that a range of bytes was specified.</p>
@@ -5797,7 +5189,7 @@ pub struct HeadObjectOutput {
     pub ssekms_key_id: Option<String>,
     /// <p>If the object is stored using server-side encryption either with an AWS KMS customer master key (CMK) or an Amazon S3-managed encryption key, the response includes this header with the value of the server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// <p>Provides storage class information of the object. Amazon S3 returns this header for all objects except for Standard storage class objects.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a>.</p>
+    /// <p>Provides storage class information of the object. Amazon S3 returns this header for all objects except for S3 Standard storage class objects.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a>.</p>
     pub storage_class: Option<String>,
     /// <p>Version of the object.</p>
     pub version_id: Option<String>,
@@ -5813,16 +5205,16 @@ impl HeadObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HeadObjectOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = HeadObjectOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HeadObjectRequest {
     /// <p>The name of the bucket containing the object.</p>
@@ -5839,7 +5231,7 @@ pub struct HeadObjectRequest {
     pub key: String,
     /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' HEAD request for the part specified. Useful querying about the size of the part and the number of parts in this object.</p>
     pub part_number: Option<i64>,
-    /// <p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, see <a href="">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35</a>.</p>
+    /// <p><p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, see <a href="">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35</a>.</p> <note> <p>Amazon S3 doesn&#39;t support retrieving multiple ranges of data per <code>GET</code> request.</p> </note></p>
     pub range: Option<String>,
     pub request_payer: Option<String>,
     /// <p>Specifies the algorithm to use to when encrypting the object (for example, AES256).</p>
@@ -5857,11 +5249,7 @@ struct HostNameDeserializer;
 impl HostNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5876,12 +5264,7 @@ impl HostNameSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5890,11 +5273,7 @@ struct HttpErrorCodeReturnedEqualsDeserializer;
 impl HttpErrorCodeReturnedEqualsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5909,12 +5288,7 @@ impl HttpErrorCodeReturnedEqualsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5923,11 +5297,7 @@ struct HttpRedirectCodeDeserializer;
 impl HttpRedirectCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5942,12 +5312,7 @@ impl HttpRedirectCodeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -5956,11 +5321,7 @@ struct IDDeserializer;
 impl IDDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -5975,17 +5336,12 @@ impl IDSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Container for the <code>Suffix</code> element.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct IndexDocument {
@@ -6025,12 +5381,7 @@ impl IndexDocumentSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Suffix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.suffix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Suffix", &obj.suffix.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6040,15 +5391,11 @@ struct InitiatedDeserializer;
 impl InitiatedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Container element that identifies who initiated the multipart upload. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Initiator {
     /// <p>Name of the Principal.</p>
@@ -6081,7 +5428,7 @@ impl InitiatorDeserializer {
     }
 }
 /// <p>Describes the serialization format of the object.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InputSerialization {
     /// <p>Describes the serialization of a CSV-encoded object.</p>
@@ -6110,12 +5457,7 @@ impl InputSerializationSerializer {
             &CSVInputSerializer::serialize(&mut writer, "CSV", value)?;
         }
         if let Some(ref value) = obj.compression_type {
-            writer.write(xml::writer::XmlEvent::start_element("CompressionType"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "CompressionType", &value.to_string())?;
         }
         if let Some(ref value) = obj.json {
             &JSONInputSerializer::serialize(&mut writer, "JSON", value)?;
@@ -6128,7 +5470,7 @@ impl InputSerializationSerializer {
 }
 
 /// <p>Specifies the inventory configuration for an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETInventoryConfig.html">GET Bucket inventory</a> in the <i>Amazon Simple Storage Service API Reference</i>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryConfiguration {
@@ -6209,26 +5551,13 @@ impl InventoryConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &InventoryFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element(
+        write_characters_element(writer, "Id", &obj.id.to_string())?;
+        write_characters_element(
+            writer,
             "IncludedObjectVersions",
-        ))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.included_object_versions
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("IsEnabled"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.is_enabled
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+            &obj.included_object_versions.to_string(),
+        )?;
+        write_characters_element(writer, "IsEnabled", &obj.is_enabled.to_string())?;
         if let Some(ref value) = obj.optional_fields {
             &InventoryOptionalFieldsSerializer::serialize(&mut writer, "OptionalFields", value)?;
         }
@@ -6268,7 +5597,7 @@ impl InventoryConfigurationListDeserializer {
     }
 }
 /// <p>Specifies the inventory configuration for an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryDestination {
@@ -6322,7 +5651,7 @@ impl InventoryDestinationSerializer {
 }
 
 /// <p>Contains the type of server-side encryption used to encrypt the inventory results.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryEncryption {
@@ -6378,7 +5707,7 @@ impl InventoryEncryptionSerializer {
 }
 
 /// <p>Specifies an inventory filter. The inventory only includes objects that meet the filter's criteria.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryFilter {
@@ -6418,12 +5747,7 @@ impl InventoryFilterSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6433,11 +5757,7 @@ struct InventoryFormatDeserializer;
 impl InventoryFormatDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6452,12 +5772,7 @@ impl InventoryFormatSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6466,11 +5781,7 @@ struct InventoryFrequencyDeserializer;
 impl InventoryFrequencyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6485,12 +5796,7 @@ impl InventoryFrequencySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6499,11 +5805,7 @@ struct InventoryIdDeserializer;
 impl InventoryIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6518,12 +5820,7 @@ impl InventoryIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6532,11 +5829,7 @@ struct InventoryIncludedObjectVersionsDeserializer;
 impl InventoryIncludedObjectVersionsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6551,12 +5844,7 @@ impl InventoryIncludedObjectVersionsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6565,11 +5853,7 @@ struct InventoryOptionalFieldDeserializer;
 impl InventoryOptionalFieldDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6584,12 +5868,7 @@ impl InventoryOptionalFieldSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6635,11 +5914,11 @@ impl InventoryOptionalFieldsSerializer {
 }
 
 /// <p>Contains the bucket name, file format, bucket owner (optional), and prefix (optional) where inventory results are published.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventoryS3BucketDestination {
-    /// <p>The ID of the account that owns the destination bucket.</p>
+    /// <p><p>The account ID that owns the destination S3 bucket. If no account ID is provided, the owner is not validated before exporting data. </p> <note> <p> Although this value is optional, we strongly recommend that you set it to help prevent problems if the destination bucket ownership changes. </p> </note></p>
     pub account_id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the bucket where inventory results will be published.</p>
     pub bucket: String,
@@ -6704,42 +5983,22 @@ impl InventoryS3BucketDestinationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.account_id {
-            writer.write(xml::writer::XmlEvent::start_element("AccountId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "AccountId", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Bucket"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.bucket
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Bucket", &obj.bucket.to_string())?;
         if let Some(ref value) = obj.encryption {
             &InventoryEncryptionSerializer::serialize(&mut writer, "Encryption", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Format"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.format
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Format", &obj.format.to_string())?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Specifies the schedule for generating inventory results.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InventorySchedule {
@@ -6780,12 +6039,7 @@ impl InventoryScheduleSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Frequency"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.frequency
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Frequency", &obj.frequency.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -6795,11 +6049,7 @@ struct IsEnabledDeserializer;
 impl IsEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -6814,12 +6064,7 @@ impl IsEnabledSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -6828,11 +6073,7 @@ struct IsLatestDeserializer;
 impl IsLatestDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6840,11 +6081,7 @@ struct IsPublicDeserializer;
 impl IsPublicDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6852,15 +6089,11 @@ struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>Specifies JSON as object's input serialization format.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JSONInput {
     /// <p>The type of JSON. Valid values: Document, Lines.</p>
@@ -6880,22 +6113,17 @@ impl JSONInputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.type_ {
-            writer.write(xml::writer::XmlEvent::start_element("Type"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Type", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Specifies JSON as request's output serialization format.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JSONOutput {
-    /// <p>The value used to separate individual records in the output.</p>
+    /// <p>The value used to separate individual records in the output. If no value is specified, Amazon S3 uses a newline character ('\n').</p>
     pub record_delimiter: Option<String>,
 }
 
@@ -6912,12 +6140,7 @@ impl JSONOutputSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.record_delimiter {
-            writer.write(xml::writer::XmlEvent::start_element("RecordDelimiter"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RecordDelimiter", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6934,12 +6157,7 @@ impl JSONTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6954,12 +6172,7 @@ impl KMSContextSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -6968,11 +6181,7 @@ struct KeyCountDeserializer;
 impl KeyCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -6980,11 +6189,7 @@ struct KeyMarkerDeserializer;
 impl KeyMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -6999,12 +6204,7 @@ impl KeyMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7013,11 +6213,7 @@ struct KeyPrefixEqualsDeserializer;
 impl KeyPrefixEqualsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7032,12 +6228,7 @@ impl KeyPrefixEqualsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -7046,11 +6237,7 @@ struct LambdaFunctionArnDeserializer;
 impl LambdaFunctionArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7065,17 +6252,12 @@ impl LambdaFunctionArnSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A container for specifying the configuration for AWS Lambda notifications.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LambdaFunctionConfiguration {
@@ -7142,19 +6324,13 @@ impl LambdaFunctionConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("CloudFunction"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.lambda_function_arn
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(
+            writer,
+            "CloudFunction",
+            &obj.lambda_function_arn.to_string(),
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -7213,15 +6389,11 @@ struct LastModifiedDeserializer;
 impl LastModifiedDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Container for lifecycle rules. You can add as many as 1000 rules.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecycleConfiguration {
     /// <p>Specifies lifecycle configuration rules for an Amazon S3 bucket. </p>
@@ -7246,7 +6418,7 @@ impl LifecycleConfigurationSerializer {
 }
 
 /// <p>Container for the expiration for the lifecycle of the object.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecycleExpiration {
@@ -7301,37 +6473,20 @@ impl LifecycleExpirationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.date {
-            writer.write(xml::writer::XmlEvent::start_element("Date"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Date", &value.to_string())?;
         }
         if let Some(ref value) = obj.days {
-            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.expired_object_delete_marker {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "ExpiredObjectDeleteMarker",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ExpiredObjectDeleteMarker", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecycleRule {
@@ -7437,12 +6592,7 @@ impl LifecycleRuleSerializer {
             &LifecycleRuleFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ID", &value.to_string())?;
         }
         if let Some(ref value) = obj.noncurrent_version_expiration {
             &NoncurrentVersionExpirationSerializer::serialize(
@@ -7458,12 +6608,7 @@ impl LifecycleRuleSerializer {
                 value,
             )?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         if let Some(ref value) = obj.transitions {
             &TransitionListSerializer::serialize(&mut writer, "Transition", value)?;
         }
@@ -7472,7 +6617,7 @@ impl LifecycleRuleSerializer {
 }
 
 /// <p>This is used in a Lifecycle Rule Filter to apply a logical AND to two or more predicates. The Lifecycle Rule will apply to any object matching all of the predicates configured inside the And operator.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecycleRuleAndOperator {
@@ -7524,12 +6669,7 @@ impl LifecycleRuleAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -7539,7 +6679,7 @@ impl LifecycleRuleAndOperatorSerializer {
 }
 
 /// <p>The <code>Filter</code> is used to identify objects that a Lifecycle Rule applies to. A <code>Filter</code> must have exactly one of <code>Prefix</code>, <code>Tag</code>, or <code>And</code> specified.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LifecycleRuleFilter {
@@ -7594,12 +6734,7 @@ impl LifecycleRuleFilterSerializer {
             &LifecycleRuleAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -7655,7 +6790,7 @@ impl LifecycleRulesSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     /// <p>The list of analytics configurations for a bucket.</p>
@@ -7710,7 +6845,7 @@ impl ListBucketAnalyticsConfigurationsOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBucketAnalyticsConfigurationsRequest {
     /// <p>The name of the bucket from which analytics configurations are retrieved.</p>
@@ -7719,7 +6854,7 @@ pub struct ListBucketAnalyticsConfigurationsRequest {
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketInventoryConfigurationsOutput {
     /// <p>If sent in the request, the marker that is used as a starting point for this inventory configuration list response.</p>
@@ -7774,7 +6909,7 @@ impl ListBucketInventoryConfigurationsOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBucketInventoryConfigurationsRequest {
     /// <p>The name of the bucket containing the inventory configurations to retrieve.</p>
@@ -7783,7 +6918,7 @@ pub struct ListBucketInventoryConfigurationsRequest {
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketMetricsConfigurationsOutput {
     /// <p>The marker that is used as a starting point for this metrics configuration list response. This value is present if it was sent in the request.</p>
@@ -7838,7 +6973,7 @@ impl ListBucketMetricsConfigurationsOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBucketMetricsConfigurationsRequest {
     /// <p>The name of the bucket containing the metrics configurations to retrieve.</p>
@@ -7847,7 +6982,7 @@ pub struct ListBucketMetricsConfigurationsRequest {
     pub continuation_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListBucketsOutput {
     /// <p>The list of buckets owned by the requestor.</p>
@@ -7880,7 +7015,7 @@ impl ListBucketsOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListMultipartUploadsOutput {
     /// <p>Name of the bucket to which the multipart upload was initiated.</p>
@@ -7986,7 +7121,7 @@ impl ListMultipartUploadsOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMultipartUploadsRequest {
     /// <p>Name of the bucket to which the multipart upload was initiated. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -8004,7 +7139,7 @@ pub struct ListMultipartUploadsRequest {
     pub upload_id_marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListObjectVersionsOutput {
     /// <p>All of the keys rolled up into a common prefix count as a single return when calculating the number of returns.</p>
@@ -8116,7 +7251,7 @@ impl ListObjectVersionsOutputDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectVersionsRequest {
     /// <p>The bucket name that contains the objects. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -8126,7 +7261,7 @@ pub struct ListObjectVersionsRequest {
     pub encoding_type: Option<String>,
     /// <p>Specifies the key to start with when listing objects in a bucket.</p>
     pub key_marker: Option<String>,
-    /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more. If additional keys satisfy the search criteria, but were not returned because max-keys was exceeded, the response contains &lt;isTruncated&gt;true&lt;/isTruncated&gt;. To return the additional keys, see key-marker and version-id-marker.</p>
+    /// <p>Sets the maximum number of keys returned in the response. By default the API returns up to 1,000 key names. The response might contain fewer keys but will never contain more. If additional keys satisfy the search criteria, but were not returned because max-keys was exceeded, the response contains &lt;isTruncated&gt;true&lt;/isTruncated&gt;. To return the additional keys, see key-marker and version-id-marker.</p>
     pub max_keys: Option<i64>,
     /// <p>Use this parameter to select only those keys that begin with the specified prefix. You can use prefixes to separate a bucket into different groupings of keys. (You can think of using prefix to make groups in the same way you'd use a folder in a file system.) You can use prefix with delimiter to roll up numerous objects into a single result under CommonPrefixes. </p>
     pub prefix: Option<String>,
@@ -8134,7 +7269,7 @@ pub struct ListObjectVersionsRequest {
     pub version_id_marker: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListObjectsOutput {
     /// <p>All of the keys rolled up in a common prefix count as a single return when calculating the number of returns. </p> <p>A response can contain CommonPrefixes only if you specify a delimiter.</p> <p>CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by the delimiter.</p> <p> CommonPrefixes lists keys that act like subdirectories in the directory specified by Prefix.</p> <p>For example, if the prefix is notes/ and the delimiter is a slash (/) as in notes/summer/july, the common prefix is notes/summer/. All of the keys that roll up into a common prefix count as a single return when calculating the number of returns.</p>
@@ -8214,7 +7349,7 @@ impl ListObjectsOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectsRequest {
     /// <p>The name of the bucket containing the objects.</p>
@@ -8224,7 +7359,7 @@ pub struct ListObjectsRequest {
     pub encoding_type: Option<String>,
     /// <p>Specifies the key to start with when listing objects in a bucket.</p>
     pub marker: Option<String>,
-    /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
+    /// <p>Sets the maximum number of keys returned in the response. By default the API returns up to 1,000 key names. The response might contain fewer keys but will never contain more. </p>
     pub max_keys: Option<i64>,
     /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
@@ -8232,7 +7367,7 @@ pub struct ListObjectsRequest {
     pub request_payer: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListObjectsV2Output {
     /// <p>All of the keys rolled up into a common prefix count as a single return when calculating the number of returns.</p> <p>A response can contain <code>CommonPrefixes</code> only if you specify a delimiter.</p> <p> <code>CommonPrefixes</code> contains all (if there are any) keys between <code>Prefix</code> and the next occurrence of the string specified by a delimiter.</p> <p> <code>CommonPrefixes</code> lists keys that act like subdirectories in the directory specified by <code>Prefix</code>.</p> <p>For example, if the prefix is <code>notes/</code> and the delimiter is a slash (<code>/</code>) as in <code>notes/summer/july</code>, the common prefix is <code>notes/summer/</code>. All of the keys that roll up into a common prefix count as a single return when calculating the number of returns. </p>
@@ -8249,7 +7384,7 @@ pub struct ListObjectsV2Output {
     pub is_truncated: Option<bool>,
     /// <p>KeyCount is the number of keys returned with this request. KeyCount will always be less than equals to MaxKeys field. Say you ask for 50 keys, your result will include less than equals 50 keys </p>
     pub key_count: Option<i64>,
-    /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
+    /// <p>Sets the maximum number of keys returned in the response. By default the API returns up to 1,000 key names. The response might contain fewer keys but will never contain more.</p>
     pub max_keys: Option<i64>,
     /// <p>Bucket name. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub name: Option<String>,
@@ -8326,7 +7461,7 @@ impl ListObjectsV2OutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListObjectsV2Request {
     /// <p>Bucket name to list. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -8339,7 +7474,7 @@ pub struct ListObjectsV2Request {
     pub encoding_type: Option<String>,
     /// <p>The owner field is not present in listV2 by default, if you want to return owner field with each key in the result then set the fetch owner field to true.</p>
     pub fetch_owner: Option<bool>,
-    /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
+    /// <p>Sets the maximum number of keys returned in the response. By default the API returns up to 1,000 key names. The response might contain fewer keys but will never contain more.</p>
     pub max_keys: Option<i64>,
     /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
@@ -8349,7 +7484,7 @@ pub struct ListObjectsV2Request {
     pub start_after: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPartsOutput {
     /// <p>If the bucket has a lifecycle rule configured with an action to abort incomplete multipart uploads and the prefix in the lifecycle rule matches the object name in the request, then the response includes this header indicating when the initiated multipart upload will become eligible for abort operation. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config">Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a>.</p> <p>The response will also include the <code>x-amz-abort-rule-id</code> header that will provide the ID of the lifecycle configuration rule that defines this action.</p>
@@ -8445,7 +7580,7 @@ impl ListPartsOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPartsRequest {
     /// <p>Name of the bucket to which the parts are being uploaded. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -8466,11 +7601,7 @@ struct LocationDeserializer;
 impl LocationDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8485,17 +7616,12 @@ impl LocationPrefixSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Describes where logs are stored and the prefix that Amazon S3 assigns to all log object keys for a bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlogging.html">PUT Bucket logging</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LoggingEnabled {
@@ -8549,21 +7675,11 @@ impl LoggingEnabledSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("TargetBucket"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.target_bucket
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "TargetBucket", &obj.target_bucket.to_string())?;
         if let Some(ref value) = obj.target_grants {
             &TargetGrantsSerializer::serialize(&mut writer, "TargetGrants", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("TargetPrefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.target_prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "TargetPrefix", &obj.target_prefix.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -8579,12 +7695,7 @@ impl MFADeleteSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8593,11 +7704,7 @@ struct MFADeleteStatusDeserializer;
 impl MFADeleteStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -8605,11 +7712,7 @@ struct MarkerDeserializer;
 impl MarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -8624,12 +7727,7 @@ impl MarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8638,11 +7736,7 @@ struct MaxAgeSecondsDeserializer;
 impl MaxAgeSecondsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -8657,12 +7751,7 @@ impl MaxAgeSecondsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -8671,11 +7760,7 @@ struct MaxKeysDeserializer;
 impl MaxKeysDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -8690,12 +7775,7 @@ impl MaxKeysSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -8704,11 +7784,7 @@ struct MaxPartsDeserializer;
 impl MaxPartsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -8723,12 +7799,7 @@ impl MaxPartsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -8737,11 +7808,7 @@ struct MaxUploadsDeserializer;
 impl MaxUploadsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -8756,12 +7823,7 @@ impl MaxUploadsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -8770,15 +7832,11 @@ struct MessageDeserializer;
 impl MessageDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A metadata key-value pair to store with an object.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetadataEntry {
     /// <p>Name of the Object.</p>
@@ -8800,20 +7858,10 @@ impl MetadataEntrySerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.name {
-            writer.write(xml::writer::XmlEvent::start_element("Name"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Name", &value.to_string())?;
         }
         if let Some(ref value) = obj.value {
-            writer.write(xml::writer::XmlEvent::start_element("Value"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Value", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -8830,12 +7878,7 @@ impl MetadataKeySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -8850,17 +7893,12 @@ impl MetadataValueSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p> A container specifying replication metrics-related settings enabling metrics and Amazon S3 events for S3 Replication Time Control (S3 RTC). Must be specified together with a <code>ReplicationTime</code> block. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Metrics {
@@ -8911,18 +7949,13 @@ impl MetricsSerializer {
             "EventThreshold",
             &obj.event_threshold,
         )?;
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates, and an object must match all of the predicates in order for the filter to apply.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetricsAndOperator {
@@ -8970,12 +8003,7 @@ impl MetricsAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -8985,7 +8013,7 @@ impl MetricsAndOperatorSerializer {
 }
 
 /// <p>Specifies a metrics configuration for the CloudWatch request metrics (specified by the metrics configuration ID) from an Amazon S3 bucket. If you're updating an existing metrics configuration, note that this is a full replacement of the existing metrics configuration. If you don't include the elements you want to keep, they are erased. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTMetricConfiguration.html"> PUT Bucket metrics</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetricsConfiguration {
@@ -9033,12 +8061,7 @@ impl MetricsConfigurationSerializer {
         if let Some(ref value) = obj.filter {
             &MetricsFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Id", &obj.id.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -9074,7 +8097,7 @@ impl MetricsConfigurationListDeserializer {
     }
 }
 /// <p>Specifies a metrics configuration filter. The metrics configuration only includes objects that meet the filter's criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator).</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MetricsFilter {
@@ -9128,12 +8151,7 @@ impl MetricsFilterSerializer {
             &MetricsAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -9147,11 +8165,7 @@ struct MetricsIdDeserializer;
 impl MetricsIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -9166,12 +8180,7 @@ impl MetricsIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -9180,11 +8189,7 @@ struct MetricsStatusDeserializer;
 impl MetricsStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -9199,12 +8204,7 @@ impl MetricsStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -9213,11 +8213,7 @@ struct MinutesDeserializer;
 impl MinutesDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -9232,17 +8228,12 @@ impl MinutesSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
 /// <p>Container for the <code>MultipartUpload</code> for the Amazon S3 object.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MultipartUpload {
     /// <p>Date and time at which the multipart upload was initiated.</p>
@@ -9303,11 +8294,7 @@ struct MultipartUploadIdDeserializer;
 impl MultipartUploadIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -9322,12 +8309,7 @@ impl MultipartUploadIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -9364,11 +8346,7 @@ struct NextKeyMarkerDeserializer;
 impl NextKeyMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9376,11 +8354,7 @@ struct NextMarkerDeserializer;
 impl NextMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9388,11 +8362,7 @@ struct NextPartNumberMarkerDeserializer;
 impl NextPartNumberMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -9400,11 +8370,7 @@ struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9412,11 +8378,7 @@ struct NextUploadIdMarkerDeserializer;
 impl NextUploadIdMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -9424,15 +8386,11 @@ struct NextVersionIdMarkerDeserializer;
 impl NextVersionIdMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in the object's lifetime.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NoncurrentVersionExpiration {
@@ -9478,19 +8436,14 @@ impl NoncurrentVersionExpirationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.noncurrent_days {
-            writer.write(xml::writer::XmlEvent::start_element("NoncurrentDays"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "NoncurrentDays", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Container for the transition rule that describes when noncurrent objects transition to the <code>STANDARD_IA</code>, <code>ONEZONE_IA</code>, <code>INTELLIGENT_TIERING</code>, <code>GLACIER</code>, or <code>DEEP_ARCHIVE</code> storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the <code>STANDARD_IA</code>, <code>ONEZONE_IA</code>, <code>INTELLIGENT_TIERING</code>, <code>GLACIER</code>, or <code>DEEP_ARCHIVE</code> storage class at a specific period in the object's lifetime.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NoncurrentVersionTransition {
@@ -9544,20 +8497,10 @@ impl NoncurrentVersionTransitionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.noncurrent_days {
-            writer.write(xml::writer::XmlEvent::start_element("NoncurrentDays"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "NoncurrentDays", &value.to_string())?;
         }
         if let Some(ref value) = obj.storage_class {
-            writer.write(xml::writer::XmlEvent::start_element("StorageClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "StorageClass", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -9613,7 +8556,7 @@ impl NoncurrentVersionTransitionListSerializer {
 }
 
 /// <p>A container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off for the bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationConfiguration {
@@ -9699,7 +8642,7 @@ impl NotificationConfigurationSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationConfigurationDeprecated {
@@ -9791,7 +8734,7 @@ impl NotificationConfigurationDeprecatedSerializer {
 }
 
 /// <p>Specifies object key name filtering rules. For information about key name filtering, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationConfigurationFilter {
@@ -9846,11 +8789,7 @@ struct NotificationIdDeserializer;
 impl NotificationIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -9865,17 +8804,12 @@ impl NotificationIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>An object consists of data and its descriptive metadata.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Object {
     /// <p>The entity tag is an MD5 hash of the object. ETag reflects only changes to the contents of an object, not its metadata.</p>
@@ -9941,17 +8875,12 @@ impl ObjectCannedACLSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Object Identifier is unique value to identify objects.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectIdentifier {
     /// <p>Key name of the object to delete.</p>
@@ -9972,19 +8901,9 @@ impl ObjectIdentifierSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Key"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.key
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Key", &obj.key.to_string())?;
         if let Some(ref value) = obj.version_id {
-            writer.write(xml::writer::XmlEvent::start_element("VersionId"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "VersionId", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -10013,11 +8932,7 @@ struct ObjectKeyDeserializer;
 impl ObjectKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10032,12 +8947,7 @@ impl ObjectKeySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10070,7 +8980,7 @@ impl ObjectListDeserializer {
     }
 }
 /// <p>The container element for Object Lock configuration parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockConfiguration {
@@ -10123,12 +9033,7 @@ impl ObjectLockConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.object_lock_enabled {
-            writer.write(xml::writer::XmlEvent::start_element("ObjectLockEnabled"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ObjectLockEnabled", &value.to_string())?;
         }
         if let Some(ref value) = obj.rule {
             &ObjectLockRuleSerializer::serialize(&mut writer, "Rule", value)?;
@@ -10142,11 +9047,7 @@ struct ObjectLockEnabledDeserializer;
 impl ObjectLockEnabledDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10161,17 +9062,12 @@ impl ObjectLockEnabledSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A Legal Hold configuration for an object.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockLegalHold {
@@ -10214,12 +9110,7 @@ impl ObjectLockLegalHoldSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.status {
-            writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Status", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -10230,11 +9121,7 @@ struct ObjectLockLegalHoldStatusDeserializer;
 impl ObjectLockLegalHoldStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10249,17 +9136,12 @@ impl ObjectLockLegalHoldStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A Retention configuration for an object.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockRetention {
@@ -10308,20 +9190,10 @@ impl ObjectLockRetentionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.mode {
-            writer.write(xml::writer::XmlEvent::start_element("Mode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Mode", &value.to_string())?;
         }
         if let Some(ref value) = obj.retain_until_date {
-            writer.write(xml::writer::XmlEvent::start_element("RetainUntilDate"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RetainUntilDate", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -10332,11 +9204,7 @@ struct ObjectLockRetentionModeDeserializer;
 impl ObjectLockRetentionModeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10351,17 +9219,12 @@ impl ObjectLockRetentionModeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>The container element for an Object Lock rule.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ObjectLockRule {
@@ -10416,15 +9279,11 @@ struct ObjectStorageClassDeserializer;
 impl ObjectStorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The version of an object.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ObjectVersion {
     /// <p>The entity tag is an MD5 hash of that version of the object.</p>
@@ -10499,11 +9358,7 @@ struct ObjectVersionIdDeserializer;
 impl ObjectVersionIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10518,12 +9373,7 @@ impl ObjectVersionIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10560,15 +9410,11 @@ struct ObjectVersionStorageClassDeserializer;
 impl ObjectVersionStorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes the location where the restore job's output is stored.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OutputLocation {
     /// <p>Describes an S3 location that will receive the results of the restore request.</p>
@@ -10595,7 +9441,7 @@ impl OutputLocationSerializer {
 }
 
 /// <p>Describes how results of the Select job are serialized.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OutputSerialization {
     /// <p>Describes the serialization of CSV-encoded Select results.</p>
@@ -10627,7 +9473,7 @@ impl OutputSerializationSerializer {
 }
 
 /// <p>Container for the owner's display name and ID.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Owner {
@@ -10671,20 +9517,10 @@ impl OwnerSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.display_name {
-            writer.write(xml::writer::XmlEvent::start_element("DisplayName"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "DisplayName", &value.to_string())?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ID", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -10695,11 +9531,7 @@ struct OwnerOverrideDeserializer;
 impl OwnerOverrideDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10714,17 +9546,12 @@ impl OwnerOverrideSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Container for Parquet.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParquetInput {}
 
@@ -10745,7 +9572,7 @@ impl ParquetInputSerializer {
 }
 
 /// <p>Container for elements related to a part.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Part {
     /// <p>Entity tag returned when the part was uploaded.</p>
@@ -10792,11 +9619,7 @@ struct PartNumberDeserializer;
 impl PartNumberDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -10811,12 +9634,7 @@ impl PartNumberSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -10825,11 +9643,7 @@ struct PartNumberMarkerDeserializer;
 impl PartNumberMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -10844,12 +9658,7 @@ impl PartNumberMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -10886,11 +9695,7 @@ struct PayerDeserializer;
 impl PayerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10905,12 +9710,7 @@ impl PayerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -10919,11 +9719,7 @@ struct PermissionDeserializer;
 impl PermissionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10938,17 +9734,12 @@ impl PermissionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>The container element for a bucket's policy status.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PolicyStatus {
     /// <p>The policy status for this bucket. <code>TRUE</code> indicates that this bucket is public. <code>FALSE</code> indicates that the bucket is not public.</p>
@@ -10979,11 +9770,7 @@ struct PrefixDeserializer;
 impl PrefixDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -10998,12 +9785,7 @@ impl PrefixSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -11012,11 +9794,7 @@ struct PriorityDeserializer;
 impl PriorityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -11031,17 +9809,12 @@ impl PrioritySerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
 /// <p>This data type contains information about progress of an operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Progress {
     /// <p>The current number of uncompressed object bytes processed.</p>
@@ -11087,7 +9860,7 @@ impl ProgressDeserializer {
     }
 }
 /// <p>This data type contains information about the progress event of an operation.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ProgressEvent {
     /// <p>The Progress event details.</p>
@@ -11118,11 +9891,7 @@ struct ProtocolDeserializer;
 impl ProtocolDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -11137,17 +9906,12 @@ impl ProtocolSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>The PublicAccessBlock configuration that you want to apply to this Amazon S3 bucket. You can enable the configuration options in any combination. For more information about when Amazon S3 considers a bucket or object public, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status">The Meaning of "Public"</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PublicAccessBlockConfiguration {
@@ -11215,44 +9979,22 @@ impl PublicAccessBlockConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.block_public_acls {
-            writer.write(xml::writer::XmlEvent::start_element("BlockPublicAcls"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "BlockPublicAcls", &value.to_string())?;
         }
         if let Some(ref value) = obj.block_public_policy {
-            writer.write(xml::writer::XmlEvent::start_element("BlockPublicPolicy"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "BlockPublicPolicy", &value.to_string())?;
         }
         if let Some(ref value) = obj.ignore_public_acls {
-            writer.write(xml::writer::XmlEvent::start_element("IgnorePublicAcls"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "IgnorePublicAcls", &value.to_string())?;
         }
         if let Some(ref value) = obj.restrict_public_buckets {
-            writer.write(xml::writer::XmlEvent::start_element(
-                "RestrictPublicBuckets",
-            ))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "RestrictPublicBuckets", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketAccelerateConfigurationRequest {
     /// <p>Container for setting the transfer acceleration state.</p>
@@ -11261,7 +10003,7 @@ pub struct PutBucketAccelerateConfigurationRequest {
     pub bucket: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketAclRequest {
     /// <p>The canned ACL to apply to the bucket.</p>
@@ -11270,8 +10012,6 @@ pub struct PutBucketAclRequest {
     pub access_control_policy: Option<AccessControlPolicy>,
     /// <p>The bucket to which to apply the ACL.</p>
     pub bucket: String,
-    /// <p>The base64-encoded 128-bit MD5 digest of the data. This header must be used as a message integrity check to verify that the request body was not corrupted in transit. For more information, go to <a href="http://www.ietf.org/rfc/rfc1864.txt">RFC 1864.</a> </p>
-    pub content_md5: Option<String>,
     /// <p>Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.</p>
     pub grant_full_control: Option<String>,
     /// <p>Allows grantee to list the objects in the bucket.</p>
@@ -11284,7 +10024,7 @@ pub struct PutBucketAclRequest {
     pub grant_write_acp: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketAnalyticsConfigurationRequest {
     /// <p>The configuration and any analyses for the analytics filter.</p>
@@ -11295,28 +10035,24 @@ pub struct PutBucketAnalyticsConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketCorsRequest {
     /// <p>Specifies the bucket impacted by the <code>cors</code>configuration.</p>
     pub bucket: String,
-    /// <p>Describes the cross-origin access configuration for objects in an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//cors.html">Enabling Cross-Origin Resource Sharing</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
+    /// <p>Describes the cross-origin access configuration for objects in an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling Cross-Origin Resource Sharing</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub cors_configuration: CORSConfiguration,
-    /// <p>The base64-encoded 128-bit MD5 digest of the data. This header must be used as a message integrity check to verify that the request body was not corrupted in transit. For more information, go to <a href="http://www.ietf.org/rfc/rfc1864.txt">RFC 1864.</a> </p>
-    pub content_md5: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketEncryptionRequest {
     /// <p>Specifies default encryption for a bucket using server-side encryption with Amazon S3-managed keys (SSE-S3) or customer master keys stored in AWS KMS (SSE-KMS). For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Default Bucket Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub bucket: String,
-    /// <p>The base64-encoded 128-bit MD5 digest of the server-side encryption configuration. This parameter is auto-populated when using the command from the CLI.</p>
-    pub content_md5: Option<String>,
     pub server_side_encryption_configuration: ServerSideEncryptionConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketInventoryConfigurationRequest {
     /// <p>The name of the bucket where the inventory configuration will be stored.</p>
@@ -11327,7 +10063,7 @@ pub struct PutBucketInventoryConfigurationRequest {
     pub inventory_configuration: InventoryConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketLifecycleConfigurationRequest {
     /// <p>The name of the bucket for which to set the configuration.</p>
@@ -11336,29 +10072,25 @@ pub struct PutBucketLifecycleConfigurationRequest {
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketLifecycleRequest {
     /// <p><p/></p>
     pub bucket: String,
     /// <p><p/></p>
-    pub content_md5: Option<String>,
-    /// <p><p/></p>
     pub lifecycle_configuration: Option<LifecycleConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketLoggingRequest {
     /// <p>The name of the bucket for which to set the logging parameters.</p>
     pub bucket: String,
     /// <p>Container for logging status information.</p>
     pub bucket_logging_status: BucketLoggingStatus,
-    /// <p>The MD5 hash of the <code>PutBucketLogging</code> request body.</p>
-    pub content_md5: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketMetricsConfigurationRequest {
     /// <p>The name of the bucket for which the metrics configuration is set.</p>
@@ -11369,7 +10101,7 @@ pub struct PutBucketMetricsConfigurationRequest {
     pub metrics_configuration: MetricsConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketNotificationConfigurationRequest {
     /// <p>The name of the bucket.</p>
@@ -11377,89 +10109,75 @@ pub struct PutBucketNotificationConfigurationRequest {
     pub notification_configuration: NotificationConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketNotificationRequest {
     /// <p>The name of the bucket.</p>
     pub bucket: String,
-    /// <p>The MD5 hash of the <code>PutPublicAccessBlock</code> request body.</p>
-    pub content_md5: Option<String>,
     /// <p>The container for the configuration.</p>
     pub notification_configuration: NotificationConfigurationDeprecated,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketPolicyRequest {
     /// <p>The name of the bucket.</p>
     pub bucket: String,
     /// <p>Set this parameter to true to confirm that you want to remove your permissions to change this bucket policy in the future.</p>
     pub confirm_remove_self_bucket_access: Option<bool>,
-    /// <p>The MD5 hash of the request body.</p>
-    pub content_md5: Option<String>,
     /// <p>The bucket policy as a JSON document.</p>
     pub policy: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketReplicationRequest {
     /// <p>The name of the bucket</p>
     pub bucket: String,
-    /// <p>The base64-encoded 128-bit MD5 digest of the data. You must use this header as a message integrity check to verify that the request body was not corrupted in transit. For more information, see <a href="http://www.ietf.org/rfc/rfc1864.txt">RFC 1864</a>.</p>
-    pub content_md5: Option<String>,
     pub replication_configuration: ReplicationConfiguration,
     /// <p><p/></p>
     pub token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketRequestPaymentRequest {
     /// <p>The bucket name.</p>
     pub bucket: String,
-    /// <p>&gt;The base64-encoded 128-bit MD5 digest of the data. You must use this header as a message integrity check to verify that the request body was not corrupted in transit. For more information, see <a href="http://www.ietf.org/rfc/rfc1864.txt">RFC 1864</a>.</p>
-    pub content_md5: Option<String>,
     /// <p>Container for Payer.</p>
     pub request_payment_configuration: RequestPaymentConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketTaggingRequest {
     /// <p>The bucket name.</p>
     pub bucket: String,
-    /// <p>The base64-encoded 128-bit MD5 digest of the data. You must use this header as a message integrity check to verify that the request body was not corrupted in transit. For more information, see <a href="http://www.ietf.org/rfc/rfc1864.txt">RFC 1864</a>.</p>
-    pub content_md5: Option<String>,
     /// <p>Container for the <code>TagSet</code> and <code>Tag</code> elements.</p>
     pub tagging: Tagging,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketVersioningRequest {
     /// <p>The bucket name.</p>
     pub bucket: String,
-    /// <p>&gt;The base64-encoded 128-bit MD5 digest of the data. You must use this header as a message integrity check to verify that the request body was not corrupted in transit. For more information, see <a href="http://www.ietf.org/rfc/rfc1864.txt">RFC 1864</a>.</p>
-    pub content_md5: Option<String>,
     /// <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.</p>
     pub mfa: Option<String>,
     /// <p>Container for setting the versioning state.</p>
     pub versioning_configuration: VersioningConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutBucketWebsiteRequest {
     /// <p>The bucket name.</p>
     pub bucket: String,
-    /// <p>The base64-encoded 128-bit MD5 digest of the data. You must use this header as a message integrity check to verify that the request body was not corrupted in transit. For more information, see <a href="http://www.ietf.org/rfc/rfc1864.txt">RFC 1864</a>.</p>
-    pub content_md5: Option<String>,
     /// <p>Container for the request.</p>
     pub website_configuration: WebsiteConfiguration,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectAclOutput {
     pub request_charged: Option<String>,
@@ -11473,16 +10191,16 @@ impl PutObjectAclOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectAclOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectAclOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectAclRequest {
     /// <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p>
@@ -11491,8 +10209,6 @@ pub struct PutObjectAclRequest {
     pub access_control_policy: Option<AccessControlPolicy>,
     /// <p>The bucket name that contains the object to which you want to attach the ACL. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub bucket: String,
-    /// <p>The base64-encoded 128-bit MD5 digest of the data. This header must be used as a message integrity check to verify that the request body was not corrupted in transit. For more information, go to <a href="http://www.ietf.org/rfc/rfc1864.txt">RFC 1864.&gt;</a> </p>
-    pub content_md5: Option<String>,
     /// <p>Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.</p>
     pub grant_full_control: Option<String>,
     /// <p>Allows grantee to list the objects in the bucket.</p>
@@ -11510,7 +10226,7 @@ pub struct PutObjectAclRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectLegalHoldOutput {
     pub request_charged: Option<String>,
@@ -11524,22 +10240,20 @@ impl PutObjectLegalHoldOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectLegalHoldOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectLegalHoldOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectLegalHoldRequest {
     /// <p>The bucket name containing the object that you want to place a Legal Hold on. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub bucket: String,
-    /// <p>The MD5 hash for the request body.</p>
-    pub content_md5: Option<String>,
     /// <p>The key name for the object that you want to place a Legal Hold on.</p>
     pub key: String,
     /// <p>Container element for the Legal Hold configuration you want to apply to the specified object.</p>
@@ -11549,7 +10263,7 @@ pub struct PutObjectLegalHoldRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectLockConfigurationOutput {
     pub request_charged: Option<String>,
@@ -11563,22 +10277,20 @@ impl PutObjectLockConfigurationOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectLockConfigurationOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectLockConfigurationOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectLockConfigurationRequest {
     /// <p>The bucket whose Object Lock configuration you want to create or replace.</p>
     pub bucket: String,
-    /// <p>The MD5 hash for the request body.</p>
-    pub content_md5: Option<String>,
     /// <p>The Object Lock configuration that you want to apply to the specified bucket.</p>
     pub object_lock_configuration: Option<ObjectLockConfiguration>,
     pub request_payer: Option<String>,
@@ -11586,7 +10298,7 @@ pub struct PutObjectLockConfigurationRequest {
     pub token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectOutput {
     /// <p>Entity tag for the uploaded object.</p>
@@ -11616,16 +10328,16 @@ impl PutObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug)]
+#[derive(Debug, Default)]
 pub struct PutObjectRequest {
     /// <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p>
     pub acl: Option<String>,
@@ -11680,7 +10392,7 @@ pub struct PutObjectRequest {
     pub ssekms_key_id: Option<String>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example, AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// <p>If you don't specify, Standard is the default storage class. Amazon S3 supports other storage classes.</p>
+    /// <p>If you don't specify, S3 Standard is the default storage class. Amazon S3 supports other storage classes.</p>
     pub storage_class: Option<String>,
     /// <p>The tag-set for the object. The tag-set must be encoded as URL Query parameters. (For example, "Key1=Value1")</p>
     pub tagging: Option<String>,
@@ -11688,7 +10400,7 @@ pub struct PutObjectRequest {
     pub website_redirect_location: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectRetentionOutput {
     pub request_charged: Option<String>,
@@ -11702,24 +10414,22 @@ impl PutObjectRetentionOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectRetentionOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectRetentionOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectRetentionRequest {
     /// <p>The bucket name that contains the object you want to apply this Object Retention configuration to. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub bucket: String,
     /// <p>Indicates whether this operation should bypass Governance-mode restrictions.</p>
     pub bypass_governance_retention: Option<bool>,
-    /// <p>The MD5 hash for the request body.</p>
-    pub content_md5: Option<String>,
     /// <p>The key name for the object that you want to apply this Object Retention configuration to.</p>
     pub key: String,
     pub request_payer: Option<String>,
@@ -11729,7 +10439,7 @@ pub struct PutObjectRetentionRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PutObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was added to.</p>
@@ -11744,22 +10454,20 @@ impl PutObjectTaggingOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutObjectTaggingOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = PutObjectTaggingOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutObjectTaggingRequest {
     /// <p>The bucket name containing the object. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub bucket: String,
-    /// <p>The MD5 hash for the request body.</p>
-    pub content_md5: Option<String>,
     /// <p>Name of the tag.</p>
     pub key: String,
     /// <p>Container for the <code>TagSet</code> and <code>Tag</code> elements</p>
@@ -11768,13 +10476,11 @@ pub struct PutObjectTaggingRequest {
     pub version_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutPublicAccessBlockRequest {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to set.</p>
     pub bucket: String,
-    /// <p>The MD5 hash of the <code>PutPublicAccessBlock</code> request body. </p>
-    pub content_md5: Option<String>,
     /// <p>The <code>PublicAccessBlock</code> configuration that you want to apply to this Amazon S3 bucket. You can enable the configuration options in any combination. For more information about when Amazon S3 considers a bucket or object public, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status">The Meaning of "Public"</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub public_access_block_configuration: PublicAccessBlockConfiguration,
 }
@@ -11784,11 +10490,7 @@ struct QueueArnDeserializer;
 impl QueueArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -11803,17 +10505,12 @@ impl QueueArnSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Specifies the configuration for publishing messages to an Amazon Simple Queue Service (Amazon SQS) queue when Amazon S3 detects specified events.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueueConfiguration {
@@ -11874,25 +10571,15 @@ impl QueueConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Queue"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.queue_arn
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Queue", &obj.queue_arn.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>This data type is deprecated. Use <a>QueueConfiguration</a> for the same purposes. This data type specifies the configuration for publishing messages to an Amazon Simple Queue Service (Amazon SQS) queue when Amazon S3 detects specified events. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueueConfigurationDeprecated {
@@ -11951,20 +10638,10 @@ impl QueueConfigurationDeprecatedSerializer {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
         if let Some(ref value) = obj.queue {
-            writer.write(xml::writer::XmlEvent::start_element("Queue"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Queue", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12030,12 +10707,7 @@ impl QuietSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -12050,12 +10722,7 @@ impl QuoteCharacterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12070,12 +10737,7 @@ impl QuoteEscapeCharacterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12090,12 +10752,7 @@ impl QuoteFieldsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12110,17 +10767,12 @@ impl RecordDelimiterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>The container for the records event.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RecordsEvent {
     /// <p>The byte array of partial, one or more result records.</p>
@@ -12147,7 +10799,7 @@ impl RecordsEventDeserializer {
     }
 }
 /// <p>Specifies how requests are redirected. In the event of an error, you can specify a different error code to return.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Redirect {
@@ -12218,51 +10870,26 @@ impl RedirectSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.host_name {
-            writer.write(xml::writer::XmlEvent::start_element("HostName"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "HostName", &value.to_string())?;
         }
         if let Some(ref value) = obj.http_redirect_code {
-            writer.write(xml::writer::XmlEvent::start_element("HttpRedirectCode"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "HttpRedirectCode", &value.to_string())?;
         }
         if let Some(ref value) = obj.protocol {
-            writer.write(xml::writer::XmlEvent::start_element("Protocol"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Protocol", &value.to_string())?;
         }
         if let Some(ref value) = obj.replace_key_prefix_with {
-            writer.write(xml::writer::XmlEvent::start_element("ReplaceKeyPrefixWith"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ReplaceKeyPrefixWith", &value.to_string())?;
         }
         if let Some(ref value) = obj.replace_key_with {
-            writer.write(xml::writer::XmlEvent::start_element("ReplaceKeyWith"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ReplaceKeyWith", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Specifies the redirect behavior of all requests to a website endpoint of an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedirectAllRequestsTo {
@@ -12307,19 +10934,9 @@ impl RedirectAllRequestsToSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("HostName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.host_name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "HostName", &obj.host_name.to_string())?;
         if let Some(ref value) = obj.protocol {
-            writer.write(xml::writer::XmlEvent::start_element("Protocol"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Protocol", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12330,11 +10947,7 @@ struct ReplaceKeyPrefixWithDeserializer;
 impl ReplaceKeyPrefixWithDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -12349,12 +10962,7 @@ impl ReplaceKeyPrefixWithSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12363,11 +10971,7 @@ struct ReplaceKeyWithDeserializer;
 impl ReplaceKeyWithDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -12382,12 +10986,7 @@ impl ReplaceKeyWithSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12396,11 +10995,7 @@ struct ReplicaKmsKeyIDDeserializer;
 impl ReplicaKmsKeyIDDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -12415,17 +11010,12 @@ impl ReplicaKmsKeyIDSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A container for replication rules. You can add up to 1,000 rules. The maximum size of a replication configuration is 2 MB.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationConfiguration {
@@ -12475,19 +11065,14 @@ impl ReplicationConfigurationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Role"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.role
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Role", &obj.role.to_string())?;
         ReplicationRulesSerializer::serialize(&mut writer, "Rule", &obj.rules)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Specifies which Amazon S3 objects to replicate and where to store the replicas.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationRule {
@@ -12593,20 +11178,10 @@ impl ReplicationRuleSerializer {
             &ReplicationRuleFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ID", &value.to_string())?;
         }
         if let Some(ref value) = obj.priority {
-            writer.write(xml::writer::XmlEvent::start_element("Priority"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Priority", &value.to_string())?;
         }
         if let Some(ref value) = obj.source_selection_criteria {
             &SourceSelectionCriteriaSerializer::serialize(
@@ -12615,18 +11190,13 @@ impl ReplicationRuleSerializer {
                 value,
             )?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p><p>A container for specifying rule filters. The filters determine the subset of objects to which the rule applies. This element is required only if you specify more than one filter. </p> <p>For example:</p> <ul> <li> <p>If you specify both a <code>Prefix</code> and a <code>Tag</code> filter, wrap these filters in an <code>And</code> tag. </p> </li> <li> <p>If you specify a filter based on multiple tags, wrap the <code>Tag</code> elements in an <code>And</code> tag</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationRuleAndOperator {
@@ -12678,12 +11248,7 @@ impl ReplicationRuleAndOperatorSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tags {
             &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
@@ -12693,7 +11258,7 @@ impl ReplicationRuleAndOperatorSerializer {
 }
 
 /// <p>A filter that identifies the subset of objects to which the replication rule applies. A <code>Filter</code> must specify exactly one <code>Prefix</code>, <code>Tag</code>, or an <code>And</code> child element.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationRuleFilter {
@@ -12749,12 +11314,7 @@ impl ReplicationRuleFilterSerializer {
             &ReplicationRuleAndOperatorSerializer::serialize(&mut writer, "And", value)?;
         }
         if let Some(ref value) = obj.prefix {
-            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Prefix", &value.to_string())?;
         }
         if let Some(ref value) = obj.tag {
             &TagSerializer::serialize(&mut writer, "Tag", value)?;
@@ -12768,11 +11328,7 @@ struct ReplicationRuleStatusDeserializer;
 impl ReplicationRuleStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -12787,12 +11343,7 @@ impl ReplicationRuleStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -12844,7 +11395,7 @@ impl ReplicationRulesSerializer {
 }
 
 /// <p> A container specifying S3 Replication Time Control (S3 RTC) related information, including whether S3 RTC is enabled and the time when all objects and operations on objects must be replicated. Must be specified together with a <code>Metrics</code> block. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationTime {
@@ -12889,12 +11440,7 @@ impl ReplicationTimeSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         ReplicationTimeValueSerializer::serialize(&mut writer, "Time", &obj.time)?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -12905,11 +11451,7 @@ struct ReplicationTimeStatusDeserializer;
 impl ReplicationTimeStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -12924,17 +11466,12 @@ impl ReplicationTimeStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p> A container specifying the time value for S3 Replication Time Control (S3 RTC) and replication metrics <code>EventThreshold</code>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReplicationTimeValue {
@@ -12975,19 +11512,14 @@ impl ReplicationTimeValueSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.minutes {
-            writer.write(xml::writer::XmlEvent::start_element("Minutes"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Minutes", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Container for Payer.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestPaymentConfiguration {
     /// <p>Specifies who pays for the download and request fees.</p>
@@ -13006,18 +11538,13 @@ impl RequestPaymentConfigurationSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Payer"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.payer
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Payer", &obj.payer.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Container for specifying if periodic <code>QueryProgress</code> messages should be sent.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestProgress {
     /// <p>Specifies whether periodic QueryProgress frames should be sent. Valid values: TRUE, FALSE. Default value: FALSE.</p>
@@ -13037,12 +11564,7 @@ impl RequestProgressSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.enabled {
-            writer.write(xml::writer::XmlEvent::start_element("Enabled"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Enabled", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -13059,12 +11581,7 @@ impl ResponseCacheControlSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13079,12 +11596,7 @@ impl ResponseContentDispositionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13099,12 +11611,7 @@ impl ResponseContentEncodingSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13119,12 +11626,7 @@ impl ResponseContentLanguageSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13139,12 +11641,7 @@ impl ResponseContentTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13159,16 +11656,11 @@ impl ResponseExpiresSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RestoreObjectOutput {
     pub request_charged: Option<String>,
@@ -13184,16 +11676,16 @@ impl RestoreObjectOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreObjectOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = RestoreObjectOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreObjectRequest {
     /// <p>The bucket name or containing the object to restore. </p> <p>When using this API with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this operation using an access point through the AWS SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-access-points.html">Using Access Points</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
@@ -13207,20 +11699,20 @@ pub struct RestoreObjectRequest {
 }
 
 /// <p>Container for restore job parameters.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreRequest {
     /// <p>Lifetime of the active copy in days. Do not use with restores that specify <code>OutputLocation</code>.</p>
     pub days: Option<i64>,
     /// <p>The optional description for the job.</p>
     pub description: Option<String>,
-    /// <p>Glacier related parameters pertaining to this job. Do not use with restores that specify <code>OutputLocation</code>.</p>
+    /// <p>S3 Glacier related parameters pertaining to this job. Do not use with restores that specify <code>OutputLocation</code>.</p>
     pub glacier_job_parameters: Option<GlacierJobParameters>,
     /// <p>Describes the location where the restore job's output is stored.</p>
     pub output_location: Option<OutputLocation>,
     /// <p>Describes the parameters for Select job types.</p>
     pub select_parameters: Option<SelectParameters>,
-    /// <p>Glacier retrieval tier at which the restore will be processed.</p>
+    /// <p>S3 Glacier retrieval tier at which the restore will be processed.</p>
     pub tier: Option<String>,
     /// <p>Type of restore request.</p>
     pub type_: Option<String>,
@@ -13239,20 +11731,10 @@ impl RestoreRequestSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.days {
-            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.description {
-            writer.write(xml::writer::XmlEvent::start_element("Description"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Description", &value.to_string())?;
         }
         if let Some(ref value) = obj.glacier_job_parameters {
             &GlacierJobParametersSerializer::serialize(&mut writer, "GlacierJobParameters", value)?;
@@ -13264,20 +11746,10 @@ impl RestoreRequestSerializer {
             &SelectParametersSerializer::serialize(&mut writer, "SelectParameters", value)?;
         }
         if let Some(ref value) = obj.tier {
-            writer.write(xml::writer::XmlEvent::start_element("Tier"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Tier", &value.to_string())?;
         }
         if let Some(ref value) = obj.type_ {
-            writer.write(xml::writer::XmlEvent::start_element("Type"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Type", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -13294,12 +11766,7 @@ impl RestoreRequestTypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -13308,11 +11775,7 @@ struct RoleDeserializer;
 impl RoleDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -13327,17 +11790,12 @@ impl RoleSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Specifies the redirect behavior and when a redirect is applied.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RoutingRule {
@@ -13429,8 +11887,8 @@ impl RoutingRulesSerializer {
     }
 }
 
-/// <p>Specifies lifecycle rules for an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlifecycle.html">PUT Bucket lifecycle</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+/// <p>Specifies lifecycle rules for an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlifecycle.html">Put Bucket Lifecycle Configuration</a> in the <i>Amazon Simple Storage Service API Reference</i>. For examples, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html#API_PutBucketLifecycleConfiguration_Examples">Put Bucket Lifecycle Configuration Examples</a> </p>
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Rule {
@@ -13445,7 +11903,7 @@ pub struct Rule {
     pub prefix: String,
     /// <p>If <code>Enabled</code>, the rule is currently being applied. If <code>Disabled</code>, the rule is not currently being applied.</p>
     pub status: String,
-    /// <p>Specifies when an object transitions to a specified storage class.</p>
+    /// <p>Specifies when an object transitions to a specified storage class. For more information about Amazon S3 lifecycle configuration rules, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-transition-general-considerations.html">Transitioning Objects Using Amazon S3 Lifecycle</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub transition: Option<Transition>,
 }
 
@@ -13526,12 +11984,7 @@ impl RuleSerializer {
             &LifecycleExpirationSerializer::serialize(&mut writer, "Expiration", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("ID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "ID", &value.to_string())?;
         }
         if let Some(ref value) = obj.noncurrent_version_expiration {
             &NoncurrentVersionExpirationSerializer::serialize(
@@ -13547,18 +12000,8 @@ impl RuleSerializer {
                 value,
             )?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         if let Some(ref value) = obj.transition {
             &TransitionSerializer::serialize(&mut writer, "Transition", value)?;
         }
@@ -13614,7 +12057,7 @@ impl RulesSerializer {
 }
 
 /// <p>A container for object key name prefix and suffix filtering rules.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3KeyFilter {
@@ -13663,7 +12106,7 @@ impl S3KeyFilterSerializer {
 }
 
 /// <p>Describes an Amazon S3 location that will receive the results of the restore request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Location {
     /// <p>A list of grants that control access to the staged results.</p>
@@ -13698,36 +12141,16 @@ impl S3LocationSerializer {
         if let Some(ref value) = obj.access_control_list {
             &GrantsSerializer::serialize(&mut writer, "AccessControlList", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("BucketName"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.bucket_name
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "BucketName", &obj.bucket_name.to_string())?;
         if let Some(ref value) = obj.canned_acl {
-            writer.write(xml::writer::XmlEvent::start_element("CannedACL"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "CannedACL", &value.to_string())?;
         }
         if let Some(ref value) = obj.encryption {
             &EncryptionSerializer::serialize(&mut writer, "Encryption", value)?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Prefix", &obj.prefix.to_string())?;
         if let Some(ref value) = obj.storage_class {
-            writer.write(xml::writer::XmlEvent::start_element("StorageClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "StorageClass", &value.to_string())?;
         }
         if let Some(ref value) = obj.tagging {
             &TaggingSerializer::serialize(&mut writer, "Tagging", value)?;
@@ -13740,7 +12163,7 @@ impl S3LocationSerializer {
 }
 
 /// <p>Specifies the use of SSE-KMS to encrypt delivered inventory reports.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SSEKMS {
@@ -13777,12 +12200,7 @@ impl SSEKMSSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("KeyId"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.key_id
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "KeyId", &obj.key_id.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -13792,11 +12210,7 @@ struct SSEKMSKeyIdDeserializer;
 impl SSEKMSKeyIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -13811,17 +12225,12 @@ impl SSEKMSKeyIdSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Specifies the use of SSE-S3 to encrypt delivered inventory reports.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SSES3 {}
@@ -13831,11 +12240,11 @@ struct SSES3Deserializer;
 impl SSES3Deserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<SSES3, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = SSES3::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -13858,7 +12267,7 @@ impl SSES3Serializer {
 }
 
 /// <p>Specifies the byte range of the object to get the records from. A record is processed when its first byte is contained by the range. This parameter is optional, but when specified, it must not be empty. See RFC 2616, Section 14.35.1 about how to specify the start and end of the range.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScanRange {
     /// <p>Specifies the end of the byte range. This parameter is optional. Valid values: non-negative integers. The default value is one less than the size of the object being queried. If only the End parameter is supplied, it is interpreted to mean scan the last N bytes of the file. For example, <code>&lt;scanrange&gt;&lt;end&gt;50&lt;/end&gt;&lt;/scanrange&gt;</code> means scan the last 50 bytes.</p>
@@ -13880,103 +12289,44 @@ impl ScanRangeSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.end {
-            writer.write(xml::writer::XmlEvent::start_element("End"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "End", &value.to_string())?;
         }
         if let Some(ref value) = obj.start {
-            writer.write(xml::writer::XmlEvent::start_element("Start"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Start", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>The container for selecting objects from a content event stream.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
-pub struct SelectObjectContentEventStream {
+#[derive(Debug, Clone, PartialEq)]
+pub enum SelectObjectContentEventStreamItem {
     /// <p>The Continuation Event.</p>
-    pub cont: Option<ContinuationEvent>,
+    Cont(ContinuationEvent),
     /// <p>The End Event.</p>
-    pub end: Option<EndEvent>,
+    End(EndEvent),
     /// <p>The Progress Event.</p>
-    pub progress: Option<ProgressEvent>,
+    Progress(ProgressEvent),
     /// <p>The Records Event.</p>
-    pub records: Option<RecordsEvent>,
+    Records(RecordsEvent),
     /// <p>The Stats Event.</p>
-    pub stats: Option<StatsEvent>,
+    Stats(StatsEvent),
 }
 
-#[allow(dead_code)]
-struct SelectObjectContentEventStreamDeserializer;
-impl SelectObjectContentEventStreamDeserializer {
-    #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<SelectObjectContentEventStream, XmlParseError> {
-        deserialize_elements::<_, SelectObjectContentEventStream, _>(
-            tag_name,
-            stack,
-            |name, stack, obj| {
-                match name {
-                    "Cont" => {
-                        obj.cont = Some(ContinuationEventDeserializer::deserialize("Cont", stack)?);
-                    }
-                    "End" => {
-                        obj.end = Some(EndEventDeserializer::deserialize("End", stack)?);
-                    }
-                    "Progress" => {
-                        obj.progress =
-                            Some(ProgressEventDeserializer::deserialize("Progress", stack)?);
-                    }
-                    "Records" => {
-                        obj.records =
-                            Some(RecordsEventDeserializer::deserialize("Records", stack)?);
-                    }
-                    "Stats" => {
-                        obj.stats = Some(StatsEventDeserializer::deserialize("Stats", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                }
-                Ok(())
-            },
-        )
+impl DeserializeEvent for SelectObjectContentEventStreamItem {
+    fn deserialize_event(_event_type: &str, _data: &[u8]) -> Result<Self, RusotoError<()>> {
+        unimplemented!()
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
-#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+
+#[derive(Debug)]
 pub struct SelectObjectContentOutput {
     /// <p>The array of results.</p>
-    pub payload: Option<SelectObjectContentEventStream>,
+    pub payload: Option<EventStream<SelectObjectContentEventStreamItem>>,
 }
 
-#[allow(dead_code)]
-struct SelectObjectContentOutputDeserializer;
-impl SelectObjectContentOutputDeserializer {
-    #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<SelectObjectContentOutput, XmlParseError> {
-        Ok(SelectObjectContentOutput {
-            payload: Some(SelectObjectContentEventStreamDeserializer::deserialize(
-                "Payload", stack,
-            )?),
-            ..SelectObjectContentOutput::default()
-        })
-    }
-}
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records. It returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectObjectContentRequest {
     /// <p>The S3 bucket.</p>
@@ -14038,7 +12388,7 @@ impl SelectObjectContentRequestSerializer {
     }
 }
 /// <p>Describes the parameters for Select job types.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectParameters {
     /// <p>The expression that is used to query the object.</p>
@@ -14063,18 +12413,8 @@ impl SelectParametersSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Expression"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.expression
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("ExpressionType"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.expression_type
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Expression", &obj.expression.to_string())?;
+        write_characters_element(writer, "ExpressionType", &obj.expression_type.to_string())?;
         InputSerializationSerializer::serialize(
             &mut writer,
             "InputSerialization",
@@ -14094,11 +12434,7 @@ struct ServerSideEncryptionDeserializer;
 impl ServerSideEncryptionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14113,21 +12449,16 @@ impl ServerSideEncryptionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Describes the default server-side encryption to apply to new objects in the bucket. If a PUT Object request doesn't specify any server-side encryption, this default encryption will be applied. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTencryption.html">PUT Bucket encryption</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ServerSideEncryptionByDefault {
-    /// <p>KMS master key ID to use for the default encryption. This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to <code>aws:kms</code>.</p>
+    /// <p><p>AWS Key Management Service (KMS) customer master key ID to use for the default encryption. This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to <code>aws:kms</code>.</p> <p>You can specify the key ID or the Amazon Resource Name (ARN) of the CMK. However, if you are using encryption with cross-account operations, you must use a fully qualified CMK ARN. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html#bucket-encryption-update-bucket-policy">Using encryption for cross-account operations</a>. </p> <p> <b>For example:</b> </p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <important> <p>Amazon S3 only supports symmetric CMKs and not asymmetric CMKs. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </important></p>
     pub kms_master_key_id: Option<String>,
     /// <p>Server-side encryption algorithm to use for the default encryption.</p>
     pub sse_algorithm: String,
@@ -14177,25 +12508,15 @@ impl ServerSideEncryptionByDefaultSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.kms_master_key_id {
-            writer.write(xml::writer::XmlEvent::start_element("KMSMasterKeyID"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "KMSMasterKeyID", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("SSEAlgorithm"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.sse_algorithm
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "SSEAlgorithm", &obj.sse_algorithm.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Specifies the default server-side-encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ServerSideEncryptionConfiguration {
@@ -14248,7 +12569,7 @@ impl ServerSideEncryptionConfigurationSerializer {
 }
 
 /// <p>Specifies the default server-side encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ServerSideEncryptionRule {
@@ -14361,11 +12682,7 @@ struct SettingDeserializer;
 impl SettingDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 
@@ -14380,12 +12697,7 @@ impl SettingSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -14394,15 +12706,11 @@ struct SizeDeserializer;
 impl SizeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>A container that describes additional filters for identifying the source objects that you want to replicate. You can choose to enable or disable the replication of these objects. Currently, Amazon S3 supports only the filter that you can specify for objects created with server-side encryption using a customer master key (CMK) stored in AWS Key Management Service (SSE-KMS).</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SourceSelectionCriteria {
@@ -14462,7 +12770,7 @@ impl SourceSelectionCriteriaSerializer {
 }
 
 /// <p>A container for filter information for the selection of S3 objects encrypted with AWS KMS.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SseKmsEncryptedObjects {
@@ -14503,12 +12811,7 @@ impl SseKmsEncryptedObjectsSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.status
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Status", &obj.status.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14518,11 +12821,7 @@ struct SseKmsEncryptedObjectsStatusDeserializer;
 impl SseKmsEncryptedObjectsStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14537,12 +12836,7 @@ impl SseKmsEncryptedObjectsStatusSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -14557,12 +12851,7 @@ impl StartSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -14571,11 +12860,7 @@ struct StartAfterDeserializer;
 impl StartAfterDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14590,17 +12875,12 @@ impl StartAfterSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Container for the stats details.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Stats {
     /// <p>The total number of uncompressed object bytes processed.</p>
@@ -14643,7 +12923,7 @@ impl StatsDeserializer {
     }
 }
 /// <p>Container for the Stats Event.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StatsEvent {
     /// <p>The Stats event details.</p>
@@ -14674,11 +12954,7 @@ struct StorageClassDeserializer;
 impl StorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14693,17 +12969,12 @@ impl StorageClassSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Specifies data related to access patterns to be collected and made available to analyze the tradeoffs between different storage classes for an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StorageClassAnalysis {
@@ -14755,7 +13026,7 @@ impl StorageClassAnalysisSerializer {
 }
 
 /// <p>Container for data related to the storage class analysis for an Amazon S3 bucket for export.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StorageClassAnalysisDataExport {
@@ -14816,12 +13087,11 @@ impl StorageClassAnalysisDataExportSerializer {
             "Destination",
             &obj.destination,
         )?;
-        writer.write(xml::writer::XmlEvent::start_element("OutputSchemaVersion"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.output_schema_version
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(
+            writer,
+            "OutputSchemaVersion",
+            &obj.output_schema_version.to_string(),
+        )?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14831,11 +13101,7 @@ struct StorageClassAnalysisSchemaVersionDeserializer;
 impl StorageClassAnalysisSchemaVersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14850,12 +13116,7 @@ impl StorageClassAnalysisSchemaVersionSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -14864,11 +13125,7 @@ struct SuffixDeserializer;
 impl SuffixDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -14883,17 +13140,12 @@ impl SuffixSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A container of a key value name pair.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
@@ -14935,18 +13187,8 @@ impl TagSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::start_element("Key"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.key
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
-        writer.write(xml::writer::XmlEvent::start_element("Value"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.value
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Key", &obj.key.to_string())?;
+        write_characters_element(writer, "Value", &obj.value.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -14991,7 +13233,7 @@ impl TagSetSerializer {
 }
 
 /// <p>Container for <code>TagSet</code> elements.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tagging {
     /// <p>A collection for a set of tags</p>
@@ -15020,11 +13262,7 @@ struct TargetBucketDeserializer;
 impl TargetBucketDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15039,17 +13277,12 @@ impl TargetBucketSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Container for granting information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TargetGrant {
@@ -15101,12 +13334,7 @@ impl TargetGrantSerializer {
             &GranteeSerializer::serialize(&mut writer, "Grantee", value)?;
         }
         if let Some(ref value) = obj.permission {
-            writer.write(xml::writer::XmlEvent::start_element("Permission"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Permission", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -15156,11 +13384,7 @@ struct TargetPrefixDeserializer;
 impl TargetPrefixDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15175,12 +13399,7 @@ impl TargetPrefixSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15195,12 +13414,7 @@ impl TierSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15209,11 +13423,7 @@ struct TokenDeserializer;
 impl TokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15228,12 +13438,7 @@ impl TokenSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15242,11 +13447,7 @@ struct TopicArnDeserializer;
 impl TopicArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15261,17 +13462,12 @@ impl TopicArnSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>A container for specifying the configuration for publication of messages to an Amazon Simple Notification Service (Amazon SNS) topic when Amazon S3 detects specified events.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicConfiguration {
@@ -15332,25 +13528,15 @@ impl TopicConfigurationSerializer {
             &NotificationConfigurationFilterSerializer::serialize(&mut writer, "Filter", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Topic"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.topic_arn
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        write_characters_element(writer, "Topic", &obj.topic_arn.to_string())?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>A container for specifying the configuration for publication of messages to an Amazon Simple Notification Service (Amazon SNS) topic when Amazon S3 detects specified events. This data type is deprecated. Use <a>TopicConfiguration</a> instead.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicConfigurationDeprecated {
@@ -15409,20 +13595,10 @@ impl TopicConfigurationDeprecatedSerializer {
             &EventListSerializer::serialize(&mut writer, "Event", value)?;
         }
         if let Some(ref value) = obj.id {
-            writer.write(xml::writer::XmlEvent::start_element("Id"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Id", &value.to_string())?;
         }
         if let Some(ref value) = obj.topic {
-            writer.write(xml::writer::XmlEvent::start_element("Topic"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Topic", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -15477,8 +13653,8 @@ impl TopicConfigurationListSerializer {
     }
 }
 
-/// <p>Specifies when an object transitions to a specified storage class.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+/// <p>Specifies when an object transitions to a specified storage class. For more information about Amazon S3 lifecycle configuration rules, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-transition-general-considerations.html">Transitioning Objects Using Amazon S3 Lifecycle</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Transition {
@@ -15532,28 +13708,13 @@ impl TransitionSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.date {
-            writer.write(xml::writer::XmlEvent::start_element("Date"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Date", &value.to_string())?;
         }
         if let Some(ref value) = obj.days {
-            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Days", &value.to_string())?;
         }
         if let Some(ref value) = obj.storage_class {
-            writer.write(xml::writer::XmlEvent::start_element("StorageClass"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "StorageClass", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -15611,11 +13772,7 @@ struct TransitionStorageClassDeserializer;
 impl TransitionStorageClassDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15630,12 +13787,7 @@ impl TransitionStorageClassSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15644,11 +13796,7 @@ struct TypeDeserializer;
 impl TypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15663,12 +13811,7 @@ impl TypeSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15677,11 +13820,7 @@ struct URIDeserializer;
 impl URIDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15696,12 +13835,7 @@ impl URISerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15710,11 +13844,7 @@ struct UploadIdMarkerDeserializer;
 impl UploadIdMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15729,16 +13859,11 @@ impl UploadIdMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadPartCopyOutput {
     /// <p>Container for all response elements.</p>
@@ -15773,7 +13898,7 @@ impl UploadPartCopyOutputDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadPartCopyRequest {
     /// <p>The bucket name.</p>
@@ -15811,7 +13936,7 @@ pub struct UploadPartCopyRequest {
     pub upload_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct UploadPartOutput {
     /// <p>Entity tag for the uploaded object.</p>
@@ -15835,16 +13960,16 @@ impl UploadPartOutputDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadPartOutput, XmlParseError> {
-        start_element(tag_name, stack)?;
+        xml_util::start_element(tag_name, stack)?;
 
         let obj = UploadPartOutput::default();
 
-        end_element(tag_name, stack)?;
+        xml_util::end_element(tag_name, stack)?;
 
         Ok(obj)
     }
 }
-#[derive(Default, Debug)]
+#[derive(Debug, Default)]
 pub struct UploadPartRequest {
     /// <p>Object data.</p>
     pub body: Option<StreamingBody>,
@@ -15894,11 +14019,7 @@ struct ValueDeserializer;
 impl ValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15913,12 +14034,7 @@ impl ValueSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
@@ -15927,11 +14043,7 @@ struct VersionIdMarkerDeserializer;
 impl VersionIdMarkerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -15946,17 +14058,12 @@ impl VersionIdMarkerSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, obj)
     }
 }
 
 /// <p>Describes the versioning state of an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTVersioningStatus.html">PUT Bucket versioning</a> in the <i>Amazon Simple Storage Service API Reference</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VersioningConfiguration {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
@@ -15978,27 +14085,17 @@ impl VersioningConfigurationSerializer {
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
         if let Some(ref value) = obj.mfa_delete {
-            writer.write(xml::writer::XmlEvent::start_element("MfaDelete"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "MfaDelete", &value.to_string())?;
         }
         if let Some(ref value) = obj.status {
-            writer.write(xml::writer::XmlEvent::start_element("Status"))?;
-            writer.write(xml::writer::XmlEvent::characters(&format!(
-                "{value}",
-                value = value
-            )));
-            writer.write(xml::writer::XmlEvent::end_element())?;
+            write_characters_element(writer, "Status", &value.to_string())?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
 
 /// <p>Specifies website configuration parameters for an Amazon S3 bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct WebsiteConfiguration {
     /// <p>The name of the error document for the website.</p>
@@ -16048,11 +14145,7 @@ struct YearsDeserializer;
 impl YearsDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -16067,12 +14160,7 @@ impl YearsSerializer {
     where
         W: Write,
     {
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.to_string()
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())
+        write_characters_element(writer, name, &obj.to_string())
     }
 }
 
@@ -19149,25 +17237,25 @@ pub trait S3 {
         input: AbortMultipartUploadRequest,
     ) -> Result<AbortMultipartUploadOutput, RusotoError<AbortMultipartUploadError>>;
 
-    /// <p><p>Completes a multipart upload by assembling previously uploaded parts.</p> <p>You first initiate the multipart upload and then upload all parts using the <a>UploadPart</a> operation. After successfully uploading all relevant parts of an upload, you call this operation to complete the upload. Upon receiving this request, Amazon S3 concatenates all the parts in ascending order by part number to create a new object. In the Complete Multipart Upload request, you must provide the parts list. You must ensure that the parts list is complete. This operation concatenates the parts that you provide in the list. For each part in the list, you must provide the part number and the <code>ETag</code> value, returned after that part was uploaded.</p> <p>Processing of a Complete Multipart Upload request could take several minutes to complete. After Amazon S3 begins processing the request, it sends an HTTP response header that specifies a 200 OK response. While processing is in progress, Amazon S3 periodically sends white space characters to keep the connection from timing out. Because a request could fail after the initial 200 OK response has been sent, it is important that you check the response body to determine whether the request succeeded.</p> <p>Note that if <code>CompleteMultipartUpload</code> fails, applications should be prepared to retry the failed requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ErrorBestPractices.html">Amazon S3 Error Best Practices</a>.</p> <p>For more information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading Objects Using Multipart Upload</a>.</p> <p>For information about permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p> <code>GetBucketLifecycle</code> has the following special errors:</p> <ul> <li> <p>Error code: <code>EntityTooSmall</code> </p> <ul> <li> <p>Description: Your proposed upload is smaller than the minimum allowed object size. Each part must be at least 5 MB in size, except the last part.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>InvalidPart</code> </p> <ul> <li> <p>Description: One or more of the specified parts could not be found. The part might not have been uploaded, or the specified entity tag might not have matched the part&#39;s entity tag.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>InvalidPartOrder</code> </p> <ul> <li> <p>Description: The list of parts was not in ascending order. The parts list must be specified in order by part number.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>NoSuchUpload</code> </p> <ul> <li> <p>Description: The specified multipart upload does not exist. The upload ID might be invalid, or the multipart upload might have been aborted or completed.</p> </li> <li> <p>404 Not Found</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>DeleteBucketMetricsConfiguration</code>:</p> <ul> <li> <p> <a>CreateMultipartUpload</a> </p> </li> <li> <p> <a>UploadPart</a> </p> </li> <li> <p> <a>AbortMultipartUpload</a> </p> </li> <li> <p> <a>ListParts</a> </p> </li> <li> <p> <a>ListMultipartUploads</a> </p> </li> </ul></p>
+    /// <p><p>Completes a multipart upload by assembling previously uploaded parts.</p> <p>You first initiate the multipart upload and then upload all parts using the <a>UploadPart</a> operation. After successfully uploading all relevant parts of an upload, you call this operation to complete the upload. Upon receiving this request, Amazon S3 concatenates all the parts in ascending order by part number to create a new object. In the Complete Multipart Upload request, you must provide the parts list. You must ensure that the parts list is complete. This operation concatenates the parts that you provide in the list. For each part in the list, you must provide the part number and the <code>ETag</code> value, returned after that part was uploaded.</p> <p>Processing of a Complete Multipart Upload request could take several minutes to complete. After Amazon S3 begins processing the request, it sends an HTTP response header that specifies a 200 OK response. While processing is in progress, Amazon S3 periodically sends white space characters to keep the connection from timing out. Because a request could fail after the initial 200 OK response has been sent, it is important that you check the response body to determine whether the request succeeded.</p> <p>Note that if <code>CompleteMultipartUpload</code> fails, applications should be prepared to retry the failed requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ErrorBestPractices.html">Amazon S3 Error Best Practices</a>.</p> <p>For more information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading Objects Using Multipart Upload</a>.</p> <p>For information about permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p> <code>GetBucketLifecycle</code> has the following special errors:</p> <ul> <li> <p>Error code: <code>EntityTooSmall</code> </p> <ul> <li> <p>Description: Your proposed upload is smaller than the minimum allowed object size. Each part must be at least 5 MB in size, except the last part.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>InvalidPart</code> </p> <ul> <li> <p>Description: One or more of the specified parts could not be found. The part might not have been uploaded, or the specified entity tag might not have matched the part&#39;s entity tag.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>InvalidPartOrder</code> </p> <ul> <li> <p>Description: The list of parts was not in ascending order. The parts list must be specified in order by part number.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>NoSuchUpload</code> </p> <ul> <li> <p>Description: The specified multipart upload does not exist. The upload ID might be invalid, or the multipart upload might have been aborted or completed.</p> </li> <li> <p>404 Not Found</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>CompleteMultipartUpload</code>:</p> <ul> <li> <p> <a>CreateMultipartUpload</a> </p> </li> <li> <p> <a>UploadPart</a> </p> </li> <li> <p> <a>AbortMultipartUpload</a> </p> </li> <li> <p> <a>ListParts</a> </p> </li> <li> <p> <a>ListMultipartUploads</a> </p> </li> </ul></p>
     async fn complete_multipart_upload(
         &self,
         input: CompleteMultipartUploadRequest,
     ) -> Result<CompleteMultipartUploadOutput, RusotoError<CompleteMultipartUploadError>>;
 
-    /// <p>Creates a copy of an object that is already stored in Amazon S3.</p> <note> <p>You can store individual objects of up to 5 TB in Amazon S3. You create a copy of your object up to 5 GB in size in a single atomic operation using this API. However, for copying an object greater than 5 GB, you must use the multipart upload Upload Part - Copy API. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjctsUsingRESTMPUapi.html">Copy Object Using the REST Multipart Upload API</a>.</p> </note> <p>When copying an object, you can preserve all metadata (default) or specify new metadata. However, the ACL is not preserved and is set to private for the user making the request. To override the default ACL setting, specify a new ACL when generating a copy request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>.</p> <important> <p>Amazon S3 transfer acceleration does not support cross-region copies. If you request a cross-region copy using a transfer acceleration endpoint, you get a 400 <code>Bad Request</code> error. For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a>.</p> </important> <p>All copy requests must be authenticated. Additionally, you must have <i>read</i> access to the source object and <i>write</i> access to the destination bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html">REST Authentication</a>. Both the Region that you want to copy the object from and the Region that you want to copy the object to must be enabled for your account.</p> <p>To only copy an object under certain conditions, such as whether the <code>Etag</code> matches or whether the object was modified before or after a specified date, use the request parameters <code>x-amz-copy-source-if-match</code>, <code>x-amz-copy-source-if-none-match</code>, <code>x-amz-copy-source-if-unmodified-since</code>, or <code> x-amz-copy-source-if-modified-since</code>.</p> <note> <p>All headers with the <code>x-amz-</code> prefix, including <code>x-amz-copy-source</code>, must be signed.</p> </note> <p>You can use this operation to change the storage class of an object that is already stored in Amazon S3 using the <code>StorageClass</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a>.</p> <p>The source object that you are copying can be encrypted or unencrypted. If the source object is encrypted, it can be encrypted by server-side encryption using AWS managed encryption keys or by using a customer-provided encryption key. When copying an object, you can request that Amazon S3 encrypt the target object by using either the AWS managed encryption keys or by using your own encryption key. You can do this regardless of the form of server-side encryption that was used to encrypt the source, or even if the source object was not encrypted. For more information about server-side encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Using Server-Side Encryption</a>.</p> <p>A copy request might return an error when Amazon S3 receives the copy request or while Amazon S3 is copying the files. If the error occurs before the copy operation starts, you receive a standard Amazon S3 error. If the error occurs during the copy operation, the error response is embedded in the <code>200 OK</code> response. This means that a <code>200 OK</code> response can contain either a success or an error. Design your application to parse the contents of the response and handle it appropriately.</p> <p>If the copy is successful, you receive a response with information about the copied object.</p> <note> <p>If the request is an HTTP 1.1 request, the response is chunk encoded. If it were not, it would not contain the content-length, and you would need to read the entire body.</p> </note> <p>Consider the following when using request headers:</p> <ul> <li> <p> Consideration 1 – If both the <code>x-amz-copy-source-if-match</code> and <code>x-amz-copy-source-if-unmodified-since</code> headers are present in the request and evaluate as follows, Amazon S3 returns 200 OK and copies the data:</p> <ul> <li> <p> <code>x-amz-copy-source-if-match</code> condition evaluates to true</p> </li> <li> <p> <code>x-amz-copy-source-if-unmodified-since</code> condition evaluates to false</p> </li> </ul> </li> <li> <p> Consideration 2 – If both of the <code>x-amz-copy-source-if-none-match</code> and <code>x-amz-copy-source-if-modified-since</code> headers are present in the request and evaluate as follows, Amazon S3 returns the <code>412 Precondition Failed</code> response code:</p> <ul> <li> <p> <code>x-amz-copy-source-if-none-match</code> condition evaluates to false</p> </li> <li> <p> <code>x-amz-copy-source-if-modified-since</code> condition evaluates to true</p> </li> </ul> </li> </ul> <p>The copy request charge is based on the storage class and Region you specify for the destination object. For pricing information, see <a href="https://aws.amazon.com/s3/pricing/">Amazon S3 Pricing</a>.</p> <p>Following are other considerations when using <code>CopyObject</code>:</p> <dl> <dt>Versioning</dt> <dd> <p>By default, <code>x-amz-copy-source</code> identifies the current version of an object to copy. (If the current version is a delete marker, Amazon S3 behaves as if the object was deleted.) To copy a different version, use the <code>versionId</code> subresource.</p> <p>If you enable versioning on the target bucket, Amazon S3 generates a unique version ID for the object being copied. This version ID is different from the version ID of the source object. Amazon S3 returns the version ID of the copied object in the <code>x-amz-version-id</code> response header in the response.</p> <p>If you do not enable versioning or suspend it on the target bucket, the version ID that Amazon S3 generates is always null.</p> <p>If the source object's storage class is GLACIER, you must restore a copy of this object before you can use it as a source object for the copy operation. For more information, see .</p> </dd> <dt>Access Permissions</dt> <dd> <p>When copying an object, you can optionally specify the accounts or groups that should be granted specific permissions on the new object. There are two ways to grant the permissions using the request headers:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </dd> <dt>Server-Side- Encryption-Specific Request Headers</dt> <dd> <p>To encrypt the target object, you must provide the appropriate encryption-related request headers. The one you use depends on whether you want to use AWS managed encryption keys or provide your own encryption key. </p> <ul> <li> <p>To encrypt the target object using server-side encryption with an AWS managed encryption key, provide the following request headers, as appropriate.</p> <ul> <li> <p> <code>x-amz-server-side​-encryption</code> </p> </li> <li> <p> <code>x-amz-server-side-encryption-aws-kms-key-id</code> </p> </li> <li> <p> <code>x-amz-server-side-encryption-context</code> </p> </li> </ul> <note> <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but don't provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS KMS to protect the data. If you want to use a customer managed AWS KMS CMK, you must provide the <code>x-amz-server-side-encryption-aws-kms-key-id</code> of the symmetric customer managed CMK. Amazon S3 only supports symmetric CMKs and not asymmetric CMKs. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </note> <important> <p>All GET and PUT requests for an object protected by AWS KMS fail if you don't make them with SSL or by using SigV4.</p> </important> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in KMS</a>.</p> </li> <li> <p>To encrypt the target object using server-side encryption with an encryption key that you provide, use the following headers.</p> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> </li> <li> <p>If the source object is encrypted using server-side encryption with customer-provided encryption keys, you must use the following headers.</p> <ul> <li> <p>x-amz-copy-source​-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-copy-source​-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-copy-source-​server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in Amazon KMS</a>.</p> </li> </ul> </dd> <dt>Access-Control-List (ACL)-Specific Request Headers</dt> <dd> <p>You also can use the following access control–related headers with this operation. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the access control list (ACL) on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. With this operation, you can grant access permissions using one of the following two methods:</p> <ul> <li> <p>Specify a canned ACL (<code>x-amz-acl</code>) — Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly — To explicitly grant access permissions to specific AWS accounts or groups, use the following headers. Each header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>. In the header, you specify a list of grantees who get the specific permission. To grant permissions explicitly, use:</p> <ul> <li> <p>x-amz-grant-read</p> </li> <li> <p>x-amz-grant-write</p> </li> <li> <p>x-amz-grant-read-acp</p> </li> <li> <p>x-amz-grant-write-acp</p> </li> <li> <p>x-amz-grant-full-control</p> </li> </ul> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by email addresses permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: emailAddress="xyz@amazon.com", emailAddress="abc@amazon.com" </code> </p> </li> </ul> </dd> </dl> <p>The following operations are related to <code>CopyObject</code>:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a>GetObject</a> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjectsExamples.html">Copying Objects</a>.</p>
+    /// <p>Creates a copy of an object that is already stored in Amazon S3.</p> <note> <p>You can store individual objects of up to 5 TB in Amazon S3. You create a copy of your object up to 5 GB in size in a single atomic operation using this API. However, to copy an object greater than 5 GB, you must use the multipart upload Upload Part - Copy API. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjctsUsingRESTMPUapi.html">Copy Object Using the REST Multipart Upload API</a>.</p> </note> <p>All copy requests must be authenticated. Additionally, you must have <i>read</i> access to the source object and <i>write</i> access to the destination bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html">REST Authentication</a>. Both the Region that you want to copy the object from and the Region that you want to copy the object to must be enabled for your account.</p> <p>A copy request might return an error when Amazon S3 receives the copy request or while Amazon S3 is copying the files. If the error occurs before the copy operation starts, you receive a standard Amazon S3 error. If the error occurs during the copy operation, the error response is embedded in the <code>200 OK</code> response. This means that a <code>200 OK</code> response can contain either a success or an error. Design your application to parse the contents of the response and handle it appropriately.</p> <p>If the copy is successful, you receive a response with information about the copied object.</p> <note> <p>If the request is an HTTP 1.1 request, the response is chunk encoded. If it were not, it would not contain the content-length, and you would need to read the entire body.</p> </note> <p>The copy request charge is based on the storage class and Region that you specify for the destination object. For pricing information, see <a href="https://aws.amazon.com/s3/pricing/">Amazon S3 pricing</a>.</p> <important> <p>Amazon S3 transfer acceleration does not support cross-Region copies. If you request a cross-Region copy using a transfer acceleration endpoint, you get a 400 <code>Bad Request</code> error. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a>.</p> </important> <p> <b>Metadata</b> </p> <p>When copying an object, you can preserve all metadata (default) or specify new metadata. However, the ACL is not preserved and is set to private for the user making the request. To override the default ACL setting, specify a new ACL when generating a copy request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. </p> <p>To specify whether you want the object metadata copied from the source object or replaced with metadata provided in the request, you can optionally add the <code>x-amz-metadata-directive</code> header. When you grant permissions, you can use the <code>s3:x-amz-metadata-directive</code> condition key to enforce certain metadata behavior when objects are uploaded. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/amazon-s3-policy-keys.html">Specifying Conditions in a Policy</a> in the <i>Amazon S3 Developer Guide</i>. For a complete list of Amazon S3-specific condition keys, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/list_amazons3.html">Actions, Resources, and Condition Keys for Amazon S3</a>.</p> <p> <b> <code>x-amz-copy-source-if</code> Headers</b> </p> <p>To only copy an object under certain conditions, such as whether the <code>Etag</code> matches or whether the object was modified before or after a specified date, use the following request parameters:</p> <ul> <li> <p> <code>x-amz-copy-source-if-match</code> </p> </li> <li> <p> <code>x-amz-copy-source-if-none-match</code> </p> </li> <li> <p> <code>x-amz-copy-source-if-unmodified-since</code> </p> </li> <li> <p> <code>x-amz-copy-source-if-modified-since</code> </p> </li> </ul> <p> If both the <code>x-amz-copy-source-if-match</code> and <code>x-amz-copy-source-if-unmodified-since</code> headers are present in the request and evaluate as follows, Amazon S3 returns <code>200 OK</code> and copies the data:</p> <ul> <li> <p> <code>x-amz-copy-source-if-match</code> condition evaluates to true</p> </li> <li> <p> <code>x-amz-copy-source-if-unmodified-since</code> condition evaluates to false</p> </li> </ul> <p>If both the <code>x-amz-copy-source-if-none-match</code> and <code>x-amz-copy-source-if-modified-since</code> headers are present in the request and evaluate as follows, Amazon S3 returns the <code>412 Precondition Failed</code> response code:</p> <ul> <li> <p> <code>x-amz-copy-source-if-none-match</code> condition evaluates to false</p> </li> <li> <p> <code>x-amz-copy-source-if-modified-since</code> condition evaluates to true</p> </li> </ul> <note> <p>All headers with the <code>x-amz-</code> prefix, including <code>x-amz-copy-source</code>, must be signed.</p> </note> <p> <b>Encryption</b> </p> <p>The source object that you are copying can be encrypted or unencrypted. The source object can be encrypted with server-side encryption using AWS managed encryption keys (SSE-S3 or SSE-KMS) or by using a customer-provided encryption key. With server-side encryption, Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts the data when you access it. </p> <p>You can optionally use the appropriate encryption-related headers to request server-side encryption for the target object. You have the option to provide your own encryption key or use SSE-S3 or SSE-KMS, regardless of the form of server-side encryption that was used to encrypt the source object. You can even request encryption if the source object was not encrypted. For more information about server-side encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Using Server-Side Encryption</a>.</p> <p> <b>Access Control List (ACL)-Specific Request Headers</b> </p> <p>When copying an object, you can optionally use headers to grant ACL-based permissions. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the ACL on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-using-rest-api.html">Managing ACLs Using the REST API</a>. </p> <p> <b>Storage Class Options</b> </p> <p>You can use the <code>CopyObject</code> operation to change the storage class of an object that is already stored in Amazon S3 using the <code>StorageClass</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the <i>Amazon S3 Service Developer Guide</i>.</p> <p> <b>Versioning</b> </p> <p>By default, <code>x-amz-copy-source</code> identifies the current version of an object to copy. If the current version is a delete marker, Amazon S3 behaves as if the object was deleted. To copy a different version, use the <code>versionId</code> subresource.</p> <p>If you enable versioning on the target bucket, Amazon S3 generates a unique version ID for the object being copied. This version ID is different from the version ID of the source object. Amazon S3 returns the version ID of the copied object in the <code>x-amz-version-id</code> response header in the response.</p> <p>If you do not enable versioning or suspend it on the target bucket, the version ID that Amazon S3 generates is always null.</p> <p>If the source object's storage class is GLACIER, you must restore a copy of this object before you can use it as a source object for the copy operation. For more information, see .</p> <p>The following operations are related to <code>CopyObject</code>:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a>GetObject</a> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjectsExamples.html">Copying Objects</a>.</p>
     async fn copy_object(
         &self,
         input: CopyObjectRequest,
     ) -> Result<CopyObjectOutput, RusotoError<CopyObjectError>>;
 
-    /// <p><p>Creates a new bucket. To create a bucket, you must register with Amazon S3 and have a valid AWS Access Key ID to authenticate requests. Anonymous requests are never allowed to create buckets. By creating the bucket, you become the bucket owner.</p> <p>Not every string is an acceptable bucket name. For information on bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html">Working with Amazon S3 Buckets</a>.</p> <p>By default, the bucket is created in the US East (N. Virginia) Region. You can optionally specify a Region in the request body. You might choose a Region to optimize latency, minimize costs, or address regulatory requirements. For example, if you reside in Europe, you will probably find it advantageous to create buckets in the EU (Ireland) Region. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro">How to Select a Region for Your Buckets</a>.</p> <note> <p>If you send your create bucket request to the <code>s3.amazonaws.com</code> endpoint, the request goes to the us-east-1 Region. Accordingly, the signature calculations in Signature Version 4 must use us-east-1 as the Region, even if the location constraint in the request specifies another Region where the bucket is to be created. If you create a bucket in a Region other than US East (N. Virginia), your application must be able to handle 307 redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html">Virtual Hosting of Buckets</a>.</p> </note> <p>When creating a bucket using this operation, you can optionally specify the accounts or groups that should be granted specific permissions on the bucket. There are two ways to grant the appropriate permissions using the request headers.</p> <ul> <li> <p>Specify a canned ACL using the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly using the <code>x-amz-grant-read</code>, <code>x-amz-grant-write</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These headers map to the set of permissions Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by email addresses permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> <note> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </note> <p>The following operations are related to <code>CreateBucket</code>:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> </ul></p>
+    /// <p><p>Creates a new bucket. To create a bucket, you must register with Amazon S3 and have a valid AWS Access Key ID to authenticate requests. Anonymous requests are never allowed to create buckets. By creating the bucket, you become the bucket owner.</p> <p>Not every string is an acceptable bucket name. For information on bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html">Working with Amazon S3 Buckets</a>.</p> <p>By default, the bucket is created in the US East (N. Virginia) Region. You can optionally specify a Region in the request body. You might choose a Region to optimize latency, minimize costs, or address regulatory requirements. For example, if you reside in Europe, you will probably find it advantageous to create buckets in the Europe (Ireland) Region. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro">How to Select a Region for Your Buckets</a>.</p> <note> <p>If you send your create bucket request to the <code>s3.amazonaws.com</code> endpoint, the request goes to the us-east-1 Region. Accordingly, the signature calculations in Signature Version 4 must use us-east-1 as the Region, even if the location constraint in the request specifies another Region where the bucket is to be created. If you create a bucket in a Region other than US East (N. Virginia), your application must be able to handle 307 redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html">Virtual Hosting of Buckets</a>.</p> </note> <p>When creating a bucket using this operation, you can optionally specify the accounts or groups that should be granted specific permissions on the bucket. There are two ways to grant the appropriate permissions using the request headers.</p> <ul> <li> <p>Specify a canned ACL using the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly using the <code>x-amz-grant-read</code>, <code>x-amz-grant-write</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These headers map to the set of permissions Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by account IDs permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: id=&quot;11112222333&quot;, id=&quot;444455556666&quot; </code> </p> </li> </ul> <note> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </note> <p>The following operations are related to <code>CreateBucket</code>:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> </ul></p>
     async fn create_bucket(
         &self,
         input: CreateBucketRequest,
     ) -> Result<CreateBucketOutput, RusotoError<CreateBucketError>>;
 
-    /// <p><p>This operation initiates a multipart upload and returns an upload ID. This upload ID is used to associate all of the parts in the specific multipart upload. You specify this upload ID in each of your subsequent upload part requests (see <a>UploadPart</a>). You also include this upload ID in the final request to either complete or abort the multipart upload request.</p> <p>For more information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html">Multipart Upload Overview</a>.</p> <p>If you have configured a lifecycle rule to abort incomplete multipart uploads, the upload must complete within the number of days specified in the bucket lifecycle configuration. Otherwise, the incomplete multipart upload becomes eligible for an abort operation and Amazon S3 aborts the multipart upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config">Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a>.</p> <p>For information about the permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p>For request signing, multipart upload is just a series of regular requests. You initiate a multipart upload, send one or more requests to upload parts, and then complete the multipart upload process. You sign each request individually. There is nothing special about signing multipart upload requests. For more information about signing, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a>.</p> <note> <p> After you initiate a multipart upload and upload one or more parts, to stop being charged for storing the uploaded parts, you must either complete or abort the multipart upload. Amazon S3 frees up the space used to store the parts and stop charging you for storing them only after you either complete or abort a multipart upload. </p> </note> <p>You can optionally request server-side encryption. For server-side encryption, Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. You can provide your own encryption key, or use AWS Key Management Service (AWS KMS) customer master keys (CMKs) or Amazon S3-managed encryption keys. If you choose to provide your own encryption key, the request headers you provide in <a>UploadPart</a>) and <a>UploadPartCopy</a>) requests must match the headers you used in the request to initiate the upload by using <code>CreateMultipartUpload</code>. </p> <p>To perform a multipart upload with encryption using an AWS KMS CMK, the requester must have permission to the <code>kms:Encrypt</code>, <code>kms:Decrypt</code>, <code>kms:ReEncrypt<em></code>, <code>kms:GenerateDataKey</em></code>, and <code>kms:DescribeKey</code> actions on the key. These permissions are required because Amazon S3 must decrypt and read data from the encrypted file parts before it completes the multipart upload.</p> <p>If your AWS Identity and Access Management (IAM) user or role is in the same AWS account as the AWS KMS CMK, then you must have these permissions on the key policy. If your IAM user or role belongs to a different account than the key, then you must have the permissions on both the key policy and your IAM user or role.</p> <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a>.</p> <dl> <dt>Access Permissions</dt> <dd> <p>When copying an object, you can optionally specify the accounts or groups that should be granted specific permissions on the new object. There are two ways to grant the permissions using the request headers:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </dd> <dt>Server-Side- Encryption-Specific Request Headers</dt> <dd> <p>You can optionally tell Amazon S3 to encrypt data at rest using server-side encryption. Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. The option you use depends on whether you want to use AWS managed encryption keys or provide your own encryption key. </p> <ul> <li> <p>Use encryption keys managed by Amazon S3 or customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) – If you want AWS to manage the keys used to encrypt data, specify the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption</p> </li> <li> <p>x-amz-server-side-encryption-aws-kms-key-id</p> </li> <li> <p>x-amz-server-side-encryption-context</p> </li> </ul> <note> <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but don&#39;t provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS KMS to protect the data.</p> </note> <important> <p>All GET and PUT requests for an object protected by AWS KMS fail if you don&#39;t make them with SSL or by using SigV4.</p> </important> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> <li> <p>Use customer-provided encryption keys – If you want to manage your own encryption keys, provide all the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> </ul> </dd> <dt>Access-Control-List (ACL)-Specific Request Headers</dt> <dd> <p>You also can use the following access control–related headers with this operation. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the access control list (ACL) on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. With this operation, you can grant access permissions using one of the following two methods:</p> <ul> <li> <p>Specify a canned ACL (<code>x-amz-acl</code>) — Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly — To explicitly grant access permissions to specific AWS accounts or groups, use the following headers. Each header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>. In the header, you specify a list of grantees who get the specific permission. To grant permissions explicitly, use:</p> <ul> <li> <p>x-amz-grant-read</p> </li> <li> <p>x-amz-grant-write</p> </li> <li> <p>x-amz-grant-read-acp</p> </li> <li> <p>x-amz-grant-write-acp</p> </li> <li> <p>x-amz-grant-full-control</p> </li> </ul> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by email addresses permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> </dd> </dl> <p>The following operations are related to <code>CreateMultipartUpload</code>:</p> <ul> <li> <p> <a>UploadPart</a> </p> </li> <li> <p> <a>CompleteMultipartUpload</a> </p> </li> <li> <p> <a>AbortMultipartUpload</a> </p> </li> <li> <p> <a>ListParts</a> </p> </li> <li> <p> <a>ListMultipartUploads</a> </p> </li> </ul></p>
+    /// <p><p>This operation initiates a multipart upload and returns an upload ID. This upload ID is used to associate all of the parts in the specific multipart upload. You specify this upload ID in each of your subsequent upload part requests (see <a>UploadPart</a>). You also include this upload ID in the final request to either complete or abort the multipart upload request.</p> <p>For more information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html">Multipart Upload Overview</a>.</p> <p>If you have configured a lifecycle rule to abort incomplete multipart uploads, the upload must complete within the number of days specified in the bucket lifecycle configuration. Otherwise, the incomplete multipart upload becomes eligible for an abort operation and Amazon S3 aborts the multipart upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config">Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a>.</p> <p>For information about the permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p>For request signing, multipart upload is just a series of regular requests. You initiate a multipart upload, send one or more requests to upload parts, and then complete the multipart upload process. You sign each request individually. There is nothing special about signing multipart upload requests. For more information about signing, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a>.</p> <note> <p> After you initiate a multipart upload and upload one or more parts, to stop being charged for storing the uploaded parts, you must either complete or abort the multipart upload. Amazon S3 frees up the space used to store the parts and stop charging you for storing them only after you either complete or abort a multipart upload. </p> </note> <p>You can optionally request server-side encryption. For server-side encryption, Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. You can provide your own encryption key, or use AWS Key Management Service (AWS KMS) customer master keys (CMKs) or Amazon S3-managed encryption keys. If you choose to provide your own encryption key, the request headers you provide in <a>UploadPart</a>) and <a>UploadPartCopy</a>) requests must match the headers you used in the request to initiate the upload by using <code>CreateMultipartUpload</code>. </p> <p>To perform a multipart upload with encryption using an AWS KMS CMK, the requester must have permission to the <code>kms:Encrypt</code>, <code>kms:Decrypt</code>, <code>kms:ReEncrypt<em></code>, <code>kms:GenerateDataKey</em></code>, and <code>kms:DescribeKey</code> actions on the key. These permissions are required because Amazon S3 must decrypt and read data from the encrypted file parts before it completes the multipart upload.</p> <p>If your AWS Identity and Access Management (IAM) user or role is in the same AWS account as the AWS KMS CMK, then you must have these permissions on the key policy. If your IAM user or role belongs to a different account than the key, then you must have the permissions on both the key policy and your IAM user or role.</p> <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a>.</p> <dl> <dt>Access Permissions</dt> <dd> <p>When copying an object, you can optionally specify the accounts or groups that should be granted specific permissions on the new object. There are two ways to grant the permissions using the request headers:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </dd> <dt>Server-Side- Encryption-Specific Request Headers</dt> <dd> <p>You can optionally tell Amazon S3 to encrypt data at rest using server-side encryption. Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. The option you use depends on whether you want to use AWS managed encryption keys or provide your own encryption key. </p> <ul> <li> <p>Use encryption keys managed by Amazon S3 or customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) – If you want AWS to manage the keys used to encrypt data, specify the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption</p> </li> <li> <p>x-amz-server-side-encryption-aws-kms-key-id</p> </li> <li> <p>x-amz-server-side-encryption-context</p> </li> </ul> <note> <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but don&#39;t provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS KMS to protect the data.</p> </note> <important> <p>All GET and PUT requests for an object protected by AWS KMS fail if you don&#39;t make them with SSL or by using SigV4.</p> </important> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> <li> <p>Use customer-provided encryption keys – If you want to manage your own encryption keys, provide all the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> </ul> </dd> <dt>Access-Control-List (ACL)-Specific Request Headers</dt> <dd> <p>You also can use the following access control–related headers with this operation. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the access control list (ACL) on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. With this operation, you can grant access permissions using one of the following two methods:</p> <ul> <li> <p>Specify a canned ACL (<code>x-amz-acl</code>) — Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly — To explicitly grant access permissions to specific AWS accounts or groups, use the following headers. Each header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>. In the header, you specify a list of grantees who get the specific permission. To grant permissions explicitly, use:</p> <ul> <li> <p>x-amz-grant-read</p> </li> <li> <p>x-amz-grant-write</p> </li> <li> <p>x-amz-grant-read-acp</p> </li> <li> <p>x-amz-grant-write-acp</p> </li> <li> <p>x-amz-grant-full-control</p> </li> </ul> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by account IDs permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: id=&quot;11112222333&quot;, id=&quot;444455556666&quot; </code> </p> </li> </ul> </dd> </dl> <p>The following operations are related to <code>CreateMultipartUpload</code>:</p> <ul> <li> <p> <a>UploadPart</a> </p> </li> <li> <p> <a>CompleteMultipartUpload</a> </p> </li> <li> <p> <a>AbortMultipartUpload</a> </p> </li> <li> <p> <a>ListParts</a> </p> </li> <li> <p> <a>ListMultipartUploads</a> </p> </li> </ul></p>
     async fn create_multipart_upload(
         &self,
         input: CreateMultipartUploadRequest,
@@ -19179,7 +17267,7 @@ pub trait S3 {
         input: DeleteBucketRequest,
     ) -> Result<(), RusotoError<DeleteBucketError>>;
 
-    /// <p><p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p> <p>To use this operation, you must have permissions to perform the <code>s3:PutAnalyticsConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p>For information about the Amazon S3 analytics feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html">Amazon S3 Analytics – Storage Class Analysis</a>. </p> <p>The following operations are related to <code>DeleteBucketAnalyticsConfiguration</code>:</p> <ul> <li> <p> </p> </li> <li> <p> </p> </li> <li> <p> </p> </li> </ul></p>
+    /// <p><p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p> <p>To use this operation, you must have permissions to perform the <code>s3:PutAnalyticsConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p>For information about the Amazon S3 analytics feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html">Amazon S3 Analytics – Storage Class Analysis</a>. </p> <p>The following operations are related to <code>DeleteBucketAnalyticsConfiguration</code>:</p> <ul> <li> <p> </p> </li> <li> <p> </p> </li> <li> <p> </p> </li> </ul></p>
     async fn delete_bucket_analytics_configuration(
         &self,
         input: DeleteBucketAnalyticsConfigurationRequest,
@@ -19191,7 +17279,7 @@ pub trait S3 {
         input: DeleteBucketCorsRequest,
     ) -> Result<(), RusotoError<DeleteBucketCorsError>>;
 
-    /// <p><p>This implementation of the DELETE operation removes default encryption from the bucket. For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//bucket-encryption.html">Amazon S3 Default Bucket Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>To use this operation, you must have permissions to perform the <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketEncryption</a> </p> </li> <li> <p> <a>GetBucketEncryption</a> </p> </li> </ul></p>
+    /// <p><p>This implementation of the DELETE operation removes default encryption from the bucket. For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Default Bucket Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>To use this operation, you must have permissions to perform the <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketEncryption</a> </p> </li> <li> <p> <a>GetBucketEncryption</a> </p> </li> </ul></p>
     async fn delete_bucket_encryption(
         &self,
         input: DeleteBucketEncryptionRequest,
@@ -19257,13 +17345,13 @@ pub trait S3 {
         input: DeleteObjectsRequest,
     ) -> Result<DeleteObjectsOutput, RusotoError<DeleteObjectsError>>;
 
-    /// <p><p>Removes the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket. To use this operation, you must have the <code>s3:PutBucketPublicAccessBlock</code> permission. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p>The following operations are related to <code>DeleteBucketMetricsConfiguration</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">Using Amazon S3 Block Public Access</a> </p> </li> <li> <p> <a>GetPublicAccessBlock</a> </p> </li> <li> <p> <a>PutPublicAccessBlock</a> </p> </li> <li> <p> <a>GetBucketPolicyStatus</a> </p> </li> </ul></p>
+    /// <p><p>Removes the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket. To use this operation, you must have the <code>s3:PutBucketPublicAccessBlock</code> permission. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p>The following operations are related to <code>DeletePublicAccessBlock</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">Using Amazon S3 Block Public Access</a> </p> </li> <li> <p> <a>GetPublicAccessBlock</a> </p> </li> <li> <p> <a>PutPublicAccessBlock</a> </p> </li> <li> <p> <a>GetBucketPolicyStatus</a> </p> </li> </ul></p>
     async fn delete_public_access_block(
         &self,
         input: DeletePublicAccessBlockRequest,
     ) -> Result<(), RusotoError<DeletePublicAccessBlockError>>;
 
-    /// <p><p>This implementation of the GET operation uses the <code>accelerate</code> subresource to return the Transfer Acceleration state of a bucket, which is either <code>Enabled</code> or <code>Suspended</code>. Amazon S3 Transfer Acceleration is a bucket-level feature that enables you to perform faster data transfers to and from Amazon S3.</p> <p>To use this operation, you must have permission to perform the <code>s3:GetAccelerateConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>You set the Transfer Acceleration state of an existing bucket to <code>Enabled</code> or <code>Suspended</code> by using the <a>PutBucketAccelerateConfiguration</a> operation. </p> <p>A GET <code>accelerate</code> request does not return a state value for a bucket that has no transfer acceleration state. A bucket has no Transfer Acceleration state if a state has never been set on the bucket. </p> <p>For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//transfer-acceleration.html">Transfer Acceleration</a> in the Amazon Simple Storage Service Developer Guide.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketAccelerateConfiguration</a> </p> </li> </ul></p>
+    /// <p><p>This implementation of the GET operation uses the <code>accelerate</code> subresource to return the Transfer Acceleration state of a bucket, which is either <code>Enabled</code> or <code>Suspended</code>. Amazon S3 Transfer Acceleration is a bucket-level feature that enables you to perform faster data transfers to and from Amazon S3.</p> <p>To use this operation, you must have permission to perform the <code>s3:GetAccelerateConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>You set the Transfer Acceleration state of an existing bucket to <code>Enabled</code> or <code>Suspended</code> by using the <a>PutBucketAccelerateConfiguration</a> operation. </p> <p>A GET <code>accelerate</code> request does not return a state value for a bucket that has no transfer acceleration state. A bucket has no Transfer Acceleration state if a state has never been set on the bucket. </p> <p>For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a> in the Amazon Simple Storage Service Developer Guide.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketAccelerateConfiguration</a> </p> </li> </ul></p>
     async fn get_bucket_accelerate_configuration(
         &self,
         input: GetBucketAccelerateConfigurationRequest,
@@ -19314,7 +17402,7 @@ pub trait S3 {
         input: GetBucketLifecycleRequest,
     ) -> Result<GetBucketLifecycleOutput, RusotoError<GetBucketLifecycleError>>;
 
-    /// <p><note> <p>Bucket lifecycle configuration now supports specifying a lifecycle rule using an object key name prefix, one or more object tags, or a combination of both. Accordingly, this section describes the latest API. The response describes the new filter element that you can use to specify a filter to select a subset of objects to which the rule applies. If you are still using previous version of the lifecycle configuration, it works. For the earlier API description, see <a>GetBucketLifecycle</a>.</p> </note> <p>Returns the lifecycle configuration information set on the bucket. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a>.</p> <p>To use this operation, you must have permission to perform the <code>s3:GetLifecycleConfiguration</code> action. The bucket owner has this permission, by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p> <code>GetBucketLifecycleConfiguration</code> has the following special error:</p> <ul> <li> <p>Error code: <code>NoSuchLifecycleConfiguration</code> </p> <ul> <li> <p>Description: The lifecycle configuration does not exist.</p> </li> <li> <p>HTTP Status Code: 404 Not Found</p> </li> <li> <p>SOAP Fault Code Prefix: Client</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>DeleteBucketMetricsConfiguration</code>:</p> <ul> <li> <p> <a>GetBucketLifecycle</a> </p> </li> <li> <p> <a>PutBucketLifecycle</a> </p> </li> <li> <p> <a>DeleteBucketLifecycle</a> </p> </li> </ul></p>
+    /// <p><note> <p>Bucket lifecycle configuration now supports specifying a lifecycle rule using an object key name prefix, one or more object tags, or a combination of both. Accordingly, this section describes the latest API. The response describes the new filter element that you can use to specify a filter to select a subset of objects to which the rule applies. If you are still using previous version of the lifecycle configuration, it works. For the earlier API description, see <a>GetBucketLifecycle</a>.</p> </note> <p>Returns the lifecycle configuration information set on the bucket. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a>.</p> <p>To use this operation, you must have permission to perform the <code>s3:GetLifecycleConfiguration</code> action. The bucket owner has this permission, by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p> <code>GetBucketLifecycleConfiguration</code> has the following special error:</p> <ul> <li> <p>Error code: <code>NoSuchLifecycleConfiguration</code> </p> <ul> <li> <p>Description: The lifecycle configuration does not exist.</p> </li> <li> <p>HTTP Status Code: 404 Not Found</p> </li> <li> <p>SOAP Fault Code Prefix: Client</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>GetBucketLifecycleConfiguration</code>:</p> <ul> <li> <p> <a>GetBucketLifecycle</a> </p> </li> <li> <p> <a>PutBucketLifecycle</a> </p> </li> <li> <p> <a>DeleteBucketLifecycle</a> </p> </li> </ul></p>
     async fn get_bucket_lifecycle_configuration(
         &self,
         input: GetBucketLifecycleConfigurationRequest,
@@ -19521,7 +17609,7 @@ pub trait S3 {
         input: PutBucketAccelerateConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketAccelerateConfigurationError>>;
 
-    /// <p><p>Sets the permissions on an existing bucket using access control lists (ACL). For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. To set the ACL of a bucket, you must have <code>WRITE_ACP</code> permission.</p> <p>You can use one of the following two ways to set a bucket&#39;s permissions:</p> <ul> <li> <p>Specify the ACL in the request body</p> </li> <li> <p>Specify permissions using request headers</p> </li> </ul> <note> <p>You cannot specify access permission using both the body and the request headers.</p> </note> <p>Depending on your application needs, you may choose to set the ACL on a bucket using either the request body or the headers. For example, if you have an existing application that updates a bucket ACL using the request body, then you can continue to use that approach.</p> <p> <b>Access Permissions</b> </p> <p>You can set access permissions using one of the following methods:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. Specify the canned ACL name as the value of <code>x-amz-acl</code>. If you use this header, you cannot use other access control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. When using these headers, you specify explicit access permissions and grantees (AWS accounts or Amazon S3 groups) who will receive the permission. If you use these ACL-specific headers, you cannot use the <code>x-amz-acl</code> header to set a canned ACL. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-write</code> header grants create, overwrite, and delete objects permission to LogDelivery group predefined by Amazon S3 and two AWS accounts identified by their email addresses.</p> <p> <code>x-amz-grant-write: uri=&quot;http://acs.amazonaws.com/groups/s3/LogDelivery&quot;, emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> <p> <b>Grantee Values</b> </p> <p>You can specify the person (grantee) to whom you&#39;re assigning access rights (using request elements) in the following ways:</p> <ul> <li> <p>By Email address:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;AmazonCustomerByEmail&quot;&gt;&lt;EmailAddress&gt;&lt;&gt;Grantees@email.com&lt;&gt;&lt;/EmailAddress&gt;lt;/Grantee&gt;</code> </p> <p>The grantee is resolved to the CanonicalUser and, in a response to a GET Object acl request, appears as the CanonicalUser.</p> </li> <li> <p>By the person&#39;s ID:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;CanonicalUser&quot;&gt;&lt;ID&gt;&lt;&gt;ID&lt;&gt;&lt;/ID&gt;&lt;DisplayName&gt;&lt;&gt;GranteesEmail&lt;&gt;&lt;/DisplayName&gt; &lt;/Grantee&gt;</code> </p> <p>DisplayName is optional and ignored in the request</p> </li> <li> <p>By URI:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;Group&quot;&gt;&lt;URI&gt;&lt;&gt;http://acs.amazonaws.com/groups/global/AuthenticatedUsers&lt;&gt;&lt;/URI&gt;&lt;/Grantee&gt;</code> </p> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CreateBucket</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> <li> <p> <a>GetObjectAcl</a> </p> </li> </ul></p>
+    /// <p><p>Sets the permissions on an existing bucket using access control lists (ACL). For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. To set the ACL of a bucket, you must have <code>WRITE<em>ACP</code> permission.</p> <p>You can use one of the following two ways to set a bucket&#39;s permissions:</p> <ul> <li> <p>Specify the ACL in the request body</p> </li> <li> <p>Specify permissions using request headers</p> </li> </ul> <note> <p>You cannot specify access permission using both the body and the request headers.</p> </note> <p>Depending on your application needs, you may choose to set the ACL on a bucket using either the request body or the headers. For example, if you have an existing application that updates a bucket ACL using the request body, then you can continue to use that approach.</p> <p> <b>Access Permissions</b> </p> <p>You can set access permissions using one of the following methods:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. Specify the canned ACL name as the value of <code>x-amz-acl</code>. If you use this header, you cannot use other access control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. When using these headers, you specify explicit access permissions and grantees (AWS accounts or Amazon S3 groups) who will receive the permission. If you use these ACL-specific headers, you cannot use the <code>x-amz-acl</code> header to set a canned ACL. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see &lt;a href=&quot;https://docs.aws.amazon.com/general/latest/gr/rande.html#s3</em>region&quot;&gt;Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p>For example, the following <code>x-amz-grant-write</code> header grants create, overwrite, and delete objects permission to LogDelivery group predefined by Amazon S3 and two AWS accounts identified by their email addresses.</p> <p> <code>x-amz-grant-write: uri=&quot;http://acs.amazonaws.com/groups/s3/LogDelivery&quot;, id=&quot;111122223333&quot;, id=&quot;555566667777&quot; </code> </p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> <p> <b>Grantee Values</b> </p> <p>You can specify the person (grantee) to whom you&#39;re assigning access rights (using request elements) in the following ways:</p> <ul> <li> <p>By the person&#39;s ID:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;CanonicalUser&quot;&gt;&lt;ID&gt;&lt;&gt;ID&lt;&gt;&lt;/ID&gt;&lt;DisplayName&gt;&lt;&gt;GranteesEmail&lt;&gt;&lt;/DisplayName&gt; &lt;/Grantee&gt;</code> </p> <p>DisplayName is optional and ignored in the request</p> </li> <li> <p>By URI:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;Group&quot;&gt;&lt;URI&gt;&lt;&gt;http://acs.amazonaws.com/groups/global/AuthenticatedUsers&lt;&gt;&lt;/URI&gt;&lt;/Grantee&gt;</code> </p> </li> <li> <p>By Email address:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;AmazonCustomerByEmail&quot;&gt;&lt;EmailAddress&gt;&lt;&gt;Grantees@email.com&lt;&gt;&lt;/EmailAddress&gt;lt;/Grantee&gt;</code> </p> <p>The grantee is resolved to the CanonicalUser and, in a response to a GET Object acl request, appears as the CanonicalUser. </p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CreateBucket</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> <li> <p> <a>GetObjectAcl</a> </p> </li> </ul></p>
     async fn put_bucket_acl(
         &self,
         input: PutBucketAclRequest,
@@ -19539,19 +17627,19 @@ pub trait S3 {
         input: PutBucketCorsRequest,
     ) -> Result<(), RusotoError<PutBucketCorsError>>;
 
-    /// <p><p>This implementation of the <code>PUT</code> operation uses the <code>encryption</code> subresource to set the default encryption state of an existing bucket.</p> <p>This implementation of the <code>PUT</code> operation sets default encryption for a bucket using server-side encryption with Amazon S3-managed keys SSE-S3 or AWS KMS customer master keys (CMKs) (SSE-KMS).</p> <important> <p>This operation requires AWS Signature Version 4. For more information, see <a href="sig-v4-authenticating-requests.html"> Authenticating Requests (AWS Signature Version 4)</a>. </p> </important> <p>To use this operation, you must have permissions to perform the <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the Amazon Simple Storage Service Developer Guide. </p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketEncryption</a> </p> </li> <li> <p> <a>DeleteBucketEncryption</a> </p> </li> </ul></p>
+    /// <p><p>This implementation of the <code>PUT</code> operation uses the <code>encryption</code> subresource to set the default encryption state of an existing bucket.</p> <p>This implementation of the <code>PUT</code> operation sets default encryption for a bucket using server-side encryption with Amazon S3-managed keys SSE-S3 or AWS KMS customer master keys (CMKs) (SSE-KMS). For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Default Bucket Encryption</a>.</p> <important> <p>This operation requires AWS Signature Version 4. For more information, see <a href="sig-v4-authenticating-requests.html"> Authenticating Requests (AWS Signature Version 4)</a>. </p> </important> <p>To use this operation, you must have permissions to perform the <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the Amazon Simple Storage Service Developer Guide. </p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketEncryption</a> </p> </li> <li> <p> <a>DeleteBucketEncryption</a> </p> </li> </ul></p>
     async fn put_bucket_encryption(
         &self,
         input: PutBucketEncryptionRequest,
     ) -> Result<(), RusotoError<PutBucketEncryptionError>>;
 
-    /// <p><p>This implementation of the <code>PUT</code> operation adds an inventory configuration (identified by the inventory ID) to the bucket. You can have up to 1,000 inventory configurations per bucket. </p> <p>Amazon S3 inventory generates inventories of the objects in the bucket on a daily or weekly basis, and the results are published to a flat file. The bucket that is inventoried is called the <i>source</i> bucket, and the bucket where the inventory flat file is stored is called the <i>destination</i> bucket. The <i>destination</i> bucket must be in the same AWS Region as the <i>source</i> bucket. </p> <p>When you configure an inventory for a <i>source</i> bucket, you specify the <i>destination</i> bucket where you want the inventory to be stored, and whether to generate the inventory daily or weekly. You can also configure what object metadata to include and whether to inventory all object versions or only current versions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//storage-inventory.html">Amazon S3 Inventory</a> in the Amazon Simple Storage Service Developer Guide.</p> <important> <p>You must create a bucket policy on the <i>destination</i> bucket to grant permissions to Amazon S3 to write objects to the bucket in the defined location. For an example policy, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-9"> Granting Permissions for Amazon S3 Inventory and Storage Class Analysis.</a> </p> </important> <p>To use this operation, you must have permissions to perform the <code>s3:PutInventoryConfiguration</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the Amazon Simple Storage Service Developer Guide.</p> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b>HTTP 400 Bad Request Error</b> </p> <ul> <li> <p> <i>Code:</i> InvalidArgument</p> </li> <li> <p> <i>Cause:</i> Invalid Argument</p> </li> </ul> </li> <li> <p class="title"> <b>HTTP 400 Bad Request Error</b> </p> <ul> <li> <p> <i>Code:</i> TooManyConfigurations</p> </li> <li> <p> <i>Cause:</i> You are attempting to create a new configuration but have already reached the 1,000-configuration limit. </p> </li> </ul> </li> <li> <p class="title"> <b>HTTP 403 Forbidden Error</b> </p> <ul> <li> <p> <i>Code:</i> AccessDenied</p> </li> <li> <p> <i>Cause:</i> You are not the owner of the specified bucket, or you do not have the <code>s3:PutInventoryConfiguration</code> bucket permission to set the configuration on the bucket </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketInventoryConfiguration</a> </p> </li> <li> <p> <a>DeleteBucketInventoryConfiguration</a> </p> </li> <li> <p> <a>ListBucketInventoryConfigurations</a> </p> </li> </ul></p>
+    /// <p><p>This implementation of the <code>PUT</code> operation adds an inventory configuration (identified by the inventory ID) to the bucket. You can have up to 1,000 inventory configurations per bucket. </p> <p>Amazon S3 inventory generates inventories of the objects in the bucket on a daily or weekly basis, and the results are published to a flat file. The bucket that is inventoried is called the <i>source</i> bucket, and the bucket where the inventory flat file is stored is called the <i>destination</i> bucket. The <i>destination</i> bucket must be in the same AWS Region as the <i>source</i> bucket. </p> <p>When you configure an inventory for a <i>source</i> bucket, you specify the <i>destination</i> bucket where you want the inventory to be stored, and whether to generate the inventory daily or weekly. You can also configure what object metadata to include and whether to inventory all object versions or only current versions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html">Amazon S3 Inventory</a> in the Amazon Simple Storage Service Developer Guide.</p> <important> <p>You must create a bucket policy on the <i>destination</i> bucket to grant permissions to Amazon S3 to write objects to the bucket in the defined location. For an example policy, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-9"> Granting Permissions for Amazon S3 Inventory and Storage Class Analysis</a>.</p> </important> <p>To use this operation, you must have permissions to perform the <code>s3:PutInventoryConfiguration</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the Amazon Simple Storage Service Developer Guide.</p> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b>HTTP 400 Bad Request Error</b> </p> <ul> <li> <p> <i>Code:</i> InvalidArgument</p> </li> <li> <p> <i>Cause:</i> Invalid Argument</p> </li> </ul> </li> <li> <p class="title"> <b>HTTP 400 Bad Request Error</b> </p> <ul> <li> <p> <i>Code:</i> TooManyConfigurations</p> </li> <li> <p> <i>Cause:</i> You are attempting to create a new configuration but have already reached the 1,000-configuration limit. </p> </li> </ul> </li> <li> <p class="title"> <b>HTTP 403 Forbidden Error</b> </p> <ul> <li> <p> <i>Code:</i> AccessDenied</p> </li> <li> <p> <i>Cause:</i> You are not the owner of the specified bucket, or you do not have the <code>s3:PutInventoryConfiguration</code> bucket permission to set the configuration on the bucket. </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketInventoryConfiguration</a> </p> </li> <li> <p> <a>DeleteBucketInventoryConfiguration</a> </p> </li> <li> <p> <a>ListBucketInventoryConfigurations</a> </p> </li> </ul></p>
     async fn put_bucket_inventory_configuration(
         &self,
         input: PutBucketInventoryConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketInventoryConfigurationError>>;
 
-    /// <p><important> <p>For an updated version of this API, see <a>PutBucketLifecycleConfiguration</a>. This version has been deprecated. Existing lifecycle configurations will work. For new lifecycle configurations, use the updated API. </p> </important> <p>Creates a new lifecycle configuration for the bucket or replaces an existing lifecycle configuration. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//object-lifecycle-mgmt.html">Object Lifecycle Management</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>By default, all Amazon S3 resources, including buckets, objects, and related subresources (for example, lifecycle configuration and website configuration) are private. Only the resource owner, the AWS account that created the resource, can access it. The resource owner can optionally grant access permissions to others by writing an access policy. For this operation, users must get the <code>s3:PutLifecycleConfiguration</code> permission.</p> <p>You can also explicitly deny permissions. Explicit denial also supersedes any other permissions. If you want to prevent users or accounts from removing or deleting objects from your bucket, you must deny them permissions for the following actions: </p> <ul> <li> <p> <code>s3:DeleteObject</code> </p> </li> <li> <p> <code>s3:DeleteObjectVersion</code> </p> </li> <li> <p> <code>s3:PutLifecycleConfiguration</code> </p> </li> </ul> <p>For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more examples of transitioning objects to storage classes such as STANDARD<em>IA or ONEZONE</em>IA, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//intro-lifecycle-rules.html#lifecycle-configuration-examples">Examples of Lifecycle Configuration</a>.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketLifecycle</a>(Deprecated)</p> </li> <li> <p> <a>GetBucketLifecycleConfiguration</a> </p> </li> <li> <p> </p> </li> <li> <p>By default, a resource owner—in this case, a bucket owner, which is the AWS account that created the bucket—can perform any of the operations. A resource owner can also grant others permission to perform the operation. For more information, see the following topics in the Amazon Simple Storage Service Developer Guide: </p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//using-with-s3-actions.html">Specifying Permissions in a Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> </p> </li> </ul> </li> </ul></p>
+    /// <p><important> <p>For an updated version of this API, see <a>PutBucketLifecycleConfiguration</a>. This version has been deprecated. Existing lifecycle configurations will work. For new lifecycle configurations, use the updated API. </p> </important> <p>Creates a new lifecycle configuration for the bucket or replaces an existing lifecycle configuration. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>By default, all Amazon S3 resources, including buckets, objects, and related subresources (for example, lifecycle configuration and website configuration) are private. Only the resource owner, the AWS account that created the resource, can access it. The resource owner can optionally grant access permissions to others by writing an access policy. For this operation, users must get the <code>s3:PutLifecycleConfiguration</code> permission.</p> <p>You can also explicitly deny permissions. Explicit denial also supersedes any other permissions. If you want to prevent users or accounts from removing or deleting objects from your bucket, you must deny them permissions for the following actions: </p> <ul> <li> <p> <code>s3:DeleteObject</code> </p> </li> <li> <p> <code>s3:DeleteObjectVersion</code> </p> </li> <li> <p> <code>s3:PutLifecycleConfiguration</code> </p> </li> </ul> <p>For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more examples of transitioning objects to storage classes such as STANDARD<em>IA or ONEZONE</em>IA, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html#lifecycle-configuration-examples">Examples of Lifecycle Configuration</a>.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketLifecycle</a>(Deprecated)</p> </li> <li> <p> <a>GetBucketLifecycleConfiguration</a> </p> </li> <li> <p> </p> </li> <li> <p>By default, a resource owner—in this case, a bucket owner, which is the AWS account that created the bucket—can perform any of the operations. A resource owner can also grant others permission to perform the operation. For more information, see the following topics in the Amazon Simple Storage Service Developer Guide: </p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> </p> </li> </ul> </li> </ul></p>
     async fn put_bucket_lifecycle(
         &self,
         input: PutBucketLifecycleRequest,
@@ -19587,7 +17675,7 @@ pub trait S3 {
         input: PutBucketNotificationConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketNotificationConfigurationError>>;
 
-    /// <p><p>Applies an Amazon S3 bucket policy to an Amazon S3 bucket. If you are using an identity other than the root user of the AWS account that owns the bucket, the calling identity must have the <code>PutBucketPolicy</code> permissions on the specified bucket and belong to the bucket owner&#39;s account in order to use this operation.</p> <p>If you don&#39;t have <code>PutBucketPolic</code>y permissions, Amazon S3 returns a <code>403 Access Denied</code> error. If you have the correct permissions, but you&#39;re not using an identity that belongs to the bucket owner&#39;s account, Amazon S3 returns a <code>405 Method Not Allowed</code> error.</p> <important> <p> As a security precaution, the root user of the AWS account that owns a bucket can always use this operation, even if the policy explicitly denies the root user the ability to perform this action. </p> </important> <p>For more information about bucket policies, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html">Using Bucket Policies and User Policies</a>.</p> <p>The following operations are related to <code>PutBucketPolicy</code>:</p> <ul> <li> <p> <a>CreateBucket</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> </ul></p>
+    /// <p><p>Applies an Amazon S3 bucket policy to an Amazon S3 bucket. If you are using an identity other than the root user of the AWS account that owns the bucket, the calling identity must have the <code>PutBucketPolicy</code> permissions on the specified bucket and belong to the bucket owner&#39;s account in order to use this operation.</p> <p>If you don&#39;t have <code>PutBucketPolicy</code> permissions, Amazon S3 returns a <code>403 Access Denied</code> error. If you have the correct permissions, but you&#39;re not using an identity that belongs to the bucket owner&#39;s account, Amazon S3 returns a <code>405 Method Not Allowed</code> error.</p> <important> <p> As a security precaution, the root user of the AWS account that owns a bucket can always use this operation, even if the policy explicitly denies the root user the ability to perform this action. </p> </important> <p>For more information about bucket policies, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html">Using Bucket Policies and User Policies</a>.</p> <p>The following operations are related to <code>PutBucketPolicy</code>:</p> <ul> <li> <p> <a>CreateBucket</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> </ul></p>
     async fn put_bucket_policy(
         &self,
         input: PutBucketPolicyRequest,
@@ -19605,7 +17693,7 @@ pub trait S3 {
         input: PutBucketRequestPaymentRequest,
     ) -> Result<(), RusotoError<PutBucketRequestPaymentError>>;
 
-    /// <p><p>Sets the tags for a bucket.</p> <p>Use tags to organize your AWS bill to reflect your own cost structure. To do this, sign up to get your AWS account bill with tag key values included. Then, to see the cost of combined resources, organize your billing information according to resources with the same tag key values. For example, you can tag several resources with a specific application name, and then organize your billing information to see the total cost of that application across several services. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Cost Allocation and Tagging</a>.</p> <note> <p>Within a bucket, if you add a tag that has the same key as an existing tag, the new value overwrites the old value. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CostAllocTagging.html">Using Cost Allocation in Amazon S3 Bucket Tags</a>.</p> </note> <p>To use this operation, you must have permissions to perform the <code>s3:PutBucketTagging</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p> <code>PutBucketTagging</code> has the following special errors:</p> <ul> <li> <p>Error code: <code>InvalidTagError</code> </p> <ul> <li> <p>Description: The tag provided was not a valid tag. This error can occur if the tag did not pass input validation. For information about tag restrictions, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2//allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> and <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2//aws-tag-restrictions.html">AWS-Generated Cost Allocation Tag Restrictions</a>.</p> </li> </ul> </li> <li> <p>Error code: <code>MalformedXMLError</code> </p> <ul> <li> <p>Description: The XML provided does not match the schema.</p> </li> </ul> </li> <li> <p>Error code: <code>OperationAbortedError </code> </p> <ul> <li> <p>Description: A conflicting conditional operation is currently in progress against this resource. Please try again.</p> </li> </ul> </li> <li> <p>Error code: <code>InternalError</code> </p> <ul> <li> <p>Description: The service was unable to apply the provided tag to the bucket.</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>PutBucketTagging</code>:</p> <ul> <li> <p> <a>GetBucketTagging</a> </p> </li> <li> <p> <a>DeleteBucketTagging</a> </p> </li> </ul></p>
+    /// <p><p>Sets the tags for a bucket.</p> <p>Use tags to organize your AWS bill to reflect your own cost structure. To do this, sign up to get your AWS account bill with tag key values included. Then, to see the cost of combined resources, organize your billing information according to resources with the same tag key values. For example, you can tag several resources with a specific application name, and then organize your billing information to see the total cost of that application across several services. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Cost Allocation and Tagging</a>.</p> <note> <p>Within a bucket, if you add a tag that has the same key as an existing tag, the new value overwrites the old value. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CostAllocTagging.html">Using Cost Allocation in Amazon S3 Bucket Tags</a>.</p> </note> <p>To use this operation, you must have permissions to perform the <code>s3:PutBucketTagging</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p> <code>PutBucketTagging</code> has the following special errors:</p> <ul> <li> <p>Error code: <code>InvalidTagError</code> </p> <ul> <li> <p>Description: The tag provided was not a valid tag. This error can occur if the tag did not pass input validation. For information about tag restrictions, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> and <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/aws-tag-restrictions.html">AWS-Generated Cost Allocation Tag Restrictions</a>.</p> </li> </ul> </li> <li> <p>Error code: <code>MalformedXMLError</code> </p> <ul> <li> <p>Description: The XML provided does not match the schema.</p> </li> </ul> </li> <li> <p>Error code: <code>OperationAbortedError </code> </p> <ul> <li> <p>Description: A conflicting conditional operation is currently in progress against this resource. Please try again.</p> </li> </ul> </li> <li> <p>Error code: <code>InternalError</code> </p> <ul> <li> <p>Description: The service was unable to apply the provided tag to the bucket.</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>PutBucketTagging</code>:</p> <ul> <li> <p> <a>GetBucketTagging</a> </p> </li> <li> <p> <a>DeleteBucketTagging</a> </p> </li> </ul></p>
     async fn put_bucket_tagging(
         &self,
         input: PutBucketTaggingRequest,
@@ -19617,19 +17705,19 @@ pub trait S3 {
         input: PutBucketVersioningRequest,
     ) -> Result<(), RusotoError<PutBucketVersioningError>>;
 
-    /// <p><p>Sets the configuration of the website that is specified in the <code>website</code> subresource. To configure a bucket as a website, you can add this subresource on the bucket with website configuration information such as the file name of the index document and any redirect rules. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Hosting Websites on Amazon S3</a>.</p> <p>This PUT operation requires the <code>S3:PutBucketWebsite</code> permission. By default, only the bucket owner can configure the website attached to a bucket; however, bucket owners can allow other users to set the website configuration by writing a bucket policy that grants them the <code>S3:PutBucketWebsite</code> permission.</p> <p>To redirect all website requests sent to the bucket&#39;s website endpoint, you add a website configuration with the following elements. Because all requests are sent to another website, you don&#39;t need to provide index document name for the bucket.</p> <ul> <li> <p> <code>WebsiteConfiguration</code> </p> </li> <li> <p> <code>RedirectAllRequestsTo</code> </p> </li> <li> <p> <code>HostName</code> </p> </li> <li> <p> <code>Protocol</code> </p> </li> </ul> <p>If you want granular control over redirects, you can use the following elements to add routing rules that describe conditions for redirecting requests and information about the redirect destination. In this case, the website configuration must provide an index document for the bucket, because some requests might not be redirected. </p> <ul> <li> <p> <code>WebsiteConfiguration</code> </p> </li> <li> <p> <code>IndexDocument</code> </p> </li> <li> <p> <code>Suffix</code> </p> </li> <li> <p> <code>ErrorDocument</code> </p> </li> <li> <p> <code>Key</code> </p> </li> <li> <p> <code>RoutingRules</code> </p> </li> <li> <p> <code>RoutingRule</code> </p> </li> <li> <p> <code>Condition</code> </p> </li> <li> <p> <code>HttpErrorCodeReturnedEquals</code> </p> </li> <li> <p> <code>KeyPrefixEquals</code> </p> </li> <li> <p> <code>Redirect</code> </p> </li> <li> <p> <code>Protocol</code> </p> </li> <li> <p> <code>HostName</code> </p> </li> <li> <p> <code>ReplaceKeyPrefixWith</code> </p> </li> <li> <p> <code>ReplaceKeyWith</code> </p> </li> <li> <p> <code>HttpRedirectCode</code> </p> </li> </ul></p>
+    /// <p>Sets the configuration of the website that is specified in the <code>website</code> subresource. To configure a bucket as a website, you can add this subresource on the bucket with website configuration information such as the file name of the index document and any redirect rules. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Hosting Websites on Amazon S3</a>.</p> <p>This PUT operation requires the <code>S3:PutBucketWebsite</code> permission. By default, only the bucket owner can configure the website attached to a bucket; however, bucket owners can allow other users to set the website configuration by writing a bucket policy that grants them the <code>S3:PutBucketWebsite</code> permission.</p> <p>To redirect all website requests sent to the bucket's website endpoint, you add a website configuration with the following elements. Because all requests are sent to another website, you don't need to provide index document name for the bucket.</p> <ul> <li> <p> <code>WebsiteConfiguration</code> </p> </li> <li> <p> <code>RedirectAllRequestsTo</code> </p> </li> <li> <p> <code>HostName</code> </p> </li> <li> <p> <code>Protocol</code> </p> </li> </ul> <p>If you want granular control over redirects, you can use the following elements to add routing rules that describe conditions for redirecting requests and information about the redirect destination. In this case, the website configuration must provide an index document for the bucket, because some requests might not be redirected. </p> <ul> <li> <p> <code>WebsiteConfiguration</code> </p> </li> <li> <p> <code>IndexDocument</code> </p> </li> <li> <p> <code>Suffix</code> </p> </li> <li> <p> <code>ErrorDocument</code> </p> </li> <li> <p> <code>Key</code> </p> </li> <li> <p> <code>RoutingRules</code> </p> </li> <li> <p> <code>RoutingRule</code> </p> </li> <li> <p> <code>Condition</code> </p> </li> <li> <p> <code>HttpErrorCodeReturnedEquals</code> </p> </li> <li> <p> <code>KeyPrefixEquals</code> </p> </li> <li> <p> <code>Redirect</code> </p> </li> <li> <p> <code>Protocol</code> </p> </li> <li> <p> <code>HostName</code> </p> </li> <li> <p> <code>ReplaceKeyPrefixWith</code> </p> </li> <li> <p> <code>ReplaceKeyWith</code> </p> </li> <li> <p> <code>HttpRedirectCode</code> </p> </li> </ul> <p>Amazon S3 has a limitation of 50 routing rules per website configuration. If you require more than 50 routing rules, you can use object redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html">Configuring an Object Redirect</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     async fn put_bucket_website(
         &self,
         input: PutBucketWebsiteRequest,
     ) -> Result<(), RusotoError<PutBucketWebsiteError>>;
 
-    /// <p><p>Adds an object to a bucket. You must have WRITE permissions on a bucket to add an object to it.</p> <p>Amazon S3 never adds partial objects; if you receive a success response, Amazon S3 added the entire object to the bucket.</p> <p>Amazon S3 is a distributed system. If it receives multiple write requests for the same object simultaneously, it overwrites all but the last object written. Amazon S3 does not provide object locking; if you need this, make sure to build it into your application layer or use versioning instead.</p> <p>To ensure that data is not corrupted traversing the network, use the <code>Content-MD5</code> header. When you use this header, Amazon S3 checks the object against the provided MD5 value and, if they do not match, returns an error. Additionally, you can calculate the MD5 while putting an object to Amazon S3 and compare the returned ETag to the calculated MD5 value.</p> <note> <p>To configure your application to send the request headers before sending the request body, use the <code>100-continue</code> HTTP status code. For PUT operations, this helps you avoid sending the message body if the message is rejected based on the headers (for example, because authentication fails or a redirect occurs). For more information on the <code>100-continue</code> HTTP status code, see Section 8.2.3 of <a href="http://www.ietf.org/rfc/rfc2616.txt">http://www.ietf.org/rfc/rfc2616.txt</a>.</p> </note> <p>You can optionally request server-side encryption. With server-side encryption, Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts the data when you access it. You have the option to provide your own encryption key or use AWS managed encryption keys. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using Server-Side Encryption</a>.</p> <dl> <dt>Access Permissions</dt> <dd> <p>You can optionally specify the accounts or groups that should be granted specific permissions on the new object. There are two ways to grant the permissions using the request headers:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </dd> <dt>Server-Side- Encryption-Specific Request Headers</dt> <dd> <p>You can optionally tell Amazon S3 to encrypt data at rest using server-side encryption. Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. The option you use depends on whether you want to use AWS managed encryption keys or provide your own encryption key. </p> <ul> <li> <p>Use encryption keys managed by Amazon S3 or customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) – If you want AWS to manage the keys used to encrypt data, specify the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption</p> </li> <li> <p>x-amz-server-side-encryption-aws-kms-key-id</p> </li> <li> <p>x-amz-server-side-encryption-context</p> </li> </ul> <note> <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but don&#39;t provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS KMS to protect the data. If you want to use a customer managed AWS KMS CMK, you must provide the <code>x-amz-server-side-encryption-aws-kms-key-id</code> of the symmetric customer managed CMK. Amazon S3 only supports symmetric CMKs and not asymmetric CMKs. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </note> <important> <p>All GET and PUT requests for an object protected by AWS KMS fail if you don&#39;t make them with SSL or by using SigV4.</p> </important> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS</a>.</p> </li> <li> <p>Use customer-provided encryption keys – If you want to manage your own encryption keys, provide all the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p>For more information about server-side encryption with CMKs stored in KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS</a>.</p> </li> </ul> </dd> <dt>Access-Control-List (ACL)-Specific Request Headers</dt> <dd> <p>You also can use the following access control–related headers with this operation. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the Access Control List (ACL) on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. With this operation, you can grant access permissions using one of the following two methods:</p> <ul> <li> <p>Specify a canned ACL (<code>x-amz-acl</code>) — Amazon S3 supports a set of predefined ACLs, known as canned ACLs. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly — To explicitly grant access permissions to specific AWS accounts or groups, use the following headers. Each header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>. In the header, you specify a list of grantees who get the specific permission. To grant permissions explicitly use:</p> <ul> <li> <p>x-amz-grant-read</p> </li> <li> <p>x-amz-grant-write</p> </li> <li> <p>x-amz-grant-read-acp</p> </li> <li> <p>x-amz-grant-write-acp</p> </li> <li> <p>x-amz-grant-full-control</p> </li> </ul> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> <important> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>EU (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference</p> </important> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by email addresses permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> </dd> <dt>Server-Side- Encryption-Specific Request Headers</dt> <dd> <p>You can optionally tell Amazon S3 to encrypt data at rest using server-side encryption. Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. The option you use depends on whether you want to use AWS-managed encryption keys or provide your own encryption key. </p> <ul> <li> <p>Use encryption keys managed by Amazon S3 or customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) – If you want AWS to manage the keys used to encrypt data, specify the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption</p> </li> <li> <p>x-amz-server-side-encryption-aws-kms-key-id</p> </li> <li> <p>x-amz-server-side-encryption-context</p> </li> </ul> <note> <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but don&#39;t provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS KMS to protect the data. If you want to use a customer managed AWS KMS CMK, you must provide the <code>x-amz-server-side-encryption-aws-kms-key-id</code> of the symmetric customer managed CMK. Amazon S3 only supports symmetric CMKs and not asymmetric CMKs. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </note> <important> <p>All GET and PUT requests for an object protected by AWS KMS fail if you don&#39;t make them with SSL or by using SigV4.</p> </important> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> <li> <p>Use customer-provided encryption keys – If you want to manage your own encryption keys, provide all the following headers in the request.</p> <note> <p>If you use this feature, the ETag value that Amazon S3 returns in the response is not the MD5 of the object.</p> </note> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> </ul> </dd> </dl> <p> <b>Storage Class Options</b> </p> <p>By default, Amazon S3 uses the Standard storage class to store newly created objects. The Standard storage class provides high durability and high availability. You can specify other storage classes depending on the performance needs. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the Amazon Simple Storage Service Developer Guide.</p> <p> <b>Versioning</b> </p> <p>If you enable versioning for a bucket, Amazon S3 automatically generates a unique version ID for the object being stored. Amazon S3 returns this ID in the response using the <code>x-amz-version-id response</code> header. If versioning is suspended, Amazon S3 always uses null as the version ID for the object stored. For more information about returning the versioning state of a bucket, see <a>GetBucketVersioning</a>. If you enable versioning for a bucket, when Amazon S3 receives multiple write requests for the same object simultaneously, it stores all of the objects.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CopyObject</a> </p> </li> <li> <p> <a>DeleteObject</a> </p> </li> </ul></p>
+    /// <p><p>Adds an object to a bucket. You must have WRITE permissions on a bucket to add an object to it.</p> <p>Amazon S3 never adds partial objects; if you receive a success response, Amazon S3 added the entire object to the bucket.</p> <p>Amazon S3 is a distributed system. If it receives multiple write requests for the same object simultaneously, it overwrites all but the last object written. Amazon S3 does not provide object locking; if you need this, make sure to build it into your application layer or use versioning instead.</p> <p>To ensure that data is not corrupted traversing the network, use the <code>Content-MD5</code> header. When you use this header, Amazon S3 checks the object against the provided MD5 value and, if they do not match, returns an error. Additionally, you can calculate the MD5 while putting an object to Amazon S3 and compare the returned ETag to the calculated MD5 value.</p> <note> <p> The <code>Content-MD5</code> header is required for any request to upload an object with a retention period configured using Amazon S3 Object Lock. For more information about Amazon S3 Object Lock, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock-overview.html">Amazon S3 Object Lock Overview</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> </note> <p> <b>Server-side Encryption</b> </p> <p>You can optionally request server-side encryption. With server-side encryption, Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts the data when you access it. You have the option to provide your own encryption key or use AWS managed encryption keys. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using Server-Side Encryption</a>.</p> <p> <b>Access Control List (ACL)-Specific Request Headers</b> </p> <p>You can use headers to grant ACL- based permissions. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the ACL on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-using-rest-api.html">Managing ACLs Using the REST API</a>. </p> <p> <b>Storage Class Options</b> </p> <p>By default, Amazon S3 uses the STANDARD storage class to store newly created objects. The STANDARD storage class provides high durability and high availability. Depending on performance needs, you can specify a different storage class. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the <i>Amazon S3 Service Developer Guide</i>.</p> <p> <b>Versioning</b> </p> <p>If you enable versioning for a bucket, Amazon S3 automatically generates a unique version ID for the object being stored. Amazon S3 returns this ID in the response. When you enable versioning for a bucket, if Amazon S3 receives multiple write requests for the same object simultaneously, it stores all of the objects.</p> <p>For more information about versioning, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/AddingObjectstoVersioningEnabledBuckets.html">Adding Objects to Versioning Enabled Buckets</a>. For information about returning the versioning state of a bucket, see <a>GetBucketVersioning</a>. </p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CopyObject</a> </p> </li> <li> <p> <a>DeleteObject</a> </p> </li> </ul></p>
     async fn put_object(
         &self,
         input: PutObjectRequest,
     ) -> Result<PutObjectOutput, RusotoError<PutObjectError>>;
 
-    /// <p><p>Uses the <code>acl</code> subresource to set the access control list (ACL) permissions for an object that already exists in a bucket. You must have <code>WRITE_ACP</code> permission to set the ACL of an object.</p> <p>Depending on your application needs, you can choose to set the ACL on an object using either the request body or the headers. For example, if you have an existing application that updates a bucket ACL using the request body, you can continue to use that approach.</p> <p> <b>Access Permissions</b> </p> <p>You can set access permissions using one of the following methods:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as canned ACLs. Each canned ACL has a predefined set of grantees and permissions. Specify the canned ACL name as the value of <code>x-amz-ac</code>l. If you use this header, you cannot use other access control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. When using these headers, you specify explicit access permissions and grantees (AWS accounts or Amazon S3 groups) who will receive the permission. If you use these ACL-specific headers, you cannot use <code>x-amz-acl</code> header to set a canned ACL. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants list objects permission to the two AWS accounts identified by their email addresses.</p> <p> <code>x-amz-grant-read: emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> <p> <b>Grantee Values</b> </p> <p>You can specify the person (grantee) to whom you&#39;re assigning access rights (using request elements) in the following ways:</p> <ul> <li> <p>By Email address:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;AmazonCustomerByEmail&quot;&gt;&lt;EmailAddress&gt;&lt;&gt;Grantees@email.com&lt;&gt;&lt;/EmailAddress&gt;lt;/Grantee&gt;</code> </p> <p>The grantee is resolved to the CanonicalUser and, in a response to a GET Object acl request, appears as the CanonicalUser.</p> </li> <li> <p>By the person&#39;s ID:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;CanonicalUser&quot;&gt;&lt;ID&gt;&lt;&gt;ID&lt;&gt;&lt;/ID&gt;&lt;DisplayName&gt;&lt;&gt;GranteesEmail&lt;&gt;&lt;/DisplayName&gt; &lt;/Grantee&gt;</code> </p> <p>DisplayName is optional and ignored in the request.</p> </li> <li> <p>By URI:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;Group&quot;&gt;&lt;URI&gt;&lt;&gt;http://acs.amazonaws.com/groups/global/AuthenticatedUsers&lt;&gt;&lt;/URI&gt;&lt;/Grantee&gt;</code> </p> </li> </ul> <p> <b>Versioning</b> </p> <p>The ACL of an object is set at the object version level. By default, PUT sets the ACL of the current version of an object. To set the ACL of a different version, use the <code>versionId</code> subresource.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CopyObject</a> </p> </li> <li> <p> <a>GetObject</a> </p> </li> </ul></p>
+    /// <p><p>Uses the <code>acl</code> subresource to set the access control list (ACL) permissions for an object that already exists in a bucket. You must have <code>WRITE<em>ACP</code> permission to set the ACL of an object.</p> <p>Depending on your application needs, you can choose to set the ACL on an object using either the request body or the headers. For example, if you have an existing application that updates a bucket ACL using the request body, you can continue to use that approach. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p> <b>Access Permissions</b> </p> <p>You can set access permissions using one of the following methods:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as canned ACLs. Each canned ACL has a predefined set of grantees and permissions. Specify the canned ACL name as the value of <code>x-amz-ac</code>l. If you use this header, you cannot use other access control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. When using these headers, you specify explicit access permissions and grantees (AWS accounts or Amazon S3 groups) who will receive the permission. If you use these ACL-specific headers, you cannot use <code>x-amz-acl</code> header to set a canned ACL. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see &lt;a href=&quot;https://docs.aws.amazon.com/general/latest/gr/rande.html#s3</em>region&quot;&gt;Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants list objects permission to the two AWS accounts identified by their email addresses.</p> <p> <code>x-amz-grant-read: emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> <p> <b>Grantee Values</b> </p> <p>You can specify the person (grantee) to whom you&#39;re assigning access rights (using request elements) in the following ways:</p> <ul> <li> <p>By the person&#39;s ID:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;CanonicalUser&quot;&gt;&lt;ID&gt;&lt;&gt;ID&lt;&gt;&lt;/ID&gt;&lt;DisplayName&gt;&lt;&gt;GranteesEmail&lt;&gt;&lt;/DisplayName&gt; &lt;/Grantee&gt;</code> </p> <p>DisplayName is optional and ignored in the request.</p> </li> <li> <p>By URI:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;Group&quot;&gt;&lt;URI&gt;&lt;&gt;http://acs.amazonaws.com/groups/global/AuthenticatedUsers&lt;&gt;&lt;/URI&gt;&lt;/Grantee&gt;</code> </p> </li> <li> <p>By Email address:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;AmazonCustomerByEmail&quot;&gt;&lt;EmailAddress&gt;&lt;&gt;Grantees@email.com&lt;&gt;&lt;/EmailAddress&gt;lt;/Grantee&gt;</code> </p> <p>The grantee is resolved to the CanonicalUser and, in a response to a GET Object acl request, appears as the CanonicalUser.</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p> <b>Versioning</b> </p> <p>The ACL of an object is set at the object version level. By default, PUT sets the ACL of the current version of an object. To set the ACL of a different version, use the <code>versionId</code> subresource.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CopyObject</a> </p> </li> <li> <p> <a>GetObject</a> </p> </li> </ul></p>
     async fn put_object_acl(
         &self,
         input: PutObjectAclRequest,
@@ -19653,7 +17741,7 @@ pub trait S3 {
         input: PutObjectRetentionRequest,
     ) -> Result<PutObjectRetentionOutput, RusotoError<PutObjectRetentionError>>;
 
-    /// <p><p>Sets the supplied tag-set to an object that already exists in a bucket</p> <p>A tag is a key-value pair. You can associate tags with an object by sending a PUT request against the tagging subresource that is associated with the object. You can retrieve tags by sending a GET request. For more information, see <a>GetObjectTagging</a>.</p> <p>For tagging-related restrictions related to characters and encodings, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">Tag Restrictions</a>. Note that Amazon S3 limits the maximum number of tags to 10 tags per object.</p> <p>To use this operation, you must have permission to perform the <code>s3:PutObjectTagging</code> action. By default, the bucket owner has this permission and can grant this permission to others.</p> <p>To put tags of any other version, use the <code>versionId</code> query parameter. You also need permission for the <code>s3:PutObjectVersionTagging</code> action.</p> <p>For information about the Amazon S3 object tagging feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object Tagging</a>.</p> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: InvalidTagError </i> </p> </li> <li> <p> <i>Cause: The tag provided was not a valid tag. This error can occur if the tag did not pass input validation. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object Tagging</a>.</i> </p> </li> </ul> </li> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: MalformedXMLError </i> </p> </li> <li> <p> <i>Cause: The XML provided does not match the schema.</i> </p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code: OperationAbortedError </i> </p> </li> <li> <p> <i>Cause: A conflicting conditional operation is currently in progress against this resource. Please try again.</i> </p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code: InternalError</i> </p> </li> <li> <p> <i>Cause: The service was unable to apply the provided tag to the object.</i> </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetObjectTagging</a> </p> </li> </ul></p>
+    /// <p><p>Sets the supplied tag-set to an object that already exists in a bucket.</p> <p>A tag is a key-value pair. You can associate tags with an object by sending a PUT request against the tagging subresource that is associated with the object. You can retrieve tags by sending a GET request. For more information, see <a>GetObjectTagging</a>.</p> <p>For tagging-related restrictions related to characters and encodings, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">Tag Restrictions</a>. Note that Amazon S3 limits the maximum number of tags to 10 tags per object.</p> <p>To use this operation, you must have permission to perform the <code>s3:PutObjectTagging</code> action. By default, the bucket owner has this permission and can grant this permission to others.</p> <p>To put tags of any other version, use the <code>versionId</code> query parameter. You also need permission for the <code>s3:PutObjectVersionTagging</code> action.</p> <p>For information about the Amazon S3 object tagging feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object Tagging</a>.</p> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: InvalidTagError </i> </p> </li> <li> <p> <i>Cause: The tag provided was not a valid tag. This error can occur if the tag did not pass input validation. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object Tagging</a>.</i> </p> </li> </ul> </li> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: MalformedXMLError </i> </p> </li> <li> <p> <i>Cause: The XML provided does not match the schema.</i> </p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code: OperationAbortedError </i> </p> </li> <li> <p> <i>Cause: A conflicting conditional operation is currently in progress against this resource. Please try again.</i> </p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code: InternalError</i> </p> </li> <li> <p> <i>Cause: The service was unable to apply the provided tag to the object.</i> </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetObjectTagging</a> </p> </li> </ul></p>
     async fn put_object_tagging(
         &self,
         input: PutObjectTaggingRequest,
@@ -19665,13 +17753,13 @@ pub trait S3 {
         input: PutPublicAccessBlockRequest,
     ) -> Result<(), RusotoError<PutPublicAccessBlockError>>;
 
-    /// <p><p>Restores an archived copy of an object back into Amazon S3</p> <p>This operation performs the following types of requests: </p> <ul> <li> <p> <code>select</code> - Perform a select query on an archived object</p> </li> <li> <p> <code>restore an archive</code> - Restore an archived object</p> </li> </ul> <p>To use this operation, you must have permissions to perform the <code>s3:RestoreObject</code> and <code>s3:GetObject</code> actions. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p> <b>Querying Archives with Select Requests</b> </p> <p>You use a select type of request to perform SQL queries on archived objects. The archived objects that are being queried by the select request must be formatted as uncompressed comma-separated values (CSV) files. You can run queries and custom analytics on your archived data without having to restore your data to a hotter Amazon S3 tier. For an overview about select requests, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/querying-glacier-archives.html">Querying Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>When making a select request, do the following:</p> <ul> <li> <p>Define an output location for the select query&#39;s output. This must be an Amazon S3 bucket in the same AWS Region as the bucket that contains the archive object that is being queried. The AWS account that initiates the job must have permissions to write to the S3 bucket. You can specify the storage class and encryption for the output objects stored in the bucket. For more information about output, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/querying-glacier-archives.html">Querying Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more information about the <code>S3</code> structure in the request body, see the following:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Managing Access with ACLs</a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> </ul> </li> <li> <p>Define the SQL expression for the <code>SELECT</code> type of restoration for your query in the request body&#39;s <code>SelectParameters</code> structure. You can use expressions like the following examples.</p> <ul> <li> <p>The following expression returns all records from the specified object.</p> <p> <code>SELECT * FROM Object</code> </p> </li> <li> <p>Assuming that you are not using any headers for data stored in the object, you can specify columns with positional headers.</p> <p> <code>SELECT s.<em>1, s.</em>2 FROM Object s WHERE s.<em>3 &gt; 100</code> </p> </li> <li> <p>If you have headers and you set the <code>fileHeaderInfo</code> in the <code>CSV</code> structure in the request body to <code>USE</code>, you can specify headers in the query. (If you set the <code>fileHeaderInfo</code> field to <code>IGNORE</code>, the first row is skipped for the query.) You cannot mix ordinal positions with header column names. </p> <p> <code>SELECT s.Id, s.FirstName, s.SSN FROM S3Object s</code> </p> </li> </ul> </li> </ul> <p>For more information about using SQL with Glacier Select restore, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html">SQL Reference for Amazon S3 Select and Glacier Select</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>When making a select request, you can also do the following:</p> <ul> <li> <p>To expedite your queries, specify the <code>Expedited</code> tier. For more information about tiers, see &quot;Restoring Archives,&quot; later in this topic.</p> </li> <li> <p>Specify details about the data serialization format of both the input object that is being queried and the serialization of the CSV-encoded query results.</p> </li> </ul> <p>The following are additional important facts about the select feature:</p> <ul> <li> <p>The output results are new Amazon S3 objects. Unlike archive retrievals, they are stored until explicitly deleted-manually or through a lifecycle policy.</p> </li> <li> <p>You can issue more than one select request on the same Amazon S3 object. Amazon S3 doesn&#39;t deduplicate requests, so avoid issuing duplicate requests.</p> </li> <li> <p> Amazon S3 accepts a select request even if the object has already been restored. A select request doesn’t return error response <code>409</code>.</p> </li> </ul> <p> <b>Restoring Archives</b> </p> <p>Objects in the GLACIER and DEEP</em>ARCHIVE storage classes are archived. To access an archived object, you must first initiate a restore request. This restores a temporary copy of the archived object. In a restore request, you specify the number of days that you want the restored copy to exist. After the specified period, Amazon S3 deletes the temporary copy but the object remains archived in the GLACIER or DEEP<em>ARCHIVE storage class that object was restored from. </p> <p>To restore a specific object version, you can provide a version ID. If you don&#39;t provide a version ID, Amazon S3 restores the current version.</p> <p>The time it takes restore jobs to finish depends on which storage class the object is being restored from and which data access tier you specify. </p> <p>When restoring an archived object (or using a select request), you can specify one of the following data access tier options in the <code>Tier</code> element of the request body: </p> <ul> <li> <p> <b> <code>Expedited</code> </b> - Expedited retrievals allow you to quickly access your data stored in the GLACIER storage class when occasional urgent requests for a subset of archives are required. For all but the largest archived objects (250 MB+), data accessed using Expedited retrievals are typically made available within 1–5 minutes. Provisioned capacity ensures that retrieval capacity for Expedited retrievals is available when you need it. Expedited retrievals and provisioned capacity are not available for the DEEP</em>ARCHIVE storage class.</p> </li> <li> <p> <b> <code>Standard</code> </b> - Standard retrievals allow you to access any of your archived objects within several hours. This is the default option for the GLACIER and DEEP<em>ARCHIVE retrieval requests that do not specify the retrieval option. Standard retrievals typically complete within 3-5 hours from the GLACIER storage class and typically complete within 12 hours from the DEEP</em>ARCHIVE storage class. </p> </li> <li> <p> <b> <code>Bulk</code> </b> - Bulk retrievals are Amazon S3 Glacier’s lowest-cost retrieval option, enabling you to retrieve large amounts, even petabytes, of data inexpensively in a day. Bulk retrievals typically complete within 5-12 hours from the GLACIER storage class and typically complete within 48 hours from the DEEP_ARCHIVE storage class.</p> </li> </ul> <p>For more information about archive retrieval options and provisioned capacity for <code>Expedited</code> data access, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>You can use Amazon S3 restore speed upgrade to change the restore speed to a faster speed while it is in progress. You upgrade the speed of an in-progress restoration by issuing another restore request to the same object, setting a new <code>Tier</code> request element. When issuing a request to upgrade the restore tier, you must choose a tier that is faster than the tier that the in-progress restore is using. You must not change any other parameters, such as the <code>Days</code> request element. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html#restoring-objects-upgrade-tier.title.html"> Upgrading the Speed of an In-Progress Restore</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>To get the status of object restoration, you can send a <code>HEAD</code> request. Operations return the <code>x-amz-restore</code> header, which provides information about the restoration status, in the response. You can use Amazon S3 event notifications to notify you when a restore is initiated or completed. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Amazon S3 Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>After restoring an archived object, you can update the restoration period by reissuing the request with a new period. Amazon S3 updates the restoration period relative to the current time and charges only for the request-there are no data transfer charges. You cannot update the restoration period when Amazon S3 is actively processing your current restore request for the object.</p> <p>If your bucket has a lifecycle configuration with a rule that includes an expiration action, the object expiration overrides the life span that you specify in a restore request. For example, if you restore an object copy for 10 days, but the object is scheduled to expire in 3 days, Amazon S3 deletes the object in 3 days. For more information about lifecycle configuration, see <a>PutBucketLifecycleConfiguration</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a> in <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p> <b>Responses</b> </p> <p>A successful operation returns either the <code>200 OK</code> or <code>202 Accepted</code> status code. </p> <ul> <li> <p>If the object copy is not previously restored, then Amazon S3 returns <code>202 Accepted</code> in the response. </p> </li> <li> <p>If the object copy is previously restored, Amazon S3 returns <code>200 OK</code> in the response. </p> </li> </ul> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: RestoreAlreadyInProgress</i> </p> </li> <li> <p> <i>Cause: Object restore is already in progress. (This error does not apply to SELECT type requests.)</i> </p> </li> <li> <p> <i>HTTP Status Code: 409 Conflict</i> </p> </li> <li> <p> <i>SOAP Fault Code Prefix: Client</i> </p> </li> </ul> </li> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: GlacierExpeditedRetrievalNotAvailable</i> </p> </li> <li> <p> <i>Cause: Glacier expedited retrievals are currently not available. Try again later. (Returned if there is insufficient capacity to process the Expedited request. This error applies only to Expedited retrievals and not to Standard or Bulk retrievals.)</i> </p> </li> <li> <p> <i>HTTP Status Code: 503</i> </p> </li> <li> <p> <i>SOAP Fault Code Prefix: N/A</i> </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketLifecycleConfiguration</a> </p> </li> <li> <p> <a>GetBucketNotificationConfiguration</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html">SQL Reference for Amazon S3 Select and Glacier Select </a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> </ul></p>
+    /// <p><p>Restores an archived copy of an object back into Amazon S3</p> <p>This operation performs the following types of requests: </p> <ul> <li> <p> <code>select</code> - Perform a select query on an archived object</p> </li> <li> <p> <code>restore an archive</code> - Restore an archived object</p> </li> </ul> <p>To use this operation, you must have permissions to perform the <code>s3:RestoreObject</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p> <b>Querying Archives with Select Requests</b> </p> <p>You use a select type of request to perform SQL queries on archived objects. The archived objects that are being queried by the select request must be formatted as uncompressed comma-separated values (CSV) files. You can run queries and custom analytics on your archived data without having to restore your data to a hotter Amazon S3 tier. For an overview about select requests, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/querying-glacier-archives.html">Querying Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>When making a select request, do the following:</p> <ul> <li> <p>Define an output location for the select query&#39;s output. This must be an Amazon S3 bucket in the same AWS Region as the bucket that contains the archive object that is being queried. The AWS account that initiates the job must have permissions to write to the S3 bucket. You can specify the storage class and encryption for the output objects stored in the bucket. For more information about output, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/querying-glacier-archives.html">Querying Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more information about the <code>S3</code> structure in the request body, see the following:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Managing Access with ACLs</a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> </ul> </li> <li> <p>Define the SQL expression for the <code>SELECT</code> type of restoration for your query in the request body&#39;s <code>SelectParameters</code> structure. You can use expressions like the following examples.</p> <ul> <li> <p>The following expression returns all records from the specified object.</p> <p> <code>SELECT * FROM Object</code> </p> </li> <li> <p>Assuming that you are not using any headers for data stored in the object, you can specify columns with positional headers.</p> <p> <code>SELECT s.<em>1, s.</em>2 FROM Object s WHERE s.<em>3 &gt; 100</code> </p> </li> <li> <p>If you have headers and you set the <code>fileHeaderInfo</code> in the <code>CSV</code> structure in the request body to <code>USE</code>, you can specify headers in the query. (If you set the <code>fileHeaderInfo</code> field to <code>IGNORE</code>, the first row is skipped for the query.) You cannot mix ordinal positions with header column names. </p> <p> <code>SELECT s.Id, s.FirstName, s.SSN FROM S3Object s</code> </p> </li> </ul> </li> </ul> <p>For more information about using SQL with S3 Glacier Select restore, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html">SQL Reference for Amazon S3 Select and S3 Glacier Select</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>When making a select request, you can also do the following:</p> <ul> <li> <p>To expedite your queries, specify the <code>Expedited</code> tier. For more information about tiers, see &quot;Restoring Archives,&quot; later in this topic.</p> </li> <li> <p>Specify details about the data serialization format of both the input object that is being queried and the serialization of the CSV-encoded query results.</p> </li> </ul> <p>The following are additional important facts about the select feature:</p> <ul> <li> <p>The output results are new Amazon S3 objects. Unlike archive retrievals, they are stored until explicitly deleted-manually or through a lifecycle policy.</p> </li> <li> <p>You can issue more than one select request on the same Amazon S3 object. Amazon S3 doesn&#39;t deduplicate requests, so avoid issuing duplicate requests.</p> </li> <li> <p> Amazon S3 accepts a select request even if the object has already been restored. A select request doesn’t return error response <code>409</code>.</p> </li> </ul> <p> <b>Restoring Archives</b> </p> <p>Objects in the GLACIER and DEEP</em>ARCHIVE storage classes are archived. To access an archived object, you must first initiate a restore request. This restores a temporary copy of the archived object. In a restore request, you specify the number of days that you want the restored copy to exist. After the specified period, Amazon S3 deletes the temporary copy but the object remains archived in the GLACIER or DEEP<em>ARCHIVE storage class that object was restored from. </p> <p>To restore a specific object version, you can provide a version ID. If you don&#39;t provide a version ID, Amazon S3 restores the current version.</p> <p>The time it takes restore jobs to finish depends on which storage class the object is being restored from and which data access tier you specify. </p> <p>When restoring an archived object (or using a select request), you can specify one of the following data access tier options in the <code>Tier</code> element of the request body: </p> <ul> <li> <p> <b> <code>Expedited</code> </b> - Expedited retrievals allow you to quickly access your data stored in the GLACIER storage class when occasional urgent requests for a subset of archives are required. For all but the largest archived objects (250 MB+), data accessed using Expedited retrievals are typically made available within 1–5 minutes. Provisioned capacity ensures that retrieval capacity for Expedited retrievals is available when you need it. Expedited retrievals and provisioned capacity are not available for the DEEP</em>ARCHIVE storage class.</p> </li> <li> <p> <b> <code>Standard</code> </b> - S3 Standard retrievals allow you to access any of your archived objects within several hours. This is the default option for the GLACIER and DEEP<em>ARCHIVE retrieval requests that do not specify the retrieval option. S3 Standard retrievals typically complete within 3-5 hours from the GLACIER storage class and typically complete within 12 hours from the DEEP</em>ARCHIVE storage class. </p> </li> <li> <p> <b> <code>Bulk</code> </b> - Bulk retrievals are Amazon S3 Glacier’s lowest-cost retrieval option, enabling you to retrieve large amounts, even petabytes, of data inexpensively in a day. Bulk retrievals typically complete within 5-12 hours from the GLACIER storage class and typically complete within 48 hours from the DEEP_ARCHIVE storage class.</p> </li> </ul> <p>For more information about archive retrieval options and provisioned capacity for <code>Expedited</code> data access, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>You can use Amazon S3 restore speed upgrade to change the restore speed to a faster speed while it is in progress. You upgrade the speed of an in-progress restoration by issuing another restore request to the same object, setting a new <code>Tier</code> request element. When issuing a request to upgrade the restore tier, you must choose a tier that is faster than the tier that the in-progress restore is using. You must not change any other parameters, such as the <code>Days</code> request element. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html#restoring-objects-upgrade-tier.title.html"> Upgrading the Speed of an In-Progress Restore</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>To get the status of object restoration, you can send a <code>HEAD</code> request. Operations return the <code>x-amz-restore</code> header, which provides information about the restoration status, in the response. You can use Amazon S3 event notifications to notify you when a restore is initiated or completed. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Amazon S3 Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>After restoring an archived object, you can update the restoration period by reissuing the request with a new period. Amazon S3 updates the restoration period relative to the current time and charges only for the request-there are no data transfer charges. You cannot update the restoration period when Amazon S3 is actively processing your current restore request for the object.</p> <p>If your bucket has a lifecycle configuration with a rule that includes an expiration action, the object expiration overrides the life span that you specify in a restore request. For example, if you restore an object copy for 10 days, but the object is scheduled to expire in 3 days, Amazon S3 deletes the object in 3 days. For more information about lifecycle configuration, see <a>PutBucketLifecycleConfiguration</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a> in <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p> <b>Responses</b> </p> <p>A successful operation returns either the <code>200 OK</code> or <code>202 Accepted</code> status code. </p> <ul> <li> <p>If the object copy is not previously restored, then Amazon S3 returns <code>202 Accepted</code> in the response. </p> </li> <li> <p>If the object copy is previously restored, Amazon S3 returns <code>200 OK</code> in the response. </p> </li> </ul> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: RestoreAlreadyInProgress</i> </p> </li> <li> <p> <i>Cause: Object restore is already in progress. (This error does not apply to SELECT type requests.)</i> </p> </li> <li> <p> <i>HTTP Status Code: 409 Conflict</i> </p> </li> <li> <p> <i>SOAP Fault Code Prefix: Client</i> </p> </li> </ul> </li> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: GlacierExpeditedRetrievalNotAvailable</i> </p> </li> <li> <p> <i>Cause: S3 Glacier expedited retrievals are currently not available. Try again later. (Returned if there is insufficient capacity to process the Expedited request. This error applies only to Expedited retrievals and not to S3 Standard or Bulk retrievals.)</i> </p> </li> <li> <p> <i>HTTP Status Code: 503</i> </p> </li> <li> <p> <i>SOAP Fault Code Prefix: N/A</i> </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketLifecycleConfiguration</a> </p> </li> <li> <p> <a>GetBucketNotificationConfiguration</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html">SQL Reference for Amazon S3 Select and S3 Glacier Select </a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> </ul></p>
     async fn restore_object(
         &self,
         input: RestoreObjectRequest,
     ) -> Result<RestoreObjectOutput, RusotoError<RestoreObjectError>>;
 
-    /// <p><p>This operation filters the contents of an Amazon S3 object based on a simple structured query language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON, CSV, or Apache Parquet) of the object. Amazon S3 uses this format to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p> <p>For more information about Amazon S3 Select, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/selecting-content-from-objects.html">Selecting Content from Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more information about using SQL with Amazon S3 Select, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html"> SQL Reference for Amazon S3 Select and Glacier Select</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p/> <p> <b>Permissions</b> </p> <p>You must have <code>s3:GetObject</code> permission for this operation. Amazon S3 Select does not support anonymous access. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a Policy</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p/> <p> <i>Object Data Formats</i> </p> <p>You can use Amazon S3 Select to query objects that have the following format properties:</p> <ul> <li> <p> <i>CSV, JSON, and Parquet</i> - Objects must be in CSV, JSON, or Parquet format.</p> </li> <li> <p> <i>UTF-8</i> - UTF-8 is the only encoding type Amazon S3 Select supports.</p> </li> <li> <p> <i>GZIP or BZIP2</i> - CSV and JSON files can be compressed using GZIP or BZIP2. GZIP and BZIP2 are the only compression formats that Amazon S3 Select supports for CSV and JSON files. Amazon S3 Select supports columnar compression for Parquet using GZIP or Snappy. Amazon S3 Select does not support whole-object compression for Parquet objects.</p> </li> <li> <p> <i>Server-side encryption</i> - Amazon S3 Select supports querying objects that are protected with server-side encryption.</p> <p>For objects that are encrypted with customer-provided encryption keys (SSE-C), you must use HTTPS, and you must use the headers that are documented in the <a>GetObject</a>. For more information about SSE-C, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Server-Side Encryption (Using Customer-Provided Encryption Keys)</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For objects that are encrypted with Amazon S3 managed encryption keys (SSE-S3) and customer master keys (CMKs) stored in AWS Key Management Service (SSE-KMS), server-side encryption is handled transparently, so you don&#39;t need to specify anything. For more information about server-side encryption, including SSE-S3 and SSE-KMS, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> </li> </ul> <p> <b>Working with the Response Body</b> </p> <p>Given the response size is unknown, Amazon S3 Select streams the response as a series of messages and includes a <code>Transfer-Encoding</code> header with <code>chunked</code> as its value in the response. For more information, see <a>RESTSelectObjectAppendix</a> .</p> <p/> <p> <b>GetObject Support</b> </p> <p>The <code>SelectObjectContent</code> operation does not support the following <code>GetObject</code> functionality. For more information, see <a>GetObject</a>.</p> <ul> <li> <p> <code>Range</code>: While you can specify a scan range for a Amazon S3 Select request, see <a>SelectObjectContentRequest$ScanRange</a> in the request parameters below, you cannot specify the range of bytes of an object to return. </p> </li> <li> <p>GLACIER, DEEP<em>ARCHIVE and REDUCED</em>REDUNDANCY storage classes: You cannot specify the GLACIER, DEEP<em>ARCHIVE, or <code>REDUCED</em>REDUNDANCY</code> storage classes. For more information, about storage classes see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#storage-class-intro">Storage Classes</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> </li> </ul> <p/> <p> <b>Special Errors</b> </p> <p>For a list of special errors for this operation and for general information about Amazon S3 errors and a list of error codes, see <a>ErrorResponses</a> </p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetObject</a> </p> </li> <li> <p> <a>GetBucketLifecycleConfiguration</a> </p> </li> <li> <p> <a>PutBucketLifecycleConfiguration</a> </p> </li> </ul></p>
+    /// <p><p>This operation filters the contents of an Amazon S3 object based on a simple structured query language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON, CSV, or Apache Parquet) of the object. Amazon S3 uses this format to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p> <p>For more information about Amazon S3 Select, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/selecting-content-from-objects.html">Selecting Content from Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more information about using SQL with Amazon S3 Select, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html"> SQL Reference for Amazon S3 Select and S3 Glacier Select</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p/> <p> <b>Permissions</b> </p> <p>You must have <code>s3:GetObject</code> permission for this operation. Amazon S3 Select does not support anonymous access. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a Policy</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p/> <p> <i>Object Data Formats</i> </p> <p>You can use Amazon S3 Select to query objects that have the following format properties:</p> <ul> <li> <p> <i>CSV, JSON, and Parquet</i> - Objects must be in CSV, JSON, or Parquet format.</p> </li> <li> <p> <i>UTF-8</i> - UTF-8 is the only encoding type Amazon S3 Select supports.</p> </li> <li> <p> <i>GZIP or BZIP2</i> - CSV and JSON files can be compressed using GZIP or BZIP2. GZIP and BZIP2 are the only compression formats that Amazon S3 Select supports for CSV and JSON files. Amazon S3 Select supports columnar compression for Parquet using GZIP or Snappy. Amazon S3 Select does not support whole-object compression for Parquet objects.</p> </li> <li> <p> <i>Server-side encryption</i> - Amazon S3 Select supports querying objects that are protected with server-side encryption.</p> <p>For objects that are encrypted with customer-provided encryption keys (SSE-C), you must use HTTPS, and you must use the headers that are documented in the <a>GetObject</a>. For more information about SSE-C, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Server-Side Encryption (Using Customer-Provided Encryption Keys)</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For objects that are encrypted with Amazon S3 managed encryption keys (SSE-S3) and customer master keys (CMKs) stored in AWS Key Management Service (SSE-KMS), server-side encryption is handled transparently, so you don&#39;t need to specify anything. For more information about server-side encryption, including SSE-S3 and SSE-KMS, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> </li> </ul> <p> <b>Working with the Response Body</b> </p> <p>Given the response size is unknown, Amazon S3 Select streams the response as a series of messages and includes a <code>Transfer-Encoding</code> header with <code>chunked</code> as its value in the response. For more information, see <a>RESTSelectObjectAppendix</a> .</p> <p/> <p> <b>GetObject Support</b> </p> <p>The <code>SelectObjectContent</code> operation does not support the following <code>GetObject</code> functionality. For more information, see <a>GetObject</a>.</p> <ul> <li> <p> <code>Range</code>: Although you can specify a scan range for an Amazon S3 Select request (see <a>SelectObjectContentRequest$ScanRange</a> in the request parameters), you cannot specify the range of bytes of an object to return. </p> </li> <li> <p>GLACIER, DEEP<em>ARCHIVE and REDUCED</em>REDUNDANCY storage classes: You cannot specify the GLACIER, DEEP<em>ARCHIVE, or <code>REDUCED</em>REDUNDANCY</code> storage classes. For more information, about storage classes see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#storage-class-intro">Storage Classes</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> </li> </ul> <p/> <p> <b>Special Errors</b> </p> <p>For a list of special errors for this operation, see <a>SelectObjectContentErrorCodeList</a> </p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetObject</a> </p> </li> <li> <p> <a>GetBucketLifecycleConfiguration</a> </p> </li> <li> <p> <a>PutBucketLifecycleConfiguration</a> </p> </li> </ul></p>
     async fn select_object_content(
         &self,
         input: SelectObjectContentRequest,
@@ -19739,33 +17827,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AbortMultipartUploadError::from_response(response));
-        }
+            .sign_and_dispatch(request, AbortMultipartUploadError::from_response)
+            .await?;
 
-        let mut result;
-        result = AbortMultipartUploadOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let result = AbortMultipartUploadOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
-    /// <p><p>Completes a multipart upload by assembling previously uploaded parts.</p> <p>You first initiate the multipart upload and then upload all parts using the <a>UploadPart</a> operation. After successfully uploading all relevant parts of an upload, you call this operation to complete the upload. Upon receiving this request, Amazon S3 concatenates all the parts in ascending order by part number to create a new object. In the Complete Multipart Upload request, you must provide the parts list. You must ensure that the parts list is complete. This operation concatenates the parts that you provide in the list. For each part in the list, you must provide the part number and the <code>ETag</code> value, returned after that part was uploaded.</p> <p>Processing of a Complete Multipart Upload request could take several minutes to complete. After Amazon S3 begins processing the request, it sends an HTTP response header that specifies a 200 OK response. While processing is in progress, Amazon S3 periodically sends white space characters to keep the connection from timing out. Because a request could fail after the initial 200 OK response has been sent, it is important that you check the response body to determine whether the request succeeded.</p> <p>Note that if <code>CompleteMultipartUpload</code> fails, applications should be prepared to retry the failed requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ErrorBestPractices.html">Amazon S3 Error Best Practices</a>.</p> <p>For more information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading Objects Using Multipart Upload</a>.</p> <p>For information about permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p> <code>GetBucketLifecycle</code> has the following special errors:</p> <ul> <li> <p>Error code: <code>EntityTooSmall</code> </p> <ul> <li> <p>Description: Your proposed upload is smaller than the minimum allowed object size. Each part must be at least 5 MB in size, except the last part.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>InvalidPart</code> </p> <ul> <li> <p>Description: One or more of the specified parts could not be found. The part might not have been uploaded, or the specified entity tag might not have matched the part&#39;s entity tag.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>InvalidPartOrder</code> </p> <ul> <li> <p>Description: The list of parts was not in ascending order. The parts list must be specified in order by part number.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>NoSuchUpload</code> </p> <ul> <li> <p>Description: The specified multipart upload does not exist. The upload ID might be invalid, or the multipart upload might have been aborted or completed.</p> </li> <li> <p>404 Not Found</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>DeleteBucketMetricsConfiguration</code>:</p> <ul> <li> <p> <a>CreateMultipartUpload</a> </p> </li> <li> <p> <a>UploadPart</a> </p> </li> <li> <p> <a>AbortMultipartUpload</a> </p> </li> <li> <p> <a>ListParts</a> </p> </li> <li> <p> <a>ListMultipartUploads</a> </p> </li> </ul></p>
+    /// <p><p>Completes a multipart upload by assembling previously uploaded parts.</p> <p>You first initiate the multipart upload and then upload all parts using the <a>UploadPart</a> operation. After successfully uploading all relevant parts of an upload, you call this operation to complete the upload. Upon receiving this request, Amazon S3 concatenates all the parts in ascending order by part number to create a new object. In the Complete Multipart Upload request, you must provide the parts list. You must ensure that the parts list is complete. This operation concatenates the parts that you provide in the list. For each part in the list, you must provide the part number and the <code>ETag</code> value, returned after that part was uploaded.</p> <p>Processing of a Complete Multipart Upload request could take several minutes to complete. After Amazon S3 begins processing the request, it sends an HTTP response header that specifies a 200 OK response. While processing is in progress, Amazon S3 periodically sends white space characters to keep the connection from timing out. Because a request could fail after the initial 200 OK response has been sent, it is important that you check the response body to determine whether the request succeeded.</p> <p>Note that if <code>CompleteMultipartUpload</code> fails, applications should be prepared to retry the failed requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ErrorBestPractices.html">Amazon S3 Error Best Practices</a>.</p> <p>For more information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading Objects Using Multipart Upload</a>.</p> <p>For information about permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p> <code>GetBucketLifecycle</code> has the following special errors:</p> <ul> <li> <p>Error code: <code>EntityTooSmall</code> </p> <ul> <li> <p>Description: Your proposed upload is smaller than the minimum allowed object size. Each part must be at least 5 MB in size, except the last part.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>InvalidPart</code> </p> <ul> <li> <p>Description: One or more of the specified parts could not be found. The part might not have been uploaded, or the specified entity tag might not have matched the part&#39;s entity tag.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>InvalidPartOrder</code> </p> <ul> <li> <p>Description: The list of parts was not in ascending order. The parts list must be specified in order by part number.</p> </li> <li> <p>400 Bad Request</p> </li> </ul> </li> <li> <p>Error code: <code>NoSuchUpload</code> </p> <ul> <li> <p>Description: The specified multipart upload does not exist. The upload ID might be invalid, or the multipart upload might have been aborted or completed.</p> </li> <li> <p>404 Not Found</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>CompleteMultipartUpload</code>:</p> <ul> <li> <p> <a>CreateMultipartUpload</a> </p> </li> <li> <p> <a>UploadPart</a> </p> </li> <li> <p> <a>AbortMultipartUpload</a> </p> </li> <li> <p> <a>ListParts</a> </p> </li> <li> <p> <a>ListMultipartUploads</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn complete_multipart_upload(
         &self,
@@ -19775,9 +17852,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
@@ -19794,59 +17869,26 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CompleteMultipartUploadError::from_response(response));
-        }
+            .sign_and_dispatch(request, CompleteMultipartUploadError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CompleteMultipartUploadOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CompleteMultipartUploadOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
-        if let Some(expiration) = response.headers.get("x-amz-expiration") {
-            let value = expiration.to_owned();
-            result.expiration = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CompleteMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.expiration = response.headers.remove("x-amz-expiration");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.ssekms_key_id = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
-    /// <p>Creates a copy of an object that is already stored in Amazon S3.</p> <note> <p>You can store individual objects of up to 5 TB in Amazon S3. You create a copy of your object up to 5 GB in size in a single atomic operation using this API. However, for copying an object greater than 5 GB, you must use the multipart upload Upload Part - Copy API. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjctsUsingRESTMPUapi.html">Copy Object Using the REST Multipart Upload API</a>.</p> </note> <p>When copying an object, you can preserve all metadata (default) or specify new metadata. However, the ACL is not preserved and is set to private for the user making the request. To override the default ACL setting, specify a new ACL when generating a copy request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>.</p> <important> <p>Amazon S3 transfer acceleration does not support cross-region copies. If you request a cross-region copy using a transfer acceleration endpoint, you get a 400 <code>Bad Request</code> error. For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a>.</p> </important> <p>All copy requests must be authenticated. Additionally, you must have <i>read</i> access to the source object and <i>write</i> access to the destination bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html">REST Authentication</a>. Both the Region that you want to copy the object from and the Region that you want to copy the object to must be enabled for your account.</p> <p>To only copy an object under certain conditions, such as whether the <code>Etag</code> matches or whether the object was modified before or after a specified date, use the request parameters <code>x-amz-copy-source-if-match</code>, <code>x-amz-copy-source-if-none-match</code>, <code>x-amz-copy-source-if-unmodified-since</code>, or <code> x-amz-copy-source-if-modified-since</code>.</p> <note> <p>All headers with the <code>x-amz-</code> prefix, including <code>x-amz-copy-source</code>, must be signed.</p> </note> <p>You can use this operation to change the storage class of an object that is already stored in Amazon S3 using the <code>StorageClass</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a>.</p> <p>The source object that you are copying can be encrypted or unencrypted. If the source object is encrypted, it can be encrypted by server-side encryption using AWS managed encryption keys or by using a customer-provided encryption key. When copying an object, you can request that Amazon S3 encrypt the target object by using either the AWS managed encryption keys or by using your own encryption key. You can do this regardless of the form of server-side encryption that was used to encrypt the source, or even if the source object was not encrypted. For more information about server-side encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Using Server-Side Encryption</a>.</p> <p>A copy request might return an error when Amazon S3 receives the copy request or while Amazon S3 is copying the files. If the error occurs before the copy operation starts, you receive a standard Amazon S3 error. If the error occurs during the copy operation, the error response is embedded in the <code>200 OK</code> response. This means that a <code>200 OK</code> response can contain either a success or an error. Design your application to parse the contents of the response and handle it appropriately.</p> <p>If the copy is successful, you receive a response with information about the copied object.</p> <note> <p>If the request is an HTTP 1.1 request, the response is chunk encoded. If it were not, it would not contain the content-length, and you would need to read the entire body.</p> </note> <p>Consider the following when using request headers:</p> <ul> <li> <p> Consideration 1 – If both the <code>x-amz-copy-source-if-match</code> and <code>x-amz-copy-source-if-unmodified-since</code> headers are present in the request and evaluate as follows, Amazon S3 returns 200 OK and copies the data:</p> <ul> <li> <p> <code>x-amz-copy-source-if-match</code> condition evaluates to true</p> </li> <li> <p> <code>x-amz-copy-source-if-unmodified-since</code> condition evaluates to false</p> </li> </ul> </li> <li> <p> Consideration 2 – If both of the <code>x-amz-copy-source-if-none-match</code> and <code>x-amz-copy-source-if-modified-since</code> headers are present in the request and evaluate as follows, Amazon S3 returns the <code>412 Precondition Failed</code> response code:</p> <ul> <li> <p> <code>x-amz-copy-source-if-none-match</code> condition evaluates to false</p> </li> <li> <p> <code>x-amz-copy-source-if-modified-since</code> condition evaluates to true</p> </li> </ul> </li> </ul> <p>The copy request charge is based on the storage class and Region you specify for the destination object. For pricing information, see <a href="https://aws.amazon.com/s3/pricing/">Amazon S3 Pricing</a>.</p> <p>Following are other considerations when using <code>CopyObject</code>:</p> <dl> <dt>Versioning</dt> <dd> <p>By default, <code>x-amz-copy-source</code> identifies the current version of an object to copy. (If the current version is a delete marker, Amazon S3 behaves as if the object was deleted.) To copy a different version, use the <code>versionId</code> subresource.</p> <p>If you enable versioning on the target bucket, Amazon S3 generates a unique version ID for the object being copied. This version ID is different from the version ID of the source object. Amazon S3 returns the version ID of the copied object in the <code>x-amz-version-id</code> response header in the response.</p> <p>If you do not enable versioning or suspend it on the target bucket, the version ID that Amazon S3 generates is always null.</p> <p>If the source object's storage class is GLACIER, you must restore a copy of this object before you can use it as a source object for the copy operation. For more information, see .</p> </dd> <dt>Access Permissions</dt> <dd> <p>When copying an object, you can optionally specify the accounts or groups that should be granted specific permissions on the new object. There are two ways to grant the permissions using the request headers:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </dd> <dt>Server-Side- Encryption-Specific Request Headers</dt> <dd> <p>To encrypt the target object, you must provide the appropriate encryption-related request headers. The one you use depends on whether you want to use AWS managed encryption keys or provide your own encryption key. </p> <ul> <li> <p>To encrypt the target object using server-side encryption with an AWS managed encryption key, provide the following request headers, as appropriate.</p> <ul> <li> <p> <code>x-amz-server-side​-encryption</code> </p> </li> <li> <p> <code>x-amz-server-side-encryption-aws-kms-key-id</code> </p> </li> <li> <p> <code>x-amz-server-side-encryption-context</code> </p> </li> </ul> <note> <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but don't provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS KMS to protect the data. If you want to use a customer managed AWS KMS CMK, you must provide the <code>x-amz-server-side-encryption-aws-kms-key-id</code> of the symmetric customer managed CMK. Amazon S3 only supports symmetric CMKs and not asymmetric CMKs. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </note> <important> <p>All GET and PUT requests for an object protected by AWS KMS fail if you don't make them with SSL or by using SigV4.</p> </important> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in KMS</a>.</p> </li> <li> <p>To encrypt the target object using server-side encryption with an encryption key that you provide, use the following headers.</p> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> </li> <li> <p>If the source object is encrypted using server-side encryption with customer-provided encryption keys, you must use the following headers.</p> <ul> <li> <p>x-amz-copy-source​-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-copy-source​-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-copy-source-​server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in Amazon KMS</a>.</p> </li> </ul> </dd> <dt>Access-Control-List (ACL)-Specific Request Headers</dt> <dd> <p>You also can use the following access control–related headers with this operation. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the access control list (ACL) on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. With this operation, you can grant access permissions using one of the following two methods:</p> <ul> <li> <p>Specify a canned ACL (<code>x-amz-acl</code>) — Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly — To explicitly grant access permissions to specific AWS accounts or groups, use the following headers. Each header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>. In the header, you specify a list of grantees who get the specific permission. To grant permissions explicitly, use:</p> <ul> <li> <p>x-amz-grant-read</p> </li> <li> <p>x-amz-grant-write</p> </li> <li> <p>x-amz-grant-read-acp</p> </li> <li> <p>x-amz-grant-write-acp</p> </li> <li> <p>x-amz-grant-full-control</p> </li> </ul> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by email addresses permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: emailAddress="xyz@amazon.com", emailAddress="abc@amazon.com" </code> </p> </li> </ul> </dd> </dl> <p>The following operations are related to <code>CopyObject</code>:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a>GetObject</a> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjectsExamples.html">Copying Objects</a>.</p>
+    /// <p>Creates a copy of an object that is already stored in Amazon S3.</p> <note> <p>You can store individual objects of up to 5 TB in Amazon S3. You create a copy of your object up to 5 GB in size in a single atomic operation using this API. However, to copy an object greater than 5 GB, you must use the multipart upload Upload Part - Copy API. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjctsUsingRESTMPUapi.html">Copy Object Using the REST Multipart Upload API</a>.</p> </note> <p>All copy requests must be authenticated. Additionally, you must have <i>read</i> access to the source object and <i>write</i> access to the destination bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html">REST Authentication</a>. Both the Region that you want to copy the object from and the Region that you want to copy the object to must be enabled for your account.</p> <p>A copy request might return an error when Amazon S3 receives the copy request or while Amazon S3 is copying the files. If the error occurs before the copy operation starts, you receive a standard Amazon S3 error. If the error occurs during the copy operation, the error response is embedded in the <code>200 OK</code> response. This means that a <code>200 OK</code> response can contain either a success or an error. Design your application to parse the contents of the response and handle it appropriately.</p> <p>If the copy is successful, you receive a response with information about the copied object.</p> <note> <p>If the request is an HTTP 1.1 request, the response is chunk encoded. If it were not, it would not contain the content-length, and you would need to read the entire body.</p> </note> <p>The copy request charge is based on the storage class and Region that you specify for the destination object. For pricing information, see <a href="https://aws.amazon.com/s3/pricing/">Amazon S3 pricing</a>.</p> <important> <p>Amazon S3 transfer acceleration does not support cross-Region copies. If you request a cross-Region copy using a transfer acceleration endpoint, you get a 400 <code>Bad Request</code> error. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a>.</p> </important> <p> <b>Metadata</b> </p> <p>When copying an object, you can preserve all metadata (default) or specify new metadata. However, the ACL is not preserved and is set to private for the user making the request. To override the default ACL setting, specify a new ACL when generating a copy request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. </p> <p>To specify whether you want the object metadata copied from the source object or replaced with metadata provided in the request, you can optionally add the <code>x-amz-metadata-directive</code> header. When you grant permissions, you can use the <code>s3:x-amz-metadata-directive</code> condition key to enforce certain metadata behavior when objects are uploaded. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/amazon-s3-policy-keys.html">Specifying Conditions in a Policy</a> in the <i>Amazon S3 Developer Guide</i>. For a complete list of Amazon S3-specific condition keys, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/list_amazons3.html">Actions, Resources, and Condition Keys for Amazon S3</a>.</p> <p> <b> <code>x-amz-copy-source-if</code> Headers</b> </p> <p>To only copy an object under certain conditions, such as whether the <code>Etag</code> matches or whether the object was modified before or after a specified date, use the following request parameters:</p> <ul> <li> <p> <code>x-amz-copy-source-if-match</code> </p> </li> <li> <p> <code>x-amz-copy-source-if-none-match</code> </p> </li> <li> <p> <code>x-amz-copy-source-if-unmodified-since</code> </p> </li> <li> <p> <code>x-amz-copy-source-if-modified-since</code> </p> </li> </ul> <p> If both the <code>x-amz-copy-source-if-match</code> and <code>x-amz-copy-source-if-unmodified-since</code> headers are present in the request and evaluate as follows, Amazon S3 returns <code>200 OK</code> and copies the data:</p> <ul> <li> <p> <code>x-amz-copy-source-if-match</code> condition evaluates to true</p> </li> <li> <p> <code>x-amz-copy-source-if-unmodified-since</code> condition evaluates to false</p> </li> </ul> <p>If both the <code>x-amz-copy-source-if-none-match</code> and <code>x-amz-copy-source-if-modified-since</code> headers are present in the request and evaluate as follows, Amazon S3 returns the <code>412 Precondition Failed</code> response code:</p> <ul> <li> <p> <code>x-amz-copy-source-if-none-match</code> condition evaluates to false</p> </li> <li> <p> <code>x-amz-copy-source-if-modified-since</code> condition evaluates to true</p> </li> </ul> <note> <p>All headers with the <code>x-amz-</code> prefix, including <code>x-amz-copy-source</code>, must be signed.</p> </note> <p> <b>Encryption</b> </p> <p>The source object that you are copying can be encrypted or unencrypted. The source object can be encrypted with server-side encryption using AWS managed encryption keys (SSE-S3 or SSE-KMS) or by using a customer-provided encryption key. With server-side encryption, Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts the data when you access it. </p> <p>You can optionally use the appropriate encryption-related headers to request server-side encryption for the target object. You have the option to provide your own encryption key or use SSE-S3 or SSE-KMS, regardless of the form of server-side encryption that was used to encrypt the source object. You can even request encryption if the source object was not encrypted. For more information about server-side encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Using Server-Side Encryption</a>.</p> <p> <b>Access Control List (ACL)-Specific Request Headers</b> </p> <p>When copying an object, you can optionally use headers to grant ACL-based permissions. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the ACL on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-using-rest-api.html">Managing ACLs Using the REST API</a>. </p> <p> <b>Storage Class Options</b> </p> <p>You can use the <code>CopyObject</code> operation to change the storage class of an object that is already stored in Amazon S3 using the <code>StorageClass</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the <i>Amazon S3 Service Developer Guide</i>.</p> <p> <b>Versioning</b> </p> <p>By default, <code>x-amz-copy-source</code> identifies the current version of an object to copy. If the current version is a delete marker, Amazon S3 behaves as if the object was deleted. To copy a different version, use the <code>versionId</code> subresource.</p> <p>If you enable versioning on the target bucket, Amazon S3 generates a unique version ID for the object being copied. This version ID is different from the version ID of the source object. Amazon S3 returns the version ID of the copied object in the <code>x-amz-version-id</code> response header in the response.</p> <p>If you do not enable versioning or suspend it on the target bucket, the version ID that Amazon S3 generates is always null.</p> <p>If the source object's storage class is GLACIER, you must restore a copy of this object before you can use it as a source object for the copy operation. For more information, see .</p> <p>The following operations are related to <code>CopyObject</code>:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a>GetObject</a> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjectsExamples.html">Copying Objects</a>.</p>
     #[allow(unused_variables, warnings)]
     async fn copy_object(
         &self,
@@ -19856,101 +17898,49 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref cache_control) = input.cache_control {
-            request.add_header("Cache-Control", &cache_control.to_string());
-        }
-
-        if let Some(ref content_disposition) = input.content_disposition {
-            request.add_header("Content-Disposition", &content_disposition.to_string());
-        }
-
-        if let Some(ref content_encoding) = input.content_encoding {
-            request.add_header("Content-Encoding", &content_encoding.to_string());
-        }
-
-        if let Some(ref content_language) = input.content_language {
-            request.add_header("Content-Language", &content_language.to_string());
-        }
-
-        if let Some(ref content_type) = input.content_type {
-            request.add_header("Content-Type", &content_type.to_string());
-        }
-        request.add_header("x-amz-copy-source", &input.copy_source);
-
-        if let Some(ref copy_source_if_match) = input.copy_source_if_match {
-            request.add_header(
-                "x-amz-copy-source-if-match",
-                &copy_source_if_match.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_modified_since) = input.copy_source_if_modified_since {
-            request.add_header(
-                "x-amz-copy-source-if-modified-since",
-                &copy_source_if_modified_since.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_none_match) = input.copy_source_if_none_match {
-            request.add_header(
-                "x-amz-copy-source-if-none-match",
-                &copy_source_if_none_match.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_unmodified_since) = input.copy_source_if_unmodified_since {
-            request.add_header(
-                "x-amz-copy-source-if-unmodified-since",
-                &copy_source_if_unmodified_since.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_sse_customer_algorithm) =
-            input.copy_source_sse_customer_algorithm
-        {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-algorithm",
-                &copy_source_sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_sse_customer_key) = input.copy_source_sse_customer_key {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-key",
-                &copy_source_sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_sse_customer_key_md5) = input.copy_source_sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-key-MD5",
-                &copy_source_sse_customer_key_md5.to_string(),
-            );
-        }
-
-        if let Some(ref expires) = input.expires {
-            request.add_header("Expires", &expires.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
+        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
+        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
+        request.add_optional_header("Content-Language", input.content_language.as_ref());
+        request.add_optional_header("Content-Type", input.content_type.as_ref());
+        request.add_header("x-amz-copy-source", &input.copy_source.to_string());
+        request.add_optional_header(
+            "x-amz-copy-source-if-match",
+            input.copy_source_if_match.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-modified-since",
+            input.copy_source_if_modified_since.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-none-match",
+            input.copy_source_if_none_match.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-unmodified-since",
+            input.copy_source_if_unmodified_since.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-algorithm",
+            input.copy_source_sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-key",
+            input.copy_source_sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-key-MD5",
+            input.copy_source_sse_customer_key_md5.as_ref(),
+        );
+        request.add_optional_header("Expires", input.expires.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -19958,169 +17948,83 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-
-        if let Some(ref metadata_directive) = input.metadata_directive {
-            request.add_header("x-amz-metadata-directive", &metadata_directive.to_string());
-        }
-
-        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
-            request.add_header(
-                "x-amz-object-lock-legal-hold",
-                &object_lock_legal_hold_status.to_string(),
-            );
-        }
-
-        if let Some(ref object_lock_mode) = input.object_lock_mode {
-            request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
-        }
-
-        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
-            request.add_header(
-                "x-amz-object-lock-retain-until-date",
-                &object_lock_retain_until_date.to_string(),
-            );
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_encryption_context) = input.ssekms_encryption_context {
-            request.add_header(
-                "x-amz-server-side-encryption-context",
-                &ssekms_encryption_context.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_key_id) = input.ssekms_key_id {
-            request.add_header(
-                "x-amz-server-side-encryption-aws-kms-key-id",
-                &ssekms_key_id.to_string(),
-            );
-        }
-
-        if let Some(ref server_side_encryption) = input.server_side_encryption {
-            request.add_header(
-                "x-amz-server-side-encryption",
-                &server_side_encryption.to_string(),
-            );
-        }
-
-        if let Some(ref storage_class) = input.storage_class {
-            request.add_header("x-amz-storage-class", &storage_class.to_string());
-        }
-
-        if let Some(ref tagging) = input.tagging {
-            request.add_header("x-amz-tagging", &tagging.to_string());
-        }
-
-        if let Some(ref tagging_directive) = input.tagging_directive {
-            request.add_header("x-amz-tagging-directive", &tagging_directive.to_string());
-        }
-
-        if let Some(ref website_redirect_location) = input.website_redirect_location {
-            request.add_header(
-                "x-amz-website-redirect-location",
-                &website_redirect_location.to_string(),
-            );
-        }
+        request.add_optional_header(
+            "x-amz-metadata-directive",
+            input.metadata_directive.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-object-lock-legal-hold",
+            input.object_lock_legal_hold_status.as_ref(),
+        );
+        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
+        request.add_optional_header(
+            "x-amz-object-lock-retain-until-date",
+            input.object_lock_retain_until_date.as_ref(),
+        );
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-context",
+            input.ssekms_encryption_context.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-aws-kms-key-id",
+            input.ssekms_key_id.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption",
+            input.server_side_encryption.as_ref(),
+        );
+        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
+        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
+        request.add_optional_header("x-amz-tagging-directive", input.tagging_directive.as_ref());
+        request.add_optional_header(
+            "x-amz-website-redirect-location",
+            input.website_redirect_location.as_ref(),
+        );
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CopyObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, CopyObjectError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CopyObjectOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(copy_source_version_id) = response.headers.get("x-amz-copy-source-version-id") {
-            let value = copy_source_version_id.to_owned();
-            result.copy_source_version_id = Some(value)
-        };
-        if let Some(expiration) = response.headers.get("x-amz-expiration") {
-            let value = expiration.to_owned();
-            result.expiration = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CopyObjectOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.copy_source_version_id = response.headers.remove("x-amz-copy-source-version-id");
+        result.expiration = response.headers.remove("x-amz-expiration");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.sse_customer_algorithm = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_encryption_context) =
-            response.headers.get("x-amz-server-side-encryption-context")
-        {
-            let value = ssekms_encryption_context.to_owned();
-            result.ssekms_encryption_context = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_encryption_context = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-context");
+        result.ssekms_key_id = response
+            .headers
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
-    /// <p><p>Creates a new bucket. To create a bucket, you must register with Amazon S3 and have a valid AWS Access Key ID to authenticate requests. Anonymous requests are never allowed to create buckets. By creating the bucket, you become the bucket owner.</p> <p>Not every string is an acceptable bucket name. For information on bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html">Working with Amazon S3 Buckets</a>.</p> <p>By default, the bucket is created in the US East (N. Virginia) Region. You can optionally specify a Region in the request body. You might choose a Region to optimize latency, minimize costs, or address regulatory requirements. For example, if you reside in Europe, you will probably find it advantageous to create buckets in the EU (Ireland) Region. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro">How to Select a Region for Your Buckets</a>.</p> <note> <p>If you send your create bucket request to the <code>s3.amazonaws.com</code> endpoint, the request goes to the us-east-1 Region. Accordingly, the signature calculations in Signature Version 4 must use us-east-1 as the Region, even if the location constraint in the request specifies another Region where the bucket is to be created. If you create a bucket in a Region other than US East (N. Virginia), your application must be able to handle 307 redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html">Virtual Hosting of Buckets</a>.</p> </note> <p>When creating a bucket using this operation, you can optionally specify the accounts or groups that should be granted specific permissions on the bucket. There are two ways to grant the appropriate permissions using the request headers.</p> <ul> <li> <p>Specify a canned ACL using the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly using the <code>x-amz-grant-read</code>, <code>x-amz-grant-write</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These headers map to the set of permissions Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by email addresses permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> <note> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </note> <p>The following operations are related to <code>CreateBucket</code>:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> </ul></p>
+    /// <p><p>Creates a new bucket. To create a bucket, you must register with Amazon S3 and have a valid AWS Access Key ID to authenticate requests. Anonymous requests are never allowed to create buckets. By creating the bucket, you become the bucket owner.</p> <p>Not every string is an acceptable bucket name. For information on bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html">Working with Amazon S3 Buckets</a>.</p> <p>By default, the bucket is created in the US East (N. Virginia) Region. You can optionally specify a Region in the request body. You might choose a Region to optimize latency, minimize costs, or address regulatory requirements. For example, if you reside in Europe, you will probably find it advantageous to create buckets in the Europe (Ireland) Region. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html#access-bucket-intro">How to Select a Region for Your Buckets</a>.</p> <note> <p>If you send your create bucket request to the <code>s3.amazonaws.com</code> endpoint, the request goes to the us-east-1 Region. Accordingly, the signature calculations in Signature Version 4 must use us-east-1 as the Region, even if the location constraint in the request specifies another Region where the bucket is to be created. If you create a bucket in a Region other than US East (N. Virginia), your application must be able to handle 307 redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html">Virtual Hosting of Buckets</a>.</p> </note> <p>When creating a bucket using this operation, you can optionally specify the accounts or groups that should be granted specific permissions on the bucket. There are two ways to grant the appropriate permissions using the request headers.</p> <ul> <li> <p>Specify a canned ACL using the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly using the <code>x-amz-grant-read</code>, <code>x-amz-grant-write</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These headers map to the set of permissions Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by account IDs permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: id=&quot;11112222333&quot;, id=&quot;444455556666&quot; </code> </p> </li> </ul> <note> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </note> <p>The following operations are related to <code>CreateBucket</code>:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn create_bucket(
         &self,
@@ -20130,36 +18034,19 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write) = input.grant_write {
-            request.add_header("x-amz-grant-write", &grant_write.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
-
-        if let Some(ref object_lock_enabled_for_bucket) = input.object_lock_enabled_for_bucket {
-            request.add_header(
-                "x-amz-bucket-object-lock-enabled",
-                &object_lock_enabled_for_bucket.to_string(),
-            );
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header(
+            "x-amz-bucket-object-lock-enabled",
+            input.object_lock_enabled_for_bucket.as_ref(),
+        );
 
         if input.create_bucket_configuration.is_some() {
             let mut writer = EventWriter::new(Vec::new());
@@ -20174,25 +18061,16 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateBucketError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateBucketError::from_response)
+            .await?;
 
-        let mut result;
-        result = CreateBucketOutput::default();
-        if let Some(location) = response.headers.get("Location") {
-            let value = location.to_owned();
-            result.location = Some(value)
-        }; // parse non-payload
+        let result = CreateBucketOutput::default();
+        let mut result = result;
+        result.location = response.headers.remove("Location"); // parse non-payload
         Ok(result)
     }
 
-    /// <p><p>This operation initiates a multipart upload and returns an upload ID. This upload ID is used to associate all of the parts in the specific multipart upload. You specify this upload ID in each of your subsequent upload part requests (see <a>UploadPart</a>). You also include this upload ID in the final request to either complete or abort the multipart upload request.</p> <p>For more information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html">Multipart Upload Overview</a>.</p> <p>If you have configured a lifecycle rule to abort incomplete multipart uploads, the upload must complete within the number of days specified in the bucket lifecycle configuration. Otherwise, the incomplete multipart upload becomes eligible for an abort operation and Amazon S3 aborts the multipart upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config">Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a>.</p> <p>For information about the permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p>For request signing, multipart upload is just a series of regular requests. You initiate a multipart upload, send one or more requests to upload parts, and then complete the multipart upload process. You sign each request individually. There is nothing special about signing multipart upload requests. For more information about signing, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a>.</p> <note> <p> After you initiate a multipart upload and upload one or more parts, to stop being charged for storing the uploaded parts, you must either complete or abort the multipart upload. Amazon S3 frees up the space used to store the parts and stop charging you for storing them only after you either complete or abort a multipart upload. </p> </note> <p>You can optionally request server-side encryption. For server-side encryption, Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. You can provide your own encryption key, or use AWS Key Management Service (AWS KMS) customer master keys (CMKs) or Amazon S3-managed encryption keys. If you choose to provide your own encryption key, the request headers you provide in <a>UploadPart</a>) and <a>UploadPartCopy</a>) requests must match the headers you used in the request to initiate the upload by using <code>CreateMultipartUpload</code>. </p> <p>To perform a multipart upload with encryption using an AWS KMS CMK, the requester must have permission to the <code>kms:Encrypt</code>, <code>kms:Decrypt</code>, <code>kms:ReEncrypt<em></code>, <code>kms:GenerateDataKey</em></code>, and <code>kms:DescribeKey</code> actions on the key. These permissions are required because Amazon S3 must decrypt and read data from the encrypted file parts before it completes the multipart upload.</p> <p>If your AWS Identity and Access Management (IAM) user or role is in the same AWS account as the AWS KMS CMK, then you must have these permissions on the key policy. If your IAM user or role belongs to a different account than the key, then you must have the permissions on both the key policy and your IAM user or role.</p> <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a>.</p> <dl> <dt>Access Permissions</dt> <dd> <p>When copying an object, you can optionally specify the accounts or groups that should be granted specific permissions on the new object. There are two ways to grant the permissions using the request headers:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </dd> <dt>Server-Side- Encryption-Specific Request Headers</dt> <dd> <p>You can optionally tell Amazon S3 to encrypt data at rest using server-side encryption. Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. The option you use depends on whether you want to use AWS managed encryption keys or provide your own encryption key. </p> <ul> <li> <p>Use encryption keys managed by Amazon S3 or customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) – If you want AWS to manage the keys used to encrypt data, specify the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption</p> </li> <li> <p>x-amz-server-side-encryption-aws-kms-key-id</p> </li> <li> <p>x-amz-server-side-encryption-context</p> </li> </ul> <note> <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but don&#39;t provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS KMS to protect the data.</p> </note> <important> <p>All GET and PUT requests for an object protected by AWS KMS fail if you don&#39;t make them with SSL or by using SigV4.</p> </important> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> <li> <p>Use customer-provided encryption keys – If you want to manage your own encryption keys, provide all the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> </ul> </dd> <dt>Access-Control-List (ACL)-Specific Request Headers</dt> <dd> <p>You also can use the following access control–related headers with this operation. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the access control list (ACL) on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. With this operation, you can grant access permissions using one of the following two methods:</p> <ul> <li> <p>Specify a canned ACL (<code>x-amz-acl</code>) — Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly — To explicitly grant access permissions to specific AWS accounts or groups, use the following headers. Each header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>. In the header, you specify a list of grantees who get the specific permission. To grant permissions explicitly, use:</p> <ul> <li> <p>x-amz-grant-read</p> </li> <li> <p>x-amz-grant-write</p> </li> <li> <p>x-amz-grant-read-acp</p> </li> <li> <p>x-amz-grant-write-acp</p> </li> <li> <p>x-amz-grant-full-control</p> </li> </ul> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by email addresses permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> </dd> </dl> <p>The following operations are related to <code>CreateMultipartUpload</code>:</p> <ul> <li> <p> <a>UploadPart</a> </p> </li> <li> <p> <a>CompleteMultipartUpload</a> </p> </li> <li> <p> <a>AbortMultipartUpload</a> </p> </li> <li> <p> <a>ListParts</a> </p> </li> <li> <p> <a>ListMultipartUploads</a> </p> </li> </ul></p>
+    /// <p><p>This operation initiates a multipart upload and returns an upload ID. This upload ID is used to associate all of the parts in the specific multipart upload. You specify this upload ID in each of your subsequent upload part requests (see <a>UploadPart</a>). You also include this upload ID in the final request to either complete or abort the multipart upload request.</p> <p>For more information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html">Multipart Upload Overview</a>.</p> <p>If you have configured a lifecycle rule to abort incomplete multipart uploads, the upload must complete within the number of days specified in the bucket lifecycle configuration. Otherwise, the incomplete multipart upload becomes eligible for an abort operation and Amazon S3 aborts the multipart upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config">Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a>.</p> <p>For information about the permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a>.</p> <p>For request signing, multipart upload is just a series of regular requests. You initiate a multipart upload, send one or more requests to upload parts, and then complete the multipart upload process. You sign each request individually. There is nothing special about signing multipart upload requests. For more information about signing, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a>.</p> <note> <p> After you initiate a multipart upload and upload one or more parts, to stop being charged for storing the uploaded parts, you must either complete or abort the multipart upload. Amazon S3 frees up the space used to store the parts and stop charging you for storing them only after you either complete or abort a multipart upload. </p> </note> <p>You can optionally request server-side encryption. For server-side encryption, Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. You can provide your own encryption key, or use AWS Key Management Service (AWS KMS) customer master keys (CMKs) or Amazon S3-managed encryption keys. If you choose to provide your own encryption key, the request headers you provide in <a>UploadPart</a>) and <a>UploadPartCopy</a>) requests must match the headers you used in the request to initiate the upload by using <code>CreateMultipartUpload</code>. </p> <p>To perform a multipart upload with encryption using an AWS KMS CMK, the requester must have permission to the <code>kms:Encrypt</code>, <code>kms:Decrypt</code>, <code>kms:ReEncrypt<em></code>, <code>kms:GenerateDataKey</em></code>, and <code>kms:DescribeKey</code> actions on the key. These permissions are required because Amazon S3 must decrypt and read data from the encrypted file parts before it completes the multipart upload.</p> <p>If your AWS Identity and Access Management (IAM) user or role is in the same AWS account as the AWS KMS CMK, then you must have these permissions on the key policy. If your IAM user or role belongs to a different account than the key, then you must have the permissions on both the key policy and your IAM user or role.</p> <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a>.</p> <dl> <dt>Access Permissions</dt> <dd> <p>When copying an object, you can optionally specify the accounts or groups that should be granted specific permissions on the new object. There are two ways to grant the permissions using the request headers:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </dd> <dt>Server-Side- Encryption-Specific Request Headers</dt> <dd> <p>You can optionally tell Amazon S3 to encrypt data at rest using server-side encryption. Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. The option you use depends on whether you want to use AWS managed encryption keys or provide your own encryption key. </p> <ul> <li> <p>Use encryption keys managed by Amazon S3 or customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) – If you want AWS to manage the keys used to encrypt data, specify the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption</p> </li> <li> <p>x-amz-server-side-encryption-aws-kms-key-id</p> </li> <li> <p>x-amz-server-side-encryption-context</p> </li> </ul> <note> <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but don&#39;t provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS KMS to protect the data.</p> </note> <important> <p>All GET and PUT requests for an object protected by AWS KMS fail if you don&#39;t make them with SSL or by using SigV4.</p> </important> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> <li> <p>Use customer-provided encryption keys – If you want to manage your own encryption keys, provide all the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> </ul> </dd> <dt>Access-Control-List (ACL)-Specific Request Headers</dt> <dd> <p>You also can use the following access control–related headers with this operation. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the access control list (ACL) on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. With this operation, you can grant access permissions using one of the following two methods:</p> <ul> <li> <p>Specify a canned ACL (<code>x-amz-acl</code>) — Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly — To explicitly grant access permissions to specific AWS accounts or groups, use the following headers. Each header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>. In the header, you specify a list of grantees who get the specific permission. To grant permissions explicitly, use:</p> <ul> <li> <p>x-amz-grant-read</p> </li> <li> <p>x-amz-grant-write</p> </li> <li> <p>x-amz-grant-read-acp</p> </li> <li> <p>x-amz-grant-write-acp</p> </li> <li> <p>x-amz-grant-full-control</p> </li> </ul> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by account IDs permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: id=&quot;11112222333&quot;, id=&quot;444455556666&quot; </code> </p> </li> </ul> </dd> </dl> <p>The following operations are related to <code>CreateMultipartUpload</code>:</p> <ul> <li> <p> <a>UploadPart</a> </p> </li> <li> <p> <a>CompleteMultipartUpload</a> </p> </li> <li> <p> <a>AbortMultipartUpload</a> </p> </li> <li> <p> <a>ListParts</a> </p> </li> <li> <p> <a>ListMultipartUploads</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn create_multipart_upload(
         &self,
@@ -20202,49 +18080,20 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref cache_control) = input.cache_control {
-            request.add_header("Cache-Control", &cache_control.to_string());
-        }
-
-        if let Some(ref content_disposition) = input.content_disposition {
-            request.add_header("Content-Disposition", &content_disposition.to_string());
-        }
-
-        if let Some(ref content_encoding) = input.content_encoding {
-            request.add_header("Content-Encoding", &content_encoding.to_string());
-        }
-
-        if let Some(ref content_language) = input.content_language {
-            request.add_header("Content-Language", &content_language.to_string());
-        }
-
-        if let Some(ref content_type) = input.content_type {
-            request.add_header("Content-Type", &content_type.to_string());
-        }
-
-        if let Some(ref expires) = input.expires {
-            request.add_header("Expires", &expires.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
+        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
+        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
+        request.add_optional_header("Content-Language", input.content_language.as_ref());
+        request.add_optional_header("Content-Type", input.content_type.as_ref());
+        request.add_optional_header("Expires", input.expires.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -20252,157 +18101,76 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-
-        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
-            request.add_header(
-                "x-amz-object-lock-legal-hold",
-                &object_lock_legal_hold_status.to_string(),
-            );
-        }
-
-        if let Some(ref object_lock_mode) = input.object_lock_mode {
-            request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
-        }
-
-        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
-            request.add_header(
-                "x-amz-object-lock-retain-until-date",
-                &object_lock_retain_until_date.to_string(),
-            );
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_encryption_context) = input.ssekms_encryption_context {
-            request.add_header(
-                "x-amz-server-side-encryption-context",
-                &ssekms_encryption_context.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_key_id) = input.ssekms_key_id {
-            request.add_header(
-                "x-amz-server-side-encryption-aws-kms-key-id",
-                &ssekms_key_id.to_string(),
-            );
-        }
-
-        if let Some(ref server_side_encryption) = input.server_side_encryption {
-            request.add_header(
-                "x-amz-server-side-encryption",
-                &server_side_encryption.to_string(),
-            );
-        }
-
-        if let Some(ref storage_class) = input.storage_class {
-            request.add_header("x-amz-storage-class", &storage_class.to_string());
-        }
-
-        if let Some(ref tagging) = input.tagging {
-            request.add_header("x-amz-tagging", &tagging.to_string());
-        }
-
-        if let Some(ref website_redirect_location) = input.website_redirect_location {
-            request.add_header(
-                "x-amz-website-redirect-location",
-                &website_redirect_location.to_string(),
-            );
-        }
+        request.add_optional_header(
+            "x-amz-object-lock-legal-hold",
+            input.object_lock_legal_hold_status.as_ref(),
+        );
+        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
+        request.add_optional_header(
+            "x-amz-object-lock-retain-until-date",
+            input.object_lock_retain_until_date.as_ref(),
+        );
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-context",
+            input.ssekms_encryption_context.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-aws-kms-key-id",
+            input.ssekms_key_id.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption",
+            input.server_side_encryption.as_ref(),
+        );
+        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
+        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
+        request.add_optional_header(
+            "x-amz-website-redirect-location",
+            input.website_redirect_location.as_ref(),
+        );
         let mut params = Params::new();
         params.put_key("uploads");
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateMultipartUploadError::from_response(response));
-        }
+            .sign_and_dispatch(request, CreateMultipartUploadError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateMultipartUploadOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                CreateMultipartUploadOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
-            let value = abort_date.to_owned();
-            result.abort_date = Some(value)
-        };
-        if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
-            let value = abort_rule_id.to_owned();
-            result.abort_rule_id = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateMultipartUploadOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.abort_date = response.headers.remove("x-amz-abort-date");
+        result.abort_rule_id = response.headers.remove("x-amz-abort-rule-id");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.sse_customer_algorithm = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_encryption_context) =
-            response.headers.get("x-amz-server-side-encryption-context")
-        {
-            let value = ssekms_encryption_context.to_owned();
-            result.ssekms_encryption_context = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_encryption_context = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-context");
+        result.ssekms_key_id = response
+            .headers
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption"); // parse non-payload
         Ok(result)
     }
 
@@ -20417,20 +18185,14 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p> <p>To use this operation, you must have permissions to perform the <code>s3:PutAnalyticsConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p>For information about the Amazon S3 analytics feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html">Amazon S3 Analytics – Storage Class Analysis</a>. </p> <p>The following operations are related to <code>DeleteBucketAnalyticsConfiguration</code>:</p> <ul> <li> <p> </p> </li> <li> <p> </p> </li> <li> <p> </p> </li> </ul></p>
+    /// <p><p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p> <p>To use this operation, you must have permissions to perform the <code>s3:PutAnalyticsConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p>For information about the Amazon S3 analytics feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html">Amazon S3 Analytics – Storage Class Analysis</a>. </p> <p>The following operations are related to <code>DeleteBucketAnalyticsConfiguration</code>:</p> <ul> <li> <p> </p> </li> <li> <p> </p> </li> <li> <p> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn delete_bucket_analytics_configuration(
         &self,
@@ -20446,16 +18208,11 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketAnalyticsConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                DeleteBucketAnalyticsConfigurationError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20476,20 +18233,14 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketCorsError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketCorsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>This implementation of the DELETE operation removes default encryption from the bucket. For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//bucket-encryption.html">Amazon S3 Default Bucket Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>To use this operation, you must have permissions to perform the <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketEncryption</a> </p> </li> <li> <p> <a>GetBucketEncryption</a> </p> </li> </ul></p>
+    /// <p><p>This implementation of the DELETE operation removes default encryption from the bucket. For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Default Bucket Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>To use this operation, you must have permissions to perform the <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketEncryption</a> </p> </li> <li> <p> <a>GetBucketEncryption</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn delete_bucket_encryption(
         &self,
@@ -20504,14 +18255,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketEncryptionError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketEncryptionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20533,16 +18278,11 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketInventoryConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                DeleteBucketInventoryConfigurationError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20563,14 +18303,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketLifecycleError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketLifecycleError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20592,16 +18326,11 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketMetricsConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                DeleteBucketMetricsConfigurationError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20622,14 +18351,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketPolicyError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20650,14 +18373,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketReplicationError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketReplicationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20678,14 +18395,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketTaggingError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20706,14 +18417,8 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteBucketWebsiteError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteBucketWebsiteError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -20729,20 +18434,12 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
-        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
-            request.add_header(
-                "x-amz-bypass-governance-retention",
-                &bypass_governance_retention.to_string(),
-            );
-        }
-
-        if let Some(ref mfa) = input.mfa {
-            request.add_header("x-amz-mfa", &mfa.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header(
+            "x-amz-bypass-governance-retention",
+            input.bypass_governance_retention.as_ref(),
+        );
+        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -20750,29 +18447,17 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteObjectError::from_response)
+            .await?;
 
-        let mut result;
-        result = DeleteObjectOutput::default();
-        if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-            let value = delete_marker.to_owned();
-            result.delete_marker = Some(value.parse::<bool>().unwrap())
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+        let result = DeleteObjectOutput::default();
+        let mut result = result;
+        result.delete_marker = response
+            .headers
+            .remove("x-amz-delete-marker")
+            .map(|value| value.parse::<bool>().unwrap());
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -20794,21 +18479,12 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteObjectTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteObjectTaggingError::from_response)
+            .await?;
 
-        let mut result;
-        result = DeleteObjectTaggingOutput::default();
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+        let result = DeleteObjectTaggingOutput::default();
+        let mut result = result;
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -20822,20 +18498,12 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
-            request.add_header(
-                "x-amz-bypass-governance-retention",
-                &bypass_governance_retention.to_string(),
-            );
-        }
-
-        if let Some(ref mfa) = input.mfa {
-            request.add_header("x-amz-mfa", &mfa.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header(
+            "x-amz-bypass-governance-retention",
+            input.bypass_governance_retention.as_ref(),
+        );
+        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         params.put_key("delete");
         request.set_params(params);
@@ -20845,37 +18513,20 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteObjectsError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeleteObjectsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeleteObjectsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            DeleteObjectsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
-    /// <p><p>Removes the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket. To use this operation, you must have the <code>s3:PutBucketPublicAccessBlock</code> permission. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p>The following operations are related to <code>DeleteBucketMetricsConfiguration</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">Using Amazon S3 Block Public Access</a> </p> </li> <li> <p> <a>GetPublicAccessBlock</a> </p> </li> <li> <p> <a>PutPublicAccessBlock</a> </p> </li> <li> <p> <a>GetBucketPolicyStatus</a> </p> </li> </ul></p>
+    /// <p><p>Removes the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket. To use this operation, you must have the <code>s3:PutBucketPublicAccessBlock</code> permission. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p>The following operations are related to <code>DeletePublicAccessBlock</code>:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">Using Amazon S3 Block Public Access</a> </p> </li> <li> <p> <a>GetPublicAccessBlock</a> </p> </li> <li> <p> <a>PutPublicAccessBlock</a> </p> </li> <li> <p> <a>GetBucketPolicyStatus</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn delete_public_access_block(
         &self,
@@ -20890,20 +18541,14 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeletePublicAccessBlockError::from_response(response));
-        }
+            .sign_and_dispatch(request, DeletePublicAccessBlockError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>This implementation of the GET operation uses the <code>accelerate</code> subresource to return the Transfer Acceleration state of a bucket, which is either <code>Enabled</code> or <code>Suspended</code>. Amazon S3 Transfer Acceleration is a bucket-level feature that enables you to perform faster data transfers to and from Amazon S3.</p> <p>To use this operation, you must have permission to perform the <code>s3:GetAccelerateConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>You set the Transfer Acceleration state of an existing bucket to <code>Enabled</code> or <code>Suspended</code> by using the <a>PutBucketAccelerateConfiguration</a> operation. </p> <p>A GET <code>accelerate</code> request does not return a state value for a bucket that has no transfer acceleration state. A bucket has no Transfer Acceleration state if a state has never been set on the bucket. </p> <p>For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//transfer-acceleration.html">Transfer Acceleration</a> in the Amazon Simple Storage Service Developer Guide.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketAccelerateConfiguration</a> </p> </li> </ul></p>
+    /// <p><p>This implementation of the GET operation uses the <code>accelerate</code> subresource to return the Transfer Acceleration state of a bucket, which is either <code>Enabled</code> or <code>Suspended</code>. Amazon S3 Transfer Acceleration is a bucket-level feature that enables you to perform faster data transfers to and from Amazon S3.</p> <p>To use this operation, you must have permission to perform the <code>s3:GetAccelerateConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>You set the Transfer Acceleration state of an existing bucket to <code>Enabled</code> or <code>Suspended</code> by using the <a>PutBucketAccelerateConfiguration</a> operation. </p> <p>A GET <code>accelerate</code> request does not return a state value for a bucket that has no transfer acceleration state. A bucket has no Transfer Acceleration state if a state has never been set on the bucket. </p> <p>For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a> in the Amazon Simple Storage Service Developer Guide.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketAccelerateConfiguration</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn get_bucket_accelerate_configuration(
         &self,
@@ -20921,34 +18566,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketAccelerateConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                GetBucketAccelerateConfigurationError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketAccelerateConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketAccelerateConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketAccelerateConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -20968,29 +18597,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketAclError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketAclError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketAclOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketAclOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21014,34 +18629,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketAnalyticsConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, GetBucketAnalyticsConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketAnalyticsConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketAnalyticsConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21061,29 +18657,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketCorsError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketCorsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketCorsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketCorsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21103,30 +18685,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketEncryptionError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketEncryptionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketEncryptionOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketEncryptionOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketEncryptionOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21150,34 +18717,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketInventoryConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, GetBucketInventoryConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketInventoryConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketInventoryConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketInventoryConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21197,35 +18745,20 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketLifecycleError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketLifecycleError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketLifecycleOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketLifecycleOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketLifecycleOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
 
-    /// <p><note> <p>Bucket lifecycle configuration now supports specifying a lifecycle rule using an object key name prefix, one or more object tags, or a combination of both. Accordingly, this section describes the latest API. The response describes the new filter element that you can use to specify a filter to select a subset of objects to which the rule applies. If you are still using previous version of the lifecycle configuration, it works. For the earlier API description, see <a>GetBucketLifecycle</a>.</p> </note> <p>Returns the lifecycle configuration information set on the bucket. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a>.</p> <p>To use this operation, you must have permission to perform the <code>s3:GetLifecycleConfiguration</code> action. The bucket owner has this permission, by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p> <code>GetBucketLifecycleConfiguration</code> has the following special error:</p> <ul> <li> <p>Error code: <code>NoSuchLifecycleConfiguration</code> </p> <ul> <li> <p>Description: The lifecycle configuration does not exist.</p> </li> <li> <p>HTTP Status Code: 404 Not Found</p> </li> <li> <p>SOAP Fault Code Prefix: Client</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>DeleteBucketMetricsConfiguration</code>:</p> <ul> <li> <p> <a>GetBucketLifecycle</a> </p> </li> <li> <p> <a>PutBucketLifecycle</a> </p> </li> <li> <p> <a>DeleteBucketLifecycle</a> </p> </li> </ul></p>
+    /// <p><note> <p>Bucket lifecycle configuration now supports specifying a lifecycle rule using an object key name prefix, one or more object tags, or a combination of both. Accordingly, this section describes the latest API. The response describes the new filter element that you can use to specify a filter to select a subset of objects to which the rule applies. If you are still using previous version of the lifecycle configuration, it works. For the earlier API description, see <a>GetBucketLifecycle</a>.</p> </note> <p>Returns the lifecycle configuration information set on the bucket. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a>.</p> <p>To use this operation, you must have permission to perform the <code>s3:GetLifecycleConfiguration</code> action. The bucket owner has this permission, by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p> <code>GetBucketLifecycleConfiguration</code> has the following special error:</p> <ul> <li> <p>Error code: <code>NoSuchLifecycleConfiguration</code> </p> <ul> <li> <p>Description: The lifecycle configuration does not exist.</p> </li> <li> <p>HTTP Status Code: 404 Not Found</p> </li> <li> <p>SOAP Fault Code Prefix: Client</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>GetBucketLifecycleConfiguration</code>:</p> <ul> <li> <p> <a>GetBucketLifecycle</a> </p> </li> <li> <p> <a>PutBucketLifecycle</a> </p> </li> <li> <p> <a>DeleteBucketLifecycle</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn get_bucket_lifecycle_configuration(
         &self,
@@ -21243,34 +18776,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketLifecycleConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, GetBucketLifecycleConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketLifecycleConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketLifecycleConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketLifecycleConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21290,30 +18804,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketLocationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketLocationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketLocationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketLocationOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketLocationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21333,29 +18832,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketLoggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketLoggingError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketLoggingOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketLoggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketLoggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21377,32 +18862,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketMetricsConfigurationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketMetricsConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketMetricsConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketMetricsConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketMetricsConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21422,32 +18890,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketNotificationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketNotificationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = NotificationConfigurationDeprecated::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = NotificationConfigurationDeprecatedDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            NotificationConfigurationDeprecatedDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21468,32 +18919,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketNotificationConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                GetBucketNotificationConfigurationError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = NotificationConfiguration::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                NotificationConfigurationDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            NotificationConfigurationDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21513,15 +18950,10 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketPolicyError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketPolicyError::from_response)
+            .await?;
 
+        let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         let mut result = GetBucketPolicyOutput::default();
         result.policy = Some(String::from_utf8_lossy(response.body.as_ref()).into());
@@ -21544,30 +18976,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketPolicyStatusError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketPolicyStatusError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketPolicyStatusOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketPolicyStatusOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketPolicyStatusOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21587,30 +19004,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketReplicationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketReplicationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketReplicationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketReplicationOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketReplicationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21630,32 +19032,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketRequestPaymentError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketRequestPaymentError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketRequestPaymentOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketRequestPaymentOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketRequestPaymentOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21675,29 +19060,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketTaggingError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketTaggingOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketTaggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21717,30 +19088,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketVersioningError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketVersioningError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketVersioningOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetBucketVersioningOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketVersioningOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21760,29 +19116,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetBucketWebsiteError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetBucketWebsiteError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetBucketWebsiteOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetBucketWebsiteOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetBucketWebsiteOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -21797,50 +19139,24 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
-
-        if let Some(ref if_modified_since) = input.if_modified_since {
-            request.add_header("If-Modified-Since", &if_modified_since.to_string());
-        }
-
-        if let Some(ref if_none_match) = input.if_none_match {
-            request.add_header("If-None-Match", &if_none_match.to_string());
-        }
-
-        if let Some(ref if_unmodified_since) = input.if_unmodified_since {
-            request.add_header("If-Unmodified-Since", &if_unmodified_since.to_string());
-        }
-
-        if let Some(ref range) = input.range {
-            request.add_header("Range", &range.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header("If-Modified-Since", input.if_modified_since.as_ref());
+        request.add_optional_header("If-None-Match", input.if_none_match.as_ref());
+        request.add_optional_header("If-Unmodified-Since", input.if_unmodified_since.as_ref());
+        request.add_optional_header("Range", input.range.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
         let mut params = Params::new();
         if let Some(ref x) = input.part_number {
             params.put("partNumber", x);
@@ -21869,69 +19185,30 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectError::from_response)
+            .await?;
 
         let mut result = GetObjectOutput::default();
         result.body = Some(response.body);
-        if let Some(accept_ranges) = response.headers.get("accept-ranges") {
-            let value = accept_ranges.to_owned();
-            result.accept_ranges = Some(value)
-        };
-        if let Some(cache_control) = response.headers.get("Cache-Control") {
-            let value = cache_control.to_owned();
-            result.cache_control = Some(value)
-        };
-        if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-            let value = content_disposition.to_owned();
-            result.content_disposition = Some(value)
-        };
-        if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-            let value = content_encoding.to_owned();
-            result.content_encoding = Some(value)
-        };
-        if let Some(content_language) = response.headers.get("Content-Language") {
-            let value = content_language.to_owned();
-            result.content_language = Some(value)
-        };
-        if let Some(content_length) = response.headers.get("Content-Length") {
-            let value = content_length.to_owned();
-            result.content_length = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(content_range) = response.headers.get("Content-Range") {
-            let value = content_range.to_owned();
-            result.content_range = Some(value)
-        };
-        if let Some(content_type) = response.headers.get("Content-Type") {
-            let value = content_type.to_owned();
-            result.content_type = Some(value)
-        };
-        if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-            let value = delete_marker.to_owned();
-            result.delete_marker = Some(value.parse::<bool>().unwrap())
-        };
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(expiration) = response.headers.get("x-amz-expiration") {
-            let value = expiration.to_owned();
-            result.expiration = Some(value)
-        };
-        if let Some(expires) = response.headers.get("Expires") {
-            let value = expires.to_owned();
-            result.expires = Some(value)
-        };
-        if let Some(last_modified) = response.headers.get("Last-Modified") {
-            let value = last_modified.to_owned();
-            result.last_modified = Some(value)
-        };
+        result.accept_ranges = response.headers.remove("accept-ranges");
+        result.cache_control = response.headers.remove("Cache-Control");
+        result.content_disposition = response.headers.remove("Content-Disposition");
+        result.content_encoding = response.headers.remove("Content-Encoding");
+        result.content_language = response.headers.remove("Content-Language");
+        result.content_length = response
+            .headers
+            .remove("Content-Length")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.content_range = response.headers.remove("Content-Range");
+        result.content_type = response.headers.remove("Content-Type");
+        result.delete_marker = response
+            .headers
+            .remove("x-amz-delete-marker")
+            .map(|value| value.parse::<bool>().unwrap());
+        result.e_tag = response.headers.remove("ETag");
+        result.expiration = response.headers.remove("x-amz-expiration");
+        result.expires = response.headers.remove("Expires");
+        result.last_modified = response.headers.remove("Last-Modified");
         let mut values = ::std::collections::HashMap::new();
         for (key, value) in response.headers.iter() {
             if key.as_str().starts_with("x-amz-meta-") {
@@ -21942,85 +19219,41 @@ impl S3 for S3Client {
             }
         }
         result.metadata = Some(values);
-        if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
-            let value = missing_meta.to_owned();
-            result.missing_meta = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(object_lock_legal_hold_status) =
-            response.headers.get("x-amz-object-lock-legal-hold")
-        {
-            let value = object_lock_legal_hold_status.to_owned();
-            result.object_lock_legal_hold_status = Some(value)
-        };
-        if let Some(object_lock_mode) = response.headers.get("x-amz-object-lock-mode") {
-            let value = object_lock_mode.to_owned();
-            result.object_lock_mode = Some(value)
-        };
-        if let Some(object_lock_retain_until_date) =
-            response.headers.get("x-amz-object-lock-retain-until-date")
-        {
-            let value = object_lock_retain_until_date.to_owned();
-            result.object_lock_retain_until_date = Some(value)
-        };
-        if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
-            let value = parts_count.to_owned();
-            result.parts_count = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(replication_status) = response.headers.get("x-amz-replication-status") {
-            let value = replication_status.to_owned();
-            result.replication_status = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(restore) = response.headers.get("x-amz-restore") {
-            let value = restore.to_owned();
-            result.restore = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        result.missing_meta = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-missing-meta")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.object_lock_legal_hold_status =
+            response.headers.remove("x-amz-object-lock-legal-hold");
+        result.object_lock_mode = response.headers.remove("x-amz-object-lock-mode");
+        result.object_lock_retain_until_date = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-object-lock-retain-until-date");
+        result.parts_count = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        };
-        if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
-            let value = storage_class.to_owned();
-            result.storage_class = Some(value)
-        };
-        if let Some(tag_count) = response.headers.get("x-amz-tagging-count") {
-            let value = tag_count.to_owned();
-            result.tag_count = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        };
-        if let Some(website_redirect_location) =
-            response.headers.get("x-amz-website-redirect-location")
-        {
-            let value = website_redirect_location.to_owned();
-            result.website_redirect_location = Some(value)
-        };
+            .remove("x-amz-mp-parts-count")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.replication_status = response.headers.remove("x-amz-replication-status");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.restore = response.headers.remove("x-amz-restore");
+        result.sse_customer_algorithm = response
+            .headers
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
+            .headers
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_key_id = response
+            .headers
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.storage_class = response.headers.remove("x-amz-storage-class");
+        result.tag_count = response
+            .headers
+            .remove("x-amz-tagging-count")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.version_id = response.headers.remove("x-amz-version-id");
+        result.website_redirect_location =
+            response.headers.remove("x-amz-website-redirect-location");
         Ok(result)
     }
 
@@ -22034,9 +19267,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22045,33 +19276,16 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectAclError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectAclError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetObjectAclOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetObjectAclOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -22085,9 +19299,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22096,30 +19308,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectLegalHoldError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectLegalHoldError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetObjectLegalHoldOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetObjectLegalHoldOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetObjectLegalHoldOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22140,32 +19337,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectLockConfigurationError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectLockConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetObjectLockConfigurationOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetObjectLockConfigurationOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetObjectLockConfigurationOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22180,9 +19360,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -22191,30 +19369,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectRetentionError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectRetentionError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetObjectRetentionOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetObjectRetentionOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetObjectRetentionOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22237,33 +19400,16 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectTaggingError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetObjectTaggingOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = GetObjectTaggingOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetObjectTaggingOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -22277,29 +19423,18 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         params.put_key("torrent");
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetObjectTorrentError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetObjectTorrentError::from_response)
+            .await?;
 
         let mut result = GetObjectTorrentOutput::default();
         result.body = Some(response.body);
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
+        result.request_charged = response.headers.remove("x-amz-request-charged");
         Ok(result)
     }
 
@@ -22318,30 +19453,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(GetPublicAccessBlockError::from_response(response));
-        }
+            .sign_and_dispatch(request, GetPublicAccessBlockError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = GetPublicAccessBlockOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                GetPublicAccessBlockOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            GetPublicAccessBlockOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22357,14 +19477,8 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(HeadBucketError::from_response(response));
-        }
+            .sign_and_dispatch(request, HeadBucketError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -22380,50 +19494,24 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
-        if let Some(ref if_match) = input.if_match {
-            request.add_header("If-Match", &if_match.to_string());
-        }
-
-        if let Some(ref if_modified_since) = input.if_modified_since {
-            request.add_header("If-Modified-Since", &if_modified_since.to_string());
-        }
-
-        if let Some(ref if_none_match) = input.if_none_match {
-            request.add_header("If-None-Match", &if_none_match.to_string());
-        }
-
-        if let Some(ref if_unmodified_since) = input.if_unmodified_since {
-            request.add_header("If-Unmodified-Since", &if_unmodified_since.to_string());
-        }
-
-        if let Some(ref range) = input.range {
-            request.add_header("Range", &range.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
+        request.add_optional_header("If-Match", input.if_match.as_ref());
+        request.add_optional_header("If-Modified-Since", input.if_modified_since.as_ref());
+        request.add_optional_header("If-None-Match", input.if_none_match.as_ref());
+        request.add_optional_header("If-Unmodified-Since", input.if_unmodified_since.as_ref());
+        request.add_optional_header("Range", input.range.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
         let mut params = Params::new();
         if let Some(ref x) = input.part_number {
             params.put("partNumber", x);
@@ -22434,65 +19522,29 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(HeadObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, HeadObjectError::from_response)
+            .await?;
 
-        let mut result;
-        result = HeadObjectOutput::default();
-        if let Some(accept_ranges) = response.headers.get("accept-ranges") {
-            let value = accept_ranges.to_owned();
-            result.accept_ranges = Some(value)
-        };
-        if let Some(cache_control) = response.headers.get("Cache-Control") {
-            let value = cache_control.to_owned();
-            result.cache_control = Some(value)
-        };
-        if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-            let value = content_disposition.to_owned();
-            result.content_disposition = Some(value)
-        };
-        if let Some(content_encoding) = response.headers.get("Content-Encoding") {
-            let value = content_encoding.to_owned();
-            result.content_encoding = Some(value)
-        };
-        if let Some(content_language) = response.headers.get("Content-Language") {
-            let value = content_language.to_owned();
-            result.content_language = Some(value)
-        };
-        if let Some(content_length) = response.headers.get("Content-Length") {
-            let value = content_length.to_owned();
-            result.content_length = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(content_type) = response.headers.get("Content-Type") {
-            let value = content_type.to_owned();
-            result.content_type = Some(value)
-        };
-        if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
-            let value = delete_marker.to_owned();
-            result.delete_marker = Some(value.parse::<bool>().unwrap())
-        };
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(expiration) = response.headers.get("x-amz-expiration") {
-            let value = expiration.to_owned();
-            result.expiration = Some(value)
-        };
-        if let Some(expires) = response.headers.get("Expires") {
-            let value = expires.to_owned();
-            result.expires = Some(value)
-        };
-        if let Some(last_modified) = response.headers.get("Last-Modified") {
-            let value = last_modified.to_owned();
-            result.last_modified = Some(value)
-        };
+        let result = HeadObjectOutput::default();
+        let mut result = result;
+        result.accept_ranges = response.headers.remove("accept-ranges");
+        result.cache_control = response.headers.remove("Cache-Control");
+        result.content_disposition = response.headers.remove("Content-Disposition");
+        result.content_encoding = response.headers.remove("Content-Encoding");
+        result.content_language = response.headers.remove("Content-Language");
+        result.content_length = response
+            .headers
+            .remove("Content-Length")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.content_type = response.headers.remove("Content-Type");
+        result.delete_marker = response
+            .headers
+            .remove("x-amz-delete-marker")
+            .map(|value| value.parse::<bool>().unwrap());
+        result.e_tag = response.headers.remove("ETag");
+        result.expiration = response.headers.remove("x-amz-expiration");
+        result.expires = response.headers.remove("Expires");
+        result.last_modified = response.headers.remove("Last-Modified");
         let mut values = ::std::collections::HashMap::new();
         for (key, value) in response.headers.iter() {
             if key.as_str().starts_with("x-amz-meta-") {
@@ -22503,81 +19555,37 @@ impl S3 for S3Client {
             }
         }
         result.metadata = Some(values);
-        if let Some(missing_meta) = response.headers.get("x-amz-missing-meta") {
-            let value = missing_meta.to_owned();
-            result.missing_meta = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(object_lock_legal_hold_status) =
-            response.headers.get("x-amz-object-lock-legal-hold")
-        {
-            let value = object_lock_legal_hold_status.to_owned();
-            result.object_lock_legal_hold_status = Some(value)
-        };
-        if let Some(object_lock_mode) = response.headers.get("x-amz-object-lock-mode") {
-            let value = object_lock_mode.to_owned();
-            result.object_lock_mode = Some(value)
-        };
-        if let Some(object_lock_retain_until_date) =
-            response.headers.get("x-amz-object-lock-retain-until-date")
-        {
-            let value = object_lock_retain_until_date.to_owned();
-            result.object_lock_retain_until_date = Some(value)
-        };
-        if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
-            let value = parts_count.to_owned();
-            result.parts_count = Some(value.parse::<i64>().unwrap())
-        };
-        if let Some(replication_status) = response.headers.get("x-amz-replication-status") {
-            let value = replication_status.to_owned();
-            result.replication_status = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(restore) = response.headers.get("x-amz-restore") {
-            let value = restore.to_owned();
-            result.restore = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        result.missing_meta = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-missing-meta")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.object_lock_legal_hold_status =
+            response.headers.remove("x-amz-object-lock-legal-hold");
+        result.object_lock_mode = response.headers.remove("x-amz-object-lock-mode");
+        result.object_lock_retain_until_date = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-object-lock-retain-until-date");
+        result.parts_count = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        };
-        if let Some(storage_class) = response.headers.get("x-amz-storage-class") {
-            let value = storage_class.to_owned();
-            result.storage_class = Some(value)
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        };
-        if let Some(website_redirect_location) =
-            response.headers.get("x-amz-website-redirect-location")
-        {
-            let value = website_redirect_location.to_owned();
-            result.website_redirect_location = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-mp-parts-count")
+            .map(|value| value.parse::<i64>().unwrap());
+        result.replication_status = response.headers.remove("x-amz-replication-status");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.restore = response.headers.remove("x-amz-restore");
+        result.sse_customer_algorithm = response
+            .headers
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
+            .headers
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_key_id = response
+            .headers
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.storage_class = response.headers.remove("x-amz-storage-class");
+        result.version_id = response.headers.remove("x-amz-version-id");
+        result.website_redirect_location =
+            response.headers.remove("x-amz-website-redirect-location"); // parse non-payload
         Ok(result)
     }
 
@@ -22602,34 +19610,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListBucketAnalyticsConfigurationsError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                ListBucketAnalyticsConfigurationsError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListBucketAnalyticsConfigurationsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListBucketAnalyticsConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22655,34 +19647,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListBucketInventoryConfigurationsError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                ListBucketInventoryConfigurationsError::from_response,
+            )
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListBucketInventoryConfigurationsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListBucketInventoryConfigurationsOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListBucketInventoryConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22708,34 +19684,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListBucketMetricsConfigurationsError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, ListBucketMetricsConfigurationsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListBucketMetricsConfigurationsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListBucketMetricsConfigurationsOutputDeserializer::deserialize(
-                &actual_tag_name,
-                &mut stack,
-            )?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListBucketMetricsConfigurationsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22748,29 +19705,15 @@ impl S3 for S3Client {
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListBucketsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListBucketsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListBucketsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListBucketsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListBucketsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22808,30 +19751,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListMultipartUploadsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListMultipartUploadsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListMultipartUploadsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListMultipartUploadsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListMultipartUploadsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22869,30 +19797,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListObjectVersionsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListObjectVersionsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListObjectVersionsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                ListObjectVersionsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListObjectVersionsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22907,9 +19820,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.delimiter {
             params.put("delimiter", x);
@@ -22929,29 +19840,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListObjectsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListObjectsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListObjectsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListObjectsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -22966,9 +19863,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.continuation_token {
             params.put("continuation-token", x);
@@ -22995,29 +19890,15 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListObjectsV2Error::from_response(response));
-        }
+            .sign_and_dispatch(request, ListObjectsV2Error::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListObjectsV2Output::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListObjectsV2OutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
         // parse non-payload
         Ok(result)
     }
@@ -23032,9 +19913,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.max_parts {
             params.put("max-parts", x);
@@ -23046,41 +19925,18 @@ impl S3 for S3Client {
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListPartsError::from_response(response));
-        }
+            .sign_and_dispatch(request, ListPartsError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListPartsOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
-            let value = abort_date.to_owned();
-            result.abort_date = Some(value)
-        };
-        if let Some(abort_rule_id) = response.headers.get("x-amz-abort-rule-id") {
-            let value = abort_rule_id.to_owned();
-            result.abort_rule_id = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListPartsOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.abort_date = response.headers.remove("x-amz-abort-date");
+        result.abort_rule_id = response.headers.remove("x-amz-abort-rule-id");
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -23106,22 +19962,17 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketAccelerateConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                PutBucketAccelerateConfigurationError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>Sets the permissions on an existing bucket using access control lists (ACL). For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. To set the ACL of a bucket, you must have <code>WRITE_ACP</code> permission.</p> <p>You can use one of the following two ways to set a bucket&#39;s permissions:</p> <ul> <li> <p>Specify the ACL in the request body</p> </li> <li> <p>Specify permissions using request headers</p> </li> </ul> <note> <p>You cannot specify access permission using both the body and the request headers.</p> </note> <p>Depending on your application needs, you may choose to set the ACL on a bucket using either the request body or the headers. For example, if you have an existing application that updates a bucket ACL using the request body, then you can continue to use that approach.</p> <p> <b>Access Permissions</b> </p> <p>You can set access permissions using one of the following methods:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. Specify the canned ACL name as the value of <code>x-amz-acl</code>. If you use this header, you cannot use other access control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. When using these headers, you specify explicit access permissions and grantees (AWS accounts or Amazon S3 groups) who will receive the permission. If you use these ACL-specific headers, you cannot use the <code>x-amz-acl</code> header to set a canned ACL. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-write</code> header grants create, overwrite, and delete objects permission to LogDelivery group predefined by Amazon S3 and two AWS accounts identified by their email addresses.</p> <p> <code>x-amz-grant-write: uri=&quot;http://acs.amazonaws.com/groups/s3/LogDelivery&quot;, emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> <p> <b>Grantee Values</b> </p> <p>You can specify the person (grantee) to whom you&#39;re assigning access rights (using request elements) in the following ways:</p> <ul> <li> <p>By Email address:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;AmazonCustomerByEmail&quot;&gt;&lt;EmailAddress&gt;&lt;&gt;Grantees@email.com&lt;&gt;&lt;/EmailAddress&gt;lt;/Grantee&gt;</code> </p> <p>The grantee is resolved to the CanonicalUser and, in a response to a GET Object acl request, appears as the CanonicalUser.</p> </li> <li> <p>By the person&#39;s ID:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;CanonicalUser&quot;&gt;&lt;ID&gt;&lt;&gt;ID&lt;&gt;&lt;/ID&gt;&lt;DisplayName&gt;&lt;&gt;GranteesEmail&lt;&gt;&lt;/DisplayName&gt; &lt;/Grantee&gt;</code> </p> <p>DisplayName is optional and ignored in the request</p> </li> <li> <p>By URI:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;Group&quot;&gt;&lt;URI&gt;&lt;&gt;http://acs.amazonaws.com/groups/global/AuthenticatedUsers&lt;&gt;&lt;/URI&gt;&lt;/Grantee&gt;</code> </p> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CreateBucket</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> <li> <p> <a>GetObjectAcl</a> </p> </li> </ul></p>
+    /// <p><p>Sets the permissions on an existing bucket using access control lists (ACL). For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. To set the ACL of a bucket, you must have <code>WRITE<em>ACP</code> permission.</p> <p>You can use one of the following two ways to set a bucket&#39;s permissions:</p> <ul> <li> <p>Specify the ACL in the request body</p> </li> <li> <p>Specify permissions using request headers</p> </li> </ul> <note> <p>You cannot specify access permission using both the body and the request headers.</p> </note> <p>Depending on your application needs, you may choose to set the ACL on a bucket using either the request body or the headers. For example, if you have an existing application that updates a bucket ACL using the request body, then you can continue to use that approach.</p> <p> <b>Access Permissions</b> </p> <p>You can set access permissions using one of the following methods:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL has a predefined set of grantees and permissions. Specify the canned ACL name as the value of <code>x-amz-acl</code>. If you use this header, you cannot use other access control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. When using these headers, you specify explicit access permissions and grantees (AWS accounts or Amazon S3 groups) who will receive the permission. If you use these ACL-specific headers, you cannot use the <code>x-amz-acl</code> header to set a canned ACL. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see &lt;a href=&quot;https://docs.aws.amazon.com/general/latest/gr/rande.html#s3</em>region&quot;&gt;Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p>For example, the following <code>x-amz-grant-write</code> header grants create, overwrite, and delete objects permission to LogDelivery group predefined by Amazon S3 and two AWS accounts identified by their email addresses.</p> <p> <code>x-amz-grant-write: uri=&quot;http://acs.amazonaws.com/groups/s3/LogDelivery&quot;, id=&quot;111122223333&quot;, id=&quot;555566667777&quot; </code> </p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> <p> <b>Grantee Values</b> </p> <p>You can specify the person (grantee) to whom you&#39;re assigning access rights (using request elements) in the following ways:</p> <ul> <li> <p>By the person&#39;s ID:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;CanonicalUser&quot;&gt;&lt;ID&gt;&lt;&gt;ID&lt;&gt;&lt;/ID&gt;&lt;DisplayName&gt;&lt;&gt;GranteesEmail&lt;&gt;&lt;/DisplayName&gt; &lt;/Grantee&gt;</code> </p> <p>DisplayName is optional and ignored in the request</p> </li> <li> <p>By URI:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;Group&quot;&gt;&lt;URI&gt;&lt;&gt;http://acs.amazonaws.com/groups/global/AuthenticatedUsers&lt;&gt;&lt;/URI&gt;&lt;/Grantee&gt;</code> </p> </li> <li> <p>By Email address:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;AmazonCustomerByEmail&quot;&gt;&lt;EmailAddress&gt;&lt;&gt;Grantees@email.com&lt;&gt;&lt;/EmailAddress&gt;lt;/Grantee&gt;</code> </p> <p>The grantee is resolved to the CanonicalUser and, in a response to a GET Object acl request, appears as the CanonicalUser. </p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CreateBucket</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> <li> <p> <a>GetObjectAcl</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn put_bucket_acl(
         &self,
@@ -23131,33 +19982,15 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write) = input.grant_write {
-            request.add_header("x-amz-grant-write", &grant_write.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
         let mut params = Params::new();
         params.put_key("acl");
         request.set_params(params);
@@ -23172,16 +20005,11 @@ impl S3 for S3Client {
         } else {
             request.set_payload(Some(Vec::new()));
         }
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketAclError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketAclError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23210,16 +20038,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketAnalyticsConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, PutBucketAnalyticsConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23235,9 +20055,6 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
@@ -23251,20 +20068,14 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketCorsError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketCorsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>This implementation of the <code>PUT</code> operation uses the <code>encryption</code> subresource to set the default encryption state of an existing bucket.</p> <p>This implementation of the <code>PUT</code> operation sets default encryption for a bucket using server-side encryption with Amazon S3-managed keys SSE-S3 or AWS KMS customer master keys (CMKs) (SSE-KMS).</p> <important> <p>This operation requires AWS Signature Version 4. For more information, see <a href="sig-v4-authenticating-requests.html"> Authenticating Requests (AWS Signature Version 4)</a>. </p> </important> <p>To use this operation, you must have permissions to perform the <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the Amazon Simple Storage Service Developer Guide. </p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketEncryption</a> </p> </li> <li> <p> <a>DeleteBucketEncryption</a> </p> </li> </ul></p>
+    /// <p><p>This implementation of the <code>PUT</code> operation uses the <code>encryption</code> subresource to set the default encryption state of an existing bucket.</p> <p>This implementation of the <code>PUT</code> operation sets default encryption for a bucket using server-side encryption with Amazon S3-managed keys SSE-S3 or AWS KMS customer master keys (CMKs) (SSE-KMS). For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Default Bucket Encryption</a>.</p> <important> <p>This operation requires AWS Signature Version 4. For more information, see <a href="sig-v4-authenticating-requests.html"> Authenticating Requests (AWS Signature Version 4)</a>. </p> </important> <p>To use this operation, you must have permissions to perform the <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission by default. The bucket owner can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the Amazon Simple Storage Service Developer Guide. </p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketEncryption</a> </p> </li> <li> <p> <a>DeleteBucketEncryption</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn put_bucket_encryption(
         &self,
@@ -23274,9 +20085,6 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
@@ -23287,22 +20095,17 @@ impl S3 for S3Client {
             &input.server_side_encryption_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketEncryptionError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketEncryptionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>This implementation of the <code>PUT</code> operation adds an inventory configuration (identified by the inventory ID) to the bucket. You can have up to 1,000 inventory configurations per bucket. </p> <p>Amazon S3 inventory generates inventories of the objects in the bucket on a daily or weekly basis, and the results are published to a flat file. The bucket that is inventoried is called the <i>source</i> bucket, and the bucket where the inventory flat file is stored is called the <i>destination</i> bucket. The <i>destination</i> bucket must be in the same AWS Region as the <i>source</i> bucket. </p> <p>When you configure an inventory for a <i>source</i> bucket, you specify the <i>destination</i> bucket where you want the inventory to be stored, and whether to generate the inventory daily or weekly. You can also configure what object metadata to include and whether to inventory all object versions or only current versions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//storage-inventory.html">Amazon S3 Inventory</a> in the Amazon Simple Storage Service Developer Guide.</p> <important> <p>You must create a bucket policy on the <i>destination</i> bucket to grant permissions to Amazon S3 to write objects to the bucket in the defined location. For an example policy, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-9"> Granting Permissions for Amazon S3 Inventory and Storage Class Analysis.</a> </p> </important> <p>To use this operation, you must have permissions to perform the <code>s3:PutInventoryConfiguration</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the Amazon Simple Storage Service Developer Guide.</p> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b>HTTP 400 Bad Request Error</b> </p> <ul> <li> <p> <i>Code:</i> InvalidArgument</p> </li> <li> <p> <i>Cause:</i> Invalid Argument</p> </li> </ul> </li> <li> <p class="title"> <b>HTTP 400 Bad Request Error</b> </p> <ul> <li> <p> <i>Code:</i> TooManyConfigurations</p> </li> <li> <p> <i>Cause:</i> You are attempting to create a new configuration but have already reached the 1,000-configuration limit. </p> </li> </ul> </li> <li> <p class="title"> <b>HTTP 403 Forbidden Error</b> </p> <ul> <li> <p> <i>Code:</i> AccessDenied</p> </li> <li> <p> <i>Cause:</i> You are not the owner of the specified bucket, or you do not have the <code>s3:PutInventoryConfiguration</code> bucket permission to set the configuration on the bucket </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketInventoryConfiguration</a> </p> </li> <li> <p> <a>DeleteBucketInventoryConfiguration</a> </p> </li> <li> <p> <a>ListBucketInventoryConfigurations</a> </p> </li> </ul></p>
+    /// <p><p>This implementation of the <code>PUT</code> operation adds an inventory configuration (identified by the inventory ID) to the bucket. You can have up to 1,000 inventory configurations per bucket. </p> <p>Amazon S3 inventory generates inventories of the objects in the bucket on a daily or weekly basis, and the results are published to a flat file. The bucket that is inventoried is called the <i>source</i> bucket, and the bucket where the inventory flat file is stored is called the <i>destination</i> bucket. The <i>destination</i> bucket must be in the same AWS Region as the <i>source</i> bucket. </p> <p>When you configure an inventory for a <i>source</i> bucket, you specify the <i>destination</i> bucket where you want the inventory to be stored, and whether to generate the inventory daily or weekly. You can also configure what object metadata to include and whether to inventory all object versions or only current versions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html">Amazon S3 Inventory</a> in the Amazon Simple Storage Service Developer Guide.</p> <important> <p>You must create a bucket policy on the <i>destination</i> bucket to grant permissions to Amazon S3 to write objects to the bucket in the defined location. For an example policy, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-9"> Granting Permissions for Amazon S3 Inventory and Storage Class Analysis</a>.</p> </important> <p>To use this operation, you must have permissions to perform the <code>s3:PutInventoryConfiguration</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the Amazon Simple Storage Service Developer Guide.</p> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b>HTTP 400 Bad Request Error</b> </p> <ul> <li> <p> <i>Code:</i> InvalidArgument</p> </li> <li> <p> <i>Cause:</i> Invalid Argument</p> </li> </ul> </li> <li> <p class="title"> <b>HTTP 400 Bad Request Error</b> </p> <ul> <li> <p> <i>Code:</i> TooManyConfigurations</p> </li> <li> <p> <i>Cause:</i> You are attempting to create a new configuration but have already reached the 1,000-configuration limit. </p> </li> </ul> </li> <li> <p class="title"> <b>HTTP 403 Forbidden Error</b> </p> <ul> <li> <p> <i>Code:</i> AccessDenied</p> </li> <li> <p> <i>Cause:</i> You are not the owner of the specified bucket, or you do not have the <code>s3:PutInventoryConfiguration</code> bucket permission to set the configuration on the bucket. </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketInventoryConfiguration</a> </p> </li> <li> <p> <a>DeleteBucketInventoryConfiguration</a> </p> </li> <li> <p> <a>ListBucketInventoryConfigurations</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn put_bucket_inventory_configuration(
         &self,
@@ -23325,22 +20128,14 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketInventoryConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, PutBucketInventoryConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><important> <p>For an updated version of this API, see <a>PutBucketLifecycleConfiguration</a>. This version has been deprecated. Existing lifecycle configurations will work. For new lifecycle configurations, use the updated API. </p> </important> <p>Creates a new lifecycle configuration for the bucket or replaces an existing lifecycle configuration. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//object-lifecycle-mgmt.html">Object Lifecycle Management</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>By default, all Amazon S3 resources, including buckets, objects, and related subresources (for example, lifecycle configuration and website configuration) are private. Only the resource owner, the AWS account that created the resource, can access it. The resource owner can optionally grant access permissions to others by writing an access policy. For this operation, users must get the <code>s3:PutLifecycleConfiguration</code> permission.</p> <p>You can also explicitly deny permissions. Explicit denial also supersedes any other permissions. If you want to prevent users or accounts from removing or deleting objects from your bucket, you must deny them permissions for the following actions: </p> <ul> <li> <p> <code>s3:DeleteObject</code> </p> </li> <li> <p> <code>s3:DeleteObjectVersion</code> </p> </li> <li> <p> <code>s3:PutLifecycleConfiguration</code> </p> </li> </ul> <p>For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more examples of transitioning objects to storage classes such as STANDARD<em>IA or ONEZONE</em>IA, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//intro-lifecycle-rules.html#lifecycle-configuration-examples">Examples of Lifecycle Configuration</a>.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketLifecycle</a>(Deprecated)</p> </li> <li> <p> <a>GetBucketLifecycleConfiguration</a> </p> </li> <li> <p> </p> </li> <li> <p>By default, a resource owner—in this case, a bucket owner, which is the AWS account that created the bucket—can perform any of the operations. A resource owner can also grant others permission to perform the operation. For more information, see the following topics in the Amazon Simple Storage Service Developer Guide: </p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//using-with-s3-actions.html">Specifying Permissions in a Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev//s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> </p> </li> </ul> </li> </ul></p>
+    /// <p><important> <p>For an updated version of this API, see <a>PutBucketLifecycleConfiguration</a>. This version has been deprecated. Existing lifecycle configurations will work. For new lifecycle configurations, use the updated API. </p> </important> <p>Creates a new lifecycle configuration for the bucket or replaces an existing lifecycle configuration. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>By default, all Amazon S3 resources, including buckets, objects, and related subresources (for example, lifecycle configuration and website configuration) are private. Only the resource owner, the AWS account that created the resource, can access it. The resource owner can optionally grant access permissions to others by writing an access policy. For this operation, users must get the <code>s3:PutLifecycleConfiguration</code> permission.</p> <p>You can also explicitly deny permissions. Explicit denial also supersedes any other permissions. If you want to prevent users or accounts from removing or deleting objects from your bucket, you must deny them permissions for the following actions: </p> <ul> <li> <p> <code>s3:DeleteObject</code> </p> </li> <li> <p> <code>s3:DeleteObjectVersion</code> </p> </li> <li> <p> <code>s3:PutLifecycleConfiguration</code> </p> </li> </ul> <p>For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more examples of transitioning objects to storage classes such as STANDARD<em>IA or ONEZONE</em>IA, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html#lifecycle-configuration-examples">Examples of Lifecycle Configuration</a>.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetBucketLifecycle</a>(Deprecated)</p> </li> <li> <p> <a>GetBucketLifecycleConfiguration</a> </p> </li> <li> <p> </p> </li> <li> <p>By default, a resource owner—in this case, a bucket owner, which is the AWS account that created the bucket—can perform any of the operations. A resource owner can also grant others permission to perform the operation. For more information, see the following topics in the Amazon Simple Storage Service Developer Guide: </p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a Policy</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to your Amazon S3 Resources</a> </p> </li> </ul> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn put_bucket_lifecycle(
         &self,
@@ -23350,9 +20145,6 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
@@ -23370,14 +20162,8 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketLifecycleError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketLifecycleError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23410,16 +20196,8 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketLifecycleConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(request, PutBucketLifecycleConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23435,9 +20213,6 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
         let mut params = Params::new();
         params.put_key("logging");
         request.set_params(params);
@@ -23448,16 +20223,11 @@ impl S3 for S3Client {
             &input.bucket_logging_status,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketLoggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketLoggingError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23486,14 +20256,8 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketMetricsConfigurationError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketMetricsConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23509,9 +20273,6 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
@@ -23522,16 +20283,11 @@ impl S3 for S3Client {
             &input.notification_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketNotificationError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketNotificationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23559,22 +20315,17 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketNotificationConfigurationError::from_response(
-                response,
-            ));
-        }
+            .sign_and_dispatch(
+                request,
+                PutBucketNotificationConfigurationError::from_response,
+            )
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>Applies an Amazon S3 bucket policy to an Amazon S3 bucket. If you are using an identity other than the root user of the AWS account that owns the bucket, the calling identity must have the <code>PutBucketPolicy</code> permissions on the specified bucket and belong to the bucket owner&#39;s account in order to use this operation.</p> <p>If you don&#39;t have <code>PutBucketPolic</code>y permissions, Amazon S3 returns a <code>403 Access Denied</code> error. If you have the correct permissions, but you&#39;re not using an identity that belongs to the bucket owner&#39;s account, Amazon S3 returns a <code>405 Method Not Allowed</code> error.</p> <important> <p> As a security precaution, the root user of the AWS account that owns a bucket can always use this operation, even if the policy explicitly denies the root user the ability to perform this action. </p> </important> <p>For more information about bucket policies, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html">Using Bucket Policies and User Policies</a>.</p> <p>The following operations are related to <code>PutBucketPolicy</code>:</p> <ul> <li> <p> <a>CreateBucket</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> </ul></p>
+    /// <p><p>Applies an Amazon S3 bucket policy to an Amazon S3 bucket. If you are using an identity other than the root user of the AWS account that owns the bucket, the calling identity must have the <code>PutBucketPolicy</code> permissions on the specified bucket and belong to the bucket owner&#39;s account in order to use this operation.</p> <p>If you don&#39;t have <code>PutBucketPolicy</code> permissions, Amazon S3 returns a <code>403 Access Denied</code> error. If you have the correct permissions, but you&#39;re not using an identity that belongs to the bucket owner&#39;s account, Amazon S3 returns a <code>405 Method Not Allowed</code> error.</p> <important> <p> As a security precaution, the root user of the AWS account that owns a bucket can always use this operation, even if the policy explicitly denies the root user the ability to perform this action. </p> </important> <p>For more information about bucket policies, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html">Using Bucket Policies and User Policies</a>.</p> <p>The following operations are related to <code>PutBucketPolicy</code>:</p> <ul> <li> <p> <a>CreateBucket</a> </p> </li> <li> <p> <a>DeleteBucket</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn put_bucket_policy(
         &self,
@@ -23584,31 +20335,19 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref confirm_remove_self_bucket_access) = input.confirm_remove_self_bucket_access
-        {
-            request.add_header(
-                "x-amz-confirm-remove-self-bucket-access",
-                &confirm_remove_self_bucket_access.to_string(),
-            );
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
+        request.add_optional_header(
+            "x-amz-confirm-remove-self-bucket-access",
+            input.confirm_remove_self_bucket_access.as_ref(),
+        );
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
         request.set_payload(Some(input.policy.into_bytes()));
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketPolicyError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketPolicyError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23624,13 +20363,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref token) = input.token {
-            request.add_header("x-amz-bucket-object-lock-token", &token.to_string());
-        }
+        request.add_optional_header("x-amz-bucket-object-lock-token", input.token.as_ref());
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
@@ -23644,14 +20377,8 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketReplicationError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketReplicationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23667,9 +20394,6 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
         let mut params = Params::new();
         params.put_key("requestPayment");
         request.set_params(params);
@@ -23680,22 +20404,17 @@ impl S3 for S3Client {
             &input.request_payment_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketRequestPaymentError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketRequestPaymentError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>Sets the tags for a bucket.</p> <p>Use tags to organize your AWS bill to reflect your own cost structure. To do this, sign up to get your AWS account bill with tag key values included. Then, to see the cost of combined resources, organize your billing information according to resources with the same tag key values. For example, you can tag several resources with a specific application name, and then organize your billing information to see the total cost of that application across several services. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Cost Allocation and Tagging</a>.</p> <note> <p>Within a bucket, if you add a tag that has the same key as an existing tag, the new value overwrites the old value. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CostAllocTagging.html">Using Cost Allocation in Amazon S3 Bucket Tags</a>.</p> </note> <p>To use this operation, you must have permissions to perform the <code>s3:PutBucketTagging</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p> <code>PutBucketTagging</code> has the following special errors:</p> <ul> <li> <p>Error code: <code>InvalidTagError</code> </p> <ul> <li> <p>Description: The tag provided was not a valid tag. This error can occur if the tag did not pass input validation. For information about tag restrictions, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2//allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> and <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2//aws-tag-restrictions.html">AWS-Generated Cost Allocation Tag Restrictions</a>.</p> </li> </ul> </li> <li> <p>Error code: <code>MalformedXMLError</code> </p> <ul> <li> <p>Description: The XML provided does not match the schema.</p> </li> </ul> </li> <li> <p>Error code: <code>OperationAbortedError </code> </p> <ul> <li> <p>Description: A conflicting conditional operation is currently in progress against this resource. Please try again.</p> </li> </ul> </li> <li> <p>Error code: <code>InternalError</code> </p> <ul> <li> <p>Description: The service was unable to apply the provided tag to the bucket.</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>PutBucketTagging</code>:</p> <ul> <li> <p> <a>GetBucketTagging</a> </p> </li> <li> <p> <a>DeleteBucketTagging</a> </p> </li> </ul></p>
+    /// <p><p>Sets the tags for a bucket.</p> <p>Use tags to organize your AWS bill to reflect your own cost structure. To do this, sign up to get your AWS account bill with tag key values included. Then, to see the cost of combined resources, organize your billing information according to resources with the same tag key values. For example, you can tag several resources with a specific application name, and then organize your billing information to see the total cost of that application across several services. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Cost Allocation and Tagging</a>.</p> <note> <p>Within a bucket, if you add a tag that has the same key as an existing tag, the new value overwrites the old value. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CostAllocTagging.html">Using Cost Allocation in Amazon S3 Bucket Tags</a>.</p> </note> <p>To use this operation, you must have permissions to perform the <code>s3:PutBucketTagging</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a>.</p> <p> <code>PutBucketTagging</code> has the following special errors:</p> <ul> <li> <p>Error code: <code>InvalidTagError</code> </p> <ul> <li> <p>Description: The tag provided was not a valid tag. This error can occur if the tag did not pass input validation. For information about tag restrictions, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> and <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/aws-tag-restrictions.html">AWS-Generated Cost Allocation Tag Restrictions</a>.</p> </li> </ul> </li> <li> <p>Error code: <code>MalformedXMLError</code> </p> <ul> <li> <p>Description: The XML provided does not match the schema.</p> </li> </ul> </li> <li> <p>Error code: <code>OperationAbortedError </code> </p> <ul> <li> <p>Description: A conflicting conditional operation is currently in progress against this resource. Please try again.</p> </li> </ul> </li> <li> <p>Error code: <code>InternalError</code> </p> <ul> <li> <p>Description: The service was unable to apply the provided tag to the bucket.</p> </li> </ul> </li> </ul> <p>The following operations are related to <code>PutBucketTagging</code>:</p> <ul> <li> <p> <a>GetBucketTagging</a> </p> </li> <li> <p> <a>DeleteBucketTagging</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn put_bucket_tagging(
         &self,
@@ -23705,9 +20424,6 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
@@ -23717,14 +20433,8 @@ impl S3 for S3Client {
         request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketTaggingError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -23740,13 +20450,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref mfa) = input.mfa {
-            request.add_header("x-amz-mfa", &mfa.to_string());
-        }
+        request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
         let mut params = Params::new();
         params.put_key("versioning");
         request.set_params(params);
@@ -23757,22 +20461,17 @@ impl S3 for S3Client {
             &input.versioning_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketVersioningError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketVersioningError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>Sets the configuration of the website that is specified in the <code>website</code> subresource. To configure a bucket as a website, you can add this subresource on the bucket with website configuration information such as the file name of the index document and any redirect rules. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Hosting Websites on Amazon S3</a>.</p> <p>This PUT operation requires the <code>S3:PutBucketWebsite</code> permission. By default, only the bucket owner can configure the website attached to a bucket; however, bucket owners can allow other users to set the website configuration by writing a bucket policy that grants them the <code>S3:PutBucketWebsite</code> permission.</p> <p>To redirect all website requests sent to the bucket&#39;s website endpoint, you add a website configuration with the following elements. Because all requests are sent to another website, you don&#39;t need to provide index document name for the bucket.</p> <ul> <li> <p> <code>WebsiteConfiguration</code> </p> </li> <li> <p> <code>RedirectAllRequestsTo</code> </p> </li> <li> <p> <code>HostName</code> </p> </li> <li> <p> <code>Protocol</code> </p> </li> </ul> <p>If you want granular control over redirects, you can use the following elements to add routing rules that describe conditions for redirecting requests and information about the redirect destination. In this case, the website configuration must provide an index document for the bucket, because some requests might not be redirected. </p> <ul> <li> <p> <code>WebsiteConfiguration</code> </p> </li> <li> <p> <code>IndexDocument</code> </p> </li> <li> <p> <code>Suffix</code> </p> </li> <li> <p> <code>ErrorDocument</code> </p> </li> <li> <p> <code>Key</code> </p> </li> <li> <p> <code>RoutingRules</code> </p> </li> <li> <p> <code>RoutingRule</code> </p> </li> <li> <p> <code>Condition</code> </p> </li> <li> <p> <code>HttpErrorCodeReturnedEquals</code> </p> </li> <li> <p> <code>KeyPrefixEquals</code> </p> </li> <li> <p> <code>Redirect</code> </p> </li> <li> <p> <code>Protocol</code> </p> </li> <li> <p> <code>HostName</code> </p> </li> <li> <p> <code>ReplaceKeyPrefixWith</code> </p> </li> <li> <p> <code>ReplaceKeyWith</code> </p> </li> <li> <p> <code>HttpRedirectCode</code> </p> </li> </ul></p>
+    /// <p>Sets the configuration of the website that is specified in the <code>website</code> subresource. To configure a bucket as a website, you can add this subresource on the bucket with website configuration information such as the file name of the index document and any redirect rules. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Hosting Websites on Amazon S3</a>.</p> <p>This PUT operation requires the <code>S3:PutBucketWebsite</code> permission. By default, only the bucket owner can configure the website attached to a bucket; however, bucket owners can allow other users to set the website configuration by writing a bucket policy that grants them the <code>S3:PutBucketWebsite</code> permission.</p> <p>To redirect all website requests sent to the bucket's website endpoint, you add a website configuration with the following elements. Because all requests are sent to another website, you don't need to provide index document name for the bucket.</p> <ul> <li> <p> <code>WebsiteConfiguration</code> </p> </li> <li> <p> <code>RedirectAllRequestsTo</code> </p> </li> <li> <p> <code>HostName</code> </p> </li> <li> <p> <code>Protocol</code> </p> </li> </ul> <p>If you want granular control over redirects, you can use the following elements to add routing rules that describe conditions for redirecting requests and information about the redirect destination. In this case, the website configuration must provide an index document for the bucket, because some requests might not be redirected. </p> <ul> <li> <p> <code>WebsiteConfiguration</code> </p> </li> <li> <p> <code>IndexDocument</code> </p> </li> <li> <p> <code>Suffix</code> </p> </li> <li> <p> <code>ErrorDocument</code> </p> </li> <li> <p> <code>Key</code> </p> </li> <li> <p> <code>RoutingRules</code> </p> </li> <li> <p> <code>RoutingRule</code> </p> </li> <li> <p> <code>Condition</code> </p> </li> <li> <p> <code>HttpErrorCodeReturnedEquals</code> </p> </li> <li> <p> <code>KeyPrefixEquals</code> </p> </li> <li> <p> <code>Redirect</code> </p> </li> <li> <p> <code>Protocol</code> </p> </li> <li> <p> <code>HostName</code> </p> </li> <li> <p> <code>ReplaceKeyPrefixWith</code> </p> </li> <li> <p> <code>ReplaceKeyWith</code> </p> </li> <li> <p> <code>HttpRedirectCode</code> </p> </li> </ul> <p>Amazon S3 has a limitation of 50 routing rules per website configuration. If you require more than 50 routing rules, you can use object redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html">Configuring an Object Redirect</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     #[allow(unused_variables, warnings)]
     async fn put_bucket_website(
         &self,
@@ -23782,9 +20481,6 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
@@ -23795,22 +20491,17 @@ impl S3 for S3Client {
             &input.website_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutBucketWebsiteError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutBucketWebsiteError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>Adds an object to a bucket. You must have WRITE permissions on a bucket to add an object to it.</p> <p>Amazon S3 never adds partial objects; if you receive a success response, Amazon S3 added the entire object to the bucket.</p> <p>Amazon S3 is a distributed system. If it receives multiple write requests for the same object simultaneously, it overwrites all but the last object written. Amazon S3 does not provide object locking; if you need this, make sure to build it into your application layer or use versioning instead.</p> <p>To ensure that data is not corrupted traversing the network, use the <code>Content-MD5</code> header. When you use this header, Amazon S3 checks the object against the provided MD5 value and, if they do not match, returns an error. Additionally, you can calculate the MD5 while putting an object to Amazon S3 and compare the returned ETag to the calculated MD5 value.</p> <note> <p>To configure your application to send the request headers before sending the request body, use the <code>100-continue</code> HTTP status code. For PUT operations, this helps you avoid sending the message body if the message is rejected based on the headers (for example, because authentication fails or a redirect occurs). For more information on the <code>100-continue</code> HTTP status code, see Section 8.2.3 of <a href="http://www.ietf.org/rfc/rfc2616.txt">http://www.ietf.org/rfc/rfc2616.txt</a>.</p> </note> <p>You can optionally request server-side encryption. With server-side encryption, Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts the data when you access it. You have the option to provide your own encryption key or use AWS managed encryption keys. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using Server-Side Encryption</a>.</p> <dl> <dt>Access Permissions</dt> <dd> <p>You can optionally specify the accounts or groups that should be granted specific permissions on the new object. There are two ways to grant the permissions using the request headers:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> </dd> <dt>Server-Side- Encryption-Specific Request Headers</dt> <dd> <p>You can optionally tell Amazon S3 to encrypt data at rest using server-side encryption. Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. The option you use depends on whether you want to use AWS managed encryption keys or provide your own encryption key. </p> <ul> <li> <p>Use encryption keys managed by Amazon S3 or customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) – If you want AWS to manage the keys used to encrypt data, specify the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption</p> </li> <li> <p>x-amz-server-side-encryption-aws-kms-key-id</p> </li> <li> <p>x-amz-server-side-encryption-context</p> </li> </ul> <note> <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but don&#39;t provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS KMS to protect the data. If you want to use a customer managed AWS KMS CMK, you must provide the <code>x-amz-server-side-encryption-aws-kms-key-id</code> of the symmetric customer managed CMK. Amazon S3 only supports symmetric CMKs and not asymmetric CMKs. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </note> <important> <p>All GET and PUT requests for an object protected by AWS KMS fail if you don&#39;t make them with SSL or by using SigV4.</p> </important> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS</a>.</p> </li> <li> <p>Use customer-provided encryption keys – If you want to manage your own encryption keys, provide all the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p>For more information about server-side encryption with CMKs stored in KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS</a>.</p> </li> </ul> </dd> <dt>Access-Control-List (ACL)-Specific Request Headers</dt> <dd> <p>You also can use the following access control–related headers with this operation. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the Access Control List (ACL) on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. With this operation, you can grant access permissions using one of the following two methods:</p> <ul> <li> <p>Specify a canned ACL (<code>x-amz-acl</code>) — Amazon S3 supports a set of predefined ACLs, known as canned ACLs. Each canned ACL has a predefined set of grantees and permissions. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly — To explicitly grant access permissions to specific AWS accounts or groups, use the following headers. Each header maps to specific permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>. In the header, you specify a list of grantees who get the specific permission. To grant permissions explicitly use:</p> <ul> <li> <p>x-amz-grant-read</p> </li> <li> <p>x-amz-grant-write</p> </li> <li> <p>x-amz-grant-read-acp</p> </li> <li> <p>x-amz-grant-write-acp</p> </li> <li> <p>x-amz-grant-full-control</p> </li> </ul> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> <important> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>EU (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference</p> </important> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants the AWS accounts identified by email addresses permissions to read object data and its metadata:</p> <p> <code>x-amz-grant-read: emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> </dd> <dt>Server-Side- Encryption-Specific Request Headers</dt> <dd> <p>You can optionally tell Amazon S3 to encrypt data at rest using server-side encryption. Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it when you access it. The option you use depends on whether you want to use AWS-managed encryption keys or provide your own encryption key. </p> <ul> <li> <p>Use encryption keys managed by Amazon S3 or customer master keys (CMKs) stored in AWS Key Management Service (AWS KMS) – If you want AWS to manage the keys used to encrypt data, specify the following headers in the request.</p> <ul> <li> <p>x-amz-server-side​-encryption</p> </li> <li> <p>x-amz-server-side-encryption-aws-kms-key-id</p> </li> <li> <p>x-amz-server-side-encryption-context</p> </li> </ul> <note> <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but don&#39;t provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the AWS managed CMK in AWS KMS to protect the data. If you want to use a customer managed AWS KMS CMK, you must provide the <code>x-amz-server-side-encryption-aws-kms-key-id</code> of the symmetric customer managed CMK. Amazon S3 only supports symmetric CMKs and not asymmetric CMKs. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using Symmetric and Asymmetric Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </note> <important> <p>All GET and PUT requests for an object protected by AWS KMS fail if you don&#39;t make them with SSL or by using SigV4.</p> </important> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> <li> <p>Use customer-provided encryption keys – If you want to manage your own encryption keys, provide all the following headers in the request.</p> <note> <p>If you use this feature, the ETag value that Amazon S3 returns in the response is not the MD5 of the object.</p> </note> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p>For more information about server-side encryption with CMKs stored in AWS KMS (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with CMKs stored in AWS KMS</a>.</p> </li> </ul> </dd> </dl> <p> <b>Storage Class Options</b> </p> <p>By default, Amazon S3 uses the Standard storage class to store newly created objects. The Standard storage class provides high durability and high availability. You can specify other storage classes depending on the performance needs. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the Amazon Simple Storage Service Developer Guide.</p> <p> <b>Versioning</b> </p> <p>If you enable versioning for a bucket, Amazon S3 automatically generates a unique version ID for the object being stored. Amazon S3 returns this ID in the response using the <code>x-amz-version-id response</code> header. If versioning is suspended, Amazon S3 always uses null as the version ID for the object stored. For more information about returning the versioning state of a bucket, see <a>GetBucketVersioning</a>. If you enable versioning for a bucket, when Amazon S3 receives multiple write requests for the same object simultaneously, it stores all of the objects.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CopyObject</a> </p> </li> <li> <p> <a>DeleteObject</a> </p> </li> </ul></p>
+    /// <p><p>Adds an object to a bucket. You must have WRITE permissions on a bucket to add an object to it.</p> <p>Amazon S3 never adds partial objects; if you receive a success response, Amazon S3 added the entire object to the bucket.</p> <p>Amazon S3 is a distributed system. If it receives multiple write requests for the same object simultaneously, it overwrites all but the last object written. Amazon S3 does not provide object locking; if you need this, make sure to build it into your application layer or use versioning instead.</p> <p>To ensure that data is not corrupted traversing the network, use the <code>Content-MD5</code> header. When you use this header, Amazon S3 checks the object against the provided MD5 value and, if they do not match, returns an error. Additionally, you can calculate the MD5 while putting an object to Amazon S3 and compare the returned ETag to the calculated MD5 value.</p> <note> <p> The <code>Content-MD5</code> header is required for any request to upload an object with a retention period configured using Amazon S3 Object Lock. For more information about Amazon S3 Object Lock, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock-overview.html">Amazon S3 Object Lock Overview</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> </note> <p> <b>Server-side Encryption</b> </p> <p>You can optionally request server-side encryption. With server-side encryption, Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts the data when you access it. You have the option to provide your own encryption key or use AWS managed encryption keys. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using Server-Side Encryption</a>.</p> <p> <b>Access Control List (ACL)-Specific Request Headers</b> </p> <p>You can use headers to grant ACL- based permissions. By default, all objects are private. Only the owner has full access control. When adding a new object, you can grant permissions to individual AWS accounts or to predefined groups defined by Amazon S3. These permissions are then added to the ACL on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-using-rest-api.html">Managing ACLs Using the REST API</a>. </p> <p> <b>Storage Class Options</b> </p> <p>By default, Amazon S3 uses the STANDARD storage class to store newly created objects. The STANDARD storage class provides high durability and high availability. Depending on performance needs, you can specify a different storage class. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the <i>Amazon S3 Service Developer Guide</i>.</p> <p> <b>Versioning</b> </p> <p>If you enable versioning for a bucket, Amazon S3 automatically generates a unique version ID for the object being stored. Amazon S3 returns this ID in the response. When you enable versioning for a bucket, if Amazon S3 receives multiple write requests for the same object simultaneously, it stores all of the objects.</p> <p>For more information about versioning, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/AddingObjectstoVersioningEnabledBuckets.html">Adding Objects to Versioning Enabled Buckets</a>. For information about returning the versioning state of a bucket, see <a>GetBucketVersioning</a>. </p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CopyObject</a> </p> </li> <li> <p> <a>DeleteObject</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn put_object(
         &self,
@@ -23820,57 +20511,22 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref cache_control) = input.cache_control {
-            request.add_header("Cache-Control", &cache_control.to_string());
-        }
-
-        if let Some(ref content_disposition) = input.content_disposition {
-            request.add_header("Content-Disposition", &content_disposition.to_string());
-        }
-
-        if let Some(ref content_encoding) = input.content_encoding {
-            request.add_header("Content-Encoding", &content_encoding.to_string());
-        }
-
-        if let Some(ref content_language) = input.content_language {
-            request.add_header("Content-Language", &content_language.to_string());
-        }
-
-        if let Some(ref content_length) = input.content_length {
-            request.add_header("Content-Length", &content_length.to_string());
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref content_type) = input.content_type {
-            request.add_header("Content-Type", &content_type.to_string());
-        }
-
-        if let Some(ref expires) = input.expires {
-            request.add_header("Expires", &expires.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header("Cache-Control", input.cache_control.as_ref());
+        request.add_optional_header("Content-Disposition", input.content_disposition.as_ref());
+        request.add_optional_header("Content-Encoding", input.content_encoding.as_ref());
+        request.add_optional_header("Content-Language", input.content_language.as_ref());
+        request.add_optional_header("Content-Length", input.content_length.as_ref());
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header("Content-Type", input.content_type.as_ref());
+        request.add_optional_header("Expires", input.expires.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
 
         if let Some(ref metadata) = input.metadata {
             for (header_name, header_value) in metadata.iter() {
@@ -23878,153 +20534,78 @@ impl S3 for S3Client {
                 request.add_header(header, header_value);
             }
         }
-
-        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
-            request.add_header(
-                "x-amz-object-lock-legal-hold",
-                &object_lock_legal_hold_status.to_string(),
-            );
-        }
-
-        if let Some(ref object_lock_mode) = input.object_lock_mode {
-            request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
-        }
-
-        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
-            request.add_header(
-                "x-amz-object-lock-retain-until-date",
-                &object_lock_retain_until_date.to_string(),
-            );
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_encryption_context) = input.ssekms_encryption_context {
-            request.add_header(
-                "x-amz-server-side-encryption-context",
-                &ssekms_encryption_context.to_string(),
-            );
-        }
-
-        if let Some(ref ssekms_key_id) = input.ssekms_key_id {
-            request.add_header(
-                "x-amz-server-side-encryption-aws-kms-key-id",
-                &ssekms_key_id.to_string(),
-            );
-        }
-
-        if let Some(ref server_side_encryption) = input.server_side_encryption {
-            request.add_header(
-                "x-amz-server-side-encryption",
-                &server_side_encryption.to_string(),
-            );
-        }
-
-        if let Some(ref storage_class) = input.storage_class {
-            request.add_header("x-amz-storage-class", &storage_class.to_string());
-        }
-
-        if let Some(ref tagging) = input.tagging {
-            request.add_header("x-amz-tagging", &tagging.to_string());
-        }
-
-        if let Some(ref website_redirect_location) = input.website_redirect_location {
-            request.add_header(
-                "x-amz-website-redirect-location",
-                &website_redirect_location.to_string(),
-            );
-        }
+        request.add_optional_header(
+            "x-amz-object-lock-legal-hold",
+            input.object_lock_legal_hold_status.as_ref(),
+        );
+        request.add_optional_header("x-amz-object-lock-mode", input.object_lock_mode.as_ref());
+        request.add_optional_header(
+            "x-amz-object-lock-retain-until-date",
+            input.object_lock_retain_until_date.as_ref(),
+        );
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-context",
+            input.ssekms_encryption_context.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-aws-kms-key-id",
+            input.ssekms_key_id.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption",
+            input.server_side_encryption.as_ref(),
+        );
+        request.add_optional_header("x-amz-storage-class", input.storage_class.as_ref());
+        request.add_optional_header("x-amz-tagging", input.tagging.as_ref());
+        request.add_optional_header(
+            "x-amz-website-redirect-location",
+            input.website_redirect_location.as_ref(),
+        );
 
         if let Some(__body) = input.body {
             request.set_payload_stream(__body);
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectOutput::default();
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(expiration) = response.headers.get("x-amz-expiration") {
-            let value = expiration.to_owned();
-            result.expiration = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        let result = PutObjectOutput::default();
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.expiration = response.headers.remove("x-amz-expiration");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.sse_customer_algorithm = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_encryption_context) =
-            response.headers.get("x-amz-server-side-encryption-context")
-        {
-            let value = ssekms_encryption_context.to_owned();
-            result.ssekms_encryption_context = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_encryption_context = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        };
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-context");
+        result.ssekms_key_id = response
+            .headers
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption");
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
-    /// <p><p>Uses the <code>acl</code> subresource to set the access control list (ACL) permissions for an object that already exists in a bucket. You must have <code>WRITE_ACP</code> permission to set the ACL of an object.</p> <p>Depending on your application needs, you can choose to set the ACL on an object using either the request body or the headers. For example, if you have an existing application that updates a bucket ACL using the request body, you can continue to use that approach.</p> <p> <b>Access Permissions</b> </p> <p>You can set access permissions using one of the following methods:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as canned ACLs. Each canned ACL has a predefined set of grantees and permissions. Specify the canned ACL name as the value of <code>x-amz-ac</code>l. If you use this header, you cannot use other access control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. When using these headers, you specify explicit access permissions and grantees (AWS accounts or Amazon S3 groups) who will receive the permission. If you use these ACL-specific headers, you cannot use <code>x-amz-acl</code> header to set a canned ACL. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> </li> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants list objects permission to the two AWS accounts identified by their email addresses.</p> <p> <code>x-amz-grant-read: emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> <p> <b>Grantee Values</b> </p> <p>You can specify the person (grantee) to whom you&#39;re assigning access rights (using request elements) in the following ways:</p> <ul> <li> <p>By Email address:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;AmazonCustomerByEmail&quot;&gt;&lt;EmailAddress&gt;&lt;&gt;Grantees@email.com&lt;&gt;&lt;/EmailAddress&gt;lt;/Grantee&gt;</code> </p> <p>The grantee is resolved to the CanonicalUser and, in a response to a GET Object acl request, appears as the CanonicalUser.</p> </li> <li> <p>By the person&#39;s ID:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;CanonicalUser&quot;&gt;&lt;ID&gt;&lt;&gt;ID&lt;&gt;&lt;/ID&gt;&lt;DisplayName&gt;&lt;&gt;GranteesEmail&lt;&gt;&lt;/DisplayName&gt; &lt;/Grantee&gt;</code> </p> <p>DisplayName is optional and ignored in the request.</p> </li> <li> <p>By URI:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;Group&quot;&gt;&lt;URI&gt;&lt;&gt;http://acs.amazonaws.com/groups/global/AuthenticatedUsers&lt;&gt;&lt;/URI&gt;&lt;/Grantee&gt;</code> </p> </li> </ul> <p> <b>Versioning</b> </p> <p>The ACL of an object is set at the object version level. By default, PUT sets the ACL of the current version of an object. To set the ACL of a different version, use the <code>versionId</code> subresource.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CopyObject</a> </p> </li> <li> <p> <a>GetObject</a> </p> </li> </ul></p>
+    /// <p><p>Uses the <code>acl</code> subresource to set the access control list (ACL) permissions for an object that already exists in a bucket. You must have <code>WRITE<em>ACP</code> permission to set the ACL of an object.</p> <p>Depending on your application needs, you can choose to set the ACL on an object using either the request body or the headers. For example, if you have an existing application that updates a bucket ACL using the request body, you can continue to use that approach. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p> <b>Access Permissions</b> </p> <p>You can set access permissions using one of the following methods:</p> <ul> <li> <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. Amazon S3 supports a set of predefined ACLs, known as canned ACLs. Each canned ACL has a predefined set of grantees and permissions. Specify the canned ACL name as the value of <code>x-amz-ac</code>l. If you use this header, you cannot use other access control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p> </li> <li> <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>, <code>x-amz-grant-read-acp</code>, <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code> headers. When using these headers, you specify explicit access permissions and grantees (AWS accounts or Amazon S3 groups) who will receive the permission. If you use these ACL-specific headers, you cannot use <code>x-amz-acl</code> header to set a canned ACL. These parameters map to the set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p> <p>You specify each grantee as a type=value pair, where the type is one of the following:</p> <ul> <li> <p> <code>id</code> – if the value specified is the canonical user ID of an AWS account</p> </li> <li> <p> <code>uri</code> – if you are granting permissions to a predefined group</p> </li> <li> <p> <code>emailAddress</code> – if the value specified is the email address of an AWS account</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see &lt;a href=&quot;https://docs.aws.amazon.com/general/latest/gr/rande.html#s3</em>region&quot;&gt;Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p>For example, the following <code>x-amz-grant-read</code> header grants list objects permission to the two AWS accounts identified by their email addresses.</p> <p> <code>x-amz-grant-read: emailAddress=&quot;xyz@amazon.com&quot;, emailAddress=&quot;abc@amazon.com&quot; </code> </p> </li> </ul> <p>You can use either a canned ACL or specify access permissions explicitly. You cannot do both.</p> <p> <b>Grantee Values</b> </p> <p>You can specify the person (grantee) to whom you&#39;re assigning access rights (using request elements) in the following ways:</p> <ul> <li> <p>By the person&#39;s ID:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;CanonicalUser&quot;&gt;&lt;ID&gt;&lt;&gt;ID&lt;&gt;&lt;/ID&gt;&lt;DisplayName&gt;&lt;&gt;GranteesEmail&lt;&gt;&lt;/DisplayName&gt; &lt;/Grantee&gt;</code> </p> <p>DisplayName is optional and ignored in the request.</p> </li> <li> <p>By URI:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;Group&quot;&gt;&lt;URI&gt;&lt;&gt;http://acs.amazonaws.com/groups/global/AuthenticatedUsers&lt;&gt;&lt;/URI&gt;&lt;/Grantee&gt;</code> </p> </li> <li> <p>By Email address:</p> <p> <code>&lt;Grantee xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:type=&quot;AmazonCustomerByEmail&quot;&gt;&lt;EmailAddress&gt;&lt;&gt;Grantees@email.com&lt;&gt;&lt;/EmailAddress&gt;lt;/Grantee&gt;</code> </p> <p>The grantee is resolved to the CanonicalUser and, in a response to a GET Object acl request, appears as the CanonicalUser.</p> <note> <p>Using email addresses to specify a grantee is only supported in the following AWS Regions: </p> <ul> <li> <p>US East (N. Virginia)</p> </li> <li> <p>US West (N. California)</p> </li> <li> <p> US West (Oregon)</p> </li> <li> <p> Asia Pacific (Singapore)</p> </li> <li> <p>Asia Pacific (Sydney)</p> </li> <li> <p>Asia Pacific (Tokyo)</p> </li> <li> <p>Europe (Ireland)</p> </li> <li> <p>South America (São Paulo)</p> </li> </ul> <p>For a list of all the Amazon S3 supported Regions and endpoints, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a> in the AWS General Reference.</p> </note> </li> </ul> <p> <b>Versioning</b> </p> <p>The ACL of an object is set at the object version level. By default, PUT sets the ACL of the current version of an object. To set the ACL of a different version, use the <code>versionId</code> subresource.</p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CopyObject</a> </p> </li> <li> <p> <a>GetObject</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn put_object_acl(
         &self,
@@ -24034,37 +20615,16 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref acl) = input.acl {
-            request.add_header("x-amz-acl", &acl.to_string());
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref grant_full_control) = input.grant_full_control {
-            request.add_header("x-amz-grant-full-control", &grant_full_control.to_string());
-        }
-
-        if let Some(ref grant_read) = input.grant_read {
-            request.add_header("x-amz-grant-read", &grant_read.to_string());
-        }
-
-        if let Some(ref grant_read_acp) = input.grant_read_acp {
-            request.add_header("x-amz-grant-read-acp", &grant_read_acp.to_string());
-        }
-
-        if let Some(ref grant_write) = input.grant_write {
-            request.add_header("x-amz-grant-write", &grant_write.to_string());
-        }
-
-        if let Some(ref grant_write_acp) = input.grant_write_acp {
-            request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-acl", input.acl.as_ref());
+        request.add_optional_header(
+            "x-amz-grant-full-control",
+            input.grant_full_control.as_ref(),
+        );
+        request.add_optional_header("x-amz-grant-read", input.grant_read.as_ref());
+        request.add_optional_header("x-amz-grant-read-acp", input.grant_read_acp.as_ref());
+        request.add_optional_header("x-amz-grant-write", input.grant_write.as_ref());
+        request.add_optional_header("x-amz-grant-write-acp", input.grant_write_acp.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24082,23 +20642,15 @@ impl S3 for S3Client {
         } else {
             request.set_payload(Some(Vec::new()));
         }
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectAclError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectAclError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectAclOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let result = PutObjectAclOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -24112,13 +20664,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24136,23 +20682,15 @@ impl S3 for S3Client {
         } else {
             request.set_payload(Some(Vec::new()));
         }
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectLegalHoldError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectLegalHoldError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectLegalHoldOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let result = PutObjectLegalHoldOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -24167,17 +20705,8 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref token) = input.token {
-            request.add_header("x-amz-bucket-object-lock-token", &token.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header("x-amz-bucket-object-lock-token", input.token.as_ref());
         let mut params = Params::new();
         params.put_key("object-lock");
         request.set_params(params);
@@ -24192,23 +20721,15 @@ impl S3 for S3Client {
         } else {
             request.set_payload(Some(Vec::new()));
         }
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectLockConfigurationError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectLockConfigurationError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectLockConfigurationOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let result = PutObjectLockConfigurationOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
@@ -24222,20 +20743,11 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
-            request.add_header(
-                "x-amz-bypass-governance-retention",
-                &bypass_governance_retention.to_string(),
-            );
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header(
+            "x-amz-bypass-governance-retention",
+            input.bypass_governance_retention.as_ref(),
+        );
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24253,27 +20765,19 @@ impl S3 for S3Client {
         } else {
             request.set_payload(Some(Vec::new()));
         }
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectRetentionError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectRetentionError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectRetentionOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        }; // parse non-payload
+        let result = PutObjectRetentionOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged"); // parse non-payload
         Ok(result)
     }
 
-    /// <p><p>Sets the supplied tag-set to an object that already exists in a bucket</p> <p>A tag is a key-value pair. You can associate tags with an object by sending a PUT request against the tagging subresource that is associated with the object. You can retrieve tags by sending a GET request. For more information, see <a>GetObjectTagging</a>.</p> <p>For tagging-related restrictions related to characters and encodings, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">Tag Restrictions</a>. Note that Amazon S3 limits the maximum number of tags to 10 tags per object.</p> <p>To use this operation, you must have permission to perform the <code>s3:PutObjectTagging</code> action. By default, the bucket owner has this permission and can grant this permission to others.</p> <p>To put tags of any other version, use the <code>versionId</code> query parameter. You also need permission for the <code>s3:PutObjectVersionTagging</code> action.</p> <p>For information about the Amazon S3 object tagging feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object Tagging</a>.</p> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: InvalidTagError </i> </p> </li> <li> <p> <i>Cause: The tag provided was not a valid tag. This error can occur if the tag did not pass input validation. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object Tagging</a>.</i> </p> </li> </ul> </li> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: MalformedXMLError </i> </p> </li> <li> <p> <i>Cause: The XML provided does not match the schema.</i> </p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code: OperationAbortedError </i> </p> </li> <li> <p> <i>Cause: A conflicting conditional operation is currently in progress against this resource. Please try again.</i> </p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code: InternalError</i> </p> </li> <li> <p> <i>Cause: The service was unable to apply the provided tag to the object.</i> </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetObjectTagging</a> </p> </li> </ul></p>
+    /// <p><p>Sets the supplied tag-set to an object that already exists in a bucket.</p> <p>A tag is a key-value pair. You can associate tags with an object by sending a PUT request against the tagging subresource that is associated with the object. You can retrieve tags by sending a GET request. For more information, see <a>GetObjectTagging</a>.</p> <p>For tagging-related restrictions related to characters and encodings, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">Tag Restrictions</a>. Note that Amazon S3 limits the maximum number of tags to 10 tags per object.</p> <p>To use this operation, you must have permission to perform the <code>s3:PutObjectTagging</code> action. By default, the bucket owner has this permission and can grant this permission to others.</p> <p>To put tags of any other version, use the <code>versionId</code> query parameter. You also need permission for the <code>s3:PutObjectVersionTagging</code> action.</p> <p>For information about the Amazon S3 object tagging feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object Tagging</a>.</p> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: InvalidTagError </i> </p> </li> <li> <p> <i>Cause: The tag provided was not a valid tag. This error can occur if the tag did not pass input validation. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object Tagging</a>.</i> </p> </li> </ul> </li> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: MalformedXMLError </i> </p> </li> <li> <p> <i>Cause: The XML provided does not match the schema.</i> </p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code: OperationAbortedError </i> </p> </li> <li> <p> <i>Cause: A conflicting conditional operation is currently in progress against this resource. Please try again.</i> </p> </li> </ul> </li> <li> <ul> <li> <p> <i>Code: InternalError</i> </p> </li> <li> <p> <i>Cause: The service was unable to apply the provided tag to the object.</i> </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetObjectTagging</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn put_object_tagging(
         &self,
@@ -24283,9 +20787,6 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24295,23 +20796,15 @@ impl S3 for S3Client {
         let mut writer = EventWriter::new(Vec::new());
         TaggingSerializer::serialize(&mut writer, "Tagging", &input.tagging);
         request.set_payload(Some(writer.into_inner()));
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutObjectTaggingError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutObjectTaggingError::from_response)
+            .await?;
 
-        let mut result;
-        result = PutObjectTaggingOutput::default();
-        if let Some(version_id) = response.headers.get("x-amz-version-id") {
-            let value = version_id.to_owned();
-            result.version_id = Some(value)
-        }; // parse non-payload
+        let result = PutObjectTaggingOutput::default();
+        let mut result = result;
+        result.version_id = response.headers.remove("x-amz-version-id"); // parse non-payload
         Ok(result)
     }
 
@@ -24325,9 +20818,6 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
@@ -24338,22 +20828,17 @@ impl S3 for S3Client {
             &input.public_access_block_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_content_md5_header();
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(PutPublicAccessBlockError::from_response(response));
-        }
+            .sign_and_dispatch(request, PutPublicAccessBlockError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
     }
 
-    /// <p><p>Restores an archived copy of an object back into Amazon S3</p> <p>This operation performs the following types of requests: </p> <ul> <li> <p> <code>select</code> - Perform a select query on an archived object</p> </li> <li> <p> <code>restore an archive</code> - Restore an archived object</p> </li> </ul> <p>To use this operation, you must have permissions to perform the <code>s3:RestoreObject</code> and <code>s3:GetObject</code> actions. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p> <b>Querying Archives with Select Requests</b> </p> <p>You use a select type of request to perform SQL queries on archived objects. The archived objects that are being queried by the select request must be formatted as uncompressed comma-separated values (CSV) files. You can run queries and custom analytics on your archived data without having to restore your data to a hotter Amazon S3 tier. For an overview about select requests, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/querying-glacier-archives.html">Querying Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>When making a select request, do the following:</p> <ul> <li> <p>Define an output location for the select query&#39;s output. This must be an Amazon S3 bucket in the same AWS Region as the bucket that contains the archive object that is being queried. The AWS account that initiates the job must have permissions to write to the S3 bucket. You can specify the storage class and encryption for the output objects stored in the bucket. For more information about output, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/querying-glacier-archives.html">Querying Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more information about the <code>S3</code> structure in the request body, see the following:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Managing Access with ACLs</a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> </ul> </li> <li> <p>Define the SQL expression for the <code>SELECT</code> type of restoration for your query in the request body&#39;s <code>SelectParameters</code> structure. You can use expressions like the following examples.</p> <ul> <li> <p>The following expression returns all records from the specified object.</p> <p> <code>SELECT * FROM Object</code> </p> </li> <li> <p>Assuming that you are not using any headers for data stored in the object, you can specify columns with positional headers.</p> <p> <code>SELECT s.<em>1, s.</em>2 FROM Object s WHERE s.<em>3 &gt; 100</code> </p> </li> <li> <p>If you have headers and you set the <code>fileHeaderInfo</code> in the <code>CSV</code> structure in the request body to <code>USE</code>, you can specify headers in the query. (If you set the <code>fileHeaderInfo</code> field to <code>IGNORE</code>, the first row is skipped for the query.) You cannot mix ordinal positions with header column names. </p> <p> <code>SELECT s.Id, s.FirstName, s.SSN FROM S3Object s</code> </p> </li> </ul> </li> </ul> <p>For more information about using SQL with Glacier Select restore, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html">SQL Reference for Amazon S3 Select and Glacier Select</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>When making a select request, you can also do the following:</p> <ul> <li> <p>To expedite your queries, specify the <code>Expedited</code> tier. For more information about tiers, see &quot;Restoring Archives,&quot; later in this topic.</p> </li> <li> <p>Specify details about the data serialization format of both the input object that is being queried and the serialization of the CSV-encoded query results.</p> </li> </ul> <p>The following are additional important facts about the select feature:</p> <ul> <li> <p>The output results are new Amazon S3 objects. Unlike archive retrievals, they are stored until explicitly deleted-manually or through a lifecycle policy.</p> </li> <li> <p>You can issue more than one select request on the same Amazon S3 object. Amazon S3 doesn&#39;t deduplicate requests, so avoid issuing duplicate requests.</p> </li> <li> <p> Amazon S3 accepts a select request even if the object has already been restored. A select request doesn’t return error response <code>409</code>.</p> </li> </ul> <p> <b>Restoring Archives</b> </p> <p>Objects in the GLACIER and DEEP</em>ARCHIVE storage classes are archived. To access an archived object, you must first initiate a restore request. This restores a temporary copy of the archived object. In a restore request, you specify the number of days that you want the restored copy to exist. After the specified period, Amazon S3 deletes the temporary copy but the object remains archived in the GLACIER or DEEP<em>ARCHIVE storage class that object was restored from. </p> <p>To restore a specific object version, you can provide a version ID. If you don&#39;t provide a version ID, Amazon S3 restores the current version.</p> <p>The time it takes restore jobs to finish depends on which storage class the object is being restored from and which data access tier you specify. </p> <p>When restoring an archived object (or using a select request), you can specify one of the following data access tier options in the <code>Tier</code> element of the request body: </p> <ul> <li> <p> <b> <code>Expedited</code> </b> - Expedited retrievals allow you to quickly access your data stored in the GLACIER storage class when occasional urgent requests for a subset of archives are required. For all but the largest archived objects (250 MB+), data accessed using Expedited retrievals are typically made available within 1–5 minutes. Provisioned capacity ensures that retrieval capacity for Expedited retrievals is available when you need it. Expedited retrievals and provisioned capacity are not available for the DEEP</em>ARCHIVE storage class.</p> </li> <li> <p> <b> <code>Standard</code> </b> - Standard retrievals allow you to access any of your archived objects within several hours. This is the default option for the GLACIER and DEEP<em>ARCHIVE retrieval requests that do not specify the retrieval option. Standard retrievals typically complete within 3-5 hours from the GLACIER storage class and typically complete within 12 hours from the DEEP</em>ARCHIVE storage class. </p> </li> <li> <p> <b> <code>Bulk</code> </b> - Bulk retrievals are Amazon S3 Glacier’s lowest-cost retrieval option, enabling you to retrieve large amounts, even petabytes, of data inexpensively in a day. Bulk retrievals typically complete within 5-12 hours from the GLACIER storage class and typically complete within 48 hours from the DEEP_ARCHIVE storage class.</p> </li> </ul> <p>For more information about archive retrieval options and provisioned capacity for <code>Expedited</code> data access, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>You can use Amazon S3 restore speed upgrade to change the restore speed to a faster speed while it is in progress. You upgrade the speed of an in-progress restoration by issuing another restore request to the same object, setting a new <code>Tier</code> request element. When issuing a request to upgrade the restore tier, you must choose a tier that is faster than the tier that the in-progress restore is using. You must not change any other parameters, such as the <code>Days</code> request element. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html#restoring-objects-upgrade-tier.title.html"> Upgrading the Speed of an In-Progress Restore</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>To get the status of object restoration, you can send a <code>HEAD</code> request. Operations return the <code>x-amz-restore</code> header, which provides information about the restoration status, in the response. You can use Amazon S3 event notifications to notify you when a restore is initiated or completed. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Amazon S3 Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>After restoring an archived object, you can update the restoration period by reissuing the request with a new period. Amazon S3 updates the restoration period relative to the current time and charges only for the request-there are no data transfer charges. You cannot update the restoration period when Amazon S3 is actively processing your current restore request for the object.</p> <p>If your bucket has a lifecycle configuration with a rule that includes an expiration action, the object expiration overrides the life span that you specify in a restore request. For example, if you restore an object copy for 10 days, but the object is scheduled to expire in 3 days, Amazon S3 deletes the object in 3 days. For more information about lifecycle configuration, see <a>PutBucketLifecycleConfiguration</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a> in <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p> <b>Responses</b> </p> <p>A successful operation returns either the <code>200 OK</code> or <code>202 Accepted</code> status code. </p> <ul> <li> <p>If the object copy is not previously restored, then Amazon S3 returns <code>202 Accepted</code> in the response. </p> </li> <li> <p>If the object copy is previously restored, Amazon S3 returns <code>200 OK</code> in the response. </p> </li> </ul> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: RestoreAlreadyInProgress</i> </p> </li> <li> <p> <i>Cause: Object restore is already in progress. (This error does not apply to SELECT type requests.)</i> </p> </li> <li> <p> <i>HTTP Status Code: 409 Conflict</i> </p> </li> <li> <p> <i>SOAP Fault Code Prefix: Client</i> </p> </li> </ul> </li> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: GlacierExpeditedRetrievalNotAvailable</i> </p> </li> <li> <p> <i>Cause: Glacier expedited retrievals are currently not available. Try again later. (Returned if there is insufficient capacity to process the Expedited request. This error applies only to Expedited retrievals and not to Standard or Bulk retrievals.)</i> </p> </li> <li> <p> <i>HTTP Status Code: 503</i> </p> </li> <li> <p> <i>SOAP Fault Code Prefix: N/A</i> </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketLifecycleConfiguration</a> </p> </li> <li> <p> <a>GetBucketNotificationConfiguration</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html">SQL Reference for Amazon S3 Select and Glacier Select </a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> </ul></p>
+    /// <p><p>Restores an archived copy of an object back into Amazon S3</p> <p>This operation performs the following types of requests: </p> <ul> <li> <p> <code>select</code> - Perform a select query on an archived object</p> </li> <li> <p> <code>restore an archive</code> - Restore an archived object</p> </li> </ul> <p>To use this operation, you must have permissions to perform the <code>s3:RestoreObject</code> action. The bucket owner has this permission by default and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">Managing Access Permissions to Your Amazon S3 Resources</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p> <b>Querying Archives with Select Requests</b> </p> <p>You use a select type of request to perform SQL queries on archived objects. The archived objects that are being queried by the select request must be formatted as uncompressed comma-separated values (CSV) files. You can run queries and custom analytics on your archived data without having to restore your data to a hotter Amazon S3 tier. For an overview about select requests, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/querying-glacier-archives.html">Querying Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>When making a select request, do the following:</p> <ul> <li> <p>Define an output location for the select query&#39;s output. This must be an Amazon S3 bucket in the same AWS Region as the bucket that contains the archive object that is being queried. The AWS account that initiates the job must have permissions to write to the S3 bucket. You can specify the storage class and encryption for the output objects stored in the bucket. For more information about output, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/querying-glacier-archives.html">Querying Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more information about the <code>S3</code> structure in the request body, see the following:</p> <ul> <li> <p> <a>PutObject</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Managing Access with ACLs</a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> </ul> </li> <li> <p>Define the SQL expression for the <code>SELECT</code> type of restoration for your query in the request body&#39;s <code>SelectParameters</code> structure. You can use expressions like the following examples.</p> <ul> <li> <p>The following expression returns all records from the specified object.</p> <p> <code>SELECT * FROM Object</code> </p> </li> <li> <p>Assuming that you are not using any headers for data stored in the object, you can specify columns with positional headers.</p> <p> <code>SELECT s.<em>1, s.</em>2 FROM Object s WHERE s.<em>3 &gt; 100</code> </p> </li> <li> <p>If you have headers and you set the <code>fileHeaderInfo</code> in the <code>CSV</code> structure in the request body to <code>USE</code>, you can specify headers in the query. (If you set the <code>fileHeaderInfo</code> field to <code>IGNORE</code>, the first row is skipped for the query.) You cannot mix ordinal positions with header column names. </p> <p> <code>SELECT s.Id, s.FirstName, s.SSN FROM S3Object s</code> </p> </li> </ul> </li> </ul> <p>For more information about using SQL with S3 Glacier Select restore, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html">SQL Reference for Amazon S3 Select and S3 Glacier Select</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>When making a select request, you can also do the following:</p> <ul> <li> <p>To expedite your queries, specify the <code>Expedited</code> tier. For more information about tiers, see &quot;Restoring Archives,&quot; later in this topic.</p> </li> <li> <p>Specify details about the data serialization format of both the input object that is being queried and the serialization of the CSV-encoded query results.</p> </li> </ul> <p>The following are additional important facts about the select feature:</p> <ul> <li> <p>The output results are new Amazon S3 objects. Unlike archive retrievals, they are stored until explicitly deleted-manually or through a lifecycle policy.</p> </li> <li> <p>You can issue more than one select request on the same Amazon S3 object. Amazon S3 doesn&#39;t deduplicate requests, so avoid issuing duplicate requests.</p> </li> <li> <p> Amazon S3 accepts a select request even if the object has already been restored. A select request doesn’t return error response <code>409</code>.</p> </li> </ul> <p> <b>Restoring Archives</b> </p> <p>Objects in the GLACIER and DEEP</em>ARCHIVE storage classes are archived. To access an archived object, you must first initiate a restore request. This restores a temporary copy of the archived object. In a restore request, you specify the number of days that you want the restored copy to exist. After the specified period, Amazon S3 deletes the temporary copy but the object remains archived in the GLACIER or DEEP<em>ARCHIVE storage class that object was restored from. </p> <p>To restore a specific object version, you can provide a version ID. If you don&#39;t provide a version ID, Amazon S3 restores the current version.</p> <p>The time it takes restore jobs to finish depends on which storage class the object is being restored from and which data access tier you specify. </p> <p>When restoring an archived object (or using a select request), you can specify one of the following data access tier options in the <code>Tier</code> element of the request body: </p> <ul> <li> <p> <b> <code>Expedited</code> </b> - Expedited retrievals allow you to quickly access your data stored in the GLACIER storage class when occasional urgent requests for a subset of archives are required. For all but the largest archived objects (250 MB+), data accessed using Expedited retrievals are typically made available within 1–5 minutes. Provisioned capacity ensures that retrieval capacity for Expedited retrievals is available when you need it. Expedited retrievals and provisioned capacity are not available for the DEEP</em>ARCHIVE storage class.</p> </li> <li> <p> <b> <code>Standard</code> </b> - S3 Standard retrievals allow you to access any of your archived objects within several hours. This is the default option for the GLACIER and DEEP<em>ARCHIVE retrieval requests that do not specify the retrieval option. S3 Standard retrievals typically complete within 3-5 hours from the GLACIER storage class and typically complete within 12 hours from the DEEP</em>ARCHIVE storage class. </p> </li> <li> <p> <b> <code>Bulk</code> </b> - Bulk retrievals are Amazon S3 Glacier’s lowest-cost retrieval option, enabling you to retrieve large amounts, even petabytes, of data inexpensively in a day. Bulk retrievals typically complete within 5-12 hours from the GLACIER storage class and typically complete within 48 hours from the DEEP_ARCHIVE storage class.</p> </li> </ul> <p>For more information about archive retrieval options and provisioned capacity for <code>Expedited</code> data access, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring Archived Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>You can use Amazon S3 restore speed upgrade to change the restore speed to a faster speed while it is in progress. You upgrade the speed of an in-progress restoration by issuing another restore request to the same object, setting a new <code>Tier</code> request element. When issuing a request to upgrade the restore tier, you must choose a tier that is faster than the tier that the in-progress restore is using. You must not change any other parameters, such as the <code>Days</code> request element. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html#restoring-objects-upgrade-tier.title.html"> Upgrading the Speed of an In-Progress Restore</a> in the <i>Amazon Simple Storage Service Developer Guide</i>. </p> <p>To get the status of object restoration, you can send a <code>HEAD</code> request. Operations return the <code>x-amz-restore</code> header, which provides information about the restoration status, in the response. You can use Amazon S3 event notifications to notify you when a restore is initiated or completed. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Amazon S3 Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>After restoring an archived object, you can update the restoration period by reissuing the request with a new period. Amazon S3 updates the restoration period relative to the current time and charges only for the request-there are no data transfer charges. You cannot update the restoration period when Amazon S3 is actively processing your current restore request for the object.</p> <p>If your bucket has a lifecycle configuration with a rule that includes an expiration action, the object expiration overrides the life span that you specify in a restore request. For example, if you restore an object copy for 10 days, but the object is scheduled to expire in 3 days, Amazon S3 deletes the object in 3 days. For more information about lifecycle configuration, see <a>PutBucketLifecycleConfiguration</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a> in <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p> <b>Responses</b> </p> <p>A successful operation returns either the <code>200 OK</code> or <code>202 Accepted</code> status code. </p> <ul> <li> <p>If the object copy is not previously restored, then Amazon S3 returns <code>202 Accepted</code> in the response. </p> </li> <li> <p>If the object copy is previously restored, Amazon S3 returns <code>200 OK</code> in the response. </p> </li> </ul> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: RestoreAlreadyInProgress</i> </p> </li> <li> <p> <i>Cause: Object restore is already in progress. (This error does not apply to SELECT type requests.)</i> </p> </li> <li> <p> <i>HTTP Status Code: 409 Conflict</i> </p> </li> <li> <p> <i>SOAP Fault Code Prefix: Client</i> </p> </li> </ul> </li> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: GlacierExpeditedRetrievalNotAvailable</i> </p> </li> <li> <p> <i>Cause: S3 Glacier expedited retrievals are currently not available. Try again later. (Returned if there is insufficient capacity to process the Expedited request. This error applies only to Expedited retrievals and not to S3 Standard or Bulk retrievals.)</i> </p> </li> <li> <p> <i>HTTP Status Code: 503</i> </p> </li> <li> <p> <i>SOAP Fault Code Prefix: N/A</i> </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>PutBucketLifecycleConfiguration</a> </p> </li> <li> <p> <a>GetBucketNotificationConfiguration</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html">SQL Reference for Amazon S3 Select and S3 Glacier Select </a> in the <i>Amazon Simple Storage Service Developer Guide</i> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn restore_object(
         &self,
@@ -24363,9 +20848,7 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.version_id {
             params.put("versionId", x);
@@ -24385,29 +20868,17 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RestoreObjectError::from_response(response));
-        }
+            .sign_and_dispatch(request, RestoreObjectError::from_response)
+            .await?;
 
-        let mut result;
-        result = RestoreObjectOutput::default();
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(restore_output_path) = response.headers.get("x-amz-restore-output-path") {
-            let value = restore_output_path.to_owned();
-            result.restore_output_path = Some(value)
-        }; // parse non-payload
+        let result = RestoreObjectOutput::default();
+        let mut result = result;
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.restore_output_path = response.headers.remove("x-amz-restore-output-path"); // parse non-payload
         Ok(result)
     }
 
-    /// <p><p>This operation filters the contents of an Amazon S3 object based on a simple structured query language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON, CSV, or Apache Parquet) of the object. Amazon S3 uses this format to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p> <p>For more information about Amazon S3 Select, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/selecting-content-from-objects.html">Selecting Content from Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more information about using SQL with Amazon S3 Select, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html"> SQL Reference for Amazon S3 Select and Glacier Select</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p/> <p> <b>Permissions</b> </p> <p>You must have <code>s3:GetObject</code> permission for this operation. Amazon S3 Select does not support anonymous access. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a Policy</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p/> <p> <i>Object Data Formats</i> </p> <p>You can use Amazon S3 Select to query objects that have the following format properties:</p> <ul> <li> <p> <i>CSV, JSON, and Parquet</i> - Objects must be in CSV, JSON, or Parquet format.</p> </li> <li> <p> <i>UTF-8</i> - UTF-8 is the only encoding type Amazon S3 Select supports.</p> </li> <li> <p> <i>GZIP or BZIP2</i> - CSV and JSON files can be compressed using GZIP or BZIP2. GZIP and BZIP2 are the only compression formats that Amazon S3 Select supports for CSV and JSON files. Amazon S3 Select supports columnar compression for Parquet using GZIP or Snappy. Amazon S3 Select does not support whole-object compression for Parquet objects.</p> </li> <li> <p> <i>Server-side encryption</i> - Amazon S3 Select supports querying objects that are protected with server-side encryption.</p> <p>For objects that are encrypted with customer-provided encryption keys (SSE-C), you must use HTTPS, and you must use the headers that are documented in the <a>GetObject</a>. For more information about SSE-C, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Server-Side Encryption (Using Customer-Provided Encryption Keys)</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For objects that are encrypted with Amazon S3 managed encryption keys (SSE-S3) and customer master keys (CMKs) stored in AWS Key Management Service (SSE-KMS), server-side encryption is handled transparently, so you don&#39;t need to specify anything. For more information about server-side encryption, including SSE-S3 and SSE-KMS, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> </li> </ul> <p> <b>Working with the Response Body</b> </p> <p>Given the response size is unknown, Amazon S3 Select streams the response as a series of messages and includes a <code>Transfer-Encoding</code> header with <code>chunked</code> as its value in the response. For more information, see <a>RESTSelectObjectAppendix</a> .</p> <p/> <p> <b>GetObject Support</b> </p> <p>The <code>SelectObjectContent</code> operation does not support the following <code>GetObject</code> functionality. For more information, see <a>GetObject</a>.</p> <ul> <li> <p> <code>Range</code>: While you can specify a scan range for a Amazon S3 Select request, see <a>SelectObjectContentRequest$ScanRange</a> in the request parameters below, you cannot specify the range of bytes of an object to return. </p> </li> <li> <p>GLACIER, DEEP<em>ARCHIVE and REDUCED</em>REDUNDANCY storage classes: You cannot specify the GLACIER, DEEP<em>ARCHIVE, or <code>REDUCED</em>REDUNDANCY</code> storage classes. For more information, about storage classes see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#storage-class-intro">Storage Classes</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> </li> </ul> <p/> <p> <b>Special Errors</b> </p> <p>For a list of special errors for this operation and for general information about Amazon S3 errors and a list of error codes, see <a>ErrorResponses</a> </p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetObject</a> </p> </li> <li> <p> <a>GetBucketLifecycleConfiguration</a> </p> </li> <li> <p> <a>PutBucketLifecycleConfiguration</a> </p> </li> </ul></p>
+    /// <p><p>This operation filters the contents of an Amazon S3 object based on a simple structured query language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON, CSV, or Apache Parquet) of the object. Amazon S3 uses this format to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response.</p> <p>For more information about Amazon S3 Select, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/selecting-content-from-objects.html">Selecting Content from Objects</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For more information about using SQL with Amazon S3 Select, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html"> SQL Reference for Amazon S3 Select and S3 Glacier Select</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p/> <p> <b>Permissions</b> </p> <p>You must have <code>s3:GetObject</code> permission for this operation. Amazon S3 Select does not support anonymous access. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a Policy</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p/> <p> <i>Object Data Formats</i> </p> <p>You can use Amazon S3 Select to query objects that have the following format properties:</p> <ul> <li> <p> <i>CSV, JSON, and Parquet</i> - Objects must be in CSV, JSON, or Parquet format.</p> </li> <li> <p> <i>UTF-8</i> - UTF-8 is the only encoding type Amazon S3 Select supports.</p> </li> <li> <p> <i>GZIP or BZIP2</i> - CSV and JSON files can be compressed using GZIP or BZIP2. GZIP and BZIP2 are the only compression formats that Amazon S3 Select supports for CSV and JSON files. Amazon S3 Select supports columnar compression for Parquet using GZIP or Snappy. Amazon S3 Select does not support whole-object compression for Parquet objects.</p> </li> <li> <p> <i>Server-side encryption</i> - Amazon S3 Select supports querying objects that are protected with server-side encryption.</p> <p>For objects that are encrypted with customer-provided encryption keys (SSE-C), you must use HTTPS, and you must use the headers that are documented in the <a>GetObject</a>. For more information about SSE-C, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Server-Side Encryption (Using Customer-Provided Encryption Keys)</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>For objects that are encrypted with Amazon S3 managed encryption keys (SSE-S3) and customer master keys (CMKs) stored in AWS Key Management Service (SSE-KMS), server-side encryption is handled transparently, so you don&#39;t need to specify anything. For more information about server-side encryption, including SSE-S3 and SSE-KMS, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> </li> </ul> <p> <b>Working with the Response Body</b> </p> <p>Given the response size is unknown, Amazon S3 Select streams the response as a series of messages and includes a <code>Transfer-Encoding</code> header with <code>chunked</code> as its value in the response. For more information, see <a>RESTSelectObjectAppendix</a> .</p> <p/> <p> <b>GetObject Support</b> </p> <p>The <code>SelectObjectContent</code> operation does not support the following <code>GetObject</code> functionality. For more information, see <a>GetObject</a>.</p> <ul> <li> <p> <code>Range</code>: Although you can specify a scan range for an Amazon S3 Select request (see <a>SelectObjectContentRequest$ScanRange</a> in the request parameters), you cannot specify the range of bytes of an object to return. </p> </li> <li> <p>GLACIER, DEEP<em>ARCHIVE and REDUCED</em>REDUNDANCY storage classes: You cannot specify the GLACIER, DEEP<em>ARCHIVE, or <code>REDUCED</em>REDUNDANCY</code> storage classes. For more information, about storage classes see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#storage-class-intro">Storage Classes</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> </li> </ul> <p/> <p> <b>Special Errors</b> </p> <p>For a list of special errors for this operation, see <a>SelectObjectContentErrorCodeList</a> </p> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>GetObject</a> </p> </li> <li> <p> <a>GetBucketLifecycleConfiguration</a> </p> </li> <li> <p> <a>PutBucketLifecycleConfiguration</a> </p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn select_object_content(
         &self,
@@ -24417,26 +20888,18 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
         let mut params = Params::new();
         params.put_key("select");
         params.put("select-type", "2");
@@ -24451,32 +20914,10 @@ impl S3 for S3Client {
         request.set_payload(Some(writer.into_inner()));
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SelectObjectContentError::from_response(response));
-        }
+            .sign_and_dispatch(request, SelectObjectContentError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = SelectObjectContentOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result =
-                SelectObjectContentOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
-        Ok(result)
+        unimplemented!()
     }
 
     /// <p><p>Uploads a part in a multipart upload.</p> <note> <p>In this operation, you provide part data in your request. However, you have an option to specify your existing Amazon S3 object as a data source for the part you are uploading. To upload a part from an existing object, you use the <a>UploadPartCopy</a> operation. </p> </note> <p>You must initiate a multipart upload (see <a>CreateMultipartUpload</a>) before you can upload any part. In response to your initiate request, Amazon S3 returns an upload ID, a unique identifier, that you must include in your upload part request.</p> <p>Part numbers can be any number from 1 to 10,000, inclusive. A part number uniquely identifies a part and also defines its position within the object being created. If you upload a new part using the same part number that was used with a previous part, the previously uploaded part is overwritten. Each part must be at least 5 MB in size, except the last part. There is no size limit on the last part of your multipart upload.</p> <p>To ensure that data is not corrupted when traversing the network, specify the <code>Content-MD5</code> header in the upload part request. Amazon S3 checks the part data against the provided MD5 value. If they do not match, Amazon S3 returns an error. </p> <p> <b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p> <p>For more information on multipart uploads, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html">Multipart Upload Overview</a> in the <i>Amazon Simple Storage Service Developer Guide </i>.</p> <p>For information on the permissions required to use the multipart upload API, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload API and Permissions</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>You can optionally request server-side encryption where Amazon S3 encrypts your data as it writes it to disks in its data centers and decrypts it for you when you access it. You have the option of providing your own encryption key, or you can use the AWS managed encryption keys. If you choose to provide your own encryption key, the request headers you provide in the request must match the headers you used in the request to initiate the upload by using <a>CreateMultipartUpload</a>. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using Server-Side Encryption</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p> <p>Server-side encryption is supported by the S3 Multipart Upload actions. Unless you are using a customer-provided encryption key, you don&#39;t need to specify the encryption parameters in each UploadPart request. Instead, you only need to specify the server-side encryption parameters in the initial Initiate Multipart request. For more information, see <a>CreateMultipartUpload</a>.</p> <p>If you requested server-side encryption using a customer-provided encryption key in your initiate multipart upload request, you must provide identical encryption information in each part upload using the following headers.</p> <ul> <li> <p>x-amz-server-side​-encryption​-customer-algorithm</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key</p> </li> <li> <p>x-amz-server-side​-encryption​-customer-key-MD5</p> </li> </ul> <p class="title"> <b>Special Errors</b> </p> <ul> <li> <p class="title"> <b/> </p> <ul> <li> <p> <i>Code: NoSuchUpload</i> </p> </li> <li> <p> <i>Cause: The specified multipart upload does not exist. The upload ID might be invalid, or the multipart upload might have been aborted or completed.</i> </p> </li> <li> <p> <i> HTTP Status Code: 404 Not Found </i> </p> </li> <li> <p> <i>SOAP Fault Code Prefix: Client</i> </p> </li> </ul> </li> </ul> <p class="title"> <b>Related Resources</b> </p> <ul> <li> <p> <a>CreateMultipartUpload</a> </p> </li> <li> <p> <a>CompleteMultipartUpload</a> </p> </li> <li> <p> <a>AbortMultipartUpload</a> </p> </li> <li> <p> <a>ListParts</a> </p> </li> <li> <p> <a>ListMultipartUploads</a> </p> </li> </ul></p>
@@ -24489,38 +20930,21 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        if let Some(ref content_length) = input.content_length {
-            request.add_header("Content-Length", &content_length.to_string());
-        }
-
-        if let Some(ref content_md5) = input.content_md5 {
-            request.add_header("Content-MD5", &content_md5.to_string());
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
+        request.add_optional_header("Content-Length", input.content_length.as_ref());
+        request.add_optional_header("Content-MD5", input.content_md5.as_ref());
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
         let mut params = Params::new();
         params.put("partNumber", &input.part_number);
         params.put("uploadId", &input.upload_id);
@@ -24530,50 +20954,23 @@ impl S3 for S3Client {
         }
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UploadPartError::from_response(response));
-        }
+            .sign_and_dispatch(request, UploadPartError::from_response)
+            .await?;
 
-        let mut result;
-        result = UploadPartOutput::default();
-        if let Some(e_tag) = response.headers.get("ETag") {
-            let value = e_tag.to_owned();
-            result.e_tag = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        let result = UploadPartOutput::default();
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.sse_customer_algorithm = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_key_id = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption"); // parse non-payload
         Ok(result)
     }
 
@@ -24587,149 +20984,76 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
-        request.add_header("x-amz-copy-source", &input.copy_source);
-
-        if let Some(ref copy_source_if_match) = input.copy_source_if_match {
-            request.add_header(
-                "x-amz-copy-source-if-match",
-                &copy_source_if_match.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_modified_since) = input.copy_source_if_modified_since {
-            request.add_header(
-                "x-amz-copy-source-if-modified-since",
-                &copy_source_if_modified_since.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_none_match) = input.copy_source_if_none_match {
-            request.add_header(
-                "x-amz-copy-source-if-none-match",
-                &copy_source_if_none_match.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_if_unmodified_since) = input.copy_source_if_unmodified_since {
-            request.add_header(
-                "x-amz-copy-source-if-unmodified-since",
-                &copy_source_if_unmodified_since.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_range) = input.copy_source_range {
-            request.add_header("x-amz-copy-source-range", &copy_source_range.to_string());
-        }
-
-        if let Some(ref copy_source_sse_customer_algorithm) =
-            input.copy_source_sse_customer_algorithm
-        {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-algorithm",
-                &copy_source_sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_sse_customer_key) = input.copy_source_sse_customer_key {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-key",
-                &copy_source_sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref copy_source_sse_customer_key_md5) = input.copy_source_sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-copy-source-server-side-encryption-customer-key-MD5",
-                &copy_source_sse_customer_key_md5.to_string(),
-            );
-        }
-
-        if let Some(ref request_payer) = input.request_payer {
-            request.add_header("x-amz-request-payer", &request_payer.to_string());
-        }
-
-        if let Some(ref sse_customer_algorithm) = input.sse_customer_algorithm {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-algorithm",
-                &sse_customer_algorithm.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key) = input.sse_customer_key {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key",
-                &sse_customer_key.to_string(),
-            );
-        }
-
-        if let Some(ref sse_customer_key_md5) = input.sse_customer_key_md5 {
-            request.add_header(
-                "x-amz-server-side-encryption-customer-key-MD5",
-                &sse_customer_key_md5.to_string(),
-            );
-        }
+        request.add_header("x-amz-copy-source", &input.copy_source.to_string());
+        request.add_optional_header(
+            "x-amz-copy-source-if-match",
+            input.copy_source_if_match.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-modified-since",
+            input.copy_source_if_modified_since.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-none-match",
+            input.copy_source_if_none_match.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-if-unmodified-since",
+            input.copy_source_if_unmodified_since.as_ref(),
+        );
+        request.add_optional_header("x-amz-copy-source-range", input.copy_source_range.as_ref());
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-algorithm",
+            input.copy_source_sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-key",
+            input.copy_source_sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-copy-source-server-side-encryption-customer-key-MD5",
+            input.copy_source_sse_customer_key_md5.as_ref(),
+        );
+        request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-algorithm",
+            input.sse_customer_algorithm.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key",
+            input.sse_customer_key.as_ref(),
+        );
+        request.add_optional_header(
+            "x-amz-server-side-encryption-customer-key-MD5",
+            input.sse_customer_key_md5.as_ref(),
+        );
         let mut params = Params::new();
         params.put("partNumber", &input.part_number);
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
 
         let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UploadPartCopyError::from_response(response));
-        }
+            .sign_and_dispatch(request, UploadPartCopyError::from_response)
+            .await?;
 
-        let mut result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = UploadPartCopyOutput::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            result = UploadPartCopyOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-        }
-        if let Some(copy_source_version_id) = response.headers.get("x-amz-copy-source-version-id") {
-            let value = copy_source_version_id.to_owned();
-            result.copy_source_version_id = Some(value)
-        };
-        if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
-            let value = request_charged.to_owned();
-            result.request_charged = Some(value)
-        };
-        if let Some(sse_customer_algorithm) = response
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UploadPartCopyOutputDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.copy_source_version_id = response.headers.remove("x-amz-copy-source-version-id");
+        result.request_charged = response.headers.remove("x-amz-request-charged");
+        result.sse_customer_algorithm = response
             .headers
-            .get("x-amz-server-side-encryption-customer-algorithm")
-        {
-            let value = sse_customer_algorithm.to_owned();
-            result.sse_customer_algorithm = Some(value)
-        };
-        if let Some(sse_customer_key_md5) = response
+            .remove("x-amz-server-side-encryption-customer-algorithm");
+        result.sse_customer_key_md5 = response
             .headers
-            .get("x-amz-server-side-encryption-customer-key-MD5")
-        {
-            let value = sse_customer_key_md5.to_owned();
-            result.sse_customer_key_md5 = Some(value)
-        };
-        if let Some(ssekms_key_id) = response
+            .remove("x-amz-server-side-encryption-customer-key-MD5");
+        result.ssekms_key_id = response
             .headers
-            .get("x-amz-server-side-encryption-aws-kms-key-id")
-        {
-            let value = ssekms_key_id.to_owned();
-            result.ssekms_key_id = Some(value)
-        };
-        if let Some(server_side_encryption) = response.headers.get("x-amz-server-side-encryption") {
-            let value = server_side_encryption.to_owned();
-            result.server_side_encryption = Some(value)
-        }; // parse non-payload
+            .remove("x-amz-server-side-encryption-aws-kms-key-id");
+        result.server_side_encryption = response.headers.remove("x-amz-server-side-encryption"); // parse non-payload
         Ok(result)
     }
 }

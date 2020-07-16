@@ -25,11 +25,11 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Attributes {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClaimDevicesByClaimCodeRequest {
     /// <p>The claim code, starting with "C-", as provided by the device manufacturer.</p>
@@ -37,7 +37,7 @@ pub struct ClaimDevicesByClaimCodeRequest {
     pub claim_code: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClaimDevicesByClaimCodeResponse {
     /// <p>The claim code provided by the device manufacturer.</p>
@@ -51,7 +51,7 @@ pub struct ClaimDevicesByClaimCodeResponse {
     pub total: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeviceRequest {
     /// <p>The unique identifier of the device.</p>
@@ -59,7 +59,7 @@ pub struct DescribeDeviceRequest {
     pub device_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeviceResponse {
     /// <p>Device details.</p>
@@ -68,7 +68,7 @@ pub struct DescribeDeviceResponse {
     pub device_description: Option<DeviceDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Device {
     /// <p>The user specified attributes associated with the device for an event.</p>
@@ -85,7 +85,7 @@ pub struct Device {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceDescription {
     /// <p>The ARN of the device.</p>
@@ -120,7 +120,7 @@ pub struct DeviceDescription {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceEvent {
     /// <p>An object representing the device associated with the event.</p>
@@ -133,7 +133,7 @@ pub struct DeviceEvent {
     pub std_event: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeviceMethod {
     /// <p>The type of the device, such as "button".</p>
     #[serde(rename = "DeviceType")]
@@ -145,7 +145,7 @@ pub struct DeviceMethod {
     pub method_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FinalizeDeviceClaimRequest {
     /// <p>The unique identifier of the device.</p>
@@ -161,7 +161,7 @@ pub struct FinalizeDeviceClaimRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FinalizeDeviceClaimResponse {
     /// <p>The device's final claim state.</p>
@@ -170,7 +170,7 @@ pub struct FinalizeDeviceClaimResponse {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceMethodsRequest {
     /// <p>The unique identifier of the device.</p>
@@ -178,7 +178,7 @@ pub struct GetDeviceMethodsRequest {
     pub device_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceMethodsResponse {
     /// <p>List of available device APIs.</p>
@@ -187,7 +187,7 @@ pub struct GetDeviceMethodsResponse {
     pub device_methods: Option<Vec<DeviceMethod>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InitiateDeviceClaimRequest {
     /// <p>The unique identifier of the device.</p>
@@ -195,7 +195,7 @@ pub struct InitiateDeviceClaimRequest {
     pub device_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateDeviceClaimResponse {
     /// <p>The device's final claim state.</p>
@@ -204,7 +204,7 @@ pub struct InitiateDeviceClaimResponse {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InvokeDeviceMethodRequest {
     /// <p>The unique identifier of the device.</p>
@@ -220,7 +220,7 @@ pub struct InvokeDeviceMethodRequest {
     pub device_method_parameters: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InvokeDeviceMethodResponse {
     /// <p>A JSON encoded string containing the device method response.</p>
@@ -229,7 +229,7 @@ pub struct InvokeDeviceMethodResponse {
     pub device_method_response: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceEventsRequest {
     /// <p>The unique identifier of the device.</p>
@@ -256,7 +256,7 @@ pub struct ListDeviceEventsRequest {
     pub to_time_stamp: f64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceEventsResponse {
     /// <p>An array of zero or more elements describing the event(s) associated with the
@@ -270,7 +270,7 @@ pub struct ListDeviceEventsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
     /// <p>The type of the device, such as "button".</p>
@@ -288,7 +288,7 @@ pub struct ListDevicesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResponse {
     /// <p>A list of devices.</p>
@@ -301,7 +301,7 @@ pub struct ListDevicesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the resource.</p>
@@ -309,7 +309,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A collection of key/value pairs defining the resource tags. For example, {
@@ -322,7 +322,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource.</p>
@@ -337,7 +337,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnclaimDeviceRequest {
     /// <p>The unique identifier of the device.</p>
@@ -345,7 +345,7 @@ pub struct UnclaimDeviceRequest {
     pub device_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnclaimDeviceResponse {
     /// <p>The device's final claim state.</p>
@@ -354,7 +354,7 @@ pub struct UnclaimDeviceResponse {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource.</p>
@@ -365,7 +365,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceStateRequest {
     /// <p>The unique identifier of the device.</p>
@@ -378,7 +378,7 @@ pub struct UpdateDeviceStateRequest {
     pub enabled: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceStateResponse {}
 
@@ -1113,6 +1113,7 @@ impl Iot1ClickDevicesClient {
 impl Iot1ClickDevices for Iot1ClickDevicesClient {
     /// <p>Adds device(s) to your account (i.e., claim one or more devices) if and only if you
     /// received a claim code with the device(s).</p>
+    #[allow(unused_mut)]
     async fn claim_devices_by_claim_code(
         &self,
         input: ClaimDevicesByClaimCodeRequest,
@@ -1130,7 +1131,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ClaimDevicesByClaimCodeResponse, _>()?;
 
@@ -1143,6 +1144,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Given a device ID, returns a DescribeDeviceResponse object describing the
     /// details of the device.</p>
+    #[allow(unused_mut)]
     async fn describe_device(
         &self,
         input: DescribeDeviceRequest,
@@ -1160,7 +1162,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDeviceResponse, _>()?;
 
@@ -1177,6 +1179,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     /// be published by simply clicking the device.</p>
     ///
     /// <p></note></p>
+    #[allow(unused_mut)]
     async fn finalize_device_claim(
         &self,
         input: FinalizeDeviceClaimRequest,
@@ -1199,7 +1202,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<FinalizeDeviceClaimResponse, _>()?;
 
@@ -1211,6 +1214,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 
     /// <p>Given a device ID, returns the invokable methods associated with the device.</p>
+    #[allow(unused_mut)]
     async fn get_device_methods(
         &self,
         input: GetDeviceMethodsRequest,
@@ -1228,7 +1232,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDeviceMethodsResponse, _>()?;
 
@@ -1245,6 +1249,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     /// be published by simply clicking the device.</p>
     ///
     /// <p></note></p>
+    #[allow(unused_mut)]
     async fn initiate_device_claim(
         &self,
         input: InitiateDeviceClaimRequest,
@@ -1265,7 +1270,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<InitiateDeviceClaimResponse, _>()?;
 
@@ -1278,6 +1283,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Given a device ID, issues a request to invoke a named device method (with possible
     /// parameters). See the "Example POST" code snippet below.</p>
+    #[allow(unused_mut)]
     async fn invoke_device_method(
         &self,
         input: InvokeDeviceMethodRequest,
@@ -1297,7 +1303,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<InvokeDeviceMethodResponse, _>()?;
 
@@ -1310,6 +1316,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Using a device ID, returns a DeviceEventsResponse object containing an
     /// array of events for the device.</p>
+    #[allow(unused_mut)]
     async fn list_device_events(
         &self,
         input: ListDeviceEventsRequest,
@@ -1338,7 +1345,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDeviceEventsResponse, _>()?;
 
@@ -1350,6 +1357,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 
     /// <p>Lists the 1-Click compatible devices associated with your AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_devices(
         &self,
         input: ListDevicesRequest,
@@ -1379,7 +1387,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDevicesResponse, _>()?;
 
@@ -1391,6 +1399,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 
     /// <p>Lists the tags associated with the specified resource ARN.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -1408,7 +1417,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -1421,6 +1430,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Adds or updates the tags associated with the resource ARN. See <a href="https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits">AWS IoT 1-Click Service Limits</a> for the maximum number of tags allowed per
     /// resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -1440,7 +1450,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -1451,6 +1461,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 
     /// <p>Disassociates a device from your AWS account using its device ID.</p>
+    #[allow(unused_mut)]
     async fn unclaim_device(
         &self,
         input: UnclaimDeviceRequest,
@@ -1468,7 +1479,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UnclaimDeviceResponse, _>()?;
 
@@ -1481,6 +1492,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Using tag keys, deletes the tags (key/value pairs) associated with the specified
     /// resource ARN.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -1504,7 +1516,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -1516,6 +1528,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
 
     /// <p>Using a Boolean value (true or false), this operation
     /// enables or disables the device given a device ID.</p>
+    #[allow(unused_mut)]
     async fn update_device_state(
         &self,
         input: UpdateDeviceStateRequest,
@@ -1535,7 +1548,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDeviceStateResponse, _>()?;
 

@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTokenRequest {
     /// <p>The unique identifier string for each client. This value should come from the persisted result of the <a>RegisterClient</a> API.</p>
@@ -57,7 +57,7 @@ pub struct CreateTokenRequest {
     pub scope: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTokenResponse {
     /// <p>An opaque token to access AWS SSO resources assigned to a user.</p>
@@ -82,7 +82,7 @@ pub struct CreateTokenResponse {
     pub token_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterClientRequest {
     /// <p>The friendly name of the client.</p>
@@ -97,7 +97,7 @@ pub struct RegisterClientRequest {
     pub scopes: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterClientResponse {
     /// <p>The endpoint where the client can request authorization.</p>
@@ -126,7 +126,7 @@ pub struct RegisterClientResponse {
     pub token_endpoint: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeviceAuthorizationRequest {
     /// <p>The unique identifier string for the client that is registered with AWS SSO. This value should come from the persisted result of the <a>RegisterClient</a> API operation.</p>
@@ -140,7 +140,7 @@ pub struct StartDeviceAuthorizationRequest {
     pub start_url: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDeviceAuthorizationResponse {
     /// <p>The short-lived code that is used by the device when polling for a session token.</p>
@@ -433,6 +433,7 @@ impl SsoOidcClient {
 #[async_trait]
 impl SsoOidc for SsoOidcClient {
     /// <p>Creates and returns an access token for the authorized client. The access token issued will be used to fetch short-term credentials for the assigned roles in the AWS account.</p>
+    #[allow(unused_mut)]
     async fn create_token(
         &self,
         input: CreateTokenRequest,
@@ -452,7 +453,7 @@ impl SsoOidc for SsoOidcClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateTokenResponse, _>()?;
 
@@ -464,6 +465,7 @@ impl SsoOidc for SsoOidcClient {
     }
 
     /// <p>Registers a client with AWS SSO. This allows clients to initiate device authorization. The output should be persisted for reuse through many authentication requests.</p>
+    #[allow(unused_mut)]
     async fn register_client(
         &self,
         input: RegisterClientRequest,
@@ -483,7 +485,7 @@ impl SsoOidc for SsoOidcClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RegisterClientResponse, _>()?;
 
@@ -495,6 +497,7 @@ impl SsoOidc for SsoOidcClient {
     }
 
     /// <p>Initiates device authorization by requesting a pair of verification codes from the authorization service.</p>
+    #[allow(unused_mut)]
     async fn start_device_authorization(
         &self,
         input: StartDeviceAuthorizationRequest,
@@ -514,7 +517,7 @@ impl SsoOidc for SsoOidcClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartDeviceAuthorizationResponse, _>()?;
 

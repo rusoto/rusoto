@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 /// <p>Provides information about your AWS account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccountInfo {
     /// <p>The identifier of the AWS account that is assigned to the user.</p>
@@ -42,7 +42,7 @@ pub struct AccountInfo {
     pub email_address: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoleCredentialsRequest {
     /// <p>The token issued by the <code>CreateToken</code> API call. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/OIDCAPIReference/API_CreateToken.html">CreateToken</a> in the <i>AWS SSO OIDC API Reference Guide</i>.</p>
@@ -56,7 +56,7 @@ pub struct GetRoleCredentialsRequest {
     pub role_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRoleCredentialsResponse {
     /// <p>The credentials for the role that is assigned to the user.</p>
@@ -65,7 +65,7 @@ pub struct GetRoleCredentialsResponse {
     pub role_credentials: Option<RoleCredentials>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountRolesRequest {
     /// <p>The token issued by the <code>CreateToken</code> API call. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/OIDCAPIReference/API_CreateToken.html">CreateToken</a> in the <i>AWS SSO OIDC API Reference Guide</i>.</p>
@@ -84,7 +84,7 @@ pub struct ListAccountRolesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountRolesResponse {
     /// <p>The page token client that is used to retrieve the list of accounts.</p>
@@ -97,7 +97,7 @@ pub struct ListAccountRolesResponse {
     pub role_list: Option<Vec<RoleInfo>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountsRequest {
     /// <p>The token issued by the <code>CreateToken</code> API call. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/OIDCAPIReference/API_CreateToken.html">CreateToken</a> in the <i>AWS SSO OIDC API Reference Guide</i>.</p>
@@ -113,7 +113,7 @@ pub struct ListAccountsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountsResponse {
     /// <p>A paginated response with the list of account information and the next token if more results are available.</p>
@@ -126,7 +126,7 @@ pub struct ListAccountsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LogoutRequest {
     /// <p>The token issued by the <code>CreateToken</code> API call. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/OIDCAPIReference/API_CreateToken.html">CreateToken</a> in the <i>AWS SSO OIDC API Reference Guide</i>.</p>
@@ -135,7 +135,7 @@ pub struct LogoutRequest {
 }
 
 /// <p>Provides information about the role credentials that are assigned to the user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RoleCredentials {
     /// <p>The identifier used for the temporary security credentials. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_use-resources.html">Using Temporary Security Credentials to Request Access to AWS Resources</a> in the <i>AWS IAM User Guide</i>.</p>
@@ -157,7 +157,7 @@ pub struct RoleCredentials {
 }
 
 /// <p>Provides information about the role that is assigned to the user.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RoleInfo {
     /// <p>The identifier of the AWS account assigned to the user.</p>
@@ -421,6 +421,7 @@ impl SsoClient {
 #[async_trait]
 impl Sso for SsoClient {
     /// <p>Returns the STS short-term credentials for a given role name that is assigned to the user.</p>
+    #[allow(unused_mut)]
     async fn get_role_credentials(
         &self,
         input: GetRoleCredentialsRequest,
@@ -432,7 +433,7 @@ impl Sso for SsoClient {
 
         request.set_endpoint_prefix("portal.sso".to_string());
 
-        request.add_header("x-amz-sso_bearer_token", &input.access_token);
+        request.add_header("x-amz-sso_bearer_token", &input.access_token.to_string());
         let mut params = Params::new();
         params.put("account_id", &input.account_id);
         params.put("role_name", &input.role_name);
@@ -444,7 +445,7 @@ impl Sso for SsoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRoleCredentialsResponse, _>()?;
 
@@ -456,6 +457,7 @@ impl Sso for SsoClient {
     }
 
     /// <p>Lists all roles that are assigned to the user for a given AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_account_roles(
         &self,
         input: ListAccountRolesRequest,
@@ -467,7 +469,7 @@ impl Sso for SsoClient {
 
         request.set_endpoint_prefix("portal.sso".to_string());
 
-        request.add_header("x-amz-sso_bearer_token", &input.access_token);
+        request.add_header("x-amz-sso_bearer_token", &input.access_token.to_string());
         let mut params = Params::new();
         params.put("account_id", &input.account_id);
         if let Some(ref x) = input.max_results {
@@ -484,7 +486,7 @@ impl Sso for SsoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAccountRolesResponse, _>()?;
 
@@ -496,6 +498,7 @@ impl Sso for SsoClient {
     }
 
     /// <p>Lists all AWS accounts assigned to the user. These AWS accounts are assigned by the administrator of the account. For more information, see <a href="https://docs.aws.amazon.com/singlesignon/latest/userguide/useraccess.html#assignusers">Assign User Access</a> in the <i>AWS SSO User Guide</i>. This operation returns a paginated response.</p>
+    #[allow(unused_mut)]
     async fn list_accounts(
         &self,
         input: ListAccountsRequest,
@@ -507,7 +510,7 @@ impl Sso for SsoClient {
 
         request.set_endpoint_prefix("portal.sso".to_string());
 
-        request.add_header("x-amz-sso_bearer_token", &input.access_token);
+        request.add_header("x-amz-sso_bearer_token", &input.access_token.to_string());
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("max_result", x);
@@ -523,7 +526,7 @@ impl Sso for SsoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAccountsResponse, _>()?;
 
@@ -535,6 +538,7 @@ impl Sso for SsoClient {
     }
 
     /// <p>Removes the client- and server-side session that is associated with the user.</p>
+    #[allow(unused_mut)]
     async fn logout(&self, input: LogoutRequest) -> Result<(), RusotoError<LogoutError>> {
         let request_uri = "/logout";
 
@@ -543,7 +547,7 @@ impl Sso for SsoClient {
 
         request.set_endpoint_prefix("portal.sso".to_string());
 
-        request.add_header("x-amz-sso_bearer_token", &input.access_token);
+        request.add_header("x-amz-sso_bearer_token", &input.access_token.to_string());
 
         let mut response = self
             .client
@@ -551,7 +555,7 @@ impl Sso for SsoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

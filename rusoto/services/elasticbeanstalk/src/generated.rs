@@ -22,10 +22,10 @@ use rusoto_core::{Client, RusotoError};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
-    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
-    start_element,
+    self as xml_util, deserialize_elements, find_start_element, skip_tree,
 };
 use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[cfg(feature = "deserialize_structs")]
 use serde::Deserialize;
@@ -33,23 +33,43 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_urlencoded;
 use std::str::FromStr;
-use xml::reader::ParserConfig;
 use xml::EventReader;
+
+impl ElasticBeanstalkClient {
+    fn new_params(&self, operation_name: &str) -> Params {
+        let mut params = Params::new();
+
+        params.put("Action", operation_name);
+        params.put("Version", "2010-12-01");
+
+        params
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
 
 #[allow(dead_code)]
 struct ARNDeserializer;
 impl ARNDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AbortEnvironmentUpdateMessage {
     /// <p>This specifies the ID of the environment with the in-progress update that you want to cancel.</p>
@@ -81,11 +101,7 @@ struct AbortableOperationInProgressDeserializer;
 impl AbortableOperationInProgressDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -93,11 +109,7 @@ struct ActionHistoryStatusDeserializer;
 impl ActionHistoryStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -105,11 +117,7 @@ struct ActionStatusDeserializer;
 impl ActionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -117,11 +125,7 @@ struct ActionTypeDeserializer;
 impl ActionTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -129,15 +133,11 @@ struct ApplicationArnDeserializer;
 impl ApplicationArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes the properties of an application.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationDescription {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -239,7 +239,7 @@ impl ApplicationDescriptionListDeserializer {
     }
 }
 /// <p>Result message containing a single description of an application.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationDescriptionMessage {
     /// <p> The <a>ApplicationDescription</a> of the application. </p>
@@ -273,7 +273,7 @@ impl ApplicationDescriptionMessageDeserializer {
     }
 }
 /// <p>Result message containing a list of application descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationDescriptionsMessage {
     /// <p>This parameter contains a list of <a>ApplicationDescription</a>.</p>
@@ -309,7 +309,7 @@ impl ApplicationDescriptionsMessageDeserializer {
     }
 }
 /// <p>Application request metrics for an AWS Elastic Beanstalk environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationMetrics {
     /// <p>The amount of time that the metrics cover (usually 10 seconds). For example, you might have 5 requests (<code>request_count</code>) within the most recent time slice of 10 seconds (<code>duration</code>).</p>
@@ -360,11 +360,7 @@ struct ApplicationNameDeserializer;
 impl ApplicationNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -380,7 +376,7 @@ impl ApplicationNamesListSerializer {
 }
 
 /// <p>The resource lifecycle configuration for an application. Defines lifecycle settings for resources that belong to the application, and the service role that AWS Elastic Beanstalk assumes in order to apply lifecycle settings. The version lifecycle configuration defines lifecycle settings for application versions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationResourceLifecycleConfig {
@@ -444,7 +440,7 @@ impl ApplicationResourceLifecycleConfigSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationResourceLifecycleDescriptionMessage {
     /// <p>The name of the application.</p>
@@ -491,15 +487,11 @@ struct ApplicationVersionArnDeserializer;
 impl ApplicationVersionArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes the properties of an application version.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationVersionDescription {
     /// <p>The name of the application to which the application version belongs.</p>
@@ -615,7 +607,7 @@ impl ApplicationVersionDescriptionListDeserializer {
     }
 }
 /// <p>Result message wrapping a single description of an application version.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationVersionDescriptionMessage {
     /// <p> The <a>ApplicationVersionDescription</a> of the application version. </p>
@@ -650,7 +642,7 @@ impl ApplicationVersionDescriptionMessageDeserializer {
     }
 }
 /// <p>Result message wrapping a list of application version descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplicationVersionDescriptionsMessage {
     /// <p>List of <code>ApplicationVersionDescription</code> objects sorted in order of creation.</p>
@@ -691,7 +683,7 @@ impl ApplicationVersionDescriptionsMessageDeserializer {
     }
 }
 /// <p>The application version lifecycle settings for an application. Defines the rules that Elastic Beanstalk applies to an application's versions in order to avoid hitting the per-region limit for application versions.</p> <p>When Elastic Beanstalk deletes an application version from its database, you can no longer deploy that version to an environment. The source bundle remains in S3 unless you configure the rule to delete it.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationVersionLifecycleConfig {
@@ -763,15 +755,11 @@ struct ApplicationVersionStatusDeserializer;
 impl ApplicationVersionStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Request to execute a scheduled managed action immediately.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplyEnvironmentManagedActionRequest {
     /// <p>The action ID of the scheduled managed action to execute.</p>
@@ -802,7 +790,7 @@ impl ApplyEnvironmentManagedActionRequestSerializer {
 }
 
 /// <p>The result message containing information about the managed action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ApplyEnvironmentManagedActionResult {
     /// <p>A description of the managed action.</p>
@@ -849,8 +837,38 @@ impl ApplyEnvironmentManagedActionResultDeserializer {
         )
     }
 }
+/// <p>Request to add or change the operations role used by an environment.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateEnvironmentOperationsRoleMessage {
+    /// <p>The name of the environment to which to set the operations role.</p>
+    pub environment_name: String,
+    /// <p>The Amazon Resource Name (ARN) of an existing IAM role to be used as the environment's operations role.</p>
+    pub operations_role: String,
+}
+
+/// Serialize `AssociateEnvironmentOperationsRoleMessage` contents to a `SignedRequest`.
+struct AssociateEnvironmentOperationsRoleMessageSerializer;
+impl AssociateEnvironmentOperationsRoleMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AssociateEnvironmentOperationsRoleMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "EnvironmentName"),
+            &obj.environment_name,
+        );
+        params.put(
+            &format!("{}{}", prefix, "OperationsRole"),
+            &obj.operations_role,
+        );
+    }
+}
+
 /// <p>Describes an Auto Scaling launch configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct AutoScalingGroup {
     /// <p>The name of the <code>AutoScalingGroup</code> . </p>
@@ -937,11 +955,7 @@ struct BoxedBooleanDeserializer;
 impl BoxedBooleanDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -949,11 +963,7 @@ struct BoxedIntDeserializer;
 impl BoxedIntDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -961,11 +971,7 @@ struct BranchNameDeserializer;
 impl BranchNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -973,15 +979,11 @@ struct BranchOrderDeserializer;
 impl BranchOrderDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Settings for an AWS CodeBuild build.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BuildConfiguration {
     /// <p>The name of the artifact of the CodeBuild build. If provided, Elastic Beanstalk stores the build artifact in the S3 location <i>S3-bucket</i>/resources/<i>application-name</i>/codebuild/codebuild-<i>version-label</i>-<i>artifact-name</i>.zip. If not provided, Elastic Beanstalk stores the build artifact in the S3 location <i>S3-bucket</i>/resources/<i>application-name</i>/codebuild/codebuild-<i>version-label</i>.zip. </p>
@@ -1023,7 +1025,7 @@ impl BuildConfigurationSerializer {
 }
 
 /// <p>The builder used to build the custom platform.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Builder {
     /// <p>The ARN of the builder.</p>
@@ -1050,7 +1052,7 @@ impl BuilderDeserializer {
     }
 }
 /// <p>CPU utilization metrics for an instance.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CPUUtilization {
     /// <p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>I/O Wait</code> state over the last 10 seconds.</p>
@@ -1119,11 +1121,7 @@ struct CauseDeserializer;
 impl CauseDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1145,7 +1143,7 @@ impl CausesDeserializer {
     }
 }
 /// <p>Results message indicating whether a CNAME is available.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckDNSAvailabilityMessage {
     /// <p>The prefix used when this CNAME is reserved.</p>
@@ -1166,7 +1164,7 @@ impl CheckDNSAvailabilityMessageSerializer {
 }
 
 /// <p>Indicates if the specified CNAME is available.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CheckDNSAvailabilityResultMessage {
     /// <p><p>Indicates if the specified CNAME is available:</p> <ul> <li> <p> <code>true</code> : The CNAME is available.</p> </li> <li> <p> <code>false</code> : The CNAME is not available.</p> </li> </ul></p>
@@ -1212,15 +1210,11 @@ struct CnameAvailabilityDeserializer;
 impl CnameAvailabilityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>Request to create or update a group of environments.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ComposeEnvironmentsMessage {
     /// <p>The name of the application to which the specified source bundles belong.</p>
@@ -1261,11 +1255,7 @@ struct ConfigurationDeploymentStatusDeserializer;
 impl ConfigurationDeploymentStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1273,15 +1263,11 @@ struct ConfigurationOptionDefaultValueDeserializer;
 impl ConfigurationOptionDefaultValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes the possible values for a configuration option.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigurationOptionDescription {
     /// <p><p>An indication of which action is required if the value for this configuration option changes:</p> <ul> <li> <p> <code>NoInterruption</code> : There is no interruption to the environment or application availability.</p> </li> <li> <p> <code>RestartEnvironment</code> : The environment is entirely restarted, all AWS resources are deleted and recreated, and the environment is unavailable during the process.</p> </li> <li> <p> <code>RestartApplicationServer</code> : The environment is available the entire time. However, a short application outage occurs when the application servers on the running Amazon EC2 instances are restarted.</p> </li> </ul></p>
@@ -1420,11 +1406,7 @@ struct ConfigurationOptionNameDeserializer;
 impl ConfigurationOptionNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1432,11 +1414,7 @@ struct ConfigurationOptionPossibleValueDeserializer;
 impl ConfigurationOptionPossibleValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1460,7 +1438,7 @@ impl ConfigurationOptionPossibleValuesDeserializer {
     }
 }
 /// <p>A specification identifying an individual configuration option along with its current value. For a list of possible namespaces and option values, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options.html">Option Values</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigurationOptionSetting {
@@ -1579,11 +1557,7 @@ struct ConfigurationOptionSeverityDeserializer;
 impl ConfigurationOptionSeverityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1591,11 +1565,7 @@ struct ConfigurationOptionValueDeserializer;
 impl ConfigurationOptionValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1603,15 +1573,11 @@ struct ConfigurationOptionValueTypeDeserializer;
 impl ConfigurationOptionValueTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes the settings for a specified configuration set.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigurationOptionsDescription {
     /// <p> A list of <a>ConfigurationOptionDescription</a>. </p>
@@ -1660,7 +1626,7 @@ impl ConfigurationOptionsDescriptionDeserializer {
     }
 }
 /// <p>Describes the settings for a configuration set.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigurationSettingsDescription {
     /// <p>The name of the application associated with this configuration set.</p>
@@ -1782,7 +1748,7 @@ impl ConfigurationSettingsDescriptionListDeserializer {
     }
 }
 /// <p>The results from a request to change the configuration settings of an environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigurationSettingsDescriptions {
     /// <p> A list of <a>ConfigurationSettingsDescription</a>. </p>
@@ -1818,7 +1784,7 @@ impl ConfigurationSettingsDescriptionsDeserializer {
     }
 }
 /// <p>Provides a list of validation messages.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ConfigurationSettingsValidationMessages {
     /// <p> A list of <a>ValidationMessage</a>. </p>
@@ -1855,11 +1821,7 @@ struct ConfigurationTemplateNameDeserializer;
 impl ConfigurationTemplateNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -1883,7 +1845,7 @@ impl ConfigurationTemplateNamesListDeserializer {
     }
 }
 /// <p>Request to create an application.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationMessage {
     /// <p>The name of the application. Must be unique within your account.</p>
@@ -1926,7 +1888,7 @@ impl CreateApplicationMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationVersionMessage {
     /// <p> The name of the application. If no application is found with this name, and <code>AutoCreateApplication</code> is <code>false</code>, returns an <code>InvalidParameterValue</code> error. </p>
@@ -2003,7 +1965,7 @@ impl CreateApplicationVersionMessageSerializer {
 }
 
 /// <p>Request to create a configuration template.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationTemplateMessage {
     /// <p>The name of the Elastic Beanstalk application to associate with this configuration template.</p>
@@ -2073,7 +2035,7 @@ impl CreateConfigurationTemplateMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentMessage {
     /// <p>The name of the application that is associated with this environment.</p>
@@ -2086,11 +2048,13 @@ pub struct CreateEnvironmentMessage {
     pub environment_name: Option<String>,
     /// <p>The name of the group to which the target environment belongs. Specify a group name only if the environment's name is specified in an environment manifest and not with the environment name parameter. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html">Environment Manifest (env.yaml)</a> for details.</p>
     pub group_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of an existing IAM role to be used as the environment's operations role. If specified, Elastic Beanstalk uses the operations role for permissions to downstream services during this call and during subsequent calls acting on this environment. To specify an operations role, you must have the <code>iam:PassRole</code> permission for the role. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    pub operations_role: Option<String>,
     /// <p>If specified, AWS Elastic Beanstalk sets the specified configuration options to the requested value in the configuration set for the new environment. These override the values obtained from the solution stack or the configuration template.</p>
     pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
     /// <p>A list of custom user-defined configuration options to remove from the configuration set for this new environment.</p>
     pub options_to_remove: Option<Vec<OptionSpecification>>,
-    /// <p><p>The Amazon Resource Name (ARN) of the custom platform to use with the environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/custom-platforms.html"> Custom Platforms</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> <note> <p>If you specify <code>PlatformArn</code>, don&#39;t specify <code>SolutionStackName</code>.</p> </note></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the custom platform to use with the environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/custom-platforms.html">Custom Platforms</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> <note> <p>If you specify <code>PlatformArn</code>, don&#39;t specify <code>SolutionStackName</code>.</p> </note></p>
     pub platform_arn: Option<String>,
     /// <p><p>The name of an Elastic Beanstalk solution stack (platform version) to use with the environment. If specified, Elastic Beanstalk sets the configuration values to the default values associated with the specified solution stack. For a list of current solution stacks, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/platforms/platforms-supported.html">Elastic Beanstalk Supported Platforms</a> in the <i>AWS Elastic Beanstalk Platforms</i> guide.</p> <note> <p>If you specify <code>SolutionStackName</code>, don&#39;t specify <code>PlatformArn</code> or <code>TemplateName</code>.</p> </note></p>
     pub solution_stack_name: Option<String>,
@@ -2128,6 +2092,9 @@ impl CreateEnvironmentMessageSerializer {
         }
         if let Some(ref field_value) = obj.group_name {
             params.put(&format!("{}{}", prefix, "GroupName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.operations_role {
+            params.put(&format!("{}{}", prefix, "OperationsRole"), &field_value);
         }
         if let Some(ref field_value) = obj.option_settings {
             ConfigurationOptionSettingsListSerializer::serialize(
@@ -2169,7 +2136,7 @@ impl CreateEnvironmentMessageSerializer {
 }
 
 /// <p>Request to create a new platform version.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlatformVersionRequest {
     /// <p>The name of the builder environment.</p>
@@ -2221,7 +2188,7 @@ impl CreatePlatformVersionRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreatePlatformVersionResult {
     /// <p>The builder used to create the custom platform.</p>
@@ -2260,7 +2227,7 @@ impl CreatePlatformVersionResultDeserializer {
     }
 }
 /// <p>Results of a <a>CreateStorageLocationResult</a> call.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CreateStorageLocationResultMessage {
     /// <p>The name of the Amazon S3 bucket created.</p>
@@ -2295,15 +2262,11 @@ struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A custom AMI available to platforms.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CustomAmi {
     /// <p>THe ID of the image used to create the custom AMI.</p>
@@ -2360,15 +2323,11 @@ struct DNSCnameDeserializer;
 impl DNSCnameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Request to delete an application.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationMessage {
     /// <p>The name of the application to delete.</p>
@@ -2400,7 +2359,7 @@ impl DeleteApplicationMessageSerializer {
 }
 
 /// <p>Request to delete an application version.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationVersionMessage {
     /// <p>The name of the application to which the version belongs.</p>
@@ -2432,7 +2391,7 @@ impl DeleteApplicationVersionMessageSerializer {
 }
 
 /// <p>Request to delete a configuration template.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationTemplateMessage {
     /// <p>The name of the application to delete the configuration template from.</p>
@@ -2459,7 +2418,7 @@ impl DeleteConfigurationTemplateMessageSerializer {
 }
 
 /// <p>Request to delete a draft environment configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEnvironmentConfigurationMessage {
     /// <p>The name of the application the environment is associated with.</p>
@@ -2488,7 +2447,7 @@ impl DeleteEnvironmentConfigurationMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePlatformVersionRequest {
     /// <p>The ARN of the version of the custom platform.</p>
@@ -2510,7 +2469,7 @@ impl DeletePlatformVersionRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DeletePlatformVersionResult {
     /// <p>Detailed information about the version of the custom platform.</p>
@@ -2544,7 +2503,7 @@ impl DeletePlatformVersionResultDeserializer {
     }
 }
 /// <p>Information about an application version deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Deployment {
     /// <p>The ID of the deployment. This number increases by one each time that you deploy source code or change instance configuration settings.</p>
@@ -2597,14 +2556,10 @@ struct DeploymentTimestampDeserializer;
 impl DeploymentTimestampDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountAttributesResult {
     /// <p>The Elastic Beanstalk resource quotas associated with the calling AWS account.</p>
@@ -2638,7 +2593,7 @@ impl DescribeAccountAttributesResultDeserializer {
     }
 }
 /// <p>Request to describe application versions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationVersionsMessage {
     /// <p>Specify an application name to show only application versions for that application.</p>
@@ -2680,7 +2635,7 @@ impl DescribeApplicationVersionsMessageSerializer {
 }
 
 /// <p>Request to describe one or more applications.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeApplicationsMessage {
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to only include those with the specified names.</p>
@@ -2707,7 +2662,7 @@ impl DescribeApplicationsMessageSerializer {
 }
 
 /// <p>Result message containing a list of application version descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationOptionsMessage {
     /// <p>The name of the application associated with the configuration template or environment. Only needed if you want to describe the configuration options associated with either the configuration template or environment.</p>
@@ -2759,7 +2714,7 @@ impl DescribeConfigurationOptionsMessageSerializer {
 }
 
 /// <p>Result message containing all of the configuration settings for a specified solution stack or configuration template.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationSettingsMessage {
     /// <p>The application for the environment or configuration template.</p>
@@ -2793,7 +2748,7 @@ impl DescribeConfigurationSettingsMessageSerializer {
 }
 
 /// <p>See the example below to learn how to create a request body.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentHealthRequest {
     /// <p>Specify the response elements to return. To retrieve all attributes, set to <code>All</code>. If no attribute names are specified, returns the name of the environment.</p>
@@ -2830,7 +2785,7 @@ impl DescribeEnvironmentHealthRequestSerializer {
 }
 
 /// <p>Health details for an AWS Elastic Beanstalk environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEnvironmentHealthResult {
     /// <p>Application request metrics for the environment.</p>
@@ -2912,7 +2867,7 @@ impl DescribeEnvironmentHealthResultDeserializer {
     }
 }
 /// <p>Request to list completed and failed managed actions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentManagedActionHistoryRequest {
     /// <p>The environment ID of the target environment.</p>
@@ -2954,7 +2909,7 @@ impl DescribeEnvironmentManagedActionHistoryRequestSerializer {
 }
 
 /// <p>A result message containing a list of completed and failed managed actions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEnvironmentManagedActionHistoryResult {
     /// <p>A list of completed and failed managed actions.</p>
@@ -2995,7 +2950,7 @@ impl DescribeEnvironmentManagedActionHistoryResultDeserializer {
     }
 }
 /// <p>Request to list an environment's upcoming and in-progress managed actions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentManagedActionsRequest {
     /// <p>The environment ID of the target environment.</p>
@@ -3028,7 +2983,7 @@ impl DescribeEnvironmentManagedActionsRequestSerializer {
 }
 
 /// <p>The result message containing a list of managed actions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeEnvironmentManagedActionsResult {
     /// <p>A list of upcoming and in-progress managed actions.</p>
@@ -3061,7 +3016,7 @@ impl DescribeEnvironmentManagedActionsResultDeserializer {
     }
 }
 /// <p>Request to describe the resources in an environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentResourcesMessage {
     /// <p>The ID of the environment to retrieve AWS resource usage data.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -3089,7 +3044,7 @@ impl DescribeEnvironmentResourcesMessageSerializer {
 }
 
 /// <p>Request to describe one or more environments.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEnvironmentsMessage {
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those that are associated with this application.</p>
@@ -3158,7 +3113,7 @@ impl DescribeEnvironmentsMessageSerializer {
 }
 
 /// <p>Request to retrieve a list of events for an environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventsMessage {
     /// <p>If specified, AWS Elastic Beanstalk restricts the returned descriptions to include only those associated with this application.</p>
@@ -3236,7 +3191,7 @@ impl DescribeEventsMessageSerializer {
 }
 
 /// <p>Parameters for a call to <code>DescribeInstancesHealth</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstancesHealthRequest {
     /// <p>Specifies the response elements you wish to receive. To retrieve all attributes, set to <code>All</code>. If no attribute names are specified, returns a list of instances.</p>
@@ -3278,7 +3233,7 @@ impl DescribeInstancesHealthRequestSerializer {
 }
 
 /// <p>Detailed health information about the Amazon EC2 instances in an AWS Elastic Beanstalk environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeInstancesHealthResult {
     /// <p>Detailed health information about each instance.</p> <p>The output differs slightly between Linux and Windows environments. There is a difference in the members that are supported under the <code>&lt;CPUUtilization&gt;</code> type.</p>
@@ -3325,7 +3280,7 @@ impl DescribeInstancesHealthResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePlatformVersionRequest {
     /// <p>The ARN of the platform version.</p>
@@ -3347,7 +3302,7 @@ impl DescribePlatformVersionRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribePlatformVersionResult {
     /// <p>Detailed information about the platform version.</p>
@@ -3386,23 +3341,43 @@ struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// <p>Request to disassociate the operations role from an environment.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateEnvironmentOperationsRoleMessage {
+    /// <p>The name of the environment from which to disassociate the operations role.</p>
+    pub environment_name: String,
+}
+
+/// Serialize `DisassociateEnvironmentOperationsRoleMessage` contents to a `SignedRequest`.
+struct DisassociateEnvironmentOperationsRoleMessageSerializer;
+impl DisassociateEnvironmentOperationsRoleMessageSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DisassociateEnvironmentOperationsRoleMessage,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "EnvironmentName"),
+            &obj.environment_name,
+        );
+    }
+}
+
 #[allow(dead_code)]
 struct Ec2InstanceIdDeserializer;
 impl Ec2InstanceIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3410,11 +3385,7 @@ struct EndpointURLDeserializer;
 impl EndpointURLDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3422,15 +3393,11 @@ struct EnvironmentArnDeserializer;
 impl EnvironmentArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes the properties of an environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnvironmentDescription {
     /// <p>Indicates if there is an in-progress environment configuration update or application version deployment that you can cancel.</p> <p> <code>true:</code> There is an update in progress. </p> <p> <code>false:</code> There are no updates currently in progress. </p>
@@ -3459,6 +3426,8 @@ pub struct EnvironmentDescription {
     pub health: Option<String>,
     /// <p>Returns the health status of the application running in your environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html">Health Colors and Statuses</a>.</p>
     pub health_status: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the environment's operations role. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    pub operations_role: Option<String>,
     /// <p>The ARN of the platform version.</p>
     pub platform_arn: Option<String>,
     /// <p>The description of the AWS resources used by this environment.</p>
@@ -3549,6 +3518,12 @@ impl EnvironmentDescriptionDeserializer {
                         stack,
                     )?);
                 }
+                "OperationsRole" => {
+                    obj.operations_role = Some(OperationsRoleDeserializer::deserialize(
+                        "OperationsRole",
+                        stack,
+                    )?);
+                }
                 "PlatformArn" => {
                     obj.platform_arn =
                         Some(PlatformArnDeserializer::deserialize("PlatformArn", stack)?);
@@ -3610,7 +3585,7 @@ impl EnvironmentDescriptionsListDeserializer {
     }
 }
 /// <p>Result message containing a list of environment descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnvironmentDescriptionsMessage {
     /// <p> Returns an <a>EnvironmentDescription</a> list. </p>
@@ -3655,11 +3630,7 @@ struct EnvironmentHealthDeserializer;
 impl EnvironmentHealthDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3679,11 +3650,7 @@ struct EnvironmentHealthStatusDeserializer;
 impl EnvironmentHealthStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -3691,11 +3658,7 @@ struct EnvironmentIdDeserializer;
 impl EnvironmentIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3711,7 +3674,7 @@ impl EnvironmentIdListSerializer {
 }
 
 /// <p>The information retrieved from the Amazon EC2 instances.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnvironmentInfoDescription {
     /// <p>The Amazon EC2 Instance ID for this information.</p>
@@ -3789,15 +3752,11 @@ struct EnvironmentInfoTypeDeserializer;
 impl EnvironmentInfoTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A link to another environment, defined in the environment's manifest. Links provide connection information in system properties that can be used to connect to another environment in the same group. See <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-cfg-manifest.html">Environment Manifest (env.yaml)</a> for details.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnvironmentLink {
     /// <p>The name of the linked environment (the dependency).</p>
@@ -3852,11 +3811,7 @@ struct EnvironmentNameDeserializer;
 impl EnvironmentNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -3872,7 +3827,7 @@ impl EnvironmentNamesListSerializer {
 }
 
 /// <p>Describes the AWS resources in use by this environment. This data is live.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnvironmentResourceDescription {
     /// <p> The <code>AutoScalingGroups</code> used by this environment. </p>
@@ -3961,7 +3916,7 @@ impl EnvironmentResourceDescriptionDeserializer {
     }
 }
 /// <p>Result message containing a list of environment resource descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnvironmentResourceDescriptionsMessage {
     /// <p> A list of <a>EnvironmentResourceDescription</a>. </p>
@@ -3996,7 +3951,7 @@ impl EnvironmentResourceDescriptionsMessageDeserializer {
     }
 }
 /// <p>Describes the AWS resources in use by this environment. This data is not live data.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EnvironmentResourcesDescription {
     /// <p>Describes the LoadBalancer.</p>
@@ -4034,15 +3989,11 @@ struct EnvironmentStatusDeserializer;
 impl EnvironmentStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes the properties of an environment tier</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnvironmentTier {
@@ -4106,15 +4057,11 @@ struct EventDateDeserializer;
 impl EventDateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes an event.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventDescription {
     /// <p>The application associated with the event.</p>
@@ -4212,7 +4159,7 @@ impl EventDescriptionListDeserializer {
     }
 }
 /// <p>Result message wrapping a list of event descriptions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct EventDescriptionsMessage {
     /// <p> A list of <a>EventDescription</a>. </p>
@@ -4254,11 +4201,7 @@ struct EventMessageDeserializer;
 impl EventMessageDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4266,11 +4209,7 @@ struct EventSeverityDeserializer;
 impl EventSeverityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4278,11 +4217,7 @@ struct FailureTypeDeserializer;
 impl FailureTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4290,11 +4225,7 @@ struct FileTypeExtensionDeserializer;
 impl FileTypeExtensionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4302,15 +4233,11 @@ struct ImageIdDeserializer;
 impl ImageIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The description of an Amazon EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Instance {
     /// <p>The ID of the Amazon EC2 instance.</p>
@@ -4357,7 +4284,7 @@ impl InstanceHealthListDeserializer {
     }
 }
 /// <p>Represents summary information about the health of an instance. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html">Health Colors and Statuses</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct InstanceHealthSummary {
     /// <p> <b>Red.</b> The health agent is reporting a high number of request failures or other issues for an instance or environment.</p>
@@ -4424,11 +4351,7 @@ struct InstanceIdDeserializer;
 impl InstanceIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -4466,15 +4389,11 @@ struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Represents the average latency for the slowest X percent of requests over the last 10 seconds.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Latency {
     /// <p>The average latency for the slowest 90 percent of requests over the last 10 seconds.</p>
@@ -4536,7 +4455,7 @@ impl LatencyDeserializer {
     }
 }
 /// <p>Describes an Auto Scaling launch configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchConfiguration {
     /// <p>The name of the launch configuration.</p>
@@ -4583,7 +4502,7 @@ impl LaunchConfigurationListDeserializer {
     }
 }
 /// <p>Describes an Amazon EC2 launch template.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LaunchTemplate {
     /// <p>The ID of the launch template.</p>
@@ -4632,15 +4551,11 @@ struct LaunchedAtDeserializer;
 impl LaunchedAtDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A list of available AWS Elastic Beanstalk solution stacks.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListAvailableSolutionStacksResultMessage {
     /// <p> A list of available solution stacks and their <a>SolutionStackDescription</a>. </p>
@@ -4685,7 +4600,7 @@ impl ListAvailableSolutionStacksResultMessageDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlatformBranchesRequest {
     /// <p>Criteria for restricting the resulting list of platform branches. The filter is evaluated as a logical conjunction (AND) of the separate <code>SearchFilter</code> terms.</p> <p>The following list shows valid attribute values for each of the <code>SearchFilter</code> terms. Most operators take a single value. The <code>in</code> and <code>not_in</code> operators can take multiple values.</p> <ul> <li> <p> <code>Attribute = BranchName</code>:</p> <ul> <li> <p> <code>Operator</code>: <code>=</code> | <code>!=</code> | <code>begins_with</code> | <code>ends_with</code> | <code>contains</code> | <code>in</code> | <code>not_in</code> </p> </li> </ul> </li> <li> <p> <code>Attribute = LifecycleState</code>:</p> <ul> <li> <p> <code>Operator</code>: <code>=</code> | <code>!=</code> | <code>in</code> | <code>not_in</code> </p> </li> <li> <p> <code>Values</code>: <code>beta</code> | <code>supported</code> | <code>deprecated</code> | <code>retired</code> </p> </li> </ul> </li> <li> <p> <code>Attribute = PlatformName</code>:</p> <ul> <li> <p> <code>Operator</code>: <code>=</code> | <code>!=</code> | <code>begins_with</code> | <code>ends_with</code> | <code>contains</code> | <code>in</code> | <code>not_in</code> </p> </li> </ul> </li> <li> <p> <code>Attribute = TierType</code>:</p> <ul> <li> <p> <code>Operator</code>: <code>=</code> | <code>!=</code> </p> </li> <li> <p> <code>Values</code>: <code>WebServer/Standard</code> | <code>Worker/SQS/HTTP</code> </p> </li> </ul> </li> </ul> <p>Array size: limited to 10 <code>SearchFilter</code> objects.</p> <p>Within each <code>SearchFilter</code> item, the <code>Values</code> array is limited to 10 items.</p>
@@ -4721,7 +4636,7 @@ impl ListPlatformBranchesRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPlatformBranchesResult {
     /// <p>In a paginated request, if this value isn't <code>null</code>, it's the token that you can pass in a subsequent request to get the next response page.</p>
@@ -4761,7 +4676,7 @@ impl ListPlatformBranchesResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPlatformVersionsRequest {
     /// <p>Criteria for restricting the resulting list of platform versions. The filter is interpreted as a logical conjunction (AND) of the separate <code>PlatformFilter</code> terms.</p>
@@ -4797,7 +4712,7 @@ impl ListPlatformVersionsRequestSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ListPlatformVersionsResult {
     /// <p>In a paginated request, if this value isn't <code>null</code>, it's the token that you can pass in a subsequent request to get the next response page.</p>
@@ -4837,7 +4752,7 @@ impl ListPlatformVersionsResultDeserializer {
         )
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceMessage {
     /// <p>The Amazon Resource Name (ARN) of the resouce for which a tag list is requested.</p> <p>Must be the ARN of an Elastic Beanstalk resource.</p>
@@ -4858,7 +4773,7 @@ impl ListTagsForResourceMessageSerializer {
 }
 
 /// <p>Describes the properties of a Listener for the LoadBalancer.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Listener {
     /// <p>The port that is used by the Listener.</p>
@@ -4912,15 +4827,11 @@ struct LoadAverageValueDeserializer;
 impl LoadAverageValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 /// <p>Describes a LoadBalancer.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadBalancer {
     /// <p>The name of the LoadBalancer.</p>
@@ -4947,7 +4858,7 @@ impl LoadBalancerDeserializer {
     }
 }
 /// <p>Describes the details of a LoadBalancer.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadBalancerDescription {
     /// <p>The domain name of the LoadBalancer.</p>
@@ -5034,15 +4945,11 @@ struct MaintainerDeserializer;
 impl MaintainerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The record of an upcoming or in-progress managed action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ManagedAction {
     /// <p>A description of the managed action.</p>
@@ -5094,7 +5001,7 @@ impl ManagedActionDeserializer {
     }
 }
 /// <p>The record of a completed or failed managed action.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ManagedActionHistoryItem {
     /// <p>A description of the managed action.</p>
@@ -5208,7 +5115,7 @@ impl ManagedActionsDeserializer {
     }
 }
 /// <p>A lifecycle rule that deletes application versions after the specified number of days.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MaxAgeRule {
@@ -5270,7 +5177,7 @@ impl MaxAgeRuleSerializer {
 }
 
 /// <p>A lifecycle rule that deletes the oldest application version when the maximum count is exceeded.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MaxCountRule {
@@ -5335,11 +5242,7 @@ struct MessageDeserializer;
 impl MessageDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5347,11 +5250,7 @@ struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5359,11 +5258,7 @@ struct NullableDoubleDeserializer;
 impl NullableDoubleDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(f64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5371,11 +5266,7 @@ struct NullableIntegerDeserializer;
 impl NullableIntegerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5383,11 +5274,7 @@ struct NullableLongDeserializer;
 impl NullableLongDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5395,11 +5282,7 @@ struct OperatingSystemNameDeserializer;
 impl OperatingSystemNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5407,11 +5290,15 @@ struct OperatingSystemVersionDeserializer;
 impl OperatingSystemVersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct OperationsRoleDeserializer;
+impl OperationsRoleDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5419,11 +5306,7 @@ struct OptionNamespaceDeserializer;
 impl OptionNamespaceDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5431,11 +5314,7 @@ struct OptionRestrictionMaxLengthDeserializer;
 impl OptionRestrictionMaxLengthDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5443,11 +5322,7 @@ struct OptionRestrictionMaxValueDeserializer;
 impl OptionRestrictionMaxValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 #[allow(dead_code)]
@@ -5455,15 +5330,11 @@ struct OptionRestrictionMinValueDeserializer;
 impl OptionRestrictionMinValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>A regular expression representing a restriction on a string configuration option value.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct OptionRestrictionRegex {
     /// <p>A unique name representing this regular expression.</p>
@@ -5495,7 +5366,7 @@ impl OptionRestrictionRegexDeserializer {
     }
 }
 /// <p>A specification identifying an individual configuration option.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OptionSpecification {
     /// <p>A unique namespace identifying the option's associated AWS resource.</p>
@@ -5543,11 +5414,7 @@ struct PlatformArnDeserializer;
 impl PlatformArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5555,15 +5422,11 @@ struct PlatformBranchLifecycleStateDeserializer;
 impl PlatformBranchLifecycleStateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Summary information about a platform branch.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlatformBranchSummary {
     /// <p>The name of the platform branch.</p>
@@ -5645,15 +5508,11 @@ struct PlatformCategoryDeserializer;
 impl PlatformCategoryDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Detailed information about a platform version.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlatformDescription {
     /// <p>The custom AMIs supported by the platform version.</p>
@@ -5834,7 +5693,7 @@ impl PlatformDescriptionDeserializer {
     }
 }
 /// <p>Describes criteria to restrict the results when listing platform versions.</p> <p>The filter is evaluated as follows: <code>Type Operator Values[1]</code> </p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PlatformFilter {
     /// <p>The operator to apply to the <code>Type</code> with each of the <code>Values</code>.</p> <p>Valid values: <code>=</code> | <code>!=</code> | <code>&lt;</code> | <code>&lt;=</code> | <code>&gt;</code> | <code>&gt;=</code> | <code>contains</code> | <code>begins_with</code> | <code>ends_with</code> </p>
@@ -5893,7 +5752,7 @@ impl PlatformFiltersSerializer {
 }
 
 /// <p>A framework supported by the platform.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlatformFramework {
     /// <p>The name of the framework.</p>
@@ -5947,11 +5806,7 @@ struct PlatformLifecycleStateDeserializer;
 impl PlatformLifecycleStateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5959,11 +5814,7 @@ struct PlatformNameDeserializer;
 impl PlatformNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -5971,15 +5822,11 @@ struct PlatformOwnerDeserializer;
 impl PlatformOwnerDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>A programming language supported by the platform.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlatformProgrammingLanguage {
     /// <p>The name of the programming language.</p>
@@ -6039,15 +5886,11 @@ struct PlatformStatusDeserializer;
 impl PlatformStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Summary information about a platform version.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PlatformSummary {
     /// <p>The operating system used by the platform version.</p>
@@ -6186,15 +6029,11 @@ struct PlatformVersionDeserializer;
 impl PlatformVersionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes a queue.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Queue {
     /// <p>The name of the queue.</p>
@@ -6241,7 +6080,7 @@ impl QueueListDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebuildEnvironmentMessage {
     /// <p>The ID of the environment to rebuild.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -6273,11 +6112,7 @@ struct RefreshedAtDeserializer;
 impl RefreshedAtDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6285,11 +6120,7 @@ struct RegexLabelDeserializer;
 impl RegexLabelDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6297,11 +6128,7 @@ struct RegexPatternDeserializer;
 impl RegexPatternDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6309,15 +6136,11 @@ struct RequestCountDeserializer;
 impl RequestCountDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 /// <p>Request to retrieve logs from an environment and store them in your Elastic Beanstalk storage bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RequestEnvironmentInfoMessage {
     /// <p>The ID of the environment of the requested data.</p> <p>If no such environment is found, <code>RequestEnvironmentInfo</code> returns an <code>InvalidParameterValue</code> error. </p> <p>Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -6352,11 +6175,7 @@ struct RequestIdDeserializer;
 impl RequestIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6364,11 +6183,7 @@ struct ResourceArnDeserializer;
 impl ResourceArnDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6376,11 +6191,7 @@ struct ResourceIdDeserializer;
 impl ResourceIdDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6388,15 +6199,11 @@ struct ResourceNameDeserializer;
 impl ResourceNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The AWS Elastic Beanstalk quota information for a single resource type in an AWS account. It reflects the resource's limits for this account.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceQuota {
     /// <p>The maximum number of instances of this Elastic Beanstalk resource type that an AWS account can use.</p>
@@ -6423,7 +6230,7 @@ impl ResourceQuotaDeserializer {
     }
 }
 /// <p>A set of per-resource AWS Elastic Beanstalk quotas associated with an AWS account. They reflect Elastic Beanstalk resource limits for this account.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceQuotas {
     /// <p>The quota for applications in the AWS account.</p>
@@ -6485,7 +6292,7 @@ impl ResourceQuotasDeserializer {
         })
     }
 }
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ResourceTagsDescriptionMessage {
     /// <p>The Amazon Resource Name (ARN) of the resource for which a tag list was requested.</p>
@@ -6524,7 +6331,7 @@ impl ResourceTagsDescriptionMessageDeserializer {
     }
 }
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestartAppServerMessage {
     /// <p>The ID of the environment to restart the server for.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -6552,7 +6359,7 @@ impl RestartAppServerMessageSerializer {
 }
 
 /// <p>Request to download logs retrieved with <a>RequestEnvironmentInfo</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RetrieveEnvironmentInfoMessage {
     /// <p>The ID of the data's environment.</p> <p>If no such environment is found, returns an <code>InvalidParameterValue</code> error.</p> <p>Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error.</p>
@@ -6583,7 +6390,7 @@ impl RetrieveEnvironmentInfoMessageSerializer {
 }
 
 /// <p>Result message containing a description of the requested environment info.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct RetrieveEnvironmentInfoResultMessage {
     /// <p> The <a>EnvironmentInfoDescription</a> of the environment. </p>
@@ -6623,11 +6430,7 @@ struct S3BucketDeserializer;
 impl S3BucketDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -6635,15 +6438,11 @@ struct S3KeyDeserializer;
 impl S3KeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>The bucket and key of an item stored in Amazon S3.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3Location {
@@ -6699,15 +6498,11 @@ struct SampleTimestampDeserializer;
 impl SampleTimestampDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes criteria to restrict a list of results.</p> <p>For operators that apply a single value to the attribute, the filter is evaluated as follows: <code>Attribute Operator Values[1]</code> </p> <p>Some operators, e.g. <code>in</code>, can apply multiple values. In this case, the filter is evaluated as a logical union (OR) of applications of the operator to the attribute with each one of the values: <code>(Attribute Operator Values[1]) OR (Attribute Operator Values[2]) OR ...</code> </p> <p>The valid values for attributes of <code>SearchFilter</code> depend on the API action. For valid values, see the reference page for the API action you're calling that takes a <code>SearchFilter</code> parameter.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchFilter {
     /// <p>The result attribute to which the filter values are applied. Valid values vary by API action.</p>
@@ -6766,7 +6561,7 @@ impl SearchFiltersSerializer {
 }
 
 /// <p>Detailed health information about an Amazon EC2 instance in your Elastic Beanstalk environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SingleInstanceHealth {
     /// <p>Request metrics from your application.</p>
@@ -6849,7 +6644,7 @@ impl SingleInstanceHealthDeserializer {
     }
 }
 /// <p>Describes the solution stack.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SolutionStackDescription {
     /// <p>The permitted file types allowed for a solution stack.</p>
@@ -6915,15 +6710,11 @@ struct SolutionStackNameDeserializer;
 impl SolutionStackNameDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Location of the source code for an application version.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SourceBuildInformation {
@@ -6985,7 +6776,7 @@ impl SourceBuildInformationSerializer {
 }
 
 /// <p>A specification for an environment configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SourceConfiguration {
     /// <p>The name of the application associated with the configuration.</p>
@@ -7017,11 +6808,7 @@ struct SourceLocationDeserializer;
 impl SourceLocationDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7029,11 +6816,7 @@ struct SourceRepositoryDeserializer;
 impl SourceRepositoryDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7041,15 +6824,11 @@ struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Represents the percentage of requests over the last 10 seconds that resulted in each type of status code response. For more information, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">Status Code Definitions</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct StatusCodes {
     /// <p>The percentage of requests over the last 10 seconds that resulted in a 2xx (200, 201, etc.) status code.</p>
@@ -7107,11 +6886,7 @@ struct StringDeserializer;
 impl StringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7119,11 +6894,7 @@ struct SupportedAddonDeserializer;
 impl SupportedAddonDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7149,11 +6920,7 @@ struct SupportedTierDeserializer;
 impl SupportedTierDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7175,7 +6942,7 @@ impl SupportedTierListDeserializer {
     }
 }
 /// <p>Swaps the CNAMEs of two environments.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SwapEnvironmentCNAMEsMessage {
     /// <p>The ID of the destination environment.</p> <p> Condition: You must specify at least the <code>DestinationEnvironmentID</code> or the <code>DestinationEnvironmentName</code>. You may also specify both. You must specify the <code>SourceEnvironmentId</code> with the <code>DestinationEnvironmentId</code>. </p>
@@ -7225,7 +6992,7 @@ impl SwapEnvironmentCNAMEsMessageSerializer {
 }
 
 /// <p>CPU utilization and load average metrics for an Amazon EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct SystemStatus {
     /// <p>CPU utilization metrics for the instance.</p>
@@ -7262,7 +7029,7 @@ impl SystemStatusDeserializer {
     }
 }
 /// <p>Describes a tag applied to a resource in an environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
@@ -7315,11 +7082,7 @@ struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7369,11 +7132,7 @@ struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7389,7 +7148,7 @@ impl TagsSerializer {
 }
 
 /// <p>Request to terminate an environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateEnvironmentMessage {
     /// <p>The ID of the environment to terminate.</p> <p> Condition: You must specify either this or an EnvironmentName, or both. If you do not specify either, AWS Elastic Beanstalk returns <code>MissingRequiredParameter</code> error. </p>
@@ -7431,11 +7190,7 @@ struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7443,15 +7198,11 @@ struct TokenDeserializer;
 impl TokenDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Describes a trigger.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Trigger {
     /// <p>The name of the trigger.</p>
@@ -7496,7 +7247,7 @@ impl TriggerListDeserializer {
     }
 }
 /// <p>Request to update an application.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationMessage {
     /// <p>The name of the application to update. If no such application is found, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error. </p>
@@ -7524,7 +7275,7 @@ impl UpdateApplicationMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationResourceLifecycleMessage {
     /// <p>The name of the application.</p>
@@ -7555,7 +7306,7 @@ impl UpdateApplicationResourceLifecycleMessageSerializer {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationVersionMessage {
     /// <p>The name of the application associated with this version.</p> <p> If no application is found with this name, <code>UpdateApplication</code> returns an <code>InvalidParameterValue</code> error.</p>
@@ -7587,7 +7338,7 @@ impl UpdateApplicationVersionMessageSerializer {
 }
 
 /// <p>The result message containing the options for the specified solution stack.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationTemplateMessage {
     /// <p>The name of the application associated with the configuration template to update.</p> <p> If no application is found with this name, <code>UpdateConfigurationTemplate</code> returns an <code>InvalidParameterValue</code> error. </p>
@@ -7641,15 +7392,11 @@ struct UpdateDateDeserializer;
 impl UpdateDateDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Request to update an environment.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnvironmentMessage {
     /// <p>The name of the application with which the environment is associated.</p>
@@ -7738,14 +7485,14 @@ impl UpdateEnvironmentMessageSerializer {
     }
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTagsForResourceMessage {
     /// <p>The Amazon Resource Name (ARN) of the resouce to be updated.</p> <p>Must be the ARN of an Elastic Beanstalk resource.</p>
     pub resource_arn: String,
-    /// <p>A list of tags to add or update.</p> <p>If a key of an existing tag is added, the tag's value is updated.</p>
+    /// <p>A list of tags to add or update. If a key of an existing tag is added, the tag's value is updated.</p> <p>Specify at least one of these parameters: <code>TagsToAdd</code>, <code>TagsToRemove</code>.</p>
     pub tags_to_add: Option<Vec<Tag>>,
-    /// <p>A list of tag keys to remove.</p> <p>If a tag key doesn't exist, it is silently ignored.</p>
+    /// <p>A list of tag keys to remove. If a tag key doesn't exist, it is silently ignored.</p> <p>Specify at least one of these parameters: <code>TagsToAdd</code>, <code>TagsToRemove</code>.</p>
     pub tags_to_remove: Option<Vec<String>>,
 }
 
@@ -7781,15 +7528,11 @@ struct UserDefinedOptionDeserializer;
 impl UserDefinedOptionDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
 /// <p>A list of validation messages for a specified configuration template.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateConfigurationSettingsMessage {
     /// <p>The name of the application that the configuration template or environment belongs to.</p>
@@ -7830,7 +7573,7 @@ impl ValidateConfigurationSettingsMessageSerializer {
 }
 
 /// <p>An error or warning for a desired configuration option value.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct ValidationMessage {
     /// <p>A message describing the error or warning.</p>
@@ -7886,11 +7629,7 @@ struct ValidationMessageStringDeserializer;
 impl ValidationMessageStringDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7916,11 +7655,7 @@ struct ValidationSeverityDeserializer;
 impl ValidationSeverityDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 #[allow(dead_code)]
@@ -7928,11 +7663,7 @@ struct VersionLabelDeserializer;
 impl VersionLabelDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 
@@ -7982,11 +7713,7 @@ struct VirtualizationTypeDeserializer;
 impl VirtualizationTypeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// Errors returned by AbortEnvironmentUpdate
@@ -8022,7 +7749,7 @@ impl AbortEnvironmentUpdateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8081,7 +7808,7 @@ impl ApplyEnvironmentManagedActionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8099,6 +7826,56 @@ impl fmt::Display for ApplyEnvironmentManagedActionError {
     }
 }
 impl Error for ApplyEnvironmentManagedActionError {}
+/// Errors returned by AssociateEnvironmentOperationsRole
+#[derive(Debug, PartialEq)]
+pub enum AssociateEnvironmentOperationsRoleError {
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
+    InsufficientPrivileges(String),
+}
+
+impl AssociateEnvironmentOperationsRoleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateEnvironmentOperationsRoleError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return RusotoError::Service(
+                            AssociateEnvironmentOperationsRoleError::InsufficientPrivileges(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for AssociateEnvironmentOperationsRoleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateEnvironmentOperationsRoleError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AssociateEnvironmentOperationsRoleError {}
 /// Errors returned by CheckDNSAvailability
 #[derive(Debug, PartialEq)]
 pub enum CheckDNSAvailabilityError {}
@@ -8122,7 +7899,7 @@ impl CheckDNSAvailabilityError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8171,7 +7948,7 @@ impl ComposeEnvironmentsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8216,7 +7993,7 @@ impl CreateApplicationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8298,7 +8075,7 @@ impl CreateApplicationVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8374,7 +8151,7 @@ impl CreateConfigurationTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8431,7 +8208,7 @@ impl CreateEnvironmentError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8494,7 +8271,7 @@ impl CreatePlatformVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8560,7 +8337,7 @@ impl CreateStorageLocationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8606,7 +8383,7 @@ impl DeleteApplicationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8679,7 +8456,7 @@ impl DeleteApplicationVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8736,7 +8513,7 @@ impl DeleteConfigurationTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8776,7 +8553,7 @@ impl DeleteEnvironmentConfigurationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8845,7 +8622,7 @@ impl DeletePlatformVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8898,7 +8675,7 @@ impl DescribeAccountAttributesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8938,7 +8715,7 @@ impl DescribeApplicationVersionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -8972,7 +8749,7 @@ impl DescribeApplicationsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9016,7 +8793,7 @@ impl DescribeConfigurationOptionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9064,7 +8841,7 @@ impl DescribeConfigurationSettingsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9117,7 +8894,7 @@ impl DescribeEnvironmentHealthError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9168,7 +8945,7 @@ impl DescribeEnvironmentManagedActionHistoryError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9218,7 +8995,7 @@ impl DescribeEnvironmentManagedActionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9268,7 +9045,7 @@ impl DescribeEnvironmentResourcesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9306,7 +9083,7 @@ impl DescribeEnvironmentsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9340,7 +9117,7 @@ impl DescribeEventsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9391,7 +9168,7 @@ impl DescribeInstancesHealthError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9449,7 +9226,7 @@ impl DescribePlatformVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9467,6 +9244,56 @@ impl fmt::Display for DescribePlatformVersionError {
     }
 }
 impl Error for DescribePlatformVersionError {}
+/// Errors returned by DisassociateEnvironmentOperationsRole
+#[derive(Debug, PartialEq)]
+pub enum DisassociateEnvironmentOperationsRoleError {
+    /// <p>The specified account does not have sufficient privileges for one or more AWS services.</p>
+    InsufficientPrivileges(String),
+}
+
+impl DisassociateEnvironmentOperationsRoleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateEnvironmentOperationsRoleError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InsufficientPrivilegesException" => {
+                        return RusotoError::Service(
+                            DisassociateEnvironmentOperationsRoleError::InsufficientPrivileges(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DisassociateEnvironmentOperationsRoleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateEnvironmentOperationsRoleError::InsufficientPrivileges(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DisassociateEnvironmentOperationsRoleError {}
 /// Errors returned by ListAvailableSolutionStacks
 #[derive(Debug, PartialEq)]
 pub enum ListAvailableSolutionStacksError {}
@@ -9492,7 +9319,7 @@ impl ListAvailableSolutionStacksError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9526,7 +9353,7 @@ impl ListPlatformBranchesError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9577,7 +9404,7 @@ impl ListPlatformVersionsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9638,7 +9465,7 @@ impl ListTagsForResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9684,7 +9511,7 @@ impl RebuildEnvironmentError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9720,7 +9547,7 @@ impl RequestEnvironmentInfoError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9754,7 +9581,7 @@ impl RestartAppServerError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9788,7 +9615,7 @@ impl RetrieveEnvironmentInfoError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9822,7 +9649,7 @@ impl SwapEnvironmentCNAMEsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9864,7 +9691,7 @@ impl TerminateEnvironmentError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9900,7 +9727,7 @@ impl UpdateApplicationError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9946,7 +9773,7 @@ impl UpdateApplicationResourceLifecycleError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -9984,7 +9811,7 @@ impl UpdateApplicationVersionError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10037,7 +9864,7 @@ impl UpdateConfigurationTemplateError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10091,7 +9918,7 @@ impl UpdateEnvironmentError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10168,7 +9995,7 @@ impl UpdateTagsForResourceError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10231,7 +10058,7 @@ impl ValidateConfigurationSettingsError {
     where
         T: Peek + Next,
     {
-        start_element("ErrorResponse", stack)?;
+        xml_util::start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
@@ -10261,6 +10088,12 @@ pub trait ElasticBeanstalk {
         &self,
         input: ApplyEnvironmentManagedActionRequest,
     ) -> Result<ApplyEnvironmentManagedActionResult, RusotoError<ApplyEnvironmentManagedActionError>>;
+
+    /// <p>Add or change the operations role used by an environment. After this call is made, Elastic Beanstalk uses the associated operations role for permissions to downstream services during subsequent calls acting on this environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    async fn associate_environment_operations_role(
+        &self,
+        input: AssociateEnvironmentOperationsRoleMessage,
+    ) -> Result<(), RusotoError<AssociateEnvironmentOperationsRoleError>>;
 
     /// <p>Checks if the specified CNAME is available.</p>
     async fn check_dns_availability(
@@ -10425,6 +10258,12 @@ pub trait ElasticBeanstalk {
         input: DescribePlatformVersionRequest,
     ) -> Result<DescribePlatformVersionResult, RusotoError<DescribePlatformVersionError>>;
 
+    /// <p>Disassociate the operations role from an environment. After this call is made, Elastic Beanstalk uses the caller's permissions for permissions to downstream services during subsequent calls acting on this environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    async fn disassociate_environment_operations_role(
+        &self,
+        input: DisassociateEnvironmentOperationsRoleMessage,
+    ) -> Result<(), RusotoError<DisassociateEnvironmentOperationsRoleError>>;
+
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
     async fn list_available_solution_stacks(
         &self,
@@ -10581,23 +10420,15 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: AbortEnvironmentUpdateMessage,
     ) -> Result<(), RusotoError<AbortEnvironmentUpdateError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "AbortEnvironmentUpdate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("AbortEnvironmentUpdate");
+        let mut params = params;
         AbortEnvironmentUpdateMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(AbortEnvironmentUpdateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, AbortEnvironmentUpdateError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -10610,46 +10441,54 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
     ) -> Result<ApplyEnvironmentManagedActionResult, RusotoError<ApplyEnvironmentManagedActionError>>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ApplyEnvironmentManagedAction");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ApplyEnvironmentManagedAction");
+        let mut params = params;
         ApplyEnvironmentManagedActionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ApplyEnvironmentManagedActionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ApplyEnvironmentManagedActionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ApplyEnvironmentManagedActionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ApplyEnvironmentManagedActionResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ApplyEnvironmentManagedActionResultDeserializer::deserialize(
                 "ApplyEnvironmentManagedActionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
+    }
+
+    /// <p>Add or change the operations role used by an environment. After this call is made, Elastic Beanstalk uses the associated operations role for permissions to downstream services during subsequent calls acting on this environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    async fn associate_environment_operations_role(
+        &self,
+        input: AssociateEnvironmentOperationsRoleMessage,
+    ) -> Result<(), RusotoError<AssociateEnvironmentOperationsRoleError>> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+        let params = self.new_params("AssociateEnvironmentOperationsRole");
+        let mut params = params;
+        AssociateEnvironmentOperationsRoleMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AssociateEnvironmentOperationsRoleError::from_response,
+            )
+            .await?;
+
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Checks if the specified CNAME is available.</p>
@@ -10658,45 +10497,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: CheckDNSAvailabilityMessage,
     ) -> Result<CheckDNSAvailabilityResultMessage, RusotoError<CheckDNSAvailabilityError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CheckDNSAvailability");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CheckDNSAvailability");
+        let mut params = params;
         CheckDNSAvailabilityMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CheckDNSAvailabilityError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CheckDNSAvailabilityError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CheckDNSAvailabilityResultMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CheckDNSAvailabilityResultMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CheckDNSAvailabilityResultMessageDeserializer::deserialize(
                 "CheckDNSAvailabilityResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10706,45 +10530,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: ComposeEnvironmentsMessage,
     ) -> Result<EnvironmentDescriptionsMessage, RusotoError<ComposeEnvironmentsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ComposeEnvironments");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ComposeEnvironments");
+        let mut params = params;
         ComposeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ComposeEnvironmentsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ComposeEnvironmentsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EnvironmentDescriptionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EnvironmentDescriptionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EnvironmentDescriptionsMessageDeserializer::deserialize(
                 "ComposeEnvironmentsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10754,45 +10563,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: CreateApplicationMessage,
     ) -> Result<ApplicationDescriptionMessage, RusotoError<CreateApplicationError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateApplication");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateApplication");
+        let mut params = params;
         CreateApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateApplicationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateApplicationError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ApplicationDescriptionMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ApplicationDescriptionMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ApplicationDescriptionMessageDeserializer::deserialize(
                 "CreateApplicationResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10803,45 +10597,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
     ) -> Result<ApplicationVersionDescriptionMessage, RusotoError<CreateApplicationVersionError>>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateApplicationVersion");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateApplicationVersion");
+        let mut params = params;
         CreateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateApplicationVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateApplicationVersionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ApplicationVersionDescriptionMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
                 "CreateApplicationVersionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10852,45 +10631,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
     ) -> Result<ConfigurationSettingsDescription, RusotoError<CreateConfigurationTemplateError>>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateConfigurationTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateConfigurationTemplate");
+        let mut params = params;
         CreateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateConfigurationTemplateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateConfigurationTemplateError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ConfigurationSettingsDescription::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ConfigurationSettingsDescriptionDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ConfigurationSettingsDescriptionDeserializer::deserialize(
                 "CreateConfigurationTemplateResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10900,45 +10664,28 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: CreateEnvironmentMessage,
     ) -> Result<EnvironmentDescription, RusotoError<CreateEnvironmentError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateEnvironment");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateEnvironment");
+        let mut params = params;
         CreateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateEnvironmentError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateEnvironmentError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EnvironmentDescription::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EnvironmentDescriptionDeserializer::deserialize(
-                "CreateEnvironmentResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                EnvironmentDescriptionDeserializer::deserialize("CreateEnvironmentResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10948,45 +10695,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: CreatePlatformVersionRequest,
     ) -> Result<CreatePlatformVersionResult, RusotoError<CreatePlatformVersionError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreatePlatformVersion");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreatePlatformVersion");
+        let mut params = params;
         CreatePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreatePlatformVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreatePlatformVersionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreatePlatformVersionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreatePlatformVersionResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreatePlatformVersionResultDeserializer::deserialize(
                 "CreatePlatformVersionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -10995,45 +10727,29 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         &self,
     ) -> Result<CreateStorageLocationResultMessage, RusotoError<CreateStorageLocationError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "CreateStorageLocation");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("CreateStorageLocation");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(CreateStorageLocationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateStorageLocationError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = CreateStorageLocationResultMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = CreateStorageLocationResultMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateStorageLocationResultMessageDeserializer::deserialize(
                 "CreateStorageLocationResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11043,23 +10759,15 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DeleteApplicationMessage,
     ) -> Result<(), RusotoError<DeleteApplicationError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteApplication");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteApplication");
+        let mut params = params;
         DeleteApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteApplicationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteApplicationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11071,23 +10779,15 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DeleteApplicationVersionMessage,
     ) -> Result<(), RusotoError<DeleteApplicationVersionError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteApplicationVersion");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteApplicationVersion");
+        let mut params = params;
         DeleteApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteApplicationVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteApplicationVersionError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11099,23 +10799,15 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DeleteConfigurationTemplateMessage,
     ) -> Result<(), RusotoError<DeleteConfigurationTemplateError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteConfigurationTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteConfigurationTemplate");
+        let mut params = params;
         DeleteConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteConfigurationTemplateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConfigurationTemplateError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11127,23 +10819,15 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DeleteEnvironmentConfigurationMessage,
     ) -> Result<(), RusotoError<DeleteEnvironmentConfigurationError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeleteEnvironmentConfiguration");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeleteEnvironmentConfiguration");
+        let mut params = params;
         DeleteEnvironmentConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeleteEnvironmentConfigurationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteEnvironmentConfigurationError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -11155,45 +10839,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DeletePlatformVersionRequest,
     ) -> Result<DeletePlatformVersionResult, RusotoError<DeletePlatformVersionError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DeletePlatformVersion");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DeletePlatformVersion");
+        let mut params = params;
         DeletePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DeletePlatformVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePlatformVersionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DeletePlatformVersionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DeletePlatformVersionResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeletePlatformVersionResultDeserializer::deserialize(
                 "DeletePlatformVersionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11202,45 +10871,29 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         &self,
     ) -> Result<DescribeAccountAttributesResult, RusotoError<DescribeAccountAttributesError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeAccountAttributes");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeAccountAttributes");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeAccountAttributesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAccountAttributesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeAccountAttributesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeAccountAttributesResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeAccountAttributesResultDeserializer::deserialize(
                 "DescribeAccountAttributesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11251,45 +10904,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
     ) -> Result<ApplicationVersionDescriptionsMessage, RusotoError<DescribeApplicationVersionsError>>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeApplicationVersions");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeApplicationVersions");
+        let mut params = params;
         DescribeApplicationVersionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeApplicationVersionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeApplicationVersionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ApplicationVersionDescriptionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ApplicationVersionDescriptionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ApplicationVersionDescriptionsMessageDeserializer::deserialize(
                 "DescribeApplicationVersionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11299,45 +10937,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DescribeApplicationsMessage,
     ) -> Result<ApplicationDescriptionsMessage, RusotoError<DescribeApplicationsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeApplications");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeApplications");
+        let mut params = params;
         DescribeApplicationsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeApplicationsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeApplicationsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ApplicationDescriptionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ApplicationDescriptionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ApplicationDescriptionsMessageDeserializer::deserialize(
                 "DescribeApplicationsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11348,45 +10971,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
     ) -> Result<ConfigurationOptionsDescription, RusotoError<DescribeConfigurationOptionsError>>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeConfigurationOptions");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeConfigurationOptions");
+        let mut params = params;
         DescribeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeConfigurationOptionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConfigurationOptionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ConfigurationOptionsDescription::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ConfigurationOptionsDescriptionDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ConfigurationOptionsDescriptionDeserializer::deserialize(
                 "DescribeConfigurationOptionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11397,45 +11005,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
     ) -> Result<ConfigurationSettingsDescriptions, RusotoError<DescribeConfigurationSettingsError>>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeConfigurationSettings");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeConfigurationSettings");
+        let mut params = params;
         DescribeConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeConfigurationSettingsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConfigurationSettingsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ConfigurationSettingsDescriptions::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ConfigurationSettingsDescriptionsDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ConfigurationSettingsDescriptionsDeserializer::deserialize(
                 "DescribeConfigurationSettingsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11445,45 +11038,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DescribeEnvironmentHealthRequest,
     ) -> Result<DescribeEnvironmentHealthResult, RusotoError<DescribeEnvironmentHealthError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEnvironmentHealth");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeEnvironmentHealth");
+        let mut params = params;
         DescribeEnvironmentHealthRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEnvironmentHealthError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEnvironmentHealthError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeEnvironmentHealthResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeEnvironmentHealthResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeEnvironmentHealthResultDeserializer::deserialize(
                 "DescribeEnvironmentHealthResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11496,10 +11074,8 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         RusotoError<DescribeEnvironmentManagedActionHistoryError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEnvironmentManagedActionHistory");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeEnvironmentManagedActionHistory");
+        let mut params = params;
         DescribeEnvironmentManagedActionHistoryRequestSerializer::serialize(
             &mut params,
             "",
@@ -11508,39 +11084,27 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEnvironmentManagedActionHistoryError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeEnvironmentManagedActionHistoryError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeEnvironmentManagedActionHistoryResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize(
                 "DescribeEnvironmentManagedActionHistoryResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11553,47 +11117,33 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         RusotoError<DescribeEnvironmentManagedActionsError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEnvironmentManagedActions");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeEnvironmentManagedActions");
+        let mut params = params;
         DescribeEnvironmentManagedActionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEnvironmentManagedActionsError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeEnvironmentManagedActionsError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeEnvironmentManagedActionsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeEnvironmentManagedActionsResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeEnvironmentManagedActionsResultDeserializer::deserialize(
                 "DescribeEnvironmentManagedActionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11606,45 +11156,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         RusotoError<DescribeEnvironmentResourcesError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEnvironmentResources");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeEnvironmentResources");
+        let mut params = params;
         DescribeEnvironmentResourcesMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEnvironmentResourcesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEnvironmentResourcesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EnvironmentResourceDescriptionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EnvironmentResourceDescriptionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EnvironmentResourceDescriptionsMessageDeserializer::deserialize(
                 "DescribeEnvironmentResourcesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11654,45 +11189,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DescribeEnvironmentsMessage,
     ) -> Result<EnvironmentDescriptionsMessage, RusotoError<DescribeEnvironmentsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEnvironments");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeEnvironments");
+        let mut params = params;
         DescribeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEnvironmentsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEnvironmentsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EnvironmentDescriptionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EnvironmentDescriptionsMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EnvironmentDescriptionsMessageDeserializer::deserialize(
                 "DescribeEnvironmentsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11702,45 +11222,28 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DescribeEventsMessage,
     ) -> Result<EventDescriptionsMessage, RusotoError<DescribeEventsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeEvents");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeEvents");
+        let mut params = params;
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeEventsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEventsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EventDescriptionsMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EventDescriptionsMessageDeserializer::deserialize(
-                "DescribeEventsResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                EventDescriptionsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11750,45 +11253,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DescribeInstancesHealthRequest,
     ) -> Result<DescribeInstancesHealthResult, RusotoError<DescribeInstancesHealthError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribeInstancesHealth");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribeInstancesHealth");
+        let mut params = params;
         DescribeInstancesHealthRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribeInstancesHealthError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeInstancesHealthError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribeInstancesHealthResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribeInstancesHealthResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribeInstancesHealthResultDeserializer::deserialize(
                 "DescribeInstancesHealthResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11798,46 +11286,54 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: DescribePlatformVersionRequest,
     ) -> Result<DescribePlatformVersionResult, RusotoError<DescribePlatformVersionError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "DescribePlatformVersion");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("DescribePlatformVersion");
+        let mut params = params;
         DescribePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(DescribePlatformVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribePlatformVersionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = DescribePlatformVersionResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = DescribePlatformVersionResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribePlatformVersionResultDeserializer::deserialize(
                 "DescribePlatformVersionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
+    }
+
+    /// <p>Disassociate the operations role from an environment. After this call is made, Elastic Beanstalk uses the caller's permissions for permissions to downstream services during subsequent calls acting on this environment. For more information, see <a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-operationsrole.html">Operations roles</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p>
+    async fn disassociate_environment_operations_role(
+        &self,
+        input: DisassociateEnvironmentOperationsRoleMessage,
+    ) -> Result<(), RusotoError<DisassociateEnvironmentOperationsRoleError>> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+        let params = self.new_params("DisassociateEnvironmentOperationsRole");
+        let mut params = params;
+        DisassociateEnvironmentOperationsRoleMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisassociateEnvironmentOperationsRoleError::from_response,
+            )
+            .await?;
+
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
@@ -11848,45 +11344,29 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         RusotoError<ListAvailableSolutionStacksError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListAvailableSolutionStacks");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListAvailableSolutionStacks");
 
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListAvailableSolutionStacksError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAvailableSolutionStacksError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListAvailableSolutionStacksResultMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListAvailableSolutionStacksResultMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListAvailableSolutionStacksResultMessageDeserializer::deserialize(
                 "ListAvailableSolutionStacksResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11896,45 +11376,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: ListPlatformBranchesRequest,
     ) -> Result<ListPlatformBranchesResult, RusotoError<ListPlatformBranchesError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListPlatformBranches");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListPlatformBranches");
+        let mut params = params;
         ListPlatformBranchesRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListPlatformBranchesError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPlatformBranchesError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListPlatformBranchesResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListPlatformBranchesResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListPlatformBranchesResultDeserializer::deserialize(
                 "ListPlatformBranchesResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11944,45 +11409,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: ListPlatformVersionsRequest,
     ) -> Result<ListPlatformVersionsResult, RusotoError<ListPlatformVersionsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListPlatformVersions");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListPlatformVersions");
+        let mut params = params;
         ListPlatformVersionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListPlatformVersionsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPlatformVersionsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ListPlatformVersionsResult::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ListPlatformVersionsResultDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListPlatformVersionsResultDeserializer::deserialize(
                 "ListPlatformVersionsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -11992,45 +11442,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: ListTagsForResourceMessage,
     ) -> Result<ResourceTagsDescriptionMessage, RusotoError<ListTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ListTagsForResource");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ListTagsForResource");
+        let mut params = params;
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ListTagsForResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ResourceTagsDescriptionMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ResourceTagsDescriptionMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ResourceTagsDescriptionMessageDeserializer::deserialize(
                 "ListTagsForResourceResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12040,23 +11475,15 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: RebuildEnvironmentMessage,
     ) -> Result<(), RusotoError<RebuildEnvironmentError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RebuildEnvironment");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("RebuildEnvironment");
+        let mut params = params;
         RebuildEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RebuildEnvironmentError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RebuildEnvironmentError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12068,23 +11495,15 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: RequestEnvironmentInfoMessage,
     ) -> Result<(), RusotoError<RequestEnvironmentInfoError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RequestEnvironmentInfo");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("RequestEnvironmentInfo");
+        let mut params = params;
         RequestEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RequestEnvironmentInfoError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RequestEnvironmentInfoError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12096,23 +11515,15 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: RestartAppServerMessage,
     ) -> Result<(), RusotoError<RestartAppServerError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RestartAppServer");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("RestartAppServer");
+        let mut params = params;
         RestartAppServerMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RestartAppServerError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RestartAppServerError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12125,45 +11536,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
     ) -> Result<RetrieveEnvironmentInfoResultMessage, RusotoError<RetrieveEnvironmentInfoError>>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "RetrieveEnvironmentInfo");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("RetrieveEnvironmentInfo");
+        let mut params = params;
         RetrieveEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(RetrieveEnvironmentInfoError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, RetrieveEnvironmentInfoError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = RetrieveEnvironmentInfoResultMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = RetrieveEnvironmentInfoResultMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RetrieveEnvironmentInfoResultMessageDeserializer::deserialize(
                 "RetrieveEnvironmentInfoResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12173,23 +11569,15 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: SwapEnvironmentCNAMEsMessage,
     ) -> Result<(), RusotoError<SwapEnvironmentCNAMEsError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "SwapEnvironmentCNAMEs");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("SwapEnvironmentCNAMEs");
+        let mut params = params;
         SwapEnvironmentCNAMEsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(SwapEnvironmentCNAMEsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, SwapEnvironmentCNAMEsError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12201,45 +11589,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: TerminateEnvironmentMessage,
     ) -> Result<EnvironmentDescription, RusotoError<TerminateEnvironmentError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "TerminateEnvironment");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("TerminateEnvironment");
+        let mut params = params;
         TerminateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(TerminateEnvironmentError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, TerminateEnvironmentError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EnvironmentDescription::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EnvironmentDescriptionDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EnvironmentDescriptionDeserializer::deserialize(
                 "TerminateEnvironmentResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12249,45 +11622,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: UpdateApplicationMessage,
     ) -> Result<ApplicationDescriptionMessage, RusotoError<UpdateApplicationError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateApplication");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateApplication");
+        let mut params = params;
         UpdateApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateApplicationError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateApplicationError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ApplicationDescriptionMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ApplicationDescriptionMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ApplicationDescriptionMessageDeserializer::deserialize(
                 "UpdateApplicationResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12300,47 +11658,33 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         RusotoError<UpdateApplicationResourceLifecycleError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateApplicationResourceLifecycle");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateApplicationResourceLifecycle");
+        let mut params = params;
         UpdateApplicationResourceLifecycleMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateApplicationResourceLifecycleError::from_response(
-                response,
-            ));
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateApplicationResourceLifecycleError::from_response,
+            )
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ApplicationResourceLifecycleDescriptionMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize(
                 "UpdateApplicationResourceLifecycleResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12351,45 +11695,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
     ) -> Result<ApplicationVersionDescriptionMessage, RusotoError<UpdateApplicationVersionError>>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateApplicationVersion");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateApplicationVersion");
+        let mut params = params;
         UpdateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateApplicationVersionError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateApplicationVersionError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ApplicationVersionDescriptionMessage::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
                 "UpdateApplicationVersionResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12400,45 +11729,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
     ) -> Result<ConfigurationSettingsDescription, RusotoError<UpdateConfigurationTemplateError>>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateConfigurationTemplate");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateConfigurationTemplate");
+        let mut params = params;
         UpdateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateConfigurationTemplateError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateConfigurationTemplateError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ConfigurationSettingsDescription::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ConfigurationSettingsDescriptionDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ConfigurationSettingsDescriptionDeserializer::deserialize(
                 "UpdateConfigurationTemplateResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12448,45 +11762,28 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: UpdateEnvironmentMessage,
     ) -> Result<EnvironmentDescription, RusotoError<UpdateEnvironmentError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateEnvironment");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateEnvironment");
+        let mut params = params;
         UpdateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateEnvironmentError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateEnvironmentError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = EnvironmentDescription::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = EnvironmentDescriptionDeserializer::deserialize(
-                "UpdateEnvironmentResult",
-                &mut stack,
-            )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                EnvironmentDescriptionDeserializer::deserialize("UpdateEnvironmentResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 
@@ -12496,23 +11793,15 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         input: UpdateTagsForResourceMessage,
     ) -> Result<(), RusotoError<UpdateTagsForResourceError>> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "UpdateTagsForResource");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("UpdateTagsForResource");
+        let mut params = params;
         UpdateTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(UpdateTagsForResourceError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateTagsForResourceError::from_response)
+            .await?;
 
         std::mem::drop(response);
         Ok(())
@@ -12527,45 +11816,30 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
         RusotoError<ValidateConfigurationSettingsError>,
     > {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
-        let mut params = Params::new();
-
-        params.put("Action", "ValidateConfigurationSettings");
-        params.put("Version", "2010-12-01");
+        let params = self.new_params("ValidateConfigurationSettings");
+        let mut params = params;
         ValidateConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
         request.set_content_type("application/x-www-form-urlencoded".to_owned());
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if !response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            return Err(ValidateConfigurationSettingsError::from_response(response));
-        }
+        let response = self
+            .sign_and_dispatch(request, ValidateConfigurationSettingsError::from_response)
+            .await?;
 
-        let result;
-        let xml_response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-        if xml_response.body.is_empty() {
-            result = ConfigurationSettingsValidationMessages::default();
-        } else {
-            let reader = EventReader::new_with_config(
-                xml_response.body.as_ref(),
-                ParserConfig::new().trim_whitespace(false),
-            );
-            let mut stack = XmlResponse::new(reader.into_iter().peekable());
-            let _start_document = stack.next();
-            let actual_tag_name = peek_at_name(&mut stack)?;
-            start_element(&actual_tag_name, &mut stack)?;
-            result = ConfigurationSettingsValidationMessagesDeserializer::deserialize(
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ConfigurationSettingsValidationMessagesDeserializer::deserialize(
                 "ValidateConfigurationSettingsResult",
-                &mut stack,
+                stack,
             )?;
-            skip_tree(&mut stack);
-            end_element(&actual_tag_name, &mut stack)?;
-        }
-        // parse non-payload
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
         Ok(result)
     }
 }

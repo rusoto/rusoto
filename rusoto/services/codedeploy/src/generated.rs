@@ -20,12 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl CodeDeployClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "codedeploy", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Represents the input of, and adds tags to, an on-premises instance operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToOnPremisesInstancesInput {
     /// <p>The names of the on-premises instances to which to add tags.</p>
@@ -37,7 +63,7 @@ pub struct AddTagsToOnPremisesInstancesInput {
 }
 
 /// <p>Information about an alarm.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Alarm {
     /// <p>The name of the alarm. Maximum length is 255 characters. Each alarm name can be used only once in a list of alarms.</p>
     #[serde(rename = "name")]
@@ -46,7 +72,7 @@ pub struct Alarm {
 }
 
 /// <p>Information about alarms associated with the deployment group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AlarmConfiguration {
     /// <p>A list of alarms configured for the deployment group. A maximum of 10 alarms can be added to a deployment group.</p>
     #[serde(rename = "alarms")]
@@ -63,7 +89,7 @@ pub struct AlarmConfiguration {
 }
 
 /// <p> A revision for an AWS Lambda or Amazon ECS deployment that is a YAML-formatted or JSON-formatted string. For AWS Lambda and Amazon ECS deployments, the revision is the same as the AppSpec file. This method replaces the deprecated <code>RawString</code> data type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AppSpecContent {
     /// <p> The YAML-formatted or JSON-formatted revision string. </p> <p> For an AWS Lambda deployment, the content includes a Lambda function name, the alias for its original version, and the alias for its replacement version. The deployment shifts traffic from the original version of the Lambda function to the replacement version. </p> <p> For an Amazon ECS deployment, the content includes the task name, information about the load balancer that serves traffic to the container, and more. </p> <p> For both types of deployments, the content can specify Lambda functions that run at specified hooks, such as <code>BeforeInstall</code>, during a deployment. </p>
     #[serde(rename = "content")]
@@ -76,7 +102,7 @@ pub struct AppSpecContent {
 }
 
 /// <p>Information about an application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationInfo {
     /// <p>The application ID.</p>
@@ -106,7 +132,7 @@ pub struct ApplicationInfo {
 }
 
 /// <p>Information about a configuration for automatically rolling back to a previous version of an application revision when a deployment is not completed successfully.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoRollbackConfiguration {
     /// <p>Indicates whether a defined automatic rollback configuration is currently enabled.</p>
     #[serde(rename = "enabled")]
@@ -119,7 +145,7 @@ pub struct AutoRollbackConfiguration {
 }
 
 /// <p>Information about an Auto Scaling group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingGroup {
     /// <p>An Auto Scaling lifecycle event hook name.</p>
@@ -133,7 +159,7 @@ pub struct AutoScalingGroup {
 }
 
 /// <p>Represents the input of a <code>BatchGetApplicationRevisions</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetApplicationRevisionsInput {
     /// <p>The name of an AWS CodeDeploy application about which to get revision information.</p>
@@ -145,7 +171,7 @@ pub struct BatchGetApplicationRevisionsInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetApplicationRevisions</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetApplicationRevisionsOutput {
     /// <p>The name of the application that corresponds to the revisions.</p>
@@ -163,7 +189,7 @@ pub struct BatchGetApplicationRevisionsOutput {
 }
 
 /// <p>Represents the input of a <code>BatchGetApplications</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetApplicationsInput {
     /// <p>A list of application names separated by spaces. The maximum number of application names you can specify is 100.</p>
@@ -172,7 +198,7 @@ pub struct BatchGetApplicationsInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetApplications</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetApplicationsOutput {
     /// <p>Information about the applications.</p>
@@ -182,7 +208,7 @@ pub struct BatchGetApplicationsOutput {
 }
 
 /// <p>Represents the input of a <code>BatchGetDeploymentGroups</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentGroupsInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
@@ -194,7 +220,7 @@ pub struct BatchGetDeploymentGroupsInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetDeploymentGroups</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentGroupsOutput {
     /// <p>Information about the deployment groups.</p>
@@ -208,7 +234,7 @@ pub struct BatchGetDeploymentGroupsOutput {
 }
 
 /// <p> Represents the input of a <code>BatchGetDeploymentInstances</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentInstancesInput {
     /// <p> The unique ID of a deployment. </p>
@@ -220,7 +246,7 @@ pub struct BatchGetDeploymentInstancesInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetDeploymentInstances</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentInstancesOutput {
     /// <p>Information about errors that might have occurred during the API call.</p>
@@ -233,7 +259,7 @@ pub struct BatchGetDeploymentInstancesOutput {
     pub instances_summary: Option<Vec<InstanceSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentTargetsInput {
     /// <p> The unique ID of a deployment. </p>
@@ -246,7 +272,7 @@ pub struct BatchGetDeploymentTargetsInput {
     pub target_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentTargetsOutput {
     /// <p><p> A list of target objects for a deployment. Each target object contains details about the target, such as its status and lifecycle events. The type of the target objects depends on the deployment&#39; compute platform. </p> <ul> <li> <p> <b>EC2/On-premises</b>: Each target object is an EC2 or on-premises instance. </p> </li> <li> <p> <b>AWS Lambda</b>: The target object is a specific version of an AWS Lambda function. </p> </li> <li> <p> <b>Amazon ECS</b>: The target object is an Amazon ECS service. </p> </li> <li> <p> <b>CloudFormation</b>: The target object is an AWS CloudFormation blue/green deployment. </p> </li> </ul></p>
@@ -256,7 +282,7 @@ pub struct BatchGetDeploymentTargetsOutput {
 }
 
 /// <p> Represents the input of a <code>BatchGetDeployments</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetDeploymentsInput {
     /// <p> A list of deployment IDs, separated by spaces. The maximum number of deployment IDs you can specify is 25.</p>
@@ -265,7 +291,7 @@ pub struct BatchGetDeploymentsInput {
 }
 
 /// <p> Represents the output of a <code>BatchGetDeployments</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentsOutput {
     /// <p> Information about the deployments. </p>
@@ -275,7 +301,7 @@ pub struct BatchGetDeploymentsOutput {
 }
 
 /// <p>Represents the input of a <code>BatchGetOnPremisesInstances</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetOnPremisesInstancesInput {
     /// <p>The names of the on-premises instances about which to get information. The maximum number of instance names you can specify is 25.</p>
@@ -284,7 +310,7 @@ pub struct BatchGetOnPremisesInstancesInput {
 }
 
 /// <p>Represents the output of a <code>BatchGetOnPremisesInstances</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetOnPremisesInstancesOutput {
     /// <p>Information about the on-premises instances.</p>
@@ -294,7 +320,7 @@ pub struct BatchGetOnPremisesInstancesOutput {
 }
 
 /// <p>Information about blue/green deployment options for a deployment group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BlueGreenDeploymentConfiguration {
     /// <p>Information about the action to take when newly provisioned instances are ready to receive traffic in a blue/green deployment.</p>
     #[serde(rename = "deploymentReadyOption")]
@@ -311,7 +337,7 @@ pub struct BlueGreenDeploymentConfiguration {
 }
 
 /// <p>Information about whether instances in the original environment are terminated when a blue/green deployment is successful. <code>BlueInstanceTerminationOption</code> does not apply to Lambda deployments. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BlueInstanceTerminationOption {
     /// <p><p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p> <code>TERMINATE</code>: Instances are terminated after a specified wait time.</p> </li> <li> <p> <code>KEEP_ALIVE</code>: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul></p>
     #[serde(rename = "action")]
@@ -324,7 +350,7 @@ pub struct BlueInstanceTerminationOption {
 }
 
 /// <p> Information about the target to be updated by an AWS CloudFormation blue/green deployment. This target type is used for all deployments initiated by a CloudFormation stack update.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CloudFormationTarget {
     /// <p>The unique ID of an AWS CloudFormation blue/green deployment.</p>
@@ -357,7 +383,7 @@ pub struct CloudFormationTarget {
     pub target_version_weight: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ContinueDeploymentInput {
     /// <p> The unique ID of a blue/green deployment for which you want to start rerouting traffic to the replacement environment. </p>
@@ -371,7 +397,7 @@ pub struct ContinueDeploymentInput {
 }
 
 /// <p>Represents the input of a <code>CreateApplication</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationInput {
     /// <p>The name of the application. This name must be unique with the applicable IAM user or AWS account.</p>
@@ -388,7 +414,7 @@ pub struct CreateApplicationInput {
 }
 
 /// <p>Represents the output of a <code>CreateApplication</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationOutput {
     /// <p>A unique application ID.</p>
@@ -398,7 +424,7 @@ pub struct CreateApplicationOutput {
 }
 
 /// <p>Represents the input of a <code>CreateDeploymentConfig</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentConfigInput {
     /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
@@ -419,7 +445,7 @@ pub struct CreateDeploymentConfigInput {
 }
 
 /// <p>Represents the output of a <code>CreateDeploymentConfig</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentConfigOutput {
     /// <p>A unique deployment configuration ID.</p>
@@ -429,7 +455,7 @@ pub struct CreateDeploymentConfigOutput {
 }
 
 /// <p>Represents the input of a <code>CreateDeploymentGroup</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentGroupInput {
     /// <p>Information to add about Amazon CloudWatch alarms when the deployment group is created.</p>
@@ -500,7 +526,7 @@ pub struct CreateDeploymentGroupInput {
 }
 
 /// <p>Represents the output of a <code>CreateDeploymentGroup</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentGroupOutput {
     /// <p>A unique deployment group ID.</p>
@@ -510,7 +536,7 @@ pub struct CreateDeploymentGroupOutput {
 }
 
 /// <p>Represents the input of a <code>CreateDeployment</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
@@ -555,7 +581,7 @@ pub struct CreateDeploymentInput {
 }
 
 /// <p> Represents the output of a <code>CreateDeployment</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentOutput {
     /// <p> The unique ID of a deployment. </p>
@@ -565,7 +591,7 @@ pub struct CreateDeploymentOutput {
 }
 
 /// <p>Represents the input of a <code>DeleteApplication</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
@@ -574,7 +600,7 @@ pub struct DeleteApplicationInput {
 }
 
 /// <p>Represents the input of a <code>DeleteDeploymentConfig</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentConfigInput {
     /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p>
@@ -583,7 +609,7 @@ pub struct DeleteDeploymentConfigInput {
 }
 
 /// <p>Represents the input of a <code>DeleteDeploymentGroup</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentGroupInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
@@ -595,7 +621,7 @@ pub struct DeleteDeploymentGroupInput {
 }
 
 /// <p>Represents the output of a <code>DeleteDeploymentGroup</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeploymentGroupOutput {
     /// <p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group.</p>
@@ -605,7 +631,7 @@ pub struct DeleteDeploymentGroupOutput {
 }
 
 /// <p>Represents the input of a <code>DeleteGitHubAccount</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGitHubAccountTokenInput {
     /// <p>The name of the GitHub account connection to delete.</p>
@@ -615,7 +641,7 @@ pub struct DeleteGitHubAccountTokenInput {
 }
 
 /// <p>Represents the output of a <code>DeleteGitHubAccountToken</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGitHubAccountTokenOutput {
     /// <p>The name of the GitHub account connection that was deleted.</p>
@@ -624,7 +650,7 @@ pub struct DeleteGitHubAccountTokenOutput {
     pub token_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourcesByExternalIdInput {
     /// <p>The unique ID of an external resource (for example, a CloudFormation stack ID) that is linked to one or more CodeDeploy resources.</p>
@@ -633,12 +659,12 @@ pub struct DeleteResourcesByExternalIdInput {
     pub external_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourcesByExternalIdOutput {}
 
 /// <p>Information about a deployment configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentConfigInfo {
     /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
@@ -668,7 +694,7 @@ pub struct DeploymentConfigInfo {
 }
 
 /// <p>Information about a deployment group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentGroupInfo {
     /// <p>A list of alarms associated with the deployment group.</p>
@@ -758,7 +784,7 @@ pub struct DeploymentGroupInfo {
 }
 
 /// <p>Information about a deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentInfo {
     /// <p>Provides information about the results of a deployment, such as whether instances in the original environment in a blue/green deployment were not terminated.</p>
@@ -876,7 +902,7 @@ pub struct DeploymentInfo {
 }
 
 /// <p>Information about the deployment status of the instances in the deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentOverview {
     /// <p>The number of instances in the deployment in a failed state.</p>
@@ -906,7 +932,7 @@ pub struct DeploymentOverview {
 }
 
 /// <p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeploymentReadyOption {
     /// <p><p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE<em>DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP</em>DEPLOYMENT: Do not register new instances with a load balancer unless traffic rerouting is started using <a>ContinueDeployment</a>. If traffic rerouting is not started before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul></p>
     #[serde(rename = "actionOnTimeout")]
@@ -919,7 +945,7 @@ pub struct DeploymentReadyOption {
 }
 
 /// <p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeploymentStyle {
     /// <p>Indicates whether to route deployment traffic behind a load balancer.</p>
     #[serde(rename = "deploymentOption")]
@@ -932,7 +958,7 @@ pub struct DeploymentStyle {
 }
 
 /// <p> Information about the deployment target. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentTarget {
     #[serde(rename = "cloudFormationTarget")]
@@ -957,7 +983,7 @@ pub struct DeploymentTarget {
 }
 
 /// <p>Represents the input of a <code>DeregisterOnPremisesInstance</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterOnPremisesInstanceInput {
     /// <p>The name of the on-premises instance to deregister.</p>
@@ -966,7 +992,7 @@ pub struct DeregisterOnPremisesInstanceInput {
 }
 
 /// <p>Diagnostic information about executable scripts that are part of a deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Diagnostics {
     /// <p><p>The associated error code:</p> <ul> <li> <p>Success: The specified script ran.</p> </li> <li> <p>ScriptMissing: The specified script was not found in the specified location.</p> </li> <li> <p>ScriptNotExecutable: The specified script is not a recognized executable file type.</p> </li> <li> <p>ScriptTimedOut: The specified script did not finish running in the specified time period.</p> </li> <li> <p>ScriptFailed: The specified script failed to run as expected.</p> </li> <li> <p>UnknownError: The specified script did not run for an unknown reason.</p> </li> </ul></p>
@@ -988,7 +1014,7 @@ pub struct Diagnostics {
 }
 
 /// <p>Information about an EC2 tag filter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EC2TagFilter {
     /// <p>The tag filter key.</p>
     #[serde(rename = "Key")]
@@ -1005,7 +1031,7 @@ pub struct EC2TagFilter {
 }
 
 /// <p>Information about groups of EC2 instance tags.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EC2TagSet {
     /// <p>A list that contains other lists of EC2 instance tag groups. For an instance to be included in the deployment group, it must be identified by all of the tag groups in the list.</p>
     #[serde(rename = "ec2TagSetList")]
@@ -1014,7 +1040,7 @@ pub struct EC2TagSet {
 }
 
 /// <p> Contains the service and cluster names used to identify an Amazon ECS deployment's target. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ECSService {
     /// <p> The name of the cluster that the Amazon ECS service is associated with. </p>
     #[serde(rename = "clusterName")]
@@ -1027,7 +1053,7 @@ pub struct ECSService {
 }
 
 /// <p> Information about the target of an Amazon ECS deployment. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ECSTarget {
     /// <p> The unique ID of a deployment. </p>
@@ -1061,7 +1087,7 @@ pub struct ECSTarget {
 }
 
 /// <p> Information about a set of Amazon ECS tasks in an AWS CodeDeploy deployment. An Amazon ECS task set includes details such as the desired number of tasks, how many tasks are running, and whether the task set serves production traffic. An AWS CodeDeploy application that uses the Amazon ECS compute platform deploys a containerized application in an Amazon ECS service as a task set. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ECSTaskSet {
     /// <p> The number of tasks in a task set. During a deployment that uses the Amazon ECS compute type, CodeDeploy instructs Amazon ECS to create a new task set and uses this value to determine how many tasks to create. After the updated task set is created, CodeDeploy shifts traffic to the new task set. </p>
@@ -1099,7 +1125,7 @@ pub struct ECSTaskSet {
 }
 
 /// <p>Information about a load balancer in Elastic Load Balancing to use in a deployment. Instances are registered directly with a load balancer, and traffic is routed to the load balancer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ELBInfo {
     /// <p>For blue/green deployments, the name of the load balancer that is used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment is complete.</p>
     #[serde(rename = "name")]
@@ -1108,7 +1134,7 @@ pub struct ELBInfo {
 }
 
 /// <p>Information about a deployment error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorInformation {
     /// <p><p>For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION<em>MISSING: The application was missing. This error code is most likely raised if the application is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>DEPLOYMENT</em>GROUP<em>MISSING: The deployment group was missing. This error code is most likely raised if the deployment group is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>HEALTH</em>CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH<em>CONSTRAINTS</em>INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM<em>ROLE</em>MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM<em>ROLE</em>PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL<em>ERROR: There was an internal error.</p> </li> <li> <p>NO</em>EC2<em>SUBSCRIPTION: The calling account is not subscribed to Amazon EC2.</p> </li> <li> <p>NO</em>INSTANCES: No instances were specified, or no instances can be found.</p> </li> <li> <p>OVER<em>MAX</em>INSTANCES: The maximum number of instances was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code is most likely raised if the revision is deleted after the deployment is created, but before it is started.</p> </li> </ul></p>
@@ -1122,7 +1148,7 @@ pub struct ErrorInformation {
 }
 
 /// <p>Information about an application revision.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenericRevisionInfo {
     /// <p>The deployment groups for which this is the current target revision.</p>
@@ -1148,7 +1174,7 @@ pub struct GenericRevisionInfo {
 }
 
 /// <p>Represents the input of a <code>GetApplication</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
@@ -1157,7 +1183,7 @@ pub struct GetApplicationInput {
 }
 
 /// <p>Represents the output of a <code>GetApplication</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationOutput {
     /// <p>Information about the application.</p>
@@ -1167,7 +1193,7 @@ pub struct GetApplicationOutput {
 }
 
 /// <p>Represents the input of a <code>GetApplicationRevision</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationRevisionInput {
     /// <p>The name of the application that corresponds to the revision.</p>
@@ -1179,7 +1205,7 @@ pub struct GetApplicationRevisionInput {
 }
 
 /// <p>Represents the output of a <code>GetApplicationRevision</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationRevisionOutput {
     /// <p>The name of the application that corresponds to the revision.</p>
@@ -1197,7 +1223,7 @@ pub struct GetApplicationRevisionOutput {
 }
 
 /// <p>Represents the input of a <code>GetDeploymentConfig</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentConfigInput {
     /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p>
@@ -1206,7 +1232,7 @@ pub struct GetDeploymentConfigInput {
 }
 
 /// <p>Represents the output of a <code>GetDeploymentConfig</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentConfigOutput {
     /// <p>Information about the deployment configuration.</p>
@@ -1216,7 +1242,7 @@ pub struct GetDeploymentConfigOutput {
 }
 
 /// <p>Represents the input of a <code>GetDeploymentGroup</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentGroupInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
@@ -1228,7 +1254,7 @@ pub struct GetDeploymentGroupInput {
 }
 
 /// <p>Represents the output of a <code>GetDeploymentGroup</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentGroupOutput {
     /// <p>Information about the deployment group.</p>
@@ -1238,7 +1264,7 @@ pub struct GetDeploymentGroupOutput {
 }
 
 /// <p>Represents the input of a <code>GetDeployment</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentInput {
     /// <p> The unique ID of a deployment associated with the IAM user or AWS account. </p>
@@ -1247,7 +1273,7 @@ pub struct GetDeploymentInput {
 }
 
 /// <p> Represents the input of a <code>GetDeploymentInstance</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentInstanceInput {
     /// <p> The unique ID of a deployment. </p>
@@ -1259,7 +1285,7 @@ pub struct GetDeploymentInstanceInput {
 }
 
 /// <p> Represents the output of a <code>GetDeploymentInstance</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentInstanceOutput {
     /// <p> Information about the instance. </p>
@@ -1269,7 +1295,7 @@ pub struct GetDeploymentInstanceOutput {
 }
 
 /// <p>Represents the output of a <code>GetDeployment</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentOutput {
     /// <p>Information about the deployment.</p>
@@ -1278,7 +1304,7 @@ pub struct GetDeploymentOutput {
     pub deployment_info: Option<DeploymentInfo>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentTargetInput {
     /// <p> The unique ID of a deployment. </p>
@@ -1291,7 +1317,7 @@ pub struct GetDeploymentTargetInput {
     pub target_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentTargetOutput {
     /// <p> A deployment target that contains information about a deployment such as its status, lifecycle events, and when it was last updated. It also contains metadata about the deployment target. The deployment target metadata depends on the deployment target's type (<code>instanceTarget</code>, <code>lambdaTarget</code>, or <code>ecsTarget</code>). </p>
@@ -1301,7 +1327,7 @@ pub struct GetDeploymentTargetOutput {
 }
 
 /// <p> Represents the input of a <code>GetOnPremisesInstance</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOnPremisesInstanceInput {
     /// <p> The name of the on-premises instance about which to get information. </p>
@@ -1310,7 +1336,7 @@ pub struct GetOnPremisesInstanceInput {
 }
 
 /// <p> Represents the output of a <code>GetOnPremisesInstance</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOnPremisesInstanceOutput {
     /// <p> Information about the on-premises instance. </p>
@@ -1320,7 +1346,7 @@ pub struct GetOnPremisesInstanceOutput {
 }
 
 /// <p>Information about the location of application artifacts stored in GitHub.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GitHubLocation {
     /// <p>The SHA1 commit ID of the GitHub commit that represents the bundled artifacts for the application revision.</p>
     #[serde(rename = "commitId")]
@@ -1333,7 +1359,7 @@ pub struct GitHubLocation {
 }
 
 /// <p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GreenFleetProvisioningOption {
     /// <p><p>The method used to add instances to a replacement environment.</p> <ul> <li> <p> <code>DISCOVER<em>EXISTING</code>: Use instances that already exist or will be created manually.</p> </li> <li> <p> <code>COPY</em>AUTO<em>SCALING</em>GROUP</code>: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul></p>
     #[serde(rename = "action")]
@@ -1342,7 +1368,7 @@ pub struct GreenFleetProvisioningOption {
 }
 
 /// <p>Information about an on-premises instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceInfo {
     /// <p>If the on-premises instance was deregistered, the time at which the on-premises instance was deregistered.</p>
@@ -1376,7 +1402,7 @@ pub struct InstanceInfo {
 }
 
 /// <p>Information about an instance in a deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceSummary {
     /// <p> The unique ID of a deployment. </p>
@@ -1406,7 +1432,7 @@ pub struct InstanceSummary {
 }
 
 /// <p> A target Amazon EC2 or on-premises instance during a deployment that uses the EC2/On-premises compute platform. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceTarget {
     /// <p> The unique ID of a deployment. </p>
@@ -1440,7 +1466,7 @@ pub struct InstanceTarget {
 }
 
 /// <p> Information about a Lambda function specified in a deployment. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaFunctionInfo {
     /// <p> The version of a Lambda function that production traffic points to. </p>
@@ -1466,7 +1492,7 @@ pub struct LambdaFunctionInfo {
 }
 
 /// <p> Information about the target AWS Lambda function during an AWS Lambda deployment. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaTarget {
     /// <p> The unique ID of a deployment. </p>
@@ -1500,7 +1526,7 @@ pub struct LambdaTarget {
 }
 
 /// <p>Information about the most recent attempted or successful deployment to a deployment group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LastDeploymentInfo {
     /// <p>A timestamp that indicates when the most recent deployment to the deployment group started.</p>
@@ -1522,7 +1548,7 @@ pub struct LastDeploymentInfo {
 }
 
 /// <p>Information about a deployment lifecycle event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LifecycleEvent {
     /// <p>Diagnostic information about the deployment lifecycle event.</p>
@@ -1548,7 +1574,7 @@ pub struct LifecycleEvent {
 }
 
 /// <p> Represents the input of a <code>ListApplicationRevisions</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationRevisionsInput {
     /// <p> The name of an AWS CodeDeploy application associated with the IAM user or AWS account. </p>
@@ -1581,7 +1607,7 @@ pub struct ListApplicationRevisionsInput {
 }
 
 /// <p>Represents the output of a <code>ListApplicationRevisions</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationRevisionsOutput {
     /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
@@ -1595,7 +1621,7 @@ pub struct ListApplicationRevisionsOutput {
 }
 
 /// <p>Represents the input of a <code>ListApplications</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsInput {
     /// <p>An identifier returned from the previous list applications call. It can be used to return the next set of applications in the list.</p>
@@ -1605,7 +1631,7 @@ pub struct ListApplicationsInput {
 }
 
 /// <p>Represents the output of a ListApplications operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationsOutput {
     /// <p>A list of application names.</p>
@@ -1619,7 +1645,7 @@ pub struct ListApplicationsOutput {
 }
 
 /// <p>Represents the input of a <code>ListDeploymentConfigs</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentConfigsInput {
     /// <p>An identifier returned from the previous <code>ListDeploymentConfigs</code> call. It can be used to return the next set of deployment configurations in the list. </p>
@@ -1629,7 +1655,7 @@ pub struct ListDeploymentConfigsInput {
 }
 
 /// <p>Represents the output of a <code>ListDeploymentConfigs</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentConfigsOutput {
     /// <p>A list of deployment configurations, including built-in configurations such as <code>CodeDeployDefault.OneAtATime</code>.</p>
@@ -1643,7 +1669,7 @@ pub struct ListDeploymentConfigsOutput {
 }
 
 /// <p>Represents the input of a <code>ListDeploymentGroups</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentGroupsInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
@@ -1656,7 +1682,7 @@ pub struct ListDeploymentGroupsInput {
 }
 
 /// <p>Represents the output of a <code>ListDeploymentGroups</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentGroupsOutput {
     /// <p>The application name.</p>
@@ -1674,7 +1700,7 @@ pub struct ListDeploymentGroupsOutput {
 }
 
 /// <p> Represents the input of a <code>ListDeploymentInstances</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentInstancesInput {
     /// <p> The unique ID of a deployment. </p>
@@ -1695,7 +1721,7 @@ pub struct ListDeploymentInstancesInput {
 }
 
 /// <p>Represents the output of a <code>ListDeploymentInstances</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentInstancesOutput {
     /// <p>A list of instance IDs.</p>
@@ -1708,7 +1734,7 @@ pub struct ListDeploymentInstancesOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentTargetsInput {
     /// <p> The unique ID of a deployment. </p>
@@ -1725,7 +1751,7 @@ pub struct ListDeploymentTargetsInput {
     pub target_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentTargetsOutput {
     /// <p> If a large amount of information is returned, a token identifier is also returned. It can be used in a subsequent <code>ListDeploymentTargets</code> call to return the next set of deployment targets in the list. </p>
@@ -1739,7 +1765,7 @@ pub struct ListDeploymentTargetsOutput {
 }
 
 /// <p>Represents the input of a <code>ListDeployments</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentsInput {
     /// <p><p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p> <note> <p>If <code>applicationName</code> is specified, then <code>deploymentGroupName</code> must be specified. If it is not specified, then <code>deploymentGroupName</code> must not be specified. </p> </note></p>
@@ -1769,7 +1795,7 @@ pub struct ListDeploymentsInput {
 }
 
 /// <p>Represents the output of a <code>ListDeployments</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentsOutput {
     /// <p>A list of deployment IDs.</p>
@@ -1783,7 +1809,7 @@ pub struct ListDeploymentsOutput {
 }
 
 /// <p>Represents the input of a <code>ListGitHubAccountTokenNames</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGitHubAccountTokenNamesInput {
     /// <p>An identifier returned from the previous <code>ListGitHubAccountTokenNames</code> call. It can be used to return the next set of names in the list. </p>
@@ -1793,7 +1819,7 @@ pub struct ListGitHubAccountTokenNamesInput {
 }
 
 /// <p>Represents the output of a <code>ListGitHubAccountTokenNames</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGitHubAccountTokenNamesOutput {
     /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent <code>ListGitHubAccountTokenNames</code> call to return the next set of names in the list. </p>
@@ -1807,7 +1833,7 @@ pub struct ListGitHubAccountTokenNamesOutput {
 }
 
 /// <p>Represents the input of a <code>ListOnPremisesInstances</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOnPremisesInstancesInput {
     /// <p>An identifier returned from the previous list on-premises instances call. It can be used to return the next set of on-premises instances in the list.</p>
@@ -1825,7 +1851,7 @@ pub struct ListOnPremisesInstancesInput {
 }
 
 /// <p>Represents the output of the list on-premises instances operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOnPremisesInstancesOutput {
     /// <p>The list of matching on-premises instance names.</p>
@@ -1838,7 +1864,7 @@ pub struct ListOnPremisesInstancesOutput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceInput {
     /// <p>An identifier returned from the previous <code>ListTagsForResource</code> call. It can be used to return the next set of applications in the list.</p>
@@ -1850,7 +1876,7 @@ pub struct ListTagsForResourceInput {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
@@ -1864,7 +1890,7 @@ pub struct ListTagsForResourceOutput {
 }
 
 /// <p>Information about the Elastic Load Balancing load balancer or target group used in a deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LoadBalancerInfo {
     /// <p><p>An array that contains information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p> <note> <p> Adding more than one load balancer to the array is not supported. </p> </note></p>
     #[serde(rename = "elbInfoList")]
@@ -1881,7 +1907,7 @@ pub struct LoadBalancerInfo {
 }
 
 /// <p>Information about minimum healthy instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MinimumHealthyHosts {
     /// <p>The minimum healthy instance type:</p> <ul> <li> <p> <code>HOST_COUNT</code>: The minimum number of healthy instances as an absolute value.</p> </li> <li> <p> <code>FLEET_PERCENT</code>: The minimum number of healthy instances as a percentage of the total number of instances in the deployment.</p> </li> </ul> <p>In an example of nine instances, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment is successful if six or more instances are deployed to successfully. Otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instances at a time. The deployment is successful if four or more instances are deployed to successfully. Otherwise, the deployment fails.</p> <note> <p>In a call to the <code>GetDeploymentConfig</code>, CodeDeployDefault.OneAtATime returns a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy attempts to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment is still successful.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "type")]
@@ -1894,7 +1920,7 @@ pub struct MinimumHealthyHosts {
 }
 
 /// <p>Information about groups of on-premises instance tags.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OnPremisesTagSet {
     /// <p>A list that contains other lists of on-premises instance tag groups. For an instance to be included in the deployment group, it must be identified by all of the tag groups in the list.</p>
     #[serde(rename = "onPremisesTagSetList")]
@@ -1902,7 +1928,7 @@ pub struct OnPremisesTagSet {
     pub on_premises_tag_set_list: Option<Vec<Vec<TagFilter>>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLifecycleEventHookExecutionStatusInput {
     /// <p> The unique ID of a deployment. Pass this ID to a Lambda function that validates a deployment lifecycle event. </p>
@@ -1919,7 +1945,7 @@ pub struct PutLifecycleEventHookExecutionStatusInput {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLifecycleEventHookExecutionStatusOutput {
     /// <p>The execution ID of the lifecycle event hook. A hook is specified in the <code>hooks</code> section of the deployment's AppSpec file.</p>
@@ -1929,7 +1955,7 @@ pub struct PutLifecycleEventHookExecutionStatusOutput {
 }
 
 /// <p>A revision for an AWS Lambda deployment that is a YAML-formatted or JSON-formatted string. For AWS Lambda deployments, the revision is the same as the AppSpec file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RawString {
     /// <p>The YAML-formatted or JSON-formatted revision string. It includes information about which Lambda function to update and optional Lambda functions that validate deployment lifecycle events.</p>
     #[serde(rename = "content")]
@@ -1942,7 +1968,7 @@ pub struct RawString {
 }
 
 /// <p>Represents the input of a RegisterApplicationRevision operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterApplicationRevisionInput {
     /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
@@ -1958,7 +1984,7 @@ pub struct RegisterApplicationRevisionInput {
 }
 
 /// <p>Represents the input of the register on-premises instance operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterOnPremisesInstanceInput {
     /// <p>The ARN of the IAM session to associate with the on-premises instance.</p>
@@ -1975,7 +2001,7 @@ pub struct RegisterOnPremisesInstanceInput {
 }
 
 /// <p>Represents the input of a <code>RemoveTagsFromOnPremisesInstances</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromOnPremisesInstancesInput {
     /// <p>The names of the on-premises instances from which to remove tags.</p>
@@ -1987,7 +2013,7 @@ pub struct RemoveTagsFromOnPremisesInstancesInput {
 }
 
 /// <p>Information about an application revision.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevisionInfo {
     /// <p>Information about an application revision, including usage details and associated deployment groups.</p>
@@ -2001,7 +2027,7 @@ pub struct RevisionInfo {
 }
 
 /// <p>Information about the location of an application revision.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RevisionLocation {
     /// <p> The content of an AppSpec file for an AWS Lambda or Amazon ECS deployment. The content is formatted as JSON or YAML and stored as a RawString. </p>
     #[serde(rename = "appSpecContent")]
@@ -2026,7 +2052,7 @@ pub struct RevisionLocation {
 }
 
 /// <p>Information about a deployment rollback.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RollbackInfo {
     /// <p>The ID of the deployment rollback.</p>
@@ -2044,7 +2070,7 @@ pub struct RollbackInfo {
 }
 
 /// <p>Information about the location of application artifacts stored in Amazon S3.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Location {
     /// <p>The name of the Amazon S3 bucket where the application revision is stored.</p>
     #[serde(rename = "bucket")]
@@ -2068,7 +2094,7 @@ pub struct S3Location {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SkipWaitTimeForInstanceTerminationInput {
     /// <p> The unique ID of a blue/green deployment for which you want to skip the instance termination wait time. </p>
@@ -2078,7 +2104,7 @@ pub struct SkipWaitTimeForInstanceTerminationInput {
 }
 
 /// <p> Represents the input of a <code>StopDeployment</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDeploymentInput {
     /// <p> Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision. </p>
@@ -2091,7 +2117,7 @@ pub struct StopDeploymentInput {
 }
 
 /// <p> Represents the output of a <code>StopDeployment</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDeploymentOutput {
     /// <p><p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul></p>
@@ -2105,7 +2131,7 @@ pub struct StopDeploymentOutput {
 }
 
 /// <p>Information about a tag.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The tag's key.</p>
     #[serde(rename = "Key")]
@@ -2118,7 +2144,7 @@ pub struct Tag {
 }
 
 /// <p>Information about an on-premises instance tag filter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TagFilter {
     /// <p>The on-premises instance tag filter key.</p>
     #[serde(rename = "Key")]
@@ -2134,7 +2160,7 @@ pub struct TagFilter {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
     /// <p> The ARN of a resource, such as a CodeDeploy application or deployment group. </p>
@@ -2145,12 +2171,12 @@ pub struct TagResourceInput {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
 
 /// <p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TargetGroupInfo {
     /// <p>For blue/green deployments, the name of the target group that instances in the original environment are deregistered from, and instances in the replacement environment are registered with. For in-place deployments, the name of the target group that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment is complete. </p>
     #[serde(rename = "name")]
@@ -2159,7 +2185,7 @@ pub struct TargetGroupInfo {
 }
 
 /// <p> Information about two target groups and how traffic is routed during an Amazon ECS deployment. An optional test traffic route can be specified. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TargetGroupPairInfo {
     /// <p> The path used by a load balancer to route production traffic when an Amazon ECS deployment is complete. </p>
     #[serde(rename = "prodTrafficRoute")]
@@ -2176,7 +2202,7 @@ pub struct TargetGroupPairInfo {
 }
 
 /// <p>Information about the instances to be used in the replacement environment in a blue/green deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TargetInstances {
     /// <p>The names of one or more Auto Scaling groups to identify a replacement environment for a blue/green deployment.</p>
     #[serde(rename = "autoScalingGroups")]
@@ -2193,7 +2219,7 @@ pub struct TargetInstances {
 }
 
 /// <p>A configuration that shifts traffic from one version of a Lambda function or ECS task set to another in two increments. The original and target Lambda function versions or ECS task sets are specified in the deployment's AppSpec file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TimeBasedCanary {
     /// <p>The number of minutes between the first and second traffic shifts of a <code>TimeBasedCanary</code> deployment.</p>
     #[serde(rename = "canaryInterval")]
@@ -2206,7 +2232,7 @@ pub struct TimeBasedCanary {
 }
 
 /// <p>A configuration that shifts traffic from one version of a Lambda function or ECS task set to another in equal increments, with an equal number of minutes between each increment. The original and target Lambda function versions or ECS task sets are specified in the deployment's AppSpec file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TimeBasedLinear {
     /// <p>The number of minutes between each incremental traffic shift of a <code>TimeBasedLinear</code> deployment.</p>
     #[serde(rename = "linearInterval")]
@@ -2219,7 +2245,7 @@ pub struct TimeBasedLinear {
 }
 
 /// <p>Information about a time range.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TimeRange {
     /// <p><p>The end time of the time range.</p> <note> <p>Specify null to leave the end time open-ended.</p> </note></p>
@@ -2233,7 +2259,7 @@ pub struct TimeRange {
 }
 
 /// <p> Information about a listener. The listener contains the path used to route traffic that is received from the load balancer to a target group. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TrafficRoute {
     /// <p> The Amazon Resource Name (ARN) of one listener. The listener identifies the route between a target group and a load balancer. This is an array of strings with a maximum size of one. </p>
     #[serde(rename = "listenerArns")]
@@ -2242,7 +2268,7 @@ pub struct TrafficRoute {
 }
 
 /// <p>The configuration that specifies how traffic is shifted from one version of a Lambda function to another version during an AWS Lambda deployment, or from one Amazon ECS task set to another during an Amazon ECS deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TrafficRoutingConfig {
     /// <p>A configuration that shifts traffic from one version of a Lambda function or ECS task set to another in two increments. The original and target Lambda function versions or ECS task sets are specified in the deployment's AppSpec file.</p>
     #[serde(rename = "timeBasedCanary")]
@@ -2259,7 +2285,7 @@ pub struct TrafficRoutingConfig {
 }
 
 /// <p>Information about notification triggers for the deployment group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TriggerConfig {
     /// <p>The event type or types for which notifications are triggered.</p>
     #[serde(rename = "triggerEvents")]
@@ -2275,7 +2301,7 @@ pub struct TriggerConfig {
     pub trigger_target_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
     /// <p> The Amazon Resource Name (ARN) that specifies from which resource to disassociate the tags with the keys in the <code>TagKeys</code> input parameter. </p>
@@ -2286,12 +2312,12 @@ pub struct UntagResourceInput {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
 /// <p>Represents the input of an <code>UpdateApplication</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationInput {
     /// <p>The current name of the application you want to change.</p>
@@ -2305,7 +2331,7 @@ pub struct UpdateApplicationInput {
 }
 
 /// <p>Represents the input of an <code>UpdateDeploymentGroup</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentGroupInput {
     /// <p>Information to add or change about Amazon CloudWatch alarms when the deployment group is updated.</p>
@@ -2377,7 +2403,7 @@ pub struct UpdateDeploymentGroupInput {
 }
 
 /// <p>Represents the output of an <code>UpdateDeploymentGroup</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeploymentGroupOutput {
     /// <p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the AWS account. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the AWS account.</p>
@@ -6733,9 +6759,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: AddTagsToOnPremisesInstancesInput,
     ) -> Result<(), RusotoError<AddTagsToOnPremisesInstancesError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.AddTagsToOnPremisesInstances",
@@ -6743,19 +6767,11 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AddTagsToOnPremisesInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AddTagsToOnPremisesInstancesError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Gets information about one or more application revisions. The maximum number of application revisions that can be returned is 25.</p>
@@ -6764,9 +6780,7 @@ impl CodeDeploy for CodeDeployClient {
         input: BatchGetApplicationRevisionsInput,
     ) -> Result<BatchGetApplicationRevisionsOutput, RusotoError<BatchGetApplicationRevisionsError>>
     {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetApplicationRevisions",
@@ -6774,20 +6788,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetApplicationRevisionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetApplicationRevisionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetApplicationRevisionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetApplicationRevisionsOutput, _>()
     }
 
     /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 100.</p>
@@ -6795,27 +6802,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetApplicationsInput,
     ) -> Result<BatchGetApplicationsOutput, RusotoError<BatchGetApplicationsError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.BatchGetApplications");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetApplicationsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetApplicationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetApplicationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetApplicationsOutput, _>()
     }
 
     /// <p>Gets information about one or more deployment groups.</p>
@@ -6823,9 +6820,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetDeploymentGroupsInput,
     ) -> Result<BatchGetDeploymentGroupsOutput, RusotoError<BatchGetDeploymentGroupsError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentGroups",
@@ -6833,20 +6828,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetDeploymentGroupsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetDeploymentGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetDeploymentGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetDeploymentGroupsOutput, _>()
     }
 
     /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of one or more instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. The maximum number of instances that can be returned is 25.</p></p>
@@ -6855,9 +6843,7 @@ impl CodeDeploy for CodeDeployClient {
         input: BatchGetDeploymentInstancesInput,
     ) -> Result<BatchGetDeploymentInstancesOutput, RusotoError<BatchGetDeploymentInstancesError>>
     {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentInstances",
@@ -6865,20 +6851,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetDeploymentInstancesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetDeploymentInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetDeploymentInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetDeploymentInstancesOutput, _>()
     }
 
     /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform or deployment method: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> <li> <p> <b>CloudFormation</b>: Information about targets of blue/green deployments initiated by a CloudFormation stack update.</p> </li> </ul></p>
@@ -6886,9 +6865,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetDeploymentTargetsInput,
     ) -> Result<BatchGetDeploymentTargetsOutput, RusotoError<BatchGetDeploymentTargetsError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentTargets",
@@ -6896,20 +6873,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetDeploymentTargetsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetDeploymentTargetsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetDeploymentTargetsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetDeploymentTargetsOutput, _>()
     }
 
     /// <p>Gets information about one or more deployments. The maximum number of deployments that can be returned is 25.</p>
@@ -6917,27 +6887,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetDeploymentsInput,
     ) -> Result<BatchGetDeploymentsOutput, RusotoError<BatchGetDeploymentsError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.BatchGetDeployments");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetDeploymentsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetDeploymentsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetDeploymentsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetDeploymentsOutput, _>()
     }
 
     /// <p>Gets information about one or more on-premises instances. The maximum number of on-premises instances that can be returned is 25.</p>
@@ -6946,9 +6906,7 @@ impl CodeDeploy for CodeDeployClient {
         input: BatchGetOnPremisesInstancesInput,
     ) -> Result<BatchGetOnPremisesInstancesOutput, RusotoError<BatchGetOnPremisesInstancesError>>
     {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetOnPremisesInstances",
@@ -6956,20 +6914,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetOnPremisesInstancesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetOnPremisesInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetOnPremisesInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetOnPremisesInstancesOutput, _>()
     }
 
     /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
@@ -6977,26 +6928,16 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ContinueDeploymentInput,
     ) -> Result<(), RusotoError<ContinueDeploymentError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.ContinueDeployment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ContinueDeploymentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ContinueDeploymentError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates an application.</p>
@@ -7004,26 +6945,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: CreateApplicationInput,
     ) -> Result<CreateApplicationOutput, RusotoError<CreateApplicationError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateApplicationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateApplicationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateApplicationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateApplicationOutput, _>()
     }
 
     /// <p>Deploys an application revision through the specified deployment group.</p>
@@ -7031,26 +6963,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: CreateDeploymentInput,
     ) -> Result<CreateDeploymentOutput, RusotoError<CreateDeploymentError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeployment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateDeploymentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDeploymentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDeploymentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDeploymentOutput, _>()
     }
 
     /// <p> Creates a deployment configuration. </p>
@@ -7058,27 +6981,18 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: CreateDeploymentConfigInput,
     ) -> Result<CreateDeploymentConfigOutput, RusotoError<CreateDeploymentConfigError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeploymentConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDeploymentConfigOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDeploymentConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDeploymentConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateDeploymentConfigOutput, _>()
     }
 
     /// <p>Creates a deployment group to which application revisions are deployed.</p>
@@ -7086,27 +7000,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: CreateDeploymentGroupInput,
     ) -> Result<CreateDeploymentGroupOutput, RusotoError<CreateDeploymentGroupError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeploymentGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDeploymentGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDeploymentGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDeploymentGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDeploymentGroupOutput, _>()
     }
 
     /// <p>Deletes an application.</p>
@@ -7114,26 +7018,16 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: DeleteApplicationInput,
     ) -> Result<(), RusotoError<DeleteApplicationError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteApplicationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteApplicationError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
@@ -7141,26 +7035,16 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: DeleteDeploymentConfigInput,
     ) -> Result<(), RusotoError<DeleteDeploymentConfigError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteDeploymentConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDeploymentConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDeploymentConfigError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a deployment group.</p>
@@ -7168,27 +7052,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: DeleteDeploymentGroupInput,
     ) -> Result<DeleteDeploymentGroupOutput, RusotoError<DeleteDeploymentGroupError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteDeploymentGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDeploymentGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDeploymentGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDeploymentGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDeploymentGroupOutput, _>()
     }
 
     /// <p>Deletes a GitHub account connection.</p>
@@ -7196,9 +7070,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: DeleteGitHubAccountTokenInput,
     ) -> Result<DeleteGitHubAccountTokenOutput, RusotoError<DeleteGitHubAccountTokenError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.DeleteGitHubAccountToken",
@@ -7206,20 +7078,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteGitHubAccountTokenOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteGitHubAccountTokenError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteGitHubAccountTokenError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteGitHubAccountTokenOutput, _>()
     }
 
     /// <p>Deletes resources linked to an external ID.</p>
@@ -7228,9 +7093,7 @@ impl CodeDeploy for CodeDeployClient {
         input: DeleteResourcesByExternalIdInput,
     ) -> Result<DeleteResourcesByExternalIdOutput, RusotoError<DeleteResourcesByExternalIdError>>
     {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.DeleteResourcesByExternalId",
@@ -7238,20 +7101,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteResourcesByExternalIdOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResourcesByExternalIdError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteResourcesByExternalIdError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteResourcesByExternalIdOutput, _>()
     }
 
     /// <p>Deregisters an on-premises instance.</p>
@@ -7259,9 +7115,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: DeregisterOnPremisesInstanceInput,
     ) -> Result<(), RusotoError<DeregisterOnPremisesInstanceError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.DeregisterOnPremisesInstance",
@@ -7269,19 +7123,11 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterOnPremisesInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeregisterOnPremisesInstanceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Gets information about an application.</p>
@@ -7289,26 +7135,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetApplicationInput,
     ) -> Result<GetApplicationOutput, RusotoError<GetApplicationError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetApplicationOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetApplicationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetApplicationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetApplicationOutput, _>()
     }
 
     /// <p>Gets information about an application revision.</p>
@@ -7316,27 +7153,18 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetApplicationRevisionInput,
     ) -> Result<GetApplicationRevisionOutput, RusotoError<GetApplicationRevisionError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetApplicationRevision");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetApplicationRevisionOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetApplicationRevisionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetApplicationRevisionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetApplicationRevisionOutput, _>()
     }
 
     /// <p><p>Gets information about a deployment.</p> <note> <p> The <code>content</code> property of the <code>appSpecContent</code> object in the returned revision is always null. Use <code>GetApplicationRevision</code> and the <code>sha256</code> property of the returned <code>appSpecContent</code> object to get the content of the deployment’s AppSpec file. </p> </note></p>
@@ -7344,26 +7172,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetDeploymentInput,
     ) -> Result<GetDeploymentOutput, RusotoError<GetDeploymentError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeployment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeploymentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDeploymentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentOutput, _>()
     }
 
     /// <p>Gets information about a deployment configuration.</p>
@@ -7371,27 +7190,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetDeploymentConfigInput,
     ) -> Result<GetDeploymentConfigOutput, RusotoError<GetDeploymentConfigError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeploymentConfigOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeploymentConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDeploymentConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentConfigOutput, _>()
     }
 
     /// <p>Gets information about a deployment group.</p>
@@ -7399,27 +7208,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetDeploymentGroupInput,
     ) -> Result<GetDeploymentGroupOutput, RusotoError<GetDeploymentGroupError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeploymentGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeploymentGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDeploymentGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentGroupOutput, _>()
     }
 
     /// <p>Gets information about an instance as part of a deployment.</p>
@@ -7427,27 +7226,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetDeploymentInstanceInput,
     ) -> Result<GetDeploymentInstanceOutput, RusotoError<GetDeploymentInstanceError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeploymentInstanceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeploymentInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDeploymentInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentInstanceOutput, _>()
     }
 
     /// <p> Returns information about a deployment target. </p>
@@ -7455,27 +7244,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetDeploymentTargetInput,
     ) -> Result<GetDeploymentTargetOutput, RusotoError<GetDeploymentTargetError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDeploymentTargetOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeploymentTargetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDeploymentTargetError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDeploymentTargetOutput, _>()
     }
 
     /// <p> Gets information about an on-premises instance. </p>
@@ -7483,27 +7262,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetOnPremisesInstanceInput,
     ) -> Result<GetOnPremisesInstanceOutput, RusotoError<GetOnPremisesInstanceError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetOnPremisesInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetOnPremisesInstanceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOnPremisesInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOnPremisesInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetOnPremisesInstanceOutput, _>()
     }
 
     /// <p>Lists information about revisions for an application.</p>
@@ -7511,9 +7280,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListApplicationRevisionsInput,
     ) -> Result<ListApplicationRevisionsOutput, RusotoError<ListApplicationRevisionsError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListApplicationRevisions",
@@ -7521,20 +7288,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListApplicationRevisionsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApplicationRevisionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListApplicationRevisionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListApplicationRevisionsOutput, _>()
     }
 
     /// <p>Lists the applications registered with the IAM user or AWS account.</p>
@@ -7542,26 +7302,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListApplicationsInput,
     ) -> Result<ListApplicationsOutput, RusotoError<ListApplicationsError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListApplications");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListApplicationsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListApplicationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListApplicationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListApplicationsOutput, _>()
     }
 
     /// <p>Lists the deployment configurations with the IAM user or AWS account.</p>
@@ -7569,27 +7320,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListDeploymentConfigsInput,
     ) -> Result<ListDeploymentConfigsOutput, RusotoError<ListDeploymentConfigsError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentConfigs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeploymentConfigsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeploymentConfigsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDeploymentConfigsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDeploymentConfigsOutput, _>()
     }
 
     /// <p>Lists the deployment groups for an application registered with the IAM user or AWS account.</p>
@@ -7597,27 +7338,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListDeploymentGroupsInput,
     ) -> Result<ListDeploymentGroupsOutput, RusotoError<ListDeploymentGroupsError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeploymentGroupsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeploymentGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDeploymentGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDeploymentGroupsOutput, _>()
     }
 
     /// <p><note> <p> The newer <code>BatchGetDeploymentTargets</code> should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
@@ -7625,9 +7356,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListDeploymentInstancesInput,
     ) -> Result<ListDeploymentInstancesOutput, RusotoError<ListDeploymentInstancesError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListDeploymentInstances",
@@ -7635,20 +7364,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeploymentInstancesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeploymentInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDeploymentInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDeploymentInstancesOutput, _>()
     }
 
     /// <p> Returns an array of target IDs that are associated a deployment. </p>
@@ -7656,27 +7378,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListDeploymentTargetsInput,
     ) -> Result<ListDeploymentTargetsOutput, RusotoError<ListDeploymentTargetsError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentTargets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeploymentTargetsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeploymentTargetsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDeploymentTargetsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDeploymentTargetsOutput, _>()
     }
 
     /// <p>Lists the deployments in a deployment group for an application registered with the IAM user or AWS account.</p>
@@ -7684,26 +7396,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListDeploymentsInput,
     ) -> Result<ListDeploymentsOutput, RusotoError<ListDeploymentsError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeployments");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListDeploymentsOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeploymentsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDeploymentsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDeploymentsOutput, _>()
     }
 
     /// <p>Lists the names of stored connections to GitHub accounts.</p>
@@ -7712,9 +7415,7 @@ impl CodeDeploy for CodeDeployClient {
         input: ListGitHubAccountTokenNamesInput,
     ) -> Result<ListGitHubAccountTokenNamesOutput, RusotoError<ListGitHubAccountTokenNamesError>>
     {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListGitHubAccountTokenNames",
@@ -7722,20 +7423,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListGitHubAccountTokenNamesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListGitHubAccountTokenNamesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListGitHubAccountTokenNamesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListGitHubAccountTokenNamesOutput, _>()
     }
 
     /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
@@ -7743,9 +7437,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListOnPremisesInstancesInput,
     ) -> Result<ListOnPremisesInstancesOutput, RusotoError<ListOnPremisesInstancesError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListOnPremisesInstances",
@@ -7753,20 +7445,13 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOnPremisesInstancesOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOnPremisesInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListOnPremisesInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListOnPremisesInstancesOutput, _>()
     }
 
     /// <p> Returns a list of tags for the resource identified by a specified Amazon Resource Name (ARN). Tags are used to organize and categorize your CodeDeploy resources. </p>
@@ -7774,27 +7459,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListTagsForResourceInput,
     ) -> Result<ListTagsForResourceOutput, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceOutput, _>()
     }
 
     /// <p> Sets the result of a Lambda validation function. The function validates lifecycle hooks during a deployment that uses the AWS Lambda or Amazon ECS compute platform. For AWS Lambda deployments, the available lifecycle hooks are <code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>. For Amazon ECS deployments, the available lifecycle hooks are <code>BeforeInstall</code>, <code>AfterInstall</code>, <code>AfterAllowTestTraffic</code>, <code>BeforeAllowTraffic</code>, and <code>AfterAllowTraffic</code>. Lambda validation functions return <code>Succeeded</code> or <code>Failed</code>. For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-lambda">AppSpec 'hooks' Section for an AWS Lambda Deployment </a> and <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#appspec-hooks-ecs">AppSpec 'hooks' Section for an Amazon ECS Deployment</a>.</p>
@@ -7805,9 +7480,7 @@ impl CodeDeploy for CodeDeployClient {
         PutLifecycleEventHookExecutionStatusOutput,
         RusotoError<PutLifecycleEventHookExecutionStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.PutLifecycleEventHookExecutionStatus",
@@ -7815,22 +7488,16 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutLifecycleEventHookExecutionStatusOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutLifecycleEventHookExecutionStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                PutLifecycleEventHookExecutionStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutLifecycleEventHookExecutionStatusOutput, _>()
     }
 
     /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
@@ -7838,9 +7505,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: RegisterApplicationRevisionInput,
     ) -> Result<(), RusotoError<RegisterApplicationRevisionError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.RegisterApplicationRevision",
@@ -7848,19 +7513,11 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterApplicationRevisionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RegisterApplicationRevisionError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
@@ -7868,9 +7525,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: RegisterOnPremisesInstanceInput,
     ) -> Result<(), RusotoError<RegisterOnPremisesInstanceError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.RegisterOnPremisesInstance",
@@ -7878,19 +7533,11 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterOnPremisesInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RegisterOnPremisesInstanceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes one or more tags from one or more on-premises instances.</p>
@@ -7898,9 +7545,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: RemoveTagsFromOnPremisesInstancesInput,
     ) -> Result<(), RusotoError<RemoveTagsFromOnPremisesInstancesError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.RemoveTagsFromOnPremisesInstances",
@@ -7908,21 +7553,14 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RemoveTagsFromOnPremisesInstancesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                RemoveTagsFromOnPremisesInstancesError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is complete.</p>
@@ -7930,9 +7568,7 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: SkipWaitTimeForInstanceTerminationInput,
     ) -> Result<(), RusotoError<SkipWaitTimeForInstanceTerminationError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.SkipWaitTimeForInstanceTermination",
@@ -7940,21 +7576,14 @@ impl CodeDeploy for CodeDeployClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SkipWaitTimeForInstanceTerminationError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                SkipWaitTimeForInstanceTerminationError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Attempts to stop an ongoing deployment.</p>
@@ -7962,26 +7591,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: StopDeploymentInput,
     ) -> Result<StopDeploymentOutput, RusotoError<StopDeploymentError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.StopDeployment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopDeploymentOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopDeploymentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopDeploymentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopDeploymentOutput, _>()
     }
 
     /// <p> Associates the list of tags in the input <code>Tags</code> parameter with the resource identified by the <code>ResourceArn</code> input parameter. </p>
@@ -7989,26 +7609,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: TagResourceInput,
     ) -> Result<TagResourceOutput, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceOutput, _>()
     }
 
     /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identified by the list of keys in the <code>TagKeys</code> input parameter. </p>
@@ -8016,26 +7627,17 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
     }
 
     /// <p>Changes the name of an application.</p>
@@ -8043,26 +7645,16 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: UpdateApplicationInput,
     ) -> Result<(), RusotoError<UpdateApplicationError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.UpdateApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateApplicationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateApplicationError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Changes information about a deployment group.</p>
@@ -8070,26 +7662,16 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: UpdateDeploymentGroupInput,
     ) -> Result<UpdateDeploymentGroupOutput, RusotoError<UpdateDeploymentGroupError>> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "CodeDeploy_20141006.UpdateDeploymentGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDeploymentGroupOutput, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDeploymentGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDeploymentGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateDeploymentGroupOutput, _>()
     }
 }

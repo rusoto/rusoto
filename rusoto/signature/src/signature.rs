@@ -20,7 +20,7 @@ use std::time::Duration;
 use base64;
 use bytes::Bytes;
 use hex;
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, Mac, NewMac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use http::{Method, Request};
 use hyper::Body;
@@ -231,18 +231,17 @@ impl SignedRequest {
     /// Add a value to the array of headers for the specified key.
     /// Headers are kept sorted by key name for use at signing (BTreeMap)
     pub fn add_header<K: ToString>(&mut self, key: K, value: &str) {
-        let key_lower = key.to_string().to_ascii_lowercase();
+        let mut key_lower = key.to_string();
+        key_lower.make_ascii_lowercase();
+
         let value_vec = value.as_bytes().to_vec();
 
-        match self.headers.entry(key_lower) {
-            Entry::Vacant(entry) => {
-                let mut values = Vec::new();
-                values.push(value_vec);
-                entry.insert(values);
-            }
-            Entry::Occupied(entry) => {
-                entry.into_mut().push(value_vec);
-            }
+        self.headers.entry(key_lower).or_default().push(value_vec);
+    }
+
+    pub fn add_optional_header<K: ToString, V: ToString>(&mut self, key: K, value: Option<V>) {
+        if let Some(ref value) = value {
+            self.add_header(key, &value.to_string());
         }
     }
 
@@ -574,7 +573,7 @@ fn digest_payload(payload: &[u8]) -> (String, usize) {
 #[inline]
 fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
     let mut hmac = Hmac::<Sha256>::new_varkey(secret).expect("failed to create hmac");
-    hmac.input(message);
+    hmac.update(message);
     hmac
 }
 
@@ -588,27 +587,26 @@ fn sign_string(
 ) -> String {
     let date_str = date.format("%Y%m%d");
     let date_hmac = hmac(format!("AWS4{}", secret).as_bytes(), date_str.as_bytes())
-        .result()
-        .code();
-    let region_hmac = hmac(date_hmac.as_ref(), region.as_bytes()).result().code();
+        .finalize()
+        .into_bytes();
+    let region_hmac = hmac(date_hmac.as_ref(), region.as_bytes())
+        .finalize()
+        .into_bytes();
     let service_hmac = hmac(region_hmac.as_ref(), service.as_bytes())
-        .result()
-        .code();
-    let signing_hmac = hmac(service_hmac.as_ref(), b"aws4_request").result().code();
+        .finalize()
+        .into_bytes();
+    let signing_hmac = hmac(service_hmac.as_ref(), b"aws4_request")
+        .finalize()
+        .into_bytes();
     hex::encode(
         hmac(signing_hmac.as_ref(), string_to_sign.as_bytes())
-            .result()
-            .code()
-            .as_ref(),
+            .finalize()
+            .into_bytes(),
     )
 }
 
 /// Mark string as AWS4-HMAC-SHA256 hashed
-pub fn string_to_sign(
-    date: OffsetDateTime,
-    hashed_canonical_request: &str,
-    scope: &str,
-) -> String {
+pub fn string_to_sign(date: OffsetDateTime, hashed_canonical_request: &str, scope: &str) -> String {
     format!(
         "AWS4-HMAC-SHA256\n{}\n{}\n{}",
         date.format("%Y%m%dT%H%M%SZ"),
@@ -750,7 +748,7 @@ pub fn decode_uri(uri: &str) -> String {
 
 fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
     let h = Sha256::digest(t.as_ref());
-    hex::encode(h.as_ref())
+    hex::encode(h)
 }
 
 fn extract_endpoint_path(endpoint: &str) -> Option<&str> {

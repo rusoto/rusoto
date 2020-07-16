@@ -20,11 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl LakeFormationClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "lakeformation", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGrantPermissionsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -36,7 +63,7 @@ pub struct BatchGrantPermissionsRequest {
     pub entries: Vec<BatchPermissionsRequestEntry>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGrantPermissionsResponse {
     /// <p>A list of failures to grant permissions to the resources.</p>
@@ -46,7 +73,7 @@ pub struct BatchGrantPermissionsResponse {
 }
 
 /// <p>A list of failures when performing a batch grant or batch revoke operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchPermissionsFailureEntry {
     /// <p>An error message that applies to the failure of the entry.</p>
@@ -60,7 +87,7 @@ pub struct BatchPermissionsFailureEntry {
 }
 
 /// <p>A permission to a resource granted by batch operation to the principal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BatchPermissionsRequestEntry {
     /// <p>A unique identifier for the batch permissions request entry.</p>
     #[serde(rename = "Id")]
@@ -83,7 +110,7 @@ pub struct BatchPermissionsRequestEntry {
     pub resource: Option<Resource>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchRevokePermissionsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -95,7 +122,7 @@ pub struct BatchRevokePermissionsRequest {
     pub entries: Vec<BatchPermissionsRequestEntry>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchRevokePermissionsResponse {
     /// <p>A list of failures to revoke permissions to the resources.</p>
@@ -105,11 +132,11 @@ pub struct BatchRevokePermissionsResponse {
 }
 
 /// <p>A structure for the catalog object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CatalogResource {}
 
 /// <p>A wildcard object, consisting of an optional list of excluded column names or indexes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnWildcard {
     /// <p>Excludes column names. Any column with this name will be excluded.</p>
     #[serde(rename = "ExcludedColumnNames")]
@@ -117,8 +144,8 @@ pub struct ColumnWildcard {
     pub excluded_column_names: Option<Vec<String>>,
 }
 
-/// <p>The AWS Lake Formation principal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+/// <p>The AWS Lake Formation principal. Supported principals are IAM users or IAM roles.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLakePrincipal {
     /// <p>An identifier for the AWS Lake Formation principal.</p>
     #[serde(rename = "DataLakePrincipalIdentifier")]
@@ -126,40 +153,52 @@ pub struct DataLakePrincipal {
     pub data_lake_principal_identifier: Option<String>,
 }
 
-/// <p>The AWS Lake Formation principal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+/// <p>A structure representing a list of AWS Lake Formation principals designated as data lake administrators and lists of principal permission entries for default create database and default create table permissions.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLakeSettings {
-    /// <p>A list of up to three principal permissions entries for default create database permissions.</p>
+    /// <p>A structure representing a list of up to three principal permissions entries for default create database permissions.</p>
     #[serde(rename = "CreateDatabaseDefaultPermissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_database_default_permissions: Option<Vec<PrincipalPermissions>>,
-    /// <p>A list of up to three principal permissions entries for default create table permissions.</p>
+    /// <p>A structure representing a list of up to three principal permissions entries for default create table permissions.</p>
     #[serde(rename = "CreateTableDefaultPermissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_table_default_permissions: Option<Vec<PrincipalPermissions>>,
-    /// <p>A list of AWS Lake Formation principals.</p>
+    /// <p>A list of AWS Lake Formation principals. Supported principals are IAM users or IAM roles.</p>
     #[serde(rename = "DataLakeAdmins")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_lake_admins: Option<Vec<DataLakePrincipal>>,
+    /// <p>A list of the resource-owning account IDs that the caller's account can use to share their user access details (user ARNs). The user ARNs can be logged in the resource owner's AWS CloudTrail log.</p> <p>You may want to specify this property when you are in a high-trust boundary, such as the same team or company. </p>
+    #[serde(rename = "TrustedResourceOwners")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trusted_resource_owners: Option<Vec<String>>,
 }
 
 /// <p>A structure for a data location object where permissions are granted or revoked. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataLocationResource {
+    /// <p>The identifier for the Data Catalog where the location is registered with AWS Lake Formation. By default, it is the account ID of the caller.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) that uniquely identifies the data location resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
 
 /// <p>A structure for the database object.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DatabaseResource {
+    /// <p>The identifier for the Data Catalog. By default, it is the account ID of the caller.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The name of the database resource. Unique to the Data Catalog.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to deregister.</p>
@@ -167,11 +206,11 @@ pub struct DeregisterResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeResourceRequest {
     /// <p>The resource ARN.</p>
@@ -179,7 +218,7 @@ pub struct DescribeResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourceResponse {
     /// <p>A structure containing information about an AWS Lake Formation resource.</p>
@@ -189,7 +228,7 @@ pub struct DescribeResourceResponse {
 }
 
 /// <p>Contains details about an error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorDetail {
     /// <p>The code associated with this error.</p>
@@ -203,7 +242,7 @@ pub struct ErrorDetail {
 }
 
 /// <p>This structure describes the filtering of columns in a table based on a filter condition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FilterCondition {
     /// <p>The comparison operator used in the filter condition.</p>
@@ -220,7 +259,7 @@ pub struct FilterCondition {
     pub string_value_list: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataLakeSettingsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -229,16 +268,16 @@ pub struct GetDataLakeSettingsRequest {
     pub catalog_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataLakeSettingsResponse {
-    /// <p>A list of AWS Lake Formation principals. </p>
+    /// <p>A structure representing a list of AWS Lake Formation principals designated as data lake administrators.</p>
     #[serde(rename = "DataLakeSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_lake_settings: Option<DataLakeSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEffectivePermissionsForPathRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -258,7 +297,7 @@ pub struct GetEffectivePermissionsForPathRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEffectivePermissionsForPathResponse {
     /// <p>A continuation token, if this is not the first call to retrieve this list.</p>
@@ -271,7 +310,7 @@ pub struct GetEffectivePermissionsForPathResponse {
     pub permissions: Option<Vec<PrincipalResourcePermissions>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GrantPermissionsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -293,11 +332,11 @@ pub struct GrantPermissionsRequest {
     pub resource: Resource,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GrantPermissionsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPermissionsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
@@ -326,7 +365,7 @@ pub struct ListPermissionsRequest {
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPermissionsResponse {
     /// <p>A continuation token, if this is not the first call to retrieve this list.</p>
@@ -339,7 +378,7 @@ pub struct ListPermissionsResponse {
     pub principal_resource_permissions: Option<Vec<PrincipalResourcePermissions>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
     /// <p>Any applicable row-level and/or column-level filtering conditions for the resources.</p>
@@ -356,7 +395,7 @@ pub struct ListResourcesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesResponse {
     /// <p>A continuation token, if this is not the first call to retrieve these resources.</p>
@@ -370,7 +409,7 @@ pub struct ListResourcesResponse {
 }
 
 /// <p>Permissions granted to a principal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PrincipalPermissions {
     /// <p>The permissions that are granted to the principal.</p>
     #[serde(rename = "Permissions")]
@@ -383,7 +422,7 @@ pub struct PrincipalPermissions {
 }
 
 /// <p>The permissions granted or revoked on a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrincipalResourcePermissions {
     /// <p>The permissions to be granted or revoked on the resource.</p>
@@ -404,44 +443,44 @@ pub struct PrincipalResourcePermissions {
     pub resource: Option<Resource>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDataLakeSettingsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>A list of AWS Lake Formation principals.</p>
+    /// <p>A structure representing a list of AWS Lake Formation principals designated as data lake administrators.</p>
     #[serde(rename = "DataLakeSettings")]
     pub data_lake_settings: DataLakeSettings,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDataLakeSettingsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to register.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>The identifier for the role.</p>
+    /// <p>The identifier for the role that registers the resource.</p>
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p>Designates a trusted caller, an IAM principal, by registering this caller with the Data Catalog. </p>
+    /// <p>Designates an AWS Identity and Access Management (IAM) service-linked role by registering this role with the Data Catalog. A service-linked role is a unique type of IAM role that is linked directly to Lake Formation.</p> <p>For more information, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/service-linked-roles.html">Using Service-Linked Roles for Lake Formation</a>.</p>
     #[serde(rename = "UseServiceLinkedRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_service_linked_role: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterResourceResponse {}
 
 /// <p>A structure for the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Resource {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
     #[serde(rename = "Catalog")]
@@ -466,7 +505,7 @@ pub struct Resource {
 }
 
 /// <p>A structure containing information about an AWS Lake Formation resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceInfo {
     /// <p>The date and time the resource was last modified.</p>
@@ -483,14 +522,14 @@ pub struct ResourceInfo {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokePermissionsRequest {
     /// <p>The identifier for the Data Catalog. By default, the account ID. The Data Catalog is the persistent metadata store. It contains database definitions, table definitions, and other control information to manage your AWS Lake Formation environment. </p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>The permissions revoked to the principal on the resource. For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
+    /// <p>The permissions revoked to the principal on the resource. For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     #[serde(rename = "Permissions")]
     pub permissions: Vec<String>,
     /// <p>Indicates a list of permissions for which to revoke the grant option allowing the principal to pass permissions to other principals.</p>
@@ -505,24 +544,41 @@ pub struct RevokePermissionsRequest {
     pub resource: Resource,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokePermissionsResponse {}
 
 /// <p>A structure for the table object. A table is a metadata definition that represents your data. You can Grant and Revoke table privileges to a principal. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TableResource {
+    /// <p>The identifier for the Data Catalog. By default, it is the account ID of the caller.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The name of the database for the table. Unique to a Data Catalog. A database is a set of associated table definitions organized into a logical group. You can Grant and Revoke database privileges to a principal. </p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
     /// <p>The name of the table.</p>
     #[serde(rename = "Name")]
-    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A wildcard object representing every table under a database.</p> <p>At least one of <code>TableResource$Name</code> or <code>TableResource$TableWildcard</code> is required.</p>
+    #[serde(rename = "TableWildcard")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_wildcard: Option<TableWildcard>,
 }
 
+/// <p>A wildcard object representing every table under a database.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TableWildcard {}
+
 /// <p>A structure for a table with columns object. This object is only used when granting a SELECT permission.</p> <p>This object must take a value for at least one of <code>ColumnsNames</code>, <code>ColumnsIndexes</code>, or <code>ColumnsWildcard</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TableWithColumnsResource {
+    /// <p>The identifier for the Data Catalog. By default, it is the account ID of the caller.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
     /// <p>The list of column names for the table. At least one of <code>ColumnNames</code> or <code>ColumnWildcard</code> is required.</p>
     #[serde(rename = "ColumnNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -533,15 +589,13 @@ pub struct TableWithColumnsResource {
     pub column_wildcard: Option<ColumnWildcard>,
     /// <p>The name of the database for the table with columns resource. Unique to the Data Catalog. A database is a set of associated table definitions organized into a logical group. You can Grant and Revoke database privileges to a principal. </p>
     #[serde(rename = "DatabaseName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub database_name: Option<String>,
+    pub database_name: String,
     /// <p>The name of the table resource. A table is a metadata definition that represents your data. You can Grant and Revoke table privileges to a principal. </p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceRequest {
     /// <p>The resource ARN.</p>
@@ -552,7 +606,7 @@ pub struct UpdateResourceRequest {
     pub role_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceResponse {}
 
@@ -1165,13 +1219,13 @@ pub trait LakeFormation {
         input: DescribeResourceRequest,
     ) -> Result<DescribeResourceResponse, RusotoError<DescribeResourceError>>;
 
-    /// <p>The AWS Lake Formation principal.</p>
+    /// <p>Retrieves the list of the data lake administrators of a Lake Formation-managed data lake. </p>
     async fn get_data_lake_settings(
         &self,
         input: GetDataLakeSettingsRequest,
     ) -> Result<GetDataLakeSettingsResponse, RusotoError<GetDataLakeSettingsError>>;
 
-    /// <p>Returns the permissions for a specified table or database resource located at a path in Amazon S3.</p>
+    /// <p>Returns the Lake Formation permissions for a specified table or database resource located at a path in Amazon S3. <code>GetEffectivePermissionsForPath</code> will not return databases and tables if the catalog is encrypted.</p>
     async fn get_effective_permissions_for_path(
         &self,
         input: GetEffectivePermissionsForPathRequest,
@@ -1180,13 +1234,13 @@ pub trait LakeFormation {
         RusotoError<GetEffectivePermissionsForPathError>,
     >;
 
-    /// <p>Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
+    /// <p>Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     async fn grant_permissions(
         &self,
         input: GrantPermissionsRequest,
     ) -> Result<GrantPermissionsResponse, RusotoError<GrantPermissionsError>>;
 
-    /// <p>Returns a list of the principal permissions on the resource, filtered by the permissions of the caller. For example, if you are granted an ALTER permission, you are able to see only the principal permissions for ALTER.</p> <p>This operation returns only those permissions that have been explicitly granted.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
+    /// <p>Returns a list of the principal permissions on the resource, filtered by the permissions of the caller. For example, if you are granted an ALTER permission, you are able to see only the principal permissions for ALTER.</p> <p>This operation returns only those permissions that have been explicitly granted.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     async fn list_permissions(
         &self,
         input: ListPermissionsRequest,
@@ -1198,13 +1252,13 @@ pub trait LakeFormation {
         input: ListResourcesRequest,
     ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>>;
 
-    /// <p>The AWS Lake Formation principal.</p>
+    /// <p>Sets the list of data lake administrators who have admin privileges on all resources managed by Lake Formation. For more information on admin privileges, see <a href="https://docs.aws.amazon.com/lake-formation/latest/dg/lake-formation-permissions.html">Granting Lake Formation Permissions</a>.</p> <p>This API replaces the current list of data lake admins with the new list being passed. To add an admin, fetch the current list and add the new admin to that list and pass that list in this API.</p>
     async fn put_data_lake_settings(
         &self,
         input: PutDataLakeSettingsRequest,
     ) -> Result<PutDataLakeSettingsResponse, RusotoError<PutDataLakeSettingsError>>;
 
-    /// <p>Registers the resource as managed by the Data Catalog.</p> <p>To add or update data, Lake Formation needs read/write access to the chosen Amazon S3 path. Choose a role that you know has permission to do this, or choose the AWSServiceRoleForLakeFormationDataAccess service-linked role. When you register the first Amazon S3 path, the service-linked role and a new inline policy are created on your behalf. Lake Formation adds the first path to the inline policy and attaches it to the service-linked role. When you register subsequent paths, Lake Formation adds the path to the existing policy.</p>
+    /// <p>Registers the resource as managed by the Data Catalog.</p> <p>To add or update data, Lake Formation needs read/write access to the chosen Amazon S3 path. Choose a role that you know has permission to do this, or choose the AWSServiceRoleForLakeFormationDataAccess service-linked role. When you register the first Amazon S3 path, the service-linked role and a new inline policy are created on your behalf. Lake Formation adds the first path to the inline policy and attaches it to the service-linked role. When you register subsequent paths, Lake Formation adds the path to the existing policy.</p> <p>The following request registers a new location and gives AWS Lake Formation permission to use the service-linked role to access that location.</p> <p> <code>ResourceArn = arn:aws:s3:::my-bucket UseServiceLinkedRole = true</code> </p> <p>If <code>UseServiceLinkedRole</code> is not set to true, you must provide or set the <code>RoleArn</code>:</p> <p> <code>arn:aws:iam::12345:role/my-data-access-role</code> </p>
     async fn register_resource(
         &self,
         input: RegisterResourceRequest,
@@ -1267,27 +1321,18 @@ impl LakeFormation for LakeFormationClient {
         &self,
         input: BatchGrantPermissionsRequest,
     ) -> Result<BatchGrantPermissionsResponse, RusotoError<BatchGrantPermissionsError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.BatchGrantPermissions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGrantPermissionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGrantPermissionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGrantPermissionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGrantPermissionsResponse, _>()
     }
 
     /// <p>Batch operation to revoke permissions from the principal.</p>
@@ -1295,27 +1340,18 @@ impl LakeFormation for LakeFormationClient {
         &self,
         input: BatchRevokePermissionsRequest,
     ) -> Result<BatchRevokePermissionsResponse, RusotoError<BatchRevokePermissionsError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.BatchRevokePermissions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchRevokePermissionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchRevokePermissionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchRevokePermissionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchRevokePermissionsResponse, _>()
     }
 
     /// <p>Deregisters the resource as managed by the Data Catalog.</p> <p>When you deregister a path, Lake Formation removes the path from the inline policy attached to your service-linked role.</p>
@@ -1323,27 +1359,17 @@ impl LakeFormation for LakeFormationClient {
         &self,
         input: DeregisterResourceRequest,
     ) -> Result<DeregisterResourceResponse, RusotoError<DeregisterResourceError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.DeregisterResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeregisterResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeregisterResourceResponse, _>()
     }
 
     /// <p>Retrieves the current data access role for the given resource registered in AWS Lake Formation.</p>
@@ -1351,58 +1377,38 @@ impl LakeFormation for LakeFormationClient {
         &self,
         input: DescribeResourceRequest,
     ) -> Result<DescribeResourceResponse, RusotoError<DescribeResourceError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.DescribeResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeResourceResponse, _>()
     }
 
-    /// <p>The AWS Lake Formation principal.</p>
+    /// <p>Retrieves the list of the data lake administrators of a Lake Formation-managed data lake. </p>
     async fn get_data_lake_settings(
         &self,
         input: GetDataLakeSettingsRequest,
     ) -> Result<GetDataLakeSettingsResponse, RusotoError<GetDataLakeSettingsError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.GetDataLakeSettings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDataLakeSettingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDataLakeSettingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDataLakeSettingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDataLakeSettingsResponse, _>()
     }
 
-    /// <p>Returns the permissions for a specified table or database resource located at a path in Amazon S3.</p>
+    /// <p>Returns the Lake Formation permissions for a specified table or database resource located at a path in Amazon S3. <code>GetEffectivePermissionsForPath</code> will not return databases and tables if the catalog is encrypted.</p>
     async fn get_effective_permissions_for_path(
         &self,
         input: GetEffectivePermissionsForPathRequest,
@@ -1410,9 +1416,7 @@ impl LakeFormation for LakeFormationClient {
         GetEffectivePermissionsForPathResponse,
         RusotoError<GetEffectivePermissionsForPathError>,
     > {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSLakeFormation.GetEffectivePermissionsForPath",
@@ -1420,75 +1424,49 @@ impl LakeFormation for LakeFormationClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEffectivePermissionsForPathResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEffectivePermissionsForPathError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetEffectivePermissionsForPathError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetEffectivePermissionsForPathResponse, _>()
     }
 
-    /// <p>Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
+    /// <p>Grants permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     async fn grant_permissions(
         &self,
         input: GrantPermissionsRequest,
     ) -> Result<GrantPermissionsResponse, RusotoError<GrantPermissionsError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.GrantPermissions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GrantPermissionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GrantPermissionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GrantPermissionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GrantPermissionsResponse, _>()
     }
 
-    /// <p>Returns a list of the principal permissions on the resource, filtered by the permissions of the caller. For example, if you are granted an ALTER permission, you are able to see only the principal permissions for ALTER.</p> <p>This operation returns only those permissions that have been explicitly granted.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/michigan/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
+    /// <p>Returns a list of the principal permissions on the resource, filtered by the permissions of the caller. For example, if you are granted an ALTER permission, you are able to see only the principal permissions for ALTER.</p> <p>This operation returns only those permissions that have been explicitly granted.</p> <p>For information about permissions, see <a href="https://docs-aws.amazon.com/lake-formation/latest/dg/security-data-access.html">Security and Access Control to Metadata and Data</a>.</p>
     async fn list_permissions(
         &self,
         input: ListPermissionsRequest,
     ) -> Result<ListPermissionsResponse, RusotoError<ListPermissionsError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.ListPermissions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListPermissionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListPermissionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListPermissionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListPermissionsResponse, _>()
     }
 
     /// <p>Lists the resources registered to be managed by the Data Catalog.</p>
@@ -1496,82 +1474,53 @@ impl LakeFormation for LakeFormationClient {
         &self,
         input: ListResourcesRequest,
     ) -> Result<ListResourcesResponse, RusotoError<ListResourcesError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.ListResources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListResourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListResourcesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListResourcesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListResourcesResponse, _>()
     }
 
-    /// <p>The AWS Lake Formation principal.</p>
+    /// <p>Sets the list of data lake administrators who have admin privileges on all resources managed by Lake Formation. For more information on admin privileges, see <a href="https://docs.aws.amazon.com/lake-formation/latest/dg/lake-formation-permissions.html">Granting Lake Formation Permissions</a>.</p> <p>This API replaces the current list of data lake admins with the new list being passed. To add an admin, fetch the current list and add the new admin to that list and pass that list in this API.</p>
     async fn put_data_lake_settings(
         &self,
         input: PutDataLakeSettingsRequest,
     ) -> Result<PutDataLakeSettingsResponse, RusotoError<PutDataLakeSettingsError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.PutDataLakeSettings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutDataLakeSettingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutDataLakeSettingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutDataLakeSettingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutDataLakeSettingsResponse, _>()
     }
 
-    /// <p>Registers the resource as managed by the Data Catalog.</p> <p>To add or update data, Lake Formation needs read/write access to the chosen Amazon S3 path. Choose a role that you know has permission to do this, or choose the AWSServiceRoleForLakeFormationDataAccess service-linked role. When you register the first Amazon S3 path, the service-linked role and a new inline policy are created on your behalf. Lake Formation adds the first path to the inline policy and attaches it to the service-linked role. When you register subsequent paths, Lake Formation adds the path to the existing policy.</p>
+    /// <p>Registers the resource as managed by the Data Catalog.</p> <p>To add or update data, Lake Formation needs read/write access to the chosen Amazon S3 path. Choose a role that you know has permission to do this, or choose the AWSServiceRoleForLakeFormationDataAccess service-linked role. When you register the first Amazon S3 path, the service-linked role and a new inline policy are created on your behalf. Lake Formation adds the first path to the inline policy and attaches it to the service-linked role. When you register subsequent paths, Lake Formation adds the path to the existing policy.</p> <p>The following request registers a new location and gives AWS Lake Formation permission to use the service-linked role to access that location.</p> <p> <code>ResourceArn = arn:aws:s3:::my-bucket UseServiceLinkedRole = true</code> </p> <p>If <code>UseServiceLinkedRole</code> is not set to true, you must provide or set the <code>RoleArn</code>:</p> <p> <code>arn:aws:iam::12345:role/my-data-access-role</code> </p>
     async fn register_resource(
         &self,
         input: RegisterResourceRequest,
     ) -> Result<RegisterResourceResponse, RusotoError<RegisterResourceError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.RegisterResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RegisterResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RegisterResourceResponse, _>()
     }
 
     /// <p>Revokes permissions to the principal to access metadata in the Data Catalog and data organized in underlying data storage such as Amazon S3.</p>
@@ -1579,27 +1528,17 @@ impl LakeFormation for LakeFormationClient {
         &self,
         input: RevokePermissionsRequest,
     ) -> Result<RevokePermissionsResponse, RusotoError<RevokePermissionsError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.RevokePermissions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RevokePermissionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RevokePermissionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RevokePermissionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RevokePermissionsResponse, _>()
     }
 
     /// <p>Updates the data access role used for vending access to the given (registered) resource in AWS Lake Formation. </p>
@@ -1607,25 +1546,16 @@ impl LakeFormation for LakeFormationClient {
         &self,
         input: UpdateResourceRequest,
     ) -> Result<UpdateResourceResponse, RusotoError<UpdateResourceError>> {
-        let mut request = SignedRequest::new("POST", "lakeformation", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSLakeFormation.UpdateResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateResourceResponse, _>()
     }
 }

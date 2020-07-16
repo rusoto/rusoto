@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJobExecutionRequest {
     /// <p>Optional. A number that identifies a particular job execution on a particular device. If not specified, the latest job execution is returned.</p>
@@ -44,7 +44,7 @@ pub struct DescribeJobExecutionRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJobExecutionResponse {
     /// <p>Contains data about a job execution.</p>
@@ -53,7 +53,7 @@ pub struct DescribeJobExecutionResponse {
     pub execution: Option<JobExecution>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPendingJobExecutionsRequest {
     /// <p>The name of the thing that is executing the job.</p>
@@ -61,7 +61,7 @@ pub struct GetPendingJobExecutionsRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPendingJobExecutionsResponse {
     /// <p>A list of JobExecutionSummary objects with status IN_PROGRESS.</p>
@@ -75,7 +75,7 @@ pub struct GetPendingJobExecutionsResponse {
 }
 
 /// <p>Contains data about a job execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecution {
     /// <p>The estimated number of seconds that remain before the job execution status will be changed to <code>TIMED_OUT</code>.</p>
@@ -125,7 +125,7 @@ pub struct JobExecution {
 }
 
 /// <p>Contains data about the state of a job execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecutionState {
     /// <p>The status of the job execution. Can be one of: "QUEUED", "IN_PROGRESS", "FAILED", "SUCCESS", "CANCELED", "REJECTED", or "REMOVED".</p>
@@ -143,7 +143,7 @@ pub struct JobExecutionState {
 }
 
 /// <p>Contains a subset of information about a job execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobExecutionSummary {
     /// <p>A number that identifies a particular job execution on a particular device.</p>
@@ -172,7 +172,7 @@ pub struct JobExecutionSummary {
     pub version_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartNextPendingJobExecutionRequest {
     /// <p>A collection of name/value pairs that describe the status of the job execution. If not specified, the statusDetails are unchanged.</p>
@@ -188,7 +188,7 @@ pub struct StartNextPendingJobExecutionRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartNextPendingJobExecutionResponse {
     /// <p>A JobExecution object.</p>
@@ -197,7 +197,7 @@ pub struct StartNextPendingJobExecutionResponse {
     pub execution: Option<JobExecution>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateJobExecutionRequest {
     /// <p>Optional. A number that identifies a particular job execution on a particular device.</p>
@@ -235,7 +235,7 @@ pub struct UpdateJobExecutionRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobExecutionResponse {
     /// <p>A JobExecutionState object.</p>
@@ -584,6 +584,7 @@ impl IotJobsDataClient {
 #[async_trait]
 impl IotJobsData for IotJobsDataClient {
     /// <p>Gets details of a job execution.</p>
+    #[allow(unused_mut)]
     async fn describe_job_execution(
         &self,
         input: DescribeJobExecutionRequest,
@@ -614,7 +615,7 @@ impl IotJobsData for IotJobsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeJobExecutionResponse, _>()?;
 
@@ -626,6 +627,7 @@ impl IotJobsData for IotJobsDataClient {
     }
 
     /// <p>Gets the list of all jobs for a thing that are not in a terminal status.</p>
+    #[allow(unused_mut)]
     async fn get_pending_job_executions(
         &self,
         input: GetPendingJobExecutionsRequest,
@@ -643,7 +645,7 @@ impl IotJobsData for IotJobsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPendingJobExecutionsResponse, _>()?;
 
@@ -655,6 +657,7 @@ impl IotJobsData for IotJobsDataClient {
     }
 
     /// <p>Gets and starts the next pending (status IN_PROGRESS or QUEUED) job execution for a thing.</p>
+    #[allow(unused_mut)]
     async fn start_next_pending_job_execution(
         &self,
         input: StartNextPendingJobExecutionRequest,
@@ -678,7 +681,7 @@ impl IotJobsData for IotJobsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartNextPendingJobExecutionResponse, _>()?;
 
@@ -690,6 +693,7 @@ impl IotJobsData for IotJobsDataClient {
     }
 
     /// <p>Updates the status of a job execution.</p>
+    #[allow(unused_mut)]
     async fn update_job_execution(
         &self,
         input: UpdateJobExecutionRequest,
@@ -713,7 +717,7 @@ impl IotJobsData for IotJobsDataClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateJobExecutionResponse, _>()?;
 

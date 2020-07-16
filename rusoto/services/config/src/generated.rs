@@ -20,12 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl ConfigServiceClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "config", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>A collection of accounts and regions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountAggregationSource {
     /// <p>The 12-digit account ID of the account being aggregated. </p>
     #[serde(rename = "AccountIds")]
@@ -41,7 +67,7 @@ pub struct AccountAggregationSource {
 }
 
 /// <p>Indicates whether an AWS Config rule is compliant based on account ID, region, compliance, and rule name.</p> <p>A rule is compliant if all of the resources that the rule evaluated comply with it. It is noncompliant if any of these resources do not comply.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregateComplianceByConfigRule {
     /// <p>The 12-digit account ID of the source account.</p>
@@ -63,7 +89,7 @@ pub struct AggregateComplianceByConfigRule {
 }
 
 /// <p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregateComplianceCount {
     /// <p>The number of compliant and noncompliant AWS Config rules.</p>
@@ -77,7 +103,7 @@ pub struct AggregateComplianceCount {
 }
 
 /// <p>The details of an AWS Config evaluation for an account ID and region in an aggregator. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregateEvaluationResult {
     /// <p>The 12-digit account ID of the source account.</p>
@@ -111,7 +137,7 @@ pub struct AggregateEvaluationResult {
 }
 
 /// <p>The details that identify a resource that is collected by AWS Config aggregator, including the resource type, ID, (if available) the custom resource name, the source account, and source region.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AggregateResourceIdentifier {
     /// <p>The ID of the AWS resource.</p>
     #[serde(rename = "ResourceId")]
@@ -132,7 +158,7 @@ pub struct AggregateResourceIdentifier {
 }
 
 /// <p>The current sync status between the source and the aggregator account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregatedSourceStatus {
     /// <p>The region authorized to collect aggregated data.</p>
@@ -166,7 +192,7 @@ pub struct AggregatedSourceStatus {
 }
 
 /// <p>An object that represents the authorizations granted to aggregator accounts and regions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AggregationAuthorization {
     /// <p>The Amazon Resource Name (ARN) of the aggregation object.</p>
@@ -188,7 +214,7 @@ pub struct AggregationAuthorization {
 }
 
 /// <p>The detailed configuration of a specified resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BaseConfigurationItem {
     /// <p>The 12-digit AWS account ID associated with the resource.</p>
@@ -249,7 +275,7 @@ pub struct BaseConfigurationItem {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetAggregateResourceConfigRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -260,7 +286,7 @@ pub struct BatchGetAggregateResourceConfigRequest {
     pub resource_identifiers: Vec<AggregateResourceIdentifier>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetAggregateResourceConfigResponse {
     /// <p>A list that contains the current configuration of one or more resources.</p>
@@ -273,7 +299,7 @@ pub struct BatchGetAggregateResourceConfigResponse {
     pub unprocessed_resource_identifiers: Option<Vec<AggregateResourceIdentifier>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetResourceConfigRequest {
     /// <p>A list of resource keys to be processed with the current request. Each element in the list consists of the resource type and resource ID.</p>
@@ -281,7 +307,7 @@ pub struct BatchGetResourceConfigRequest {
     pub resource_keys: Vec<ResourceKey>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetResourceConfigResponse {
     /// <p>A list that contains the current configuration of one or more resources.</p>
@@ -295,7 +321,7 @@ pub struct BatchGetResourceConfigResponse {
 }
 
 /// <p>Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Compliance {
     /// <p>The number of AWS resources or AWS Config rules that cause a result of <code>NON_COMPLIANT</code>, up to a maximum number.</p>
@@ -309,7 +335,7 @@ pub struct Compliance {
 }
 
 /// <p>Indicates whether an AWS Config rule is compliant. A rule is compliant if all of the resources that the rule evaluated comply with it. A rule is noncompliant if any of these resources do not comply.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceByConfigRule {
     /// <p>Indicates whether the AWS Config rule is compliant.</p>
@@ -323,7 +349,7 @@ pub struct ComplianceByConfigRule {
 }
 
 /// <p>Indicates whether an AWS resource that is evaluated according to one or more AWS Config rules is compliant. A resource is compliant if it complies with all of the rules that evaluate it. A resource is noncompliant if it does not comply with one or more of these rules.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceByResource {
     /// <p>Indicates whether the AWS resource complies with all of the AWS Config rules that evaluated it.</p>
@@ -341,7 +367,7 @@ pub struct ComplianceByResource {
 }
 
 /// <p>The number of AWS resources or AWS Config rules responsible for the current compliance of the item, up to a maximum number.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceContributorCount {
     /// <p>Indicates whether the maximum count is reached.</p>
@@ -355,7 +381,7 @@ pub struct ComplianceContributorCount {
 }
 
 /// <p>The number of AWS Config rules or AWS resources that are compliant and noncompliant.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceSummary {
     /// <p>The time that AWS Config created the compliance summary.</p>
@@ -373,7 +399,7 @@ pub struct ComplianceSummary {
 }
 
 /// <p>The number of AWS resources of a specific type that are compliant or noncompliant, up to a maximum of 100 for each.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComplianceSummaryByResourceType {
     /// <p>The number of AWS resources that are compliant or noncompliant, up to a maximum of 100 for each.</p>
@@ -387,7 +413,7 @@ pub struct ComplianceSummaryByResourceType {
 }
 
 /// <p>Provides status of the delivery of the snapshot or the configuration history to the specified Amazon S3 bucket. Also provides the status of notifications about the Amazon S3 delivery to the specified Amazon SNS topic.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigExportDeliveryInfo {
     /// <p>The time of the last attempted delivery.</p>
@@ -417,7 +443,7 @@ pub struct ConfigExportDeliveryInfo {
 }
 
 /// <p>An AWS Config rule represents an AWS Lambda function that you create for a custom rule or a predefined function for an AWS managed rule. The function evaluates configuration items to assess whether your AWS resources comply with your desired configurations. This function can run when AWS Config detects a configuration change to an AWS resource and at a periodic frequency that you choose (for example, every 24 hours).</p> <note> <p>You can use the AWS CLI and AWS SDKs if you want to create a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot. For more information, see <a>ConfigSnapshotDeliveryProperties</a>.</p> </note> <p>For more information about developing and using AWS Config rules, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfigRule {
     /// <p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>
     #[serde(rename = "ConfigRuleArn")]
@@ -461,7 +487,7 @@ pub struct ConfigRule {
 }
 
 /// <p>Filters the compliance results based on account ID, region, compliance type, and rule name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigRuleComplianceFilters {
     /// <p>The 12-digit account ID of the source account. </p>
@@ -483,7 +509,7 @@ pub struct ConfigRuleComplianceFilters {
 }
 
 /// <p>Filters the results based on the account IDs and regions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConfigRuleComplianceSummaryFilters {
     /// <p>The 12-digit account ID of the source account.</p>
@@ -497,7 +523,7 @@ pub struct ConfigRuleComplianceSummaryFilters {
 }
 
 /// <p>Status information for your AWS managed Config rules. The status includes information such as the last time the rule ran, the last time it failed, and the related error for the last failure.</p> <p>This action does not return status information about custom AWS Config rules.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigRuleEvaluationStatus {
     /// <p>The Amazon Resource Name (ARN) of the AWS Config rule.</p>
@@ -550,7 +576,7 @@ pub struct ConfigRuleEvaluationStatus {
 }
 
 /// <p>Provides options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket in your delivery channel.</p> <p>The frequency for a rule that triggers evaluations for your resources when AWS Config delivers the configuration snapshot is set by one of two values, depending on which is less frequent:</p> <ul> <li> <p>The value for the <code>deliveryFrequency</code> parameter within the delivery channel configuration, which sets how often AWS Config delivers configuration snapshots. This value also sets how often AWS Config invokes evaluations for AWS Config rules.</p> </li> <li> <p>The value for the <code>MaximumExecutionFrequency</code> parameter, which sets the maximum frequency with which AWS Config invokes evaluations for the rule. For more information, see <a>ConfigRule</a>.</p> </li> </ul> <p>If the <code>deliveryFrequency</code> value is less frequent than the <code>MaximumExecutionFrequency</code> value for a rule, AWS Config invokes the rule only as often as the <code>deliveryFrequency</code> value.</p> <ol> <li> <p>For example, you want your rule to run evaluations when AWS Config delivers the configuration snapshot.</p> </li> <li> <p>You specify the <code>MaximumExecutionFrequency</code> value for <code>Six_Hours</code>. </p> </li> <li> <p>You then specify the delivery channel <code>deliveryFrequency</code> value for <code>TwentyFour_Hours</code>.</p> </li> <li> <p>Because the value for <code>deliveryFrequency</code> is less frequent than <code>MaximumExecutionFrequency</code>, AWS Config invokes evaluations for the rule every 24 hours. </p> </li> </ol> <p>You should set the <code>MaximumExecutionFrequency</code> value to be at least as frequent as the <code>deliveryFrequency</code> value. You can view the <code>deliveryFrequency</code> value by using the <code>DescribeDeliveryChannnels</code> action.</p> <p>To update the <code>deliveryFrequency</code> with which AWS Config delivers your configuration snapshots, use the <code>PutDeliveryChannel</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfigSnapshotDeliveryProperties {
     /// <p>The frequency with which AWS Config delivers configuration snapshots.</p>
     #[serde(rename = "deliveryFrequency")]
@@ -559,7 +585,7 @@ pub struct ConfigSnapshotDeliveryProperties {
 }
 
 /// <p>A list that contains the status of the delivery of the configuration stream notification to the Amazon SNS topic.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigStreamDeliveryInfo {
     /// <p>The error code from the last attempted delivery.</p>
@@ -581,7 +607,7 @@ pub struct ConfigStreamDeliveryInfo {
 }
 
 /// <p>The details about the configuration aggregator, including information about source accounts, regions, and metadata of the aggregator. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationAggregator {
     /// <p>Provides a list of source accounts and regions to be aggregated.</p>
@@ -611,7 +637,7 @@ pub struct ConfigurationAggregator {
 }
 
 /// <p>A list that contains detailed configurations of a specified resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationItem {
     /// <p>The 12-digit AWS account ID associated with the resource.</p>
@@ -689,7 +715,7 @@ pub struct ConfigurationItem {
 }
 
 /// <p>An object that represents the recording of configuration changes of an AWS resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfigurationRecorder {
     /// <p>The name of the recorder. By default, AWS Config automatically assigns the name "default" when creating the configuration recorder. You cannot change the assigned name.</p>
     #[serde(rename = "name")]
@@ -706,7 +732,7 @@ pub struct ConfigurationRecorder {
 }
 
 /// <p>The current status of the configuration recorder.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationRecorderStatus {
     /// <p>The error code indicating that the recording failed.</p>
@@ -744,7 +770,7 @@ pub struct ConfigurationRecorderStatus {
 }
 
 /// <p>Filters the conformance pack by compliance types and AWS Config rule names.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConformancePackComplianceFilters {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
@@ -758,7 +784,7 @@ pub struct ConformancePackComplianceFilters {
 }
 
 /// <p>Summary includes the name and status of the conformance pack.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackComplianceSummary {
     /// <p>The status of the conformance pack. The allowed values are COMPLIANT and NON_COMPLIANT. </p>
@@ -770,7 +796,7 @@ pub struct ConformancePackComplianceSummary {
 }
 
 /// <p>Returns details of a conformance pack. A conformance pack is a collection of AWS Config rules and remediation actions that can be easily deployed in an account and a region.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackDetail {
     /// <p>Amazon Resource Name (ARN) of the conformance pack.</p>
@@ -804,7 +830,7 @@ pub struct ConformancePackDetail {
 }
 
 /// <p>Filters a conformance pack by AWS Config rule names, compliance types, AWS resource types, and resource IDs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConformancePackEvaluationFilters {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
@@ -826,7 +852,7 @@ pub struct ConformancePackEvaluationFilters {
 }
 
 /// <p>The details of a conformance pack evaluation. Provides AWS Config rule and AWS resource type that was evaluated, the compliance of the conformance pack, related time stamps, and supplementary information. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackEvaluationResult {
     /// <p>Supplementary information about how the evaluation determined the compliance. </p>
@@ -847,7 +873,7 @@ pub struct ConformancePackEvaluationResult {
 }
 
 /// <p>Input parameters in the form of key-value pairs for the conformance pack, both of which you define. Keys can have a maximum character length of 128 characters, and values can have a maximum length of 256 characters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConformancePackInputParameter {
     /// <p>One part of a key-value pair.</p>
     #[serde(rename = "ParameterName")]
@@ -858,7 +884,7 @@ pub struct ConformancePackInputParameter {
 }
 
 /// <p>Compliance information of one or more AWS Config rules within a conformance pack. You can filter using AWS Config rule names and compliance types.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackRuleCompliance {
     /// <p>Compliance of the AWS Config rule</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
@@ -872,7 +898,7 @@ pub struct ConformancePackRuleCompliance {
 }
 
 /// <p>Status details of a conformance pack.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackStatusDetail {
     /// <p>Amazon Resource Name (ARN) of comformance pack.</p>
@@ -903,7 +929,7 @@ pub struct ConformancePackStatusDetail {
     pub stack_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAggregationAuthorizationRequest {
     /// <p>The 12-digit account ID of the account authorized to aggregate data.</p>
@@ -915,7 +941,7 @@ pub struct DeleteAggregationAuthorizationRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigRuleRequest {
     /// <p>The name of the AWS Config rule that you want to delete.</p>
@@ -923,7 +949,7 @@ pub struct DeleteConfigRuleRequest {
     pub config_rule_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationAggregatorRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -932,7 +958,7 @@ pub struct DeleteConfigurationAggregatorRequest {
 }
 
 /// <p>The request object for the <code>DeleteConfigurationRecorder</code> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationRecorderRequest {
     /// <p>The name of the configuration recorder to be deleted. You can retrieve the name of your configuration recorder by using the <code>DescribeConfigurationRecorders</code> action.</p>
@@ -940,7 +966,7 @@ pub struct DeleteConfigurationRecorderRequest {
     pub configuration_recorder_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConformancePackRequest {
     /// <p>Name of the conformance pack you want to delete.</p>
@@ -949,7 +975,7 @@ pub struct DeleteConformancePackRequest {
 }
 
 /// <p>The input for the <a>DeleteDeliveryChannel</a> action. The action accepts the following data, in JSON format. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeliveryChannelRequest {
     /// <p>The name of the delivery channel to delete.</p>
@@ -958,7 +984,7 @@ pub struct DeleteDeliveryChannelRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEvaluationResultsRequest {
     /// <p>The name of the AWS Config rule for which you want to delete the evaluation results.</p>
@@ -967,11 +993,11 @@ pub struct DeleteEvaluationResultsRequest {
 }
 
 /// <p>The output when you delete the evaluation results for the specified AWS Config rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEvaluationResultsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOrganizationConfigRuleRequest {
     /// <p>The name of organization config rule that you want to delete.</p>
@@ -979,7 +1005,7 @@ pub struct DeleteOrganizationConfigRuleRequest {
     pub organization_config_rule_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOrganizationConformancePackRequest {
     /// <p>The name of organization conformance pack that you want to delete.</p>
@@ -987,7 +1013,7 @@ pub struct DeleteOrganizationConformancePackRequest {
     pub organization_conformance_pack_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePendingAggregationRequestRequest {
     /// <p>The 12-digit account ID of the account requesting to aggregate data.</p>
@@ -998,7 +1024,7 @@ pub struct DeletePendingAggregationRequestRequest {
     pub requester_aws_region: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRemediationConfigurationRequest {
     /// <p>The name of the AWS Config rule for which you want to delete remediation configuration.</p>
@@ -1010,11 +1036,11 @@ pub struct DeleteRemediationConfigurationRequest {
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRemediationConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRemediationExceptionsRequest {
     /// <p>The name of the AWS Config rule for which you want to delete remediation exception configuration.</p>
@@ -1025,7 +1051,7 @@ pub struct DeleteRemediationExceptionsRequest {
     pub resource_keys: Vec<RemediationExceptionResourceKey>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRemediationExceptionsResponse {
     /// <p>Returns a list of failed delete remediation exceptions batch objects. Each object in the batch consists of a list of failed items and failure messages.</p>
@@ -1034,7 +1060,7 @@ pub struct DeleteRemediationExceptionsResponse {
     pub failed_batches: Option<Vec<FailedDeleteRemediationExceptionsBatch>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceConfigRequest {
     /// <p>Unique identifier of the resource.</p>
@@ -1045,7 +1071,7 @@ pub struct DeleteResourceConfigRequest {
     pub resource_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRetentionConfigurationRequest {
     /// <p>The name of the retention configuration to delete.</p>
@@ -1054,7 +1080,7 @@ pub struct DeleteRetentionConfigurationRequest {
 }
 
 /// <p>The input for the <a>DeliverConfigSnapshot</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeliverConfigSnapshotRequest {
     /// <p>The name of the delivery channel through which the snapshot is delivered.</p>
@@ -1063,7 +1089,7 @@ pub struct DeliverConfigSnapshotRequest {
 }
 
 /// <p>The output for the <a>DeliverConfigSnapshot</a> action, in JSON format.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeliverConfigSnapshotResponse {
     /// <p>The ID of the snapshot that is being created.</p>
@@ -1073,7 +1099,7 @@ pub struct DeliverConfigSnapshotResponse {
 }
 
 /// <p>The channel through which AWS Config delivers notifications and updated configuration states.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeliveryChannel {
     /// <p>The options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket.</p>
     #[serde(rename = "configSnapshotDeliveryProperties")]
@@ -1098,7 +1124,7 @@ pub struct DeliveryChannel {
 }
 
 /// <p>The status of a specified delivery channel.</p> <p>Valid values: <code>Success</code> | <code>Failure</code> </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeliveryChannelStatus {
     /// <p>A list that contains the status of the delivery of the configuration history to the specified Amazon S3 bucket.</p>
@@ -1119,7 +1145,7 @@ pub struct DeliveryChannelStatus {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAggregateComplianceByConfigRulesRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -1139,7 +1165,7 @@ pub struct DescribeAggregateComplianceByConfigRulesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAggregateComplianceByConfigRulesResponse {
     /// <p>Returns a list of AggregateComplianceByConfigRule object.</p>
@@ -1152,7 +1178,7 @@ pub struct DescribeAggregateComplianceByConfigRulesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAggregationAuthorizationsRequest {
     /// <p>The maximum number of AggregationAuthorizations returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
@@ -1165,7 +1191,7 @@ pub struct DescribeAggregationAuthorizationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAggregationAuthorizationsResponse {
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
@@ -1179,7 +1205,7 @@ pub struct DescribeAggregationAuthorizationsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComplianceByConfigRuleRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
@@ -1197,7 +1223,7 @@ pub struct DescribeComplianceByConfigRuleRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComplianceByConfigRuleResponse {
     /// <p>Indicates whether each of the specified AWS Config rules is compliant.</p>
@@ -1211,7 +1237,7 @@ pub struct DescribeComplianceByConfigRuleResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeComplianceByResourceRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>
@@ -1237,7 +1263,7 @@ pub struct DescribeComplianceByResourceRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeComplianceByResourceResponse {
     /// <p>Indicates whether the specified AWS resource complies with all of the AWS Config rules that evaluate it.</p>
@@ -1251,7 +1277,7 @@ pub struct DescribeComplianceByResourceResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigRuleEvaluationStatusRequest {
     /// <p>The name of the AWS managed Config rules for which you want status information. If you do not specify any names, AWS Config returns status information for all AWS managed Config rules that you use.</p>
@@ -1269,7 +1295,7 @@ pub struct DescribeConfigRuleEvaluationStatusRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigRuleEvaluationStatusResponse {
     /// <p>Status information about your AWS managed Config rules.</p>
@@ -1283,7 +1309,7 @@ pub struct DescribeConfigRuleEvaluationStatusResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigRulesRequest {
     /// <p>The names of the AWS Config rules for which you want details. If you do not specify any names, AWS Config returns details for all your rules.</p>
@@ -1297,7 +1323,7 @@ pub struct DescribeConfigRulesRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigRulesResponse {
     /// <p>The details about your AWS Config rules.</p>
@@ -1310,7 +1336,7 @@ pub struct DescribeConfigRulesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -1330,7 +1356,7 @@ pub struct DescribeConfigurationAggregatorSourcesStatusRequest {
     pub update_status: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationAggregatorSourcesStatusResponse {
     /// <p>Returns an AggregatedSourceStatus object. </p>
@@ -1343,7 +1369,7 @@ pub struct DescribeConfigurationAggregatorSourcesStatusResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationAggregatorsRequest {
     /// <p>The name of the configuration aggregators.</p>
@@ -1360,7 +1386,7 @@ pub struct DescribeConfigurationAggregatorsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationAggregatorsResponse {
     /// <p>Returns a ConfigurationAggregators object.</p>
@@ -1374,7 +1400,7 @@ pub struct DescribeConfigurationAggregatorsResponse {
 }
 
 /// <p>The input for the <a>DescribeConfigurationRecorderStatus</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRecorderStatusRequest {
     /// <p>The name(s) of the configuration recorder. If the name is not specified, the action returns the current status of all the configuration recorders associated with the account.</p>
@@ -1384,7 +1410,7 @@ pub struct DescribeConfigurationRecorderStatusRequest {
 }
 
 /// <p>The output for the <a>DescribeConfigurationRecorderStatus</a> action, in JSON format.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRecorderStatusResponse {
     /// <p>A list that contains status of the specified recorders.</p>
@@ -1394,7 +1420,7 @@ pub struct DescribeConfigurationRecorderStatusResponse {
 }
 
 /// <p>The input for the <a>DescribeConfigurationRecorders</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConfigurationRecordersRequest {
     /// <p>A list of configuration recorder names.</p>
@@ -1404,7 +1430,7 @@ pub struct DescribeConfigurationRecordersRequest {
 }
 
 /// <p>The output for the <a>DescribeConfigurationRecorders</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConfigurationRecordersResponse {
     /// <p>A list that contains the descriptions of the specified configuration recorders.</p>
@@ -1413,7 +1439,7 @@ pub struct DescribeConfigurationRecordersResponse {
     pub configuration_recorders: Option<Vec<ConfigurationRecorder>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConformancePackComplianceRequest {
     /// <p>Name of the conformance pack.</p>
@@ -1433,7 +1459,7 @@ pub struct DescribeConformancePackComplianceRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConformancePackComplianceResponse {
     /// <p>Name of the conformance pack.</p>
@@ -1448,7 +1474,7 @@ pub struct DescribeConformancePackComplianceResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConformancePackStatusRequest {
     /// <p>Comma-separated list of conformance pack names.</p>
@@ -1465,7 +1491,7 @@ pub struct DescribeConformancePackStatusRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConformancePackStatusResponse {
     /// <p>A list of <code>ConformancePackStatusDetail</code> objects.</p>
@@ -1478,7 +1504,7 @@ pub struct DescribeConformancePackStatusResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeConformancePacksRequest {
     /// <p>Comma-separated list of conformance pack names for which you want details. If you do not specify any names, AWS Config returns details for all your conformance packs. </p>
@@ -1495,7 +1521,7 @@ pub struct DescribeConformancePacksRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConformancePacksResponse {
     /// <p>Returns a list of <code>ConformancePackDetail</code> objects.</p>
@@ -1509,7 +1535,7 @@ pub struct DescribeConformancePacksResponse {
 }
 
 /// <p>The input for the <a>DeliveryChannelStatus</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeliveryChannelStatusRequest {
     /// <p>A list of delivery channel names.</p>
@@ -1519,7 +1545,7 @@ pub struct DescribeDeliveryChannelStatusRequest {
 }
 
 /// <p>The output for the <a>DescribeDeliveryChannelStatus</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeliveryChannelStatusResponse {
     /// <p>A list that contains the status of a specified delivery channel.</p>
@@ -1529,7 +1555,7 @@ pub struct DescribeDeliveryChannelStatusResponse {
 }
 
 /// <p>The input for the <a>DescribeDeliveryChannels</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDeliveryChannelsRequest {
     /// <p>A list of delivery channel names.</p>
@@ -1539,7 +1565,7 @@ pub struct DescribeDeliveryChannelsRequest {
 }
 
 /// <p>The output for the <a>DescribeDeliveryChannels</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeliveryChannelsResponse {
     /// <p>A list that contains the descriptions of the specified delivery channel.</p>
@@ -1548,7 +1574,7 @@ pub struct DescribeDeliveryChannelsResponse {
     pub delivery_channels: Option<Vec<DeliveryChannel>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConfigRuleStatusesRequest {
     /// <p>The maximum number of <code>OrganizationConfigRuleStatuses</code> returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100.</p>
@@ -1565,7 +1591,7 @@ pub struct DescribeOrganizationConfigRuleStatusesRequest {
     pub organization_config_rule_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConfigRuleStatusesResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -1578,7 +1604,7 @@ pub struct DescribeOrganizationConfigRuleStatusesResponse {
     pub organization_config_rule_statuses: Option<Vec<OrganizationConfigRuleStatus>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConfigRulesRequest {
     /// <p>The maximum number of organization config rules returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100.</p>
@@ -1595,7 +1621,7 @@ pub struct DescribeOrganizationConfigRulesRequest {
     pub organization_config_rule_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConfigRulesResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -1608,7 +1634,7 @@ pub struct DescribeOrganizationConfigRulesResponse {
     pub organization_config_rules: Option<Vec<OrganizationConfigRule>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConformancePackStatusesRequest {
     /// <p>The maximum number of OrganizationConformancePackStatuses returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100. </p>
@@ -1625,7 +1651,7 @@ pub struct DescribeOrganizationConformancePackStatusesRequest {
     pub organization_conformance_pack_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConformancePackStatusesResponse {
     /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -1638,7 +1664,7 @@ pub struct DescribeOrganizationConformancePackStatusesResponse {
     pub organization_conformance_pack_statuses: Option<Vec<OrganizationConformancePackStatus>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConformancePacksRequest {
     /// <p>The maximum number of organization config packs returned on each page. If you do no specify a number, AWS Config uses the default. The default is 100.</p>
@@ -1655,7 +1681,7 @@ pub struct DescribeOrganizationConformancePacksRequest {
     pub organization_conformance_pack_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConformancePacksResponse {
     /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>
@@ -1668,7 +1694,7 @@ pub struct DescribeOrganizationConformancePacksResponse {
     pub organization_conformance_packs: Option<Vec<OrganizationConformancePack>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePendingAggregationRequestsRequest {
     /// <p>The maximum number of evaluation results returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
@@ -1681,7 +1707,7 @@ pub struct DescribePendingAggregationRequestsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePendingAggregationRequestsResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
@@ -1694,7 +1720,7 @@ pub struct DescribePendingAggregationRequestsResponse {
     pub pending_aggregation_requests: Option<Vec<PendingAggregationRequest>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRemediationConfigurationsRequest {
     /// <p>A list of AWS Config rule names of remediation configurations for which you want details. </p>
@@ -1702,7 +1728,7 @@ pub struct DescribeRemediationConfigurationsRequest {
     pub config_rule_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationConfigurationsResponse {
     /// <p>Returns a remediation configuration object.</p>
@@ -1711,7 +1737,7 @@ pub struct DescribeRemediationConfigurationsResponse {
     pub remediation_configurations: Option<Vec<RemediationConfiguration>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRemediationExceptionsRequest {
     /// <p>The name of the AWS Config rule.</p>
@@ -1731,7 +1757,7 @@ pub struct DescribeRemediationExceptionsRequest {
     pub resource_keys: Option<Vec<RemediationExceptionResourceKey>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationExceptionsResponse {
     /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response.</p>
@@ -1744,7 +1770,7 @@ pub struct DescribeRemediationExceptionsResponse {
     pub remediation_exceptions: Option<Vec<RemediationException>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRemediationExecutionStatusRequest {
     /// <p>A list of AWS Config rule names.</p>
@@ -1764,7 +1790,7 @@ pub struct DescribeRemediationExecutionStatusRequest {
     pub resource_keys: Option<Vec<ResourceKey>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRemediationExecutionStatusResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
@@ -1777,7 +1803,7 @@ pub struct DescribeRemediationExecutionStatusResponse {
     pub remediation_execution_statuses: Option<Vec<RemediationExecutionStatus>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRetentionConfigurationsRequest {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -1790,7 +1816,7 @@ pub struct DescribeRetentionConfigurationsRequest {
     pub retention_configuration_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRetentionConfigurationsResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -1804,7 +1830,7 @@ pub struct DescribeRetentionConfigurationsResponse {
 }
 
 /// <p>Identifies an AWS resource and indicates whether it complies with the AWS Config rule that it was evaluated against.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Evaluation {
     /// <p>Supplementary information about how the evaluation determined the compliance.</p>
     #[serde(rename = "Annotation")]
@@ -1825,7 +1851,7 @@ pub struct Evaluation {
 }
 
 /// <p>The details of an AWS Config evaluation. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationResult {
     /// <p>Supplementary information about how the evaluation determined the compliance.</p>
@@ -1855,7 +1881,7 @@ pub struct EvaluationResult {
 }
 
 /// <p>Uniquely identifies an evaluation result.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationResultIdentifier {
     /// <p>Identifies an AWS Config rule used to evaluate an AWS resource, and provides the type and ID of the evaluated resource.</p>
@@ -1869,7 +1895,7 @@ pub struct EvaluationResultIdentifier {
 }
 
 /// <p>Identifies an AWS Config rule that evaluated an AWS resource, and provides the type and ID of the resource that the rule evaluated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EvaluationResultQualifier {
     /// <p>The name of the AWS Config rule that was used in the evaluation.</p>
@@ -1887,7 +1913,7 @@ pub struct EvaluationResultQualifier {
 }
 
 /// <p>The controls that AWS Config uses for executing remediations.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ExecutionControls {
     /// <p>A SsmControls object.</p>
     #[serde(rename = "SsmControls")]
@@ -1896,7 +1922,7 @@ pub struct ExecutionControls {
 }
 
 /// <p>List of each of the failed delete remediation exceptions with specific reasons.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedDeleteRemediationExceptionsBatch {
     /// <p>Returns remediation exception resource key object of the failed items.</p>
@@ -1910,7 +1936,7 @@ pub struct FailedDeleteRemediationExceptionsBatch {
 }
 
 /// <p>List of each of the failed remediations with specific reasons.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedRemediationBatch {
     /// <p>Returns remediation configurations of the failed items.</p>
@@ -1924,7 +1950,7 @@ pub struct FailedRemediationBatch {
 }
 
 /// <p>List of each of the failed remediation exceptions with specific reasons.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedRemediationExceptionBatch {
     /// <p>Returns remediation exception resource key object of the failed items.</p>
@@ -1938,7 +1964,7 @@ pub struct FailedRemediationExceptionBatch {
 }
 
 /// <p>Details about the fields such as name of the field.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FieldInfo {
     /// <p>Name of the field.</p>
@@ -1947,7 +1973,7 @@ pub struct FieldInfo {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateComplianceDetailsByConfigRuleRequest {
     /// <p>The 12-digit account ID of the source account.</p>
@@ -1976,7 +2002,7 @@ pub struct GetAggregateComplianceDetailsByConfigRuleRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateComplianceDetailsByConfigRuleResponse {
     /// <p>Returns an AggregateEvaluationResults object.</p>
@@ -1989,7 +2015,7 @@ pub struct GetAggregateComplianceDetailsByConfigRuleResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateConfigRuleComplianceSummaryRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -2013,7 +2039,7 @@ pub struct GetAggregateConfigRuleComplianceSummaryRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateConfigRuleComplianceSummaryResponse {
     /// <p>Returns a list of AggregateComplianceCounts object.</p>
@@ -2030,7 +2056,7 @@ pub struct GetAggregateConfigRuleComplianceSummaryResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateDiscoveredResourceCountsRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -2054,7 +2080,7 @@ pub struct GetAggregateDiscoveredResourceCountsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateDiscoveredResourceCountsResponse {
     /// <p>The key passed into the request object. If <code>GroupByKey</code> is not provided, the result will be empty.</p>
@@ -2074,7 +2100,7 @@ pub struct GetAggregateDiscoveredResourceCountsResponse {
     pub total_discovered_resources: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAggregateResourceConfigRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -2085,7 +2111,7 @@ pub struct GetAggregateResourceConfigRequest {
     pub resource_identifier: AggregateResourceIdentifier,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAggregateResourceConfigResponse {
     /// <p>Returns a <code>ConfigurationItem</code> object.</p>
@@ -2095,7 +2121,7 @@ pub struct GetAggregateResourceConfigResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceDetailsByConfigRuleRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>
@@ -2116,7 +2142,7 @@ pub struct GetComplianceDetailsByConfigRuleRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceDetailsByConfigRuleResponse {
     /// <p>Indicates whether the AWS resource complies with the specified AWS Config rule.</p>
@@ -2130,7 +2156,7 @@ pub struct GetComplianceDetailsByConfigRuleResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceDetailsByResourceRequest {
     /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>NOT_APPLICABLE</code>.</p>
@@ -2150,7 +2176,7 @@ pub struct GetComplianceDetailsByResourceRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceDetailsByResourceResponse {
     /// <p>Indicates whether the specified AWS resource complies each AWS Config rule.</p>
@@ -2164,7 +2190,7 @@ pub struct GetComplianceDetailsByResourceResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceSummaryByConfigRuleResponse {
     /// <p>The number of AWS Config rules that are compliant and the number that are noncompliant, up to a maximum of 25 for each.</p>
@@ -2174,7 +2200,7 @@ pub struct GetComplianceSummaryByConfigRuleResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComplianceSummaryByResourceTypeRequest {
     /// <p>Specify one or more resource types to get the number of resources that are compliant and the number that are noncompliant for each resource type.</p> <p>For this request, you can specify an AWS resource type such as <code>AWS::EC2::Instance</code>. You can specify that the resource type is an AWS account by specifying <code>AWS::::Account</code>.</p>
@@ -2184,7 +2210,7 @@ pub struct GetComplianceSummaryByResourceTypeRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComplianceSummaryByResourceTypeResponse {
     /// <p>The number of resources that are compliant and the number that are noncompliant. If one or more resource types were provided with the request, the numbers are returned for each resource type. The maximum number returned is 100.</p>
@@ -2193,7 +2219,7 @@ pub struct GetComplianceSummaryByResourceTypeResponse {
     pub compliance_summaries_by_resource_type: Option<Vec<ComplianceSummaryByResourceType>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConformancePackComplianceDetailsRequest {
     /// <p>Name of the conformance pack.</p>
@@ -2213,7 +2239,7 @@ pub struct GetConformancePackComplianceDetailsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConformancePackComplianceDetailsResponse {
     /// <p>Name of the conformance pack.</p>
@@ -2229,7 +2255,7 @@ pub struct GetConformancePackComplianceDetailsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConformancePackComplianceSummaryRequest {
     /// <p>Names of conformance packs.</p>
@@ -2245,7 +2271,7 @@ pub struct GetConformancePackComplianceSummaryRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConformancePackComplianceSummaryResponse {
     /// <p>A list of <code>ConformancePackComplianceSummary</code> objects. </p>
@@ -2258,7 +2284,7 @@ pub struct GetConformancePackComplianceSummaryResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDiscoveredResourceCountsRequest {
     /// <p>The maximum number of <a>ResourceCount</a> objects returned on each page. The default is 100. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
@@ -2275,7 +2301,7 @@ pub struct GetDiscoveredResourceCountsRequest {
     pub resource_types: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDiscoveredResourceCountsResponse {
     /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
@@ -2292,7 +2318,7 @@ pub struct GetDiscoveredResourceCountsResponse {
     pub total_discovered_resources: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOrganizationConfigRuleDetailedStatusRequest {
     /// <p>A <code>StatusDetailFilters</code> object.</p>
@@ -2312,7 +2338,7 @@ pub struct GetOrganizationConfigRuleDetailedStatusRequest {
     pub organization_config_rule_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOrganizationConfigRuleDetailedStatusResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -2325,7 +2351,7 @@ pub struct GetOrganizationConfigRuleDetailedStatusResponse {
     pub organization_config_rule_detailed_status: Option<Vec<MemberAccountStatus>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOrganizationConformancePackDetailedStatusRequest {
     /// <p>An <code>OrganizationResourceDetailedStatusFilters</code> object.</p>
@@ -2345,7 +2371,7 @@ pub struct GetOrganizationConformancePackDetailedStatusRequest {
     pub organization_conformance_pack_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOrganizationConformancePackDetailedStatusResponse {
     /// <p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -2360,7 +2386,7 @@ pub struct GetOrganizationConformancePackDetailedStatusResponse {
 }
 
 /// <p>The input for the <a>GetResourceConfigHistory</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceConfigHistoryRequest {
     /// <p>The chronological order for configuration items listed. By default, the results are listed in reverse chronological order.</p>
@@ -2392,7 +2418,7 @@ pub struct GetResourceConfigHistoryRequest {
 }
 
 /// <p>The output for the <a>GetResourceConfigHistory</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceConfigHistoryResponse {
     /// <p>A list that contains the configuration history of one or more resources.</p>
@@ -2406,7 +2432,7 @@ pub struct GetResourceConfigHistoryResponse {
 }
 
 /// <p>The count of resources that are grouped by the group name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupedResourceCount {
     /// <p>The name of the group that can be region, account ID, or resource type. For example, region1, region2 if the region was chosen as <code>GroupByKey</code>.</p>
@@ -2417,7 +2443,7 @@ pub struct GroupedResourceCount {
     pub resource_count: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAggregateDiscoveredResourcesRequest {
     /// <p>The name of the configuration aggregator. </p>
@@ -2440,7 +2466,7 @@ pub struct ListAggregateDiscoveredResourcesRequest {
     pub resource_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAggregateDiscoveredResourcesResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
@@ -2454,7 +2480,7 @@ pub struct ListAggregateDiscoveredResourcesResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDiscoveredResourcesRequest {
     /// <p>Specifies whether AWS Config includes deleted resources in the results. By default, deleted resources are not included.</p>
@@ -2483,7 +2509,7 @@ pub struct ListDiscoveredResourcesRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDiscoveredResourcesResponse {
     /// <p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>
@@ -2496,7 +2522,7 @@ pub struct ListDiscoveredResourcesResponse {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The maximum number of tags returned on each page. The limit maximum is 50. You cannot specify a number greater than 50. If you specify 0, AWS Config uses the default. </p>
@@ -2512,7 +2538,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
@@ -2526,7 +2552,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Organization config rule creation or deletion status in each member account. This includes the name of the rule, the status, error code and error message when the rule creation or deletion failed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberAccountStatus {
     /// <p>The 12-digit account ID of a member account.</p>
@@ -2553,7 +2579,7 @@ pub struct MemberAccountStatus {
 }
 
 /// <p>This object contains regions to set up the aggregator and an IAM role to retrieve organization details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OrganizationAggregationSource {
     /// <p>If true, aggregate existing AWS Config regions and future regions.</p>
     #[serde(rename = "AllAwsRegions")]
@@ -2569,7 +2595,7 @@ pub struct OrganizationAggregationSource {
 }
 
 /// <p>An organization config rule that has information about config rules that AWS Config creates in member accounts.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationConfigRule {
     /// <p>A comma-separated list of accounts excluded from organization config rule.</p>
@@ -2597,7 +2623,7 @@ pub struct OrganizationConfigRule {
 }
 
 /// <p>Returns the status for an organization config rule in an organization.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationConfigRuleStatus {
     /// <p>An error code that is returned when organization config rule creation or deletion has failed.</p>
@@ -2621,7 +2647,7 @@ pub struct OrganizationConfigRuleStatus {
 }
 
 /// <p>An organization conformance pack that has information about conformance packs that AWS Config creates in member accounts. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationConformancePack {
     /// <p>A list of <code>ConformancePackInputParameter</code> objects.</p>
@@ -2651,7 +2677,7 @@ pub struct OrganizationConformancePack {
 }
 
 /// <p>Organization conformance pack creation or deletion status in each member account. This includes the name of the conformance pack, the status, error code and error message when the conformance pack creation or deletion failed. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationConformancePackDetailedStatus {
     /// <p>The 12-digit account ID of a member account.</p>
@@ -2678,7 +2704,7 @@ pub struct OrganizationConformancePackDetailedStatus {
 }
 
 /// <p>Returns the status for an organization conformance pack in an organization.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationConformancePackStatus {
     /// <p>An error code that is returned when organization conformance pack creation or deletion has failed in a member account. </p>
@@ -2702,7 +2728,7 @@ pub struct OrganizationConformancePackStatus {
 }
 
 /// <p>An object that specifies organization custom rule metadata such as resource type, resource ID of AWS resource, Lamdba function ARN, and organization trigger types that trigger AWS Config to evaluate your AWS resources against a rule. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OrganizationCustomRuleMetadata {
     /// <p>The description that you provide for organization config rule.</p>
     #[serde(rename = "Description")]
@@ -2741,7 +2767,7 @@ pub struct OrganizationCustomRuleMetadata {
 }
 
 /// <p>An object that specifies organization managed rule metadata such as resource type and ID of AWS resource along with the rule identifier. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OrganizationManagedRuleMetadata {
     /// <p>The description that you provide for organization config rule.</p>
     #[serde(rename = "Description")]
@@ -2777,7 +2803,7 @@ pub struct OrganizationManagedRuleMetadata {
 }
 
 /// <p>Status filter object to filter results based on specific member account ID or status type for an organization conformance pack.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OrganizationResourceDetailedStatusFilters {
     /// <p>The 12-digit account ID of the member account within an organization.</p>
@@ -2791,7 +2817,7 @@ pub struct OrganizationResourceDetailedStatusFilters {
 }
 
 /// <p>An object that represents the account ID and region of an aggregator account that is requesting authorization but is not yet authorized.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PendingAggregationRequest {
     /// <p>The 12-digit account ID of the account requesting to aggregate data.</p>
@@ -2804,7 +2830,7 @@ pub struct PendingAggregationRequest {
     pub requester_aws_region: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAggregationAuthorizationRequest {
     /// <p>The 12-digit account ID of the account authorized to aggregate data.</p>
@@ -2819,7 +2845,7 @@ pub struct PutAggregationAuthorizationRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAggregationAuthorizationResponse {
     /// <p>Returns an AggregationAuthorization object. </p>
@@ -2828,7 +2854,7 @@ pub struct PutAggregationAuthorizationResponse {
     pub aggregation_authorization: Option<AggregationAuthorization>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigRuleRequest {
     /// <p>The rule that you want to add to your account.</p>
@@ -2840,7 +2866,7 @@ pub struct PutConfigRuleRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationAggregatorRequest {
     /// <p>A list of AccountAggregationSource object. </p>
@@ -2860,7 +2886,7 @@ pub struct PutConfigurationAggregatorRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConfigurationAggregatorResponse {
     /// <p>Returns a ConfigurationAggregator object.</p>
@@ -2870,7 +2896,7 @@ pub struct PutConfigurationAggregatorResponse {
 }
 
 /// <p>The input for the <a>PutConfigurationRecorder</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConfigurationRecorderRequest {
     /// <p>The configuration recorder object that records each configuration change made to the resources.</p>
@@ -2878,7 +2904,7 @@ pub struct PutConfigurationRecorderRequest {
     pub configuration_recorder: ConfigurationRecorder,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutConformancePackRequest {
     /// <p>A list of <code>ConformancePackInputParameter</code> objects.</p>
@@ -2905,7 +2931,7 @@ pub struct PutConformancePackRequest {
     pub template_s3_uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutConformancePackResponse {
     /// <p>ARN of the conformance pack.</p>
@@ -2915,7 +2941,7 @@ pub struct PutConformancePackResponse {
 }
 
 /// <p>The input for the <a>PutDeliveryChannel</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDeliveryChannelRequest {
     /// <p>The configuration delivery channel object that delivers the configuration information to an Amazon S3 bucket and to an Amazon SNS topic.</p>
@@ -2924,7 +2950,7 @@ pub struct PutDeliveryChannelRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEvaluationsRequest {
     /// <p>The assessments that the AWS Lambda function performs. Each evaluation identifies an AWS resource and indicates whether it complies with the AWS Config rule that invokes the AWS Lambda function.</p>
@@ -2941,7 +2967,7 @@ pub struct PutEvaluationsRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEvaluationsResponse {
     /// <p>Requests that failed because of a client or server error.</p>
@@ -2950,7 +2976,7 @@ pub struct PutEvaluationsResponse {
     pub failed_evaluations: Option<Vec<Evaluation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutOrganizationConfigRuleRequest {
     /// <p>A comma-separated list of accounts that you want to exclude from an organization config rule.</p>
@@ -2970,7 +2996,7 @@ pub struct PutOrganizationConfigRuleRequest {
     pub organization_managed_rule_metadata: Option<OrganizationManagedRuleMetadata>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutOrganizationConfigRuleResponse {
     /// <p>The Amazon Resource Name (ARN) of an organization config rule.</p>
@@ -2979,7 +3005,7 @@ pub struct PutOrganizationConfigRuleResponse {
     pub organization_config_rule_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutOrganizationConformancePackRequest {
     /// <p>A list of <code>ConformancePackInputParameter</code> objects.</p>
@@ -3010,7 +3036,7 @@ pub struct PutOrganizationConformancePackRequest {
     pub template_s3_uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutOrganizationConformancePackResponse {
     /// <p>ARN of the organization conformance pack.</p>
@@ -3019,7 +3045,7 @@ pub struct PutOrganizationConformancePackResponse {
     pub organization_conformance_pack_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRemediationConfigurationsRequest {
     /// <p>A list of remediation configuration objects.</p>
@@ -3027,7 +3053,7 @@ pub struct PutRemediationConfigurationsRequest {
     pub remediation_configurations: Vec<RemediationConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRemediationConfigurationsResponse {
     /// <p>Returns a list of failed remediation batch objects.</p>
@@ -3036,7 +3062,7 @@ pub struct PutRemediationConfigurationsResponse {
     pub failed_batches: Option<Vec<FailedRemediationBatch>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRemediationExceptionsRequest {
     /// <p>The name of the AWS Config rule for which you want to create remediation exception.</p>
@@ -3055,7 +3081,7 @@ pub struct PutRemediationExceptionsRequest {
     pub resource_keys: Vec<RemediationExceptionResourceKey>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRemediationExceptionsResponse {
     /// <p>Returns a list of failed remediation exceptions batch objects. Each object in the batch consists of a list of failed items and failure messages.</p>
@@ -3064,7 +3090,7 @@ pub struct PutRemediationExceptionsResponse {
     pub failed_batches: Option<Vec<FailedRemediationExceptionBatch>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResourceConfigRequest {
     /// <p><p>The configuration object of the resource in valid JSON format. It must match the schema registered with AWS CloudFormation.</p> <note> <p>The configuration JSON must not exceed 64 KB.</p> </note></p>
@@ -3089,7 +3115,7 @@ pub struct PutResourceConfigRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRetentionConfigurationRequest {
     /// <p><p>Number of days AWS Config stores your historical information.</p> <note> <p>Currently, only applicable to the configuration item history.</p> </note></p>
@@ -3097,7 +3123,7 @@ pub struct PutRetentionConfigurationRequest {
     pub retention_period_in_days: i64,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRetentionConfigurationResponse {
     /// <p>Returns a retention configuration object.</p>
@@ -3107,7 +3133,7 @@ pub struct PutRetentionConfigurationResponse {
 }
 
 /// <p>Details about the query.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryInfo {
     /// <p>Returns a <code>FieldInfo</code> object.</p>
@@ -3117,7 +3143,7 @@ pub struct QueryInfo {
 }
 
 /// <p>Specifies the types of AWS resource for which AWS Config records configuration changes.</p> <p>In the recording group, you specify whether all supported types or specific types of resources are recorded.</p> <p>By default, AWS Config records configuration changes for all supported types of regional resources that AWS Config discovers in the region in which it is running. Regional resources are tied to a region and can be used only in that region. Examples of regional resources are EC2 instances and EBS volumes.</p> <p>You can also have AWS Config record configuration changes for supported types of global resources (for example, IAM resources). Global resources are not tied to an individual region and can be used in all regions.</p> <important> <p>The configuration details for any global resource are the same in all regions. If you customize AWS Config in multiple regions to record global resources, it will create multiple configuration items each time a global resource changes: one configuration item for each region. These configuration items will contain identical data. To prevent duplicate configuration items, you should consider customizing AWS Config in only one region to record global resources, unless you want the configuration items to be available in multiple regions.</p> </important> <p>If you don't want AWS Config to record all resources, you can specify which types of resources it will record with the <code>resourceTypes</code> parameter.</p> <p>For a list of supported resource types, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported Resource Types</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/select-resources.html">Selecting Which Resources AWS Config Records</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RecordingGroup {
     /// <p>Specifies whether AWS Config records configuration changes for every supported type of regional resource.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of regional resource, it starts recording resources of that type automatically.</p> <p>If you set this option to <code>true</code>, you cannot enumerate a list of <code>resourceTypes</code>.</p>
     #[serde(rename = "allSupported")]
@@ -3134,7 +3160,7 @@ pub struct RecordingGroup {
 }
 
 /// <p>The relationship of the related resource to the main resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Relationship {
     /// <p>The type of relationship with the related resource.</p>
@@ -3156,7 +3182,7 @@ pub struct Relationship {
 }
 
 /// <p>An object that represents the details about the remediation configuration that includes the remediation action, parameters, and data to execute the action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemediationConfiguration {
     /// <p>Amazon Resource Name (ARN) of remediation configuration.</p>
     #[serde(rename = "Arn")]
@@ -3206,7 +3232,7 @@ pub struct RemediationConfiguration {
 }
 
 /// <p>An object that represents the details about the remediation exception. The details include the rule name, an explanation of an exception, the time when the exception will be deleted, the resource ID, and resource type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemediationException {
     /// <p>The name of the AWS Config rule.</p>
@@ -3229,7 +3255,7 @@ pub struct RemediationException {
 }
 
 /// <p>The details that identify a resource within AWS Config, including the resource type and resource ID. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemediationExceptionResourceKey {
     /// <p>The ID of the resource (for example., sg-xxxxxx).</p>
     #[serde(rename = "ResourceId")]
@@ -3242,7 +3268,7 @@ pub struct RemediationExceptionResourceKey {
 }
 
 /// <p>Provides details of the current status of the invoked remediation action for that resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemediationExecutionStatus {
     /// <p>Start time when the remediation was executed.</p>
@@ -3267,7 +3293,7 @@ pub struct RemediationExecutionStatus {
 }
 
 /// <p>Name of the step from the SSM document.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemediationExecutionStep {
     /// <p>An error message if the step was interrupted during execution.</p>
@@ -3293,7 +3319,7 @@ pub struct RemediationExecutionStep {
 }
 
 /// <p>The value is either a dynamic (resource) value or a static value. You must select either a dynamic value or a static value.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemediationParameterValue {
     /// <p>The value is dynamic and changes at run-time.</p>
     #[serde(rename = "ResourceValue")]
@@ -3306,7 +3332,7 @@ pub struct RemediationParameterValue {
 }
 
 /// <p>An object that contains the resource type and the number of resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceCount {
     /// <p>The number of resources.</p>
@@ -3320,7 +3346,7 @@ pub struct ResourceCount {
 }
 
 /// <p>Filters the resource count based on account ID, region, and resource type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResourceCountFilters {
     /// <p>The 12-digit ID of the account.</p>
@@ -3338,7 +3364,7 @@ pub struct ResourceCountFilters {
 }
 
 /// <p>Filters the results by resource account ID, region, resource ID, and resource name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResourceFilters {
     /// <p>The 12-digit source account ID.</p>
@@ -3360,7 +3386,7 @@ pub struct ResourceFilters {
 }
 
 /// <p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceIdentifier {
     /// <p>The time that the resource was deleted.</p>
@@ -3382,7 +3408,7 @@ pub struct ResourceIdentifier {
 }
 
 /// <p>The details that identify a resource within AWS Config, including the resource type and resource ID.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceKey {
     /// <p>The ID of the resource (for example., sg-xxxxxx). </p>
     #[serde(rename = "resourceId")]
@@ -3393,7 +3419,7 @@ pub struct ResourceKey {
 }
 
 /// <p>The dynamic value of the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceValue {
     /// <p>The value is a resource ID.</p>
     #[serde(rename = "Value")]
@@ -3401,7 +3427,7 @@ pub struct ResourceValue {
 }
 
 /// <p>An object with the name of the retention configuration and the retention period in days. The object stores the configuration for data retention in AWS Config.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RetentionConfiguration {
     /// <p>The name of the retention configuration object.</p>
@@ -3413,7 +3439,7 @@ pub struct RetentionConfiguration {
 }
 
 /// <p>Defines which resources trigger an evaluation for an AWS Config rule. The scope can include one or more resource types, a combination of a tag key and value, or a combination of one resource type and one resource ID. Specify a scope to constrain which resources trigger an evaluation for a rule. Otherwise, evaluations for the rule are triggered when any resource in your recording group changes in configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scope {
     /// <p>The ID of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for <code>ComplianceResourceTypes</code>.</p>
     #[serde(rename = "ComplianceResourceId")]
@@ -3433,7 +3459,7 @@ pub struct Scope {
     pub tag_value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectAggregateResourceConfigRequest {
     /// <p>The name of the configuration aggregator.</p>
@@ -3455,7 +3481,7 @@ pub struct SelectAggregateResourceConfigRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SelectAggregateResourceConfigResponse {
     /// <p>The nextToken string returned in a previous request that you use to request the next page of results in a paginated response. </p>
@@ -3471,7 +3497,7 @@ pub struct SelectAggregateResourceConfigResponse {
     pub results: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelectResourceConfigRequest {
     /// <p>The SQL query <code>SELECT</code> command.</p>
@@ -3487,7 +3513,7 @@ pub struct SelectResourceConfigRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SelectResourceConfigResponse {
     /// <p>The <code>nextToken</code> string returned in a previous request that you use to request the next page of results in a paginated response. </p>
@@ -3505,7 +3531,7 @@ pub struct SelectResourceConfigResponse {
 }
 
 /// <p>Provides the AWS Config rule owner (AWS or customer), the rule identifier, and the events that trigger the evaluation of your AWS resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Source {
     /// <p>Indicates whether AWS or the customer owns and manages the AWS Config rule.</p>
     #[serde(rename = "Owner")]
@@ -3520,7 +3546,7 @@ pub struct Source {
 }
 
 /// <p>Provides the source and the message types that trigger AWS Config to evaluate your AWS resources against a rule. It also provides the frequency with which you want AWS Config to run evaluations for the rule if the trigger type is periodic. You can specify the parameter values for <code>SourceDetail</code> only for custom rules. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SourceDetail {
     /// <p>The source of the event, such as an AWS service, that triggers AWS Config to evaluate your AWS resources.</p>
     #[serde(rename = "EventSource")]
@@ -3537,7 +3563,7 @@ pub struct SourceDetail {
 }
 
 /// <p>AWS Systems Manager (SSM) specific remediation controls.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SsmControls {
     /// <p>The maximum percentage of remediation actions allowed to run in parallel on the non-compliant resources for that specific rule. You can specify a percentage, such as 10%. The default value is 10. </p>
     #[serde(rename = "ConcurrentExecutionRatePercentage")]
@@ -3550,7 +3576,7 @@ pub struct SsmControls {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartConfigRulesEvaluationRequest {
     /// <p>The list of names of AWS Config rules that you want to run evaluations for.</p>
@@ -3560,12 +3586,12 @@ pub struct StartConfigRulesEvaluationRequest {
 }
 
 /// <p>The output when you start the evaluation for the specified AWS Config rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartConfigRulesEvaluationResponse {}
 
 /// <p>The input for the <a>StartConfigurationRecorder</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartConfigurationRecorderRequest {
     /// <p>The name of the recorder object that records each configuration change made to the resources.</p>
@@ -3573,7 +3599,7 @@ pub struct StartConfigurationRecorderRequest {
     pub configuration_recorder_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRemediationExecutionRequest {
     /// <p>The list of names of AWS Config rules that you want to run remediation execution for.</p>
@@ -3584,7 +3610,7 @@ pub struct StartRemediationExecutionRequest {
     pub resource_keys: Vec<ResourceKey>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartRemediationExecutionResponse {
     /// <p>For resources that have failed to start execution, the API returns a resource key object.</p>
@@ -3598,7 +3624,7 @@ pub struct StartRemediationExecutionResponse {
 }
 
 /// <p>The static value of the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StaticValue {
     /// <p>A list of values. For example, the ARN of the assumed role. </p>
     #[serde(rename = "Values")]
@@ -3606,7 +3632,7 @@ pub struct StaticValue {
 }
 
 /// <p>Status filter object to filter results based on specific member account ID or status type for an organization config rule. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StatusDetailFilters {
     /// <p>The 12-digit account ID of the member account within an organization.</p>
@@ -3620,7 +3646,7 @@ pub struct StatusDetailFilters {
 }
 
 /// <p>The input for the <a>StopConfigurationRecorder</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopConfigurationRecorderRequest {
     /// <p>The name of the recorder object that records each configuration change made to the resources.</p>
@@ -3629,7 +3655,7 @@ pub struct StopConfigurationRecorderRequest {
 }
 
 /// <p>The tags for the resource. The metadata that you apply to a resource to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>One part of a key-value pair that make up a tag. A key is a general label that acts like a category for more specific tag values.</p>
     #[serde(rename = "Key")]
@@ -3641,7 +3667,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the resource for which to list the tags. Currently, the supported resources are <code>ConfigRule</code>, <code>ConfigurationAggregator</code> and <code>AggregatorAuthorization</code>.</p>
@@ -3652,7 +3678,7 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the resource for which to list the tags. Currently, the supported resources are <code>ConfigRule</code>, <code>ConfigurationAggregator</code> and <code>AggregatorAuthorization</code>.</p>
@@ -8255,9 +8281,7 @@ impl ConfigService for ConfigServiceClient {
         BatchGetAggregateResourceConfigResponse,
         RusotoError<BatchGetAggregateResourceConfigError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.BatchGetAggregateResourceConfig",
@@ -8265,22 +8289,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetAggregateResourceConfigError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetAggregateResourceConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
     }
 
     /// <p><p>Returns the current configuration for one or more requested resources. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty unprocessedResourceKeys list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return any tags for the requested resources. This information is filtered out of the supplementaryConfiguration section of the API response.</p> </li> </ul> </note></p>
@@ -8288,27 +8303,18 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: BatchGetResourceConfigRequest,
     ) -> Result<BatchGetResourceConfigResponse, RusotoError<BatchGetResourceConfigError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.BatchGetResourceConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchGetResourceConfigResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetResourceConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetResourceConfigResponse, _>()
     }
 
     /// <p>Deletes the authorization granted to the specified configuration aggregator account in a specified region.</p>
@@ -8316,9 +8322,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteAggregationAuthorizationRequest,
     ) -> Result<(), RusotoError<DeleteAggregationAuthorizationError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteAggregationAuthorization",
@@ -8326,19 +8330,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteAggregationAuthorizationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteAggregationAuthorizationError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>
@@ -8346,26 +8342,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConfigRuleRequest,
     ) -> Result<(), RusotoError<DeleteConfigRuleError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DeleteConfigRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConfigRuleError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified configuration aggregator and the aggregated data associated with the aggregator.</p>
@@ -8373,9 +8359,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConfigurationAggregatorRequest,
     ) -> Result<(), RusotoError<DeleteConfigurationAggregatorError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteConfigurationAggregator",
@@ -8383,19 +8367,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigurationAggregatorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConfigurationAggregatorError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the configuration recorder.</p> <p>After the configuration recorder is deleted, AWS Config will not record resource configuration changes until you create a new configuration recorder.</p> <p>This action does not delete the configuration information that was previously recorded. You will be able to access the previously recorded information by using the <code>GetResourceConfigHistory</code> action, but you will not be able to access this information in the AWS Config console until you create a new configuration recorder.</p>
@@ -8403,9 +8379,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConfigurationRecorderRequest,
     ) -> Result<(), RusotoError<DeleteConfigurationRecorderError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteConfigurationRecorder",
@@ -8413,19 +8387,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConfigurationRecorderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConfigurationRecorderError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified conformance pack and all the AWS Config rules, remediation actions, and all evaluation results within that conformance pack.</p> <p>AWS Config sets the conformance pack to <code>DELETE_IN_PROGRESS</code> until the deletion is complete. You cannot update a conformance pack while it is in this state.</p>
@@ -8433,26 +8399,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConformancePackRequest,
     ) -> Result<(), RusotoError<DeleteConformancePackError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DeleteConformancePack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteConformancePackError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteConformancePackError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the delivery channel.</p> <p>Before you can delete the delivery channel, you must stop the configuration recorder by using the <a>StopConfigurationRecorder</a> action.</p>
@@ -8460,26 +8416,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteDeliveryChannelRequest,
     ) -> Result<(), RusotoError<DeleteDeliveryChannelError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DeleteDeliveryChannel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDeliveryChannelError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDeliveryChannelError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the evaluation results for the specified AWS Config rule. You can specify one AWS Config rule per request. After you delete the evaluation results, you can call the <a>StartConfigRulesEvaluation</a> API to start evaluating your AWS resources against the rule.</p>
@@ -8487,9 +8433,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteEvaluationResultsRequest,
     ) -> Result<DeleteEvaluationResultsResponse, RusotoError<DeleteEvaluationResultsError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteEvaluationResults",
@@ -8497,20 +8441,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteEvaluationResultsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEvaluationResultsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteEvaluationResultsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteEvaluationResultsResponse, _>()
     }
 
     /// <p>Deletes the specified organization config rule and all of its evaluation results from all member accounts in that organization. Only a master account can delete an organization config rule.</p> <p>AWS Config sets the state of a rule to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a rule while it is in this state.</p>
@@ -8518,9 +8455,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteOrganizationConfigRuleRequest,
     ) -> Result<(), RusotoError<DeleteOrganizationConfigRuleError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteOrganizationConfigRule",
@@ -8528,19 +8463,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteOrganizationConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteOrganizationConfigRuleError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the specified organization conformance pack and all of the config rules and remediation actions from all member accounts in that organization. Only a master account can delete an organization conformance pack.</p> <p>AWS Config sets the state of a conformance pack to DELETE_IN_PROGRESS until the deletion is complete. You cannot update a conformance pack while it is in this state. </p>
@@ -8548,9 +8475,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteOrganizationConformancePackRequest,
     ) -> Result<(), RusotoError<DeleteOrganizationConformancePackError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteOrganizationConformancePack",
@@ -8558,21 +8483,14 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteOrganizationConformancePackError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteOrganizationConformancePackError::from_response,
+            )
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes pending authorization requests for a specified aggregator account in a specified region.</p>
@@ -8580,9 +8498,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeletePendingAggregationRequestRequest,
     ) -> Result<(), RusotoError<DeletePendingAggregationRequestError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeletePendingAggregationRequest",
@@ -8590,21 +8506,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeletePendingAggregationRequestError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeletePendingAggregationRequestError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the remediation configuration.</p>
@@ -8615,9 +8521,7 @@ impl ConfigService for ConfigServiceClient {
         DeleteRemediationConfigurationResponse,
         RusotoError<DeleteRemediationConfigurationError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteRemediationConfiguration",
@@ -8625,20 +8529,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRemediationConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRemediationConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRemediationConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteRemediationConfigurationResponse, _>()
     }
 
     /// <p>Deletes one or more remediation exceptions mentioned in the resource keys.</p>
@@ -8647,9 +8544,7 @@ impl ConfigService for ConfigServiceClient {
         input: DeleteRemediationExceptionsRequest,
     ) -> Result<DeleteRemediationExceptionsResponse, RusotoError<DeleteRemediationExceptionsError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteRemediationExceptions",
@@ -8657,20 +8552,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRemediationExceptionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRemediationExceptionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRemediationExceptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteRemediationExceptionsResponse, _>()
     }
 
     /// <p>Records the configuration state for a custom resource that has been deleted. This API records a new ConfigurationItem with a ResourceDeleted status. You can retrieve the ConfigurationItems recorded for this resource in your AWS Config History. </p>
@@ -8678,26 +8566,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteResourceConfigRequest,
     ) -> Result<(), RusotoError<DeleteResourceConfigError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DeleteResourceConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteResourceConfigError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the retention configuration.</p>
@@ -8705,9 +8583,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteRetentionConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteRetentionConfigurationError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteRetentionConfiguration",
@@ -8715,19 +8591,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRetentionConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRetentionConfigurationError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Schedules delivery of a configuration snapshot to the Amazon S3 bucket in the specified delivery channel. After the delivery has started, AWS Config sends the following notifications using an Amazon SNS topic that you have specified.</p> <ul> <li> <p>Notification of the start of the delivery.</p> </li> <li> <p>Notification of the completion of the delivery, if the delivery was successfully completed.</p> </li> <li> <p>Notification of delivery failure, if the delivery failed.</p> </li> </ul></p>
@@ -8735,27 +8603,18 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeliverConfigSnapshotRequest,
     ) -> Result<DeliverConfigSnapshotResponse, RusotoError<DeliverConfigSnapshotError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DeliverConfigSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeliverConfigSnapshotResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeliverConfigSnapshotError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeliverConfigSnapshotError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeliverConfigSnapshotResponse, _>()
     }
 
     /// <p><p>Returns a list of compliant and noncompliant rules with the number of resources for compliant and noncompliant rules. </p> <note> <p>The results can return an empty result page, but if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
@@ -8766,9 +8625,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeAggregateComplianceByConfigRulesResponse,
         RusotoError<DescribeAggregateComplianceByConfigRulesError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeAggregateComplianceByConfigRules",
@@ -8776,20 +8633,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAggregateComplianceByConfigRulesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeAggregateComplianceByConfigRulesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
     }
 
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
@@ -8800,9 +8653,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeAggregationAuthorizationsResponse,
         RusotoError<DescribeAggregationAuthorizationsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeAggregationAuthorizations",
@@ -8810,22 +8661,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAggregationAuthorizationsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeAggregationAuthorizationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
     }
 
     /// <p><p>Indicates whether the specified AWS Config rules are compliant. If a rule is noncompliant, this action returns the number of AWS resources that do not comply with the rule.</p> <p>A rule is compliant if all of the evaluated resources comply with it. It is noncompliant if any of these resources do not comply.</p> <p>If AWS Config has no current evaluation results for the rule, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
@@ -8836,9 +8681,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeComplianceByConfigRuleResponse,
         RusotoError<DescribeComplianceByConfigRuleError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeComplianceByConfigRule",
@@ -8846,20 +8689,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeComplianceByConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeComplianceByConfigRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
     }
 
     /// <p><p>Indicates whether the specified AWS resources are compliant. If a resource is noncompliant, this action returns the number of AWS Config rules that the resource does not comply with.</p> <p>A resource is compliant if it complies with all the AWS Config rules that evaluate it. It is noncompliant if it does not comply with one or more of these rules.</p> <p>If AWS Config has no current evaluation results for the resource, it returns <code>INSUFFICIENT<em>DATA</code>. This result might indicate one of the following conditions about the rules that evaluate the resource:</p> <ul> <li> <p>AWS Config has never invoked an evaluation for the rule. To check whether it has, use the <code>DescribeConfigRuleEvaluationStatus</code> action to get the <code>LastSuccessfulInvocationTime</code> and <code>LastFailedInvocationTime</code>.</p> </li> <li> <p>The rule&#39;s AWS Lambda function is failing to send evaluation results to AWS Config. Verify that the role that you assigned to your configuration recorder includes the <code>config:PutEvaluations</code> permission. If the rule is a custom rule, verify that the AWS Lambda execution role includes the <code>config:PutEvaluations</code> permission.</p> </li> <li> <p>The rule&#39;s AWS Lambda function has returned <code>NOT</em>APPLICABLE</code> for all evaluation results. This can occur if the resources were deleted or removed from the rule&#39;s scope.</p> </li> </ul></p>
@@ -8868,9 +8704,7 @@ impl ConfigService for ConfigServiceClient {
         input: DescribeComplianceByResourceRequest,
     ) -> Result<DescribeComplianceByResourceResponse, RusotoError<DescribeComplianceByResourceError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeComplianceByResource",
@@ -8878,20 +8712,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeComplianceByResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeComplianceByResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeComplianceByResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeComplianceByResourceResponse, _>()
     }
 
     /// <p>Returns status information for each of your AWS managed Config rules. The status includes information such as the last time AWS Config invoked the rule, the last time AWS Config failed to invoke the rule, and the related error for the last failure.</p>
@@ -8902,9 +8729,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigRuleEvaluationStatusResponse,
         RusotoError<DescribeConfigRuleEvaluationStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigRuleEvaluationStatus",
@@ -8912,22 +8737,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigRuleEvaluationStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConfigRuleEvaluationStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
     }
 
     /// <p>Returns details about your AWS Config rules.</p>
@@ -8935,27 +8754,17 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DescribeConfigRulesRequest,
     ) -> Result<DescribeConfigRulesResponse, RusotoError<DescribeConfigRulesError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.DescribeConfigRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigRulesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigRulesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConfigRulesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeConfigRulesResponse, _>()
     }
 
     /// <p>Returns status information for sources within an aggregator. The status includes information about the last time AWS Config verified authorization between the source account and an aggregator account. In case of a failure, the status contains the related error code or message. </p>
@@ -8966,9 +8775,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigurationAggregatorSourcesStatusResponse,
         RusotoError<DescribeConfigurationAggregatorSourcesStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationAggregatorSourcesStatus",
@@ -8976,20 +8783,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationAggregatorSourcesStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConfigurationAggregatorSourcesStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConfigurationAggregatorSourcesStatusResponse, _>()
     }
 
     /// <p>Returns the details of one or more configuration aggregators. If the configuration aggregator is not specified, this action returns the details for all the configuration aggregators associated with the account. </p>
@@ -9000,9 +8803,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigurationAggregatorsResponse,
         RusotoError<DescribeConfigurationAggregatorsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationAggregators",
@@ -9010,22 +8811,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigurationAggregatorsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConfigurationAggregatorsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
     }
 
     /// <p><p>Returns the current status of the specified configuration recorder. If a configuration recorder is not specified, this action returns the status of all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
@@ -9036,9 +8831,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigurationRecorderStatusResponse,
         RusotoError<DescribeConfigurationRecorderStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationRecorderStatus",
@@ -9046,22 +8839,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigurationRecorderStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConfigurationRecorderStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
     }
 
     /// <p><p>Returns the details for the specified configuration recorders. If the configuration recorder is not specified, this action returns the details for all configuration recorders associated with the account.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> </note></p>
@@ -9072,9 +8859,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigurationRecordersResponse,
         RusotoError<DescribeConfigurationRecordersError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationRecorders",
@@ -9082,20 +8867,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConfigurationRecordersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConfigurationRecordersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConfigurationRecordersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConfigurationRecordersResponse, _>()
     }
 
     /// <p><p>Returns compliance details for each rule in that conformance pack.</p> <note> <p>You must provide exact rule names.</p> </note></p>
@@ -9106,9 +8884,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConformancePackComplianceResponse,
         RusotoError<DescribeConformancePackComplianceError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConformancePackCompliance",
@@ -9116,22 +8892,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConformancePackComplianceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConformancePackComplianceError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeConformancePackComplianceError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConformancePackComplianceResponse, _>()
     }
 
     /// <p><p>Provides one or more conformance packs deployment status.</p> <note> <p>If there are no conformance packs then you will see an empty result.</p> </note></p>
@@ -9142,9 +8912,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeConformancePackStatusResponse,
         RusotoError<DescribeConformancePackStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConformancePackStatus",
@@ -9152,20 +8920,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConformancePackStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConformancePackStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConformancePackStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConformancePackStatusResponse, _>()
     }
 
     /// <p>Returns a list of one or more conformance packs.</p>
@@ -9173,9 +8934,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DescribeConformancePacksRequest,
     ) -> Result<DescribeConformancePacksResponse, RusotoError<DescribeConformancePacksError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConformancePacks",
@@ -9183,20 +8942,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeConformancePacksResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeConformancePacksError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeConformancePacksError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeConformancePacksResponse, _>()
     }
 
     /// <p><p>Returns the current status of the specified delivery channel. If a delivery channel is not specified, this action returns the current status of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
@@ -9207,9 +8959,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeDeliveryChannelStatusResponse,
         RusotoError<DescribeDeliveryChannelStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeDeliveryChannelStatus",
@@ -9217,20 +8967,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDeliveryChannelStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDeliveryChannelStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
     }
 
     /// <p><p>Returns details about the specified delivery channel. If a delivery channel is not specified, this action returns the details of all delivery channels associated with the account.</p> <note> <p>Currently, you can specify only one delivery channel per region in your account.</p> </note></p>
@@ -9238,9 +8981,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DescribeDeliveryChannelsRequest,
     ) -> Result<DescribeDeliveryChannelsResponse, RusotoError<DescribeDeliveryChannelsError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeDeliveryChannels",
@@ -9248,20 +8989,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDeliveryChannelsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDeliveryChannelsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDeliveryChannelsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDeliveryChannelsResponse, _>()
     }
 
     /// <p><p>Provides organization config rule deployment status for an organization.</p> <note> <p>The status is not considered successful until organization config rule is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
@@ -9272,9 +9006,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeOrganizationConfigRuleStatusesResponse,
         RusotoError<DescribeOrganizationConfigRuleStatusesError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeOrganizationConfigRuleStatuses",
@@ -9282,22 +9014,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOrganizationConfigRuleStatusesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOrganizationConfigRuleStatusesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeOrganizationConfigRuleStatusesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeOrganizationConfigRuleStatusesResponse, _>()
     }
 
     /// <p><p>Returns a list of organization config rules.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization config rule names. It is only applicable, when you request all the organization config rules.</p> <p>Only a master account can call this API.</p> </note></p>
@@ -9308,9 +9034,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeOrganizationConfigRulesResponse,
         RusotoError<DescribeOrganizationConfigRulesError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeOrganizationConfigRules",
@@ -9318,22 +9042,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOrganizationConfigRulesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOrganizationConfigRulesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeOrganizationConfigRulesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeOrganizationConfigRulesResponse, _>()
     }
 
     /// <p><p>Provides organization conformance pack deployment status for an organization.</p> <note> <p>The status is not considered successful until organization conformance pack is successfully deployed in all the member accounts with an exception of excluded accounts.</p> <p>When you specify the limit and the next token, you receive a paginated response. Limit and next token are not applicable if you specify organization conformance pack names. They are only applicable, when you request all the organization conformance packs.</p> <p>Only a master account can call this API.</p> </note></p>
@@ -9344,9 +9059,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeOrganizationConformancePackStatusesResponse,
         RusotoError<DescribeOrganizationConformancePackStatusesError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeOrganizationConformancePackStatuses",
@@ -9354,20 +9067,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOrganizationConformancePackStatusesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOrganizationConformancePackStatusesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeOrganizationConformancePackStatusesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeOrganizationConformancePackStatusesResponse, _>()
     }
 
     /// <p><p>Returns a list of organization conformance packs.</p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you specify organization conformance packs names. They are only applicable, when you request all the organization conformance packs. </p> <p>Only a master account can call this API.</p> </note></p>
@@ -9378,9 +9087,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeOrganizationConformancePacksResponse,
         RusotoError<DescribeOrganizationConformancePacksError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeOrganizationConformancePacks",
@@ -9388,22 +9095,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeOrganizationConformancePacksResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeOrganizationConformancePacksError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeOrganizationConformancePacksError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeOrganizationConformancePacksResponse, _>()
     }
 
     /// <p>Returns a list of all pending aggregation requests.</p>
@@ -9414,9 +9115,7 @@ impl ConfigService for ConfigServiceClient {
         DescribePendingAggregationRequestsResponse,
         RusotoError<DescribePendingAggregationRequestsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribePendingAggregationRequests",
@@ -9424,22 +9123,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribePendingAggregationRequestsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribePendingAggregationRequestsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribePendingAggregationRequestsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribePendingAggregationRequestsResponse, _>()
     }
 
     /// <p>Returns the details of one or more remediation configurations.</p>
@@ -9450,9 +9143,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeRemediationConfigurationsResponse,
         RusotoError<DescribeRemediationConfigurationsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeRemediationConfigurations",
@@ -9460,22 +9151,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRemediationConfigurationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRemediationConfigurationsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeRemediationConfigurationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRemediationConfigurationsResponse, _>()
     }
 
     /// <p><p>Returns the details of one or more remediation exceptions. A detailed view of a remediation exception for a set of resources that includes an explanation of an exception and the time when the exception will be deleted. When you specify the limit and the next token, you receive a paginated response. </p> <note> <p>When you specify the limit and the next token, you receive a paginated response. </p> <p>Limit and next token are not applicable if you request resources in batch. It is only applicable, when you request all resources.</p> </note></p>
@@ -9486,9 +9171,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeRemediationExceptionsResponse,
         RusotoError<DescribeRemediationExceptionsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeRemediationExceptions",
@@ -9496,20 +9179,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRemediationExceptionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRemediationExceptionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeRemediationExceptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRemediationExceptionsResponse, _>()
     }
 
     /// <p>Provides a detailed view of a Remediation Execution for a set of resources including state, timestamps for when steps for the remediation execution occur, and any error messages for steps that have failed. When you specify the limit and the next token, you receive a paginated response.</p>
@@ -9520,9 +9196,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeRemediationExecutionStatusResponse,
         RusotoError<DescribeRemediationExecutionStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeRemediationExecutionStatus",
@@ -9530,22 +9204,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRemediationExecutionStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRemediationExecutionStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeRemediationExecutionStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRemediationExecutionStatusResponse, _>()
     }
 
     /// <p><p>Returns the details of one or more retention configurations. If the retention configuration name is not specified, this action returns the details for all the retention configurations for that account.</p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
@@ -9556,9 +9224,7 @@ impl ConfigService for ConfigServiceClient {
         DescribeRetentionConfigurationsResponse,
         RusotoError<DescribeRetentionConfigurationsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeRetentionConfigurations",
@@ -9566,22 +9232,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeRetentionConfigurationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRetentionConfigurationsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeRetentionConfigurationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRetentionConfigurationsResponse, _>()
     }
 
     /// <p><p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
@@ -9592,9 +9249,7 @@ impl ConfigService for ConfigServiceClient {
         GetAggregateComplianceDetailsByConfigRuleResponse,
         RusotoError<GetAggregateComplianceDetailsByConfigRuleError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateComplianceDetailsByConfigRule",
@@ -9602,20 +9257,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAggregateComplianceDetailsByConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetAggregateComplianceDetailsByConfigRuleError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
     }
 
     /// <p><p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
@@ -9626,9 +9277,7 @@ impl ConfigService for ConfigServiceClient {
         GetAggregateConfigRuleComplianceSummaryResponse,
         RusotoError<GetAggregateConfigRuleComplianceSummaryError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateConfigRuleComplianceSummary",
@@ -9636,22 +9285,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAggregateConfigRuleComplianceSummaryError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetAggregateConfigRuleComplianceSummaryError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
     }
 
     /// <p>Returns the resource counts across accounts and regions that are present in your AWS Config aggregator. You can request the resource counts by providing filters and GroupByKey.</p> <p>For example, if the input contains accountID 12345678910 and region us-east-1 in filters, the API returns the count of resources in account ID 12345678910 and region us-east-1. If the input contains ACCOUNT_ID as a GroupByKey, the API returns resource counts for all source accounts that are present in your aggregator.</p>
@@ -9662,9 +9305,7 @@ impl ConfigService for ConfigServiceClient {
         GetAggregateDiscoveredResourceCountsResponse,
         RusotoError<GetAggregateDiscoveredResourceCountsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateDiscoveredResourceCounts",
@@ -9672,22 +9313,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAggregateDiscoveredResourceCountsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetAggregateDiscoveredResourceCountsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
     }
 
     /// <p>Returns configuration item that is aggregated for your specific resource in a specific source account and region.</p>
@@ -9696,9 +9331,7 @@ impl ConfigService for ConfigServiceClient {
         input: GetAggregateResourceConfigRequest,
     ) -> Result<GetAggregateResourceConfigResponse, RusotoError<GetAggregateResourceConfigError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateResourceConfig",
@@ -9706,20 +9339,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAggregateResourceConfigResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAggregateResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAggregateResourceConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAggregateResourceConfigResponse, _>()
     }
 
     /// <p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>
@@ -9730,9 +9356,7 @@ impl ConfigService for ConfigServiceClient {
         GetComplianceDetailsByConfigRuleResponse,
         RusotoError<GetComplianceDetailsByConfigRuleError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceDetailsByConfigRule",
@@ -9740,22 +9364,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetComplianceDetailsByConfigRuleError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetComplianceDetailsByConfigRuleError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
     }
 
     /// <p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>
@@ -9766,9 +9384,7 @@ impl ConfigService for ConfigServiceClient {
         GetComplianceDetailsByResourceResponse,
         RusotoError<GetComplianceDetailsByResourceError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceDetailsByResource",
@@ -9776,20 +9392,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetComplianceDetailsByResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetComplianceDetailsByResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetComplianceDetailsByResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetComplianceDetailsByResourceResponse, _>()
     }
 
     /// <p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>
@@ -9799,31 +9408,23 @@ impl ConfigService for ConfigServiceClient {
         GetComplianceSummaryByConfigRuleResponse,
         RusotoError<GetComplianceSummaryByConfigRuleError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceSummaryByConfigRule",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetComplianceSummaryByConfigRuleError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetComplianceSummaryByConfigRuleError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
     }
 
     /// <p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>
@@ -9834,9 +9435,7 @@ impl ConfigService for ConfigServiceClient {
         GetComplianceSummaryByResourceTypeResponse,
         RusotoError<GetComplianceSummaryByResourceTypeError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceSummaryByResourceType",
@@ -9844,22 +9443,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetComplianceSummaryByResourceTypeError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetComplianceSummaryByResourceTypeError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
     }
 
     /// <p>Returns compliance details of a conformance pack for all AWS resources that are monitered by conformance pack.</p>
@@ -9870,9 +9463,7 @@ impl ConfigService for ConfigServiceClient {
         GetConformancePackComplianceDetailsResponse,
         RusotoError<GetConformancePackComplianceDetailsError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetConformancePackComplianceDetails",
@@ -9880,22 +9471,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConformancePackComplianceDetailsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConformancePackComplianceDetailsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetConformancePackComplianceDetailsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetConformancePackComplianceDetailsResponse, _>()
     }
 
     /// <p>Returns compliance details for the conformance pack based on the cumulative compliance results of all the rules in that conformance pack.</p>
@@ -9906,9 +9491,7 @@ impl ConfigService for ConfigServiceClient {
         GetConformancePackComplianceSummaryResponse,
         RusotoError<GetConformancePackComplianceSummaryError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetConformancePackComplianceSummary",
@@ -9916,22 +9499,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetConformancePackComplianceSummaryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetConformancePackComplianceSummaryError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetConformancePackComplianceSummaryError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetConformancePackComplianceSummaryResponse, _>()
     }
 
     /// <p><p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class="title"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets).</p> </li> <li> <p>The number of each resource type (25, 20, and 15).</p> </li> <li> <p>The total number of all resources (60).</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you might not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer.</p> </li> <li> <p>You just enabled resource recording.</p> </li> </ul> <p>It might take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note></p>
@@ -9940,9 +9517,7 @@ impl ConfigService for ConfigServiceClient {
         input: GetDiscoveredResourceCountsRequest,
     ) -> Result<GetDiscoveredResourceCountsResponse, RusotoError<GetDiscoveredResourceCountsError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetDiscoveredResourceCounts",
@@ -9950,20 +9525,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDiscoveredResourceCountsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDiscoveredResourceCountsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDiscoveredResourceCountsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDiscoveredResourceCountsResponse, _>()
     }
 
     /// <p><p>Returns detailed status for each member account within an organization for a given organization config rule.</p> <note> <p>Only a master account can call this API.</p> </note></p>
@@ -9974,9 +9542,7 @@ impl ConfigService for ConfigServiceClient {
         GetOrganizationConfigRuleDetailedStatusResponse,
         RusotoError<GetOrganizationConfigRuleDetailedStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetOrganizationConfigRuleDetailedStatus",
@@ -9984,22 +9550,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetOrganizationConfigRuleDetailedStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOrganizationConfigRuleDetailedStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetOrganizationConfigRuleDetailedStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetOrganizationConfigRuleDetailedStatusResponse, _>()
     }
 
     /// <p>Returns detailed status for each member account within an organization for a given organization conformance pack.</p> <p>Only a master account can call this API.</p>
@@ -10010,9 +9570,7 @@ impl ConfigService for ConfigServiceClient {
         GetOrganizationConformancePackDetailedStatusResponse,
         RusotoError<GetOrganizationConformancePackDetailedStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetOrganizationConformancePackDetailedStatus",
@@ -10020,20 +9578,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetOrganizationConformancePackDetailedStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOrganizationConformancePackDetailedStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetOrganizationConformancePackDetailedStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetOrganizationConformancePackDetailedStatusResponse, _>()
     }
 
     /// <p><p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note></p>
@@ -10041,9 +9595,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: GetResourceConfigHistoryRequest,
     ) -> Result<GetResourceConfigHistoryResponse, RusotoError<GetResourceConfigHistoryError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetResourceConfigHistory",
@@ -10051,20 +9603,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetResourceConfigHistoryResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetResourceConfigHistoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetResourceConfigHistoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetResourceConfigHistoryResponse, _>()
     }
 
     /// <p>Accepts a resource type and returns a list of resource identifiers that are aggregated for a specific resource type across accounts and regions. A resource identifier includes the resource type, ID, (if available) the custom resource name, source account, and source region. You can narrow the results to include only resources that have specific resource IDs, or a resource name, or source account ID, or source region.</p> <p>For example, if the input consists of accountID 12345678910 and the region is us-east-1 for resource type <code>AWS::EC2::Instance</code> then the API returns all the EC2 instance identifiers of accountID 12345678910 and region us-east-1.</p>
@@ -10075,9 +9620,7 @@ impl ConfigService for ConfigServiceClient {
         ListAggregateDiscoveredResourcesResponse,
         RusotoError<ListAggregateDiscoveredResourcesError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.ListAggregateDiscoveredResources",
@@ -10085,22 +9628,16 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAggregateDiscoveredResourcesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListAggregateDiscoveredResourcesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
     }
 
     /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name, but not both, in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
@@ -10108,9 +9645,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: ListDiscoveredResourcesRequest,
     ) -> Result<ListDiscoveredResourcesResponse, RusotoError<ListDiscoveredResourcesError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.ListDiscoveredResources",
@@ -10118,20 +9653,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDiscoveredResourcesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDiscoveredResourcesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDiscoveredResourcesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDiscoveredResourcesResponse, _>()
     }
 
     /// <p>List the tags for AWS Config resource.</p>
@@ -10139,27 +9667,17 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
     /// <p>Authorizes the aggregator account and region to collect data from the source account and region. </p>
@@ -10168,9 +9686,7 @@ impl ConfigService for ConfigServiceClient {
         input: PutAggregationAuthorizationRequest,
     ) -> Result<PutAggregationAuthorizationResponse, RusotoError<PutAggregationAuthorizationError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutAggregationAuthorization",
@@ -10178,20 +9694,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutAggregationAuthorizationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutAggregationAuthorizationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutAggregationAuthorizationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutAggregationAuthorizationResponse, _>()
     }
 
     /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom AWS Config rules and AWS managed Config rules. A custom AWS Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom AWS Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 150.</p> <p>For information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
@@ -10199,26 +9708,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutConfigRuleRequest,
     ) -> Result<(), RusotoError<PutConfigRuleError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.PutConfigRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutConfigRuleError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions. The source account can be individual account(s) or an organization.</p> <note> <p>AWS Config should be enabled in source accounts and regions you want to aggregate.</p> <p>If your source type is an organization, you must be signed in to the master account and all features must be enabled in your organization. AWS Config calls <code>EnableAwsServiceAccess</code> API to enable integration between AWS Config and AWS Organizations. </p> </note></p>
@@ -10227,9 +9726,7 @@ impl ConfigService for ConfigServiceClient {
         input: PutConfigurationAggregatorRequest,
     ) -> Result<PutConfigurationAggregatorResponse, RusotoError<PutConfigurationAggregatorError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutConfigurationAggregator",
@@ -10237,20 +9734,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutConfigurationAggregatorResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConfigurationAggregatorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutConfigurationAggregatorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutConfigurationAggregatorResponse, _>()
     }
 
     /// <p><p>Creates a new configuration recorder to record the selected resource configurations.</p> <p>You can use this action to change the role <code>roleARN</code> or the <code>recordingGroup</code> of an existing recorder. To change the role, call the action on the existing configuration recorder and specify a role.</p> <note> <p>Currently, you can specify only one configuration recorder per region in your account.</p> <p>If <code>ConfigurationRecorder</code> does not have the <b>recordingGroup</b> parameter specified, the default is to record all supported resource types.</p> </note></p>
@@ -10258,9 +9748,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutConfigurationRecorderRequest,
     ) -> Result<(), RusotoError<PutConfigurationRecorderError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutConfigurationRecorder",
@@ -10268,19 +9756,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConfigurationRecorderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutConfigurationRecorderError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Creates or updates a conformance pack. A conformance pack is a collection of AWS Config rules that can be easily deployed in an account and a region and across AWS Organization.</p> <p>This API creates a service linked role <code>AWSServiceRoleForConfigConforms</code> in your account. The service linked role is created only when the role does not exist in your account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> </note></p>
@@ -10288,27 +9768,17 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutConformancePackRequest,
     ) -> Result<PutConformancePackResponse, RusotoError<PutConformancePackError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.PutConformancePack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutConformancePackResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutConformancePackError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutConformancePackError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutConformancePackResponse, _>()
     }
 
     /// <p><p>Creates a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.</p> <p>Before you can create a delivery channel, you must create a configuration recorder.</p> <p>You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.</p> <note> <p>You can have only one delivery channel per region in your account.</p> </note></p>
@@ -10316,26 +9786,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutDeliveryChannelRequest,
     ) -> Result<(), RusotoError<PutDeliveryChannelError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.PutDeliveryChannel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutDeliveryChannelError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutDeliveryChannelError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Used by an AWS Lambda function to deliver evaluation results to AWS Config. This action is required in every AWS Lambda function that is invoked by an AWS Config rule.</p>
@@ -10343,26 +9803,17 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutEvaluationsRequest,
     ) -> Result<PutEvaluationsResponse, RusotoError<PutEvaluationsError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.PutEvaluations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutEvaluationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutEvaluationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutEvaluationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutEvaluationsResponse, _>()
     }
 
     /// <p><p>Adds or updates organization config rule for your entire organization evaluating whether your AWS resources comply with your desired configurations. Only a master account can create or update an organization config rule.</p> <p>This API enables organization service access through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with <code>GetRole</code> action.</p> <p>You can use this action to create both custom AWS Config rules and AWS managed Config rules. If you are adding a new custom AWS Config rule, you must first create AWS Lambda function in the master account that the rule invokes to evaluate your resources. When you use the <code>PutOrganizationConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. If you are adding an AWS managed Config rule, specify the rule&#39;s identifier for the <code>RuleIdentifier</code> key.</p> <p>The maximum number of organization config rules that AWS Config supports is 150.</p> <note> <p>Specify either <code>OrganizationCustomRuleMetadata</code> or <code>OrganizationManagedRuleMetadata</code>.</p> </note></p>
@@ -10371,9 +9822,7 @@ impl ConfigService for ConfigServiceClient {
         input: PutOrganizationConfigRuleRequest,
     ) -> Result<PutOrganizationConfigRuleResponse, RusotoError<PutOrganizationConfigRuleError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutOrganizationConfigRule",
@@ -10381,20 +9830,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutOrganizationConfigRuleResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutOrganizationConfigRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutOrganizationConfigRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutOrganizationConfigRuleResponse, _>()
     }
 
     /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master account of your organization. The service linked role is created only when the role does not exist in the master account. AWS Config verifies the existence of role with GetRole action.</p> <note> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the confomance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 6 conformance packs with 25 AWS Config rules in each pack.</p> </note></p>
@@ -10405,9 +9847,7 @@ impl ConfigService for ConfigServiceClient {
         PutOrganizationConformancePackResponse,
         RusotoError<PutOrganizationConformancePackError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutOrganizationConformancePack",
@@ -10415,20 +9855,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutOrganizationConformancePackResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutOrganizationConformancePackError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutOrganizationConformancePackError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutOrganizationConformancePackResponse, _>()
     }
 
     /// <p>Adds or updates the remediation configuration with a specific AWS Config rule with the selected target or action. The API creates the <code>RemediationConfiguration</code> object for the AWS Config rule. The AWS Config rule must already exist for you to add a remediation configuration. The target (SSM document) must exist and have permissions to use the target. </p>
@@ -10437,9 +9870,7 @@ impl ConfigService for ConfigServiceClient {
         input: PutRemediationConfigurationsRequest,
     ) -> Result<PutRemediationConfigurationsResponse, RusotoError<PutRemediationConfigurationsError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutRemediationConfigurations",
@@ -10447,20 +9878,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutRemediationConfigurationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRemediationConfigurationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRemediationConfigurationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutRemediationConfigurationsResponse, _>()
     }
 
     /// <p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an exisiting exception for a specific resource with a specific AWS Config rule. </p>
@@ -10468,9 +9892,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutRemediationExceptionsRequest,
     ) -> Result<PutRemediationExceptionsResponse, RusotoError<PutRemediationExceptionsError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutRemediationExceptions",
@@ -10478,20 +9900,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutRemediationExceptionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRemediationExceptionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRemediationExceptionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutRemediationExceptionsResponse, _>()
     }
 
     /// <p><p>Records the configuration state for the resource provided in the request. The configuration state of a resource is represented in AWS Config as Configuration Items. Once this API records the configuration item, you can retrieve the list of configuration items for the custom resource type using existing AWS Config APIs. </p> <note> <p>The custom resource type must be registered with AWS CloudFormation. This API accepts the configuration item registered with AWS CloudFormation.</p> <p>When you call this API, AWS Config only stores configuration state of the resource provided in the request. This API does not change or remediate the configuration of the resource. </p> </note></p>
@@ -10499,26 +9914,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutResourceConfigRequest,
     ) -> Result<(), RusotoError<PutResourceConfigError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.PutResourceConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutResourceConfigError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Creates and updates the retention configuration with details about retention period (number of days) that AWS Config stores your historical information. The API creates the <code>RetentionConfiguration</code> object and names the object as <b>default</b>. When you have a <code>RetentionConfiguration</code> object named <b>default</b>, calling the API modifies the default object. </p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note></p>
@@ -10527,9 +9932,7 @@ impl ConfigService for ConfigServiceClient {
         input: PutRetentionConfigurationRequest,
     ) -> Result<PutRetentionConfigurationResponse, RusotoError<PutRetentionConfigurationError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutRetentionConfiguration",
@@ -10537,20 +9940,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<PutRetentionConfigurationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutRetentionConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutRetentionConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutRetentionConfigurationResponse, _>()
     }
 
     /// <p>Accepts a structured query language (SQL) SELECT command and an aggregator to query configuration state of AWS resources across multiple accounts and regions, performs the corresponding search, and returns resource configurations matching the properties.</p> <p>For more information about query components, see the <a href="https://docs.aws.amazon.com/config/latest/developerguide/query-components.html"> <b>Query Components</b> </a> section in the AWS Config Developer Guide.</p>
@@ -10561,9 +9957,7 @@ impl ConfigService for ConfigServiceClient {
         SelectAggregateResourceConfigResponse,
         RusotoError<SelectAggregateResourceConfigError>,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.SelectAggregateResourceConfig",
@@ -10571,20 +9965,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SelectAggregateResourceConfigResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SelectAggregateResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SelectAggregateResourceConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SelectAggregateResourceConfigResponse, _>()
     }
 
     /// <p>Accepts a structured query language (SQL) <code>SELECT</code> command, performs the corresponding search, and returns resource configurations matching the properties.</p> <p>For more information about query components, see the <a href="https://docs.aws.amazon.com/config/latest/developerguide/query-components.html"> <b>Query Components</b> </a> section in the AWS Config Developer Guide.</p>
@@ -10592,27 +9979,18 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: SelectResourceConfigRequest,
     ) -> Result<SelectResourceConfigResponse, RusotoError<SelectResourceConfigError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.SelectResourceConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SelectResourceConfigResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SelectResourceConfigError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SelectResourceConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SelectResourceConfigResponse, _>()
     }
 
     /// <p><p>Runs an on-demand evaluation for the specified AWS Config rules against the last known configuration state of the resources. Use <code>StartConfigRulesEvaluation</code> when you want to test that a rule you updated is working as expected. <code>StartConfigRulesEvaluation</code> does not re-record the latest configuration state for your resources. It re-runs an evaluation against the last known state of your resources. </p> <p>You can specify up to 25 AWS Config rules per request. </p> <p>An existing <code>StartConfigRulesEvaluation</code> call for the specified rules must complete before you can call the API again. If you chose to have AWS Config stream to an Amazon SNS topic, you will receive a <code>ConfigRuleEvaluationStarted</code> notification when the evaluation starts.</p> <note> <p>You don&#39;t need to call the <code>StartConfigRulesEvaluation</code> API to run an evaluation for a new rule. When you create a rule, AWS Config evaluates your resources against the rule automatically. </p> </note> <p>The <code>StartConfigRulesEvaluation</code> API is useful if you want to run on-demand evaluations, such as the following example:</p> <ol> <li> <p>You have a custom rule that evaluates your IAM resources every 24 hours.</p> </li> <li> <p>You update your Lambda function to add additional conditions to your rule.</p> </li> <li> <p>Instead of waiting for the next periodic evaluation, you call the <code>StartConfigRulesEvaluation</code> API.</p> </li> <li> <p>AWS Config invokes your Lambda function and evaluates your IAM resources.</p> </li> <li> <p>Your custom rule will still run periodic evaluations every 24 hours.</p> </li> </ol></p>
@@ -10621,9 +9999,7 @@ impl ConfigService for ConfigServiceClient {
         input: StartConfigRulesEvaluationRequest,
     ) -> Result<StartConfigRulesEvaluationResponse, RusotoError<StartConfigRulesEvaluationError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StartConfigRulesEvaluation",
@@ -10631,20 +10007,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartConfigRulesEvaluationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartConfigRulesEvaluationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartConfigRulesEvaluationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartConfigRulesEvaluationResponse, _>()
     }
 
     /// <p>Starts recording configurations of the AWS resources you have selected to record in your AWS account.</p> <p>You must have created at least one delivery channel to successfully start the configuration recorder.</p>
@@ -10652,9 +10021,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: StartConfigurationRecorderRequest,
     ) -> Result<(), RusotoError<StartConfigurationRecorderError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StartConfigurationRecorder",
@@ -10662,19 +10029,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartConfigurationRecorderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartConfigurationRecorderError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Runs an on-demand remediation for the specified AWS Config rules against the last known remediation configuration. It runs an execution against the current state of your resources. Remediation execution is asynchronous.</p> <p>You can specify up to 100 resource keys per request. An existing StartRemediationExecution call for the specified resource keys must complete before you can call the API again.</p>
@@ -10683,9 +10042,7 @@ impl ConfigService for ConfigServiceClient {
         input: StartRemediationExecutionRequest,
     ) -> Result<StartRemediationExecutionResponse, RusotoError<StartRemediationExecutionError>>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StartRemediationExecution",
@@ -10693,20 +10050,13 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartRemediationExecutionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartRemediationExecutionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartRemediationExecutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartRemediationExecutionResponse, _>()
     }
 
     /// <p>Stops recording configurations of the AWS resources you have selected to record in your AWS account.</p>
@@ -10714,9 +10064,7 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: StopConfigurationRecorderRequest,
     ) -> Result<(), RusotoError<StopConfigurationRecorderError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StopConfigurationRecorder",
@@ -10724,19 +10072,11 @@ impl ConfigService for ConfigServiceClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopConfigurationRecorderError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopConfigurationRecorderError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Associates the specified tags to a resource with the specified resourceArn. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well.</p>
@@ -10744,26 +10084,16 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes specified tags from a resource.</p>
@@ -10771,25 +10101,15 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "StarlingDoveService.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 }

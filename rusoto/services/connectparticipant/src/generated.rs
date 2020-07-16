@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Connection credentials. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConnectionCredentials {
     /// <p>The connection token.</p>
@@ -38,7 +38,7 @@ pub struct ConnectionCredentials {
     pub expiry: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateParticipantConnectionRequest {
     /// <p>Participant Token as obtained from <a href="https://docs.aws.amazon.com/connect/latest/APIReference/API_StartChatContactResponse.html">StartChatContact</a> API response.</p>
@@ -49,7 +49,7 @@ pub struct CreateParticipantConnectionRequest {
     pub type_: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateParticipantConnectionResponse {
     /// <p>Creates the participant's connection credentials. The authentication token associated with the participant's connection.</p>
@@ -62,7 +62,7 @@ pub struct CreateParticipantConnectionResponse {
     pub websocket: Option<Websocket>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisconnectParticipantRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -74,11 +74,11 @@ pub struct DisconnectParticipantRequest {
     pub connection_token: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisconnectParticipantResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTranscriptRequest {
     /// <p>The authentication token associated with the participant's connection.</p>
@@ -110,7 +110,7 @@ pub struct GetTranscriptRequest {
     pub start_position: Option<StartPosition>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTranscriptResponse {
     /// <p>The initial contact ID for the contact. </p>
@@ -128,7 +128,7 @@ pub struct GetTranscriptResponse {
 }
 
 /// <p>An item - message or event - that has been sent. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Item {
     /// <p>The time when the message or event was sent.</p> <p>It's specified in ISO 8601 format: yyyy-MM-ddThh:mm:ss.SSSZ. For example, 2019-11-08T02:41:28.172Z.</p>
@@ -165,7 +165,7 @@ pub struct Item {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendEventRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -184,7 +184,7 @@ pub struct SendEventRequest {
     pub content_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendEventResponse {
     /// <p>The time when the event was sent.</p> <p>It's specified in ISO 8601 format: yyyy-MM-ddThh:mm:ss.SSSZ. For example, 2019-11-08T02:41:28.172Z.</p>
@@ -197,7 +197,7 @@ pub struct SendEventResponse {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendMessageRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -215,7 +215,7 @@ pub struct SendMessageRequest {
     pub content_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendMessageResponse {
     /// <p>The time when the message was sent.</p> <p>It's specified in ISO 8601 format: yyyy-MM-ddThh:mm:ss.SSSZ. For example, 2019-11-08T02:41:28.172Z.</p>
@@ -229,7 +229,7 @@ pub struct SendMessageResponse {
 }
 
 /// <p>A filtering option for where to start. For example, if you sent 100 messages, start with message 50. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartPosition {
     /// <p>The time in ISO format where to start.</p> <p>It's specified in ISO 8601 format: yyyy-MM-ddThh:mm:ss.SSSZ. For example, 2019-11-08T02:41:28.172Z.</p>
@@ -247,7 +247,7 @@ pub struct StartPosition {
 }
 
 /// <p>The websocket for the participant's connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Websocket {
     /// <p>The URL expiration timestamp in ISO date format.</p> <p>It's specified in ISO 8601 format: yyyy-MM-ddThh:mm:ss.SSSZ. For example, 2019-11-08T02:41:28.172Z.</p>
@@ -554,6 +554,7 @@ impl ConnectParticipantClient {
 #[async_trait]
 impl ConnectParticipant for ConnectParticipantClient {
     /// <p>Creates the participant's connection. Note that ParticipantToken is used for invoking this API instead of ConnectionToken.</p> <p>The participant token is valid for the lifetime of the participant – until the they are part of a contact.</p> <p>The response URL for <code>WEBSOCKET</code> Type has a connect expiry timeout of 100s. Clients must manually connect to the returned websocket URL and subscribe to the desired topic. </p> <p>For chat, you need to publish the following on the established websocket connection:</p> <p> <code>{"topic":"aws/subscribe","content":{"topics":["aws/chat"]}}</code> </p> <p>Upon websocket URL expiry, as specified in the response ConnectionExpiry parameter, clients need to call this API again to obtain a new websocket URL and perform the same steps as before.</p>
+    #[allow(unused_mut)]
     async fn create_participant_connection(
         &self,
         input: CreateParticipantConnectionRequest,
@@ -567,7 +568,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_endpoint_prefix("participant.connect".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("X-Amz-Bearer", &input.participant_token);
+        request.add_header("X-Amz-Bearer", &input.participant_token.to_string());
 
         let mut response = self
             .client
@@ -575,7 +576,7 @@ impl ConnectParticipant for ConnectParticipantClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateParticipantConnectionResponse, _>()?;
 
@@ -587,6 +588,7 @@ impl ConnectParticipant for ConnectParticipantClient {
     }
 
     /// <p>Disconnects a participant. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    #[allow(unused_mut)]
     async fn disconnect_participant(
         &self,
         input: DisconnectParticipantRequest,
@@ -599,7 +601,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_endpoint_prefix("participant.connect".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("X-Amz-Bearer", &input.connection_token);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
 
         let mut response = self
             .client
@@ -607,7 +609,7 @@ impl ConnectParticipant for ConnectParticipantClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisconnectParticipantResponse, _>()?;
 
@@ -619,6 +621,7 @@ impl ConnectParticipant for ConnectParticipantClient {
     }
 
     /// <p>Retrieves a transcript of the session. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    #[allow(unused_mut)]
     async fn get_transcript(
         &self,
         input: GetTranscriptRequest,
@@ -631,7 +634,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_endpoint_prefix("participant.connect".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("X-Amz-Bearer", &input.connection_token);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
 
         let mut response = self
             .client
@@ -639,7 +642,7 @@ impl ConnectParticipant for ConnectParticipantClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetTranscriptResponse, _>()?;
 
@@ -651,6 +654,7 @@ impl ConnectParticipant for ConnectParticipantClient {
     }
 
     /// <p>Sends an event. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    #[allow(unused_mut)]
     async fn send_event(
         &self,
         input: SendEventRequest,
@@ -663,7 +667,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_endpoint_prefix("participant.connect".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("X-Amz-Bearer", &input.connection_token);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
 
         let mut response = self
             .client
@@ -671,7 +675,7 @@ impl ConnectParticipant for ConnectParticipantClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SendEventResponse, _>()?;
 
@@ -683,6 +687,7 @@ impl ConnectParticipant for ConnectParticipantClient {
     }
 
     /// <p>Sends a message. Note that ConnectionToken is used for invoking this API instead of ParticipantToken.</p>
+    #[allow(unused_mut)]
     async fn send_message(
         &self,
         input: SendMessageRequest,
@@ -695,7 +700,7 @@ impl ConnectParticipant for ConnectParticipantClient {
         request.set_endpoint_prefix("participant.connect".to_string());
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
-        request.add_header("X-Amz-Bearer", &input.connection_token);
+        request.add_header("X-Amz-Bearer", &input.connection_token.to_string());
 
         let mut response = self
             .client
@@ -703,7 +708,7 @@ impl ConnectParticipant for ConnectParticipantClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SendMessageResponse, _>()?;
 

@@ -20,12 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl WorkspacesClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "workspaces", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Describes a modification to the configuration of Bring Your Own License (BYOL) for the specified account. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccountModification {
     /// <p>The IP address range, specified as an IPv4 CIDR block, for the management network interface used for the account.</p>
@@ -54,7 +80,7 @@ pub struct AccountModification {
     pub start_time: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateIpGroupsRequest {
     /// <p>The identifier of the directory.</p>
@@ -65,11 +91,11 @@ pub struct AssociateIpGroupsRequest {
     pub group_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateIpGroupsResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AuthorizeIpRulesRequest {
     /// <p>The identifier of the group.</p>
@@ -80,12 +106,12 @@ pub struct AuthorizeIpRulesRequest {
     pub user_rules: Vec<IpRuleItem>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuthorizeIpRulesResult {}
 
 /// <p>Describes an Amazon WorkSpaces client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ClientProperties {
     /// <p>Specifies whether users can cache their credentials on the Amazon WorkSpaces client. When enabled, users can choose to reconnect to their WorkSpaces without re-entering their credentials. </p>
     #[serde(rename = "ReconnectEnabled")]
@@ -94,7 +120,7 @@ pub struct ClientProperties {
 }
 
 /// <p>Information about the Amazon WorkSpaces client.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClientPropertiesResult {
     /// <p>Information about the Amazon WorkSpaces client.</p>
@@ -108,7 +134,7 @@ pub struct ClientPropertiesResult {
 }
 
 /// <p>Describes the compute type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComputeType {
     /// <p>The compute type.</p>
@@ -117,7 +143,7 @@ pub struct ComputeType {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyWorkspaceImageRequest {
     /// <p>A description of the image.</p>
@@ -139,7 +165,7 @@ pub struct CopyWorkspaceImageRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopyWorkspaceImageResult {
     /// <p>The identifier of the image.</p>
@@ -148,7 +174,7 @@ pub struct CopyWorkspaceImageResult {
     pub image_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIpGroupRequest {
     /// <p>The description of the group.</p>
@@ -168,7 +194,7 @@ pub struct CreateIpGroupRequest {
     pub user_rules: Option<Vec<IpRuleItem>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIpGroupResult {
     /// <p>The identifier of the group.</p>
@@ -177,7 +203,7 @@ pub struct CreateIpGroupResult {
     pub group_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTagsRequest {
     /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
@@ -188,11 +214,11 @@ pub struct CreateTagsRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTagsResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkspacesRequest {
     /// <p>The WorkSpaces to create. You can specify up to 25 WorkSpaces.</p>
@@ -200,7 +226,7 @@ pub struct CreateWorkspacesRequest {
     pub workspaces: Vec<WorkspaceRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be created.</p>
@@ -214,7 +240,7 @@ pub struct CreateWorkspacesResult {
 }
 
 /// <p>Describes the default values that are used to create WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html">Update Directory Details for Your WorkSpaces</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultWorkspaceCreationProperties {
     /// <p>The identifier of any security groups to apply to WorkSpaces when they are created.</p>
@@ -243,7 +269,7 @@ pub struct DefaultWorkspaceCreationProperties {
     pub user_enabled_as_local_administrator: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIpGroupRequest {
     /// <p>The identifier of the IP access control group.</p>
@@ -251,11 +277,11 @@ pub struct DeleteIpGroupRequest {
     pub group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIpGroupResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTagsRequest {
     /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
@@ -266,11 +292,11 @@ pub struct DeleteTagsRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagsResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkspaceImageRequest {
     /// <p>The identifier of the image.</p>
@@ -278,11 +304,11 @@ pub struct DeleteWorkspaceImageRequest {
     pub image_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkspaceImageResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterWorkspaceDirectoryRequest {
     /// <p>The identifier of the directory. If any WorkSpaces are registered to this directory, you must remove them before you deregister the directory, or you will receive an OperationNotSupportedException error.</p>
@@ -290,11 +316,11 @@ pub struct DeregisterWorkspaceDirectoryRequest {
     pub directory_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterWorkspaceDirectoryResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountModificationsRequest {
     /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
@@ -303,7 +329,7 @@ pub struct DescribeAccountModificationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountModificationsResult {
     /// <p>The list of modifications to the configuration of BYOL.</p>
@@ -316,11 +342,11 @@ pub struct DescribeAccountModificationsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAccountRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountResult {
     /// <p>The IP address range, specified as an IPv4 CIDR block, used for the management network interface.</p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
@@ -333,7 +359,7 @@ pub struct DescribeAccountResult {
     pub dedicated_tenancy_support: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeClientPropertiesRequest {
     /// <p>The resource identifier, in the form of directory IDs.</p>
@@ -341,7 +367,7 @@ pub struct DescribeClientPropertiesRequest {
     pub resource_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClientPropertiesResult {
     /// <p>Information about the specified Amazon WorkSpaces clients.</p>
@@ -350,7 +376,7 @@ pub struct DescribeClientPropertiesResult {
     pub client_properties_list: Option<Vec<ClientPropertiesResult>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeIpGroupsRequest {
     /// <p>The identifiers of one or more IP access control groups.</p>
@@ -367,7 +393,7 @@ pub struct DescribeIpGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIpGroupsResult {
     /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
@@ -380,7 +406,7 @@ pub struct DescribeIpGroupsResult {
     pub result: Option<Vec<WorkspacesIpGroup>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTagsRequest {
     /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
@@ -388,7 +414,7 @@ pub struct DescribeTagsRequest {
     pub resource_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagsResult {
     /// <p>The tags.</p>
@@ -397,7 +423,7 @@ pub struct DescribeTagsResult {
     pub tag_list: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceBundlesRequest {
     /// <p>The identifiers of the bundles. You cannot combine this parameter with any other filter.</p>
@@ -414,7 +440,7 @@ pub struct DescribeWorkspaceBundlesRequest {
     pub owner: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceBundlesResult {
     /// <p>Information about the bundles.</p>
@@ -427,7 +453,7 @@ pub struct DescribeWorkspaceBundlesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceDirectoriesRequest {
     /// <p>The identifiers of the directories. If the value is null, all directories are retrieved.</p>
@@ -444,7 +470,7 @@ pub struct DescribeWorkspaceDirectoriesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceDirectoriesResult {
     /// <p>Information about the directories.</p>
@@ -457,7 +483,7 @@ pub struct DescribeWorkspaceDirectoriesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceImagesRequest {
     /// <p>The identifier of the image.</p>
@@ -474,7 +500,7 @@ pub struct DescribeWorkspaceImagesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceImagesResult {
     /// <p>Information about the images.</p>
@@ -487,7 +513,7 @@ pub struct DescribeWorkspaceImagesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspaceSnapshotsRequest {
     /// <p>The identifier of the WorkSpace.</p>
@@ -495,7 +521,7 @@ pub struct DescribeWorkspaceSnapshotsRequest {
     pub workspace_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceSnapshotsResult {
     /// <p>Information about the snapshots that can be used to rebuild a WorkSpace. These snapshots include the user volume.</p>
@@ -508,7 +534,7 @@ pub struct DescribeWorkspaceSnapshotsResult {
     pub restore_snapshots: Option<Vec<Snapshot>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspacesConnectionStatusRequest {
     /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
@@ -521,7 +547,7 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
     pub workspace_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspacesConnectionStatusResult {
     /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
@@ -534,7 +560,7 @@ pub struct DescribeWorkspacesConnectionStatusResult {
     pub workspaces_connection_status: Option<Vec<WorkspaceConnectionStatus>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeWorkspacesRequest {
     /// <p>The identifier of the bundle. All WorkSpaces that are created from this bundle are retrieved. You cannot combine this parameter with any other filter.</p>
@@ -563,7 +589,7 @@ pub struct DescribeWorkspacesRequest {
     pub workspace_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspacesResult {
     /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
@@ -576,7 +602,7 @@ pub struct DescribeWorkspacesResult {
     pub workspaces: Option<Vec<Workspace>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateIpGroupsRequest {
     /// <p>The identifier of the directory.</p>
@@ -587,12 +613,12 @@ pub struct DisassociateIpGroupsRequest {
     pub group_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateIpGroupsResult {}
 
 /// <p>Describes a WorkSpace that cannot be created.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedCreateWorkspaceRequest {
     /// <p>The error code that is returned if the WorkSpace cannot be created.</p>
@@ -610,7 +636,7 @@ pub struct FailedCreateWorkspaceRequest {
 }
 
 /// <p>Describes a WorkSpace that could not be rebooted. (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), restored (<a>RestoreWorkspace</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedWorkspaceChangeRequest {
     /// <p>The error code that is returned if the WorkSpace cannot be rebooted.</p>
@@ -627,7 +653,7 @@ pub struct FailedWorkspaceChangeRequest {
     pub workspace_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportWorkspaceImageRequest {
     /// <p>The identifier of the EC2 image.</p>
@@ -648,7 +674,7 @@ pub struct ImportWorkspaceImageRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportWorkspaceImageResult {
     /// <p>The identifier of the WorkSpace image.</p>
@@ -658,7 +684,7 @@ pub struct ImportWorkspaceImageResult {
 }
 
 /// <p>Describes a rule for an IP access control group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IpRuleItem {
     /// <p>The IP address range, in CIDR notation.</p>
     #[serde(rename = "ipRule")]
@@ -670,7 +696,7 @@ pub struct IpRuleItem {
     pub rule_desc: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAvailableManagementCidrRangesRequest {
     /// <p>The IP address range to search. Specify an IP address range that is compatible with your network and in CIDR notation (that is, specify the range as an IPv4 CIDR block).</p>
@@ -686,7 +712,7 @@ pub struct ListAvailableManagementCidrRangesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAvailableManagementCidrRangesResult {
     /// <p>The list of available IP address ranges, specified as IPv4 CIDR blocks.</p>
@@ -699,7 +725,7 @@ pub struct ListAvailableManagementCidrRangesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MigrateWorkspaceRequest {
     /// <p>The identifier of the target bundle type to migrate the WorkSpace to.</p>
@@ -710,7 +736,7 @@ pub struct MigrateWorkspaceRequest {
     pub source_workspace_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MigrateWorkspaceResult {
     /// <p>The original identifier of the WorkSpace that is being migrated.</p>
@@ -724,7 +750,7 @@ pub struct MigrateWorkspaceResult {
 }
 
 /// <p>Describes a WorkSpace modification.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModificationState {
     /// <p>The resource.</p>
@@ -737,7 +763,7 @@ pub struct ModificationState {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyAccountRequest {
     /// <p>The IP address range, specified as an IPv4 CIDR block, for the management network interface. Specify an IP address range that is compatible with your network and in CIDR notation (that is, specify the range as an IPv4 CIDR block). The CIDR block size must be /16 (for example, 203.0.113.25/16). It must also be specified as available by the <code>ListAvailableManagementCidrRanges</code> operation.</p>
@@ -750,11 +776,11 @@ pub struct ModifyAccountRequest {
     pub dedicated_tenancy_support: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyAccountResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClientPropertiesRequest {
     /// <p>Information about the Amazon WorkSpaces client.</p>
@@ -765,11 +791,11 @@ pub struct ModifyClientPropertiesRequest {
     pub resource_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyClientPropertiesResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifySelfservicePermissionsRequest {
     /// <p>The identifier of the directory.</p>
@@ -780,11 +806,11 @@ pub struct ModifySelfservicePermissionsRequest {
     pub selfservice_permissions: SelfservicePermissions,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifySelfservicePermissionsResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspaceAccessPropertiesRequest {
     /// <p>The identifier of the directory.</p>
@@ -795,11 +821,11 @@ pub struct ModifyWorkspaceAccessPropertiesRequest {
     pub workspace_access_properties: WorkspaceAccessProperties,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyWorkspaceAccessPropertiesResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspaceCreationPropertiesRequest {
     /// <p>The identifier of the directory.</p>
@@ -810,11 +836,11 @@ pub struct ModifyWorkspaceCreationPropertiesRequest {
     pub workspace_creation_properties: WorkspaceCreationProperties,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyWorkspaceCreationPropertiesResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspacePropertiesRequest {
     /// <p>The identifier of the WorkSpace.</p>
@@ -825,11 +851,11 @@ pub struct ModifyWorkspacePropertiesRequest {
     pub workspace_properties: WorkspaceProperties,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyWorkspacePropertiesResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyWorkspaceStateRequest {
     /// <p>The identifier of the WorkSpace.</p>
@@ -840,12 +866,12 @@ pub struct ModifyWorkspaceStateRequest {
     pub workspace_state: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyWorkspaceStateResult {}
 
 /// <p>The operating system that the image is running.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OperatingSystem {
     /// <p>The operating system.</p>
@@ -855,7 +881,7 @@ pub struct OperatingSystem {
 }
 
 /// <p>Describes the information used to reboot a WorkSpace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootRequest {
     /// <p>The identifier of the WorkSpace.</p>
@@ -863,7 +889,7 @@ pub struct RebootRequest {
     pub workspace_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebootWorkspacesRequest {
     /// <p>The WorkSpaces to reboot. You can specify up to 25 WorkSpaces.</p>
@@ -871,7 +897,7 @@ pub struct RebootWorkspacesRequest {
     pub reboot_workspace_requests: Vec<RebootRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be rebooted.</p>
@@ -881,7 +907,7 @@ pub struct RebootWorkspacesResult {
 }
 
 /// <p>Describes the information used to rebuild a WorkSpace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebuildRequest {
     /// <p>The identifier of the WorkSpace.</p>
@@ -889,7 +915,7 @@ pub struct RebuildRequest {
     pub workspace_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RebuildWorkspacesRequest {
     /// <p>The WorkSpace to rebuild. You can specify a single WorkSpace.</p>
@@ -897,7 +923,7 @@ pub struct RebuildWorkspacesRequest {
     pub rebuild_workspace_requests: Vec<RebuildRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebuildWorkspacesResult {
     /// <p>Information about the WorkSpace that could not be rebuilt.</p>
@@ -906,7 +932,7 @@ pub struct RebuildWorkspacesResult {
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterWorkspaceDirectoryRequest {
     /// <p>The identifier of the directory. You cannot register a directory if it does not have a status of Active. If the directory does not have a status of Active, you will receive an InvalidResourceStateException error. If you have already registered the maximum number of directories that you can register with Amazon WorkSpaces, you will receive a ResourceLimitExceededException error. Deregister directories that you are not using for WorkSpaces, and try again.</p>
@@ -933,11 +959,11 @@ pub struct RegisterWorkspaceDirectoryRequest {
     pub tenancy: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterWorkspaceDirectoryResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestoreWorkspaceRequest {
     /// <p>The identifier of the WorkSpace.</p>
@@ -945,11 +971,11 @@ pub struct RestoreWorkspaceRequest {
     pub workspace_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreWorkspaceResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RevokeIpRulesRequest {
     /// <p>The identifier of the group.</p>
@@ -960,12 +986,12 @@ pub struct RevokeIpRulesRequest {
     pub user_rules: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokeIpRulesResult {}
 
 /// <p>Describes the root volume for a WorkSpace bundle.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RootStorage {
     /// <p>The size of the root volume.</p>
@@ -975,7 +1001,7 @@ pub struct RootStorage {
 }
 
 /// <p>Describes the self-service permissions for a directory. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/enable-user-self-service-workspace-management.html">Enable Self-Service WorkSpace Management Capabilities for Your Users</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SelfservicePermissions {
     /// <p>Specifies whether users can change the compute type (bundle) for their WorkSpace.</p>
     #[serde(rename = "ChangeComputeType")]
@@ -1000,7 +1026,7 @@ pub struct SelfservicePermissions {
 }
 
 /// <p>Describes a snapshot.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Snapshot {
     /// <p>The time when the snapshot was created.</p>
@@ -1010,7 +1036,7 @@ pub struct Snapshot {
 }
 
 /// <p>Information used to start a WorkSpace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartRequest {
     /// <p>The identifier of the WorkSpace.</p>
@@ -1019,7 +1045,7 @@ pub struct StartRequest {
     pub workspace_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartWorkspacesRequest {
     /// <p>The WorkSpaces to start. You can specify up to 25 WorkSpaces.</p>
@@ -1027,7 +1053,7 @@ pub struct StartWorkspacesRequest {
     pub start_workspace_requests: Vec<StartRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be started.</p>
@@ -1037,7 +1063,7 @@ pub struct StartWorkspacesResult {
 }
 
 /// <p>Describes the information used to stop a WorkSpace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRequest {
     /// <p>The identifier of the WorkSpace.</p>
@@ -1046,7 +1072,7 @@ pub struct StopRequest {
     pub workspace_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopWorkspacesRequest {
     /// <p>The WorkSpaces to stop. You can specify up to 25 WorkSpaces.</p>
@@ -1054,7 +1080,7 @@ pub struct StopWorkspacesRequest {
     pub stop_workspace_requests: Vec<StopRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be stopped.</p>
@@ -1064,7 +1090,7 @@ pub struct StopWorkspacesResult {
 }
 
 /// <p>Describes a tag.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The key of the tag.</p>
     #[serde(rename = "Key")]
@@ -1076,7 +1102,7 @@ pub struct Tag {
 }
 
 /// <p>Describes the information used to terminate a WorkSpace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateRequest {
     /// <p>The identifier of the WorkSpace.</p>
@@ -1084,7 +1110,7 @@ pub struct TerminateRequest {
     pub workspace_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminateWorkspacesRequest {
     /// <p>The WorkSpaces to terminate. You can specify up to 25 WorkSpaces.</p>
@@ -1092,7 +1118,7 @@ pub struct TerminateWorkspacesRequest {
     pub terminate_workspace_requests: Vec<TerminateRequest>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be terminated.</p>
@@ -1101,7 +1127,7 @@ pub struct TerminateWorkspacesResult {
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRulesOfIpGroupRequest {
     /// <p>The identifier of the group.</p>
@@ -1112,12 +1138,12 @@ pub struct UpdateRulesOfIpGroupRequest {
     pub user_rules: Vec<IpRuleItem>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRulesOfIpGroupResult {}
 
 /// <p>Describes the user storage for a WorkSpace bundle.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserStorage {
     /// <p>The size of the user storage.</p>
@@ -1127,7 +1153,7 @@ pub struct UserStorage {
 }
 
 /// <p>Describes a WorkSpace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Workspace {
     /// <p>The identifier of the bundle used to create the WorkSpace.</p>
@@ -1193,7 +1219,7 @@ pub struct Workspace {
 }
 
 /// <p>The device types and operating systems that can be used to access a WorkSpace. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/workspaces-network-requirements.html">Amazon WorkSpaces Client Network Requirements</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WorkspaceAccessProperties {
     /// <p>Indicates whether users can use Android devices to access their WorkSpaces.</p>
     #[serde(rename = "DeviceTypeAndroid")]
@@ -1226,7 +1252,7 @@ pub struct WorkspaceAccessProperties {
 }
 
 /// <p>Describes a WorkSpace bundle.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspaceBundle {
     /// <p>The bundle identifier.</p>
@@ -1268,7 +1294,7 @@ pub struct WorkspaceBundle {
 }
 
 /// <p>Describes the connection status of a WorkSpace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspaceConnectionStatus {
     /// <p>The connection state of the WorkSpace. The connection state is unknown if the WorkSpace is stopped.</p>
@@ -1290,7 +1316,7 @@ pub struct WorkspaceConnectionStatus {
 }
 
 /// <p>Describes the default properties that are used for creating WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html">Update Directory Details for Your WorkSpaces</a>. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct WorkspaceCreationProperties {
     /// <p>The identifier of your custom security group.</p>
@@ -1316,7 +1342,7 @@ pub struct WorkspaceCreationProperties {
 }
 
 /// <p>Describes a directory that is used with Amazon WorkSpaces.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspaceDirectory {
     /// <p>The directory alias.</p>
@@ -1386,7 +1412,7 @@ pub struct WorkspaceDirectory {
 }
 
 /// <p>Describes a WorkSpace image.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspaceImage {
     /// <p>The description of the image.</p>
@@ -1424,7 +1450,7 @@ pub struct WorkspaceImage {
 }
 
 /// <p>Describes a WorkSpace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WorkspaceProperties {
     /// <p>The compute type. For more information, see <a href="http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles">Amazon WorkSpaces Bundles</a>.</p>
     #[serde(rename = "ComputeTypeName")]
@@ -1449,7 +1475,7 @@ pub struct WorkspaceProperties {
 }
 
 /// <p>Describes the information used to create a WorkSpace.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WorkspaceRequest {
     /// <p>The identifier of the bundle for the WorkSpace. You can use <a>DescribeWorkspaceBundles</a> to list the available bundles.</p>
     #[serde(rename = "BundleId")]
@@ -1483,7 +1509,7 @@ pub struct WorkspaceRequest {
 }
 
 /// <p>Describes an IP access control group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspacesIpGroup {
     /// <p>The description of the group.</p>
@@ -3773,26 +3799,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: AssociateIpGroupsRequest,
     ) -> Result<AssociateIpGroupsResult, RusotoError<AssociateIpGroupsError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.AssociateIpGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AssociateIpGroupsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateIpGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateIpGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AssociateIpGroupsResult, _>()
     }
 
     /// <p>Adds one or more rules to the specified IP access control group.</p> <p>This action gives users permission to access their WorkSpaces from the CIDR address ranges specified in the rules.</p>
@@ -3800,26 +3817,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: AuthorizeIpRulesRequest,
     ) -> Result<AuthorizeIpRulesResult, RusotoError<AuthorizeIpRulesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.AuthorizeIpRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<AuthorizeIpRulesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AuthorizeIpRulesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AuthorizeIpRulesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AuthorizeIpRulesResult, _>()
     }
 
     /// <p>Copies the specified image from the specified Region to the current Region.</p>
@@ -3827,27 +3835,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: CopyWorkspaceImageRequest,
     ) -> Result<CopyWorkspaceImageResult, RusotoError<CopyWorkspaceImageError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.CopyWorkspaceImage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CopyWorkspaceImageResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CopyWorkspaceImageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CopyWorkspaceImageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CopyWorkspaceImageResult, _>()
     }
 
     /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
@@ -3855,26 +3853,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: CreateIpGroupRequest,
     ) -> Result<CreateIpGroupResult, RusotoError<CreateIpGroupError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.CreateIpGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateIpGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateIpGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateIpGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateIpGroupResult, _>()
     }
 
     /// <p>Creates the specified tags for the specified WorkSpaces resource.</p>
@@ -3882,26 +3871,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: CreateTagsRequest,
     ) -> Result<CreateTagsResult, RusotoError<CreateTagsError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.CreateTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateTagsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateTagsResult, _>()
     }
 
     /// <p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>
@@ -3909,26 +3889,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: CreateWorkspacesRequest,
     ) -> Result<CreateWorkspacesResult, RusotoError<CreateWorkspacesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.CreateWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkspacesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateWorkspacesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateWorkspacesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkspacesResult, _>()
     }
 
     /// <p>Deletes the specified IP access control group.</p> <p>You cannot delete an IP access control group that is associated with a directory.</p>
@@ -3936,26 +3907,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DeleteIpGroupRequest,
     ) -> Result<DeleteIpGroupResult, RusotoError<DeleteIpGroupError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DeleteIpGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteIpGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteIpGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteIpGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteIpGroupResult, _>()
     }
 
     /// <p>Deletes the specified tags from the specified WorkSpaces resource.</p>
@@ -3963,26 +3925,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DeleteTagsRequest,
     ) -> Result<DeleteTagsResult, RusotoError<DeleteTagsError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DeleteTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagsResult, _>()
     }
 
     /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and un-share the image if it is shared with other accounts. </p>
@@ -3990,27 +3943,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DeleteWorkspaceImageRequest,
     ) -> Result<DeleteWorkspaceImageResult, RusotoError<DeleteWorkspaceImageError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DeleteWorkspaceImage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteWorkspaceImageResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteWorkspaceImageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteWorkspaceImageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteWorkspaceImageResult, _>()
     }
 
     /// <p>Deregisters the specified directory. This operation is asynchronous and returns before the WorkSpace directory is deregistered. If any WorkSpaces are registered to this directory, you must remove them before you can deregister the directory.</p>
@@ -4019,9 +3962,7 @@ impl Workspaces for WorkspacesClient {
         input: DeregisterWorkspaceDirectoryRequest,
     ) -> Result<DeregisterWorkspaceDirectoryResult, RusotoError<DeregisterWorkspaceDirectoryError>>
     {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.DeregisterWorkspaceDirectory",
@@ -4029,45 +3970,29 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeregisterWorkspaceDirectoryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeregisterWorkspaceDirectoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeregisterWorkspaceDirectoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeregisterWorkspaceDirectoryResult, _>()
     }
 
     /// <p>Retrieves a list that describes the configuration of Bring Your Own License (BYOL) for the specified account.</p>
     async fn describe_account(
         &self,
     ) -> Result<DescribeAccountResult, RusotoError<DescribeAccountError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DescribeAccount");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeAccountResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAccountError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAccountError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeAccountResult, _>()
     }
 
     /// <p>Retrieves a list that describes modifications to the configuration of Bring Your Own License (BYOL) for the specified account.</p>
@@ -4076,9 +4001,7 @@ impl Workspaces for WorkspacesClient {
         input: DescribeAccountModificationsRequest,
     ) -> Result<DescribeAccountModificationsResult, RusotoError<DescribeAccountModificationsError>>
     {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.DescribeAccountModifications",
@@ -4086,20 +4009,13 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAccountModificationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAccountModificationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAccountModificationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAccountModificationsResult, _>()
     }
 
     /// <p>Retrieves a list that describes one or more specified Amazon WorkSpaces clients.</p>
@@ -4107,27 +4023,18 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeClientPropertiesRequest,
     ) -> Result<DescribeClientPropertiesResult, RusotoError<DescribeClientPropertiesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DescribeClientProperties");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeClientPropertiesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeClientPropertiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeClientPropertiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeClientPropertiesResult, _>()
     }
 
     /// <p>Describes one or more of your IP access control groups.</p>
@@ -4135,26 +4042,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeIpGroupsRequest,
     ) -> Result<DescribeIpGroupsResult, RusotoError<DescribeIpGroupsError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DescribeIpGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeIpGroupsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeIpGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeIpGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeIpGroupsResult, _>()
     }
 
     /// <p>Describes the specified tags for the specified WorkSpaces resource.</p>
@@ -4162,26 +4060,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeTagsRequest,
     ) -> Result<DescribeTagsResult, RusotoError<DescribeTagsError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DescribeTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTagsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTagsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagsResult, _>()
     }
 
     /// <p>Retrieves a list that describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
@@ -4189,27 +4078,18 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeWorkspaceBundlesRequest,
     ) -> Result<DescribeWorkspaceBundlesResult, RusotoError<DescribeWorkspaceBundlesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaceBundles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeWorkspaceBundlesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeWorkspaceBundlesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeWorkspaceBundlesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeWorkspaceBundlesResult, _>()
     }
 
     /// <p>Describes the available directories that are registered with Amazon WorkSpaces.</p>
@@ -4218,9 +4098,7 @@ impl Workspaces for WorkspacesClient {
         input: DescribeWorkspaceDirectoriesRequest,
     ) -> Result<DescribeWorkspaceDirectoriesResult, RusotoError<DescribeWorkspaceDirectoriesError>>
     {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.DescribeWorkspaceDirectories",
@@ -4228,20 +4106,13 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeWorkspaceDirectoriesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeWorkspaceDirectoriesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeWorkspaceDirectoriesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeWorkspaceDirectoriesResult, _>()
     }
 
     /// <p>Retrieves a list that describes one or more specified images, if the image identifiers are provided. Otherwise, all images in the account are described. </p>
@@ -4249,27 +4120,18 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeWorkspaceImagesRequest,
     ) -> Result<DescribeWorkspaceImagesResult, RusotoError<DescribeWorkspaceImagesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaceImages");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeWorkspaceImagesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeWorkspaceImagesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeWorkspaceImagesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeWorkspaceImagesResult, _>()
     }
 
     /// <p>Describes the snapshots for the specified WorkSpace.</p>
@@ -4278,9 +4140,7 @@ impl Workspaces for WorkspacesClient {
         input: DescribeWorkspaceSnapshotsRequest,
     ) -> Result<DescribeWorkspaceSnapshotsResult, RusotoError<DescribeWorkspaceSnapshotsError>>
     {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.DescribeWorkspaceSnapshots",
@@ -4288,20 +4148,13 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeWorkspaceSnapshotsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeWorkspaceSnapshotsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeWorkspaceSnapshotsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeWorkspaceSnapshotsResult, _>()
     }
 
     /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results by using the bundle identifier, directory identifier, or owner, but you can specify only one filter at a time.</p>
@@ -4309,27 +4162,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeWorkspacesRequest,
     ) -> Result<DescribeWorkspacesResult, RusotoError<DescribeWorkspacesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeWorkspacesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeWorkspacesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeWorkspacesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeWorkspacesResult, _>()
     }
 
     /// <p>Describes the connection status of the specified WorkSpaces.</p>
@@ -4340,9 +4183,7 @@ impl Workspaces for WorkspacesClient {
         DescribeWorkspacesConnectionStatusResult,
         RusotoError<DescribeWorkspacesConnectionStatusError>,
     > {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.DescribeWorkspacesConnectionStatus",
@@ -4350,22 +4191,16 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeWorkspacesConnectionStatusResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeWorkspacesConnectionStatusError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeWorkspacesConnectionStatusError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeWorkspacesConnectionStatusResult, _>()
     }
 
     /// <p>Disassociates the specified IP access control group from the specified directory.</p>
@@ -4373,27 +4208,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DisassociateIpGroupsRequest,
     ) -> Result<DisassociateIpGroupsResult, RusotoError<DisassociateIpGroupsError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.DisassociateIpGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateIpGroupsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateIpGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DisassociateIpGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DisassociateIpGroupsResult, _>()
     }
 
     /// <p>Imports the specified Windows 7 or Windows 10 Bring Your Own License (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
@@ -4401,27 +4226,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: ImportWorkspaceImageRequest,
     ) -> Result<ImportWorkspaceImageResult, RusotoError<ImportWorkspaceImageError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.ImportWorkspaceImage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ImportWorkspaceImageResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportWorkspaceImageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ImportWorkspaceImageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ImportWorkspaceImageResult, _>()
     }
 
     /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable Bring Your Own License (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
@@ -4432,9 +4247,7 @@ impl Workspaces for WorkspacesClient {
         ListAvailableManagementCidrRangesResult,
         RusotoError<ListAvailableManagementCidrRangesError>,
     > {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.ListAvailableManagementCidrRanges",
@@ -4442,22 +4255,16 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAvailableManagementCidrRangesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAvailableManagementCidrRangesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListAvailableManagementCidrRangesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAvailableManagementCidrRangesResult, _>()
     }
 
     /// <p>Migrates a WorkSpace from one operating system or bundle type to another, while retaining the data on the user volume.</p> <p>The migration process recreates the WorkSpace by using a new root volume from the target bundle image and the user volume from the last available snapshot of the original WorkSpace. During migration, the original <code>D:\Users\%USERNAME%</code> user profile folder is renamed to <code>D:\Users\%USERNAME%MMddyyTHHmmss%.NotMigrated</code>. A new <code>D:\Users\%USERNAME%\</code> folder is generated by the new OS. Certain files in the old user profile are moved to the new user profile.</p> <p>For available migration scenarios, details about what happens during migration, and best practices, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/migrate-workspaces.html">Migrate a WorkSpace</a>.</p>
@@ -4465,26 +4272,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: MigrateWorkspaceRequest,
     ) -> Result<MigrateWorkspaceResult, RusotoError<MigrateWorkspaceError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.MigrateWorkspace");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<MigrateWorkspaceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(MigrateWorkspaceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, MigrateWorkspaceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<MigrateWorkspaceResult, _>()
     }
 
     /// <p>Modifies the configuration of Bring Your Own License (BYOL) for the specified account.</p>
@@ -4492,26 +4290,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: ModifyAccountRequest,
     ) -> Result<ModifyAccountResult, RusotoError<ModifyAccountError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.ModifyAccount");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ModifyAccountResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyAccountError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyAccountError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ModifyAccountResult, _>()
     }
 
     /// <p>Modifies the properties of the specified Amazon WorkSpaces clients.</p>
@@ -4519,27 +4308,18 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: ModifyClientPropertiesRequest,
     ) -> Result<ModifyClientPropertiesResult, RusotoError<ModifyClientPropertiesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.ModifyClientProperties");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ModifyClientPropertiesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyClientPropertiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyClientPropertiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ModifyClientPropertiesResult, _>()
     }
 
     /// <p>Modifies the self-service WorkSpace management capabilities for your users. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/enable-user-self-service-workspace-management.html">Enable Self-Service WorkSpace Management Capabilities for Your Users</a>.</p>
@@ -4548,9 +4328,7 @@ impl Workspaces for WorkspacesClient {
         input: ModifySelfservicePermissionsRequest,
     ) -> Result<ModifySelfservicePermissionsResult, RusotoError<ModifySelfservicePermissionsError>>
     {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.ModifySelfservicePermissions",
@@ -4558,20 +4336,13 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ModifySelfservicePermissionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifySelfservicePermissionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifySelfservicePermissionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ModifySelfservicePermissionsResult, _>()
     }
 
     /// <p>Specifies which devices and operating systems users can use to access their WorkSpaces. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-directory-details.html#control-device-access"> Control Device Access</a>.</p>
@@ -4582,9 +4353,7 @@ impl Workspaces for WorkspacesClient {
         ModifyWorkspaceAccessPropertiesResult,
         RusotoError<ModifyWorkspaceAccessPropertiesError>,
     > {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.ModifyWorkspaceAccessProperties",
@@ -4592,22 +4361,13 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ModifyWorkspaceAccessPropertiesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyWorkspaceAccessPropertiesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyWorkspaceAccessPropertiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ModifyWorkspaceAccessPropertiesResult, _>()
     }
 
     /// <p>Modify the default properties used to create WorkSpaces.</p>
@@ -4618,9 +4378,7 @@ impl Workspaces for WorkspacesClient {
         ModifyWorkspaceCreationPropertiesResult,
         RusotoError<ModifyWorkspaceCreationPropertiesError>,
     > {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.ModifyWorkspaceCreationProperties",
@@ -4628,22 +4386,16 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ModifyWorkspaceCreationPropertiesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyWorkspaceCreationPropertiesError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ModifyWorkspaceCreationPropertiesError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ModifyWorkspaceCreationPropertiesResult, _>()
     }
 
     /// <p>Modifies the specified WorkSpace properties.</p>
@@ -4651,9 +4403,7 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: ModifyWorkspacePropertiesRequest,
     ) -> Result<ModifyWorkspacePropertiesResult, RusotoError<ModifyWorkspacePropertiesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.ModifyWorkspaceProperties",
@@ -4661,20 +4411,13 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ModifyWorkspacePropertiesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyWorkspacePropertiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyWorkspacePropertiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ModifyWorkspacePropertiesResult, _>()
     }
 
     /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, rebuild, or restore. An AutoStop WorkSpace in this state is not stopped. Users cannot log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
@@ -4682,27 +4425,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: ModifyWorkspaceStateRequest,
     ) -> Result<ModifyWorkspaceStateResult, RusotoError<ModifyWorkspaceStateError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.ModifyWorkspaceState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ModifyWorkspaceStateResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ModifyWorkspaceStateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ModifyWorkspaceStateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ModifyWorkspaceStateResult, _>()
     }
 
     /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code> or <code>UNHEALTHY</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
@@ -4710,26 +4443,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: RebootWorkspacesRequest,
     ) -> Result<RebootWorkspacesResult, RusotoError<RebootWorkspacesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.RebootWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RebootWorkspacesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RebootWorkspacesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RebootWorkspacesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RebootWorkspacesResult, _>()
     }
 
     /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, <code>UNHEALTHY</code>, or <code>STOPPED</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
@@ -4737,26 +4461,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: RebuildWorkspacesRequest,
     ) -> Result<RebuildWorkspacesResult, RusotoError<RebuildWorkspacesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.RebuildWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RebuildWorkspacesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RebuildWorkspacesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RebuildWorkspacesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RebuildWorkspacesResult, _>()
     }
 
     /// <p>Registers the specified directory. This operation is asynchronous and returns before the WorkSpace directory is registered. If this is the first time you are registering a directory, you will need to create the workspaces_DefaultRole role before you can register a directory. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/workspaces-access-control.html#create-default-role"> Creating the workspaces_DefaultRole Role</a>.</p>
@@ -4765,9 +4480,7 @@ impl Workspaces for WorkspacesClient {
         input: RegisterWorkspaceDirectoryRequest,
     ) -> Result<RegisterWorkspaceDirectoryResult, RusotoError<RegisterWorkspaceDirectoryError>>
     {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "WorkspacesService.RegisterWorkspaceDirectory",
@@ -4775,20 +4488,13 @@ impl Workspaces for WorkspacesClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RegisterWorkspaceDirectoryResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RegisterWorkspaceDirectoryError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RegisterWorkspaceDirectoryError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RegisterWorkspaceDirectoryResult, _>()
     }
 
     /// <p>Restores the specified WorkSpace to its last known healthy state.</p> <p>You cannot restore a WorkSpace unless its state is <code> AVAILABLE</code>, <code>ERROR</code>, <code>UNHEALTHY</code>, or <code>STOPPED</code>.</p> <p>Restoring a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/restore-workspace.html">Restore a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpace is completely restored.</p>
@@ -4796,26 +4502,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: RestoreWorkspaceRequest,
     ) -> Result<RestoreWorkspaceResult, RusotoError<RestoreWorkspaceError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.RestoreWorkspace");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RestoreWorkspaceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RestoreWorkspaceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RestoreWorkspaceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RestoreWorkspaceResult, _>()
     }
 
     /// <p>Removes one or more rules from the specified IP access control group.</p>
@@ -4823,26 +4520,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: RevokeIpRulesRequest,
     ) -> Result<RevokeIpRulesResult, RusotoError<RevokeIpRulesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.RevokeIpRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RevokeIpRulesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RevokeIpRulesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RevokeIpRulesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RevokeIpRulesResult, _>()
     }
 
     /// <p>Starts the specified WorkSpaces.</p> <p>You cannot start a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>STOPPED</code>.</p>
@@ -4850,26 +4538,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: StartWorkspacesRequest,
     ) -> Result<StartWorkspacesResult, RusotoError<StartWorkspacesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.StartWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StartWorkspacesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartWorkspacesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartWorkspacesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartWorkspacesResult, _>()
     }
 
     /// <p> Stops the specified WorkSpaces.</p> <p>You cannot stop a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>AVAILABLE</code>, <code>IMPAIRED</code>, <code>UNHEALTHY</code>, or <code>ERROR</code>.</p>
@@ -4877,26 +4556,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: StopWorkspacesRequest,
     ) -> Result<StopWorkspacesResult, RusotoError<StopWorkspacesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.StopWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopWorkspacesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopWorkspacesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopWorkspacesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopWorkspacesResult, _>()
     }
 
     /// <p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p>
@@ -4904,27 +4574,17 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: TerminateWorkspacesRequest,
     ) -> Result<TerminateWorkspacesResult, RusotoError<TerminateWorkspacesError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.TerminateWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<TerminateWorkspacesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TerminateWorkspacesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TerminateWorkspacesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TerminateWorkspacesResult, _>()
     }
 
     /// <p>Replaces the current rules of the specified IP access control group with the specified rules.</p>
@@ -4932,26 +4592,16 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: UpdateRulesOfIpGroupRequest,
     ) -> Result<UpdateRulesOfIpGroupResult, RusotoError<UpdateRulesOfIpGroupError>> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "WorkspacesService.UpdateRulesOfIpGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRulesOfIpGroupResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRulesOfIpGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRulesOfIpGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateRulesOfIpGroupResult, _>()
     }
 }

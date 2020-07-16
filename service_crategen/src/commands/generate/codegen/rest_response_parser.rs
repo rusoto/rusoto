@@ -106,28 +106,27 @@ fn parse_single_header(
     let member_shape = service.get_shape(&member.shape).unwrap();
     if shape.required(member_name) {
         format!(
-            "let value = response.headers.get(\"{location_name}\").unwrap().to_owned();
+            "let value = response.headers.remove(\"{location_name}\").unwrap();
                  result.{field_name} = {primitive_parser};",
             location_name = member.location_name.as_ref().unwrap(),
             field_name = member_name.to_snake_case(),
-            primitive_parser = generate_header_primitive_parser(member_shape)
+            primitive_parser = generate_header_primitive_parser(member_shape).unwrap_or("value")
         )
     } else {
         format!(
-            "if let Some({field_name}) = response.headers.get(\"{location_name}\") {{
-                    let value = {field_name}.to_owned();
-                    result.{field_name} = Some({primitive_parser})
-                  }};",
+            "result.{field_name} = response.headers.remove(\"{location_name}\"){primitive_parser};",
             location_name = member.location_name.as_ref().unwrap(),
             field_name = member_name.to_snake_case(),
             primitive_parser = generate_header_primitive_parser(member_shape)
+                .map(|s| format!(".map(|value| {})", s))
+                .unwrap_or_default()
         )
     }
 }
 
-fn generate_header_primitive_parser(shape: &Shape) -> String {
+fn generate_header_primitive_parser(shape: &Shape) -> Option<&str> {
     let statement = match shape.shape_type {
-        ShapeType::String | ShapeType::Timestamp => "value",
+        ShapeType::String | ShapeType::Timestamp => return None,
         ShapeType::Double => "value.parse::<f64>().unwrap()",
         ShapeType::Integer | ShapeType::Long => "value.parse::<i64>().unwrap()",
         ShapeType::Float => "value.parse::<f32>().unwrap()",
@@ -135,5 +134,5 @@ fn generate_header_primitive_parser(shape: &Shape) -> String {
         _ => panic!("Unknown primitive shape type"),
     };
 
-    statement.to_string()
+    Some(statement)
 }

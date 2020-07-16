@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupInput {
     /// <p>The description of the resource group. Descriptions can have a maximum of 511 characters, including letters, numbers, hyphens, underscores, punctuation, and spaces.</p>
@@ -44,7 +44,7 @@ pub struct CreateGroupInput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupOutput {
     /// <p>A full description of the resource group after it is created.</p>
@@ -61,7 +61,7 @@ pub struct CreateGroupOutput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGroupInput {
     /// <p>The name of the resource group to delete.</p>
@@ -69,7 +69,7 @@ pub struct DeleteGroupInput {
     pub group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupOutput {
     /// <p>A full description of the deleted resource group.</p>
@@ -78,7 +78,7 @@ pub struct DeleteGroupOutput {
     pub group: Option<Group>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupInput {
     /// <p>The name of the resource group.</p>
@@ -86,7 +86,7 @@ pub struct GetGroupInput {
     pub group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupOutput {
     /// <p>A full description of the resource group.</p>
@@ -95,7 +95,7 @@ pub struct GetGroupOutput {
     pub group: Option<Group>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGroupQueryInput {
     /// <p>The name of the resource group.</p>
@@ -103,7 +103,7 @@ pub struct GetGroupQueryInput {
     pub group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupQueryOutput {
     /// <p>The resource query associated with the specified group.</p>
@@ -112,7 +112,7 @@ pub struct GetGroupQueryOutput {
     pub group_query: Option<GroupQuery>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsInput {
     /// <p>The ARN of the resource group for which you want a list of tags. The resource must exist within the account you are using.</p>
@@ -120,7 +120,7 @@ pub struct GetTagsInput {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagsOutput {
     /// <p>The ARN of the tagged resource group.</p>
@@ -134,7 +134,7 @@ pub struct GetTagsOutput {
 }
 
 /// <p>A resource group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Group {
     /// <p>The description of the resource group.</p>
@@ -150,7 +150,7 @@ pub struct Group {
 }
 
 /// <p>A filter name and value pair that is used to obtain more specific results from a list of groups.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GroupFilter {
     /// <p>The name of the filter. Filter names are case-sensitive.</p>
@@ -162,7 +162,7 @@ pub struct GroupFilter {
 }
 
 /// <p>The ARN and group name of a group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupIdentifier {
     /// <p>The ARN of a resource group.</p>
@@ -176,7 +176,7 @@ pub struct GroupIdentifier {
 }
 
 /// <p>The underlying resource query of a resource group. Resources that match query results are part of the group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupQuery {
     /// <p>The name of a resource group that is associated with a specific resource query.</p>
@@ -187,7 +187,7 @@ pub struct GroupQuery {
     pub resource_query: ResourceQuery,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupResourcesInput {
     /// <p><p>Filters, formatted as ResourceFilter objects, that you want to apply to a ListGroupResources operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter resources by their type. Specify up to five resource types in the format AWS::ServiceCode::ResourceType. For example, AWS::EC2::Instance, or AWS::S3::Bucket.</p> </li> </ul></p>
@@ -207,7 +207,7 @@ pub struct ListGroupResourcesInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupResourcesOutput {
     /// <p>The NextToken value to include in a subsequent <code>ListGroupResources</code> request, to get more results.</p>
@@ -224,7 +224,7 @@ pub struct ListGroupResourcesOutput {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsInput {
     /// <p><p>Filters, formatted as GroupFilter objects, that you want to apply to a ListGroups operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter groups by resource type. Specify up to five resource types in the format AWS::ServiceCode::ResourceType. For example, AWS::EC2::Instance, or AWS::S3::Bucket.</p> </li> </ul></p>
@@ -241,7 +241,7 @@ pub struct ListGroupsInput {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsOutput {
     /// <p>A list of GroupIdentifier objects. Each identifier is an object that contains both the GroupName and the GroupArn.</p>
@@ -255,7 +255,7 @@ pub struct ListGroupsOutput {
 }
 
 /// <p>A two-part error structure that can occur in <code>ListGroupResources</code> or <code>SearchResources</code> operations on CloudFormation stack-based queries. The error occurs if the CloudFormation stack on which the query is based either does not exist, or has a status that renders the stack inactive. A <code>QueryError</code> occurrence does not necessarily mean that AWS Resource Groups could not complete the operation, but the resulting group might have no member resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryError {
     /// <p>Possible values are <code>CLOUDFORMATION_STACK_INACTIVE</code> and <code>CLOUDFORMATION_STACK_NOT_EXISTING</code>.</p>
@@ -269,7 +269,7 @@ pub struct QueryError {
 }
 
 /// <p>A filter name and value pair that is used to obtain more specific results from a list of resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResourceFilter {
     /// <p>The name of the filter. Filter names are case-sensitive.</p>
@@ -281,7 +281,7 @@ pub struct ResourceFilter {
 }
 
 /// <p>The ARN of a resource, and its resource type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceIdentifier {
     /// <p>The ARN of a resource.</p>
@@ -295,7 +295,7 @@ pub struct ResourceIdentifier {
 }
 
 /// <p>The query that is used to define a resource group or a search for resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResourceQuery {
     /// <p>The query that defines a group or a search.</p>
     #[serde(rename = "Query")]
@@ -305,7 +305,7 @@ pub struct ResourceQuery {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchResourcesInput {
     /// <p>The maximum number of group member ARNs returned by <code>SearchResources</code> in paginated output. By default, this number is 50.</p>
@@ -321,7 +321,7 @@ pub struct SearchResourcesInput {
     pub resource_query: ResourceQuery,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchResourcesOutput {
     /// <p>The NextToken value to include in a subsequent <code>SearchResources</code> request, to get more results.</p>
@@ -338,7 +338,7 @@ pub struct SearchResourcesOutput {
     pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagInput {
     /// <p>The ARN of the resource to which to add tags.</p>
@@ -349,7 +349,7 @@ pub struct TagInput {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagOutput {
     /// <p>The ARN of the tagged resource.</p>
@@ -362,7 +362,7 @@ pub struct TagOutput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagInput {
     /// <p>The ARN of the resource from which to remove tags.</p>
@@ -373,7 +373,7 @@ pub struct UntagInput {
     pub keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagOutput {
     /// <p>The ARN of the resource from which tags have been removed.</p>
@@ -386,7 +386,7 @@ pub struct UntagOutput {
     pub keys: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupInput {
     /// <p>The description of the resource group. Descriptions can have a maximum of 511 characters, including letters, numbers, hyphens, underscores, punctuation, and spaces.</p>
@@ -398,7 +398,7 @@ pub struct UpdateGroupInput {
     pub group_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupOutput {
     /// <p>The full description of the resource group after it has been updated.</p>
@@ -407,7 +407,7 @@ pub struct UpdateGroupOutput {
     pub group: Option<Group>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGroupQueryInput {
     /// <p>The name of the resource group for which you want to edit the query.</p>
@@ -418,7 +418,7 @@ pub struct UpdateGroupQueryInput {
     pub resource_query: ResourceQuery,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupQueryOutput {
     /// <p>The resource query associated with the resource group after the update.</p>
@@ -1249,6 +1249,7 @@ impl ResourceGroupsClient {
 #[async_trait]
 impl ResourceGroups for ResourceGroupsClient {
     /// <p>Creates a group with a specified name, description, and resource query.</p>
+    #[allow(unused_mut)]
     async fn create_group(
         &self,
         input: CreateGroupInput,
@@ -1267,7 +1268,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateGroupOutput, _>()?;
 
@@ -1279,6 +1280,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Deletes a specified resource group. Deleting a resource group does not delete resources that are members of the group; it only deletes the group structure.</p>
+    #[allow(unused_mut)]
     async fn delete_group(
         &self,
         input: DeleteGroupInput,
@@ -1295,7 +1297,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteGroupOutput, _>()?;
 
@@ -1307,6 +1309,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns information about a specified resource group.</p>
+    #[allow(unused_mut)]
     async fn get_group(
         &self,
         input: GetGroupInput,
@@ -1322,7 +1325,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetGroupOutput, _>()?;
 
@@ -1334,6 +1337,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns the resource query associated with the specified resource group.</p>
+    #[allow(unused_mut)]
     async fn get_group_query(
         &self,
         input: GetGroupQueryInput,
@@ -1349,7 +1353,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetGroupQueryOutput, _>()?;
 
@@ -1361,6 +1365,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p>
+    #[allow(unused_mut)]
     async fn get_tags(
         &self,
         input: GetTagsInput,
@@ -1376,7 +1381,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetTagsOutput, _>()?;
 
@@ -1388,6 +1393,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns a list of ARNs of resources that are members of a specified resource group.</p>
+    #[allow(unused_mut)]
     async fn list_group_resources(
         &self,
         input: ListGroupResourcesInput,
@@ -1418,7 +1424,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListGroupResourcesOutput, _>()?;
 
@@ -1430,6 +1436,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns a list of existing resource groups in your account.</p>
+    #[allow(unused_mut)]
     async fn list_groups(
         &self,
         input: ListGroupsInput,
@@ -1457,7 +1464,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListGroupsOutput, _>()?;
 
@@ -1469,6 +1476,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Returns a list of AWS resource identifiers that matches a specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
+    #[allow(unused_mut)]
     async fn search_resources(
         &self,
         input: SearchResourcesInput,
@@ -1487,7 +1495,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SearchResourcesOutput, _>()?;
 
@@ -1499,6 +1507,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p>
+    #[allow(unused_mut)]
     async fn tag(&self, input: TagInput) -> Result<TagOutput, RusotoError<TagError>> {
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
 
@@ -1514,7 +1523,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<TagOutput, _>()?;
 
@@ -1526,6 +1535,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Deletes specified tags from a specified resource.</p>
+    #[allow(unused_mut)]
     async fn untag(&self, input: UntagInput) -> Result<UntagOutput, RusotoError<UntagError>> {
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
 
@@ -1542,7 +1552,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UntagOutput, _>()?;
 
@@ -1554,6 +1564,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Updates an existing group with a new or changed description. You cannot update the name of a resource group.</p>
+    #[allow(unused_mut)]
     async fn update_group(
         &self,
         input: UpdateGroupInput,
@@ -1572,7 +1583,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateGroupOutput, _>()?;
 
@@ -1584,6 +1595,7 @@ impl ResourceGroups for ResourceGroupsClient {
     }
 
     /// <p>Updates the resource query of a group.</p>
+    #[allow(unused_mut)]
     async fn update_group_query(
         &self,
         input: UpdateGroupQueryInput,
@@ -1602,7 +1614,7 @@ impl ResourceGroups for ResourceGroupsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateGroupQueryOutput, _>()?;
 

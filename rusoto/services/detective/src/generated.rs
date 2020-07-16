@@ -24,7 +24,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
     /// <p>The ARN of the behavior graph that the member account is accepting the invitation for.</p> <p>The member account status in the behavior graph must be <code>INVITED</code>.</p>
@@ -33,7 +33,7 @@ pub struct AcceptInvitationRequest {
 }
 
 /// <p>An AWS account that is the master of or a member of a behavior graph.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Account {
     /// <p>The account identifier of the AWS account.</p>
@@ -44,7 +44,7 @@ pub struct Account {
     pub email_address: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGraphResponse {
     /// <p>The ARN of the new behavior graph.</p>
@@ -53,7 +53,7 @@ pub struct CreateGraphResponse {
     pub graph_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMembersRequest {
     /// <p>The list of AWS accounts to invite to become member accounts in the behavior graph. For each invited account, the account list contains the account identifier and the AWS account root user email address.</p>
@@ -68,7 +68,7 @@ pub struct CreateMembersRequest {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMembersResponse {
     /// <p>The set of member account invitation requests that Detective was able to process. This includes accounts that are being verified, that failed verification, and that passed verification and are being sent an invitation.</p>
@@ -81,7 +81,7 @@ pub struct CreateMembersResponse {
     pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGraphRequest {
     /// <p>The ARN of the behavior graph to disable.</p>
@@ -89,7 +89,7 @@ pub struct DeleteGraphRequest {
     pub graph_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMembersRequest {
     /// <p>The list of AWS account identifiers for the member accounts to delete from the behavior graph.</p>
@@ -100,7 +100,7 @@ pub struct DeleteMembersRequest {
     pub graph_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMembersResponse {
     /// <p>The list of AWS account identifiers for the member accounts that Detective successfully deleted from the behavior graph.</p>
@@ -113,7 +113,7 @@ pub struct DeleteMembersResponse {
     pub unprocessed_accounts: Option<Vec<UnprocessedAccount>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMembershipRequest {
     /// <p>The ARN of the behavior graph to remove the member account from.</p> <p>The member account's member status in the behavior graph must be <code>ENABLED</code>.</p>
@@ -121,7 +121,7 @@ pub struct DisassociateMembershipRequest {
     pub graph_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
     /// <p>The list of AWS account identifiers for the member account for which to return member details.</p> <p>You cannot use <code>GetMembers</code> to retrieve information about member accounts that were removed from the behavior graph.</p>
@@ -132,7 +132,7 @@ pub struct GetMembersRequest {
     pub graph_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMembersResponse {
     /// <p>The member account details that Detective is returning in response to the request.</p>
@@ -146,7 +146,7 @@ pub struct GetMembersResponse {
 }
 
 /// <p>A behavior graph in Detective.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Graph {
     /// <p>The ARN of the behavior graph.</p>
@@ -159,7 +159,7 @@ pub struct Graph {
     pub created_time: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGraphsRequest {
     /// <p>The maximum number of graphs to return at a time. The total must be less than the overall limit on the number of results to return, which is currently 200.</p>
@@ -172,7 +172,7 @@ pub struct ListGraphsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGraphsResponse {
     /// <p>A list of behavior graphs that the account is a master for.</p>
@@ -185,7 +185,7 @@ pub struct ListGraphsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsRequest {
     /// <p>The maximum number of behavior graph invitations to return in the response. The total must be less than the overall limit on the number of results to return, which is currently 200.</p>
@@ -198,7 +198,7 @@ pub struct ListInvitationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInvitationsResponse {
     /// <p>The list of behavior graphs for which the member account has open or accepted invitations.</p>
@@ -211,7 +211,7 @@ pub struct ListInvitationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersRequest {
     /// <p>The ARN of the behavior graph for which to retrieve the list of member accounts.</p>
@@ -227,7 +227,7 @@ pub struct ListMembersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMembersResponse {
     /// <p>The list of member accounts in the behavior graph.</p> <p>The results include member accounts that did not pass verification and member accounts that have not yet accepted the invitation to the behavior graph. The results do not include member accounts that were removed from the behavior graph.</p>
@@ -241,7 +241,7 @@ pub struct ListMembersResponse {
 }
 
 /// <p>Details about a member account that was invited to contribute to a behavior graph.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberDetail {
     /// <p>The AWS account identifier for the member account.</p>
@@ -286,7 +286,7 @@ pub struct MemberDetail {
     pub updated_time: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectInvitationRequest {
     /// <p>The ARN of the behavior graph to reject the invitation to.</p> <p>The member account's current member status in the behavior graph must be <code>INVITED</code>.</p>
@@ -294,7 +294,7 @@ pub struct RejectInvitationRequest {
     pub graph_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMonitoringMemberRequest {
     /// <p>The account ID of the member account to try to enable.</p> <p>The account must be an invited member account with a status of <code>ACCEPTED_BUT_DISABLED</code>. </p>
@@ -306,7 +306,7 @@ pub struct StartMonitoringMemberRequest {
 }
 
 /// <p>A member account that was included in a request but for which the request could not be processed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnprocessedAccount {
     /// <p>The AWS account identifier of the member account that was not processed.</p>
@@ -910,6 +910,7 @@ impl DetectiveClient {
 #[async_trait]
 impl Detective for DetectiveClient {
     /// <p>Accepts an invitation for the member account to contribute data to a behavior graph. This operation can only be called by an invited member account. </p> <p>The request provides the ARN of behavior graph.</p> <p>The member account status in the graph must be <code>INVITED</code>.</p>
+    #[allow(unused_mut)]
     async fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
@@ -929,7 +930,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -940,6 +941,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p>Creates a new behavior graph for the calling account, and sets that account as the master account. This operation is called by the account that is enabling Detective.</p> <p>Before you try to enable Detective, make sure that your account has been enrolled in Amazon GuardDuty for at least 48 hours. If you do not meet this requirement, you cannot enable Detective. If you do meet the GuardDuty prerequisite, then when you make the request to enable Detective, it checks whether your data volume is within the Detective quota. If it exceeds the quota, then you cannot enable Detective. </p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the master account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same master account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
+    #[allow(unused_mut)]
     async fn create_graph(&self) -> Result<CreateGraphResponse, RusotoError<CreateGraphError>> {
         let request_uri = "/graph";
 
@@ -954,7 +956,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateGraphResponse, _>()?;
 
@@ -966,6 +968,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p><p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the master account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then sends invitations to the verified accounts.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are being sent an invitation, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
+    #[allow(unused_mut)]
     async fn create_members(
         &self,
         input: CreateMembersRequest,
@@ -985,7 +988,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateMembersResponse, _>()?;
 
@@ -997,6 +1000,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the master account for a behavior graph.</p>
+    #[allow(unused_mut)]
     async fn delete_graph(
         &self,
         input: DeleteGraphRequest,
@@ -1016,7 +1020,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -1027,6 +1031,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p>Deletes one or more member accounts from the master account behavior graph. This operation can only be called by a Detective master account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the master account uses the <code>DeleteGraph</code> API method.</p>
+    #[allow(unused_mut)]
     async fn delete_members(
         &self,
         input: DeleteMembersRequest,
@@ -1046,7 +1051,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteMembersResponse, _>()?;
 
@@ -1058,6 +1063,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p>Removes the member account from the specified behavior graph. This operation can only be called by a member account that has the <code>ENABLED</code> status.</p>
+    #[allow(unused_mut)]
     async fn disassociate_membership(
         &self,
         input: DisassociateMembershipRequest,
@@ -1077,7 +1083,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -1088,6 +1094,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p>Returns the membership details for specified member accounts for a behavior graph.</p>
+    #[allow(unused_mut)]
     async fn get_members(
         &self,
         input: GetMembersRequest,
@@ -1107,7 +1114,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMembersResponse, _>()?;
 
@@ -1119,6 +1126,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p>Returns the list of behavior graphs that the calling account is a master of. This operation can only be called by a master account.</p> <p>Because an account can currently only be the master of one behavior graph within a Region, the results always contain a single graph.</p>
+    #[allow(unused_mut)]
     async fn list_graphs(
         &self,
         input: ListGraphsRequest,
@@ -1138,7 +1146,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListGraphsResponse, _>()?;
 
@@ -1150,6 +1158,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p>Retrieves the list of open and accepted behavior graph invitations for the member account. This operation can only be called by a member account.</p> <p>Open invitations are invitations that the member account has not responded to.</p> <p>The results do not include behavior graphs for which the member account declined the invitation. The results also do not include behavior graphs that the member account resigned from or was removed from.</p>
+    #[allow(unused_mut)]
     async fn list_invitations(
         &self,
         input: ListInvitationsRequest,
@@ -1169,7 +1178,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInvitationsResponse, _>()?;
 
@@ -1181,6 +1190,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p>Retrieves the list of member accounts for a behavior graph. Does not return member accounts that were removed from the behavior graph.</p>
+    #[allow(unused_mut)]
     async fn list_members(
         &self,
         input: ListMembersRequest,
@@ -1200,7 +1210,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMembersResponse, _>()?;
 
@@ -1212,6 +1222,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p>Rejects an invitation to contribute the account data to a behavior graph. This operation must be called by a member account that has the <code>INVITED</code> status.</p>
+    #[allow(unused_mut)]
     async fn reject_invitation(
         &self,
         input: RejectInvitationRequest,
@@ -1231,7 +1242,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -1242,6 +1253,7 @@ impl Detective for DetectiveClient {
     }
 
     /// <p><p>Sends a request to enable data ingest for a member account that has a status of <code>ACCEPTED<em>BUT</em>DISABLED</code>.</p> <p>For valid member accounts, the status is updated as follows.</p> <ul> <li> <p>If Detective enabled the member account, then the new status is <code>ENABLED</code>.</p> </li> <li> <p>If Detective cannot enable the member account, the status remains <code>ACCEPTED<em>BUT</em>DISABLED</code>. </p> </li> </ul></p>
+    #[allow(unused_mut)]
     async fn start_monitoring_member(
         &self,
         input: StartMonitoringMemberRequest,
@@ -1261,7 +1273,7 @@ impl Detective for DetectiveClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

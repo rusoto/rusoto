@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelChangeSetRequest {
     /// <p>Required. The catalog related to the request. Fixed value: <code>AWSMarketplace</code>.</p>
@@ -36,7 +36,7 @@ pub struct CancelChangeSetRequest {
     pub change_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelChangeSetResponse {
     /// <p>The ARN associated with the change set referenced in this request.</p>
@@ -50,7 +50,7 @@ pub struct CancelChangeSetResponse {
 }
 
 /// <p>An object that contains the <code>ChangeType</code>, <code>Details</code>, and <code>Entity</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Change {
     /// <p>Change types are single string values that describe your intention for the change. Each change type is unique for each <code>EntityType</code> provided in the change's scope.</p>
@@ -65,7 +65,7 @@ pub struct Change {
 }
 
 /// <p>A summary of a change set returned in a list of change sets when the <code>ListChangeSets</code> action is called.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChangeSetSummaryListItem {
     /// <p>The ARN associated with the unique identifier for the change set referenced in this request.</p>
@@ -99,13 +99,17 @@ pub struct ChangeSetSummaryListItem {
 }
 
 /// <p>This object is a container for common summary information about the change. The summary doesn't contain the whole change structure.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChangeSummary {
     /// <p>The type of the change.</p>
     #[serde(rename = "ChangeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_type: Option<String>,
+    /// <p>This object contains details specific to the change type of the requested change.</p>
+    #[serde(rename = "Details")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub details: Option<String>,
     /// <p>The entity to be changed.</p>
     #[serde(rename = "Entity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -116,7 +120,7 @@ pub struct ChangeSummary {
     pub error_detail_list: Option<Vec<ErrorDetail>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChangeSetRequest {
     /// <p>Required. The catalog related to the request. Fixed value: <code>AWSMarketplace</code> </p>
@@ -127,7 +131,7 @@ pub struct DescribeChangeSetRequest {
     pub change_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChangeSetResponse {
     /// <p>An array of <code>ChangeSummary</code> objects.</p>
@@ -164,7 +168,7 @@ pub struct DescribeChangeSetResponse {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntityRequest {
     /// <p>Required. The catalog related to the request. Fixed value: <code>AWSMarketplace</code> </p>
@@ -175,7 +179,7 @@ pub struct DescribeEntityRequest {
     pub entity_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntityResponse {
     /// <p>This stringified JSON object includes the details of the entity.</p>
@@ -201,7 +205,7 @@ pub struct DescribeEntityResponse {
 }
 
 /// <p>A product entity contains data that describes your product, its supported features, and how it can be used or launched by your customer. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Entity {
     /// <p>The identifier for the entity.</p>
     #[serde(rename = "Identifier")]
@@ -213,7 +217,7 @@ pub struct Entity {
 }
 
 /// <p>This object is a container for common summary information about the entity. The summary doesn't contain the whole entity structure, but it does contain information common across all entities.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntitySummary {
     /// <p>The ARN associated with the unique identifier for the entity.</p>
@@ -232,18 +236,18 @@ pub struct EntitySummary {
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<String>,
-    /// <p>The name for the entity. This value is not unique. It is defined by the provider.</p>
+    /// <p>The name for the entity. This value is not unique. It is defined by the seller.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The visibility status of the entity to subscribers. This value can be <code>Public</code> (everyone can view the entity), <code>Limited</code> (the entity is visible to limited accounts only), or <code>Restricted</code> (the entity was published and then unpublished and only existing subscribers can view it). </p>
+    /// <p>The visibility status of the entity to buyers. This value can be <code>Public</code> (everyone can view the entity), <code>Limited</code> (the entity is visible to limited accounts only), or <code>Restricted</code> (the entity was published and then unpublished and only existing buyers can view it). </p>
     #[serde(rename = "Visibility")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visibility: Option<String>,
 }
 
 /// <p>Details about the error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorDetail {
     /// <p>The error code that identifies the type of error.</p>
@@ -257,7 +261,7 @@ pub struct ErrorDetail {
 }
 
 /// <p>A filter object, used to optionally filter results from calls to the <code>ListEntities</code> and <code>ListChangeSets</code> actions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>For <code>ListEntities</code>, the supported value for this is an <code>EntityId</code>.</p> <p>For <code>ListChangeSets</code>, the supported values are as follows:</p>
@@ -270,7 +274,7 @@ pub struct Filter {
     pub value_list: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChangeSetsRequest {
     /// <p>The catalog related to the request. Fixed value: <code>AWSMarketplace</code> </p>
@@ -288,13 +292,13 @@ pub struct ListChangeSetsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An object that contains two attributes, <code>sortBy</code> and <code>sortOrder</code>.</p>
+    /// <p>An object that contains two attributes, <code>SortBy</code> and <code>SortOrder</code>.</p>
     #[serde(rename = "Sort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<Sort>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChangeSetsResponse {
     /// <p> Array of <code>ChangeSetSummaryListItem</code> objects.</p>
@@ -307,7 +311,7 @@ pub struct ListChangeSetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesRequest {
     /// <p>The catalog related to the request. Fixed value: <code>AWSMarketplace</code> </p>
@@ -328,13 +332,13 @@ pub struct ListEntitiesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An object that contains two attributes, <code>sortBy</code> and <code>sortOrder</code>.</p>
+    /// <p>An object that contains two attributes, <code>SortBy</code> and <code>SortOrder</code>.</p>
     #[serde(rename = "Sort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<Sort>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntitiesResponse {
     /// <p> Array of <code>EntitySummary</code> object.</p>
@@ -347,8 +351,8 @@ pub struct ListEntitiesResponse {
     pub next_token: Option<String>,
 }
 
-/// <p>An object that contains two attributes, <code>sortBy</code> and <code>sortOrder</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+/// <p>An object that contains two attributes, <code>SortBy</code> and <code>SortOrder</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Sort {
     /// <p>For <code>ListEntities</code>, supported attributes include <code>LastModifiedDate</code> (default), <code>Visibility</code>, <code>EntityId</code>, and <code>Name</code>.</p> <p>For <code>ListChangeSets</code>, supported attributes include <code>StartTime</code> and <code>EndTime</code>.</p>
@@ -361,7 +365,7 @@ pub struct Sort {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChangeSetRequest {
     /// <p>The catalog related to the request. Fixed value: <code>AWSMarketplace</code> </p>
@@ -380,7 +384,7 @@ pub struct StartChangeSetRequest {
     pub client_request_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartChangeSetResponse {
     /// <p>The ARN associated to the unique identifier generated for the request.</p>
@@ -732,7 +736,7 @@ pub trait MarketplaceCatalog {
         input: ListEntitiesRequest,
     ) -> Result<ListEntitiesResponse, RusotoError<ListEntitiesError>>;
 
-    /// <p>This operation allows you to request changes in your entities.</p>
+    /// <p>This operation allows you to request changes for your entities. Within a single ChangeSet, you cannot start the same change type against the same entity multiple times. Additionally, when a ChangeSet is running, all the entities targeted by the different changes are locked until the ChangeSet has completed (either succeeded, cancelled, or failed). If you try to start a ChangeSet containing a change against an entity that is already locked, you will receive a <code>ResourceInUseException</code>.</p> <p>For example, you cannot start the ChangeSet described in the <a href="https://docs.aws.amazon.com/marketplace-catalog/latest/api-reference/API_StartChangeSet.html#API_StartChangeSet_Examples">example</a> below because it contains two changes to execute the same change type (<code>AddRevisions</code>) against the same entity (<code>entity-id@1)</code>.</p>
     async fn start_change_set(
         &self,
         input: StartChangeSetRequest,
@@ -779,6 +783,7 @@ impl MarketplaceCatalogClient {
 #[async_trait]
 impl MarketplaceCatalog for MarketplaceCatalogClient {
     /// <p>Used to cancel an open change request. Must be sent before the status of the request changes to <code>APPLYING</code>, the final stage of completing your change request. You can describe a change during the 60-day request history retention period for API calls.</p>
+    #[allow(unused_mut)]
     async fn cancel_change_set(
         &self,
         input: CancelChangeSetRequest,
@@ -802,7 +807,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelChangeSetResponse, _>()?;
 
@@ -814,6 +819,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
     }
 
     /// <p>Provides information about a given change set.</p>
+    #[allow(unused_mut)]
     async fn describe_change_set(
         &self,
         input: DescribeChangeSetRequest,
@@ -836,7 +842,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeChangeSetResponse, _>()?;
 
@@ -848,6 +854,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
     }
 
     /// <p>Returns the metadata and content of the entity.</p>
+    #[allow(unused_mut)]
     async fn describe_entity(
         &self,
         input: DescribeEntityRequest,
@@ -870,7 +877,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeEntityResponse, _>()?;
 
@@ -882,6 +889,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
     }
 
     /// <p>Returns the list of change sets owned by the account being used to make the call. You can filter this list by providing any combination of <code>entityId</code>, <code>ChangeSetName</code>, and status. If you provide more than one filter, the API operation applies a logical AND between the filters.</p> <p>You can describe a change during the 60-day request history retention period for API calls.</p>
+    #[allow(unused_mut)]
     async fn list_change_sets(
         &self,
         input: ListChangeSetsRequest,
@@ -901,7 +909,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListChangeSetsResponse, _>()?;
 
@@ -913,6 +921,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
     }
 
     /// <p>Provides the list of entities of a given type.</p>
+    #[allow(unused_mut)]
     async fn list_entities(
         &self,
         input: ListEntitiesRequest,
@@ -932,7 +941,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListEntitiesResponse, _>()?;
 
@@ -943,7 +952,8 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         }
     }
 
-    /// <p>This operation allows you to request changes in your entities.</p>
+    /// <p>This operation allows you to request changes for your entities. Within a single ChangeSet, you cannot start the same change type against the same entity multiple times. Additionally, when a ChangeSet is running, all the entities targeted by the different changes are locked until the ChangeSet has completed (either succeeded, cancelled, or failed). If you try to start a ChangeSet containing a change against an entity that is already locked, you will receive a <code>ResourceInUseException</code>.</p> <p>For example, you cannot start the ChangeSet described in the <a href="https://docs.aws.amazon.com/marketplace-catalog/latest/api-reference/API_StartChangeSet.html#API_StartChangeSet_Examples">example</a> below because it contains two changes to execute the same change type (<code>AddRevisions</code>) against the same entity (<code>entity-id@1)</code>.</p>
+    #[allow(unused_mut)]
     async fn start_change_set(
         &self,
         input: StartChangeSetRequest,
@@ -963,7 +973,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartChangeSetResponse, _>()?;
 

@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptInvitationRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
@@ -39,12 +39,26 @@ pub struct AcceptInvitationRequest {
     pub master_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptInvitationResponse {}
 
+/// <p>Contains information on the current access control policies for the bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AccessControlList {
+    /// <p>A value that indicates whether public read access for the bucket is enabled through an Access Control List (ACL).</p>
+    #[serde(rename = "AllowsPublicReadAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allows_public_read_access: Option<bool>,
+    /// <p>A value that indicates whether public write access for the bucket is enabled through an Access Control List (ACL).</p>
+    #[serde(rename = "AllowsPublicWriteAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allows_public_write_access: Option<bool>,
+}
+
 /// <p>Contains information about the access keys.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccessKeyDetails {
     /// <p>The access key ID of the user.</p>
@@ -66,7 +80,7 @@ pub struct AccessKeyDetails {
 }
 
 /// <p>Contains information about the account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AccountDetail {
     /// <p>The member account ID.</p>
@@ -77,8 +91,18 @@ pub struct AccountDetail {
     pub email: String,
 }
 
+/// <p>Contains information about the account level permissions on the S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AccountLevelPermissions {
+    /// <p>Describes the S3 Block Public Access settings of the bucket's parent account.</p>
+    #[serde(rename = "BlockPublicAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_public_access: Option<BlockPublicAccess>,
+}
+
 /// <p>Contains information about actions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Action {
     /// <p>The GuardDuty finding activity type.</p>
@@ -104,7 +128,7 @@ pub struct Action {
 }
 
 /// <p>The account within the organization specified as the GuardDuty delegated administrator.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AdminAccount {
     /// <p>The AWS account ID for the account.</p>
@@ -117,7 +141,7 @@ pub struct AdminAccount {
     pub admin_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ArchiveFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to archive.</p>
@@ -128,12 +152,12 @@ pub struct ArchiveFindingsRequest {
     pub finding_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArchiveFindingsResponse {}
 
 /// <p>Contains information about the API operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AwsApiCallAction {
     /// <p>The AWS API name.</p>
@@ -158,8 +182,62 @@ pub struct AwsApiCallAction {
     pub service_name: Option<String>,
 }
 
+/// <p>Contains information on how the bucker owner's S3 Block Public Access settings are being applied to the S3 bucket. See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html">S3 Block Public Access</a> for more information. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BlockPublicAccess {
+    /// <p>Indicates if S3 Block Public Access is set to <code>BlockPublicAcls</code>.</p>
+    #[serde(rename = "BlockPublicAcls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_public_acls: Option<bool>,
+    /// <p>Indicates if S3 Block Public Access is set to <code>BlockPublicPolicy</code>.</p>
+    #[serde(rename = "BlockPublicPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_public_policy: Option<bool>,
+    /// <p>Indicates if S3 Block Public Access is set to <code>IgnorePublicAcls</code>.</p>
+    #[serde(rename = "IgnorePublicAcls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ignore_public_acls: Option<bool>,
+    /// <p>Indicates if S3 Block Public Access is set to <code>RestrictPublicBuckets</code>.</p>
+    #[serde(rename = "RestrictPublicBuckets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restrict_public_buckets: Option<bool>,
+}
+
+/// <p>Contains information about the bucket level permissions for the S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BucketLevelPermissions {
+    /// <p>Contains information on how Access Control Policies are applied to the bucket.</p>
+    #[serde(rename = "AccessControlList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_control_list: Option<AccessControlList>,
+    /// <p>Contains information on which account level S3 Block Public Access settings are applied to the S3 bucket.</p>
+    #[serde(rename = "BlockPublicAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_public_access: Option<BlockPublicAccess>,
+    /// <p>Contains information on the bucket policies for the S3 bucket.</p>
+    #[serde(rename = "BucketPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_policy: Option<BucketPolicy>,
+}
+
+/// <p>Contains information on the current bucket policies for the S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BucketPolicy {
+    /// <p>A value that indicates whether public read access for the bucket is enabled through a bucket policy.</p>
+    #[serde(rename = "AllowsPublicReadAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allows_public_read_access: Option<bool>,
+    /// <p>A value that indicates whether public write access for the bucket is enabled through a bucket policy.</p>
+    #[serde(rename = "AllowsPublicWriteAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allows_public_write_access: Option<bool>,
+}
+
 /// <p>Contains information about the city associated with the IP address.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct City {
     /// <p>The city name of the remote IP address.</p>
@@ -169,7 +247,7 @@ pub struct City {
 }
 
 /// <p>Contains information about the condition.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Condition {
     /// <p>Represents an <i>equal</i> <b/> condition to be applied to a single field when querying for findings.</p>
     #[serde(rename = "Equals")]
@@ -198,7 +276,7 @@ pub struct Condition {
 }
 
 /// <p>Contains information about the country where the remote IP address is located.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Country {
     /// <p>The country code of the remote IP address.</p>
@@ -211,7 +289,7 @@ pub struct Country {
     pub country_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDetectorRequest {
     /// <p>The idempotency token for the create request.</p>
@@ -231,7 +309,7 @@ pub struct CreateDetectorRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDetectorResponse {
     /// <p>The unique ID of the created detector.</p>
@@ -240,7 +318,7 @@ pub struct CreateDetectorResponse {
     pub detector_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFilterRequest {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
@@ -274,7 +352,7 @@ pub struct CreateFilterRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFilterResponse {
     /// <p>The name of the successfully created filter.</p>
@@ -282,7 +360,7 @@ pub struct CreateFilterResponse {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIPSetRequest {
     /// <p>A Boolean value that indicates whether GuardDuty is to start using the uploaded IPSet.</p>
@@ -298,7 +376,7 @@ pub struct CreateIPSetRequest {
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the IPSet. For example: .</p>
+    /// <p>The URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
     /// <p>The user-friendly name to identify the IPSet.</p> <p> Allowed characters are alphanumerics, spaces, hyphens (-), and underscores (_).</p>
@@ -310,7 +388,7 @@ pub struct CreateIPSetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIPSetResponse {
     /// <p>The ID of the IPSet resource.</p>
@@ -318,7 +396,7 @@ pub struct CreateIPSetResponse {
     pub ip_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMembersRequest {
     /// <p>A list of account ID and email address pairs of the accounts that you want to associate with the master GuardDuty account.</p>
@@ -329,7 +407,7 @@ pub struct CreateMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMembersResponse {
     /// <p>A list of objects that include the <code>accountIds</code> of the unprocessed accounts and a result string that explains why each was unprocessed.</p>
@@ -337,7 +415,7 @@ pub struct CreateMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePublishingDestinationRequest {
     /// <p>The idempotency token for the request.</p>
@@ -355,7 +433,7 @@ pub struct CreatePublishingDestinationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePublishingDestinationResponse {
     /// <p>The ID of the publishing destination that is created.</p>
@@ -363,7 +441,7 @@ pub struct CreatePublishingDestinationResponse {
     pub destination_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSampleFindingsRequest {
     /// <p>The ID of the detector to create sample findings for.</p>
@@ -375,11 +453,11 @@ pub struct CreateSampleFindingsRequest {
     pub finding_types: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSampleFindingsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThreatIntelSetRequest {
     /// <p>A Boolean value that indicates whether GuardDuty is to start using the uploaded ThreatIntelSet.</p>
@@ -395,7 +473,7 @@ pub struct CreateThreatIntelSetRequest {
     /// <p>The format of the file that contains the ThreatIntelSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the ThreatIntelSet. For example: .</p>
+    /// <p>The URI of the file that contains the ThreatIntelSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
     /// <p>A user-friendly ThreatIntelSet name displayed in all findings that are generated by activity that involves IP addresses included in this ThreatIntelSet.</p>
@@ -407,7 +485,7 @@ pub struct CreateThreatIntelSetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThreatIntelSetResponse {
     /// <p>The ID of the ThreatIntelSet resource.</p>
@@ -415,7 +493,7 @@ pub struct CreateThreatIntelSetResponse {
     pub threat_intel_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeclineInvitationsRequest {
     /// <p>A list of account IDs of the AWS accounts that sent invitations to the current member account that you want to decline invitations from.</p>
@@ -423,7 +501,7 @@ pub struct DeclineInvitationsRequest {
     pub account_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeclineInvitationsResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
@@ -431,7 +509,21 @@ pub struct DeclineInvitationsResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+/// <p>Contains information on the server side encryption method used in the S3 bucket. See <a href="https://docs.aws.amazon.com/AmazonS3/atest/dev/serv-side-encryption.html">S3 Server-Side Encryption</a> for more information.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DefaultServerSideEncryption {
+    /// <p>The type of encryption used for objects within the S3 bucket.</p>
+    #[serde(rename = "EncryptionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the KMS encryption key. Only available if the bucket <code>EncryptionType</code> is <code>aws:kms</code>.</p>
+    #[serde(rename = "KmsMasterKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorRequest {
     /// <p>The unique ID of the detector that you want to delete.</p>
@@ -439,11 +531,11 @@ pub struct DeleteDetectorRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFilterRequest {
     /// <p>The unique ID of the detector that the filter is associated with.</p>
@@ -454,11 +546,11 @@ pub struct DeleteFilterRequest {
     pub filter_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFilterResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIPSetRequest {
     /// <p>The unique ID of the detector associated with the IPSet.</p>
@@ -469,11 +561,11 @@ pub struct DeleteIPSetRequest {
     pub ip_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIPSetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInvitationsRequest {
     /// <p>A list of account IDs of the AWS accounts that sent invitations to the current member account that you want to delete invitations from.</p>
@@ -481,7 +573,7 @@ pub struct DeleteInvitationsRequest {
     pub account_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInvitationsResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
@@ -489,7 +581,7 @@ pub struct DeleteInvitationsResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to delete.</p>
@@ -500,7 +592,7 @@ pub struct DeleteMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMembersResponse {
     /// <p>The accounts that could not be processed.</p>
@@ -508,7 +600,7 @@ pub struct DeleteMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePublishingDestinationRequest {
     /// <p>The ID of the publishing destination to delete.</p>
@@ -519,11 +611,11 @@ pub struct DeletePublishingDestinationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePublishingDestinationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteThreatIntelSetRequest {
     /// <p>The unique ID of the detector that the threatIntelSet is associated with.</p>
@@ -534,11 +626,11 @@ pub struct DeleteThreatIntelSetRequest {
     pub threat_intel_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThreatIntelSetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOrganizationConfigurationRequest {
     /// <p>The ID of the detector to retrieve information about the delegated administrator from.</p>
@@ -546,7 +638,7 @@ pub struct DescribeOrganizationConfigurationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationConfigurationResponse {
     /// <p>Indicates whether GuardDuty is automatically enabled for accounts added to the organization.</p>
@@ -557,7 +649,7 @@ pub struct DescribeOrganizationConfigurationResponse {
     pub member_account_limit_reached: bool,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePublishingDestinationRequest {
     /// <p>The ID of the publishing destination to retrieve.</p>
@@ -568,7 +660,7 @@ pub struct DescribePublishingDestinationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePublishingDestinationResponse {
     /// <p>The ID of the publishing destination.</p>
@@ -589,7 +681,7 @@ pub struct DescribePublishingDestinationResponse {
 }
 
 /// <p>Contains information about the publishing destination, including the ID, type, and status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Destination {
     /// <p>The unique ID of the publishing destination.</p>
@@ -604,7 +696,7 @@ pub struct Destination {
 }
 
 /// <p>Contains the Amazon Resource Name (ARN) of the resource to publish to, such as an S3 bucket, and the ARN of the KMS key to use to encrypt published findings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DestinationProperties {
     /// <p>The ARN of the resource to publish to.</p>
     #[serde(rename = "DestinationArn")]
@@ -616,7 +708,7 @@ pub struct DestinationProperties {
     pub kms_key_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisableOrganizationAdminAccountRequest {
     /// <p>The AWS Account ID for the organizations account to be disabled as a GuardDuty delegated administrator.</p>
@@ -624,11 +716,11 @@ pub struct DisableOrganizationAdminAccountRequest {
     pub admin_account_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableOrganizationAdminAccountResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateFromMasterAccountRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
@@ -636,11 +728,11 @@ pub struct DisassociateFromMasterAccountRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateFromMasterAccountResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to disassociate from the master account.</p>
@@ -651,7 +743,7 @@ pub struct DisassociateMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateMembersResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
@@ -660,7 +752,7 @@ pub struct DisassociateMembersResponse {
 }
 
 /// <p>Contains information about the DNS_REQUEST action described in this finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DnsRequestAction {
     /// <p>The domain information for the API request.</p>
@@ -670,7 +762,7 @@ pub struct DnsRequestAction {
 }
 
 /// <p>Contains information about the domain.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainDetails {
     /// <p>The domain information for the AWS API call.</p>
@@ -679,7 +771,7 @@ pub struct DomainDetails {
     pub domain: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableOrganizationAdminAccountRequest {
     /// <p>The AWS Account ID for the organization account to be enabled as a GuardDuty delegated administrator.</p>
@@ -687,12 +779,12 @@ pub struct EnableOrganizationAdminAccountRequest {
     pub admin_account_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableOrganizationAdminAccountResponse {}
 
 /// <p>Contains information about the reason that the finding was generated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Evidence {
     /// <p>A list of threat intelligence details related to the evidence.</p>
@@ -702,7 +794,7 @@ pub struct Evidence {
 }
 
 /// <p>Contains information about the finding, which is generated when abnormal or suspicious activity is detected.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Finding {
     /// <p>The ID of the account in which the finding was generated.</p>
@@ -756,7 +848,7 @@ pub struct Finding {
 }
 
 /// <p>Contains information about the criteria used for querying findings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FindingCriteria {
     /// <p>Represents a map of finding properties that match specified conditions and values when querying findings.</p>
     #[serde(rename = "Criterion")]
@@ -765,7 +857,7 @@ pub struct FindingCriteria {
 }
 
 /// <p>Contains information about finding statistics.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FindingStatistics {
     /// <p>Represents a map of severity to count statistics for a set of findings.</p>
@@ -775,7 +867,7 @@ pub struct FindingStatistics {
 }
 
 /// <p>Contains information about the location of the remote IP address.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GeoLocation {
     /// <p>The latitude information of the remote IP address.</p>
@@ -788,7 +880,7 @@ pub struct GeoLocation {
     pub lon: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDetectorRequest {
     /// <p>The unique ID of the detector that you want to get.</p>
@@ -796,7 +888,7 @@ pub struct GetDetectorRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorResponse {
     /// <p>The timestamp of when the detector was created.</p>
@@ -823,7 +915,7 @@ pub struct GetDetectorResponse {
     pub updated_at: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFilterRequest {
     /// <p>The unique ID of the detector that the filter is associated with.</p>
@@ -834,7 +926,7 @@ pub struct GetFilterRequest {
     pub filter_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFilterResponse {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
@@ -860,7 +952,7 @@ pub struct GetFilterResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to retrieve.</p>
@@ -875,7 +967,7 @@ pub struct GetFindingsRequest {
     pub sort_criteria: Option<SortCriteria>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsResponse {
     /// <p>A list of findings.</p>
@@ -883,7 +975,7 @@ pub struct GetFindingsResponse {
     pub findings: Vec<Finding>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFindingsStatisticsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings' statistics you want to retrieve.</p>
@@ -898,7 +990,7 @@ pub struct GetFindingsStatisticsRequest {
     pub finding_statistic_types: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsStatisticsResponse {
     /// <p>The finding statistics object.</p>
@@ -906,7 +998,7 @@ pub struct GetFindingsStatisticsResponse {
     pub finding_statistics: FindingStatistics,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIPSetRequest {
     /// <p>The unique ID of the detector that the IPSet is associated with.</p>
@@ -917,13 +1009,13 @@ pub struct GetIPSetRequest {
     pub ip_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIPSetResponse {
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the IPSet. For example: .</p>
+    /// <p>The URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
     /// <p>The user-friendly name for the IPSet.</p>
@@ -938,11 +1030,11 @@ pub struct GetIPSetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInvitationsCountRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInvitationsCountResponse {
     /// <p>The number of received invitations.</p>
@@ -951,7 +1043,7 @@ pub struct GetInvitationsCountResponse {
     pub invitations_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMasterAccountRequest {
     /// <p>The unique ID of the detector of the GuardDuty member account.</p>
@@ -959,7 +1051,7 @@ pub struct GetMasterAccountRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMasterAccountResponse {
     /// <p>The master account details.</p>
@@ -967,7 +1059,7 @@ pub struct GetMasterAccountResponse {
     pub master: Master,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to describe.</p>
@@ -978,7 +1070,7 @@ pub struct GetMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMembersResponse {
     /// <p>A list of members.</p>
@@ -989,7 +1081,7 @@ pub struct GetMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetThreatIntelSetRequest {
     /// <p>The unique ID of the detector that the threatIntelSet is associated with.</p>
@@ -1000,13 +1092,13 @@ pub struct GetThreatIntelSetRequest {
     pub threat_intel_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetThreatIntelSetResponse {
     /// <p>The format of the threatIntelSet.</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The URI of the file that contains the ThreatIntelSet. For example: .</p>
+    /// <p>The URI of the file that contains the ThreatIntelSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     pub location: String,
     /// <p>A user-friendly ThreatIntelSet name displayed in all findings that are generated by activity that involves IP addresses included in this ThreatIntelSet.</p>
@@ -1022,7 +1114,7 @@ pub struct GetThreatIntelSetResponse {
 }
 
 /// <p>Contains information about the EC2 instance profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IamInstanceProfile {
     /// <p>The profile ARN of the EC2 instance.</p>
@@ -1036,7 +1128,7 @@ pub struct IamInstanceProfile {
 }
 
 /// <p>Contains information about the details of an instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceDetails {
     /// <p>The Availability Zone of the EC2 instance.</p>
@@ -1094,7 +1186,7 @@ pub struct InstanceDetails {
 }
 
 /// <p>Contains information about the invitation to become a member account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Invitation {
     /// <p>The ID of the account that the invitation was sent from.</p>
@@ -1115,7 +1207,7 @@ pub struct Invitation {
     pub relationship_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteMembersRequest {
     /// <p>A list of account IDs of the accounts that you want to invite to GuardDuty as members.</p>
@@ -1134,7 +1226,7 @@ pub struct InviteMembersRequest {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InviteMembersResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
@@ -1142,7 +1234,7 @@ pub struct InviteMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 50. The maximum value is 50.</p>
@@ -1155,7 +1247,7 @@ pub struct ListDetectorsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorsResponse {
     /// <p>A list of detector IDs.</p>
@@ -1167,7 +1259,7 @@ pub struct ListDetectorsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFiltersRequest {
     /// <p>The unique ID of the detector that the filter is associated with.</p>
@@ -1183,7 +1275,7 @@ pub struct ListFiltersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFiltersResponse {
     /// <p>A list of filter names.</p>
@@ -1195,13 +1287,13 @@ pub struct ListFiltersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFindingsRequest {
     /// <p>The ID of the detector that specifies the GuardDuty service whose findings you want to list.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p><p>Represents the criteria used for querying findings. Valid values include:</p> <ul> <li> <p>JSON field name</p> </li> <li> <p>accountId</p> </li> <li> <p>region</p> </li> <li> <p>confidence</p> </li> <li> <p>id</p> </li> <li> <p>resource.accessKeyDetails.accessKeyId</p> </li> <li> <p>resource.accessKeyDetails.principalId</p> </li> <li> <p>resource.accessKeyDetails.userName</p> </li> <li> <p>resource.accessKeyDetails.userType</p> </li> <li> <p>resource.instanceDetails.iamInstanceProfile.id</p> </li> <li> <p>resource.instanceDetails.imageId</p> </li> <li> <p>resource.instanceDetails.instanceId</p> </li> <li> <p>resource.instanceDetails.outpostArn</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.ipv6Addresses</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicDnsName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicIp</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.subnetId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.vpcId</p> </li> <li> <p>resource.instanceDetails.tags.key</p> </li> <li> <p>resource.instanceDetails.tags.value</p> </li> <li> <p>resource.resourceType</p> </li> <li> <p>service.action.actionType</p> </li> <li> <p>service.action.awsApiCallAction.api</p> </li> <li> <p>service.action.awsApiCallAction.callerType</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.awsApiCallAction.serviceName</p> </li> <li> <p>service.action.dnsRequestAction.domain</p> </li> <li> <p>service.action.networkConnectionAction.blocked</p> </li> <li> <p>service.action.networkConnectionAction.connectionDirection</p> </li> <li> <p>service.action.networkConnectionAction.localPortDetails.port</p> </li> <li> <p>service.action.networkConnectionAction.protocol</p> </li> <li> <p>service.action.networkConnectionAction.localIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.networkConnectionAction.remotePortDetails.port</p> </li> <li> <p>service.additionalInfo.threatListName</p> </li> <li> <p>service.archived</p> <p>When this attribute is set to &#39;true&#39;, only archived findings are listed. When it&#39;s set to &#39;false&#39;, only unarchived findings are listed. When this attribute is not set, all existing findings are listed.</p> </li> <li> <p>service.resourceRole</p> </li> <li> <p>severity</p> </li> <li> <p>type</p> </li> <li> <p>updatedAt</p> <p>Type: Timestamp in Unix Epoch millisecond format: 1486685375000</p> </li> </ul></p>
+    /// <p><p>Represents the criteria used for querying findings. Valid values include:</p> <ul> <li> <p>JSON field name</p> </li> <li> <p>accountId</p> </li> <li> <p>region</p> </li> <li> <p>confidence</p> </li> <li> <p>id</p> </li> <li> <p>resource.accessKeyDetails.accessKeyId</p> </li> <li> <p>resource.accessKeyDetails.principalId</p> </li> <li> <p>resource.accessKeyDetails.userName</p> </li> <li> <p>resource.accessKeyDetails.userType</p> </li> <li> <p>resource.instanceDetails.iamInstanceProfile.id</p> </li> <li> <p>resource.instanceDetails.imageId</p> </li> <li> <p>resource.instanceDetails.instanceId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.ipv6Addresses</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicDnsName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.publicIp</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.securityGroups.groupName</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.subnetId</p> </li> <li> <p>resource.instanceDetails.networkInterfaces.vpcId</p> </li> <li> <p>resource.instanceDetails.tags.key</p> </li> <li> <p>resource.instanceDetails.tags.value</p> </li> <li> <p>resource.resourceType</p> </li> <li> <p>service.action.actionType</p> </li> <li> <p>service.action.awsApiCallAction.api</p> </li> <li> <p>service.action.awsApiCallAction.callerType</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.awsApiCallAction.serviceName</p> </li> <li> <p>service.action.dnsRequestAction.domain</p> </li> <li> <p>service.action.networkConnectionAction.blocked</p> </li> <li> <p>service.action.networkConnectionAction.connectionDirection</p> </li> <li> <p>service.action.networkConnectionAction.localPortDetails.port</p> </li> <li> <p>service.action.networkConnectionAction.protocol</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.city.cityName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.country.countryName</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.ipAddressV4</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asn</p> </li> <li> <p>service.action.networkConnectionAction.remoteIpDetails.organization.asnOrg</p> </li> <li> <p>service.action.networkConnectionAction.remotePortDetails.port</p> </li> <li> <p>service.additionalInfo.threatListName</p> </li> <li> <p>service.archived</p> <p>When this attribute is set to &#39;true&#39;, only archived findings are listed. When it&#39;s set to &#39;false&#39;, only unarchived findings are listed. When this attribute is not set, all existing findings are listed.</p> </li> <li> <p>service.resourceRole</p> </li> <li> <p>severity</p> </li> <li> <p>type</p> </li> <li> <p>updatedAt</p> <p>Type: Timestamp in Unix Epoch millisecond format: 1486685375000</p> </li> </ul></p>
     #[serde(rename = "FindingCriteria")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding_criteria: Option<FindingCriteria>,
@@ -1219,7 +1311,7 @@ pub struct ListFindingsRequest {
     pub sort_criteria: Option<SortCriteria>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsResponse {
     /// <p>The IDs of the findings that you're listing.</p>
@@ -1231,7 +1323,7 @@ pub struct ListFindingsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIPSetsRequest {
     /// <p>The unique ID of the detector that the IPSet is associated with.</p>
@@ -1247,7 +1339,7 @@ pub struct ListIPSetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIPSetsResponse {
     /// <p>The IDs of the IPSet resources.</p>
@@ -1259,7 +1351,7 @@ pub struct ListIPSetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInvitationsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items that you want in the response. The default value is 50. The maximum value is 50.</p>
@@ -1272,7 +1364,7 @@ pub struct ListInvitationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInvitationsResponse {
     /// <p>A list of invitation descriptions.</p>
@@ -1285,7 +1377,7 @@ pub struct ListInvitationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMembersRequest {
     /// <p>The unique ID of the detector the member is associated with.</p>
@@ -1299,13 +1391,13 @@ pub struct ListMembersRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Specifies what member accounts the response includes based on their relationship status with the master account. The default value is "true". If set to "false" the response includes all existing member accounts (including members who haven't been invited yet or have been disassociated).</p>
+    /// <p>Specifies whether to only return associated members or to return all members (including members who haven't been invited yet or have been disassociated).</p>
     #[serde(rename = "OnlyAssociated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub only_associated: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMembersResponse {
     /// <p>A list of members.</p>
@@ -1318,7 +1410,7 @@ pub struct ListMembersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOrganizationAdminAccountsRequest {
     /// <p>The maximum number of results to return in the response.</p>
@@ -1331,7 +1423,7 @@ pub struct ListOrganizationAdminAccountsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOrganizationAdminAccountsResponse {
     /// <p>An AdminAccounts object that includes a list of accounts configured as GuardDuty delegated administrators.</p>
@@ -1344,7 +1436,7 @@ pub struct ListOrganizationAdminAccountsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPublishingDestinationsRequest {
     /// <p>The ID of the detector to retrieve publishing destinations for.</p>
@@ -1360,7 +1452,7 @@ pub struct ListPublishingDestinationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPublishingDestinationsResponse {
     /// <p>A <code>Destinations</code> object that includes information about each publishing destination returned.</p>
@@ -1372,7 +1464,7 @@ pub struct ListPublishingDestinationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the given GuardDuty resource. </p>
@@ -1380,7 +1472,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags associated with the resource.</p>
@@ -1389,7 +1481,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListThreatIntelSetsRequest {
     /// <p>The unique ID of the detector that the threatIntelSet is associated with.</p>
@@ -1405,7 +1497,7 @@ pub struct ListThreatIntelSetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThreatIntelSetsResponse {
     /// <p>The pagination parameter to be used on the next list operation to retrieve more items.</p>
@@ -1418,7 +1510,7 @@ pub struct ListThreatIntelSetsResponse {
 }
 
 /// <p>Contains information about the local IP address of the connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LocalIpDetails {
     /// <p>The IPv4 local address of the connection.</p>
@@ -1428,7 +1520,7 @@ pub struct LocalIpDetails {
 }
 
 /// <p>Contains information about the port for the local connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LocalPortDetails {
     /// <p>The port number of the local connection.</p>
@@ -1442,7 +1534,7 @@ pub struct LocalPortDetails {
 }
 
 /// <p>Contains information about the master account and invitation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Master {
     /// <p>The ID of the account used as the master account.</p>
@@ -1464,7 +1556,7 @@ pub struct Master {
 }
 
 /// <p>Contains information about the member account. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Member {
     /// <p>The ID of the member account.</p>
@@ -1493,7 +1585,7 @@ pub struct Member {
 }
 
 /// <p>Contains information about the NETWORK_CONNECTION action described in the finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkConnectionAction {
     /// <p>Indicates whether EC2 blocked the network connection to your instance.</p>
@@ -1527,7 +1619,7 @@ pub struct NetworkConnectionAction {
 }
 
 /// <p>Contains information about the elastic network interface of the EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>A list of IPv6 addresses for the EC2 instance.</p>
@@ -1573,7 +1665,7 @@ pub struct NetworkInterface {
 }
 
 /// <p>Contains information about the ISP organization of the remote IP address.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Organization {
     /// <p>The Autonomous System Number (ASN) of the internet provider of the remote IP address.</p>
@@ -1594,8 +1686,32 @@ pub struct Organization {
     pub org: Option<String>,
 }
 
+/// <p>Contains information on the owner of the bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Owner {
+    /// <p>The canonical user ID of the bucket owner. For information about locating your canonical user ID see <a href="https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html#FindingCanonicalId">Finding Your Account Canonical User ID.</a> </p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+}
+
+/// <p>Contains information about how permissions are configured for the S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PermissionConfiguration {
+    /// <p>Contains information about the account level permissions on the S3 bucket.</p>
+    #[serde(rename = "AccountLevelPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_level_permissions: Option<AccountLevelPermissions>,
+    /// <p>Contains information about the bucket level permissions for the S3 bucket.</p>
+    #[serde(rename = "BucketLevelPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_level_permissions: Option<BucketLevelPermissions>,
+}
+
 /// <p>Contains information about the PORT_PROBE action described in the finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PortProbeAction {
     /// <p>Indicates whether EC2 blocked the port probe to the instance, such as with an ACL.</p>
@@ -1609,7 +1725,7 @@ pub struct PortProbeAction {
 }
 
 /// <p>Contains information about the port probe details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PortProbeDetail {
     /// <p>The local IP information of the connection.</p>
@@ -1627,7 +1743,7 @@ pub struct PortProbeDetail {
 }
 
 /// <p>Contains other private IP address information of the EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrivateIpAddressDetails {
     /// <p>The private DNS name of the EC2 instance.</p>
@@ -1641,7 +1757,7 @@ pub struct PrivateIpAddressDetails {
 }
 
 /// <p>Contains information about the product code for the EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductCode {
     /// <p>The product code information.</p>
@@ -1654,8 +1770,22 @@ pub struct ProductCode {
     pub product_type: Option<String>,
 }
 
+/// <p>Describes the public access policies that apply to the S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PublicAccess {
+    /// <p>Describes the effective permission on this bucket after factoring all attached policies.</p>
+    #[serde(rename = "EffectivePermission")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_permission: Option<String>,
+    /// <p>Contains information about how permissions are configured for the S3 bucket.</p>
+    #[serde(rename = "PermissionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permission_configuration: Option<PermissionConfiguration>,
+}
+
 /// <p>Contains information about the remote IP address of the connection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoteIpDetails {
     /// <p>The city information of the remote IP address.</p>
@@ -1681,7 +1811,7 @@ pub struct RemoteIpDetails {
 }
 
 /// <p>Contains information about the remote port.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemotePortDetails {
     /// <p>The port number of the remote connection.</p>
@@ -1695,7 +1825,7 @@ pub struct RemotePortDetails {
 }
 
 /// <p>Contains information about the AWS resource associated with the activity that prompted GuardDuty to generate a finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resource {
     /// <p>The IAM access key details (IAM user information) of a user that engaged in the activity that prompted GuardDuty to generate a finding.</p>
@@ -1710,10 +1840,51 @@ pub struct Resource {
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
+    /// <p>Contains information on the S3 bucket.</p>
+    #[serde(rename = "S3BucketDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_details: Option<Vec<S3BucketDetail>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct S3BucketDetail {
+    /// <p>The Amazon Resource Name (ARN) of the S3 bucket.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time the bucket was created at.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>Describes the server side encryption method used in the S3 bucket.</p>
+    #[serde(rename = "DefaultServerSideEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_server_side_encryption: Option<DefaultServerSideEncryption>,
+    /// <p>The name of the S3 bucket.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The owner of the S3 bucket.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner: Option<Owner>,
+    /// <p>Describes the public access policies that apply to the S3 bucket.</p>
+    #[serde(rename = "PublicAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_access: Option<PublicAccess>,
+    /// <p>All tags attached to the S3 bucket</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>Describes whether the bucket is a source or destination bucket.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>Contains information about the security groups associated with the EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityGroup {
     /// <p>The security group ID of the EC2 instance.</p>
@@ -1727,7 +1898,7 @@ pub struct SecurityGroup {
 }
 
 /// <p>Contains additional information about the generated finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Service {
     /// <p>Information about the activity that is described in a finding.</p>
@@ -1773,7 +1944,7 @@ pub struct Service {
 }
 
 /// <p>Contains information about the criteria used for sorting findings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SortCriteria {
     /// <p>Represents the finding attribute (for example, accountId) to sort findings by.</p>
@@ -1786,7 +1957,7 @@ pub struct SortCriteria {
     pub order_by: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMonitoringMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts to start monitoring.</p>
@@ -1797,7 +1968,7 @@ pub struct StartMonitoringMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMonitoringMembersResponse {
     /// <p>A list of objects that contain the unprocessed account and a result string that explains why it was unprocessed.</p>
@@ -1805,7 +1976,7 @@ pub struct StartMonitoringMembersResponse {
     pub unprocessed_accounts: Vec<UnprocessedAccount>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopMonitoringMembersRequest {
     /// <p>A list of account IDs for the member accounts to stop monitoring.</p>
@@ -1816,7 +1987,7 @@ pub struct StopMonitoringMembersRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopMonitoringMembersResponse {
     /// <p>A list of objects that contain an accountId for each account that could not be processed, and a result string that indicates why the account was not processed. </p>
@@ -1825,7 +1996,7 @@ pub struct StopMonitoringMembersResponse {
 }
 
 /// <p>Contains information about a tag associated with the EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Tag {
     /// <p>The EC2 instance tag key.</p>
@@ -1838,7 +2009,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the GuardDuty resource to apply a tag to.</p>
@@ -1849,12 +2020,12 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>An instance of a threat intelligence detail that constitutes evidence for the finding.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThreatIntelligenceDetail {
     /// <p>The name of the threat intelligence list that triggered the finding.</p>
@@ -1867,7 +2038,7 @@ pub struct ThreatIntelligenceDetail {
     pub threat_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnarchiveFindingsRequest {
     /// <p>The ID of the detector associated with the findings to unarchive.</p>
@@ -1878,12 +2049,12 @@ pub struct UnarchiveFindingsRequest {
     pub finding_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnarchiveFindingsResponse {}
 
 /// <p>Contains information about the accounts that weren't processed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnprocessedAccount {
     /// <p>The AWS account ID.</p>
@@ -1894,7 +2065,7 @@ pub struct UnprocessedAccount {
     pub result: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) for the resource to remove tags from.</p>
@@ -1905,11 +2076,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorRequest {
     /// <p>The unique ID of the detector to update.</p>
@@ -1925,11 +2096,11 @@ pub struct UpdateDetectorRequest {
     pub finding_publishing_frequency: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFilterRequest {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
@@ -1956,7 +2127,7 @@ pub struct UpdateFilterRequest {
     pub rank: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFilterResponse {
     /// <p>The name of the filter.</p>
@@ -1964,7 +2135,7 @@ pub struct UpdateFilterResponse {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFindingsFeedbackRequest {
     /// <p>Additional feedback about the GuardDuty findings.</p>
@@ -1982,11 +2153,11 @@ pub struct UpdateFindingsFeedbackRequest {
     pub finding_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFindingsFeedbackResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIPSetRequest {
     /// <p>The updated Boolean value that specifies whether the IPSet is active or not.</p>
@@ -1999,7 +2170,7 @@ pub struct UpdateIPSetRequest {
     /// <p>The unique ID that specifies the IPSet that you want to update.</p>
     #[serde(rename = "IpSetId")]
     pub ip_set_id: String,
-    /// <p>The updated URI of the file that contains the IPSet. For example: .</p>
+    /// <p>The updated URI of the file that contains the IPSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -2009,11 +2180,11 @@ pub struct UpdateIPSetRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIPSetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOrganizationConfigurationRequest {
     /// <p>Indicates whether to automatically enable member accounts in the organization.</p>
@@ -2024,11 +2195,11 @@ pub struct UpdateOrganizationConfigurationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOrganizationConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePublishingDestinationRequest {
     /// <p>The ID of the publishing destination to update.</p>
@@ -2043,11 +2214,11 @@ pub struct UpdatePublishingDestinationRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePublishingDestinationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThreatIntelSetRequest {
     /// <p>The updated Boolean value that specifies whether the ThreateIntelSet is active or not.</p>
@@ -2057,7 +2228,7 @@ pub struct UpdateThreatIntelSetRequest {
     /// <p>The detectorID that specifies the GuardDuty service whose ThreatIntelSet you want to update.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
-    /// <p>The updated URI of the file that contains the ThreateIntelSet. For example: .</p>
+    /// <p>The updated URI of the file that contains the ThreateIntelSet. For example: https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key.</p>
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -2070,7 +2241,7 @@ pub struct UpdateThreatIntelSetRequest {
     pub threat_intel_set_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThreatIntelSetResponse {}
 
@@ -4423,7 +4594,7 @@ pub trait GuardDuty {
         input: ListInvitationsRequest,
     ) -> Result<ListInvitationsResponse, RusotoError<ListInvitationsError>>;
 
-    /// <p>Lists details about associated member accounts for the current GuardDuty master account.</p>
+    /// <p>Lists details about all member accounts for the current GuardDuty master account.</p>
     async fn list_members(
         &self,
         input: ListMembersRequest,
@@ -4572,6 +4743,7 @@ impl GuardDutyClient {
 #[async_trait]
 impl GuardDuty for GuardDutyClient {
     /// <p>Accepts the invitation to be monitored by a master GuardDuty account.</p>
+    #[allow(unused_mut)]
     async fn accept_invitation(
         &self,
         input: AcceptInvitationRequest,
@@ -4593,7 +4765,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AcceptInvitationResponse, _>()?;
 
@@ -4605,6 +4777,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p><p>Archives GuardDuty findings that are specified by the list of finding IDs.</p> <note> <p>Only the master account can archive findings. Member accounts don&#39;t have permission to archive findings from their accounts.</p> </note></p>
+    #[allow(unused_mut)]
     async fn archive_findings(
         &self,
         input: ArchiveFindingsRequest,
@@ -4626,7 +4799,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ArchiveFindingsResponse, _>()?;
 
@@ -4638,6 +4811,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Creates a single Amazon GuardDuty detector. A detector is a resource that represents the GuardDuty service. To start using GuardDuty, you must create a detector in each Region where you enable the service. You can have only one detector per account per Region.</p>
+    #[allow(unused_mut)]
     async fn create_detector(
         &self,
         input: CreateDetectorRequest,
@@ -4656,7 +4830,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDetectorResponse, _>()?;
 
@@ -4668,6 +4842,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Creates a filter using the specified finding criteria.</p>
+    #[allow(unused_mut)]
     async fn create_filter(
         &self,
         input: CreateFilterRequest,
@@ -4689,7 +4864,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateFilterResponse, _>()?;
 
@@ -4701,6 +4876,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Creates a new IPSet, which is called a trusted IP list in the console user interface. An IPSet is a list of IP addresses that are trusted for secure communication with AWS infrastructure and applications. GuardDuty doesn't generate findings for IP addresses that are included in IPSets. Only users from the master account can use this operation.</p>
+    #[allow(unused_mut)]
     async fn create_ip_set(
         &self,
         input: CreateIPSetRequest,
@@ -4722,7 +4898,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateIPSetResponse, _>()?;
 
@@ -4734,6 +4910,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Creates member accounts of the current AWS account by specifying a list of AWS account IDs. The current AWS account can then invite these members to manage GuardDuty in their accounts.</p>
+    #[allow(unused_mut)]
     async fn create_members(
         &self,
         input: CreateMembersRequest,
@@ -4755,7 +4932,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateMembersResponse, _>()?;
 
@@ -4767,6 +4944,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Creates a publishing destination to export findings to. The resource to export findings to must exist before you use this operation.</p>
+    #[allow(unused_mut)]
     async fn create_publishing_destination(
         &self,
         input: CreatePublishingDestinationRequest,
@@ -4789,7 +4967,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePublishingDestinationResponse, _>()?;
 
@@ -4801,6 +4979,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Generates example findings of types specified by the list of finding types. If 'NULL' is specified for <code>findingTypes</code>, the API generates example findings of all supported finding types.</p>
+    #[allow(unused_mut)]
     async fn create_sample_findings(
         &self,
         input: CreateSampleFindingsRequest,
@@ -4822,7 +5001,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSampleFindingsResponse, _>()?;
 
@@ -4834,6 +5013,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Creates a new ThreatIntelSet. ThreatIntelSets consist of known malicious IP addresses. GuardDuty generates findings based on ThreatIntelSets. Only users of the master account can use this operation.</p>
+    #[allow(unused_mut)]
     async fn create_threat_intel_set(
         &self,
         input: CreateThreatIntelSetRequest,
@@ -4855,7 +5035,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateThreatIntelSetResponse, _>()?;
 
@@ -4867,6 +5047,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Declines invitations sent to the current member account by AWS accounts specified by their account IDs.</p>
+    #[allow(unused_mut)]
     async fn decline_invitations(
         &self,
         input: DeclineInvitationsRequest,
@@ -4885,7 +5066,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeclineInvitationsResponse, _>()?;
 
@@ -4897,6 +5078,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Deletes an Amazon GuardDuty detector that is specified by the detector ID.</p>
+    #[allow(unused_mut)]
     async fn delete_detector(
         &self,
         input: DeleteDetectorRequest,
@@ -4912,7 +5094,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDetectorResponse, _>()?;
 
@@ -4924,6 +5106,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Deletes the filter specified by the filter name.</p>
+    #[allow(unused_mut)]
     async fn delete_filter(
         &self,
         input: DeleteFilterRequest,
@@ -4943,7 +5126,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteFilterResponse, _>()?;
 
@@ -4955,6 +5138,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Deletes the IPSet specified by the <code>ipSetId</code>. IPSets are called trusted IP lists in the console user interface.</p>
+    #[allow(unused_mut)]
     async fn delete_ip_set(
         &self,
         input: DeleteIPSetRequest,
@@ -4974,7 +5158,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteIPSetResponse, _>()?;
 
@@ -4986,6 +5170,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Deletes invitations sent to the current member account by AWS accounts specified by their account IDs.</p>
+    #[allow(unused_mut)]
     async fn delete_invitations(
         &self,
         input: DeleteInvitationsRequest,
@@ -5004,7 +5189,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteInvitationsResponse, _>()?;
 
@@ -5016,6 +5201,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Deletes GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
+    #[allow(unused_mut)]
     async fn delete_members(
         &self,
         input: DeleteMembersRequest,
@@ -5037,7 +5223,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteMembersResponse, _>()?;
 
@@ -5049,6 +5235,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Deletes the publishing definition with the specified <code>destinationId</code>.</p>
+    #[allow(unused_mut)]
     async fn delete_publishing_destination(
         &self,
         input: DeletePublishingDestinationRequest,
@@ -5069,7 +5256,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeletePublishingDestinationResponse, _>()?;
 
@@ -5081,6 +5268,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Deletes the ThreatIntelSet specified by the ThreatIntelSet ID.</p>
+    #[allow(unused_mut)]
     async fn delete_threat_intel_set(
         &self,
         input: DeleteThreatIntelSetRequest,
@@ -5100,7 +5288,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteThreatIntelSetResponse, _>()?;
 
@@ -5112,6 +5300,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Returns information about the account selected as the delegated administrator for GuardDuty.</p>
+    #[allow(unused_mut)]
     async fn describe_organization_configuration(
         &self,
         input: DescribeOrganizationConfigurationRequest,
@@ -5133,7 +5322,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeOrganizationConfigurationResponse, _>()?;
 
@@ -5147,6 +5336,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Returns information about the publishing destination specified by the provided <code>destinationId</code>.</p>
+    #[allow(unused_mut)]
     async fn describe_publishing_destination(
         &self,
         input: DescribePublishingDestinationRequest,
@@ -5169,7 +5359,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribePublishingDestinationResponse, _>()?;
 
@@ -5181,6 +5371,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Disables an AWS account within the Organization as the GuardDuty delegated administrator.</p>
+    #[allow(unused_mut)]
     async fn disable_organization_admin_account(
         &self,
         input: DisableOrganizationAdminAccountRequest,
@@ -5202,7 +5393,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisableOrganizationAdminAccountResponse, _>()?;
 
@@ -5216,6 +5407,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Disassociates the current GuardDuty member account from its master account.</p>
+    #[allow(unused_mut)]
     async fn disassociate_from_master_account(
         &self,
         input: DisassociateFromMasterAccountRequest,
@@ -5237,7 +5429,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateFromMasterAccountResponse, _>()?;
 
@@ -5249,6 +5441,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Disassociates GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
+    #[allow(unused_mut)]
     async fn disassociate_members(
         &self,
         input: DisassociateMembersRequest,
@@ -5270,7 +5463,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateMembersResponse, _>()?;
 
@@ -5282,6 +5475,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Enables an AWS account within the organization as the GuardDuty delegated administrator.</p>
+    #[allow(unused_mut)]
     async fn enable_organization_admin_account(
         &self,
         input: EnableOrganizationAdminAccountRequest,
@@ -5303,7 +5497,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<EnableOrganizationAdminAccountResponse, _>()?;
 
@@ -5315,6 +5509,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Retrieves an Amazon GuardDuty detector specified by the detectorId.</p>
+    #[allow(unused_mut)]
     async fn get_detector(
         &self,
         input: GetDetectorRequest,
@@ -5330,7 +5525,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDetectorResponse, _>()?;
 
@@ -5342,6 +5537,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Returns the details of the filter specified by the filter name.</p>
+    #[allow(unused_mut)]
     async fn get_filter(
         &self,
         input: GetFilterRequest,
@@ -5361,7 +5557,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetFilterResponse, _>()?;
 
@@ -5373,6 +5569,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Describes Amazon GuardDuty findings specified by finding IDs.</p>
+    #[allow(unused_mut)]
     async fn get_findings(
         &self,
         input: GetFindingsRequest,
@@ -5394,7 +5591,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetFindingsResponse, _>()?;
 
@@ -5406,6 +5603,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Lists Amazon GuardDuty findings statistics for the specified detector ID.</p>
+    #[allow(unused_mut)]
     async fn get_findings_statistics(
         &self,
         input: GetFindingsStatisticsRequest,
@@ -5427,7 +5625,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetFindingsStatisticsResponse, _>()?;
 
@@ -5439,6 +5637,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Retrieves the IPSet specified by the <code>ipSetId</code>.</p>
+    #[allow(unused_mut)]
     async fn get_ip_set(
         &self,
         input: GetIPSetRequest,
@@ -5458,7 +5657,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetIPSetResponse, _>()?;
 
@@ -5470,6 +5669,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Returns the count of all GuardDuty membership invitations that were sent to the current member account except the currently accepted invitation.</p>
+    #[allow(unused_mut)]
     async fn get_invitations_count(
         &self,
     ) -> Result<GetInvitationsCountResponse, RusotoError<GetInvitationsCountError>> {
@@ -5484,7 +5684,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetInvitationsCountResponse, _>()?;
 
@@ -5496,6 +5696,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Provides the details for the GuardDuty master account associated with the current GuardDuty member account.</p>
+    #[allow(unused_mut)]
     async fn get_master_account(
         &self,
         input: GetMasterAccountRequest,
@@ -5514,7 +5715,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMasterAccountResponse, _>()?;
 
@@ -5526,6 +5727,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Retrieves GuardDuty member accounts (to the current GuardDuty master account) specified by the account IDs.</p>
+    #[allow(unused_mut)]
     async fn get_members(
         &self,
         input: GetMembersRequest,
@@ -5547,7 +5749,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMembersResponse, _>()?;
 
@@ -5559,6 +5761,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Retrieves the ThreatIntelSet that is specified by the ThreatIntelSet ID.</p>
+    #[allow(unused_mut)]
     async fn get_threat_intel_set(
         &self,
         input: GetThreatIntelSetRequest,
@@ -5578,7 +5781,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetThreatIntelSetResponse, _>()?;
 
@@ -5590,6 +5793,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Invites other AWS accounts (created as members of the current AWS account by CreateMembers) to enable GuardDuty, and allow the current AWS account to view and manage these accounts' GuardDuty findings on their behalf as the master account.</p>
+    #[allow(unused_mut)]
     async fn invite_members(
         &self,
         input: InviteMembersRequest,
@@ -5611,7 +5815,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<InviteMembersResponse, _>()?;
 
@@ -5623,6 +5827,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Lists detectorIds of all the existing Amazon GuardDuty detector resources.</p>
+    #[allow(unused_mut)]
     async fn list_detectors(
         &self,
         input: ListDetectorsRequest,
@@ -5647,7 +5852,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDetectorsResponse, _>()?;
 
@@ -5659,6 +5864,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Returns a paginated list of the current filters.</p>
+    #[allow(unused_mut)]
     async fn list_filters(
         &self,
         input: ListFiltersRequest,
@@ -5686,7 +5892,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListFiltersResponse, _>()?;
 
@@ -5698,6 +5904,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Lists Amazon GuardDuty findings for the specified detector ID.</p>
+    #[allow(unused_mut)]
     async fn list_findings(
         &self,
         input: ListFindingsRequest,
@@ -5719,7 +5926,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListFindingsResponse, _>()?;
 
@@ -5731,6 +5938,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Lists the IPSets of the GuardDuty service specified by the detector ID. If you use this operation from a member account, the IPSets returned are the IPSets from the associated master account.</p>
+    #[allow(unused_mut)]
     async fn list_ip_sets(
         &self,
         input: ListIPSetsRequest,
@@ -5758,7 +5966,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListIPSetsResponse, _>()?;
 
@@ -5770,6 +5978,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Lists all GuardDuty membership invitations that were sent to the current AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_invitations(
         &self,
         input: ListInvitationsRequest,
@@ -5794,7 +6003,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInvitationsResponse, _>()?;
 
@@ -5805,7 +6014,8 @@ impl GuardDuty for GuardDutyClient {
         }
     }
 
-    /// <p>Lists details about associated member accounts for the current GuardDuty master account.</p>
+    /// <p>Lists details about all member accounts for the current GuardDuty master account.</p>
+    #[allow(unused_mut)]
     async fn list_members(
         &self,
         input: ListMembersRequest,
@@ -5836,7 +6046,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMembersResponse, _>()?;
 
@@ -5848,6 +6058,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Lists the accounts configured as GuardDuty delegated administrators.</p>
+    #[allow(unused_mut)]
     async fn list_organization_admin_accounts(
         &self,
         input: ListOrganizationAdminAccountsRequest,
@@ -5875,7 +6086,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListOrganizationAdminAccountsResponse, _>()?;
 
@@ -5887,6 +6098,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Returns a list of publishing destinations associated with the specified <code>dectectorId</code>.</p>
+    #[allow(unused_mut)]
     async fn list_publishing_destinations(
         &self,
         input: ListPublishingDestinationsRequest,
@@ -5915,7 +6127,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPublishingDestinationsResponse, _>()?;
 
@@ -5927,6 +6139,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Lists tags for a resource. Tagging is currently supported for detectors, finding filters, IP sets, and threat intel sets, with a limit of 50 tags per resource. When invoked, this operation returns all assigned tags for a given resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -5942,7 +6155,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -5954,6 +6167,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Lists the ThreatIntelSets of the GuardDuty service specified by the detector ID. If you use this operation from a member account, the ThreatIntelSets associated with the master account are returned.</p>
+    #[allow(unused_mut)]
     async fn list_threat_intel_sets(
         &self,
         input: ListThreatIntelSetsRequest,
@@ -5981,7 +6195,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListThreatIntelSetsResponse, _>()?;
 
@@ -5993,6 +6207,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Turns on GuardDuty monitoring of the specified member accounts. Use this operation to restart monitoring of accounts that you stopped monitoring with the <code>StopMonitoringMembers</code> operation.</p>
+    #[allow(unused_mut)]
     async fn start_monitoring_members(
         &self,
         input: StartMonitoringMembersRequest,
@@ -6014,7 +6229,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartMonitoringMembersResponse, _>()?;
 
@@ -6026,6 +6241,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Stops GuardDuty monitoring for the specified member accounts. Use the <code>StartMonitoringMembers</code> operation to restart monitoring for those accounts.</p>
+    #[allow(unused_mut)]
     async fn stop_monitoring_members(
         &self,
         input: StopMonitoringMembersRequest,
@@ -6047,7 +6263,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StopMonitoringMembersResponse, _>()?;
 
@@ -6059,6 +6275,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Adds tags to a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -6077,7 +6294,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -6089,6 +6306,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Unarchives GuardDuty findings specified by the <code>findingIds</code>.</p>
+    #[allow(unused_mut)]
     async fn unarchive_findings(
         &self,
         input: UnarchiveFindingsRequest,
@@ -6110,7 +6328,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UnarchiveFindingsResponse, _>()?;
 
@@ -6122,6 +6340,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Removes tags from a resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -6143,7 +6362,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -6155,6 +6374,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Updates the Amazon GuardDuty detector specified by the detectorId.</p>
+    #[allow(unused_mut)]
     async fn update_detector(
         &self,
         input: UpdateDetectorRequest,
@@ -6173,7 +6393,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDetectorResponse, _>()?;
 
@@ -6185,6 +6405,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Updates the filter specified by the filter name.</p>
+    #[allow(unused_mut)]
     async fn update_filter(
         &self,
         input: UpdateFilterRequest,
@@ -6207,7 +6428,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFilterResponse, _>()?;
 
@@ -6219,6 +6440,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Marks the specified GuardDuty findings as useful or not useful.</p>
+    #[allow(unused_mut)]
     async fn update_findings_feedback(
         &self,
         input: UpdateFindingsFeedbackRequest,
@@ -6240,7 +6462,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateFindingsFeedbackResponse, _>()?;
 
@@ -6252,6 +6474,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Updates the IPSet specified by the IPSet ID.</p>
+    #[allow(unused_mut)]
     async fn update_ip_set(
         &self,
         input: UpdateIPSetRequest,
@@ -6274,7 +6497,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateIPSetResponse, _>()?;
 
@@ -6286,6 +6509,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Updates the delegated administrator account with the values provided.</p>
+    #[allow(unused_mut)]
     async fn update_organization_configuration(
         &self,
         input: UpdateOrganizationConfigurationRequest,
@@ -6310,7 +6534,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateOrganizationConfigurationResponse, _>()?;
 
@@ -6324,6 +6548,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Updates information about the publishing destination specified by the <code>destinationId</code>.</p>
+    #[allow(unused_mut)]
     async fn update_publishing_destination(
         &self,
         input: UpdatePublishingDestinationRequest,
@@ -6347,7 +6572,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdatePublishingDestinationResponse, _>()?;
 
@@ -6359,6 +6584,7 @@ impl GuardDuty for GuardDutyClient {
     }
 
     /// <p>Updates the ThreatIntelSet specified by the ThreatIntelSet ID.</p>
+    #[allow(unused_mut)]
     async fn update_threat_intel_set(
         &self,
         input: UpdateThreatIntelSetRequest,
@@ -6381,7 +6607,7 @@ impl GuardDuty for GuardDutyClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateThreatIntelSetResponse, _>()?;
 

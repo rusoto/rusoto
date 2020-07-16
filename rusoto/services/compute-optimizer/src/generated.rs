@@ -20,12 +20,39 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl ComputeOptimizerClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "compute-optimizer", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Describes the configuration of an Auto Scaling group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingGroupConfiguration {
     /// <p>The desired capacity, or number of instances, for the Auto Scaling group.</p>
@@ -47,7 +74,7 @@ pub struct AutoScalingGroupConfiguration {
 }
 
 /// <p>Describes an Auto Scaling group recommendation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingGroupRecommendation {
     /// <p>The AWS account ID of the Auto Scaling group.</p>
@@ -89,7 +116,7 @@ pub struct AutoScalingGroupRecommendation {
 }
 
 /// <p>Describes a recommendation option for an Auto Scaling group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingGroupRecommendationOption {
     /// <p>An array of objects that describe an Auto Scaling group configuration.</p>
@@ -110,24 +137,150 @@ pub struct AutoScalingGroupRecommendationOption {
     pub rank: Option<i64>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeRecommendationExportJobsRequest {
+    /// <p>An array of objects that describe a filter to return a more specific list of export jobs.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<JobFilter>>,
+    /// <p>The identification numbers of the export jobs to return.</p> <p>An export job ID is returned when you create an export using the <code>ExportAutoScalingGroupRecommendations</code> or <code>ExportEC2InstanceRecommendations</code> actions.</p> <p>All export jobs created in the last seven days are returned if this parameter is omitted.</p>
+    #[serde(rename = "jobIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_ids: Option<Vec<String>>,
+    /// <p>The maximum number of export jobs to return with a single request.</p> <p>To retrieve the remaining results, make another request with the returned <code>NextToken</code> value.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to advance to the next page of export jobs.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeRecommendationExportJobsResponse {
+    /// <p>The token to use to advance to the next page of export jobs.</p> <p>This value is null when there are no more pages of export jobs to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of objects that describe recommendation export jobs.</p>
+    #[serde(rename = "recommendationExportJobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recommendation_export_jobs: Option<Vec<RecommendationExportJob>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExportAutoScalingGroupRecommendationsRequest {
+    /// <p>The IDs of the AWS accounts for which to export Auto Scaling group recommendations.</p> <p>If your account is the master account of an organization, use this parameter to specify the member accounts for which you want to export recommendations.</p> <p>This parameter cannot be specified together with the include member accounts parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the include member accounts parameter, is omitted.</p> <p>You can specify multiple account IDs per request.</p>
+    #[serde(rename = "accountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_ids: Option<Vec<String>>,
+    /// <p>The recommendations data to include in the export file.</p>
+    #[serde(rename = "fieldsToExport")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fields_to_export: Option<Vec<String>>,
+    /// <p>The format of the export file.</p> <p>The only export file format currently supported is <code>Csv</code>.</p>
+    #[serde(rename = "fileFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_format: Option<String>,
+    /// <p>An array of objects that describe a filter to export a more specific set of Auto Scaling group recommendations.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>Indicates whether to include recommendations for resources in all member accounts of the organization if your account is the master account of an organization.</p> <p>The member accounts must also be opted in to Compute Optimizer.</p> <p>Recommendations for member accounts of the organization are not included in the export file if this parameter is omitted.</p> <p>This parameter cannot be specified together with the account IDs parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the account IDs parameter, is omitted.</p>
+    #[serde(rename = "includeMemberAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_member_accounts: Option<bool>,
+    /// <p>An object to specify the destination Amazon Simple Storage Service (Amazon S3) bucket name and key prefix for the export job.</p> <p>You must create the destination Amazon S3 bucket for your recommendations export before you create the export job. Compute Optimizer does not create the S3 bucket for you. After you create the S3 bucket, ensure that it has the required permission policy to allow Compute Optimizer to write the export file to it. If you plan to specify an object prefix when you create the export job, you must include the object prefix in the policy that you add to the S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/create-s3-bucket-policy-for-compute-optimizer.html">Amazon S3 Bucket Policy for Compute Optimizer</a> in the <i>Compute Optimizer user guide</i>.</p>
+    #[serde(rename = "s3DestinationConfig")]
+    pub s_3_destination_config: S3DestinationConfig,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExportAutoScalingGroupRecommendationsResponse {
+    /// <p>The identification number of the export job.</p> <p>Use the <code>DescribeRecommendationExportJobs</code> action, and specify the job ID to view the status of an export job.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>An object that describes the destination Amazon S3 bucket of a recommendations export file.</p>
+    #[serde(rename = "s3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_destination: Option<S3Destination>,
+}
+
+/// <p>Describes the destination of the recommendations export and metadata files.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExportDestination {
+    /// <p>An object that describes the destination Amazon Simple Storage Service (Amazon S3) bucket name and object keys of a recommendations export file, and its associated metadata file.</p>
+    #[serde(rename = "s3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3: Option<S3Destination>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExportEC2InstanceRecommendationsRequest {
+    /// <p>The IDs of the AWS accounts for which to export instance recommendations.</p> <p>If your account is the master account of an organization, use this parameter to specify the member accounts for which you want to export recommendations.</p> <p>This parameter cannot be specified together with the include member accounts parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the include member accounts parameter, is omitted.</p> <p>You can specify multiple account IDs per request.</p>
+    #[serde(rename = "accountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_ids: Option<Vec<String>>,
+    /// <p>The recommendations data to include in the export file.</p>
+    #[serde(rename = "fieldsToExport")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fields_to_export: Option<Vec<String>>,
+    /// <p>The format of the export file.</p> <p>The only export file format currently supported is <code>Csv</code>.</p>
+    #[serde(rename = "fileFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_format: Option<String>,
+    /// <p>An array of objects that describe a filter to export a more specific set of instance recommendations.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>Indicates whether to include recommendations for resources in all member accounts of the organization if your account is the master account of an organization.</p> <p>The member accounts must also be opted in to Compute Optimizer.</p> <p>Recommendations for member accounts of the organization are not included in the export file if this parameter is omitted.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the account IDs parameter, is omitted.</p>
+    #[serde(rename = "includeMemberAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_member_accounts: Option<bool>,
+    /// <p>An object to specify the destination Amazon Simple Storage Service (Amazon S3) bucket name and key prefix for the export job.</p> <p>You must create the destination Amazon S3 bucket for your recommendations export before you create the export job. Compute Optimizer does not create the S3 bucket for you. After you create the S3 bucket, ensure that it has the required permission policy to allow Compute Optimizer to write the export file to it. If you plan to specify an object prefix when you create the export job, you must include the object prefix in the policy that you add to the S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/create-s3-bucket-policy-for-compute-optimizer.html">Amazon S3 Bucket Policy for Compute Optimizer</a> in the <i>Compute Optimizer user guide</i>.</p>
+    #[serde(rename = "s3DestinationConfig")]
+    pub s_3_destination_config: S3DestinationConfig,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExportEC2InstanceRecommendationsResponse {
+    /// <p>The identification number of the export job.</p> <p>Use the <code>DescribeRecommendationExportJobs</code> action, and specify the job ID to view the status of an export job.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>An object that describes the destination Amazon S3 bucket of a recommendations export file.</p>
+    #[serde(rename = "s3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_destination: Option<S3Destination>,
+}
+
 /// <p>Describes a filter that returns a more specific list of recommendations.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
-    /// <p>The name of the filter.</p> <p>Specify <code>Finding</code> to filter the results to a specific findings classification.</p> <p>Specify <code>RecommendationSourceType</code> to filter the results to a specific resource type.</p>
+    /// <p>The name of the filter.</p> <p>Specify <code>Finding</code> to return recommendations with a specific findings classification (e.g., <code>Overprovisioned</code>).</p> <p>Specify <code>RecommendationSourceType</code> to return recommendations of a specific resource type (e.g., <code>AutoScalingGroup</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The value of the filter.</p> <p>If you specify the <code>name</code> parameter as <code>Finding</code>, and you're recommendations for an <i>instance</i>, then the valid values are <code>Underprovisioned</code>, <code>Overprovisioned</code>, <code>NotOptimized</code>, or <code>Optimized</code>.</p> <p>If you specify the <code>name</code> parameter as <code>Finding</code>, and you're recommendations for an <i>Auto Scaling group</i>, then the valid values are <code>Optimized</code>, or <code>NotOptimized</code>.</p> <p>If you specify the <code>name</code> parameter as <code>RecommendationSourceType</code>, then the valid values are <code>EC2Instance</code>, or <code>AutoScalingGroup</code>.</p>
+    /// <p>The value of the filter.</p> <p>If you specify the <code>name</code> parameter as <code>Finding</code>, and you request recommendations for an <i>instance</i>, then the valid values are <code>Underprovisioned</code>, <code>Overprovisioned</code>, <code>NotOptimized</code>, or <code>Optimized</code>.</p> <p>If you specify the <code>name</code> parameter as <code>Finding</code>, and you request recommendations for an <i>Auto Scaling group</i>, then the valid values are <code>Optimized</code>, or <code>NotOptimized</code>.</p> <p>If you specify the <code>name</code> parameter as <code>RecommendationSourceType</code>, then the valid values are <code>Ec2Instance</code>, or <code>AutoScalingGroup</code>.</p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAutoScalingGroupRecommendationsRequest {
-    /// <p>The AWS account IDs for which to return Auto Scaling group recommendations.</p> <p>Only one account ID can be specified per request.</p>
+    /// <p>The IDs of the AWS accounts for which to return Auto Scaling group recommendations.</p> <p>If your account is the master account of an organization, use this parameter to specify the member accounts for which you want to return Auto Scaling group recommendations.</p> <p>Only one account ID can be specified per request.</p>
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
@@ -139,7 +292,7 @@ pub struct GetAutoScalingGroupRecommendationsRequest {
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of Auto Scaling group recommendations to return with a single call.</p> <p>To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
+    /// <p>The maximum number of Auto Scaling group recommendations to return with a single request.</p> <p>To retrieve the remaining results, make another request with the returned <code>NextToken</code> value.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -149,7 +302,7 @@ pub struct GetAutoScalingGroupRecommendationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAutoScalingGroupRecommendationsResponse {
     /// <p>An array of objects that describe Auto Scaling group recommendations.</p>
@@ -166,10 +319,10 @@ pub struct GetAutoScalingGroupRecommendationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEC2InstanceRecommendationsRequest {
-    /// <p>The AWS account IDs for which to return instance recommendations.</p> <p>Only one account ID can be specified per request.</p>
+    /// <p>The IDs of the AWS accounts for which to return instance recommendations.</p> <p>If your account is the master account of an organization, use this parameter to specify the member accounts for which you want to return instance recommendations.</p> <p>Only one account ID can be specified per request.</p>
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
@@ -181,7 +334,7 @@ pub struct GetEC2InstanceRecommendationsRequest {
     #[serde(rename = "instanceArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_arns: Option<Vec<String>>,
-    /// <p>The maximum number of instance recommendations to return with a single call.</p> <p>To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
+    /// <p>The maximum number of instance recommendations to return with a single request.</p> <p>To retrieve the remaining results, make another request with the returned <code>NextToken</code> value.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -191,7 +344,7 @@ pub struct GetEC2InstanceRecommendationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEC2InstanceRecommendationsResponse {
     /// <p>An array of objects that describe errors of the request.</p> <p>For example, an error is returned if you request recommendations for an instance of an unsupported instance family.</p>
@@ -208,7 +361,7 @@ pub struct GetEC2InstanceRecommendationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEC2RecommendationProjectedMetricsRequest {
     /// <p>The time stamp of the last projected metrics data point to return.</p>
@@ -228,7 +381,7 @@ pub struct GetEC2RecommendationProjectedMetricsRequest {
     pub stat: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEC2RecommendationProjectedMetricsResponse {
     /// <p>An array of objects that describe a projected metrics.</p>
@@ -237,11 +390,11 @@ pub struct GetEC2RecommendationProjectedMetricsResponse {
     pub recommended_option_projected_metrics: Option<Vec<RecommendedOptionProjectedMetric>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEnrollmentStatusRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEnrollmentStatusResponse {
     /// <p>Confirms the enrollment status of member accounts within the organization, if the account is a master account of an organization.</p>
@@ -259,7 +412,7 @@ pub struct GetEnrollmentStatusResponse {
 }
 
 /// <p>Describes an error experienced when getting recommendations.</p> <p>For example, an error is returned if you request recommendations for an unsupported Auto Scaling group, or if you request recommendations for an instance of an unsupported instance family.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecommendationError {
     /// <p>The error code.</p>
@@ -276,14 +429,14 @@ pub struct GetRecommendationError {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecommendationSummariesRequest {
-    /// <p>The AWS account IDs for which to return recommendation summaries.</p> <p>Only one account ID can be specified per request.</p>
+    /// <p>The IDs of the AWS accounts for which to return recommendation summaries.</p> <p>If your account is the master account of an organization, use this parameter to specify the member accounts for which you want to return recommendation summaries.</p> <p>Only one account ID can be specified per request.</p>
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
-    /// <p>The maximum number of recommendation summaries to return with a single call.</p> <p>To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
+    /// <p>The maximum number of recommendation summaries to return with a single request.</p> <p>To retrieve the remaining results, make another request with the returned <code>NextToken</code> value.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -293,7 +446,7 @@ pub struct GetRecommendationSummariesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRecommendationSummariesResponse {
     /// <p>The token to use to advance to the next page of recommendation summaries.</p> <p>This value is null when there are no more pages of recommendation summaries to return.</p>
@@ -307,10 +460,10 @@ pub struct GetRecommendationSummariesResponse {
 }
 
 /// <p>Describes an Amazon EC2 instance recommendation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceRecommendation {
-    /// <p>The AWS account ID of the instance recommendation.</p>
+    /// <p>The AWS account ID of the instance.</p>
     #[serde(rename = "accountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
@@ -353,7 +506,7 @@ pub struct InstanceRecommendation {
 }
 
 /// <p>Describes a recommendation option for an Amazon EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceRecommendationOption {
     /// <p>The instance type of the instance recommendation.</p>
@@ -374,8 +527,22 @@ pub struct InstanceRecommendationOption {
     pub rank: Option<i64>,
 }
 
+/// <p>Describes a filter that returns a more specific list of recommendation export jobs.</p> <p>This filter is used with the <code>DescribeRecommendationExportJobs</code> action.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct JobFilter {
+    /// <p>The name of the filter.</p> <p>Specify <code>ResourceType</code> to return export jobs of a specific resource type (e.g., <code>Ec2Instance</code>).</p> <p>Specify <code>JobStatus</code> to return export jobs with a specific status (e.g, <code>Complete</code>).</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The value of the filter.</p> <p>If you specify the <code>name</code> parameter as <code>ResourceType</code>, the valid values are <code>Ec2Instance</code> or <code>AutoScalingGroup</code>.</p> <p>If you specify the <code>name</code> parameter as <code>JobStatus</code>, the valid values are <code>Queued</code>, <code>InProgress</code>, <code>Complete</code>, or <code>Failed</code>.</p>
+    #[serde(rename = "values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
+}
+
 /// <p>Describes a projected utilization metric of a recommendation option, such as an Amazon EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectedMetric {
     /// <p><p>The name of the projected utilization metric.</p> <note> <p>Memory metrics are only returned for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
@@ -392,8 +559,42 @@ pub struct ProjectedMetric {
     pub values: Option<Vec<f64>>,
 }
 
+/// <p>Describes a recommendation export job.</p> <p>Use the <code>DescribeRecommendationExportJobs</code> action to view your recommendation export jobs.</p> <p>Use the <code>ExportAutoScalingGroupRecommendations</code> or <code>ExportEC2InstanceRecommendations</code> actions to request an export of your recommendations.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RecommendationExportJob {
+    /// <p>The timestamp of when the export job was created.</p>
+    #[serde(rename = "creationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_timestamp: Option<f64>,
+    /// <p>An object that describes the destination of the export file.</p>
+    #[serde(rename = "destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<ExportDestination>,
+    /// <p>The reason for an export job failure.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The identification number of the export job.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The timestamp of when the export job was last updated.</p>
+    #[serde(rename = "lastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<f64>,
+    /// <p>The resource type of the exported recommendations.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The status of the export job.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
 /// <p>Describes the source of a recommendation, such as an Amazon EC2 instance or Auto Scaling group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecommendationSource {
     /// <p>The Amazon Resource Name (ARN) of the recommendation source.</p>
@@ -407,7 +608,7 @@ pub struct RecommendationSource {
 }
 
 /// <p>A summary of a recommendation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecommendationSummary {
     /// <p>The AWS account ID of the recommendation summary.</p>
@@ -425,7 +626,7 @@ pub struct RecommendationSummary {
 }
 
 /// <p>Describes a projected utilization metric of a recommendation option.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecommendedOptionProjectedMetric {
     /// <p>An array of objects that describe a projected utilization metric.</p>
@@ -442,8 +643,40 @@ pub struct RecommendedOptionProjectedMetric {
     pub recommended_instance_type: Option<String>,
 }
 
+/// <p>Describes the destination Amazon Simple Storage Service (Amazon S3) bucket name and object keys of a recommendations export file, and its associated metadata file.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct S3Destination {
+    /// <p>The name of the Amazon S3 bucket used as the destination of an export file.</p>
+    #[serde(rename = "bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket: Option<String>,
+    /// <p>The Amazon S3 bucket key of an export file.</p> <p>The key uniquely identifies the object, or export file, in the S3 bucket.</p>
+    #[serde(rename = "key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The Amazon S3 bucket key of a metadata file.</p> <p>The key uniquely identifies the object, or metadata file, in the S3 bucket.</p>
+    #[serde(rename = "metadataKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_key: Option<String>,
+}
+
+/// <p>Describes the destination Amazon Simple Storage Service (Amazon S3) bucket name and key prefix for a recommendations export job.</p> <p>You must create the destination Amazon S3 bucket for your recommendations export before you create the export job. Compute Optimizer does not create the S3 bucket for you. After you create the S3 bucket, ensure that it has the required permission policy to allow Compute Optimizer to write the export file to it. If you plan to specify an object prefix when you create the export job, you must include the object prefix in the policy that you add to the S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/create-s3-bucket-policy-for-compute-optimizer.html">Amazon S3 Bucket Policy for Compute Optimizer</a> in the <i>Compute Optimizer user guide</i>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct S3DestinationConfig {
+    /// <p>The name of the Amazon S3 bucket to use as the destination for an export job.</p>
+    #[serde(rename = "bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket: Option<String>,
+    /// <p>The Amazon S3 bucket prefix for an export job.</p>
+    #[serde(rename = "keyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_prefix: Option<String>,
+}
+
 /// <p>The summary of a recommendation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Summary {
     /// <p>The finding classification of the recommendation.</p>
@@ -456,10 +689,10 @@ pub struct Summary {
     pub value: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnrollmentStatusRequest {
-    /// <p>Indicates whether to enroll member accounts within the organization, if the account is a master account of an organization.</p>
+    /// <p>Indicates whether to enroll member accounts of the organization if the your account is the master account of an organization.</p>
     #[serde(rename = "includeMemberAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_member_accounts: Option<bool>,
@@ -468,7 +701,7 @@ pub struct UpdateEnrollmentStatusRequest {
     pub status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEnrollmentStatusResponse {
     /// <p>The enrollment status of the account.</p>
@@ -482,7 +715,7 @@ pub struct UpdateEnrollmentStatusResponse {
 }
 
 /// <p>Describes a utilization metric of a resource, such as an Amazon EC2 instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UtilizationMetric {
     /// <p><p>The name of the utilization metric.</p> <note> <p>Memory metrics are only returned for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
@@ -499,24 +732,340 @@ pub struct UtilizationMetric {
     pub value: Option<f64>,
 }
 
-/// Errors returned by GetAutoScalingGroupRecommendations
+/// Errors returned by DescribeRecommendationExportJobs
 #[derive(Debug, PartialEq)]
-pub enum GetAutoScalingGroupRecommendationsError {
+pub enum DescribeRecommendationExportJobsError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>An internal error has occurred. Try your call again.</p>
     InternalServer(String),
     /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
     InvalidParameterValue(String),
     /// <p>The request must contain either a valid (registered) AWS access key ID or X.509 certificate.</p>
     MissingAuthenticationToken(String),
-    /// <p>You must opt in to the service to perform this action.</p>
+    /// <p>The account is not opted in to AWS Compute Optimizer.</p>
     OptInRequired(String),
-    /// <p>The specified resource was not found.</p>
+    /// <p>A resource that is required for the action doesn't exist.</p>
     ResourceNotFound(String),
     /// <p>The request has failed due to a temporary failure of the server.</p>
     ServiceUnavailable(String),
-    /// <p>The limit on the number of requests per second was exceeded.</p>
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl DescribeRecommendationExportJobsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeRecommendationExportJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DescribeRecommendationExportJobsError::AccessDenied(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        DescribeRecommendationExportJobsError::InternalServer(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeRecommendationExportJobsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "MissingAuthenticationToken" => {
+                    return RusotoError::Service(
+                        DescribeRecommendationExportJobsError::MissingAuthenticationToken(err.msg),
+                    )
+                }
+                "OptInRequiredException" => {
+                    return RusotoError::Service(
+                        DescribeRecommendationExportJobsError::OptInRequired(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeRecommendationExportJobsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DescribeRecommendationExportJobsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeRecommendationExportJobsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeRecommendationExportJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeRecommendationExportJobsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRecommendationExportJobsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRecommendationExportJobsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRecommendationExportJobsError::MissingAuthenticationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRecommendationExportJobsError::OptInRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRecommendationExportJobsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRecommendationExportJobsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRecommendationExportJobsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeRecommendationExportJobsError {}
+/// Errors returned by ExportAutoScalingGroupRecommendations
+#[derive(Debug, PartialEq)]
+pub enum ExportAutoScalingGroupRecommendationsError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>An internal error has occurred. Try your call again.</p>
+    InternalServer(String),
+    /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
+    InvalidParameterValue(String),
+    /// <p>The request exceeds a limit of the service.</p>
+    LimitExceeded(String),
+    /// <p>The request must contain either a valid (registered) AWS access key ID or X.509 certificate.</p>
+    MissingAuthenticationToken(String),
+    /// <p>The account is not opted in to AWS Compute Optimizer.</p>
+    OptInRequired(String),
+    /// <p>The request has failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl ExportAutoScalingGroupRecommendationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ExportAutoScalingGroupRecommendationsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        ExportAutoScalingGroupRecommendationsError::AccessDenied(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        ExportAutoScalingGroupRecommendationsError::InternalServer(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        ExportAutoScalingGroupRecommendationsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        ExportAutoScalingGroupRecommendationsError::LimitExceeded(err.msg),
+                    )
+                }
+                "MissingAuthenticationToken" => {
+                    return RusotoError::Service(
+                        ExportAutoScalingGroupRecommendationsError::MissingAuthenticationToken(
+                            err.msg,
+                        ),
+                    )
+                }
+                "OptInRequiredException" => {
+                    return RusotoError::Service(
+                        ExportAutoScalingGroupRecommendationsError::OptInRequired(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        ExportAutoScalingGroupRecommendationsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        ExportAutoScalingGroupRecommendationsError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ExportAutoScalingGroupRecommendationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ExportAutoScalingGroupRecommendationsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportAutoScalingGroupRecommendationsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportAutoScalingGroupRecommendationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportAutoScalingGroupRecommendationsError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportAutoScalingGroupRecommendationsError::MissingAuthenticationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportAutoScalingGroupRecommendationsError::OptInRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportAutoScalingGroupRecommendationsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportAutoScalingGroupRecommendationsError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ExportAutoScalingGroupRecommendationsError {}
+/// Errors returned by ExportEC2InstanceRecommendations
+#[derive(Debug, PartialEq)]
+pub enum ExportEC2InstanceRecommendationsError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>An internal error has occurred. Try your call again.</p>
+    InternalServer(String),
+    /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
+    InvalidParameterValue(String),
+    /// <p>The request exceeds a limit of the service.</p>
+    LimitExceeded(String),
+    /// <p>The request must contain either a valid (registered) AWS access key ID or X.509 certificate.</p>
+    MissingAuthenticationToken(String),
+    /// <p>The account is not opted in to AWS Compute Optimizer.</p>
+    OptInRequired(String),
+    /// <p>The request has failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl ExportEC2InstanceRecommendationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ExportEC2InstanceRecommendationsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        ExportEC2InstanceRecommendationsError::AccessDenied(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        ExportEC2InstanceRecommendationsError::InternalServer(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        ExportEC2InstanceRecommendationsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        ExportEC2InstanceRecommendationsError::LimitExceeded(err.msg),
+                    )
+                }
+                "MissingAuthenticationToken" => {
+                    return RusotoError::Service(
+                        ExportEC2InstanceRecommendationsError::MissingAuthenticationToken(err.msg),
+                    )
+                }
+                "OptInRequiredException" => {
+                    return RusotoError::Service(
+                        ExportEC2InstanceRecommendationsError::OptInRequired(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        ExportEC2InstanceRecommendationsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ExportEC2InstanceRecommendationsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ExportEC2InstanceRecommendationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ExportEC2InstanceRecommendationsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEC2InstanceRecommendationsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEC2InstanceRecommendationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEC2InstanceRecommendationsError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEC2InstanceRecommendationsError::MissingAuthenticationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEC2InstanceRecommendationsError::OptInRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEC2InstanceRecommendationsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEC2InstanceRecommendationsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ExportEC2InstanceRecommendationsError {}
+/// Errors returned by GetAutoScalingGroupRecommendations
+#[derive(Debug, PartialEq)]
+pub enum GetAutoScalingGroupRecommendationsError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>An internal error has occurred. Try your call again.</p>
+    InternalServer(String),
+    /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
+    InvalidParameterValue(String),
+    /// <p>The request must contain either a valid (registered) AWS access key ID or X.509 certificate.</p>
+    MissingAuthenticationToken(String),
+    /// <p>The account is not opted in to AWS Compute Optimizer.</p>
+    OptInRequired(String),
+    /// <p>A resource that is required for the action doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request has failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -612,19 +1161,19 @@ impl Error for GetAutoScalingGroupRecommendationsError {}
 pub enum GetEC2InstanceRecommendationsError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>An internal error has occurred. Try your call again.</p>
     InternalServer(String),
     /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
     InvalidParameterValue(String),
     /// <p>The request must contain either a valid (registered) AWS access key ID or X.509 certificate.</p>
     MissingAuthenticationToken(String),
-    /// <p>You must opt in to the service to perform this action.</p>
+    /// <p>The account is not opted in to AWS Compute Optimizer.</p>
     OptInRequired(String),
-    /// <p>The specified resource was not found.</p>
+    /// <p>A resource that is required for the action doesn't exist.</p>
     ResourceNotFound(String),
     /// <p>The request has failed due to a temporary failure of the server.</p>
     ServiceUnavailable(String),
-    /// <p>The limit on the number of requests per second was exceeded.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -710,19 +1259,19 @@ impl Error for GetEC2InstanceRecommendationsError {}
 pub enum GetEC2RecommendationProjectedMetricsError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>An internal error has occurred. Try your call again.</p>
     InternalServer(String),
     /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
     InvalidParameterValue(String),
     /// <p>The request must contain either a valid (registered) AWS access key ID or X.509 certificate.</p>
     MissingAuthenticationToken(String),
-    /// <p>You must opt in to the service to perform this action.</p>
+    /// <p>The account is not opted in to AWS Compute Optimizer.</p>
     OptInRequired(String),
-    /// <p>The specified resource was not found.</p>
+    /// <p>A resource that is required for the action doesn't exist.</p>
     ResourceNotFound(String),
     /// <p>The request has failed due to a temporary failure of the server.</p>
     ServiceUnavailable(String),
-    /// <p>The limit on the number of requests per second was exceeded.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -818,7 +1367,7 @@ impl Error for GetEC2RecommendationProjectedMetricsError {}
 pub enum GetEnrollmentStatusError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>An internal error has occurred. Try your call again.</p>
     InternalServer(String),
     /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
     InvalidParameterValue(String),
@@ -826,7 +1375,7 @@ pub enum GetEnrollmentStatusError {
     MissingAuthenticationToken(String),
     /// <p>The request has failed due to a temporary failure of the server.</p>
     ServiceUnavailable(String),
-    /// <p>The limit on the number of requests per second was exceeded.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -886,17 +1435,17 @@ impl Error for GetEnrollmentStatusError {}
 pub enum GetRecommendationSummariesError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>An internal error has occurred. Try your call again.</p>
     InternalServer(String),
     /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
     InvalidParameterValue(String),
     /// <p>The request must contain either a valid (registered) AWS access key ID or X.509 certificate.</p>
     MissingAuthenticationToken(String),
-    /// <p>You must opt in to the service to perform this action.</p>
+    /// <p>The account is not opted in to AWS Compute Optimizer.</p>
     OptInRequired(String),
     /// <p>The request has failed due to a temporary failure of the server.</p>
     ServiceUnavailable(String),
-    /// <p>The limit on the number of requests per second was exceeded.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -974,7 +1523,7 @@ impl Error for GetRecommendationSummariesError {}
 pub enum UpdateEnrollmentStatusError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>The request processing has failed because of an unknown error, exception, or failure.</p>
+    /// <p>An internal error has occurred. Try your call again.</p>
     InternalServer(String),
     /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
     InvalidParameterValue(String),
@@ -982,7 +1531,7 @@ pub enum UpdateEnrollmentStatusError {
     MissingAuthenticationToken(String),
     /// <p>The request has failed due to a temporary failure of the server.</p>
     ServiceUnavailable(String),
-    /// <p>The limit on the number of requests per second was exceeded.</p>
+    /// <p>The request was denied due to request throttling.</p>
     Throttling(String),
 }
 
@@ -1042,6 +1591,33 @@ impl Error for UpdateEnrollmentStatusError {}
 /// Trait representing the capabilities of the AWS Compute Optimizer API. AWS Compute Optimizer clients implement this trait.
 #[async_trait]
 pub trait ComputeOptimizer {
+    /// <p>Describes recommendation export jobs created in the last seven days.</p> <p>Use the <code>ExportAutoScalingGroupRecommendations</code> or <code>ExportEC2InstanceRecommendations</code> actions to request an export of your recommendations. Then use the <code>DescribeRecommendationExportJobs</code> action to view your export jobs.</p>
+    async fn describe_recommendation_export_jobs(
+        &self,
+        input: DescribeRecommendationExportJobsRequest,
+    ) -> Result<
+        DescribeRecommendationExportJobsResponse,
+        RusotoError<DescribeRecommendationExportJobsError>,
+    >;
+
+    /// <p>Exports optimization recommendations for Auto Scaling groups.</p> <p>Recommendations are exported in a comma-separated values (.csv) file, and its metadata in a JavaScript Object Notation (.json) file, to an existing Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html">Exporting Recommendations</a> in the <i>Compute Optimizer User Guide</i>.</p> <p>You can have only one Auto Scaling group export job in progress per AWS Region.</p>
+    async fn export_auto_scaling_group_recommendations(
+        &self,
+        input: ExportAutoScalingGroupRecommendationsRequest,
+    ) -> Result<
+        ExportAutoScalingGroupRecommendationsResponse,
+        RusotoError<ExportAutoScalingGroupRecommendationsError>,
+    >;
+
+    /// <p>Exports optimization recommendations for Amazon EC2 instances.</p> <p>Recommendations are exported in a comma-separated values (.csv) file, and its metadata in a JavaScript Object Notation (.json) file, to an existing Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html">Exporting Recommendations</a> in the <i>Compute Optimizer User Guide</i>.</p> <p>You can have only one Amazon EC2 instance export job in progress per AWS Region.</p>
+    async fn export_ec2_instance_recommendations(
+        &self,
+        input: ExportEC2InstanceRecommendationsRequest,
+    ) -> Result<
+        ExportEC2InstanceRecommendationsResponse,
+        RusotoError<ExportEC2InstanceRecommendationsError>,
+    >;
+
     /// <p>Returns Auto Scaling group recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Auto Scaling groups that are configured to run instances of the M, C, R, T, and X instance families. The service does not generate recommendations for Auto Scaling groups that have a scaling policy attached to them, or that do not have the same values for desired, minimum, and maximum capacity. In order for Compute Optimizer to analyze your Auto Scaling groups, they must be of a fixed size. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
     async fn get_auto_scaling_group_recommendations(
         &self,
@@ -1069,7 +1645,7 @@ pub trait ComputeOptimizer {
         RusotoError<GetEC2RecommendationProjectedMetricsError>,
     >;
 
-    /// <p>Returns the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a master account of an organization, this operation also confirms the enrollment status of member accounts within the organization.</p>
+    /// <p>Returns the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is the master account of an organization, this action also confirms the enrollment status of member accounts within the organization.</p>
     async fn get_enrollment_status(
         &self,
     ) -> Result<GetEnrollmentStatusResponse, RusotoError<GetEnrollmentStatusError>>;
@@ -1080,7 +1656,7 @@ pub trait ComputeOptimizer {
         input: GetRecommendationSummariesRequest,
     ) -> Result<GetRecommendationSummariesResponse, RusotoError<GetRecommendationSummariesError>>;
 
-    /// <p>Updates the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a master account of an organization, this operation can also enroll member accounts within the organization.</p>
+    /// <p>Updates the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a master account of an organization, this action can also be used to enroll member accounts within the organization.</p>
     async fn update_enrollment_status(
         &self,
         input: UpdateEnrollmentStatusRequest,
@@ -1126,6 +1702,90 @@ impl ComputeOptimizerClient {
 
 #[async_trait]
 impl ComputeOptimizer for ComputeOptimizerClient {
+    /// <p>Describes recommendation export jobs created in the last seven days.</p> <p>Use the <code>ExportAutoScalingGroupRecommendations</code> or <code>ExportEC2InstanceRecommendations</code> actions to request an export of your recommendations. Then use the <code>DescribeRecommendationExportJobs</code> action to view your export jobs.</p>
+    async fn describe_recommendation_export_jobs(
+        &self,
+        input: DescribeRecommendationExportJobsRequest,
+    ) -> Result<
+        DescribeRecommendationExportJobsResponse,
+        RusotoError<DescribeRecommendationExportJobsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "ComputeOptimizerService.DescribeRecommendationExportJobs",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeRecommendationExportJobsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeRecommendationExportJobsResponse, _>()
+    }
+
+    /// <p>Exports optimization recommendations for Auto Scaling groups.</p> <p>Recommendations are exported in a comma-separated values (.csv) file, and its metadata in a JavaScript Object Notation (.json) file, to an existing Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html">Exporting Recommendations</a> in the <i>Compute Optimizer User Guide</i>.</p> <p>You can have only one Auto Scaling group export job in progress per AWS Region.</p>
+    async fn export_auto_scaling_group_recommendations(
+        &self,
+        input: ExportAutoScalingGroupRecommendationsRequest,
+    ) -> Result<
+        ExportAutoScalingGroupRecommendationsResponse,
+        RusotoError<ExportAutoScalingGroupRecommendationsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "ComputeOptimizerService.ExportAutoScalingGroupRecommendations",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ExportAutoScalingGroupRecommendationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ExportAutoScalingGroupRecommendationsResponse, _>()
+    }
+
+    /// <p>Exports optimization recommendations for Amazon EC2 instances.</p> <p>Recommendations are exported in a comma-separated values (.csv) file, and its metadata in a JavaScript Object Notation (.json) file, to an existing Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html">Exporting Recommendations</a> in the <i>Compute Optimizer User Guide</i>.</p> <p>You can have only one Amazon EC2 instance export job in progress per AWS Region.</p>
+    async fn export_ec2_instance_recommendations(
+        &self,
+        input: ExportEC2InstanceRecommendationsRequest,
+    ) -> Result<
+        ExportEC2InstanceRecommendationsResponse,
+        RusotoError<ExportEC2InstanceRecommendationsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "ComputeOptimizerService.ExportEC2InstanceRecommendations",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ExportEC2InstanceRecommendationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ExportEC2InstanceRecommendationsResponse, _>()
+    }
+
     /// <p>Returns Auto Scaling group recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Auto Scaling groups that are configured to run instances of the M, C, R, T, and X instance families. The service does not generate recommendations for Auto Scaling groups that have a scaling policy attached to them, or that do not have the same values for desired, minimum, and maximum capacity. In order for Compute Optimizer to analyze your Auto Scaling groups, they must be of a fixed size. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
     async fn get_auto_scaling_group_recommendations(
         &self,
@@ -1134,9 +1794,7 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         GetAutoScalingGroupRecommendationsResponse,
         RusotoError<GetAutoScalingGroupRecommendationsError>,
     > {
-        let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComputeOptimizerService.GetAutoScalingGroupRecommendations",
@@ -1144,22 +1802,16 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAutoScalingGroupRecommendationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAutoScalingGroupRecommendationsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetAutoScalingGroupRecommendationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAutoScalingGroupRecommendationsResponse, _>()
     }
 
     /// <p>Returns Amazon EC2 instance recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Amazon Elastic Compute Cloud (Amazon EC2) and Amazon EC2 Auto Scaling. It generates recommendations for M, C, R, T, and X instance families. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
@@ -1170,9 +1822,7 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         GetEC2InstanceRecommendationsResponse,
         RusotoError<GetEC2InstanceRecommendationsError>,
     > {
-        let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComputeOptimizerService.GetEC2InstanceRecommendations",
@@ -1180,20 +1830,13 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEC2InstanceRecommendationsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEC2InstanceRecommendationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetEC2InstanceRecommendationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetEC2InstanceRecommendationsResponse, _>()
     }
 
     /// <p>Returns the projected utilization metrics of Amazon EC2 instance recommendations.</p>
@@ -1204,9 +1847,7 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         GetEC2RecommendationProjectedMetricsResponse,
         RusotoError<GetEC2RecommendationProjectedMetricsError>,
     > {
-        let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComputeOptimizerService.GetEC2RecommendationProjectedMetrics",
@@ -1214,51 +1855,35 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEC2RecommendationProjectedMetricsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEC2RecommendationProjectedMetricsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetEC2RecommendationProjectedMetricsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetEC2RecommendationProjectedMetricsResponse, _>()
     }
 
-    /// <p>Returns the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a master account of an organization, this operation also confirms the enrollment status of member accounts within the organization.</p>
+    /// <p>Returns the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is the master account of an organization, this action also confirms the enrollment status of member accounts within the organization.</p>
     async fn get_enrollment_status(
         &self,
     ) -> Result<GetEnrollmentStatusResponse, RusotoError<GetEnrollmentStatusError>> {
-        let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComputeOptimizerService.GetEnrollmentStatus",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetEnrollmentStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEnrollmentStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetEnrollmentStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetEnrollmentStatusResponse, _>()
     }
 
     /// <p>Returns the optimization findings for an account.</p> <p>For example, it returns the number of Amazon EC2 instances in an account that are under-provisioned, over-provisioned, or optimized. It also returns the number of Auto Scaling groups in an account that are not optimized, or optimized.</p>
@@ -1267,9 +1892,7 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         input: GetRecommendationSummariesRequest,
     ) -> Result<GetRecommendationSummariesResponse, RusotoError<GetRecommendationSummariesError>>
     {
-        let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComputeOptimizerService.GetRecommendationSummaries",
@@ -1277,30 +1900,21 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRecommendationSummariesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRecommendationSummariesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRecommendationSummariesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRecommendationSummariesResponse, _>()
     }
 
-    /// <p>Updates the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a master account of an organization, this operation can also enroll member accounts within the organization.</p>
+    /// <p>Updates the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a master account of an organization, this action can also be used to enroll member accounts within the organization.</p>
     async fn update_enrollment_status(
         &self,
         input: UpdateEnrollmentStatusRequest,
     ) -> Result<UpdateEnrollmentStatusResponse, RusotoError<UpdateEnrollmentStatusError>> {
-        let mut request = SignedRequest::new("POST", "compute-optimizer", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "ComputeOptimizerService.UpdateEnrollmentStatus",
@@ -1308,19 +1922,12 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateEnrollmentStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateEnrollmentStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateEnrollmentStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateEnrollmentStatusResponse, _>()
     }
 }

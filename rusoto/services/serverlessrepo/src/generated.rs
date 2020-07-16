@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A nested application summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationDependencySummary {
     /// <p>The Amazon Resource Name (ARN) of the nested application.</p>
@@ -38,7 +38,7 @@ pub struct ApplicationDependencySummary {
 }
 
 /// <p>Policy statement applied to the application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ApplicationPolicyStatement {
     /// <p>For the list of actions supported for this operation, see <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application
     /// Permissions</a>.</p>
@@ -58,7 +58,7 @@ pub struct ApplicationPolicyStatement {
 }
 
 /// <p>Summary of details about the application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationSummary {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -91,7 +91,7 @@ pub struct ApplicationSummary {
     pub spdx_license_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
     /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
@@ -158,7 +158,7 @@ pub struct CreateApplicationRequest {
     pub template_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -215,7 +215,7 @@ pub struct CreateApplicationResponse {
     pub version: Option<Version>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -242,7 +242,7 @@ pub struct CreateApplicationVersionRequest {
     pub template_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationVersionResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -308,7 +308,7 @@ pub struct CreateApplicationVersionResponse {
     pub template_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationChangeSetRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -395,7 +395,7 @@ pub struct CreateCloudFormationChangeSetRequest {
     pub template_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCloudFormationChangeSetResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -418,7 +418,7 @@ pub struct CreateCloudFormationChangeSetResponse {
     pub stack_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCloudFormationTemplateRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -432,7 +432,7 @@ pub struct CreateCloudFormationTemplateRequest {
     pub semantic_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCloudFormationTemplateResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -470,7 +470,7 @@ pub struct CreateCloudFormationTemplateResponse {
     pub template_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -478,7 +478,7 @@ pub struct DeleteApplicationRequest {
     pub application_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -486,7 +486,7 @@ pub struct GetApplicationPolicyRequest {
     pub application_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationPolicyResponse {
     /// <p>An array of policy statements applied to the application.</p>
@@ -495,7 +495,7 @@ pub struct GetApplicationPolicyResponse {
     pub statements: Option<Vec<ApplicationPolicyStatement>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -507,7 +507,7 @@ pub struct GetApplicationRequest {
     pub semantic_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -564,7 +564,7 @@ pub struct GetApplicationResponse {
     pub version: Option<Version>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFormationTemplateRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -575,7 +575,7 @@ pub struct GetCloudFormationTemplateRequest {
     pub template_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCloudFormationTemplateResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -613,7 +613,7 @@ pub struct GetCloudFormationTemplateResponse {
     pub template_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationDependenciesRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -633,7 +633,7 @@ pub struct ListApplicationDependenciesRequest {
     pub semantic_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationDependenciesResponse {
     /// <p>An array of application summaries nested in the application.</p>
@@ -646,7 +646,7 @@ pub struct ListApplicationDependenciesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationVersionsRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -662,7 +662,7 @@ pub struct ListApplicationVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationVersionsResponse {
     /// <p>The token to request the next page of results.</p>
@@ -675,7 +675,7 @@ pub struct ListApplicationVersionsResponse {
     pub versions: Option<Vec<VersionSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
     /// <p>The total number of items to return.</p>
@@ -688,7 +688,7 @@ pub struct ListApplicationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationsResponse {
     /// <p>An array of application summaries.</p>
@@ -702,7 +702,7 @@ pub struct ListApplicationsResponse {
 }
 
 /// <p>Parameters supported by the application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParameterDefinition {
     /// <p>A regular expression that represents the patterns to allow for String types.</p>
@@ -775,7 +775,7 @@ pub struct ParameterDefinition {
 }
 
 /// <p>Parameter value of the application.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParameterValue {
     /// <p>The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation
@@ -787,7 +787,7 @@ pub struct ParameterValue {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutApplicationPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -798,7 +798,7 @@ pub struct PutApplicationPolicyRequest {
     pub statements: Vec<ApplicationPolicyStatement>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutApplicationPolicyResponse {
     /// <p>An array of policy statements applied to the application.</p>
@@ -809,7 +809,7 @@ pub struct PutApplicationPolicyResponse {
 
 /// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a>
 /// </i> Data Type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackConfiguration {
     /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a>
@@ -826,7 +826,7 @@ pub struct RollbackConfiguration {
 
 /// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a>
 /// </i> Data Type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RollbackTrigger {
     /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a>
@@ -841,7 +841,7 @@ pub struct RollbackTrigger {
 
 /// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a>
 /// </i> Data Type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
     /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a>
@@ -856,7 +856,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UnshareApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -867,7 +867,7 @@ pub struct UnshareApplicationRequest {
     pub organization_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -899,7 +899,7 @@ pub struct UpdateApplicationRequest {
     pub readme_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -957,7 +957,7 @@ pub struct UpdateApplicationResponse {
 }
 
 /// <p>Application version details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Version {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -1017,7 +1017,7 @@ pub struct Version {
 }
 
 /// <p>An application version summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VersionSummary {
     /// <p>The application Amazon Resource Name (ARN).</p>
@@ -2003,6 +2003,7 @@ impl ServerlessRepoClient {
 #[async_trait]
 impl ServerlessRepo for ServerlessRepoClient {
     /// <p>Creates an application, optionally including an AWS SAM file to create the first application version in the same call.</p>
+    #[allow(unused_mut)]
     async fn create_application(
         &self,
         input: CreateApplicationRequest,
@@ -2021,7 +2022,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateApplicationResponse, _>()?;
 
@@ -2033,6 +2034,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Creates an application version.</p>
+    #[allow(unused_mut)]
     async fn create_application_version(
         &self,
         input: CreateApplicationVersionRequest,
@@ -2055,7 +2057,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateApplicationVersionResponse, _>()?;
 
@@ -2067,6 +2069,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Creates an AWS CloudFormation change set for the given application.</p>
+    #[allow(unused_mut)]
     async fn create_cloud_formation_change_set(
         &self,
         input: CreateCloudFormationChangeSetRequest,
@@ -2091,7 +2094,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateCloudFormationChangeSetResponse, _>()?;
 
@@ -2103,6 +2106,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Creates an AWS CloudFormation template.</p>
+    #[allow(unused_mut)]
     async fn create_cloud_formation_template(
         &self,
         input: CreateCloudFormationTemplateRequest,
@@ -2125,7 +2129,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateCloudFormationTemplateResponse, _>()?;
 
@@ -2137,6 +2141,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Deletes the specified application.</p>
+    #[allow(unused_mut)]
     async fn delete_application(
         &self,
         input: DeleteApplicationRequest,
@@ -2156,7 +2161,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2167,6 +2172,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Gets the specified application.</p>
+    #[allow(unused_mut)]
     async fn get_application(
         &self,
         input: GetApplicationRequest,
@@ -2191,7 +2197,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetApplicationResponse, _>()?;
 
@@ -2203,6 +2209,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Retrieves the policy for the application.</p>
+    #[allow(unused_mut)]
     async fn get_application_policy(
         &self,
         input: GetApplicationPolicyRequest,
@@ -2221,7 +2228,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetApplicationPolicyResponse, _>()?;
 
@@ -2233,6 +2240,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Gets the specified AWS CloudFormation template.</p>
+    #[allow(unused_mut)]
     async fn get_cloud_formation_template(
         &self,
         input: GetCloudFormationTemplateRequest,
@@ -2253,7 +2261,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetCloudFormationTemplateResponse, _>()?;
 
@@ -2265,6 +2273,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Retrieves the list of applications nested in the containing application.</p>
+    #[allow(unused_mut)]
     async fn list_application_dependencies(
         &self,
         input: ListApplicationDependenciesRequest,
@@ -2296,7 +2305,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListApplicationDependenciesResponse, _>()?;
 
@@ -2308,6 +2317,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Lists versions for the specified application.</p>
+    #[allow(unused_mut)]
     async fn list_application_versions(
         &self,
         input: ListApplicationVersionsRequest,
@@ -2335,7 +2345,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListApplicationVersionsResponse, _>()?;
 
@@ -2347,6 +2357,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Lists applications owned by the requester.</p>
+    #[allow(unused_mut)]
     async fn list_applications(
         &self,
         input: ListApplicationsRequest,
@@ -2371,7 +2382,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListApplicationsResponse, _>()?;
 
@@ -2386,6 +2397,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     /// <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application
     /// Permissions</a>
     /// .</p>
+    #[allow(unused_mut)]
     async fn put_application_policy(
         &self,
         input: PutApplicationPolicyRequest,
@@ -2407,7 +2419,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutApplicationPolicyResponse, _>()?;
 
@@ -2419,6 +2431,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Unshares an application from an AWS Organization.</p><p>This operation can be called only from the organization's master account.</p>
+    #[allow(unused_mut)]
     async fn unshare_application(
         &self,
         input: UnshareApplicationRequest,
@@ -2440,7 +2453,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2451,6 +2464,7 @@ impl ServerlessRepo for ServerlessRepoClient {
     }
 
     /// <p>Updates the specified application.</p>
+    #[allow(unused_mut)]
     async fn update_application(
         &self,
         input: UpdateApplicationRequest,
@@ -2472,7 +2486,7 @@ impl ServerlessRepo for ServerlessRepoClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateApplicationResponse, _>()?;
 

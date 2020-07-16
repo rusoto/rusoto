@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>CDN Authorization credentials</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Authorization {
     /// <p>The Amazon Resource Name (ARN) for the secret in Secrets Manager that your Content Distribution Network (CDN) uses for authorization to access your endpoint.</p>
     #[serde(rename = "CdnIdentifierSecret")]
@@ -37,7 +37,7 @@ pub struct Authorization {
 }
 
 /// <p>A Channel resource configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Channel {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
@@ -61,7 +61,7 @@ pub struct Channel {
 }
 
 /// <p>A Common Media Application Format (CMAF) encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CmafEncryption {
     /// <p>Time (in seconds) between each encryption key rotation.</p>
     #[serde(rename = "KeyRotationIntervalSeconds")]
@@ -72,7 +72,7 @@ pub struct CmafEncryption {
 }
 
 /// <p>A Common Media Application Format (CMAF) packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CmafPackage {
     #[serde(rename = "Encryption")]
@@ -97,7 +97,7 @@ pub struct CmafPackage {
 }
 
 /// <p>A Common Media Application Format (CMAF) packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CmafPackageCreateOrUpdateParameters {
     #[serde(rename = "Encryption")]
@@ -122,7 +122,7 @@ pub struct CmafPackageCreateOrUpdateParameters {
 }
 
 /// <p>A new Channel configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
     /// <p>A short text description of the Channel.</p>
@@ -138,7 +138,7 @@ pub struct CreateChannelRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
@@ -162,7 +162,7 @@ pub struct CreateChannelResponse {
 }
 
 /// <p>Configuration parameters used to create a new HarvestJob.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHarvestJobRequest {
     /// <p>The end of the time-window which will be harvested</p>
@@ -183,7 +183,7 @@ pub struct CreateHarvestJobRequest {
     pub start_time: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHarvestJobResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the HarvestJob.</p>
@@ -228,7 +228,7 @@ pub struct CreateHarvestJobResponse {
 }
 
 /// <p>Configuration parameters used to create a new OriginEndpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOriginEndpointRequest {
     #[serde(rename = "Authorization")]
@@ -287,7 +287,7 @@ pub struct CreateOriginEndpointRequest {
     pub whitelist: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOriginEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
@@ -355,7 +355,7 @@ pub struct CreateOriginEndpointResponse {
 }
 
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DashEncryption {
     /// <p>Time (in seconds) between each encryption key rotation.</p>
     #[serde(rename = "KeyRotationIntervalSeconds")]
@@ -366,7 +366,7 @@ pub struct DashEncryption {
 }
 
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DashPackage {
     #[serde(rename = "AdTriggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -422,7 +422,7 @@ pub struct DashPackage {
     pub suggested_presentation_delay_seconds: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelRequest {
     /// <p>The ID of the Channel to delete.</p>
@@ -430,11 +430,11 @@ pub struct DeleteChannelRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteChannelResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOriginEndpointRequest {
     /// <p>The ID of the OriginEndpoint to delete.</p>
@@ -442,11 +442,11 @@ pub struct DeleteOriginEndpointRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteOriginEndpointResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelRequest {
     /// <p>The ID of a Channel.</p>
@@ -454,7 +454,7 @@ pub struct DescribeChannelRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
@@ -477,7 +477,7 @@ pub struct DescribeChannelResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHarvestJobRequest {
     /// <p>The ID of the HarvestJob.</p>
@@ -485,7 +485,7 @@ pub struct DescribeHarvestJobRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHarvestJobResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the HarvestJob.</p>
@@ -529,7 +529,7 @@ pub struct DescribeHarvestJobResponse {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeOriginEndpointRequest {
     /// <p>The ID of the OriginEndpoint.</p>
@@ -537,7 +537,7 @@ pub struct DescribeOriginEndpointRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOriginEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
@@ -605,7 +605,7 @@ pub struct DescribeOriginEndpointResponse {
 }
 
 /// <p>A HarvestJob resource configuration</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HarvestJob {
     /// <p>The Amazon Resource Name (ARN) assigned to the HarvestJob.</p>
@@ -650,7 +650,7 @@ pub struct HarvestJob {
 }
 
 /// <p>An HTTP Live Streaming (HLS) encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsEncryption {
     /// <p>A constant initialization vector for encryption (optional).
     /// When not specified the initialization vector will be periodically rotated.</p>
@@ -674,7 +674,7 @@ pub struct HlsEncryption {
 }
 
 /// <p>An HTTP Live Streaming (HLS) ingest resource configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HlsIngest {
     /// <p>A list of endpoints to which the source stream should be sent.</p>
@@ -684,7 +684,7 @@ pub struct HlsIngest {
 }
 
 /// <p>A HTTP Live Streaming (HLS) manifest configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HlsManifest {
     /// <p>This setting controls how ad markers are included in the packaged OriginEndpoint.
@@ -736,7 +736,7 @@ pub struct HlsManifest {
 }
 
 /// <p>A HTTP Live Streaming (HLS) manifest configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HlsManifestCreateOrUpdateParameters {
     /// <p>This setting controls how ad markers are included in the packaged OriginEndpoint.
@@ -790,7 +790,7 @@ pub struct HlsManifestCreateOrUpdateParameters {
 }
 
 /// <p>An HTTP Live Streaming (HLS) packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsPackage {
     /// <p>This setting controls how ad markers are included in the packaged OriginEndpoint.
     /// &quot;NONE&quot; will omit all SCTE-35 ad markers from the output.
@@ -851,7 +851,7 @@ pub struct HlsPackage {
 }
 
 /// <p>An endpoint for ingesting source content for a Channel.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IngestEndpoint {
     /// <p>The system generated unique identifier for the IngestEndpoint</p>
@@ -872,7 +872,7 @@ pub struct IngestEndpoint {
     pub username: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
     /// <p>Upper bound on number of records to return.</p>
@@ -885,7 +885,7 @@ pub struct ListChannelsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsResponse {
     /// <p>A list of Channel records.</p>
@@ -898,7 +898,7 @@ pub struct ListChannelsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHarvestJobsRequest {
     /// <p>When specified, the request will return only HarvestJobs associated with the given Channel ID.</p>
@@ -919,7 +919,7 @@ pub struct ListHarvestJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHarvestJobsResponse {
     /// <p>A list of HarvestJob records.</p>
@@ -932,7 +932,7 @@ pub struct ListHarvestJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOriginEndpointsRequest {
     /// <p>When specified, the request will return only OriginEndpoints associated with the given Channel ID.</p>
@@ -949,7 +949,7 @@ pub struct ListOriginEndpointsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOriginEndpointsResponse {
     /// <p>A token that can be used to resume pagination from the end of the collection.</p>
@@ -962,14 +962,14 @@ pub struct ListOriginEndpointsResponse {
     pub origin_endpoints: Option<Vec<OriginEndpoint>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
@@ -978,14 +978,14 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>A Microsoft Smooth Streaming (MSS) encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MssEncryption {
     #[serde(rename = "SpekeKeyProvider")]
     pub speke_key_provider: SpekeKeyProvider,
 }
 
 /// <p>A Microsoft Smooth Streaming (MSS) packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MssPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1004,7 +1004,7 @@ pub struct MssPackage {
 }
 
 /// <p>An OriginEndpoint resource configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OriginEndpoint {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
@@ -1071,7 +1071,7 @@ pub struct OriginEndpoint {
     pub whitelist: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RotateChannelCredentialsRequest {
     /// <p>The ID of the channel to update.</p>
@@ -1079,7 +1079,7 @@ pub struct RotateChannelCredentialsRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RotateChannelCredentialsResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
@@ -1102,7 +1102,7 @@ pub struct RotateChannelCredentialsResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RotateIngestEndpointCredentialsRequest {
     /// <p>The ID of the channel the IngestEndpoint is on.</p>
@@ -1113,7 +1113,7 @@ pub struct RotateIngestEndpointCredentialsRequest {
     pub ingest_endpoint_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RotateIngestEndpointCredentialsResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
@@ -1137,7 +1137,7 @@ pub struct RotateIngestEndpointCredentialsResponse {
 }
 
 /// <p>Configuration parameters for where in an S3 bucket to place the harvested content</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Destination {
     /// <p>The name of an S3 bucket within which harvested content will be exported</p>
     #[serde(rename = "BucketName")]
@@ -1151,7 +1151,7 @@ pub struct S3Destination {
 }
 
 /// <p>A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpekeKeyProvider {
     /// <p>An Amazon Resource Name (ARN) of a Certificate Manager certificate
     /// that MediaPackage will use for enforcing secure end-to-end data
@@ -1175,7 +1175,7 @@ pub struct SpekeKeyProvider {
 }
 
 /// <p>A StreamSelection configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StreamSelection {
     /// <p>The maximum video bitrate (bps) to include in output.</p>
     #[serde(rename = "MaxVideoBitsPerSecond")]
@@ -1191,7 +1191,7 @@ pub struct StreamSelection {
     pub stream_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     #[serde(rename = "ResourceArn")]
@@ -1200,7 +1200,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     #[serde(rename = "ResourceArn")]
@@ -1211,7 +1211,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>Configuration parameters used to update the Channel.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
     /// <p>A short text description of the Channel.</p>
@@ -1223,7 +1223,7 @@ pub struct UpdateChannelRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
@@ -1247,7 +1247,7 @@ pub struct UpdateChannelResponse {
 }
 
 /// <p>Configuration parameters used to update an existing OriginEndpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateOriginEndpointRequest {
     #[serde(rename = "Authorization")]
@@ -1298,7 +1298,7 @@ pub struct UpdateOriginEndpointRequest {
     pub whitelist: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOriginEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
@@ -2561,6 +2561,7 @@ impl MediaPackageClient {
 #[async_trait]
 impl MediaPackage for MediaPackageClient {
     /// <p>Creates a new Channel.</p>
+    #[allow(unused_mut)]
     async fn create_channel(
         &self,
         input: CreateChannelRequest,
@@ -2579,7 +2580,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateChannelResponse, _>()?;
 
@@ -2591,6 +2592,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Creates a new HarvestJob record.</p>
+    #[allow(unused_mut)]
     async fn create_harvest_job(
         &self,
         input: CreateHarvestJobRequest,
@@ -2609,7 +2611,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateHarvestJobResponse, _>()?;
 
@@ -2621,6 +2623,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Creates a new OriginEndpoint record.</p>
+    #[allow(unused_mut)]
     async fn create_origin_endpoint(
         &self,
         input: CreateOriginEndpointRequest,
@@ -2639,7 +2642,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateOriginEndpointResponse, _>()?;
 
@@ -2651,6 +2654,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Deletes an existing Channel.</p>
+    #[allow(unused_mut)]
     async fn delete_channel(
         &self,
         input: DeleteChannelRequest,
@@ -2666,7 +2670,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteChannelResponse, _>()?;
 
@@ -2678,6 +2682,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Deletes an existing OriginEndpoint.</p>
+    #[allow(unused_mut)]
     async fn delete_origin_endpoint(
         &self,
         input: DeleteOriginEndpointRequest,
@@ -2693,7 +2698,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteOriginEndpointResponse, _>()?;
 
@@ -2705,6 +2710,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Gets details about a Channel.</p>
+    #[allow(unused_mut)]
     async fn describe_channel(
         &self,
         input: DescribeChannelRequest,
@@ -2720,7 +2726,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeChannelResponse, _>()?;
 
@@ -2732,6 +2738,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Gets details about an existing HarvestJob.</p>
+    #[allow(unused_mut)]
     async fn describe_harvest_job(
         &self,
         input: DescribeHarvestJobRequest,
@@ -2747,7 +2754,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeHarvestJobResponse, _>()?;
 
@@ -2759,6 +2766,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Gets details about an existing OriginEndpoint.</p>
+    #[allow(unused_mut)]
     async fn describe_origin_endpoint(
         &self,
         input: DescribeOriginEndpointRequest,
@@ -2774,7 +2782,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeOriginEndpointResponse, _>()?;
 
@@ -2786,6 +2794,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Returns a collection of Channels.</p>
+    #[allow(unused_mut)]
     async fn list_channels(
         &self,
         input: ListChannelsRequest,
@@ -2810,7 +2819,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListChannelsResponse, _>()?;
 
@@ -2822,6 +2831,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Returns a collection of HarvestJob records.</p>
+    #[allow(unused_mut)]
     async fn list_harvest_jobs(
         &self,
         input: ListHarvestJobsRequest,
@@ -2852,7 +2862,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListHarvestJobsResponse, _>()?;
 
@@ -2864,6 +2874,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Returns a collection of OriginEndpoint records.</p>
+    #[allow(unused_mut)]
     async fn list_origin_endpoints(
         &self,
         input: ListOriginEndpointsRequest,
@@ -2891,7 +2902,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListOriginEndpointsResponse, _>()?;
 
@@ -2902,6 +2913,7 @@ impl MediaPackage for MediaPackageClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2917,7 +2929,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -2929,6 +2941,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
+    #[allow(unused_mut)]
     async fn rotate_channel_credentials(
         &self,
         input: RotateChannelCredentialsRequest,
@@ -2944,7 +2957,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RotateChannelCredentialsResponse, _>()?;
 
@@ -2956,6 +2969,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Rotate the IngestEndpoint&#39;s username and password, as specified by the IngestEndpoint&#39;s id.</p>
+    #[allow(unused_mut)]
     async fn rotate_ingest_endpoint_credentials(
         &self,
         input: RotateIngestEndpointCredentialsRequest,
@@ -2978,7 +2992,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RotateIngestEndpointCredentialsResponse, _>()?;
 
@@ -2991,6 +3005,7 @@ impl MediaPackage for MediaPackageClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3009,7 +3024,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3019,6 +3034,7 @@ impl MediaPackage for MediaPackageClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3040,7 +3056,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3051,6 +3067,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Updates an existing Channel.</p>
+    #[allow(unused_mut)]
     async fn update_channel(
         &self,
         input: UpdateChannelRequest,
@@ -3069,7 +3086,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateChannelResponse, _>()?;
 
@@ -3081,6 +3098,7 @@ impl MediaPackage for MediaPackageClient {
     }
 
     /// <p>Updates an existing OriginEndpoint.</p>
+    #[allow(unused_mut)]
     async fn update_origin_endpoint(
         &self,
         input: UpdateOriginEndpointRequest,
@@ -3099,7 +3117,7 @@ impl MediaPackage for MediaPackageClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateOriginEndpointResponse, _>()?;
 

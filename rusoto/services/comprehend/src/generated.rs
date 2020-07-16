@@ -20,12 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl ComprehendClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "comprehend", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectDominantLanguageItemResult {
     /// <p>The zero-based index of the document in the input list.</p>
@@ -38,7 +64,7 @@ pub struct BatchDetectDominantLanguageItemResult {
     pub languages: Option<Vec<DominantLanguage>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectDominantLanguageRequest {
     /// <p>A list containing the text of the input documents. The list can contain a maximum of 25 documents. Each document should contain at least 20 characters and must contain fewer than 5,000 bytes of UTF-8 encoded characters.</p>
@@ -46,7 +72,7 @@ pub struct BatchDetectDominantLanguageRequest {
     pub text_list: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectDominantLanguageResponse {
     /// <p>A list containing one object for each document that contained an error. The results are sorted in ascending order by the <code>Index</code> field and match the order of the documents in the input list. If there are no errors in the batch, the <code>ErrorList</code> is empty.</p>
@@ -58,7 +84,7 @@ pub struct BatchDetectDominantLanguageResponse {
 }
 
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectEntitiesItemResult {
     /// <p>One or more <a>Entity</a> objects, one for each entity detected in the document.</p>
@@ -71,7 +97,7 @@ pub struct BatchDetectEntitiesItemResult {
     pub index: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectEntitiesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
@@ -82,7 +108,7 @@ pub struct BatchDetectEntitiesRequest {
     pub text_list: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectEntitiesResponse {
     /// <p>A list containing one object for each document that contained an error. The results are sorted in ascending order by the <code>Index</code> field and match the order of the documents in the input list. If there are no errors in the batch, the <code>ErrorList</code> is empty.</p>
@@ -94,7 +120,7 @@ pub struct BatchDetectEntitiesResponse {
 }
 
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectKeyPhrasesItemResult {
     /// <p>The zero-based index of the document in the input list.</p>
@@ -107,7 +133,7 @@ pub struct BatchDetectKeyPhrasesItemResult {
     pub key_phrases: Option<Vec<KeyPhrase>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectKeyPhrasesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
@@ -118,7 +144,7 @@ pub struct BatchDetectKeyPhrasesRequest {
     pub text_list: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectKeyPhrasesResponse {
     /// <p>A list containing one object for each document that contained an error. The results are sorted in ascending order by the <code>Index</code> field and match the order of the documents in the input list. If there are no errors in the batch, the <code>ErrorList</code> is empty.</p>
@@ -130,7 +156,7 @@ pub struct BatchDetectKeyPhrasesResponse {
 }
 
 /// <p>The result of calling the operation. The operation returns one object for each document that is successfully processed by the operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectSentimentItemResult {
     /// <p>The zero-based index of the document in the input list.</p>
@@ -147,7 +173,7 @@ pub struct BatchDetectSentimentItemResult {
     pub sentiment_score: Option<SentimentScore>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectSentimentRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
@@ -158,7 +184,7 @@ pub struct BatchDetectSentimentRequest {
     pub text_list: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectSentimentResponse {
     /// <p>A list containing one object for each document that contained an error. The results are sorted in ascending order by the <code>Index</code> field and match the order of the documents in the input list. If there are no errors in the batch, the <code>ErrorList</code> is empty.</p>
@@ -170,7 +196,7 @@ pub struct BatchDetectSentimentResponse {
 }
 
 /// <p>The result of calling the operation. The operation returns one object that is successfully processed by the operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectSyntaxItemResult {
     /// <p>The zero-based index of the document in the input list.</p>
@@ -183,7 +209,7 @@ pub struct BatchDetectSyntaxItemResult {
     pub syntax_tokens: Option<Vec<SyntaxToken>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDetectSyntaxRequest {
     /// <p>The language of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt"). All documents must be in the same language.</p>
@@ -194,7 +220,7 @@ pub struct BatchDetectSyntaxRequest {
     pub text_list: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDetectSyntaxResponse {
     /// <p>A list containing one object for each document that contained an error. The results are sorted in ascending order by the <code>Index</code> field and match the order of the documents in the input list. If there are no errors in the batch, the <code>ErrorList</code> is empty.</p>
@@ -206,7 +232,7 @@ pub struct BatchDetectSyntaxResponse {
 }
 
 /// <p>Describes an error that occurred while processing a document in a batch. The operation returns on <code>BatchItemError</code> object for each document that contained an error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchItemError {
     /// <p>The numeric error code of the error.</p>
@@ -224,7 +250,7 @@ pub struct BatchItemError {
 }
 
 /// <p>Describes the result metrics for the test data associated with an documentation classifier.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClassifierEvaluationMetrics {
     /// <p>The fraction of the labels that were correct recognized. It is computed by dividing the number of labels in the test documents that were correctly recognized by the total number of labels in the test documents.</p>
@@ -262,7 +288,7 @@ pub struct ClassifierEvaluationMetrics {
 }
 
 /// <p>Provides information about a document classifier.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClassifierMetadata {
     /// <p> Describes the result metrics for the test data associated with an documentation classifier.</p>
@@ -273,7 +299,7 @@ pub struct ClassifierMetadata {
     #[serde(rename = "NumberOfLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_labels: Option<i64>,
-    /// <p>The number of documents in the input data that were used to test the classifier. Typically this is 10 to 20 percent of the input documents.</p>
+    /// <p>The number of documents in the input data that were used to test the classifier. Typically this is 10 to 20 percent of the input documents, up to 10,000 documents.</p>
     #[serde(rename = "NumberOfTestDocuments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_test_documents: Option<i64>,
@@ -283,7 +309,7 @@ pub struct ClassifierMetadata {
     pub number_of_trained_documents: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClassifyDocumentRequest {
     /// <p>The Amazon Resource Number (ARN) of the endpoint.</p>
@@ -294,7 +320,7 @@ pub struct ClassifyDocumentRequest {
     pub text: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClassifyDocumentResponse {
     /// <p>The classes used by the document being analyzed. These are used for multi-class trained models. Individual classes are mutually exclusive and each document is expected to have only a single class assigned to it. For example, an animal can be a dog or a cat, but not both at the same time. </p>
@@ -307,7 +333,7 @@ pub struct ClassifyDocumentResponse {
     pub labels: Option<Vec<DocumentLabel>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentClassifierRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
@@ -348,7 +374,7 @@ pub struct CreateDocumentClassifierRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDocumentClassifierResponse {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier.</p>
@@ -357,7 +383,7 @@ pub struct CreateDocumentClassifierResponse {
     pub document_classifier_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEndpointRequest {
     /// <p>An idempotency token provided by the customer. If this token matches a previous endpoint creation request, Amazon Comprehend will not return a <code>ResourceInUseException</code>. </p>
@@ -379,7 +405,7 @@ pub struct CreateEndpointRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEndpointResponse {
     /// <p>The Amazon Resource Number (ARN) of the endpoint being created.</p>
@@ -388,7 +414,7 @@ pub struct CreateEndpointResponse {
     pub endpoint_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEntityRecognizerRequest {
     /// <p> A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
@@ -421,7 +447,7 @@ pub struct CreateEntityRecognizerRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEntityRecognizerResponse {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
@@ -430,7 +456,7 @@ pub struct CreateEntityRecognizerResponse {
     pub entity_recognizer_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentClassifierRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier. </p>
@@ -438,11 +464,11 @@ pub struct DeleteDocumentClassifierRequest {
     pub document_classifier_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDocumentClassifierResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEndpointRequest {
     /// <p>The Amazon Resource Number (ARN) of the endpoint being deleted.</p>
@@ -450,11 +476,11 @@ pub struct DeleteEndpointRequest {
     pub endpoint_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEndpointResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEntityRecognizerRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
@@ -462,11 +488,11 @@ pub struct DeleteEntityRecognizerRequest {
     pub entity_recognizer_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEntityRecognizerResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentClassificationJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
@@ -474,7 +500,7 @@ pub struct DescribeDocumentClassificationJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentClassificationJobResponse {
     /// <p>An object that describes the properties associated with the document classification job.</p>
@@ -483,7 +509,7 @@ pub struct DescribeDocumentClassificationJobResponse {
     pub document_classification_job_properties: Option<DocumentClassificationJobProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentClassifierRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier. The operation returns this identifier in its response.</p>
@@ -491,7 +517,7 @@ pub struct DescribeDocumentClassifierRequest {
     pub document_classifier_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDocumentClassifierResponse {
     /// <p>An object that contains the properties associated with a document classifier.</p>
@@ -500,7 +526,7 @@ pub struct DescribeDocumentClassifierResponse {
     pub document_classifier_properties: Option<DocumentClassifierProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDominantLanguageDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
@@ -508,7 +534,7 @@ pub struct DescribeDominantLanguageDetectionJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDominantLanguageDetectionJobResponse {
     /// <p>An object that contains the properties associated with a dominant language detection job.</p>
@@ -517,7 +543,7 @@ pub struct DescribeDominantLanguageDetectionJobResponse {
     pub dominant_language_detection_job_properties: Option<DominantLanguageDetectionJobProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEndpointRequest {
     /// <p>The Amazon Resource Number (ARN) of the endpoint being described.</p>
@@ -525,7 +551,7 @@ pub struct DescribeEndpointRequest {
     pub endpoint_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointResponse {
     /// <p>Describes information associated with the specific endpoint.</p>
@@ -534,7 +560,7 @@ pub struct DescribeEndpointResponse {
     pub endpoint_properties: Option<EndpointProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntitiesDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
@@ -542,7 +568,7 @@ pub struct DescribeEntitiesDetectionJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntitiesDetectionJobResponse {
     /// <p>An object that contains the properties associated with an entities detection job.</p>
@@ -551,7 +577,7 @@ pub struct DescribeEntitiesDetectionJobResponse {
     pub entities_detection_job_properties: Option<EntitiesDetectionJobProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEntityRecognizerRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
@@ -559,7 +585,7 @@ pub struct DescribeEntityRecognizerRequest {
     pub entity_recognizer_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEntityRecognizerResponse {
     /// <p>Describes information associated with an entity recognizer.</p>
@@ -568,7 +594,7 @@ pub struct DescribeEntityRecognizerResponse {
     pub entity_recognizer_properties: Option<EntityRecognizerProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeKeyPhrasesDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
@@ -576,7 +602,7 @@ pub struct DescribeKeyPhrasesDetectionJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeKeyPhrasesDetectionJobResponse {
     /// <p>An object that contains the properties associated with a key phrases detection job. </p>
@@ -585,7 +611,7 @@ pub struct DescribeKeyPhrasesDetectionJobResponse {
     pub key_phrases_detection_job_properties: Option<KeyPhrasesDetectionJobProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSentimentDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
@@ -593,7 +619,7 @@ pub struct DescribeSentimentDetectionJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSentimentDetectionJobResponse {
     /// <p>An object that contains the properties associated with a sentiment detection job.</p>
@@ -602,7 +628,7 @@ pub struct DescribeSentimentDetectionJobResponse {
     pub sentiment_detection_job_properties: Option<SentimentDetectionJobProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTopicsDetectionJobRequest {
     /// <p>The identifier assigned by the user to the detection job.</p>
@@ -610,7 +636,7 @@ pub struct DescribeTopicsDetectionJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTopicsDetectionJobResponse {
     /// <p>The list of properties for the requested job.</p>
@@ -619,7 +645,7 @@ pub struct DescribeTopicsDetectionJobResponse {
     pub topics_detection_job_properties: Option<TopicsDetectionJobProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectDominantLanguageRequest {
     /// <p>A UTF-8 text string. Each string should contain at least 20 characters and must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
@@ -627,7 +653,7 @@ pub struct DetectDominantLanguageRequest {
     pub text: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectDominantLanguageResponse {
     /// <p>The languages that Amazon Comprehend detected in the input text. For each language, the response returns the RFC 5646 language code and the level of confidence that Amazon Comprehend has in the accuracy of its inference. For more information about RFC 5646, see <a href="https://tools.ietf.org/html/rfc5646">Tags for Identifying Languages</a> on the <i>IETF Tools</i> web site.</p>
@@ -636,27 +662,32 @@ pub struct DetectDominantLanguageResponse {
     pub languages: Option<Vec<DominantLanguage>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectEntitiesRequest {
-    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
+    /// <p>The Amazon Resource Name of an endpoint that is associated with a custom entity recognition model. Provide an endpoint if you want to detect entities by using your own custom model instead of the default model that is used by Amazon Comprehend.</p> <p>If you specify an endpoint, Amazon Comprehend uses the language of your custom model, and it ignores any language code that you provide in your request.</p>
+    #[serde(rename = "EndpointArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_arn: Option<String>,
+    /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p> <p>If your request includes the endpoint for a custom entity recognition model, Amazon Comprehend uses the language of your custom model, and it ignores any language code that you specify here.</p>
     #[serde(rename = "LanguageCode")]
-    pub language_code: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
     /// <p>A UTF-8 text string. Each string must contain fewer that 5,000 bytes of UTF-8 encoded characters.</p>
     #[serde(rename = "Text")]
     pub text: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectEntitiesResponse {
-    /// <p>A collection of entities identified in the input text. For each entity, the response provides the entity text, entity type, where the entity text begins and ends, and the level of confidence that Amazon Comprehend has in the detection. For a list of entity types, see <a>how-entities</a>. </p>
+    /// <p>A collection of entities identified in the input text. For each entity, the response provides the entity text, entity type, where the entity text begins and ends, and the level of confidence that Amazon Comprehend has in the detection. </p> <p>If your request uses a custom entity recognition model, Amazon Comprehend detects the entities that the model is trained to recognize. Otherwise, it detects the default entity types. For a list of default entity types, see <a>how-entities</a>.</p>
     #[serde(rename = "Entities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entities: Option<Vec<Entity>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectKeyPhrasesRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
@@ -667,7 +698,7 @@ pub struct DetectKeyPhrasesRequest {
     pub text: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectKeyPhrasesResponse {
     /// <p>A collection of key phrases that Amazon Comprehend identified in the input text. For each key phrase, the response provides the text of the key phrase, where the key phrase begins and ends, and the level of confidence that Amazon Comprehend has in the accuracy of the detection. </p>
@@ -676,7 +707,7 @@ pub struct DetectKeyPhrasesResponse {
     pub key_phrases: Option<Vec<KeyPhrase>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectSentimentRequest {
     /// <p>The language of the input documents. You can specify any of the primary languages supported by Amazon Comprehend. All documents must be in the same language.</p>
@@ -687,7 +718,7 @@ pub struct DetectSentimentRequest {
     pub text: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectSentimentResponse {
     /// <p>The inferred sentiment that Amazon Comprehend has the highest level of confidence in.</p>
@@ -700,7 +731,7 @@ pub struct DetectSentimentResponse {
     pub sentiment_score: Option<SentimentScore>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DetectSyntaxRequest {
     /// <p>The language code of the input documents. You can specify any of the following languages supported by Amazon Comprehend: German ("de"), English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), or Portuguese ("pt").</p>
@@ -711,7 +742,7 @@ pub struct DetectSyntaxRequest {
     pub text: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectSyntaxResponse {
     /// <p>A collection of syntax tokens describing the text. For each token, the response provides the text, the token type, where the text begins and ends, and the level of confidence that Amazon Comprehend has that the token is correct. For a list of token types, see <a>how-syntax</a>.</p>
@@ -721,7 +752,7 @@ pub struct DetectSyntaxResponse {
 }
 
 /// <p>Specifies the class that categorizes the document being analyzed</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentClass {
     /// <p>The name of the class.</p>
@@ -735,7 +766,7 @@ pub struct DocumentClass {
 }
 
 /// <p>Provides information for filtering a list of document classification jobs. For more information, see the operation. You can provide only one filter parameter in each request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentClassificationJobFilter {
     /// <p>Filters on the name of the job.</p>
@@ -746,18 +777,18 @@ pub struct DocumentClassificationJobFilter {
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_status: Option<String>,
-    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted before the specified time. Jobs are returned in descending order, newest to oldest.</p>
+    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in descending order, newest to oldest.</p>
     #[serde(rename = "SubmitTimeAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time_after: Option<f64>,
-    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in ascending order, oldest to newest.</p>
+    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted before the specified time. Jobs are returned in ascending order, oldest to newest.</p>
     #[serde(rename = "SubmitTimeBefore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time_before: Option<f64>,
 }
 
 /// <p>Provides information about a document classification job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentClassificationJobProperties {
     /// <p>The Amazon Resource Name (ARN) of the AWS identity and Access Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
@@ -811,7 +842,7 @@ pub struct DocumentClassificationJobProperties {
 }
 
 /// <p>Provides information for filtering a list of document classifiers. You can only specify one filtering parameter in a request. For more information, see the operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentClassifierFilter {
     /// <p>Filters the list of classifiers based on status. </p>
@@ -829,7 +860,7 @@ pub struct DocumentClassifierFilter {
 }
 
 /// <p>The input properties for training a document classifier. </p> <p>For more information on how the input file is formatted, see <a>how-document-classification-training-data</a>. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentClassifierInputDataConfig {
     /// <p>Indicates the delimiter used to separate each label for training a multi-label classifier. The default delimiter between labels is a pipe (|). You can use a different character as a delimiter (if it's an allowed character) by specifying it under Delimiter for labels. If the training documents use a delimiter other than the default or the delimiter you specify, the labels on that line will be combined to make a single unique label, such as LABELLABELLABEL.</p>
     #[serde(rename = "LabelDelimiter")]
@@ -841,7 +872,7 @@ pub struct DocumentClassifierInputDataConfig {
 }
 
 /// <p>Provides output results configuration parameters for custom classifier jobs. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentClassifierOutputDataConfig {
     /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt the output results from an analysis job. The KmsKeyId can be one of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>KMS Key Alias: <code>&quot;alias/ExampleAlias&quot;</code> </p> </li> <li> <p>ARN of a KMS Key Alias: <code>&quot;arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias&quot;</code> </p> </li> </ul></p>
     #[serde(rename = "KmsKeyId")]
@@ -854,7 +885,7 @@ pub struct DocumentClassifierOutputDataConfig {
 }
 
 /// <p>Provides information about a document classifier.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentClassifierProperties {
     /// <p>Information about the document classifier, including the number of documents used for training the classifier, the number of documents used for test the classifier, and an accuracy rating.</p>
@@ -920,7 +951,7 @@ pub struct DocumentClassifierProperties {
 }
 
 /// <p>Specifies one of the label or labels that categorize the document being analyzed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentLabel {
     /// <p>The name of the label.</p>
@@ -934,7 +965,7 @@ pub struct DocumentLabel {
 }
 
 /// <p>Returns the code for the dominant language in the input text and the level of confidence that Amazon Comprehend has in the accuracy of the detection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DominantLanguage {
     /// <p>The RFC 5646 language code for the dominant language. For more information about RFC 5646, see <a href="https://tools.ietf.org/html/rfc5646">Tags for Identifying Languages</a> on the <i>IETF Tools</i> web site.</p>
@@ -948,7 +979,7 @@ pub struct DominantLanguage {
 }
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DominantLanguageDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
@@ -970,7 +1001,7 @@ pub struct DominantLanguageDetectionJobFilter {
 }
 
 /// <p>Provides information about a dominant language detection job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DominantLanguageDetectionJobProperties {
     /// <p>The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to your input data.</p>
@@ -1020,7 +1051,7 @@ pub struct DominantLanguageDetectionJobProperties {
 }
 
 /// <p>The filter used to determine which endpoints are are returned. You can filter jobs on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EndpointFilter {
     /// <p>Specifies a date after which the returned endpoint or endpoints were created.</p>
@@ -1042,7 +1073,7 @@ pub struct EndpointFilter {
 }
 
 /// <p>Specifies information about the specified endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EndpointProperties {
     /// <p>The creation date and time of the endpoint.</p>
@@ -1080,7 +1111,7 @@ pub struct EndpointProperties {
 }
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EntitiesDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
@@ -1102,7 +1133,7 @@ pub struct EntitiesDetectionJobFilter {
 }
 
 /// <p>Provides information about an entities detection job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntitiesDetectionJobProperties {
     /// <p>The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to your input data.</p>
@@ -1160,7 +1191,7 @@ pub struct EntitiesDetectionJobProperties {
 }
 
 /// <p>Provides information about an entity. </p> <p> </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Entity {
     /// <p>A character offset in the input text that shows where the entity begins (the first character is at position 0). The offset returns the position of each UTF-8 code point in the string. A <i>code point</i> is the abstract character from a particular graphical representation. For example, a multi-byte UTF-8 character maps to a single code point.</p>
@@ -1186,7 +1217,7 @@ pub struct Entity {
 }
 
 /// <p>Describes the annotations associated with a entity recognizer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EntityRecognizerAnnotations {
     /// <p> Specifies the Amazon S3 location where the annotations for an entity recognizer are located. The URI must be in the same region as the API endpoint that you are calling.</p>
     #[serde(rename = "S3Uri")]
@@ -1194,7 +1225,7 @@ pub struct EntityRecognizerAnnotations {
 }
 
 /// <p>Describes the training documents submitted with an entity recognizer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EntityRecognizerDocuments {
     /// <p> Specifies the Amazon S3 location where the training documents for an entity recognizer are located. The URI must be in the same region as the API endpoint that you are calling.</p>
     #[serde(rename = "S3Uri")]
@@ -1202,7 +1233,7 @@ pub struct EntityRecognizerDocuments {
 }
 
 /// <p>Describes the entity recognizer submitted with an entity recognizer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EntityRecognizerEntityList {
     /// <p>Specifies the Amazon S3 location where the entity list is located. The URI must be in the same region as the API endpoint that you are calling.</p>
     #[serde(rename = "S3Uri")]
@@ -1210,7 +1241,7 @@ pub struct EntityRecognizerEntityList {
 }
 
 /// <p>Detailed information about the accuracy of an entity recognizer. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityRecognizerEvaluationMetrics {
     /// <p>A measure of how accurate the recognizer results are for the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>
@@ -1228,7 +1259,7 @@ pub struct EntityRecognizerEvaluationMetrics {
 }
 
 /// <p>Provides information for filtering a list of entity recognizers. You can only specify one filtering parameter in a request. For more information, see the operation./&gt;</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EntityRecognizerFilter {
     /// <p>The status of an entity recognizer.</p>
@@ -1246,7 +1277,7 @@ pub struct EntityRecognizerFilter {
 }
 
 /// <p>Specifies the format and location of the input data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EntityRecognizerInputDataConfig {
     /// <p>S3 location of the annotations file for an entity recognizer.</p>
     #[serde(rename = "Annotations")]
@@ -1265,7 +1296,7 @@ pub struct EntityRecognizerInputDataConfig {
 }
 
 /// <p>Detailed information about an entity recognizer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityRecognizerMetadata {
     /// <p>Entity types from the metadata of an entity recognizer.</p>
@@ -1287,7 +1318,7 @@ pub struct EntityRecognizerMetadata {
 }
 
 /// <p>Individual item from the list of entity types in the metadata of an entity recognizer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityRecognizerMetadataEntityTypesListItem {
     /// <p>Detailed information about the accuracy of the entity recognizer for a specific item on the list of entity types. </p>
@@ -1305,7 +1336,7 @@ pub struct EntityRecognizerMetadataEntityTypesListItem {
 }
 
 /// <p>Describes information about an entity recognizer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityRecognizerProperties {
     /// <p> The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
@@ -1363,7 +1394,7 @@ pub struct EntityRecognizerProperties {
 }
 
 /// <p>Detailed information about the accuracy of an entity recognizer for a specific entity type. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityTypesEvaluationMetrics {
     /// <p>A measure of how accurate the recognizer results are for for a specific entity type in the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>
@@ -1381,7 +1412,7 @@ pub struct EntityTypesEvaluationMetrics {
 }
 
 /// <p>Information about an individual item on a list of entity types.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EntityTypesListItem {
     /// <p>Entity type of an item on an entity type list.</p>
     #[serde(rename = "Type")]
@@ -1389,7 +1420,7 @@ pub struct EntityTypesListItem {
 }
 
 /// <p>The input properties for a topic detection job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputDataConfig {
     /// <p><p>Specifies how the text in an input file should be processed:</p> <ul> <li> <p> <code>ONE<em>DOC</em>PER<em>FILE</code> - Each file is considered a separate document. Use this option when you are processing large documents, such as newspaper articles or scientific papers.</p> </li> <li> <p> <code>ONE</em>DOC<em>PER</em>LINE</code> - Each line in a file is considered a separate document. Use this option when you are processing many short documents, such as text messages.</p> </li> </ul></p>
     #[serde(rename = "InputFormat")]
@@ -1401,7 +1432,7 @@ pub struct InputDataConfig {
 }
 
 /// <p>Describes a key noun phrase.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KeyPhrase {
     /// <p>A character offset in the input text that shows where the key phrase begins (the first character is at position 0). The offset returns the position of each UTF-8 code point in the string. A <i>code point</i> is the abstract character from a particular graphical representation. For example, a multi-byte UTF-8 character maps to a single code point.</p>
@@ -1423,7 +1454,7 @@ pub struct KeyPhrase {
 }
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KeyPhrasesDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
@@ -1445,7 +1476,7 @@ pub struct KeyPhrasesDetectionJobFilter {
 }
 
 /// <p>Provides information about a key phrases detection job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KeyPhrasesDetectionJobProperties {
     /// <p>The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to your input data.</p>
@@ -1498,7 +1529,7 @@ pub struct KeyPhrasesDetectionJobProperties {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentClassificationJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
@@ -1515,7 +1546,7 @@ pub struct ListDocumentClassificationJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentClassificationJobsResponse {
     /// <p>A list containing the properties of each job returned.</p>
@@ -1529,7 +1560,7 @@ pub struct ListDocumentClassificationJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDocumentClassifiersRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
@@ -1546,7 +1577,7 @@ pub struct ListDocumentClassifiersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDocumentClassifiersResponse {
     /// <p>A list containing the properties of each job returned.</p>
@@ -1559,7 +1590,7 @@ pub struct ListDocumentClassifiersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDominantLanguageDetectionJobsRequest {
     /// <p>Filters that jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
@@ -1576,7 +1607,7 @@ pub struct ListDominantLanguageDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDominantLanguageDetectionJobsResponse {
     /// <p>A list containing the properties of each job that is returned.</p>
@@ -1590,7 +1621,7 @@ pub struct ListDominantLanguageDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEndpointsRequest {
     /// <p>Filters the endpoints that are returned. You can filter endpoints on their name, model, status, or the date and time that they were created. You can only set one filter at a time. </p>
@@ -1607,7 +1638,7 @@ pub struct ListEndpointsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEndpointsResponse {
     /// <p>Displays a list of endpoint properties being retrieved by the service in response to the request.</p>
@@ -1620,7 +1651,7 @@ pub struct ListEndpointsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntitiesDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
@@ -1637,7 +1668,7 @@ pub struct ListEntitiesDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntitiesDetectionJobsResponse {
     /// <p>A list containing the properties of each job that is returned.</p>
@@ -1650,7 +1681,7 @@ pub struct ListEntitiesDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEntityRecognizersRequest {
     /// <p>Filters the list of entities returned. You can filter on <code>Status</code>, <code>SubmitTimeBefore</code>, or <code>SubmitTimeAfter</code>. You can only set one filter at a time.</p>
@@ -1667,7 +1698,7 @@ pub struct ListEntityRecognizersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEntityRecognizersResponse {
     /// <p>The list of properties of an entity recognizer.</p>
@@ -1680,7 +1711,7 @@ pub struct ListEntityRecognizersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListKeyPhrasesDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
@@ -1697,7 +1728,7 @@ pub struct ListKeyPhrasesDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListKeyPhrasesDetectionJobsResponse {
     /// <p>A list containing the properties of each job that is returned.</p>
@@ -1710,7 +1741,7 @@ pub struct ListKeyPhrasesDetectionJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSentimentDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
@@ -1727,7 +1758,7 @@ pub struct ListSentimentDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSentimentDetectionJobsResponse {
     /// <p>Identifies the next page of results to return.</p>
@@ -1740,7 +1771,7 @@ pub struct ListSentimentDetectionJobsResponse {
     pub sentiment_detection_job_properties_list: Option<Vec<SentimentDetectionJobProperties>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource you are querying. </p>
@@ -1748,7 +1779,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource you are querying.</p>
@@ -1761,7 +1792,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTopicsDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. Jobs can be filtered on their name, status, or the date and time that they were submitted. You can set only one filter at a time.</p>
@@ -1778,7 +1809,7 @@ pub struct ListTopicsDetectionJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTopicsDetectionJobsResponse {
     /// <p>Identifies the next page of results to return.</p>
@@ -1792,7 +1823,7 @@ pub struct ListTopicsDetectionJobsResponse {
 }
 
 /// <p><p>Provides configuration parameters for the output of topic detection jobs.</p> <p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputDataConfig {
     /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt the output results from an analysis job. The KmsKeyId can be one of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>KMS Key Alias: <code>&quot;alias/ExampleAlias&quot;</code> </p> </li> <li> <p>ARN of a KMS Key Alias: <code>&quot;arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias&quot;</code> </p> </li> </ul></p>
     #[serde(rename = "KmsKeyId")]
@@ -1804,7 +1835,7 @@ pub struct OutputDataConfig {
 }
 
 /// <p>Identifies the part of speech represented by the token and gives the confidence that Amazon Comprehend has that the part of speech was correctly identified. For more information about the parts of speech that Amazon Comprehend can identify, see <a>how-syntax</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PartOfSpeechTag {
     /// <p>The confidence that Amazon Comprehend has that the part of speech was correctly identified.</p>
@@ -1818,7 +1849,7 @@ pub struct PartOfSpeechTag {
 }
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SentimentDetectionJobFilter {
     /// <p>Filters on the name of the job.</p>
@@ -1840,7 +1871,7 @@ pub struct SentimentDetectionJobFilter {
 }
 
 /// <p>Provides information about a sentiment detection job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SentimentDetectionJobProperties {
     /// <p>The Amazon Resource Name (ARN) that gives Amazon Comprehend read access to your input data.</p>
@@ -1894,7 +1925,7 @@ pub struct SentimentDetectionJobProperties {
 }
 
 /// <p>Describes the level of confidence that Amazon Comprehend has in the accuracy of its detection of sentiments.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SentimentScore {
     /// <p>The level of confidence that Amazon Comprehend has in the accuracy of its detection of the <code>MIXED</code> sentiment.</p>
@@ -1915,7 +1946,7 @@ pub struct SentimentScore {
     pub positive: Option<f32>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDocumentClassificationJobRequest {
     /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
@@ -1948,7 +1979,7 @@ pub struct StartDocumentClassificationJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDocumentClassificationJobResponse {
     /// <p>The identifier generated for the job. To get the status of the job, use this identifier with the operation.</p>
@@ -1961,7 +1992,7 @@ pub struct StartDocumentClassificationJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDominantLanguageDetectionJobRequest {
     /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
@@ -1991,7 +2022,7 @@ pub struct StartDominantLanguageDetectionJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDominantLanguageDetectionJobResponse {
     /// <p>The identifier generated for the job. To get the status of a job, use this identifier with the operation.</p>
@@ -2004,7 +2035,7 @@ pub struct StartDominantLanguageDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartEntitiesDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
@@ -2041,7 +2072,7 @@ pub struct StartEntitiesDetectionJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartEntitiesDetectionJobResponse {
     /// <p>The identifier generated for the job. To get the status of job, use this identifier with the operation.</p>
@@ -2054,7 +2085,7 @@ pub struct StartEntitiesDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartKeyPhrasesDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
@@ -2087,7 +2118,7 @@ pub struct StartKeyPhrasesDetectionJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartKeyPhrasesDetectionJobResponse {
     /// <p>The identifier generated for the job. To get the status of a job, use this identifier with the operation.</p>
@@ -2100,7 +2131,7 @@ pub struct StartKeyPhrasesDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartSentimentDetectionJobRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
@@ -2133,7 +2164,7 @@ pub struct StartSentimentDetectionJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSentimentDetectionJobResponse {
     /// <p>The identifier generated for the job. To get the status of a job, use this identifier with the operation.</p>
@@ -2146,7 +2177,7 @@ pub struct StartSentimentDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTopicsDetectionJobRequest {
     /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
@@ -2180,7 +2211,7 @@ pub struct StartTopicsDetectionJobRequest {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTopicsDetectionJobResponse {
     /// <p>The identifier generated for the job. To get the status of the job, use this identifier with the <code>DescribeTopicDetectionJob</code> operation.</p>
@@ -2193,7 +2224,7 @@ pub struct StartTopicsDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDominantLanguageDetectionJobRequest {
     /// <p>The identifier of the dominant language detection job to stop.</p>
@@ -2201,7 +2232,7 @@ pub struct StopDominantLanguageDetectionJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDominantLanguageDetectionJobResponse {
     /// <p>The identifier of the dominant language detection job to stop.</p>
@@ -2214,7 +2245,7 @@ pub struct StopDominantLanguageDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopEntitiesDetectionJobRequest {
     /// <p>The identifier of the entities detection job to stop.</p>
@@ -2222,7 +2253,7 @@ pub struct StopEntitiesDetectionJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopEntitiesDetectionJobResponse {
     /// <p>The identifier of the entities detection job to stop.</p>
@@ -2235,7 +2266,7 @@ pub struct StopEntitiesDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopKeyPhrasesDetectionJobRequest {
     /// <p>The identifier of the key phrases detection job to stop.</p>
@@ -2243,7 +2274,7 @@ pub struct StopKeyPhrasesDetectionJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopKeyPhrasesDetectionJobResponse {
     /// <p>The identifier of the key phrases detection job to stop.</p>
@@ -2256,7 +2287,7 @@ pub struct StopKeyPhrasesDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopSentimentDetectionJobRequest {
     /// <p>The identifier of the sentiment detection job to stop.</p>
@@ -2264,7 +2295,7 @@ pub struct StopSentimentDetectionJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopSentimentDetectionJobResponse {
     /// <p>The identifier of the sentiment detection job to stop.</p>
@@ -2277,7 +2308,7 @@ pub struct StopSentimentDetectionJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingDocumentClassifierRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the document classifier currently being trained.</p>
@@ -2285,11 +2316,11 @@ pub struct StopTrainingDocumentClassifierRequest {
     pub document_classifier_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTrainingDocumentClassifierResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTrainingEntityRecognizerRequest {
     /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer currently being trained.</p>
@@ -2297,12 +2328,12 @@ pub struct StopTrainingEntityRecognizerRequest {
     pub entity_recognizer_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTrainingEntityRecognizerResponse {}
 
 /// <p>Represents a work in the input text that was recognized and assigned a part of speech. There is one syntax token record for each word in the source text.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SyntaxToken {
     /// <p>The zero-based offset from the beginning of the source text to the first character in the word.</p>
@@ -2328,7 +2359,7 @@ pub struct SyntaxToken {
 }
 
 /// <p>A key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with the key-value pair ‘Department’:’Sales’ might be added to a resource to indicate its use by a particular department. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The initial part of a key-value pair that forms a tag associated with a given resource. For instance, if you want to show which resources are used by which departments, you might use “Department” as the key portion of the pair, with multiple possible values such as “sales,” “legal,” and “administration.” </p>
     #[serde(rename = "Key")]
@@ -2339,7 +2370,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource to which you want to associate the tags. </p>
@@ -2350,12 +2381,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Provides information for filtering topic detection jobs. For more information, see .</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TopicsDetectionJobFilter {
     /// <p><p/></p>
@@ -2377,7 +2408,7 @@ pub struct TopicsDetectionJobFilter {
 }
 
 /// <p>Provides information about a topic detection job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TopicsDetectionJobProperties {
     /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role that grants Amazon Comprehend read access to your job data. </p>
@@ -2430,7 +2461,7 @@ pub struct TopicsDetectionJobProperties {
     pub vpc_config: Option<VpcConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p> The Amazon Resource Name (ARN) of the given Amazon Comprehend resource from which you want to remove the tags. </p>
@@ -2441,11 +2472,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointRequest {
     /// <p> The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
@@ -2456,12 +2487,12 @@ pub struct UpdateEndpointRequest {
     pub endpoint_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEndpointResponse {}
 
 /// <p> Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job. For For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VpcConfig {
     /// <p>The ID number for a security group on an instance of your private VPC. Security groups on your VPC function serve as a virtual firewall to control inbound and outbound traffic and provides security for the resources that you’ll be accessing on the VPC. This ID number is preceded by "sg-", for instance: "sg-03b388029b0a285ea". For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html">Security Groups for your VPC</a>. </p>
     #[serde(rename = "SecurityGroupIds")]
@@ -2784,7 +2815,7 @@ pub enum ClassifyDocumentError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
@@ -2838,9 +2869,9 @@ pub enum CreateDocumentClassifierError {
     InvalidRequest(String),
     /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
     KmsKeyValidation(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
-    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    /// <p>The maximum number of resources per account has been exceeded. Review the resources, and then try your request again.</p>
     ResourceLimitExceeded(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -2926,13 +2957,13 @@ pub enum CreateEndpointError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
-    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    /// <p>The maximum number of resources per account has been exceeded. Review the resources, and then try your request again.</p>
     ResourceLimitExceeded(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -3002,9 +3033,9 @@ pub enum CreateEntityRecognizerError {
     InvalidRequest(String),
     /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
     KmsKeyValidation(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
-    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    /// <p>The maximum number of resources per account has been exceeded. Review the resources, and then try your request again.</p>
     ResourceLimitExceeded(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -3086,11 +3117,11 @@ pub enum DeleteDocumentClassifierError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -3158,7 +3189,7 @@ pub enum DeleteEndpointError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
@@ -3212,11 +3243,11 @@ pub enum DeleteEntityRecognizerError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -3866,6 +3897,8 @@ pub enum DetectEntitiesError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
+    ResourceUnavailable(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
@@ -3881,6 +3914,9 @@ impl DetectEntitiesError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DetectEntitiesError::InvalidRequest(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(DetectEntitiesError::ResourceUnavailable(err.msg))
                 }
                 "TextSizeLimitExceededException" => {
                     return RusotoError::Service(DetectEntitiesError::TextSizeLimitExceeded(
@@ -3903,6 +3939,7 @@ impl fmt::Display for DetectEntitiesError {
         match *self {
             DetectEntitiesError::InternalServer(ref cause) => write!(f, "{}", cause),
             DetectEntitiesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DetectEntitiesError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
             DetectEntitiesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
             DetectEntitiesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
         }
@@ -4624,7 +4661,7 @@ pub enum StartDocumentClassificationJobError {
     KmsKeyValidation(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -4776,7 +4813,7 @@ pub enum StartEntitiesDetectionJobError {
     KmsKeyValidation(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -5454,13 +5491,13 @@ pub enum UpdateEndpointError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
-    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    /// <p>The specified resource name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
-    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    /// <p>The maximum number of resources per account has been exceeded. Review the resources, and then try your request again.</p>
     ResourceLimitExceeded(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
-    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    /// <p>The specified resource is not available. Check the resource and try your request again.</p>
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
@@ -5554,7 +5591,7 @@ pub trait Comprehend {
         input: ClassifyDocumentRequest,
     ) -> Result<ClassifyDocumentResponse, RusotoError<ClassifyDocumentError>>;
 
-    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
+    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier, you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
     async fn create_document_classifier(
         &self,
         input: CreateDocumentClassifierRequest,
@@ -5900,9 +5937,7 @@ impl Comprehend for ComprehendClient {
         input: BatchDetectDominantLanguageRequest,
     ) -> Result<BatchDetectDominantLanguageResponse, RusotoError<BatchDetectDominantLanguageError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.BatchDetectDominantLanguage",
@@ -5910,20 +5945,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDetectDominantLanguageResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDetectDominantLanguageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDetectDominantLanguageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDetectDominantLanguageResponse, _>()
     }
 
     /// <p>Inspects the text of a batch of documents for named entities and returns information about them. For more information about named entities, see <a>how-entities</a> </p>
@@ -5931,27 +5959,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: BatchDetectEntitiesRequest,
     ) -> Result<BatchDetectEntitiesResponse, RusotoError<BatchDetectEntitiesError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectEntities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDetectEntitiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDetectEntitiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDetectEntitiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchDetectEntitiesResponse, _>()
     }
 
     /// <p>Detects the key noun phrases found in a batch of documents.</p>
@@ -5959,27 +5977,18 @@ impl Comprehend for ComprehendClient {
         &self,
         input: BatchDetectKeyPhrasesRequest,
     ) -> Result<BatchDetectKeyPhrasesResponse, RusotoError<BatchDetectKeyPhrasesError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectKeyPhrases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDetectKeyPhrasesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDetectKeyPhrasesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDetectKeyPhrasesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDetectKeyPhrasesResponse, _>()
     }
 
     /// <p>Inspects a batch of documents and returns an inference of the prevailing sentiment, <code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>, in each one.</p>
@@ -5987,27 +5996,18 @@ impl Comprehend for ComprehendClient {
         &self,
         input: BatchDetectSentimentRequest,
     ) -> Result<BatchDetectSentimentResponse, RusotoError<BatchDetectSentimentError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectSentiment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDetectSentimentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDetectSentimentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDetectSentimentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchDetectSentimentResponse, _>()
     }
 
     /// <p>Inspects the text of a batch of documents for the syntax and part of speech of the words in the document and returns information about them. For more information, see <a>how-syntax</a>.</p>
@@ -6015,27 +6015,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: BatchDetectSyntaxRequest,
     ) -> Result<BatchDetectSyntaxResponse, RusotoError<BatchDetectSyntaxError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectSyntax");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchDetectSyntaxResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchDetectSyntaxError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchDetectSyntaxError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchDetectSyntaxResponse, _>()
     }
 
     /// <p>Creates a new document classification request to analyze a single document in real-time, using a previously created and trained custom model and an endpoint.</p>
@@ -6043,37 +6033,25 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ClassifyDocumentRequest,
     ) -> Result<ClassifyDocumentResponse, RusotoError<ClassifyDocumentError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.ClassifyDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ClassifyDocumentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ClassifyDocumentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ClassifyDocumentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ClassifyDocumentResponse, _>()
     }
 
-    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
+    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier, you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
     async fn create_document_classifier(
         &self,
         input: CreateDocumentClassifierRequest,
     ) -> Result<CreateDocumentClassifierResponse, RusotoError<CreateDocumentClassifierError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.CreateDocumentClassifier",
@@ -6081,20 +6059,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDocumentClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDocumentClassifierError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDocumentClassifierError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateDocumentClassifierResponse, _>()
     }
 
     /// <p>Creates a model-specific endpoint for synchronous inference for a previously trained custom model </p>
@@ -6102,26 +6073,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: CreateEndpointRequest,
     ) -> Result<CreateEndpointResponse, RusotoError<CreateEndpointError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.CreateEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateEndpointError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateEndpointError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateEndpointResponse, _>()
     }
 
     /// <p>Creates an entity recognizer using submitted files. After your <code>CreateEntityRecognizer</code> request is submitted, you can check job status using the API. </p>
@@ -6129,27 +6091,18 @@ impl Comprehend for ComprehendClient {
         &self,
         input: CreateEntityRecognizerRequest,
     ) -> Result<CreateEntityRecognizerResponse, RusotoError<CreateEntityRecognizerError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.CreateEntityRecognizer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateEntityRecognizerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateEntityRecognizerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateEntityRecognizerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateEntityRecognizerResponse, _>()
     }
 
     /// <p>Deletes a previously created document classifier</p> <p>Only those classifiers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the classifier into a DELETING state, and it is then removed by a background job. Once removed, the classifier disappears from your account and is no longer available for use. </p>
@@ -6157,9 +6110,7 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DeleteDocumentClassifierRequest,
     ) -> Result<DeleteDocumentClassifierResponse, RusotoError<DeleteDocumentClassifierError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DeleteDocumentClassifier",
@@ -6167,20 +6118,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDocumentClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDocumentClassifierError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDocumentClassifierError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteDocumentClassifierResponse, _>()
     }
 
     /// <p>Deletes a model-specific endpoint for a previously-trained custom model. All endpoints must be deleted in order for the model to be deleted.</p>
@@ -6188,26 +6132,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DeleteEndpointRequest,
     ) -> Result<DeleteEndpointResponse, RusotoError<DeleteEndpointError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.DeleteEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEndpointError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteEndpointError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteEndpointResponse, _>()
     }
 
     /// <p>Deletes an entity recognizer.</p> <p>Only those recognizers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the recognizer into a DELETING state, and it is then removed by a background job. Once removed, the recognizer disappears from your account and is no longer available for use. </p>
@@ -6215,27 +6150,18 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DeleteEntityRecognizerRequest,
     ) -> Result<DeleteEntityRecognizerResponse, RusotoError<DeleteEntityRecognizerError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.DeleteEntityRecognizer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteEntityRecognizerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEntityRecognizerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteEntityRecognizerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteEntityRecognizerResponse, _>()
     }
 
     /// <p>Gets the properties associated with a document classification job. Use this operation to get the status of a classification job.</p>
@@ -6246,9 +6172,7 @@ impl Comprehend for ComprehendClient {
         DescribeDocumentClassificationJobResponse,
         RusotoError<DescribeDocumentClassificationJobError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeDocumentClassificationJob",
@@ -6256,22 +6180,16 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDocumentClassificationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDocumentClassificationJobError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeDocumentClassificationJobError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDocumentClassificationJobResponse, _>()
     }
 
     /// <p>Gets the properties associated with a document classifier.</p>
@@ -6280,9 +6198,7 @@ impl Comprehend for ComprehendClient {
         input: DescribeDocumentClassifierRequest,
     ) -> Result<DescribeDocumentClassifierResponse, RusotoError<DescribeDocumentClassifierError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeDocumentClassifier",
@@ -6290,20 +6206,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDocumentClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDocumentClassifierError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDocumentClassifierError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDocumentClassifierResponse, _>()
     }
 
     /// <p>Gets the properties associated with a dominant language detection job. Use this operation to get the status of a detection job.</p>
@@ -6314,9 +6223,7 @@ impl Comprehend for ComprehendClient {
         DescribeDominantLanguageDetectionJobResponse,
         RusotoError<DescribeDominantLanguageDetectionJobError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeDominantLanguageDetectionJob",
@@ -6324,22 +6231,16 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDominantLanguageDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDominantLanguageDetectionJobError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeDominantLanguageDetectionJobError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDominantLanguageDetectionJobResponse, _>()
     }
 
     /// <p>Gets the properties associated with a specific endpoint. Use this operation to get the status of an endpoint.</p>
@@ -6347,27 +6248,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DescribeEndpointRequest,
     ) -> Result<DescribeEndpointResponse, RusotoError<DescribeEndpointError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.DescribeEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEndpointError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEndpointError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeEndpointResponse, _>()
     }
 
     /// <p>Gets the properties associated with an entities detection job. Use this operation to get the status of a detection job.</p>
@@ -6376,9 +6267,7 @@ impl Comprehend for ComprehendClient {
         input: DescribeEntitiesDetectionJobRequest,
     ) -> Result<DescribeEntitiesDetectionJobResponse, RusotoError<DescribeEntitiesDetectionJobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeEntitiesDetectionJob",
@@ -6386,20 +6275,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEntitiesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEntitiesDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEntitiesDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeEntitiesDetectionJobResponse, _>()
     }
 
     /// <p>Provides details about an entity recognizer including status, S3 buckets containing training data, recognizer metadata, metrics, and so on.</p>
@@ -6407,9 +6289,7 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DescribeEntityRecognizerRequest,
     ) -> Result<DescribeEntityRecognizerResponse, RusotoError<DescribeEntityRecognizerError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeEntityRecognizer",
@@ -6417,20 +6297,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEntityRecognizerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEntityRecognizerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEntityRecognizerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeEntityRecognizerResponse, _>()
     }
 
     /// <p>Gets the properties associated with a key phrases detection job. Use this operation to get the status of a detection job.</p>
@@ -6441,9 +6314,7 @@ impl Comprehend for ComprehendClient {
         DescribeKeyPhrasesDetectionJobResponse,
         RusotoError<DescribeKeyPhrasesDetectionJobError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeKeyPhrasesDetectionJob",
@@ -6451,20 +6322,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeKeyPhrasesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeKeyPhrasesDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeKeyPhrasesDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeKeyPhrasesDetectionJobResponse, _>()
     }
 
     /// <p>Gets the properties associated with a sentiment detection job. Use this operation to get the status of a detection job.</p>
@@ -6475,9 +6339,7 @@ impl Comprehend for ComprehendClient {
         DescribeSentimentDetectionJobResponse,
         RusotoError<DescribeSentimentDetectionJobError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeSentimentDetectionJob",
@@ -6485,20 +6347,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSentimentDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSentimentDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeSentimentDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeSentimentDetectionJobResponse, _>()
     }
 
     /// <p>Gets the properties associated with a topic detection job. Use this operation to get the status of a detection job.</p>
@@ -6507,9 +6362,7 @@ impl Comprehend for ComprehendClient {
         input: DescribeTopicsDetectionJobRequest,
     ) -> Result<DescribeTopicsDetectionJobResponse, RusotoError<DescribeTopicsDetectionJobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeTopicsDetectionJob",
@@ -6517,20 +6370,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeTopicsDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTopicsDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTopicsDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeTopicsDetectionJobResponse, _>()
     }
 
     /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
@@ -6538,27 +6384,18 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DetectDominantLanguageRequest,
     ) -> Result<DetectDominantLanguageResponse, RusotoError<DetectDominantLanguageError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.DetectDominantLanguage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetectDominantLanguageResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectDominantLanguageError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectDominantLanguageError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DetectDominantLanguageResponse, _>()
     }
 
     /// <p>Inspects text for named entities, and returns information about them. For more information, about named entities, see <a>how-entities</a>. </p>
@@ -6566,26 +6403,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DetectEntitiesRequest,
     ) -> Result<DetectEntitiesResponse, RusotoError<DetectEntitiesError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.DetectEntities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetectEntitiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectEntitiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectEntitiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DetectEntitiesResponse, _>()
     }
 
     /// <p>Detects the key noun phrases found in the text. </p>
@@ -6593,27 +6421,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DetectKeyPhrasesRequest,
     ) -> Result<DetectKeyPhrasesResponse, RusotoError<DetectKeyPhrasesError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.DetectKeyPhrases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DetectKeyPhrasesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectKeyPhrasesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectKeyPhrasesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DetectKeyPhrasesResponse, _>()
     }
 
     /// <p>Inspects text and returns an inference of the prevailing sentiment (<code>POSITIVE</code>, <code>NEUTRAL</code>, <code>MIXED</code>, or <code>NEGATIVE</code>). </p>
@@ -6621,26 +6439,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DetectSentimentRequest,
     ) -> Result<DetectSentimentResponse, RusotoError<DetectSentimentError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.DetectSentiment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetectSentimentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectSentimentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectSentimentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DetectSentimentResponse, _>()
     }
 
     /// <p>Inspects text for syntax and the part of speech of words in the document. For more information, <a>how-syntax</a>.</p>
@@ -6648,26 +6457,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DetectSyntaxRequest,
     ) -> Result<DetectSyntaxResponse, RusotoError<DetectSyntaxError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.DetectSyntax");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DetectSyntaxResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DetectSyntaxError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DetectSyntaxError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DetectSyntaxResponse, _>()
     }
 
     /// <p>Gets a list of the documentation classification jobs that you have submitted.</p>
@@ -6678,9 +6478,7 @@ impl Comprehend for ComprehendClient {
         ListDocumentClassificationJobsResponse,
         RusotoError<ListDocumentClassificationJobsError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListDocumentClassificationJobs",
@@ -6688,20 +6486,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDocumentClassificationJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDocumentClassificationJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDocumentClassificationJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDocumentClassificationJobsResponse, _>()
     }
 
     /// <p>Gets a list of the document classifiers that you have created.</p>
@@ -6709,9 +6500,7 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListDocumentClassifiersRequest,
     ) -> Result<ListDocumentClassifiersResponse, RusotoError<ListDocumentClassifiersError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListDocumentClassifiers",
@@ -6719,20 +6508,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDocumentClassifiersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDocumentClassifiersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDocumentClassifiersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDocumentClassifiersResponse, _>()
     }
 
     /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
@@ -6743,9 +6525,7 @@ impl Comprehend for ComprehendClient {
         ListDominantLanguageDetectionJobsResponse,
         RusotoError<ListDominantLanguageDetectionJobsError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListDominantLanguageDetectionJobs",
@@ -6753,22 +6533,16 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDominantLanguageDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDominantLanguageDetectionJobsError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListDominantLanguageDetectionJobsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDominantLanguageDetectionJobsResponse, _>()
     }
 
     /// <p>Gets a list of all existing endpoints that you've created.</p>
@@ -6776,26 +6550,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListEndpointsRequest,
     ) -> Result<ListEndpointsResponse, RusotoError<ListEndpointsError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.ListEndpoints");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListEndpointsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEndpointsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListEndpointsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListEndpointsResponse, _>()
     }
 
     /// <p>Gets a list of the entity detection jobs that you have submitted.</p>
@@ -6804,9 +6569,7 @@ impl Comprehend for ComprehendClient {
         input: ListEntitiesDetectionJobsRequest,
     ) -> Result<ListEntitiesDetectionJobsResponse, RusotoError<ListEntitiesDetectionJobsError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListEntitiesDetectionJobs",
@@ -6814,20 +6577,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEntitiesDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEntitiesDetectionJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListEntitiesDetectionJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListEntitiesDetectionJobsResponse, _>()
     }
 
     /// <p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>
@@ -6835,27 +6591,18 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListEntityRecognizersRequest,
     ) -> Result<ListEntityRecognizersResponse, RusotoError<ListEntityRecognizersError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.ListEntityRecognizers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEntityRecognizersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEntityRecognizersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListEntityRecognizersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListEntityRecognizersResponse, _>()
     }
 
     /// <p>Get a list of key phrase detection jobs that you have submitted.</p>
@@ -6864,9 +6611,7 @@ impl Comprehend for ComprehendClient {
         input: ListKeyPhrasesDetectionJobsRequest,
     ) -> Result<ListKeyPhrasesDetectionJobsResponse, RusotoError<ListKeyPhrasesDetectionJobsError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListKeyPhrasesDetectionJobs",
@@ -6874,20 +6619,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListKeyPhrasesDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListKeyPhrasesDetectionJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListKeyPhrasesDetectionJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListKeyPhrasesDetectionJobsResponse, _>()
     }
 
     /// <p>Gets a list of sentiment detection jobs that you have submitted.</p>
@@ -6896,9 +6634,7 @@ impl Comprehend for ComprehendClient {
         input: ListSentimentDetectionJobsRequest,
     ) -> Result<ListSentimentDetectionJobsResponse, RusotoError<ListSentimentDetectionJobsError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListSentimentDetectionJobs",
@@ -6906,20 +6642,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSentimentDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSentimentDetectionJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSentimentDetectionJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListSentimentDetectionJobsResponse, _>()
     }
 
     /// <p>Lists all tags associated with a given Amazon Comprehend resource. </p>
@@ -6927,27 +6656,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
     /// <p>Gets a list of the topic detection jobs that you have submitted.</p>
@@ -6955,9 +6674,7 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListTopicsDetectionJobsRequest,
     ) -> Result<ListTopicsDetectionJobsResponse, RusotoError<ListTopicsDetectionJobsError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListTopicsDetectionJobs",
@@ -6965,20 +6682,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTopicsDetectionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTopicsDetectionJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTopicsDetectionJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListTopicsDetectionJobsResponse, _>()
     }
 
     /// <p>Starts an asynchronous document classification job. Use the operation to track the progress of the job.</p>
@@ -6989,9 +6699,7 @@ impl Comprehend for ComprehendClient {
         StartDocumentClassificationJobResponse,
         RusotoError<StartDocumentClassificationJobError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartDocumentClassificationJob",
@@ -6999,20 +6707,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartDocumentClassificationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartDocumentClassificationJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartDocumentClassificationJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartDocumentClassificationJobResponse, _>()
     }
 
     /// <p>Starts an asynchronous dominant language detection job for a collection of documents. Use the operation to track the status of a job.</p>
@@ -7023,9 +6724,7 @@ impl Comprehend for ComprehendClient {
         StartDominantLanguageDetectionJobResponse,
         RusotoError<StartDominantLanguageDetectionJobError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartDominantLanguageDetectionJob",
@@ -7033,22 +6732,16 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartDominantLanguageDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartDominantLanguageDetectionJobError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                StartDominantLanguageDetectionJobError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartDominantLanguageDetectionJobResponse, _>()
     }
 
     /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p> <p>This API can be used for either standard entity detection or custom entity recognition. In order to be used for custom entity recognition, the optional <code>EntityRecognizerArn</code> must be used in order to provide access to the recognizer being used to detect the custom entity.</p>
@@ -7057,9 +6750,7 @@ impl Comprehend for ComprehendClient {
         input: StartEntitiesDetectionJobRequest,
     ) -> Result<StartEntitiesDetectionJobResponse, RusotoError<StartEntitiesDetectionJobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartEntitiesDetectionJob",
@@ -7067,20 +6758,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartEntitiesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartEntitiesDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartEntitiesDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartEntitiesDetectionJobResponse, _>()
     }
 
     /// <p>Starts an asynchronous key phrase detection job for a collection of documents. Use the operation to track the status of a job.</p>
@@ -7089,9 +6773,7 @@ impl Comprehend for ComprehendClient {
         input: StartKeyPhrasesDetectionJobRequest,
     ) -> Result<StartKeyPhrasesDetectionJobResponse, RusotoError<StartKeyPhrasesDetectionJobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartKeyPhrasesDetectionJob",
@@ -7099,20 +6781,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartKeyPhrasesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartKeyPhrasesDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartKeyPhrasesDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartKeyPhrasesDetectionJobResponse, _>()
     }
 
     /// <p>Starts an asynchronous sentiment detection job for a collection of documents. use the operation to track the status of a job.</p>
@@ -7121,9 +6796,7 @@ impl Comprehend for ComprehendClient {
         input: StartSentimentDetectionJobRequest,
     ) -> Result<StartSentimentDetectionJobResponse, RusotoError<StartSentimentDetectionJobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartSentimentDetectionJob",
@@ -7131,20 +6804,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartSentimentDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartSentimentDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartSentimentDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartSentimentDetectionJobResponse, _>()
     }
 
     /// <p>Starts an asynchronous topic detection job. Use the <code>DescribeTopicDetectionJob</code> operation to track the status of a job.</p>
@@ -7152,9 +6818,7 @@ impl Comprehend for ComprehendClient {
         &self,
         input: StartTopicsDetectionJobRequest,
     ) -> Result<StartTopicsDetectionJobResponse, RusotoError<StartTopicsDetectionJobError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartTopicsDetectionJob",
@@ -7162,20 +6826,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartTopicsDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartTopicsDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartTopicsDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartTopicsDetectionJobResponse, _>()
     }
 
     /// <p>Stops a dominant language detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
@@ -7186,9 +6843,7 @@ impl Comprehend for ComprehendClient {
         StopDominantLanguageDetectionJobResponse,
         RusotoError<StopDominantLanguageDetectionJobError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopDominantLanguageDetectionJob",
@@ -7196,22 +6851,16 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopDominantLanguageDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopDominantLanguageDetectionJobError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                StopDominantLanguageDetectionJobError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopDominantLanguageDetectionJobResponse, _>()
     }
 
     /// <p>Stops an entities detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
@@ -7219,9 +6868,7 @@ impl Comprehend for ComprehendClient {
         &self,
         input: StopEntitiesDetectionJobRequest,
     ) -> Result<StopEntitiesDetectionJobResponse, RusotoError<StopEntitiesDetectionJobError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopEntitiesDetectionJob",
@@ -7229,20 +6876,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopEntitiesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopEntitiesDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopEntitiesDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopEntitiesDetectionJobResponse, _>()
     }
 
     /// <p>Stops a key phrases detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
@@ -7251,9 +6891,7 @@ impl Comprehend for ComprehendClient {
         input: StopKeyPhrasesDetectionJobRequest,
     ) -> Result<StopKeyPhrasesDetectionJobResponse, RusotoError<StopKeyPhrasesDetectionJobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopKeyPhrasesDetectionJob",
@@ -7261,20 +6899,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopKeyPhrasesDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopKeyPhrasesDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopKeyPhrasesDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopKeyPhrasesDetectionJobResponse, _>()
     }
 
     /// <p>Stops a sentiment detection job in progress.</p> <p>If the job state is <code>IN_PROGRESS</code> the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state; otherwise the job is be stopped and put into the <code>STOPPED</code> state.</p> <p>If the job is in the <code>COMPLETED</code> or <code>FAILED</code> state when you call the <code>StopDominantLanguageDetectionJob</code> operation, the operation returns a 400 Internal Request Exception. </p> <p>When a job is stopped, any documents already processed are written to the output location.</p>
@@ -7283,9 +6914,7 @@ impl Comprehend for ComprehendClient {
         input: StopSentimentDetectionJobRequest,
     ) -> Result<StopSentimentDetectionJobResponse, RusotoError<StopSentimentDetectionJobError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopSentimentDetectionJob",
@@ -7293,20 +6922,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopSentimentDetectionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopSentimentDetectionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopSentimentDetectionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopSentimentDetectionJobResponse, _>()
     }
 
     /// <p>Stops a document classifier training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and put into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body. </p>
@@ -7317,9 +6939,7 @@ impl Comprehend for ComprehendClient {
         StopTrainingDocumentClassifierResponse,
         RusotoError<StopTrainingDocumentClassifierError>,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopTrainingDocumentClassifier",
@@ -7327,20 +6947,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopTrainingDocumentClassifierResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopTrainingDocumentClassifierError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopTrainingDocumentClassifierError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopTrainingDocumentClassifierResponse, _>()
     }
 
     /// <p>Stops an entity recognizer training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and putted into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body.</p>
@@ -7349,9 +6962,7 @@ impl Comprehend for ComprehendClient {
         input: StopTrainingEntityRecognizerRequest,
     ) -> Result<StopTrainingEntityRecognizerResponse, RusotoError<StopTrainingEntityRecognizerError>>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopTrainingEntityRecognizer",
@@ -7359,20 +6970,13 @@ impl Comprehend for ComprehendClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopTrainingEntityRecognizerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopTrainingEntityRecognizerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopTrainingEntityRecognizerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopTrainingEntityRecognizerResponse, _>()
     }
 
     /// <p>Associates a specific tag with an Amazon Comprehend resource. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
@@ -7380,26 +6984,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
     /// <p>Removes a specific tag associated with an Amazon Comprehend resource. </p>
@@ -7407,26 +7002,17 @@ impl Comprehend for ComprehendClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
     /// <p>Updates information about the specified endpoint.</p>
@@ -7434,25 +7020,16 @@ impl Comprehend for ComprehendClient {
         &self,
         input: UpdateEndpointRequest,
     ) -> Result<UpdateEndpointResponse, RusotoError<UpdateEndpointError>> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Comprehend_20171127.UpdateEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateEndpointResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateEndpointError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateEndpointError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateEndpointResponse, _>()
     }
 }

@@ -51,11 +51,7 @@ impl GenerateProtocol for RestXmlGenerator {
                         {set_parameters}
                         {build_payload}
 
-                        let mut response = self.client.sign_and_dispatch(request).await.map_err(RusotoError::from)?;
-                        if !response.status.is_success() {{
-                            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-                            return Err({error_type}::from_response(response));
-                        }}
+                        let mut response = self.sign_and_dispatch(request, {error_type}::from_response).await?;
 
                         {parse_response_body}
                     }}
@@ -83,27 +79,56 @@ impl GenerateProtocol for RestXmlGenerator {
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
+    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         let imports = "
             use std::str::{FromStr};
             use std::io::Write;
-            use xml::reader::ParserConfig;
             use rusoto_core::param::{Params, ServiceParams};
             use rusoto_core::signature::SignedRequest;
             use xml;
             use xml::EventReader;
             use xml::EventWriter;
+            use rusoto_core::request::HttpResponse;
             use rusoto_core::proto::xml::error::*;
             use rusoto_core::proto::xml::util::{Next, Peek, XmlParseError, XmlResponse};
-            use rusoto_core::proto::xml::util::{peek_at_name, characters, end_element, find_start_element, start_element, skip_tree, deserialize_elements};
+            use rusoto_core::proto::xml::util::{self as xml_util, find_start_element, skip_tree, deserialize_elements, write_characters_element};
             #[cfg(feature = \"serialize_structs\")]
             use serde::Serialize;
             #[cfg(feature = \"deserialize_structs\")]
             use serde::Deserialize;
-            "
-            .to_owned();
+            ";
 
-        writeln!(writer, "{}", imports)
+        writeln!(writer, "{}", imports)?;
+
+        writeln!(
+            writer,
+            "
+            impl {type_name} {{
+                async fn sign_and_dispatch<E>(
+                    &self,
+                    request: SignedRequest,
+                    from_response: fn (BufferedHttpResponse) -> RusotoError<E>,
+                ) -> Result<HttpResponse, RusotoError<E>> {{
+                    let mut response = self.client.sign_and_dispatch(request).await?;
+                    if !response.status.is_success() {{
+                        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                        return Err(from_response(response));
+                    }}
+
+                    Ok(response)
+                }}
+            }}",
+            type_name = service.client_type_name(),
+        )?;
+
+        if service.has_event_streams() {
+            writeln!(
+                writer,
+                "use rusoto_core::event_stream::{{DeserializeEvent, EventStream}};"
+            )?;
+        }
+
+        Ok(())
     }
 
     fn generate_serializer(
@@ -148,6 +173,10 @@ impl GenerateProtocol for RestXmlGenerator {
         shape: &Shape,
         service: &Service<'_>,
     ) -> Option<String> {
+        if shape.eventstream() {
+            return None;
+        }
+
         let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
         Some(xml_payload_parser::generate_deserializer(
             name, &ty, shape, service,
@@ -187,9 +216,6 @@ fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) 
     // the payload field determines which member of the input shape is sent as the request body (if any)
     if input_shape.payload.is_some() {
         parts.push(generate_payload_member_serialization(service, input_shape));
-        parts.push(
-            generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()),
-        );
     } else if used_as_request_payload(input_shape) {
         // In Route 53, no operation has "payload" parameter but some API actually requires
         // payload. In that case, the payload should include members whose "location" parameter is
@@ -202,29 +228,13 @@ fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) 
             xmlns = xmlns.uri
         ));
         parts.push("request.set_payload(Some(writer.into_inner()));".to_owned());
-        parts.push(
-            generate_service_specific_code(service, operation).unwrap_or_else(|| "".to_owned()),
-        );
+    }
+
+    if operation.http_checksum_required.unwrap_or(false) {
+        parts.push("request.set_content_md5_header();".to_owned());
     }
 
     Some(parts.join("\n"))
-}
-
-fn generate_service_specific_code(service: &Service<'_>, operation: &Operation) -> Option<String> {
-    // S3 needs some special handholding.  Others may later.
-    // See `handlers.py` in botocore for more details
-    match service.service_type_name() {
-        "S3" => match &operation.name[..] {
-            "PutBucketTagging"
-            | "PutBucketLifecycle"
-            | "PutBucketLifecycleConfiguration"
-            | "PutBucketCors"
-            | "DeleteObjects"
-            | "PutBucketReplication" => Some("request.set_content_md5_header();".to_owned()),
-            _ => None,
-        },
-        _ => None,
-    }
 }
 
 fn generate_payload_member_serialization(service: &Service, shape: &Shape) -> String {
@@ -311,14 +321,14 @@ fn generate_serializer_signature(name: &str) -> String {
 
 fn generate_primitive_serializer(shape: &Shape) -> String {
     let value_str = match shape.shape_type {
-        ShapeType::Blob => "String::from_utf8(obj.to_vec()).expect(\"Not a UTF-8 string\")",
-        _ => "obj.to_string()",
+        ShapeType::Blob => "std::str::from_utf8(obj).expect(\"Not a UTF-8 string\")",
+        ShapeType::String | ShapeType::Timestamp => "obj",
+        _ => "&obj.to_string()",
     };
-    format!("
-        writer.write(xml::writer::XmlEvent::start_element(name))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value = {value_str})))?;
-        writer.write(xml::writer::XmlEvent::end_element())
-        ", value_str = value_str)
+    format!(
+        "write_characters_element(writer, name, {value_str})",
+        value_str = value_str
+    )
 }
 
 fn generate_list_serializer(shape: &Shape, service: &Service<'_>) -> String {
@@ -403,18 +413,14 @@ fn generate_primitive_struct_field_serializer(
 ) -> String {
     if shape.required(member_name) {
         format!(
-        "writer.write(xml::writer::XmlEvent::start_element(\"{location_name}\"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value=obj.{field_name})))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;",
-        field_name = generate_field_name(member_name),
-        location_name = location_name,
-    )
+            "write_characters_element(writer, \"{location_name}\", &obj.{field_name}.to_string())?;",
+            field_name = generate_field_name(member_name),
+            location_name = location_name,
+        )
     } else {
         format!(
             "if let Some(ref value) = obj.{field_name} {{
-                writer.write(xml::writer::XmlEvent::start_element(\"{location_name}\"))?;
-                writer.write(xml::writer::XmlEvent::characters(&format!(\"{{value}}\", value=value)));
-                writer.write(xml::writer::XmlEvent::end_element())?;
+                write_characters_element(writer, \"{location_name}\", &value.to_string())?;
             }}",
             field_name = generate_field_name(member_name),
             location_name = location_name,

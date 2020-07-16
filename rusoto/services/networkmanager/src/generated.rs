@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateCustomerGatewayRequest {
     /// <p>The Amazon Resource Name (ARN) of the customer gateway. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazonec2.html#amazonec2-resources-for-iam-policies">Resources Defined by Amazon EC2</a>.</p>
@@ -43,7 +43,7 @@ pub struct AssociateCustomerGatewayRequest {
     pub link_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateCustomerGatewayResponse {
     /// <p>The customer gateway association.</p>
@@ -52,7 +52,7 @@ pub struct AssociateCustomerGatewayResponse {
     pub customer_gateway_association: Option<CustomerGatewayAssociation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateLinkRequest {
     /// <p>The ID of the device.</p>
@@ -66,7 +66,7 @@ pub struct AssociateLinkRequest {
     pub link_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateLinkResponse {
     /// <p>The link association.</p>
@@ -76,7 +76,7 @@ pub struct AssociateLinkResponse {
 }
 
 /// <p>Describes bandwidth information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Bandwidth {
     /// <p>Download speed in Mbps.</p>
     #[serde(rename = "DownloadSpeed")]
@@ -88,7 +88,7 @@ pub struct Bandwidth {
     pub upload_speed: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeviceRequest {
     /// <p>A description of the device.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -128,7 +128,7 @@ pub struct CreateDeviceRequest {
     pub vendor: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeviceResponse {
     /// <p>Information about the device.</p>
@@ -137,7 +137,7 @@ pub struct CreateDeviceResponse {
     pub device: Option<Device>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGlobalNetworkRequest {
     /// <p>A description of the global network.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -150,7 +150,7 @@ pub struct CreateGlobalNetworkRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGlobalNetworkResponse {
     /// <p>Information about the global network object.</p>
@@ -159,7 +159,7 @@ pub struct CreateGlobalNetworkResponse {
     pub global_network: Option<GlobalNetwork>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLinkRequest {
     /// <p> The upload speed and download speed in Mbps. </p>
@@ -189,7 +189,7 @@ pub struct CreateLinkRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLinkResponse {
     /// <p>Information about the link.</p>
@@ -198,7 +198,7 @@ pub struct CreateLinkResponse {
     pub link: Option<Link>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSiteRequest {
     /// <p>A description of your site.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -218,7 +218,7 @@ pub struct CreateSiteRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSiteResponse {
     /// <p>Information about the site.</p>
@@ -228,7 +228,7 @@ pub struct CreateSiteResponse {
 }
 
 /// <p>Describes the association between a customer gateway, a device, and a link.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CustomerGatewayAssociation {
     /// <p>The Amazon Resource Name (ARN) of the customer gateway.</p>
@@ -253,7 +253,7 @@ pub struct CustomerGatewayAssociation {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeviceRequest {
     /// <p>The ID of the device.</p>
@@ -264,7 +264,7 @@ pub struct DeleteDeviceRequest {
     pub global_network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeviceResponse {
     /// <p>Information about the device.</p>
@@ -273,7 +273,7 @@ pub struct DeleteDeviceResponse {
     pub device: Option<Device>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGlobalNetworkRequest {
     /// <p>The ID of the global network.</p>
@@ -281,7 +281,7 @@ pub struct DeleteGlobalNetworkRequest {
     pub global_network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGlobalNetworkResponse {
     /// <p>Information about the global network.</p>
@@ -290,7 +290,7 @@ pub struct DeleteGlobalNetworkResponse {
     pub global_network: Option<GlobalNetwork>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteLinkRequest {
     /// <p>The ID of the global network.</p>
@@ -301,7 +301,7 @@ pub struct DeleteLinkRequest {
     pub link_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLinkResponse {
     /// <p>Information about the link.</p>
@@ -310,7 +310,7 @@ pub struct DeleteLinkResponse {
     pub link: Option<Link>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSiteRequest {
     /// <p>The ID of the global network.</p>
@@ -321,7 +321,7 @@ pub struct DeleteSiteRequest {
     pub site_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSiteResponse {
     /// <p>Information about the site.</p>
@@ -330,7 +330,7 @@ pub struct DeleteSiteResponse {
     pub site: Option<Site>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeregisterTransitGatewayRequest {
     /// <p>The ID of the global network.</p>
@@ -341,7 +341,7 @@ pub struct DeregisterTransitGatewayRequest {
     pub transit_gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterTransitGatewayResponse {
     /// <p>The transit gateway registration information.</p>
@@ -350,7 +350,7 @@ pub struct DeregisterTransitGatewayResponse {
     pub transit_gateway_registration: Option<TransitGatewayRegistration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGlobalNetworksRequest {
     /// <p>The IDs of one or more global networks. The maximum is 10.</p>
@@ -367,7 +367,7 @@ pub struct DescribeGlobalNetworksRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGlobalNetworksResponse {
     /// <p>Information about the global networks.</p>
@@ -381,7 +381,7 @@ pub struct DescribeGlobalNetworksResponse {
 }
 
 /// <p>Describes a device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Device {
     /// <p>The date and time that the site was created.</p>
@@ -438,7 +438,7 @@ pub struct Device {
     pub vendor: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateCustomerGatewayRequest {
     /// <p>The Amazon Resource Name (ARN) of the customer gateway. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazonec2.html#amazonec2-resources-for-iam-policies">Resources Defined by Amazon EC2</a>.</p>
@@ -449,7 +449,7 @@ pub struct DisassociateCustomerGatewayRequest {
     pub global_network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateCustomerGatewayResponse {
     /// <p>Information about the customer gateway association.</p>
@@ -458,7 +458,7 @@ pub struct DisassociateCustomerGatewayResponse {
     pub customer_gateway_association: Option<CustomerGatewayAssociation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateLinkRequest {
     /// <p>The ID of the device.</p>
@@ -472,7 +472,7 @@ pub struct DisassociateLinkRequest {
     pub link_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateLinkResponse {
     /// <p>Information about the link association.</p>
@@ -481,7 +481,7 @@ pub struct DisassociateLinkResponse {
     pub link_association: Option<LinkAssociation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCustomerGatewayAssociationsRequest {
     /// <p>One or more customer gateway Amazon Resource Names (ARNs). For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazonec2.html#amazonec2-resources-for-iam-policies">Resources Defined by Amazon EC2</a>. The maximum is 10.</p>
@@ -501,7 +501,7 @@ pub struct GetCustomerGatewayAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCustomerGatewayAssociationsResponse {
     /// <p>The customer gateway associations.</p>
@@ -514,7 +514,7 @@ pub struct GetCustomerGatewayAssociationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicesRequest {
     /// <p>One or more device IDs. The maximum is 10.</p>
@@ -538,7 +538,7 @@ pub struct GetDevicesRequest {
     pub site_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicesResponse {
     /// <p>The devices.</p>
@@ -551,7 +551,7 @@ pub struct GetDevicesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLinkAssociationsRequest {
     /// <p>The ID of the device.</p>
@@ -575,7 +575,7 @@ pub struct GetLinkAssociationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLinkAssociationsResponse {
     /// <p>The link associations.</p>
@@ -588,7 +588,7 @@ pub struct GetLinkAssociationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLinksRequest {
     /// <p>The ID of the global network.</p>
@@ -620,7 +620,7 @@ pub struct GetLinksRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLinksResponse {
     /// <p>The links.</p>
@@ -633,7 +633,7 @@ pub struct GetLinksResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSitesRequest {
     /// <p>The ID of the global network.</p>
@@ -653,7 +653,7 @@ pub struct GetSitesRequest {
     pub site_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSitesResponse {
     /// <p>The token for the next page of results.</p>
@@ -666,7 +666,7 @@ pub struct GetSitesResponse {
     pub sites: Option<Vec<Site>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTransitGatewayRegistrationsRequest {
     /// <p>The ID of the global network.</p>
@@ -686,7 +686,7 @@ pub struct GetTransitGatewayRegistrationsRequest {
     pub transit_gateway_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTransitGatewayRegistrationsResponse {
     /// <p>The token for the next page of results.</p>
@@ -700,7 +700,7 @@ pub struct GetTransitGatewayRegistrationsResponse {
 }
 
 /// <p>Describes a global network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GlobalNetwork {
     /// <p>The date and time that the global network was created.</p>
@@ -730,7 +730,7 @@ pub struct GlobalNetwork {
 }
 
 /// <p>Describes a link.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Link {
     /// <p>The bandwidth for the link.</p>
@@ -780,7 +780,7 @@ pub struct Link {
 }
 
 /// <p>Describes the association between a device and a link.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LinkAssociation {
     /// <p>The device ID for the link association.</p>
@@ -801,7 +801,7 @@ pub struct LinkAssociation {
     pub link_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -809,7 +809,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The list of tags.</p>
@@ -819,7 +819,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Describes a location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Location {
     /// <p>The physical address.</p>
     #[serde(rename = "Address")]
@@ -835,7 +835,7 @@ pub struct Location {
     pub longitude: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegisterTransitGatewayRequest {
     /// <p>The ID of the global network.</p>
@@ -846,7 +846,7 @@ pub struct RegisterTransitGatewayRequest {
     pub transit_gateway_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterTransitGatewayResponse {
     /// <p>Information about the transit gateway registration.</p>
@@ -856,7 +856,7 @@ pub struct RegisterTransitGatewayResponse {
 }
 
 /// <p>Describes a site.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Site {
     /// <p>The date and time that the site was created.</p>
@@ -894,7 +894,7 @@ pub struct Site {
 }
 
 /// <p>Describes a tag.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The tag key.</p> <p>Length Constraints: Maximum length of 128 characters.</p>
     #[serde(rename = "Key")]
@@ -906,7 +906,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -917,12 +917,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Describes the registration of a transit gateway to a global network.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransitGatewayRegistration {
     /// <p>The ID of the global network.</p>
@@ -940,7 +940,7 @@ pub struct TransitGatewayRegistration {
 }
 
 /// <p>Describes the status of a transit gateway registration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransitGatewayRegistrationStateReason {
     /// <p>The code for the state reason.</p>
@@ -953,7 +953,7 @@ pub struct TransitGatewayRegistrationStateReason {
     pub message: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -964,11 +964,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceRequest {
     /// <p>A description of the device.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -1006,7 +1006,7 @@ pub struct UpdateDeviceRequest {
     pub vendor: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceResponse {
     /// <p>Information about the device.</p>
@@ -1015,7 +1015,7 @@ pub struct UpdateDeviceResponse {
     pub device: Option<Device>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGlobalNetworkRequest {
     /// <p>A description of the global network.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -1027,7 +1027,7 @@ pub struct UpdateGlobalNetworkRequest {
     pub global_network_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGlobalNetworkResponse {
     /// <p>Information about the global network object.</p>
@@ -1036,7 +1036,7 @@ pub struct UpdateGlobalNetworkResponse {
     pub global_network: Option<GlobalNetwork>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLinkRequest {
     /// <p>The upload and download speed in Mbps. </p>
@@ -1063,7 +1063,7 @@ pub struct UpdateLinkRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLinkResponse {
     /// <p>Information about the link.</p>
@@ -1072,7 +1072,7 @@ pub struct UpdateLinkResponse {
     pub link: Option<Link>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSiteRequest {
     /// <p>A description of your site.</p> <p>Length Constraints: Maximum length of 256 characters.</p>
@@ -1091,7 +1091,7 @@ pub struct UpdateSiteRequest {
     pub site_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSiteResponse {
     /// <p>Information about the site.</p>
@@ -1101,7 +1101,7 @@ pub struct UpdateSiteResponse {
 }
 
 /// <p>Describes a validation exception for a field.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct ValidationExceptionField {
     /// <p>The message for the field.</p>
     pub message: String,
@@ -2915,6 +2915,7 @@ impl NetworkManagerClient {
 #[async_trait]
 impl NetworkManager for NetworkManagerClient {
     /// <p>Associates a customer gateway with a device and optionally, with a link. If you specify a link, it must be associated with the specified device. </p> <p>You can only associate customer gateways that are connected to a VPN attachment on a transit gateway. The transit gateway must be registered in your global network. When you register a transit gateway, customer gateways that are connected to the transit gateway are automatically included in the global network. To list customer gateways that are connected to a transit gateway, use the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpnConnections.html">DescribeVpnConnections</a> EC2 API and filter by <code>transit-gateway-id</code>.</p> <p>You cannot associate a customer gateway with more than one device and link. </p>
+    #[allow(unused_mut)]
     async fn associate_customer_gateway(
         &self,
         input: AssociateCustomerGatewayRequest,
@@ -2936,7 +2937,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateCustomerGatewayResponse, _>()?;
 
@@ -2948,6 +2949,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Associates a link to a device. A device can be associated to multiple links and a link can be associated to multiple devices. The device and link must be in the same global network and the same site.</p>
+    #[allow(unused_mut)]
     async fn associate_link(
         &self,
         input: AssociateLinkRequest,
@@ -2969,7 +2971,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateLinkResponse, _>()?;
 
@@ -2981,6 +2983,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Creates a new device in a global network. If you specify both a site ID and a location, the location of the site is used for visualization in the Network Manager console.</p>
+    #[allow(unused_mut)]
     async fn create_device(
         &self,
         input: CreateDeviceRequest,
@@ -3002,7 +3005,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDeviceResponse, _>()?;
 
@@ -3014,6 +3017,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Creates a new, empty global network.</p>
+    #[allow(unused_mut)]
     async fn create_global_network(
         &self,
         input: CreateGlobalNetworkRequest,
@@ -3032,7 +3036,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateGlobalNetworkResponse, _>()?;
 
@@ -3044,6 +3048,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Creates a new link for a specified site.</p>
+    #[allow(unused_mut)]
     async fn create_link(
         &self,
         input: CreateLinkRequest,
@@ -3065,7 +3070,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateLinkResponse, _>()?;
 
@@ -3077,6 +3082,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Creates a new site in a global network.</p>
+    #[allow(unused_mut)]
     async fn create_site(
         &self,
         input: CreateSiteRequest,
@@ -3098,7 +3104,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateSiteResponse, _>()?;
 
@@ -3110,6 +3116,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Deletes an existing device. You must first disassociate the device from any links and customer gateways.</p>
+    #[allow(unused_mut)]
     async fn delete_device(
         &self,
         input: DeleteDeviceRequest,
@@ -3130,7 +3137,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDeviceResponse, _>()?;
 
@@ -3142,6 +3149,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Deletes an existing global network. You must first delete all global network objects (devices, links, and sites) and deregister all transit gateways.</p>
+    #[allow(unused_mut)]
     async fn delete_global_network(
         &self,
         input: DeleteGlobalNetworkRequest,
@@ -3161,7 +3169,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteGlobalNetworkResponse, _>()?;
 
@@ -3173,6 +3181,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Deletes an existing link. You must first disassociate the link from any devices and customer gateways.</p>
+    #[allow(unused_mut)]
     async fn delete_link(
         &self,
         input: DeleteLinkRequest,
@@ -3193,7 +3202,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteLinkResponse, _>()?;
 
@@ -3205,6 +3214,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Deletes an existing site. The site cannot be associated with any device or link.</p>
+    #[allow(unused_mut)]
     async fn delete_site(
         &self,
         input: DeleteSiteRequest,
@@ -3225,7 +3235,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteSiteResponse, _>()?;
 
@@ -3237,6 +3247,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Deregisters a transit gateway from your global network. This action does not delete your transit gateway, or modify any of its attachments. This action removes any customer gateway associations.</p>
+    #[allow(unused_mut)]
     async fn deregister_transit_gateway(
         &self,
         input: DeregisterTransitGatewayRequest,
@@ -3253,7 +3264,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeregisterTransitGatewayResponse, _>()?;
 
@@ -3265,6 +3276,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Describes one or more global networks. By default, all global networks are described. To describe the objects in your global network, you must use the appropriate <code>Get*</code> action. For example, to list the transit gateways in your global network, use <a>GetTransitGatewayRegistrations</a>.</p>
+    #[allow(unused_mut)]
     async fn describe_global_networks(
         &self,
         input: DescribeGlobalNetworksRequest,
@@ -3294,7 +3306,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeGlobalNetworksResponse, _>()?;
 
@@ -3306,6 +3318,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Disassociates a customer gateway from a device and a link.</p>
+    #[allow(unused_mut)]
     async fn disassociate_customer_gateway(
         &self,
         input: DisassociateCustomerGatewayRequest,
@@ -3323,7 +3336,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateCustomerGatewayResponse, _>()?;
 
@@ -3335,6 +3348,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Disassociates an existing device from a link. You must first disassociate any customer gateways that are associated with the link.</p>
+    #[allow(unused_mut)]
     async fn disassociate_link(
         &self,
         input: DisassociateLinkRequest,
@@ -3359,7 +3373,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateLinkResponse, _>()?;
 
@@ -3371,6 +3385,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets the association information for customer gateways that are associated with devices and links in your global network.</p>
+    #[allow(unused_mut)]
     async fn get_customer_gateway_associations(
         &self,
         input: GetCustomerGatewayAssociationsRequest,
@@ -3406,7 +3421,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetCustomerGatewayAssociationsResponse, _>()?;
 
@@ -3418,6 +3433,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets information about one or more of your devices in a global network.</p>
+    #[allow(unused_mut)]
     async fn get_devices(
         &self,
         input: GetDevicesRequest,
@@ -3453,7 +3469,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDevicesResponse, _>()?;
 
@@ -3465,6 +3481,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets the link associations for a device or a link. Either the device ID or the link ID must be specified.</p>
+    #[allow(unused_mut)]
     async fn get_link_associations(
         &self,
         input: GetLinkAssociationsRequest,
@@ -3498,7 +3515,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetLinkAssociationsResponse, _>()?;
 
@@ -3510,6 +3527,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets information about one or more links in a specified global network.</p> <p>If you specify the site ID, you cannot specify the type or provider in the same request. You can specify the type and provider in the same request.</p>
+    #[allow(unused_mut)]
     async fn get_links(
         &self,
         input: GetLinksRequest,
@@ -3551,7 +3569,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetLinksResponse, _>()?;
 
@@ -3563,6 +3581,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets information about one or more of your sites in a global network.</p>
+    #[allow(unused_mut)]
     async fn get_sites(
         &self,
         input: GetSitesRequest,
@@ -3595,7 +3614,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSitesResponse, _>()?;
 
@@ -3607,6 +3626,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Gets information about the transit gateway registrations in a specified global network.</p>
+    #[allow(unused_mut)]
     async fn get_transit_gateway_registrations(
         &self,
         input: GetTransitGatewayRegistrationsRequest,
@@ -3642,7 +3662,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetTransitGatewayRegistrationsResponse, _>()?;
 
@@ -3654,6 +3674,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Lists the tags for a specified resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3669,7 +3690,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -3681,6 +3702,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Registers a transit gateway in your global network. The transit gateway can be in any AWS Region, but it must be owned by the same AWS account that owns the global network. You cannot register a transit gateway in more than one global network.</p>
+    #[allow(unused_mut)]
     async fn register_transit_gateway(
         &self,
         input: RegisterTransitGatewayRequest,
@@ -3702,7 +3724,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RegisterTransitGatewayResponse, _>()?;
 
@@ -3714,6 +3736,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Tags a specified resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3732,7 +3755,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -3744,6 +3767,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Removes tags from a specified resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3766,7 +3790,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -3778,6 +3802,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Updates the details for an existing device. To remove information for any of the parameters, specify an empty string.</p>
+    #[allow(unused_mut)]
     async fn update_device(
         &self,
         input: UpdateDeviceRequest,
@@ -3800,7 +3825,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDeviceResponse, _>()?;
 
@@ -3812,6 +3837,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Updates an existing global network. To remove information for any of the parameters, specify an empty string.</p>
+    #[allow(unused_mut)]
     async fn update_global_network(
         &self,
         input: UpdateGlobalNetworkRequest,
@@ -3833,7 +3859,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateGlobalNetworkResponse, _>()?;
 
@@ -3845,6 +3871,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Updates the details for an existing link. To remove information for any of the parameters, specify an empty string.</p>
+    #[allow(unused_mut)]
     async fn update_link(
         &self,
         input: UpdateLinkRequest,
@@ -3867,7 +3894,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateLinkResponse, _>()?;
 
@@ -3879,6 +3906,7 @@ impl NetworkManager for NetworkManagerClient {
     }
 
     /// <p>Updates the information for an existing site. To remove information for any of the parameters, specify an empty string.</p>
+    #[allow(unused_mut)]
     async fn update_site(
         &self,
         input: UpdateSiteRequest,
@@ -3901,7 +3929,7 @@ impl NetworkManager for NetworkManagerClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateSiteResponse, _>()?;
 

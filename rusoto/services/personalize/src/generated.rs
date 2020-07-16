@@ -20,12 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl PersonalizeClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "personalize", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Describes a custom algorithm.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Algorithm {
     /// <p>The Amazon Resource Name (ARN) of the algorithm.</p>
@@ -71,7 +97,7 @@ pub struct Algorithm {
 }
 
 /// <p>Describes an algorithm image.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AlgorithmImage {
     /// <p>The URI of the Docker container for the algorithm image.</p>
@@ -84,7 +110,7 @@ pub struct AlgorithmImage {
 }
 
 /// <p>When the solution performs AutoML (<code>performAutoML</code> is true in <a>CreateSolution</a>), Amazon Personalize determines which recipe, from the specified list, optimizes the given metric. Amazon Personalize then uses that recipe for the solution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutoMLConfig {
     /// <p>The metric to optimize.</p>
     #[serde(rename = "metricName")]
@@ -97,7 +123,7 @@ pub struct AutoMLConfig {
 }
 
 /// <p>When the solution performs AutoML (<code>performAutoML</code> is true in <a>CreateSolution</a>), specifies the recipe that best optimized the specified metric.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoMLResult {
     /// <p>The Amazon Resource Name (ARN) of the best recipe.</p>
@@ -107,7 +133,7 @@ pub struct AutoMLResult {
 }
 
 /// <p>Contains information on a batch inference job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchInferenceJob {
     /// <p>The Amazon Resource Name (ARN) of the batch inference job.</p>
@@ -122,6 +148,10 @@ pub struct BatchInferenceJob {
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
+    /// <p>The ARN of the filter used on the batch inference job.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
     /// <p>The Amazon S3 path that leads to the input data used to generate the batch inference job.</p>
     #[serde(rename = "jobInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -157,7 +187,7 @@ pub struct BatchInferenceJob {
 }
 
 /// <p>The input configuration of a batch inference job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BatchInferenceJobInput {
     /// <p>The URI of the Amazon S3 location that contains your input data. The Amazon S3 bucket must be in the same region as the API endpoint you are calling.</p>
     #[serde(rename = "s3DataSource")]
@@ -165,7 +195,7 @@ pub struct BatchInferenceJobInput {
 }
 
 /// <p>The output configuration parameters of a batch inference job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BatchInferenceJobOutput {
     /// <p>Information on the Amazon S3 bucket in which the batch inference job's output is stored.</p>
     #[serde(rename = "s3DataDestination")]
@@ -173,7 +203,7 @@ pub struct BatchInferenceJobOutput {
 }
 
 /// <p>A truncated version of the <a>BatchInferenceJob</a> datatype. The <a>ListBatchInferenceJobs</a> operation returns a list of batch inference job summaries.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchInferenceJobSummary {
     /// <p>The Amazon Resource Name (ARN) of the batch inference job.</p>
@@ -207,7 +237,7 @@ pub struct BatchInferenceJobSummary {
 }
 
 /// <p>Describes a deployed solution version, otherwise known as a campaign. For more information on campaigns, see <a>CreateCampaign</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Campaign {
     /// <p>The Amazon Resource Name (ARN) of the campaign. </p>
@@ -248,7 +278,7 @@ pub struct Campaign {
 }
 
 /// <p>Provides a summary of the properties of a campaign. For a complete listing, call the <a>DescribeCampaign</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CampaignSummary {
     /// <p>The Amazon Resource Name (ARN) of the campaign.</p>
@@ -278,7 +308,7 @@ pub struct CampaignSummary {
 }
 
 /// <p>Provides a summary of the properties of a campaign update. For a complete listing, call the <a>DescribeCampaign</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CampaignUpdateSummary {
     /// <p>The date and time (in Unix time) that the campaign update was created.</p>
@@ -308,7 +338,7 @@ pub struct CampaignUpdateSummary {
 }
 
 /// <p>Provides the name and range of a categorical hyperparameter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CategoricalHyperParameterRange {
     /// <p>The name of the hyperparameter.</p>
     #[serde(rename = "name")]
@@ -321,7 +351,7 @@ pub struct CategoricalHyperParameterRange {
 }
 
 /// <p>Provides the name and range of a continuous hyperparameter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ContinuousHyperParameterRange {
     /// <p>The maximum allowable value for the hyperparameter.</p>
     #[serde(rename = "maxValue")]
@@ -337,9 +367,13 @@ pub struct ContinuousHyperParameterRange {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBatchInferenceJobRequest {
+    /// <p>The ARN of the filter to apply to the batch inference job. For more information on using filters, see Using Filters with Amazon Personalize.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
     /// <p>The Amazon S3 path that leads to the input file to base your recommendations on. The input material must be in JSON format.</p>
     #[serde(rename = "jobInput")]
     pub job_input: BatchInferenceJobInput,
@@ -361,7 +395,7 @@ pub struct CreateBatchInferenceJobRequest {
     pub solution_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBatchInferenceJobResponse {
     /// <p>The ARN of the batch inference job.</p>
@@ -370,7 +404,7 @@ pub struct CreateBatchInferenceJobResponse {
     pub batch_inference_job_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCampaignRequest {
     /// <p>Specifies the requested minimum provisioned transactions (recommendations) per second that Amazon Personalize will support.</p>
@@ -384,7 +418,7 @@ pub struct CreateCampaignRequest {
     pub solution_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCampaignResponse {
     /// <p>The Amazon Resource Name (ARN) of the campaign.</p>
@@ -393,7 +427,7 @@ pub struct CreateCampaignResponse {
     pub campaign_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of a KMS key used to encrypt the datasets.</p>
@@ -409,7 +443,7 @@ pub struct CreateDatasetGroupRequest {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetGroupResponse {
     /// <p>The Amazon Resource Name (ARN) of the new dataset group.</p>
@@ -418,7 +452,7 @@ pub struct CreateDatasetGroupResponse {
     pub dataset_group_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetImportJobRequest {
     /// <p>The Amazon S3 bucket that contains the training data to import.</p>
@@ -435,7 +469,7 @@ pub struct CreateDatasetImportJobRequest {
     pub role_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetImportJobResponse {
     /// <p>The ARN of the dataset import job.</p>
@@ -444,7 +478,7 @@ pub struct CreateDatasetImportJobResponse {
     pub dataset_import_job_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDatasetRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group to add the dataset to.</p>
@@ -461,7 +495,7 @@ pub struct CreateDatasetRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDatasetResponse {
     /// <p>The ARN of the dataset.</p>
@@ -470,7 +504,7 @@ pub struct CreateDatasetResponse {
     pub dataset_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventTrackerRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group that receives the event data.</p>
@@ -481,7 +515,7 @@ pub struct CreateEventTrackerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEventTrackerResponse {
     /// <p>The ARN of the event tracker.</p>
@@ -494,7 +528,30 @@ pub struct CreateEventTrackerResponse {
     pub tracking_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateFilterRequest {
+    /// <p>The ARN of the dataset group that the filter will belong to.</p>
+    #[serde(rename = "datasetGroupArn")]
+    pub dataset_group_arn: String,
+    /// <p>The filter expression that designates the interaction types that the filter will filter out. A filter expression must follow the following format:</p> <p> <code>EXCLUDE itemId WHERE INTERACTIONS.event_type in ("EVENT_TYPE")</code> </p> <p>Where "EVENT_TYPE" is the type of event to filter out. To filter out all items with any interactions history, set <code>"*"</code> as the EVENT_TYPE. For more information, see Using Filters with Amazon Personalize.</p>
+    #[serde(rename = "filterExpression")]
+    pub filter_expression: String,
+    /// <p>The name of the filter to create.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateFilterResponse {
+    /// <p>The ARN of the new filter.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSchemaRequest {
     /// <p>The name for the schema.</p>
@@ -505,7 +562,7 @@ pub struct CreateSchemaRequest {
     pub schema: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSchemaResponse {
     /// <p>The Amazon Resource Name (ARN) of the created schema.</p>
@@ -514,7 +571,7 @@ pub struct CreateSchemaResponse {
     pub schema_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSolutionRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group that provides the training data.</p>
@@ -545,7 +602,7 @@ pub struct CreateSolutionRequest {
     pub solution_config: Option<SolutionConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSolutionResponse {
     /// <p>The ARN of the solution.</p>
@@ -554,7 +611,7 @@ pub struct CreateSolutionResponse {
     pub solution_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSolutionVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the solution containing the training configuration information.</p>
@@ -566,7 +623,7 @@ pub struct CreateSolutionVersionRequest {
     pub training_mode: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSolutionVersionResponse {
     /// <p>The ARN of the new solution version.</p>
@@ -576,7 +633,7 @@ pub struct CreateSolutionVersionResponse {
 }
 
 /// <p>Describes the data source that contains the data to upload to a dataset.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSource {
     /// <p>The path to the Amazon S3 bucket where the data that you want to upload to your dataset is stored. For example: </p> <p> <code>s3://bucket-name/training-data.csv</code> </p>
     #[serde(rename = "dataLocation")]
@@ -585,7 +642,7 @@ pub struct DataSource {
 }
 
 /// <p>Provides metadata for a dataset.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Dataset {
     /// <p>The creation date and time (in Unix time) of the dataset.</p>
@@ -623,7 +680,7 @@ pub struct Dataset {
 }
 
 /// <p>A dataset group is a collection of related datasets (Interactions, User, and Item). You create a dataset group by calling <a>CreateDatasetGroup</a>. You then create a dataset and add it to a dataset group by calling <a>CreateDataset</a>. The dataset group is used to create and train a solution by calling <a>CreateSolution</a>. A dataset group can contain only one of each type of dataset.</p> <p>You can specify an AWS Key Management Service (KMS) key to encrypt the datasets in the group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetGroup {
     /// <p>The creation date and time (in Unix time) of the dataset group.</p>
@@ -661,7 +718,7 @@ pub struct DatasetGroup {
 }
 
 /// <p>Provides a summary of the properties of a dataset group. For a complete listing, call the <a>DescribeDatasetGroup</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetGroupSummary {
     /// <p>The date and time (in Unix time) that the dataset group was created.</p>
@@ -691,7 +748,7 @@ pub struct DatasetGroupSummary {
 }
 
 /// <p><p>Describes a job that imports training data from a data source (Amazon S3 bucket) to an Amazon Personalize dataset. For more information, see <a>CreateDatasetImportJob</a>.</p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetImportJob {
     /// <p>The creation date and time (in Unix time) of the dataset import job.</p>
@@ -733,7 +790,7 @@ pub struct DatasetImportJob {
 }
 
 /// <p>Provides a summary of the properties of a dataset import job. For a complete listing, call the <a>DescribeDatasetImportJob</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetImportJobSummary {
     /// <p>The date and time (in Unix time) that the dataset import job was created.</p>
@@ -763,7 +820,7 @@ pub struct DatasetImportJobSummary {
 }
 
 /// <p>Describes the schema for a dataset. For more information on schemas, see <a>CreateSchema</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetSchema {
     /// <p>The date and time (in Unix time) that the schema was created.</p>
@@ -789,7 +846,7 @@ pub struct DatasetSchema {
 }
 
 /// <p>Provides a summary of the properties of a dataset schema. For a complete listing, call the <a>DescribeSchema</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetSchemaSummary {
     /// <p>The date and time (in Unix time) that the schema was created.</p>
@@ -811,7 +868,7 @@ pub struct DatasetSchemaSummary {
 }
 
 /// <p>Provides a summary of the properties of a dataset. For a complete listing, call the <a>DescribeDataset</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DatasetSummary {
     /// <p>The date and time (in Unix time) that the dataset was created.</p>
@@ -841,7 +898,7 @@ pub struct DatasetSummary {
 }
 
 /// <p>Provides the name and default range of a categorical hyperparameter and whether the hyperparameter is tunable. A tunable hyperparameter can have its value determined during hyperparameter optimization (HPO).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultCategoricalHyperParameterRange {
     /// <p>Whether the hyperparameter is tunable.</p>
@@ -859,7 +916,7 @@ pub struct DefaultCategoricalHyperParameterRange {
 }
 
 /// <p>Provides the name and default range of a continuous hyperparameter and whether the hyperparameter is tunable. A tunable hyperparameter can have its value determined during hyperparameter optimization (HPO).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultContinuousHyperParameterRange {
     /// <p>Whether the hyperparameter is tunable.</p>
@@ -881,7 +938,7 @@ pub struct DefaultContinuousHyperParameterRange {
 }
 
 /// <p>Specifies the hyperparameters and their default ranges. Hyperparameters can be categorical, continuous, or integer-valued.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultHyperParameterRanges {
     /// <p>The categorical hyperparameters and their default ranges.</p>
@@ -899,7 +956,7 @@ pub struct DefaultHyperParameterRanges {
 }
 
 /// <p>Provides the name and default range of a integer-valued hyperparameter and whether the hyperparameter is tunable. A tunable hyperparameter can have its value determined during hyperparameter optimization (HPO).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultIntegerHyperParameterRange {
     /// <p>Indicates whether the hyperparameter is tunable.</p>
@@ -920,7 +977,7 @@ pub struct DefaultIntegerHyperParameterRange {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCampaignRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign to delete.</p>
@@ -928,7 +985,7 @@ pub struct DeleteCampaignRequest {
     pub campaign_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetGroupRequest {
     /// <p>The ARN of the dataset group to delete.</p>
@@ -936,7 +993,7 @@ pub struct DeleteDatasetGroupRequest {
     pub dataset_group_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDatasetRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset to delete.</p>
@@ -944,7 +1001,7 @@ pub struct DeleteDatasetRequest {
     pub dataset_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventTrackerRequest {
     /// <p>The Amazon Resource Name (ARN) of the event tracker to delete.</p>
@@ -952,7 +1009,15 @@ pub struct DeleteEventTrackerRequest {
     pub event_tracker_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFilterRequest {
+    /// <p>The ARN of the filter to delete.</p>
+    #[serde(rename = "filterArn")]
+    pub filter_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSchemaRequest {
     /// <p>The Amazon Resource Name (ARN) of the schema to delete.</p>
@@ -960,7 +1025,7 @@ pub struct DeleteSchemaRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSolutionRequest {
     /// <p>The ARN of the solution to delete.</p>
@@ -968,7 +1033,7 @@ pub struct DeleteSolutionRequest {
     pub solution_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAlgorithmRequest {
     /// <p>The Amazon Resource Name (ARN) of the algorithm to describe.</p>
@@ -976,7 +1041,7 @@ pub struct DescribeAlgorithmRequest {
     pub algorithm_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAlgorithmResponse {
     /// <p>A listing of the properties of the algorithm.</p>
@@ -985,7 +1050,7 @@ pub struct DescribeAlgorithmResponse {
     pub algorithm: Option<Algorithm>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeBatchInferenceJobRequest {
     /// <p>The ARN of the batch inference job to describe.</p>
@@ -993,7 +1058,7 @@ pub struct DescribeBatchInferenceJobRequest {
     pub batch_inference_job_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBatchInferenceJobResponse {
     /// <p>Information on the specified batch inference job.</p>
@@ -1002,7 +1067,7 @@ pub struct DescribeBatchInferenceJobResponse {
     pub batch_inference_job: Option<BatchInferenceJob>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCampaignRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign.</p>
@@ -1010,7 +1075,7 @@ pub struct DescribeCampaignRequest {
     pub campaign_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCampaignResponse {
     /// <p>The properties of the campaign.</p>
@@ -1019,7 +1084,7 @@ pub struct DescribeCampaignResponse {
     pub campaign: Option<Campaign>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group to describe.</p>
@@ -1027,7 +1092,7 @@ pub struct DescribeDatasetGroupRequest {
     pub dataset_group_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetGroupResponse {
     /// <p>A listing of the dataset group's properties.</p>
@@ -1036,7 +1101,7 @@ pub struct DescribeDatasetGroupResponse {
     pub dataset_group: Option<DatasetGroup>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetImportJobRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset import job to describe.</p>
@@ -1044,7 +1109,7 @@ pub struct DescribeDatasetImportJobRequest {
     pub dataset_import_job_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetImportJobResponse {
     /// <p><p>Information about the dataset import job, including the status.</p> <p>The status is one of the following values:</p> <ul> <li> <p>CREATE PENDING</p> </li> <li> <p>CREATE IN_PROGRESS</p> </li> <li> <p>ACTIVE</p> </li> <li> <p>CREATE FAILED</p> </li> </ul></p>
@@ -1053,7 +1118,7 @@ pub struct DescribeDatasetImportJobResponse {
     pub dataset_import_job: Option<DatasetImportJob>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset to describe.</p>
@@ -1061,7 +1126,7 @@ pub struct DescribeDatasetRequest {
     pub dataset_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetResponse {
     /// <p>A listing of the dataset's properties.</p>
@@ -1070,7 +1135,7 @@ pub struct DescribeDatasetResponse {
     pub dataset: Option<Dataset>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeEventTrackerRequest {
     /// <p>The Amazon Resource Name (ARN) of the event tracker to describe.</p>
@@ -1078,7 +1143,7 @@ pub struct DescribeEventTrackerRequest {
     pub event_tracker_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEventTrackerResponse {
     /// <p>An object that describes the event tracker.</p>
@@ -1087,7 +1152,7 @@ pub struct DescribeEventTrackerResponse {
     pub event_tracker: Option<EventTracker>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeFeatureTransformationRequest {
     /// <p>The Amazon Resource Name (ARN) of the feature transformation to describe.</p>
@@ -1095,7 +1160,7 @@ pub struct DescribeFeatureTransformationRequest {
     pub feature_transformation_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFeatureTransformationResponse {
     /// <p>A listing of the FeatureTransformation properties.</p>
@@ -1104,7 +1169,24 @@ pub struct DescribeFeatureTransformationResponse {
     pub feature_transformation: Option<FeatureTransformation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeFilterRequest {
+    /// <p>The ARN of the filter to describe.</p>
+    #[serde(rename = "filterArn")]
+    pub filter_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeFilterResponse {
+    /// <p>The filter's details.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Filter>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRecipeRequest {
     /// <p>The Amazon Resource Name (ARN) of the recipe to describe.</p>
@@ -1112,7 +1194,7 @@ pub struct DescribeRecipeRequest {
     pub recipe_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRecipeResponse {
     /// <p>An object that describes the recipe.</p>
@@ -1121,7 +1203,7 @@ pub struct DescribeRecipeResponse {
     pub recipe: Option<Recipe>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSchemaRequest {
     /// <p>The Amazon Resource Name (ARN) of the schema to retrieve.</p>
@@ -1129,7 +1211,7 @@ pub struct DescribeSchemaRequest {
     pub schema_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSchemaResponse {
     /// <p>The requested schema.</p>
@@ -1138,7 +1220,7 @@ pub struct DescribeSchemaResponse {
     pub schema: Option<DatasetSchema>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSolutionRequest {
     /// <p>The Amazon Resource Name (ARN) of the solution to describe.</p>
@@ -1146,7 +1228,7 @@ pub struct DescribeSolutionRequest {
     pub solution_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSolutionResponse {
     /// <p>An object that describes the solution.</p>
@@ -1155,7 +1237,7 @@ pub struct DescribeSolutionResponse {
     pub solution: Option<Solution>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeSolutionVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the solution version.</p>
@@ -1163,7 +1245,7 @@ pub struct DescribeSolutionVersionRequest {
     pub solution_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSolutionVersionResponse {
     /// <p>The solution version.</p>
@@ -1173,7 +1255,7 @@ pub struct DescribeSolutionVersionResponse {
 }
 
 /// <p>Provides information about an event tracker.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventTracker {
     /// <p>The Amazon AWS account that owns the event tracker.</p>
@@ -1211,7 +1293,7 @@ pub struct EventTracker {
 }
 
 /// <p>Provides a summary of the properties of an event tracker. For a complete listing, call the <a>DescribeEventTracker</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventTrackerSummary {
     /// <p>The date and time (in Unix time) that the event tracker was created.</p>
@@ -1237,7 +1319,7 @@ pub struct EventTrackerSummary {
 }
 
 /// <p>Provides feature transformation information. Feature transformation is the process of modifying raw input data into a form more suitable for model training.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FeatureTransformation {
     /// <p>The creation date and time (in Unix time) of the feature transformation.</p>
@@ -1266,7 +1348,79 @@ pub struct FeatureTransformation {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+/// <p>Contains information on a recommendation filter, including its ARN, status, and filter expression.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Filter {
+    /// <p>The time at which the filter was created.</p>
+    #[serde(rename = "creationDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date_time: Option<f64>,
+    /// <p>The ARN of the dataset group to which the filter belongs.</p>
+    #[serde(rename = "datasetGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_group_arn: Option<String>,
+    /// <p>If the filter failed, the reason for its failure.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The ARN of the filter.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
+    /// <p>Specifies the type of item interactions to filter out of recommendation results. The filter expression must follow the following format:</p> <p> <code>EXCLUDE itemId WHERE INTERACTIONS.event_type in ("EVENT_TYPE")</code> </p> <p>Where "EVENT_TYPE" is the type of event to filter out. For more information, see Using Filters with Amazon Personalize.</p>
+    #[serde(rename = "filterExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_expression: Option<String>,
+    /// <p>The time at which the filter was last updated.</p>
+    #[serde(rename = "lastUpdatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date_time: Option<f64>,
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the filter.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>A short summary of a filter's attributes.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FilterSummary {
+    /// <p>The time at which the filter was created.</p>
+    #[serde(rename = "creationDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date_time: Option<f64>,
+    /// <p>The ARN of the dataset group to which the filter belongs.</p>
+    #[serde(rename = "datasetGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_group_arn: Option<String>,
+    /// <p>If the filter failed, the reason for the failure.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The ARN of the filter.</p>
+    #[serde(rename = "filterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arn: Option<String>,
+    /// <p>The time at which the filter was last updated.</p>
+    #[serde(rename = "lastUpdatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date_time: Option<f64>,
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the filter.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSolutionMetricsRequest {
     /// <p>The Amazon Resource Name (ARN) of the solution version for which to get metrics.</p>
@@ -1274,7 +1428,7 @@ pub struct GetSolutionMetricsRequest {
     pub solution_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSolutionMetricsResponse {
     /// <p>The metrics for the solution version.</p>
@@ -1288,7 +1442,7 @@ pub struct GetSolutionMetricsResponse {
 }
 
 /// <p>Describes the properties for hyperparameter optimization (HPO). For use with the bring-your-own-recipe feature. Do not use for Amazon Personalize native recipes.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HPOConfig {
     /// <p>The hyperparameters and their allowable ranges.</p>
     #[serde(rename = "algorithmHyperParameterRanges")]
@@ -1305,7 +1459,7 @@ pub struct HPOConfig {
 }
 
 /// <p>The metric to optimize during hyperparameter optimization (HPO).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HPOObjective {
     /// <p>The name of the metric.</p>
     #[serde(rename = "metricName")]
@@ -1322,7 +1476,7 @@ pub struct HPOObjective {
 }
 
 /// <p>Describes the resource configuration for hyperparameter optimization (HPO).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HPOResourceConfig {
     /// <p>The maximum number of training jobs when you create a solution version. The maximum value for <code>maxNumberOfTrainingJobs</code> is <code>40</code>.</p>
     #[serde(rename = "maxNumberOfTrainingJobs")]
@@ -1335,7 +1489,7 @@ pub struct HPOResourceConfig {
 }
 
 /// <p>Specifies the hyperparameters and their ranges. Hyperparameters can be categorical, continuous, or integer-valued.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HyperParameterRanges {
     /// <p>The categorical hyperparameters and their ranges.</p>
     #[serde(rename = "categoricalHyperParameterRanges")]
@@ -1352,7 +1506,7 @@ pub struct HyperParameterRanges {
 }
 
 /// <p>Provides the name and range of an integer-valued hyperparameter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IntegerHyperParameterRange {
     /// <p>The maximum allowable value for the hyperparameter.</p>
     #[serde(rename = "maxValue")]
@@ -1368,7 +1522,7 @@ pub struct IntegerHyperParameterRange {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBatchInferenceJobsRequest {
     /// <p>The maximum number of batch inference job results to return in each page. The default value is 100.</p>
@@ -1385,7 +1539,7 @@ pub struct ListBatchInferenceJobsRequest {
     pub solution_version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBatchInferenceJobsResponse {
     /// <p>A list containing information on each job that is returned.</p>
@@ -1398,7 +1552,7 @@ pub struct ListBatchInferenceJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListCampaignsRequest {
     /// <p>The maximum number of campaigns to return.</p>
@@ -1415,7 +1569,7 @@ pub struct ListCampaignsRequest {
     pub solution_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCampaignsResponse {
     /// <p>A list of the campaigns.</p>
@@ -1428,7 +1582,7 @@ pub struct ListCampaignsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetGroupsRequest {
     /// <p>The maximum number of dataset groups to return.</p>
@@ -1441,7 +1595,7 @@ pub struct ListDatasetGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetGroupsResponse {
     /// <p>The list of your dataset groups.</p>
@@ -1454,7 +1608,7 @@ pub struct ListDatasetGroupsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetImportJobsRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset to list the dataset import jobs for.</p>
@@ -1471,7 +1625,7 @@ pub struct ListDatasetImportJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetImportJobsResponse {
     /// <p>The list of dataset import jobs.</p>
@@ -1484,7 +1638,7 @@ pub struct ListDatasetImportJobsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDatasetsRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group that contains the datasets to list.</p>
@@ -1501,7 +1655,7 @@ pub struct ListDatasetsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetsResponse {
     /// <p>An array of <code>Dataset</code> objects. Each object provides metadata information.</p>
@@ -1514,7 +1668,7 @@ pub struct ListDatasetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventTrackersRequest {
     /// <p>The ARN of a dataset group used to filter the response.</p>
@@ -1531,7 +1685,7 @@ pub struct ListEventTrackersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventTrackersResponse {
     /// <p>A list of event trackers.</p>
@@ -1544,7 +1698,37 @@ pub struct ListEventTrackersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFiltersRequest {
+    /// <p>The ARN of the dataset group that contains the filters.</p>
+    #[serde(rename = "datasetGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_group_arn: Option<String>,
+    /// <p>The maximum number of filters to return.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token returned from the previous call to <code>ListFilters</code> for getting the next set of filters (if they exist).</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFiltersResponse {
+    /// <p>A list of returned filters.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<FilterSummary>>,
+    /// <p>A token for getting the next set of filters (if they exist).</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRecipesRequest {
     /// <p>The maximum number of recipes to return.</p>
@@ -1561,7 +1745,7 @@ pub struct ListRecipesRequest {
     pub recipe_provider: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecipesResponse {
     /// <p>A token for getting the next set of recipes.</p>
@@ -1574,7 +1758,7 @@ pub struct ListRecipesResponse {
     pub recipes: Option<Vec<RecipeSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSchemasRequest {
     /// <p>The maximum number of schemas to return.</p>
@@ -1587,7 +1771,7 @@ pub struct ListSchemasRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSchemasResponse {
     /// <p>A token used to get the next set of schemas (if they exist).</p>
@@ -1600,7 +1784,7 @@ pub struct ListSchemasResponse {
     pub schemas: Option<Vec<DatasetSchemaSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSolutionVersionsRequest {
     /// <p>The maximum number of solution versions to return.</p>
@@ -1617,7 +1801,7 @@ pub struct ListSolutionVersionsRequest {
     pub solution_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSolutionVersionsResponse {
     /// <p>A token for getting the next set of solution versions (if they exist).</p>
@@ -1630,7 +1814,7 @@ pub struct ListSolutionVersionsResponse {
     pub solution_versions: Option<Vec<SolutionVersionSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSolutionsRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group.</p>
@@ -1647,7 +1831,7 @@ pub struct ListSolutionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSolutionsResponse {
     /// <p>A token for getting the next set of solutions (if they exist).</p>
@@ -1661,7 +1845,7 @@ pub struct ListSolutionsResponse {
 }
 
 /// <p>Provides information about a recipe. Each recipe provides an algorithm that Amazon Personalize uses in model training when you use the <a>CreateSolution</a> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Recipe {
     /// <p>The Amazon Resource Name (ARN) of the algorithm that Amazon Personalize uses to train the model.</p>
@@ -1703,7 +1887,7 @@ pub struct Recipe {
 }
 
 /// <p>Provides a summary of the properties of a recipe. For a complete listing, call the <a>DescribeRecipe</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecipeSummary {
     /// <p>The date and time (in Unix time) that the recipe was created.</p>
@@ -1729,7 +1913,7 @@ pub struct RecipeSummary {
 }
 
 /// <p>The configuration details of an Amazon S3 input or output bucket.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3DataConfig {
     /// <p>The Amazon Resource Name (ARN) of the Amazon Key Management Service (KMS) key that Amazon Personalize uses to encrypt or decrypt the input and output files of a batch inference job.</p>
     #[serde(rename = "kmsKeyArn")]
@@ -1741,7 +1925,7 @@ pub struct S3DataConfig {
 }
 
 /// <p>An object that provides information about a solution. A solution is a trained model that can be deployed as a campaign.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Solution {
     /// <p>When <code>performAutoML</code> is true, specifies the best recipe found.</p>
@@ -1799,7 +1983,7 @@ pub struct Solution {
 }
 
 /// <p>Describes the configuration properties for the solution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SolutionConfig {
     /// <p>Lists the hyperparameter names and ranges.</p>
     #[serde(rename = "algorithmHyperParameters")]
@@ -1824,7 +2008,7 @@ pub struct SolutionConfig {
 }
 
 /// <p>Provides a summary of the properties of a solution. For a complete listing, call the <a>DescribeSolution</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SolutionSummary {
     /// <p>The date and time (in Unix time) that the solution was created.</p>
@@ -1850,7 +2034,7 @@ pub struct SolutionSummary {
 }
 
 /// <p>An object that provides information about a specific version of a <a>Solution</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SolutionVersion {
     /// <p>The date and time (in Unix time) that this version of the solution was created.</p>
@@ -1916,7 +2100,7 @@ pub struct SolutionVersion {
 }
 
 /// <p>Provides a summary of the properties of a solution version. For a complete listing, call the <a>DescribeSolutionVersion</a> API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SolutionVersionSummary {
     /// <p>The date and time (in Unix time) that this version of a solution was created.</p>
@@ -1942,7 +2126,7 @@ pub struct SolutionVersionSummary {
 }
 
 /// <p>If hyperparameter optimization (HPO) was performed, contains the hyperparameter values of the best performing model.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TunedHPOParams {
     /// <p>A list of the hyperparameter values of the best performing model.</p>
@@ -1951,7 +2135,7 @@ pub struct TunedHPOParams {
     pub algorithm_hyper_parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCampaignRequest {
     /// <p>The Amazon Resource Name (ARN) of the campaign.</p>
@@ -1967,7 +2151,7 @@ pub struct UpdateCampaignRequest {
     pub solution_version_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCampaignResponse {
     /// <p>The same campaign ARN as given in the request.</p>
@@ -2314,6 +2498,54 @@ impl fmt::Display for CreateEventTrackerError {
     }
 }
 impl Error for CreateEventTrackerError {}
+/// Errors returned by CreateFilter
+#[derive(Debug, PartialEq)]
+pub enum CreateFilterError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>The limit on the number of requests per second has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>Could not find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl CreateFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFilterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateFilterError::InvalidInput(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateFilterError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateFilterError::ResourceAlreadyExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateFilterError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateFilterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateFilterError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateFilterError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFilterError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateFilterError {}
 /// Errors returned by CreateSchema
 #[derive(Debug, PartialEq)]
 pub enum CreateSchemaError {
@@ -2624,6 +2856,42 @@ impl fmt::Display for DeleteEventTrackerError {
     }
 }
 impl Error for DeleteEventTrackerError {}
+/// Errors returned by DeleteFilter
+#[derive(Debug, PartialEq)]
+pub enum DeleteFilterError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>Could not find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFilterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteFilterError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteFilterError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteFilterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFilterError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteFilterError {}
 /// Errors returned by DeleteSchema
 #[derive(Debug, PartialEq)]
 pub enum DeleteSchemaError {
@@ -3016,6 +3284,42 @@ impl fmt::Display for DescribeFeatureTransformationError {
     }
 }
 impl Error for DescribeFeatureTransformationError {}
+/// Errors returned by DescribeFilter
+#[derive(Debug, PartialEq)]
+pub enum DescribeFilterError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>Could not find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFilterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(DescribeFilterError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeFilterError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeFilterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeFilterError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeFilterError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeFilterError {}
 /// Errors returned by DescribeRecipe
 #[derive(Debug, PartialEq)]
 pub enum DescribeRecipeError {
@@ -3420,6 +3724,42 @@ impl fmt::Display for ListEventTrackersError {
     }
 }
 impl Error for ListEventTrackersError {}
+/// Errors returned by ListFilters
+#[derive(Debug, PartialEq)]
+pub enum ListFiltersError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>The token is not valid.</p>
+    InvalidNextToken(String),
+}
+
+impl ListFiltersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFiltersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListFiltersError::InvalidInput(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListFiltersError::InvalidNextToken(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFiltersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFiltersError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListFiltersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFiltersError {}
 /// Errors returned by ListRecipes
 #[derive(Debug, PartialEq)]
 pub enum ListRecipesError {
@@ -3643,6 +3983,12 @@ pub trait Personalize {
         input: CreateEventTrackerRequest,
     ) -> Result<CreateEventTrackerResponse, RusotoError<CreateEventTrackerError>>;
 
+    /// <p>Creates a recommendation filter. For more information, see Using Filters with Amazon Personalize.</p>
+    async fn create_filter(
+        &self,
+        input: CreateFilterRequest,
+    ) -> Result<CreateFilterResponse, RusotoError<CreateFilterError>>;
+
     /// <p><p>Creates an Amazon Personalize schema from the specified schema string. The schema you create must be in Avro JSON format.</p> <p>Amazon Personalize recognizes three schema variants. Each schema is associated with a dataset type and has a set of required field and keywords. You specify a schema when you call <a>CreateDataset</a>.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSchemas</a> </p> </li> <li> <p> <a>DescribeSchema</a> </p> </li> <li> <p> <a>DeleteSchema</a> </p> </li> </ul></p>
     async fn create_schema(
         &self,
@@ -3684,6 +4030,12 @@ pub trait Personalize {
         &self,
         input: DeleteEventTrackerRequest,
     ) -> Result<(), RusotoError<DeleteEventTrackerError>>;
+
+    /// <p>Deletes a filter.</p>
+    async fn delete_filter(
+        &self,
+        input: DeleteFilterRequest,
+    ) -> Result<(), RusotoError<DeleteFilterError>>;
 
     /// <p>Deletes a schema. Before deleting a schema, you must delete all datasets referencing the schema. For more information on schemas, see <a>CreateSchema</a>.</p>
     async fn delete_schema(
@@ -3747,6 +4099,12 @@ pub trait Personalize {
         DescribeFeatureTransformationResponse,
         RusotoError<DescribeFeatureTransformationError>,
     >;
+
+    /// <p>Describes a filter's properties.</p>
+    async fn describe_filter(
+        &self,
+        input: DescribeFilterRequest,
+    ) -> Result<DescribeFilterResponse, RusotoError<DescribeFilterError>>;
 
     /// <p>Describes a recipe.</p> <p>A recipe contains three items:</p> <ul> <li> <p>An algorithm that trains a model.</p> </li> <li> <p>Hyperparameters that govern the training.</p> </li> <li> <p>Feature transformation information for modifying the input data before training.</p> </li> </ul> <p>Amazon Personalize provides a set of predefined recipes. You specify a recipe when you create a solution with the <a>CreateSolution</a> API. <code>CreateSolution</code> trains a model by using the algorithm in the specified recipe and a training dataset. The solution, when deployed as a campaign, can provide recommendations using the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> API.</p>
     async fn describe_recipe(
@@ -3813,6 +4171,12 @@ pub trait Personalize {
         &self,
         input: ListEventTrackersRequest,
     ) -> Result<ListEventTrackersResponse, RusotoError<ListEventTrackersError>>;
+
+    /// <p>Lists all filters that belong to a given dataset group.</p>
+    async fn list_filters(
+        &self,
+        input: ListFiltersRequest,
+    ) -> Result<ListFiltersResponse, RusotoError<ListFiltersError>>;
 
     /// <p>Returns a list of available recipes. The response provides the properties for each recipe, including the recipe's Amazon Resource Name (ARN).</p>
     async fn list_recipes(
@@ -3889,27 +4253,18 @@ impl Personalize for PersonalizeClient {
         &self,
         input: CreateBatchInferenceJobRequest,
     ) -> Result<CreateBatchInferenceJobResponse, RusotoError<CreateBatchInferenceJobError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.CreateBatchInferenceJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateBatchInferenceJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateBatchInferenceJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateBatchInferenceJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateBatchInferenceJobResponse, _>()
     }
 
     /// <p><p>Creates a campaign by deploying a solution version. When a client calls the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> and <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetPersonalizedRanking.html">GetPersonalizedRanking</a> APIs, a campaign is specified in the request.</p> <p> <b>Minimum Provisioned TPS and Auto-Scaling</b> </p> <p>A transaction is a single <code>GetRecommendations</code> or <code>GetPersonalizedRanking</code> call. Transactions per second (TPS) is the throughput and unit of billing for Amazon Personalize. The minimum provisioned TPS (<code>minProvisionedTPS</code>) specifies the baseline throughput provisioned by Amazon Personalize, and thus, the minimum billing charge. If your TPS increases beyond <code>minProvisionedTPS</code>, Amazon Personalize auto-scales the provisioned capacity up and down, but never below <code>minProvisionedTPS</code>, to maintain a 70% utilization. There&#39;s a short time delay while the capacity is increased that might cause loss of transactions. It&#39;s recommended to start with a low <code>minProvisionedTPS</code>, track your usage using Amazon CloudWatch metrics, and then increase the <code>minProvisionedTPS</code> as necessary.</p> <p> <b>Status</b> </p> <p>A campaign can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the campaign status, call <a>DescribeCampaign</a>.</p> <note> <p>Wait until the <code>status</code> of the campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListCampaigns</a> </p> </li> <li> <p> <a>DescribeCampaign</a> </p> </li> <li> <p> <a>UpdateCampaign</a> </p> </li> <li> <p> <a>DeleteCampaign</a> </p> </li> </ul></p>
@@ -3917,26 +4272,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: CreateCampaignRequest,
     ) -> Result<CreateCampaignResponse, RusotoError<CreateCampaignError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.CreateCampaign");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateCampaignResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateCampaignError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateCampaignError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateCampaignResponse, _>()
     }
 
     /// <p><p>Creates an empty dataset and adds it to the specified dataset group. Use <a>CreateDatasetImportJob</a> to import your training data to a dataset.</p> <p>There are three types of datasets:</p> <ul> <li> <p>Interactions</p> </li> <li> <p>Items</p> </li> <li> <p>Users</p> </li> </ul> <p>Each dataset type has an associated schema with required field types. Only the <code>Interactions</code> dataset is required in order to train a model (also referred to as creating a solution).</p> <p>A dataset can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the status of the dataset, call <a>DescribeDataset</a>.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>CreateDatasetGroup</a> </p> </li> <li> <p> <a>ListDatasets</a> </p> </li> <li> <p> <a>DescribeDataset</a> </p> </li> <li> <p> <a>DeleteDataset</a> </p> </li> </ul></p>
@@ -3944,26 +4290,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: CreateDatasetRequest,
     ) -> Result<CreateDatasetResponse, RusotoError<CreateDatasetError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.CreateDataset");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateDatasetResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDatasetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDatasetError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDatasetResponse, _>()
     }
 
     /// <p><p>Creates an empty dataset group. A dataset group contains related datasets that supply data for training a model. A dataset group can contain at most three datasets, one for each type of dataset:</p> <ul> <li> <p>Interactions</p> </li> <li> <p>Items</p> </li> <li> <p>Users</p> </li> </ul> <p>To train a model (create a solution), a dataset group that contains an <code>Interactions</code> dataset is required. Call <a>CreateDataset</a> to add a dataset to the group.</p> <p>A dataset group can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING</p> </li> </ul> <p>To get the status of the dataset group, call <a>DescribeDatasetGroup</a>. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the creation failed.</p> <note> <p>You must wait until the <code>status</code> of the dataset group is <code>ACTIVE</code> before adding a dataset to the group.</p> </note> <p>You can specify an AWS Key Management Service (KMS) key to encrypt the datasets in the group. If you specify a KMS key, you must also include an AWS Identity and Access Management (IAM) role that has permission to access the key.</p> <p class="title"> <b>APIs that require a dataset group ARN in the request</b> </p> <ul> <li> <p> <a>CreateDataset</a> </p> </li> <li> <p> <a>CreateEventTracker</a> </p> </li> <li> <p> <a>CreateSolution</a> </p> </li> </ul> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetGroups</a> </p> </li> <li> <p> <a>DescribeDatasetGroup</a> </p> </li> <li> <p> <a>DeleteDatasetGroup</a> </p> </li> </ul></p>
@@ -3971,27 +4308,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: CreateDatasetGroupRequest,
     ) -> Result<CreateDatasetGroupResponse, RusotoError<CreateDatasetGroupError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.CreateDatasetGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDatasetGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDatasetGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDatasetGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDatasetGroupResponse, _>()
     }
 
     /// <p><p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) role that has permission to read from the data source.</p> <important> <p>The dataset import job replaces any previous data in the dataset.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul></p>
@@ -3999,27 +4326,18 @@ impl Personalize for PersonalizeClient {
         &self,
         input: CreateDatasetImportJobRequest,
     ) -> Result<CreateDatasetImportJobResponse, RusotoError<CreateDatasetImportJobError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.CreateDatasetImportJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDatasetImportJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDatasetImportJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDatasetImportJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateDatasetImportJobResponse, _>()
     }
 
     /// <p><p>Creates an event tracker that you use when sending event data to the specified dataset group using the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_UBS_PutEvents.html">PutEvents</a> API.</p> <p>When Amazon Personalize creates an event tracker, it also creates an <i>event-interactions</i> dataset in the dataset group associated with the event tracker. The event-interactions dataset stores the event data from the <code>PutEvents</code> call. The contents of this dataset are not available to the user.</p> <note> <p>Only one event tracker can be associated with a dataset group. You will get an error if you call <code>CreateEventTracker</code> using the same dataset group as an existing event tracker.</p> </note> <p>When you send event data you include your tracking ID. The tracking ID identifies the customer and authorizes the customer to send the data.</p> <p>The event tracker can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the status of the event tracker, call <a>DescribeEventTracker</a>.</p> <note> <p>The event tracker must be in the ACTIVE state before using the tracking ID.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListEventTrackers</a> </p> </li> <li> <p> <a>DescribeEventTracker</a> </p> </li> <li> <p> <a>DeleteEventTracker</a> </p> </li> </ul></p>
@@ -4027,27 +4345,35 @@ impl Personalize for PersonalizeClient {
         &self,
         input: CreateEventTrackerRequest,
     ) -> Result<CreateEventTrackerResponse, RusotoError<CreateEventTrackerError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.CreateEventTracker");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateEventTrackerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateEventTrackerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateEventTrackerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateEventTrackerResponse, _>()
+    }
+
+    /// <p>Creates a recommendation filter. For more information, see Using Filters with Amazon Personalize.</p>
+    async fn create_filter(
+        &self,
+        input: CreateFilterRequest,
+    ) -> Result<CreateFilterResponse, RusotoError<CreateFilterError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonPersonalize.CreateFilter");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateFilterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateFilterResponse, _>()
     }
 
     /// <p><p>Creates an Amazon Personalize schema from the specified schema string. The schema you create must be in Avro JSON format.</p> <p>Amazon Personalize recognizes three schema variants. Each schema is associated with a dataset type and has a set of required field and keywords. You specify a schema when you call <a>CreateDataset</a>.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSchemas</a> </p> </li> <li> <p> <a>DescribeSchema</a> </p> </li> <li> <p> <a>DeleteSchema</a> </p> </li> </ul></p>
@@ -4055,26 +4381,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: CreateSchemaRequest,
     ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.CreateSchema");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateSchemaResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSchemaError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSchemaError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateSchemaResponse, _>()
     }
 
     /// <p><p>Creates the configuration for training a model. A trained model is known as a solution. After the configuration is created, you train the model (create a solution) by calling the <a>CreateSolutionVersion</a> operation. Every time you call <code>CreateSolutionVersion</code>, a new version of the solution is created.</p> <p>After creating a solution version, you check its accuracy by calling <a>GetSolutionMetrics</a>. When you are satisfied with the version, you deploy it using <a>CreateCampaign</a>. The campaign provides recommendations to a client through the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> API.</p> <p>To train a model, Amazon Personalize requires training data and a recipe. The training data comes from the dataset group that you provide in the request. A recipe specifies the training algorithm and a feature transformation. You can specify one of the predefined recipes provided by Amazon Personalize. Alternatively, you can specify <code>performAutoML</code> and Amazon Personalize will analyze your data and select the optimum USER<em>PERSONALIZATION recipe for you.</p> <p> <b>Status</b> </p> <p>A solution can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN</em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the status of the solution, call <a>DescribeSolution</a>. Wait until the status shows as ACTIVE before calling <code>CreateSolutionVersion</code>.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolutionVersion</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul></p>
@@ -4082,26 +4399,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: CreateSolutionRequest,
     ) -> Result<CreateSolutionResponse, RusotoError<CreateSolutionError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.CreateSolution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateSolutionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSolutionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSolutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateSolutionResponse, _>()
     }
 
     /// <p><p>Trains or retrains an active solution. A solution is created using the <a>CreateSolution</a> operation and must be in the ACTIVE state before calling <code>CreateSolutionVersion</code>. A new version of the solution is created every time you call this operation.</p> <p> <b>Status</b> </p> <p>A solution version can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the version, call <a>DescribeSolutionVersion</a>. Wait until the status shows as ACTIVE before calling <code>CreateCampaign</code>.</p> <p>If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolution</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul></p>
@@ -4109,27 +4417,18 @@ impl Personalize for PersonalizeClient {
         &self,
         input: CreateSolutionVersionRequest,
     ) -> Result<CreateSolutionVersionResponse, RusotoError<CreateSolutionVersionError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.CreateSolutionVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSolutionVersionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSolutionVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSolutionVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateSolutionVersionResponse, _>()
     }
 
     /// <p>Removes a campaign by deleting the solution deployment. The solution that the campaign is based on is not deleted and can be redeployed when needed. A deleted campaign can no longer be specified in a <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> request. For more information on campaigns, see <a>CreateCampaign</a>.</p>
@@ -4137,26 +4436,16 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DeleteCampaignRequest,
     ) -> Result<(), RusotoError<DeleteCampaignError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DeleteCampaign");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteCampaignError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteCampaignError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a dataset. You can't delete a dataset if an associated <code>DatasetImportJob</code> or <code>SolutionVersion</code> is in the CREATE PENDING or IN PROGRESS state. For more information on datasets, see <a>CreateDataset</a>.</p>
@@ -4164,26 +4453,16 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DeleteDatasetRequest,
     ) -> Result<(), RusotoError<DeleteDatasetError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DeleteDataset");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDatasetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDatasetError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p><p>Deletes a dataset group. Before you delete a dataset group, you must delete the following:</p> <ul> <li> <p>All associated event trackers.</p> </li> <li> <p>All associated solutions.</p> </li> <li> <p>All datasets in the dataset group.</p> </li> </ul></p>
@@ -4191,26 +4470,16 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DeleteDatasetGroupRequest,
     ) -> Result<(), RusotoError<DeleteDatasetGroupError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DeleteDatasetGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDatasetGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDatasetGroupError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the event tracker. Does not delete the event-interactions dataset from the associated dataset group. For more information on event trackers, see <a>CreateEventTracker</a>.</p>
@@ -4218,26 +4487,33 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DeleteEventTrackerRequest,
     ) -> Result<(), RusotoError<DeleteEventTrackerError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DeleteEventTracker");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEventTrackerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteEventTrackerError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes a filter.</p>
+    async fn delete_filter(
+        &self,
+        input: DeleteFilterRequest,
+    ) -> Result<(), RusotoError<DeleteFilterError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonPersonalize.DeleteFilter");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteFilterError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a schema. Before deleting a schema, you must delete all datasets referencing the schema. For more information on schemas, see <a>CreateSchema</a>.</p>
@@ -4245,26 +4521,16 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DeleteSchemaRequest,
     ) -> Result<(), RusotoError<DeleteSchemaError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DeleteSchema");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSchemaError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSchemaError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes all versions of a solution and the <code>Solution</code> object itself. Before deleting a solution, you must delete all campaigns based on the solution. To determine what campaigns are using the solution, call <a>ListCampaigns</a> and supply the Amazon Resource Name (ARN) of the solution. You can't delete a solution if an associated <code>SolutionVersion</code> is in the CREATE PENDING or IN PROGRESS state. For more information on solutions, see <a>CreateSolution</a>.</p>
@@ -4272,26 +4538,16 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DeleteSolutionRequest,
     ) -> Result<(), RusotoError<DeleteSolutionError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DeleteSolution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSolutionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSolutionError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Describes the given algorithm.</p>
@@ -4299,27 +4555,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DescribeAlgorithmRequest,
     ) -> Result<DescribeAlgorithmResponse, RusotoError<DescribeAlgorithmError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DescribeAlgorithm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeAlgorithmResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeAlgorithmError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeAlgorithmError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeAlgorithmResponse, _>()
     }
 
     /// <p>Gets the properties of a batch inference job including name, Amazon Resource Name (ARN), status, input and output configurations, and the ARN of the solution version used to generate the recommendations.</p>
@@ -4328,9 +4574,7 @@ impl Personalize for PersonalizeClient {
         input: DescribeBatchInferenceJobRequest,
     ) -> Result<DescribeBatchInferenceJobResponse, RusotoError<DescribeBatchInferenceJobError>>
     {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonPersonalize.DescribeBatchInferenceJob",
@@ -4338,20 +4582,13 @@ impl Personalize for PersonalizeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeBatchInferenceJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeBatchInferenceJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeBatchInferenceJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeBatchInferenceJobResponse, _>()
     }
 
     /// <p>Describes the given campaign, including its status.</p> <p>A campaign can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>When the <code>status</code> is <code>CREATE FAILED</code>, the response includes the <code>failureReason</code> key, which describes why.</p> <p>For more information on campaigns, see <a>CreateCampaign</a>.</p>
@@ -4359,27 +4596,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DescribeCampaignRequest,
     ) -> Result<DescribeCampaignResponse, RusotoError<DescribeCampaignError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DescribeCampaign");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeCampaignResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeCampaignError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeCampaignError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeCampaignResponse, _>()
     }
 
     /// <p>Describes the given dataset. For more information on datasets, see <a>CreateDataset</a>.</p>
@@ -4387,26 +4614,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DescribeDatasetRequest,
     ) -> Result<DescribeDatasetResponse, RusotoError<DescribeDatasetError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DescribeDataset");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeDatasetResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDatasetError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDatasetError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeDatasetResponse, _>()
     }
 
     /// <p>Describes the given dataset group. For more information on dataset groups, see <a>CreateDatasetGroup</a>.</p>
@@ -4414,27 +4632,18 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DescribeDatasetGroupRequest,
     ) -> Result<DescribeDatasetGroupResponse, RusotoError<DescribeDatasetGroupError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DescribeDatasetGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDatasetGroupResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDatasetGroupError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDatasetGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDatasetGroupResponse, _>()
     }
 
     /// <p>Describes the dataset import job created by <a>CreateDatasetImportJob</a>, including the import job status.</p>
@@ -4442,27 +4651,18 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DescribeDatasetImportJobRequest,
     ) -> Result<DescribeDatasetImportJobResponse, RusotoError<DescribeDatasetImportJobError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DescribeDatasetImportJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeDatasetImportJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDatasetImportJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDatasetImportJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDatasetImportJobResponse, _>()
     }
 
     /// <p>Describes an event tracker. The response includes the <code>trackingId</code> and <code>status</code> of the event tracker. For more information on event trackers, see <a>CreateEventTracker</a>.</p>
@@ -4470,27 +4670,18 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DescribeEventTrackerRequest,
     ) -> Result<DescribeEventTrackerResponse, RusotoError<DescribeEventTrackerError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DescribeEventTracker");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeEventTrackerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeEventTrackerError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeEventTrackerError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeEventTrackerResponse, _>()
     }
 
     /// <p>Describes the given feature transformation.</p>
@@ -4501,9 +4692,7 @@ impl Personalize for PersonalizeClient {
         DescribeFeatureTransformationResponse,
         RusotoError<DescribeFeatureTransformationError>,
     > {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AmazonPersonalize.DescribeFeatureTransformation",
@@ -4511,20 +4700,31 @@ impl Personalize for PersonalizeClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeFeatureTransformationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeFeatureTransformationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeFeatureTransformationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeFeatureTransformationResponse, _>()
+    }
+
+    /// <p>Describes a filter's properties.</p>
+    async fn describe_filter(
+        &self,
+        input: DescribeFilterRequest,
+    ) -> Result<DescribeFilterResponse, RusotoError<DescribeFilterError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonPersonalize.DescribeFilter");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeFilterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeFilterResponse, _>()
     }
 
     /// <p>Describes a recipe.</p> <p>A recipe contains three items:</p> <ul> <li> <p>An algorithm that trains a model.</p> </li> <li> <p>Hyperparameters that govern the training.</p> </li> <li> <p>Feature transformation information for modifying the input data before training.</p> </li> </ul> <p>Amazon Personalize provides a set of predefined recipes. You specify a recipe when you create a solution with the <a>CreateSolution</a> API. <code>CreateSolution</code> trains a model by using the algorithm in the specified recipe and a training dataset. The solution, when deployed as a campaign, can provide recommendations using the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> API.</p>
@@ -4532,26 +4732,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DescribeRecipeRequest,
     ) -> Result<DescribeRecipeResponse, RusotoError<DescribeRecipeError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DescribeRecipe");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeRecipeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeRecipeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeRecipeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeRecipeResponse, _>()
     }
 
     /// <p>Describes a schema. For more information on schemas, see <a>CreateSchema</a>.</p>
@@ -4559,26 +4750,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DescribeSchemaRequest,
     ) -> Result<DescribeSchemaResponse, RusotoError<DescribeSchemaError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DescribeSchema");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeSchemaResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSchemaError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeSchemaError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeSchemaResponse, _>()
     }
 
     /// <p>Describes a solution. For more information on solutions, see <a>CreateSolution</a>.</p>
@@ -4586,27 +4768,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DescribeSolutionRequest,
     ) -> Result<DescribeSolutionResponse, RusotoError<DescribeSolutionError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DescribeSolution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSolutionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSolutionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeSolutionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeSolutionResponse, _>()
     }
 
     /// <p>Describes a specific version of a solution. For more information on solutions, see <a>CreateSolution</a>.</p>
@@ -4614,27 +4786,18 @@ impl Personalize for PersonalizeClient {
         &self,
         input: DescribeSolutionVersionRequest,
     ) -> Result<DescribeSolutionVersionResponse, RusotoError<DescribeSolutionVersionError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.DescribeSolutionVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeSolutionVersionResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeSolutionVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeSolutionVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeSolutionVersionResponse, _>()
     }
 
     /// <p>Gets the metrics for the specified solution version.</p>
@@ -4642,27 +4805,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: GetSolutionMetricsRequest,
     ) -> Result<GetSolutionMetricsResponse, RusotoError<GetSolutionMetricsError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.GetSolutionMetrics");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSolutionMetricsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSolutionMetricsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSolutionMetricsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetSolutionMetricsResponse, _>()
     }
 
     /// <p>Gets a list of the batch inference jobs that have been performed off of a solution version.</p>
@@ -4670,27 +4823,18 @@ impl Personalize for PersonalizeClient {
         &self,
         input: ListBatchInferenceJobsRequest,
     ) -> Result<ListBatchInferenceJobsResponse, RusotoError<ListBatchInferenceJobsError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.ListBatchInferenceJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBatchInferenceJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBatchInferenceJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListBatchInferenceJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListBatchInferenceJobsResponse, _>()
     }
 
     /// <p>Returns a list of campaigns that use the given solution. When a solution is not specified, all the campaigns associated with the account are listed. The response provides the properties for each campaign, including the Amazon Resource Name (ARN). For more information on campaigns, see <a>CreateCampaign</a>.</p>
@@ -4698,26 +4842,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: ListCampaignsRequest,
     ) -> Result<ListCampaignsResponse, RusotoError<ListCampaignsError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.ListCampaigns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListCampaignsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListCampaignsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListCampaignsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListCampaignsResponse, _>()
     }
 
     /// <p>Returns a list of dataset groups. The response provides the properties for each dataset group, including the Amazon Resource Name (ARN). For more information on dataset groups, see <a>CreateDatasetGroup</a>.</p>
@@ -4725,27 +4860,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: ListDatasetGroupsRequest,
     ) -> Result<ListDatasetGroupsResponse, RusotoError<ListDatasetGroupsError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.ListDatasetGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDatasetGroupsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDatasetGroupsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDatasetGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDatasetGroupsResponse, _>()
     }
 
     /// <p>Returns a list of dataset import jobs that use the given dataset. When a dataset is not specified, all the dataset import jobs associated with the account are listed. The response provides the properties for each dataset import job, including the Amazon Resource Name (ARN). For more information on dataset import jobs, see <a>CreateDatasetImportJob</a>. For more information on datasets, see <a>CreateDataset</a>.</p>
@@ -4753,27 +4878,18 @@ impl Personalize for PersonalizeClient {
         &self,
         input: ListDatasetImportJobsRequest,
     ) -> Result<ListDatasetImportJobsResponse, RusotoError<ListDatasetImportJobsError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.ListDatasetImportJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDatasetImportJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDatasetImportJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDatasetImportJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDatasetImportJobsResponse, _>()
     }
 
     /// <p>Returns the list of datasets contained in the given dataset group. The response provides the properties for each dataset, including the Amazon Resource Name (ARN). For more information on datasets, see <a>CreateDataset</a>.</p>
@@ -4781,26 +4897,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: ListDatasetsRequest,
     ) -> Result<ListDatasetsResponse, RusotoError<ListDatasetsError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.ListDatasets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListDatasetsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDatasetsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDatasetsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDatasetsResponse, _>()
     }
 
     /// <p>Returns the list of event trackers associated with the account. The response provides the properties for each event tracker, including the Amazon Resource Name (ARN) and tracking ID. For more information on event trackers, see <a>CreateEventTracker</a>.</p>
@@ -4808,27 +4915,35 @@ impl Personalize for PersonalizeClient {
         &self,
         input: ListEventTrackersRequest,
     ) -> Result<ListEventTrackersResponse, RusotoError<ListEventTrackersError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.ListEventTrackers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListEventTrackersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListEventTrackersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListEventTrackersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListEventTrackersResponse, _>()
+    }
+
+    /// <p>Lists all filters that belong to a given dataset group.</p>
+    async fn list_filters(
+        &self,
+        input: ListFiltersRequest,
+    ) -> Result<ListFiltersResponse, RusotoError<ListFiltersError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonPersonalize.ListFilters");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListFiltersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListFiltersResponse, _>()
     }
 
     /// <p>Returns a list of available recipes. The response provides the properties for each recipe, including the recipe's Amazon Resource Name (ARN).</p>
@@ -4836,26 +4951,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: ListRecipesRequest,
     ) -> Result<ListRecipesResponse, RusotoError<ListRecipesError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.ListRecipes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListRecipesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRecipesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRecipesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListRecipesResponse, _>()
     }
 
     /// <p>Returns the list of schemas associated with the account. The response provides the properties for each schema, including the Amazon Resource Name (ARN). For more information on schemas, see <a>CreateSchema</a>.</p>
@@ -4863,26 +4969,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: ListSchemasRequest,
     ) -> Result<ListSchemasResponse, RusotoError<ListSchemasError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.ListSchemas");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListSchemasResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSchemasError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSchemasError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListSchemasResponse, _>()
     }
 
     /// <p>Returns a list of solution versions for the given solution. When a solution is not specified, all the solution versions associated with the account are listed. The response provides the properties for each solution version, including the Amazon Resource Name (ARN). For more information on solutions, see <a>CreateSolution</a>.</p>
@@ -4890,27 +4987,18 @@ impl Personalize for PersonalizeClient {
         &self,
         input: ListSolutionVersionsRequest,
     ) -> Result<ListSolutionVersionsResponse, RusotoError<ListSolutionVersionsError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.ListSolutionVersions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListSolutionVersionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSolutionVersionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSolutionVersionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListSolutionVersionsResponse, _>()
     }
 
     /// <p>Returns a list of solutions that use the given dataset group. When a dataset group is not specified, all the solutions associated with the account are listed. The response provides the properties for each solution, including the Amazon Resource Name (ARN). For more information on solutions, see <a>CreateSolution</a>.</p>
@@ -4918,26 +5006,17 @@ impl Personalize for PersonalizeClient {
         &self,
         input: ListSolutionsRequest,
     ) -> Result<ListSolutionsResponse, RusotoError<ListSolutionsError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.ListSolutions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListSolutionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSolutionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSolutionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListSolutionsResponse, _>()
     }
 
     /// <p>Updates a campaign by either deploying a new solution or changing the value of the campaign's <code>minProvisionedTPS</code> parameter.</p> <p>To update a campaign, the campaign status must be ACTIVE or CREATE FAILED. Check the campaign status using the <a>DescribeCampaign</a> API.</p> <note> <p>You must wait until the <code>status</code> of the updated campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p>For more information on campaigns, see <a>CreateCampaign</a>.</p>
@@ -4945,25 +5024,16 @@ impl Personalize for PersonalizeClient {
         &self,
         input: UpdateCampaignRequest,
     ) -> Result<UpdateCampaignResponse, RusotoError<UpdateCampaignError>> {
-        let mut request = SignedRequest::new("POST", "personalize", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AmazonPersonalize.UpdateCampaign");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateCampaignResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateCampaignError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateCampaignError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateCampaignResponse, _>()
     }
 }

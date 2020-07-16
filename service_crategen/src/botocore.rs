@@ -202,6 +202,7 @@ pub struct Shape {
     pub aws_box: Option<bool>,
     pub documentation: Option<String>,
     pub error: Option<HttpError>,
+    pub eventstream: Option<bool>,
     pub exception: Option<bool>,
     pub fault: Option<bool>,
     pub flattened: Option<bool>,
@@ -268,6 +269,10 @@ impl<'a> Shape {
                 .contains(&String::from(field))
     }
 
+    pub fn eventstream(&self) -> bool {
+        self.eventstream.unwrap_or(false)
+    }
+
     pub fn exception(&self) -> bool {
         self.exception.unwrap_or(false)
     }
@@ -309,6 +314,8 @@ pub struct Operation {
     pub documentation_url: Option<String>,
     pub errors: Option<BTreeSet<Error>>,
     pub http: HttpRequest,
+    #[serde(rename = "httpChecksumRequired")]
+    pub http_checksum_required: Option<bool>,
     pub input: Option<Input>,
     pub name: String,
     pub output: Option<Output>,

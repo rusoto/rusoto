@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Settings for logging access in a stage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccessLogSettings {
     /// <p>The ARN of the CloudWatch Logs log group to receive access logs.</p>
     #[serde(rename = "DestinationArn")]
@@ -39,7 +39,7 @@ pub struct AccessLogSettings {
 }
 
 /// <p>Represents an API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Api {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
@@ -98,7 +98,7 @@ pub struct Api {
 }
 
 /// <p>Represents an API mapping.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiMapping {
     /// <p>The API identifier.</p>
@@ -118,7 +118,7 @@ pub struct ApiMapping {
 }
 
 /// <p>Represents an authorizer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Authorizer {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
@@ -160,7 +160,7 @@ pub struct Authorizer {
 }
 
 /// <p>Represents a CORS configuration. Supported only for HTTP APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html">Configuring CORS</a> for more information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Cors {
     /// <p>Specifies whether credentials are included in the CORS request. Supported only for HTTP APIs.</p>
     #[serde(rename = "AllowCredentials")]
@@ -189,7 +189,7 @@ pub struct Cors {
 }
 
 /// <p>Creates a new ApiMapping resource to represent an API mapping.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiMappingRequest {
     /// <p>The API identifier.</p>
@@ -207,7 +207,7 @@ pub struct CreateApiMappingRequest {
     pub stage: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApiMappingResponse {
     /// <p>The API identifier.</p>
@@ -229,7 +229,7 @@ pub struct CreateApiMappingResponse {
 }
 
 /// <p>Creates a new Api resource to represent an API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiRequest {
     /// <p>An API key selection expression. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
@@ -280,7 +280,7 @@ pub struct CreateApiRequest {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
@@ -342,7 +342,7 @@ pub struct CreateApiResponse {
 }
 
 /// <p>Creates a new Authorizer resource to represent an authorizer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
     /// <p>The API identifier.</p>
@@ -380,7 +380,7 @@ pub struct CreateAuthorizerRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAuthorizerResponse {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
@@ -423,7 +423,7 @@ pub struct CreateAuthorizerResponse {
 }
 
 /// <p>Creates a new Deployment resource to represent a deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
     /// <p>The API identifier.</p>
@@ -439,7 +439,7 @@ pub struct CreateDeploymentRequest {
     pub stage_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResponse {
     /// <p>Specifies whether a deployment was automatically released.</p>
@@ -469,7 +469,7 @@ pub struct CreateDeploymentResponse {
 }
 
 /// <p>Creates a new DomainName resource to represent a domain name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainNameRequest {
     /// <p>The domain name.</p>
@@ -485,7 +485,7 @@ pub struct CreateDomainNameRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainNameResponse {
     /// <p>The API mapping selection expression.</p>
@@ -507,7 +507,7 @@ pub struct CreateDomainNameResponse {
 }
 
 /// <p>Creates a new Integration resource to represent an integration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIntegrationRequest {
     /// <p>The API identifier.</p>
@@ -580,7 +580,7 @@ pub struct CreateIntegrationRequest {
 }
 
 /// <p>Creates a new IntegrationResponse resource to represent an integration response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIntegrationResponseRequest {
     /// <p>The API identifier.</p>
@@ -610,7 +610,7 @@ pub struct CreateIntegrationResponseRequest {
     pub template_selection_expression: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIntegrationResponseResponse {
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
@@ -639,7 +639,7 @@ pub struct CreateIntegrationResponseResponse {
     pub template_selection_expression: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIntegrationResult {
     /// <p>Specifies whether an integration is managed by API Gateway. If you created an API using using quick create, the resulting integration is managed by API Gateway. You can update a managed integration, but you can't delete it.</p>
@@ -722,7 +722,7 @@ pub struct CreateIntegrationResult {
 }
 
 /// <p>Creates a new Model.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelRequest {
     /// <p>The API identifier.</p>
@@ -744,7 +744,7 @@ pub struct CreateModelRequest {
     pub schema: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelResponse {
     /// <p>The content-type for the model, for example, "application/json".</p>
@@ -770,7 +770,7 @@ pub struct CreateModelResponse {
 }
 
 /// <p>Creates a new Route resource to represent a route.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteRequest {
     /// <p>The API identifier.</p>
@@ -822,7 +822,7 @@ pub struct CreateRouteRequest {
 }
 
 /// <p>Creates a new RouteResponse resource to represent a route response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRouteResponseRequest {
     /// <p>The API identifier.</p>
@@ -848,7 +848,7 @@ pub struct CreateRouteResponseRequest {
     pub route_response_key: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRouteResponseResponse {
     /// <p>Represents the model selection expression of a route response. Supported only for WebSocket APIs.</p>
@@ -873,7 +873,7 @@ pub struct CreateRouteResponseResponse {
     pub route_response_key: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRouteResult {
     /// <p>Specifies whether a route is managed by API Gateway. If you created an API using quick create, the $default route is managed by API Gateway. You can't modify the $default route key.</p>
@@ -931,7 +931,7 @@ pub struct CreateRouteResult {
 }
 
 /// <p>Creates a new Stage resource to represent a stage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStageRequest {
     /// <p>Settings for logging access in this stage.</p>
@@ -978,7 +978,7 @@ pub struct CreateStageRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStageResponse {
     /// <p>Settings for logging access in this stage.</p>
@@ -1040,7 +1040,7 @@ pub struct CreateStageResponse {
 }
 
 /// <p>Creates a VPC link</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcLinkRequest {
     /// <p>The name of the VPC link.</p>
@@ -1059,7 +1059,7 @@ pub struct CreateVpcLinkRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVpcLinkResponse {
     /// <p>The timestamp when the VPC link was created.</p>
@@ -1100,7 +1100,7 @@ pub struct CreateVpcLinkResponse {
     pub vpc_link_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccessLogSettingsRequest {
     /// <p>The API identifier.</p>
@@ -1111,7 +1111,7 @@ pub struct DeleteAccessLogSettingsRequest {
     pub stage_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiMappingRequest {
     /// <p>The API mapping identifier.</p>
@@ -1122,7 +1122,7 @@ pub struct DeleteApiMappingRequest {
     pub domain_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiRequest {
     /// <p>The API identifier.</p>
@@ -1130,7 +1130,7 @@ pub struct DeleteApiRequest {
     pub api_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
     /// <p>The API identifier.</p>
@@ -1141,7 +1141,7 @@ pub struct DeleteAuthorizerRequest {
     pub authorizer_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCorsConfigurationRequest {
     /// <p>The API identifier.</p>
@@ -1149,7 +1149,7 @@ pub struct DeleteCorsConfigurationRequest {
     pub api_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentRequest {
     /// <p>The API identifier.</p>
@@ -1160,7 +1160,7 @@ pub struct DeleteDeploymentRequest {
     pub deployment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainNameRequest {
     /// <p>The domain name.</p>
@@ -1168,7 +1168,7 @@ pub struct DeleteDomainNameRequest {
     pub domain_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationRequest {
     /// <p>The API identifier.</p>
@@ -1179,7 +1179,7 @@ pub struct DeleteIntegrationRequest {
     pub integration_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationResponseRequest {
     /// <p>The API identifier.</p>
@@ -1193,7 +1193,7 @@ pub struct DeleteIntegrationResponseRequest {
     pub integration_response_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelRequest {
     /// <p>The API identifier.</p>
@@ -1204,7 +1204,7 @@ pub struct DeleteModelRequest {
     pub model_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteRequest {
     /// <p>The API identifier.</p>
@@ -1215,7 +1215,7 @@ pub struct DeleteRouteRequest {
     pub route_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteRequestParameterRequest {
     /// <p>The API identifier.</p>
@@ -1229,7 +1229,7 @@ pub struct DeleteRouteRequestParameterRequest {
     pub route_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteResponseRequest {
     /// <p>The API identifier.</p>
@@ -1243,7 +1243,7 @@ pub struct DeleteRouteResponseRequest {
     pub route_response_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRouteSettingsRequest {
     /// <p>The API identifier.</p>
@@ -1257,7 +1257,7 @@ pub struct DeleteRouteSettingsRequest {
     pub stage_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStageRequest {
     /// <p>The API identifier.</p>
@@ -1268,7 +1268,7 @@ pub struct DeleteStageRequest {
     pub stage_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcLinkRequest {
     /// <p>The ID of the VPC link.</p>
@@ -1276,12 +1276,12 @@ pub struct DeleteVpcLinkRequest {
     pub vpc_link_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVpcLinkResponse {}
 
 /// <p>An immutable representation of an API that can be called by users. A Deployment must be associated with a Stage for it to be callable over the internet.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployment {
     /// <p>Specifies whether a deployment was automatically released.</p>
@@ -1311,7 +1311,7 @@ pub struct Deployment {
 }
 
 /// <p>Represents a domain name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainName {
     /// <p>The API mapping selection expression.</p>
@@ -1332,7 +1332,7 @@ pub struct DomainName {
 }
 
 /// <p>The domain name configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DomainNameConfiguration {
     /// <p>A domain name for the API.</p>
     #[serde(rename = "ApiGatewayDomainName")]
@@ -1372,7 +1372,7 @@ pub struct DomainNameConfiguration {
     pub security_policy: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportApiRequest {
     /// <p>The API identifier.</p>
@@ -1398,12 +1398,12 @@ pub struct ExportApiRequest {
     pub stage_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct ExportApiResponse {
     pub body: Option<bytes::Bytes>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiMappingRequest {
     /// <p>The API mapping identifier.</p>
@@ -1414,7 +1414,7 @@ pub struct GetApiMappingRequest {
     pub domain_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiMappingResponse {
     /// <p>The API identifier.</p>
@@ -1435,7 +1435,7 @@ pub struct GetApiMappingResponse {
     pub stage: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiMappingsRequest {
     /// <p>The domain name.</p>
@@ -1451,7 +1451,7 @@ pub struct GetApiMappingsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiMappingsResponse {
     /// <p>The elements from this collection.</p>
@@ -1464,7 +1464,7 @@ pub struct GetApiMappingsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiRequest {
     /// <p>The API identifier.</p>
@@ -1472,7 +1472,7 @@ pub struct GetApiRequest {
     pub api_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
@@ -1533,7 +1533,7 @@ pub struct GetApiResponse {
     pub warnings: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApisRequest {
     /// <p>The maximum number of elements to be returned for this resource.</p>
@@ -1546,7 +1546,7 @@ pub struct GetApisRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApisResponse {
     /// <p>The elements from this collection.</p>
@@ -1559,7 +1559,7 @@ pub struct GetApisResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizerRequest {
     /// <p>The API identifier.</p>
@@ -1570,7 +1570,7 @@ pub struct GetAuthorizerRequest {
     pub authorizer_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAuthorizerResponse {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
@@ -1612,7 +1612,7 @@ pub struct GetAuthorizerResponse {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizersRequest {
     /// <p>The API identifier.</p>
@@ -1628,7 +1628,7 @@ pub struct GetAuthorizersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAuthorizersResponse {
     /// <p>The elements from this collection.</p>
@@ -1641,7 +1641,7 @@ pub struct GetAuthorizersResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentRequest {
     /// <p>The API identifier.</p>
@@ -1652,7 +1652,7 @@ pub struct GetDeploymentRequest {
     pub deployment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentResponse {
     /// <p>Specifies whether a deployment was automatically released.</p>
@@ -1681,7 +1681,7 @@ pub struct GetDeploymentResponse {
     pub description: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentsRequest {
     /// <p>The API identifier.</p>
@@ -1697,7 +1697,7 @@ pub struct GetDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentsResponse {
     /// <p>The elements from this collection.</p>
@@ -1710,7 +1710,7 @@ pub struct GetDeploymentsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNameRequest {
     /// <p>The domain name.</p>
@@ -1718,7 +1718,7 @@ pub struct GetDomainNameRequest {
     pub domain_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainNameResponse {
     /// <p>The API mapping selection expression.</p>
@@ -1739,7 +1739,7 @@ pub struct GetDomainNameResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNamesRequest {
     /// <p>The maximum number of elements to be returned for this resource.</p>
@@ -1752,7 +1752,7 @@ pub struct GetDomainNamesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainNamesResponse {
     /// <p>The elements from this collection.</p>
@@ -1765,7 +1765,7 @@ pub struct GetDomainNamesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationRequest {
     /// <p>The API identifier.</p>
@@ -1776,7 +1776,7 @@ pub struct GetIntegrationRequest {
     pub integration_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationResponseRequest {
     /// <p>The API identifier.</p>
@@ -1790,7 +1790,7 @@ pub struct GetIntegrationResponseRequest {
     pub integration_response_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationResponseResponse {
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
@@ -1819,7 +1819,7 @@ pub struct GetIntegrationResponseResponse {
     pub template_selection_expression: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationResponsesRequest {
     /// <p>The API identifier.</p>
@@ -1838,7 +1838,7 @@ pub struct GetIntegrationResponsesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationResponsesResponse {
     /// <p>The elements from this collection.</p>
@@ -1851,7 +1851,7 @@ pub struct GetIntegrationResponsesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationResult {
     /// <p>Specifies whether an integration is managed by API Gateway. If you created an API using using quick create, the resulting integration is managed by API Gateway. You can update a managed integration, but you can't delete it.</p>
@@ -1933,7 +1933,7 @@ pub struct GetIntegrationResult {
     pub tls_config: Option<TlsConfig>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationsRequest {
     /// <p>The API identifier.</p>
@@ -1949,7 +1949,7 @@ pub struct GetIntegrationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationsResponse {
     /// <p>The elements from this collection.</p>
@@ -1962,7 +1962,7 @@ pub struct GetIntegrationsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelRequest {
     /// <p>The API identifier.</p>
@@ -1973,7 +1973,7 @@ pub struct GetModelRequest {
     pub model_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelResponse {
     /// <p>The content-type for the model, for example, "application/json".</p>
@@ -1998,7 +1998,7 @@ pub struct GetModelResponse {
     pub schema: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelTemplateRequest {
     /// <p>The API identifier.</p>
@@ -2009,7 +2009,7 @@ pub struct GetModelTemplateRequest {
     pub model_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelTemplateResponse {
     /// <p>The template value.</p>
@@ -2018,7 +2018,7 @@ pub struct GetModelTemplateResponse {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelsRequest {
     /// <p>The API identifier.</p>
@@ -2034,7 +2034,7 @@ pub struct GetModelsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelsResponse {
     /// <p>The elements from this collection.</p>
@@ -2047,7 +2047,7 @@ pub struct GetModelsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRouteRequest {
     /// <p>The API identifier.</p>
@@ -2058,7 +2058,7 @@ pub struct GetRouteRequest {
     pub route_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRouteResponseRequest {
     /// <p>The API identifier.</p>
@@ -2072,7 +2072,7 @@ pub struct GetRouteResponseRequest {
     pub route_response_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRouteResponseResponse {
     /// <p>Represents the model selection expression of a route response. Supported only for WebSocket APIs.</p>
@@ -2097,7 +2097,7 @@ pub struct GetRouteResponseResponse {
     pub route_response_key: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRouteResponsesRequest {
     /// <p>The API identifier.</p>
@@ -2116,7 +2116,7 @@ pub struct GetRouteResponsesRequest {
     pub route_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRouteResponsesResponse {
     /// <p>The elements from this collection.</p>
@@ -2129,7 +2129,7 @@ pub struct GetRouteResponsesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRouteResult {
     /// <p>Specifies whether a route is managed by API Gateway. If you created an API using quick create, the $default route is managed by API Gateway. You can't modify the $default route key.</p>
@@ -2186,7 +2186,7 @@ pub struct GetRouteResult {
     pub target: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoutesRequest {
     /// <p>The API identifier.</p>
@@ -2202,7 +2202,7 @@ pub struct GetRoutesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRoutesResponse {
     /// <p>The elements from this collection.</p>
@@ -2215,7 +2215,7 @@ pub struct GetRoutesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStageRequest {
     /// <p>The API identifier.</p>
@@ -2226,7 +2226,7 @@ pub struct GetStageRequest {
     pub stage_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStageResponse {
     /// <p>Settings for logging access in this stage.</p>
@@ -2287,7 +2287,7 @@ pub struct GetStageResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStagesRequest {
     /// <p>The API identifier.</p>
@@ -2303,7 +2303,7 @@ pub struct GetStagesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStagesResponse {
     /// <p>The elements from this collection.</p>
@@ -2316,7 +2316,7 @@ pub struct GetStagesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
     /// <p>The resource ARN for the tag.</p>
@@ -2324,7 +2324,7 @@ pub struct GetTagsRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagsResponse {
     #[serde(rename = "Tags")]
@@ -2332,7 +2332,7 @@ pub struct GetTagsResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVpcLinkRequest {
     /// <p>The ID of the VPC link.</p>
@@ -2340,7 +2340,7 @@ pub struct GetVpcLinkRequest {
     pub vpc_link_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVpcLinkResponse {
     /// <p>The timestamp when the VPC link was created.</p>
@@ -2381,7 +2381,7 @@ pub struct GetVpcLinkResponse {
     pub vpc_link_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVpcLinksRequest {
     /// <p>The maximum number of elements to be returned for this resource.</p>
@@ -2394,7 +2394,7 @@ pub struct GetVpcLinksRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVpcLinksResponse {
     /// <p>A collection of VPC links.</p>
@@ -2408,7 +2408,7 @@ pub struct GetVpcLinksResponse {
 }
 
 /// <p></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportApiRequest {
     /// <p>Specifies how to interpret the base path of the API during import. Valid values are ignore, prepend, and split. The default value is ignore. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-import-api-basePath.html">Set the OpenAPI basePath Property</a>. Supported only for HTTP APIs.</p>
@@ -2424,7 +2424,7 @@ pub struct ImportApiRequest {
     pub fail_on_warnings: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
@@ -2486,7 +2486,7 @@ pub struct ImportApiResponse {
 }
 
 /// <p>Represents an integration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Integration {
     /// <p>Specifies whether an integration is managed by API Gateway. If you created an API using using quick create, the resulting integration is managed by API Gateway. You can update a managed integration, but you can't delete it.</p>
@@ -2569,7 +2569,7 @@ pub struct Integration {
 }
 
 /// <p>Represents an integration response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IntegrationResponse {
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
@@ -2598,7 +2598,7 @@ pub struct IntegrationResponse {
 }
 
 /// <p>Represents the configuration of a JWT authorizer. Required for the JWT authorizer type. Supported only for HTTP APIs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JWTConfiguration {
     /// <p>A list of the intended recipients of the JWT. A valid JWT must provide an aud that matches at least one entry in this list. See <a href="https://tools.ietf.org/html/rfc7519#section-4.1.3">RFC 7519</a>. Supported only for HTTP APIs.</p>
     #[serde(rename = "Audience")]
@@ -2612,7 +2612,7 @@ pub struct JWTConfiguration {
 }
 
 /// <p>Represents a data model for an API. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Create Models and Mapping Templates for Request and Response Mappings</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Model {
     /// <p>The content-type for the model, for example, "application/json".</p>
@@ -2637,7 +2637,7 @@ pub struct Model {
 }
 
 /// <p>Validation constraints imposed on parameters of a request (path, query string, headers).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ParameterConstraints {
     /// <p>Whether or not the parameter is required.</p>
     #[serde(rename = "Required")]
@@ -2646,7 +2646,7 @@ pub struct ParameterConstraints {
 }
 
 /// <p></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReimportApiRequest {
     /// <p>The API identifier.</p>
@@ -2665,7 +2665,7 @@ pub struct ReimportApiRequest {
     pub fail_on_warnings: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReimportApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
@@ -2727,7 +2727,7 @@ pub struct ReimportApiResponse {
 }
 
 /// <p>Represents a route.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Route {
     /// <p>Specifies whether a route is managed by API Gateway. If you created an API using quick create, the $default route is managed by API Gateway. You can't modify the $default route key.</p>
@@ -2784,7 +2784,7 @@ pub struct Route {
 }
 
 /// <p>Represents a route response.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RouteResponse {
     /// <p>Represents the model selection expression of a route response. Supported only for WebSocket APIs.</p>
@@ -2809,7 +2809,7 @@ pub struct RouteResponse {
 }
 
 /// <p>Represents a collection of route settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RouteSettings {
     /// <p>Specifies whether (true) or not (false) data trace logging is enabled for this route. This property affects the log entries pushed to Amazon CloudWatch Logs. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DataTraceEnabled")]
@@ -2834,7 +2834,7 @@ pub struct RouteSettings {
 }
 
 /// <p>Represents an API stage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Stage {
     /// <p>Settings for logging access in this stage.</p>
@@ -2895,7 +2895,7 @@ pub struct Stage {
 }
 
 /// <p>Creates a new Tag resource to represent a tag.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The resource ARN for the tag.</p>
@@ -2907,12 +2907,12 @@ pub struct TagResourceRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>The TLS configuration for a private integration. If you specify a TLS configuration, private integration traffic uses the HTTPS protocol. Supported only for HTTP APIs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TlsConfig {
     /// <p>If you specify a server name, API Gateway uses it to verify the hostname on the integration's certificate. The server name is also included in the TLS handshake to support Server Name Indication (SNI) or virtual hosting.</p>
@@ -2922,7 +2922,7 @@ pub struct TlsConfig {
 }
 
 /// <p>The TLS configuration for a private integration. If you specify a TLS configuration, private integration traffic uses the HTTPS protocol. Supported only for HTTP APIs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TlsConfigInput {
     /// <p>If you specify a server name, API Gateway uses it to verify the hostname on the integration's certificate. The server name is also included in the TLS handshake to support Server Name Indication (SNI) or virtual hosting.</p>
@@ -2931,7 +2931,7 @@ pub struct TlsConfigInput {
     pub server_name_to_verify: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The resource ARN for the tag.</p>
@@ -2943,7 +2943,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>Updates an ApiMapping.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiMappingRequest {
     /// <p>The API identifier.</p>
@@ -2965,7 +2965,7 @@ pub struct UpdateApiMappingRequest {
     pub stage: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApiMappingResponse {
     /// <p>The API identifier.</p>
@@ -2987,7 +2987,7 @@ pub struct UpdateApiMappingResponse {
 }
 
 /// <p>Updates an Api.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiRequest {
     /// <p>The API identifier.</p>
@@ -3035,7 +3035,7 @@ pub struct UpdateApiRequest {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
@@ -3097,7 +3097,7 @@ pub struct UpdateApiResponse {
 }
 
 /// <p>Updates an Authorizer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthorizerRequest {
     /// <p>The API identifier.</p>
@@ -3141,7 +3141,7 @@ pub struct UpdateAuthorizerRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuthorizerResponse {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
@@ -3184,7 +3184,7 @@ pub struct UpdateAuthorizerResponse {
 }
 
 /// <p>Updates a Deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentRequest {
     /// <p>The API identifier.</p>
@@ -3199,7 +3199,7 @@ pub struct UpdateDeploymentRequest {
     pub description: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeploymentResponse {
     /// <p>Specifies whether a deployment was automatically released.</p>
@@ -3229,7 +3229,7 @@ pub struct UpdateDeploymentResponse {
 }
 
 /// <p>Updates a DomainName.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainNameRequest {
     /// <p>The domain name.</p>
@@ -3241,7 +3241,7 @@ pub struct UpdateDomainNameRequest {
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainNameResponse {
     /// <p>The API mapping selection expression.</p>
@@ -3263,7 +3263,7 @@ pub struct UpdateDomainNameResponse {
 }
 
 /// <p>Updates an Integration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationRequest {
     /// <p>The API identifier.</p>
@@ -3340,7 +3340,7 @@ pub struct UpdateIntegrationRequest {
 }
 
 /// <p>Updates an IntegrationResponses.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationResponseRequest {
     /// <p>The API identifier.</p>
@@ -3381,7 +3381,7 @@ pub struct UpdateIntegrationResponseRequest {
     pub template_selection_expression: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIntegrationResponseResponse {
     /// <p>Supported only for WebSocket APIs. Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p> <p>CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p> <p>CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p> <p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
@@ -3410,7 +3410,7 @@ pub struct UpdateIntegrationResponseResponse {
     pub template_selection_expression: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIntegrationResult {
     /// <p>Specifies whether an integration is managed by API Gateway. If you created an API using using quick create, the resulting integration is managed by API Gateway. You can update a managed integration, but you can't delete it.</p>
@@ -3493,7 +3493,7 @@ pub struct UpdateIntegrationResult {
 }
 
 /// <p>Updates a Model.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelRequest {
     /// <p>The API identifier.</p>
@@ -3520,7 +3520,7 @@ pub struct UpdateModelRequest {
     pub schema: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateModelResponse {
     /// <p>The content-type for the model, for example, "application/json".</p>
@@ -3546,7 +3546,7 @@ pub struct UpdateModelResponse {
 }
 
 /// <p>Updates a Route.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteRequest {
     /// <p>The API identifier.</p>
@@ -3602,7 +3602,7 @@ pub struct UpdateRouteRequest {
 }
 
 /// <p>Updates a RouteResponse.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRouteResponseRequest {
     /// <p>The API identifier.</p>
@@ -3632,7 +3632,7 @@ pub struct UpdateRouteResponseRequest {
     pub route_response_key: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRouteResponseResponse {
     /// <p>Represents the model selection expression of a route response. Supported only for WebSocket APIs.</p>
@@ -3657,7 +3657,7 @@ pub struct UpdateRouteResponseResponse {
     pub route_response_key: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRouteResult {
     /// <p>Specifies whether a route is managed by API Gateway. If you created an API using quick create, the $default route is managed by API Gateway. You can't modify the $default route key.</p>
@@ -3715,7 +3715,7 @@ pub struct UpdateRouteResult {
 }
 
 /// <p>Updates a Stage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStageRequest {
     /// <p>Settings for logging access in this stage.</p>
@@ -3758,7 +3758,7 @@ pub struct UpdateStageRequest {
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStageResponse {
     /// <p>Settings for logging access in this stage.</p>
@@ -3820,7 +3820,7 @@ pub struct UpdateStageResponse {
 }
 
 /// <p>Updates a VPC link.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVpcLinkRequest {
     /// <p>The name of the VPC link.</p>
@@ -3832,7 +3832,7 @@ pub struct UpdateVpcLinkRequest {
     pub vpc_link_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVpcLinkResponse {
     /// <p>The timestamp when the VPC link was created.</p>
@@ -3874,7 +3874,7 @@ pub struct UpdateVpcLinkResponse {
 }
 
 /// <p>Represents a VPC link.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcLink {
     /// <p>The timestamp when the VPC link was created.</p>
@@ -7374,6 +7374,7 @@ impl ApiGatewayV2Client {
 #[async_trait]
 impl ApiGatewayV2 for ApiGatewayV2Client {
     /// <p>Creates an Api resource.</p>
+    #[allow(unused_mut)]
     async fn create_api(
         &self,
         input: CreateApiRequest,
@@ -7392,7 +7393,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateApiResponse, _>()?;
 
@@ -7404,6 +7405,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates an API mapping.</p>
+    #[allow(unused_mut)]
     async fn create_api_mapping(
         &self,
         input: CreateApiMappingRequest,
@@ -7425,7 +7427,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateApiMappingResponse, _>()?;
 
@@ -7437,6 +7439,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates an Authorizer for an API.</p>
+    #[allow(unused_mut)]
     async fn create_authorizer(
         &self,
         input: CreateAuthorizerRequest,
@@ -7455,7 +7458,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateAuthorizerResponse, _>()?;
 
@@ -7467,6 +7470,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a Deployment for an API.</p>
+    #[allow(unused_mut)]
     async fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
@@ -7485,7 +7489,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDeploymentResponse, _>()?;
 
@@ -7497,6 +7501,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a domain name.</p>
+    #[allow(unused_mut)]
     async fn create_domain_name(
         &self,
         input: CreateDomainNameRequest,
@@ -7515,7 +7520,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDomainNameResponse, _>()?;
 
@@ -7527,6 +7532,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates an Integration.</p>
+    #[allow(unused_mut)]
     async fn create_integration(
         &self,
         input: CreateIntegrationRequest,
@@ -7545,7 +7551,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateIntegrationResult, _>()?;
 
@@ -7557,6 +7563,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates an IntegrationResponses.</p>
+    #[allow(unused_mut)]
     async fn create_integration_response(
         &self,
         input: CreateIntegrationResponseRequest,
@@ -7580,7 +7587,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateIntegrationResponseResponse, _>()?;
 
@@ -7592,6 +7599,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a Model for an API.</p>
+    #[allow(unused_mut)]
     async fn create_model(
         &self,
         input: CreateModelRequest,
@@ -7610,7 +7618,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateModelResponse, _>()?;
 
@@ -7622,6 +7630,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a Route for an API.</p>
+    #[allow(unused_mut)]
     async fn create_route(
         &self,
         input: CreateRouteRequest,
@@ -7640,7 +7649,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRouteResult, _>()?;
 
@@ -7652,6 +7661,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a RouteResponse for a Route.</p>
+    #[allow(unused_mut)]
     async fn create_route_response(
         &self,
         input: CreateRouteResponseRequest,
@@ -7674,7 +7684,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRouteResponseResponse, _>()?;
 
@@ -7686,6 +7696,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a Stage for an API.</p>
+    #[allow(unused_mut)]
     async fn create_stage(
         &self,
         input: CreateStageRequest,
@@ -7704,7 +7715,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateStageResponse, _>()?;
 
@@ -7716,6 +7727,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a VPC link.</p>
+    #[allow(unused_mut)]
     async fn create_vpc_link(
         &self,
         input: CreateVpcLinkRequest,
@@ -7734,7 +7746,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateVpcLinkResponse, _>()?;
 
@@ -7746,6 +7758,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes the AccessLogSettings for a Stage. To disable access logging for a Stage, delete its AccessLogSettings.</p>
+    #[allow(unused_mut)]
     async fn delete_access_log_settings(
         &self,
         input: DeleteAccessLogSettingsRequest,
@@ -7765,7 +7778,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7776,6 +7789,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes an Api resource.</p>
+    #[allow(unused_mut)]
     async fn delete_api(&self, input: DeleteApiRequest) -> Result<(), RusotoError<DeleteApiError>> {
         let request_uri = format!("/v2/apis/{api_id}", api_id = input.api_id);
 
@@ -7788,7 +7802,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7799,6 +7813,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes an API mapping.</p>
+    #[allow(unused_mut)]
     async fn delete_api_mapping(
         &self,
         input: DeleteApiMappingRequest,
@@ -7818,7 +7833,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7829,6 +7844,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes an Authorizer.</p>
+    #[allow(unused_mut)]
     async fn delete_authorizer(
         &self,
         input: DeleteAuthorizerRequest,
@@ -7848,7 +7864,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7859,6 +7875,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a CORS configuration.</p>
+    #[allow(unused_mut)]
     async fn delete_cors_configuration(
         &self,
         input: DeleteCorsConfigurationRequest,
@@ -7874,7 +7891,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7885,6 +7902,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a Deployment.</p>
+    #[allow(unused_mut)]
     async fn delete_deployment(
         &self,
         input: DeleteDeploymentRequest,
@@ -7904,7 +7922,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7915,6 +7933,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a domain name.</p>
+    #[allow(unused_mut)]
     async fn delete_domain_name(
         &self,
         input: DeleteDomainNameRequest,
@@ -7933,7 +7952,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7944,6 +7963,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes an Integration.</p>
+    #[allow(unused_mut)]
     async fn delete_integration(
         &self,
         input: DeleteIntegrationRequest,
@@ -7963,7 +7983,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -7974,6 +7994,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes an IntegrationResponses.</p>
+    #[allow(unused_mut)]
     async fn delete_integration_response(
         &self,
         input: DeleteIntegrationResponseRequest,
@@ -7989,7 +8010,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8000,6 +8021,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a Model.</p>
+    #[allow(unused_mut)]
     async fn delete_model(
         &self,
         input: DeleteModelRequest,
@@ -8019,7 +8041,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8030,6 +8052,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a Route.</p>
+    #[allow(unused_mut)]
     async fn delete_route(
         &self,
         input: DeleteRouteRequest,
@@ -8049,7 +8072,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8060,6 +8083,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a route request parameter.</p>
+    #[allow(unused_mut)]
     async fn delete_route_request_parameter(
         &self,
         input: DeleteRouteRequestParameterRequest,
@@ -8080,7 +8104,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8091,6 +8115,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a RouteResponse.</p>
+    #[allow(unused_mut)]
     async fn delete_route_response(
         &self,
         input: DeleteRouteResponseRequest,
@@ -8111,7 +8136,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8122,6 +8147,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes the RouteSettings for a stage.</p>
+    #[allow(unused_mut)]
     async fn delete_route_settings(
         &self,
         input: DeleteRouteSettingsRequest,
@@ -8142,7 +8168,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8153,6 +8179,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a Stage.</p>
+    #[allow(unused_mut)]
     async fn delete_stage(
         &self,
         input: DeleteStageRequest,
@@ -8172,7 +8199,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -8183,6 +8210,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a VPC link.</p>
+    #[allow(unused_mut)]
     async fn delete_vpc_link(
         &self,
         input: DeleteVpcLinkRequest,
@@ -8201,7 +8229,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteVpcLinkResponse, _>()?;
 
@@ -8212,6 +8240,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         }
     }
 
+    #[allow(unused_mut)]
     async fn export_api(
         &self,
         input: ExportApiRequest,
@@ -8244,7 +8273,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = ExportApiResponse::default();
             result.body = Some(response.body);
@@ -8257,6 +8286,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets an Api resource.</p>
+    #[allow(unused_mut)]
     async fn get_api(
         &self,
         input: GetApiRequest,
@@ -8272,7 +8302,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetApiResponse, _>()?;
 
@@ -8284,6 +8314,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets an API mapping.</p>
+    #[allow(unused_mut)]
     async fn get_api_mapping(
         &self,
         input: GetApiMappingRequest,
@@ -8303,7 +8334,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetApiMappingResponse, _>()?;
 
@@ -8315,6 +8346,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets API mappings.</p>
+    #[allow(unused_mut)]
     async fn get_api_mappings(
         &self,
         input: GetApiMappingsRequest,
@@ -8342,7 +8374,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetApiMappingsResponse, _>()?;
 
@@ -8354,6 +8386,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a collection of Api resources.</p>
+    #[allow(unused_mut)]
     async fn get_apis(
         &self,
         input: GetApisRequest,
@@ -8378,7 +8411,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetApisResponse, _>()?;
 
@@ -8390,6 +8423,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets an Authorizer.</p>
+    #[allow(unused_mut)]
     async fn get_authorizer(
         &self,
         input: GetAuthorizerRequest,
@@ -8409,7 +8443,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAuthorizerResponse, _>()?;
 
@@ -8421,6 +8455,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Authorizers for an API.</p>
+    #[allow(unused_mut)]
     async fn get_authorizers(
         &self,
         input: GetAuthorizersRequest,
@@ -8445,7 +8480,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAuthorizersResponse, _>()?;
 
@@ -8457,6 +8492,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a Deployment.</p>
+    #[allow(unused_mut)]
     async fn get_deployment(
         &self,
         input: GetDeploymentRequest,
@@ -8476,7 +8512,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDeploymentResponse, _>()?;
 
@@ -8488,6 +8524,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Deployments for an API.</p>
+    #[allow(unused_mut)]
     async fn get_deployments(
         &self,
         input: GetDeploymentsRequest,
@@ -8512,7 +8549,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDeploymentsResponse, _>()?;
 
@@ -8524,6 +8561,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a domain name.</p>
+    #[allow(unused_mut)]
     async fn get_domain_name(
         &self,
         input: GetDomainNameRequest,
@@ -8542,7 +8580,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDomainNameResponse, _>()?;
 
@@ -8554,6 +8592,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the domain names for an AWS account.</p>
+    #[allow(unused_mut)]
     async fn get_domain_names(
         &self,
         input: GetDomainNamesRequest,
@@ -8578,7 +8617,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDomainNamesResponse, _>()?;
 
@@ -8590,6 +8629,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets an Integration.</p>
+    #[allow(unused_mut)]
     async fn get_integration(
         &self,
         input: GetIntegrationRequest,
@@ -8609,7 +8649,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetIntegrationResult, _>()?;
 
@@ -8621,6 +8661,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets an IntegrationResponses.</p>
+    #[allow(unused_mut)]
     async fn get_integration_response(
         &self,
         input: GetIntegrationResponseRequest,
@@ -8636,7 +8677,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetIntegrationResponseResponse, _>()?;
 
@@ -8648,6 +8689,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the IntegrationResponses for an Integration.</p>
+    #[allow(unused_mut)]
     async fn get_integration_responses(
         &self,
         input: GetIntegrationResponsesRequest,
@@ -8676,7 +8718,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetIntegrationResponsesResponse, _>()?;
 
@@ -8688,6 +8730,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Integrations for an API.</p>
+    #[allow(unused_mut)]
     async fn get_integrations(
         &self,
         input: GetIntegrationsRequest,
@@ -8712,7 +8755,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetIntegrationsResponse, _>()?;
 
@@ -8724,6 +8767,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a Model.</p>
+    #[allow(unused_mut)]
     async fn get_model(
         &self,
         input: GetModelRequest,
@@ -8743,7 +8787,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetModelResponse, _>()?;
 
@@ -8755,6 +8799,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a model template.</p>
+    #[allow(unused_mut)]
     async fn get_model_template(
         &self,
         input: GetModelTemplateRequest,
@@ -8774,7 +8819,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetModelTemplateResponse, _>()?;
 
@@ -8786,6 +8831,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Models for an API.</p>
+    #[allow(unused_mut)]
     async fn get_models(
         &self,
         input: GetModelsRequest,
@@ -8810,7 +8856,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetModelsResponse, _>()?;
 
@@ -8822,6 +8868,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a Route.</p>
+    #[allow(unused_mut)]
     async fn get_route(
         &self,
         input: GetRouteRequest,
@@ -8841,7 +8888,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetRouteResult, _>()?;
 
@@ -8853,6 +8900,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a RouteResponse.</p>
+    #[allow(unused_mut)]
     async fn get_route_response(
         &self,
         input: GetRouteResponseRequest,
@@ -8873,7 +8921,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRouteResponseResponse, _>()?;
 
@@ -8885,6 +8933,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the RouteResponses for a Route.</p>
+    #[allow(unused_mut)]
     async fn get_route_responses(
         &self,
         input: GetRouteResponsesRequest,
@@ -8913,7 +8962,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRouteResponsesResponse, _>()?;
 
@@ -8925,6 +8974,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Routes for an API.</p>
+    #[allow(unused_mut)]
     async fn get_routes(
         &self,
         input: GetRoutesRequest,
@@ -8949,7 +8999,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRoutesResponse, _>()?;
 
@@ -8961,6 +9011,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a Stage.</p>
+    #[allow(unused_mut)]
     async fn get_stage(
         &self,
         input: GetStageRequest,
@@ -8980,7 +9031,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetStageResponse, _>()?;
 
@@ -8992,6 +9043,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets the Stages for an API.</p>
+    #[allow(unused_mut)]
     async fn get_stages(
         &self,
         input: GetStagesRequest,
@@ -9016,7 +9068,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetStagesResponse, _>()?;
 
@@ -9028,6 +9080,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a collection of Tag resources.</p>
+    #[allow(unused_mut)]
     async fn get_tags(
         &self,
         input: GetTagsRequest,
@@ -9043,7 +9096,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()?;
 
@@ -9055,6 +9108,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a VPC link.</p>
+    #[allow(unused_mut)]
     async fn get_vpc_link(
         &self,
         input: GetVpcLinkRequest,
@@ -9073,7 +9127,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVpcLinkResponse, _>()?;
 
@@ -9085,6 +9139,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a collection of VPC links.</p>
+    #[allow(unused_mut)]
     async fn get_vpc_links(
         &self,
         input: GetVpcLinksRequest,
@@ -9109,7 +9164,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVpcLinksResponse, _>()?;
 
@@ -9121,6 +9176,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Imports an API.</p>
+    #[allow(unused_mut)]
     async fn import_api(
         &self,
         input: ImportApiRequest,
@@ -9148,7 +9204,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ImportApiResponse, _>()?;
 
@@ -9160,6 +9216,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Puts an Api resource.</p>
+    #[allow(unused_mut)]
     async fn reimport_api(
         &self,
         input: ReimportApiRequest,
@@ -9187,7 +9244,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ReimportApiResponse, _>()?;
 
@@ -9199,6 +9256,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Creates a new Tag resource to represent a tag.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -9217,7 +9275,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -9229,6 +9287,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Deletes a Tag.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -9250,7 +9309,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -9261,6 +9320,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates an Api resource.</p>
+    #[allow(unused_mut)]
     async fn update_api(
         &self,
         input: UpdateApiRequest,
@@ -9279,7 +9339,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateApiResponse, _>()?;
 
@@ -9291,6 +9351,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>The API mapping.</p>
+    #[allow(unused_mut)]
     async fn update_api_mapping(
         &self,
         input: UpdateApiMappingRequest,
@@ -9313,7 +9374,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateApiMappingResponse, _>()?;
 
@@ -9325,6 +9386,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates an Authorizer.</p>
+    #[allow(unused_mut)]
     async fn update_authorizer(
         &self,
         input: UpdateAuthorizerRequest,
@@ -9347,7 +9409,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateAuthorizerResponse, _>()?;
 
@@ -9359,6 +9421,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a Deployment.</p>
+    #[allow(unused_mut)]
     async fn update_deployment(
         &self,
         input: UpdateDeploymentRequest,
@@ -9381,7 +9444,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDeploymentResponse, _>()?;
 
@@ -9393,6 +9456,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a domain name.</p>
+    #[allow(unused_mut)]
     async fn update_domain_name(
         &self,
         input: UpdateDomainNameRequest,
@@ -9414,7 +9478,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDomainNameResponse, _>()?;
 
@@ -9426,6 +9490,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates an Integration.</p>
+    #[allow(unused_mut)]
     async fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
@@ -9448,7 +9513,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateIntegrationResult, _>()?;
 
@@ -9460,6 +9525,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates an IntegrationResponses.</p>
+    #[allow(unused_mut)]
     async fn update_integration_response(
         &self,
         input: UpdateIntegrationResponseRequest,
@@ -9479,7 +9545,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateIntegrationResponseResponse, _>()?;
 
@@ -9491,6 +9557,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a Model.</p>
+    #[allow(unused_mut)]
     async fn update_model(
         &self,
         input: UpdateModelRequest,
@@ -9513,7 +9580,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateModelResponse, _>()?;
 
@@ -9525,6 +9592,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a Route.</p>
+    #[allow(unused_mut)]
     async fn update_route(
         &self,
         input: UpdateRouteRequest,
@@ -9547,7 +9615,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRouteResult, _>()?;
 
@@ -9559,6 +9627,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a RouteResponse.</p>
+    #[allow(unused_mut)]
     async fn update_route_response(
         &self,
         input: UpdateRouteResponseRequest,
@@ -9582,7 +9651,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRouteResponseResponse, _>()?;
 
@@ -9594,6 +9663,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a Stage.</p>
+    #[allow(unused_mut)]
     async fn update_stage(
         &self,
         input: UpdateStageRequest,
@@ -9616,7 +9686,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateStageResponse, _>()?;
 
@@ -9628,6 +9698,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Updates a VPC link.</p>
+    #[allow(unused_mut)]
     async fn update_vpc_link(
         &self,
         input: UpdateVpcLinkRequest,
@@ -9649,7 +9720,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateVpcLinkResponse, _>()?;
 

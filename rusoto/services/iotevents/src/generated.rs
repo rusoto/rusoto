@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>An action to be performed when the <code>condition</code> is TRUE.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Action {
     /// <p>Information needed to clear the timer.</p>
     #[serde(rename = "clearTimer")]
@@ -83,7 +83,7 @@ pub struct Action {
 }
 
 /// <p><p>A structure that contains timestamp information. For more information, see <a href="https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_TimeInNanos.html">TimeInNanos</a> in the <i>AWS IoT SiteWise API Reference</i>.</p> <p>For parameters that are string data type, you can specify the following options:</p> <ul> <li> <p>Use a string. For example, the <code>timeInSeconds</code> value can be <code>&#39;1586400675&#39;</code>.</p> </li> <li> <p>Use an expression. For example, the <code>timeInSeconds</code> value can be <code>&#39;${$input.TemperatureInput.sensorData.timestamp/1000}&#39;</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/iotevents/latest/developerguide/iotevents-expressions.html">Expressions</a> in the <i>AWS IoT Events Developer Guide</i>.</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AssetPropertyTimestamp {
     /// <p>The nanosecond offset converted from <code>timeInSeconds</code>. The valid range is between 0-999999999. You can also specify an expression.</p>
     #[serde(rename = "offsetInNanos")]
@@ -95,7 +95,7 @@ pub struct AssetPropertyTimestamp {
 }
 
 /// <p><p>A structure that contains value information. For more information, see <a href="https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_AssetPropertyValue.html">AssetPropertyValue</a> in the <i>AWS IoT SiteWise API Reference</i>.</p> <p>For parameters that are string data type, you can specify the following options: </p> <ul> <li> <p>Use a string. For example, the <code>quality</code> value can be <code>&#39;GOOD&#39;</code>.</p> </li> <li> <p>Use an expression. For example, the <code>quality</code> value can be <code>$input.TemperatureInput.sensorData.quality</code> .</p> <p>For more information, see <a href="https://docs.aws.amazon.com/iotevents/latest/developerguide/iotevents-expressions.html">Expressions</a> in the <i>AWS IoT Events Developer Guide</i>.</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AssetPropertyValue {
     /// <p>The quality of the asset property value. The value must be <code>GOOD</code>, <code>BAD</code>, or <code>UNCERTAIN</code>. You can also specify an expression.</p>
     #[serde(rename = "quality")]
@@ -111,7 +111,7 @@ pub struct AssetPropertyValue {
 }
 
 /// <p><p>A structure that contains an asset property value. For more information, see <a href="https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_Variant.html">Variant</a> in the <i>AWS IoT SiteWise API Reference</i>.</p> <important> <p>You must specify one of the following value types, depending on the <code>dataType</code> of the specified asset property. For more information, see <a href="https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_AssetProperty.html">AssetProperty</a> in the <i>AWS IoT SiteWise API Reference</i>.</p> </important> <p>For parameters that are string data type, you can specify the following options:</p> <ul> <li> <p>Use a string. For example, the <code>doubleValue</code> value can be <code>&#39;47.9&#39;</code>.</p> </li> <li> <p>Use an expression. For example, the <code>doubleValue</code> value can be <code>$input.TemperatureInput.sensorData.temperature</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/iotevents/latest/developerguide/iotevents-expressions.html">Expressions</a> in the <i>AWS IoT Events Developer Guide</i>.</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AssetPropertyVariant {
     /// <p>The asset property value is a Boolean value that must be <code>TRUE</code> or <code>FALSE</code>. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value.</p>
     #[serde(rename = "booleanValue")]
@@ -132,7 +132,7 @@ pub struct AssetPropertyVariant {
 }
 
 /// <p>The attributes from the JSON payload that are made available by the input. Inputs are derived from messages sent to the AWS IoT Events system using <code>BatchPutMessage</code>. Each such message contains a JSON payload. Those attributes (and their paired values) specified here are available for use in the <code>condition</code> expressions used by detectors. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Attribute {
     /// <p>An expression that specifies an attribute-value pair in a JSON structure. Use this to specify an attribute from the JSON payload that is made available by the input. Inputs are derived from messages sent to AWS IoT Events (<code>BatchPutMessage</code>). Each such message contains a JSON payload. The attribute (and its paired value) specified here are available for use in the <code>condition</code> expressions used by detectors. </p> <p>Syntax: <code>&lt;field-name&gt;.&lt;field-name&gt;...</code> </p>
     #[serde(rename = "jsonPath")]
@@ -140,14 +140,14 @@ pub struct Attribute {
 }
 
 /// <p>Information needed to clear the timer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ClearTimerAction {
     /// <p>The name of the timer to clear.</p>
     #[serde(rename = "timerName")]
     pub timer_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDetectorModelRequest {
     /// <p>Information that defines how the detectors operate.</p>
@@ -177,7 +177,7 @@ pub struct CreateDetectorModelRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDetectorModelResponse {
     /// <p>Information about how the detector model is configured.</p>
@@ -186,7 +186,7 @@ pub struct CreateDetectorModelResponse {
     pub detector_model_configuration: Option<DetectorModelConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInputRequest {
     /// <p>The definition of the input.</p>
@@ -205,7 +205,7 @@ pub struct CreateInputRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInputResponse {
     /// <p>Information about the configuration of the input.</p>
@@ -214,7 +214,7 @@ pub struct CreateInputResponse {
     pub input_configuration: Option<InputConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorModelRequest {
     /// <p>The name of the detector model to be deleted.</p>
@@ -222,11 +222,11 @@ pub struct DeleteDetectorModelRequest {
     pub detector_model_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorModelResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInputRequest {
     /// <p>The name of the input to delete.</p>
@@ -234,11 +234,11 @@ pub struct DeleteInputRequest {
     pub input_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInputResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDetectorModelRequest {
     /// <p>The name of the detector model.</p>
@@ -250,7 +250,7 @@ pub struct DescribeDetectorModelRequest {
     pub detector_model_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDetectorModelResponse {
     /// <p>Information about the detector model.</p>
@@ -259,7 +259,7 @@ pub struct DescribeDetectorModelResponse {
     pub detector_model: Option<DetectorModel>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInputRequest {
     /// <p>The name of the input.</p>
@@ -267,7 +267,7 @@ pub struct DescribeInputRequest {
     pub input_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInputResponse {
     /// <p>Information about the input.</p>
@@ -276,11 +276,11 @@ pub struct DescribeInputResponse {
     pub input: Option<Input>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeLoggingOptionsRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLoggingOptionsResponse {
     /// <p>The current settings of the AWS IoT Events logging options.</p>
@@ -290,7 +290,7 @@ pub struct DescribeLoggingOptionsResponse {
 }
 
 /// <p>The detector model and the specific detectors (instances) for which the logging level is given.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DetectorDebugOption {
     /// <p>The name of the detector model.</p>
     #[serde(rename = "detectorModelName")]
@@ -302,7 +302,7 @@ pub struct DetectorDebugOption {
 }
 
 /// <p>Information about the detector model.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectorModel {
     /// <p>Information about how the detector is configured.</p>
@@ -316,7 +316,7 @@ pub struct DetectorModel {
 }
 
 /// <p>Information about how the detector model is configured.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectorModelConfiguration {
     /// <p>The time the detector model was created.</p>
@@ -362,7 +362,7 @@ pub struct DetectorModelConfiguration {
 }
 
 /// <p>Information that defines how a detector operates.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DetectorModelDefinition {
     /// <p>The state that is entered at the creation of each detector (instance).</p>
     #[serde(rename = "initialStateName")]
@@ -373,7 +373,7 @@ pub struct DetectorModelDefinition {
 }
 
 /// <p>Information about the detector model.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectorModelSummary {
     /// <p>The time the detector model was created.</p>
@@ -391,7 +391,7 @@ pub struct DetectorModelSummary {
 }
 
 /// <p>Information about the detector model version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectorModelVersionSummary {
     /// <p>The time the detector model version was created.</p>
@@ -429,7 +429,7 @@ pub struct DetectorModelVersionSummary {
 }
 
 /// <p><p>Defines an action to write to the Amazon DynamoDB table that you created. The standard action payload contains all attribute-value pairs that have the information about the detector model instance and the event that triggered the action. You can also customize the <a href="https://docs.aws.amazon.com/iotevents/latest/apireference/API_Payload.html">payload</a>. One column of the DynamoDB table receives all attribute-value pairs in the payload that you specify.</p> <p>The <code>tableName</code> and <code>hashKeyField</code> values must match the table name and the partition key of the DynamoDB table. </p> <note> <p>If the DynamoDB table also has a sort key, you must specify <code>rangeKeyField</code>. The <code>rangeKeyField</code> value must match the sort key.</p> </note> <p/> <p>The <code>hashKeyValue</code> and <code>rangeKeyValue</code> use substitution templates. These templates provide data at runtime. The syntax is <code>${sql-expression}</code>.</p> <p>You can use expressions for parameters that are string data type. For more information, see <a href="https://docs.aws.amazon.com/iotevents/latest/developerguide/iotevents-expressions.html">Expressions</a> in the <i>AWS IoT Events Developer Guide</i>.</p> <note> <p>If the defined payload type is a string, <code>DynamoDBAction</code> writes non-JSON data to the DynamoDB table as binary data. The DynamoDB console displays the data as Base64-encoded text. The <code>payloadField</code> is <code>&lt;payload-field&gt;_raw</code>.</p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DynamoDBAction {
     /// <p>The name of the hash key (also called the partition key).</p>
     #[serde(rename = "hashKeyField")]
@@ -470,7 +470,7 @@ pub struct DynamoDBAction {
 }
 
 /// <p>Defines an action to write to the Amazon DynamoDB table that you created. The default action payload contains all attribute-value pairs that have the information about the detector model instance and the event that triggered the action. You can also customize the <a href="https://docs.aws.amazon.com/iotevents/latest/apireference/API_Payload.html">payload</a>. A separate column of the DynamoDB table receives one attribute-value pair in the payload that you specify.</p> <important> <p>The <code>type</code> value for <code>Payload</code> must be <code>JSON</code>.</p> </important> <p>You can use expressions for parameters that are strings. For more information, see <a href="https://docs.aws.amazon.com/iotevents/latest/developerguide/iotevents-expressions.html">Expressions</a> in the <i>AWS IoT Events Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DynamoDBv2Action {
     #[serde(rename = "payload")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -481,7 +481,7 @@ pub struct DynamoDBv2Action {
 }
 
 /// <p>Specifies the <code>actions</code> to be performed when the <code>condition</code> evaluates to TRUE.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Event {
     /// <p>The actions to be performed.</p>
     #[serde(rename = "actions")]
@@ -497,7 +497,7 @@ pub struct Event {
 }
 
 /// <p>Sends information about the detector model instance and the event that triggered the action to an Amazon Kinesis Data Firehose delivery stream.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FirehoseAction {
     /// <p>The name of the Kinesis Data Firehose delivery stream where the data is written.</p>
     #[serde(rename = "deliveryStreamName")]
@@ -513,7 +513,7 @@ pub struct FirehoseAction {
 }
 
 /// <p>Information about the input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Input {
     /// <p>Information about the configuration of an input.</p>
@@ -527,7 +527,7 @@ pub struct Input {
 }
 
 /// <p>Information about the configuration of an input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputConfiguration {
     /// <p>The time the input was created.</p>
@@ -552,7 +552,7 @@ pub struct InputConfiguration {
 }
 
 /// <p>The definition of the input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputDefinition {
     /// <p>The attributes from the JSON payload that are made available by the input. Inputs are derived from messages sent to the AWS IoT Events system using <code>BatchPutMessage</code>. Each such message contains a JSON payload, and those attributes (and their paired values) specified here are available for use in the <code>condition</code> expressions used by detectors that monitor this input. </p>
     #[serde(rename = "attributes")]
@@ -560,7 +560,7 @@ pub struct InputDefinition {
 }
 
 /// <p>Information about the input.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InputSummary {
     /// <p>The time the input was created.</p>
@@ -590,7 +590,7 @@ pub struct InputSummary {
 }
 
 /// <p>Sends an AWS IoT Events input, passing in information about the detector model instance and the event that triggered the action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IotEventsAction {
     /// <p>The name of the AWS IoT Events input where the data is sent.</p>
     #[serde(rename = "inputName")]
@@ -602,7 +602,7 @@ pub struct IotEventsAction {
 }
 
 /// <p><p>Sends information about the detector model instance and the event that triggered the action to a specified asset property in AWS IoT SiteWise.</p> <important> <p>You must specify either <code>propertyAlias</code> or both <code>assetId</code> and <code>propertyId</code> to identify the target asset property in AWS IoT SiteWise.</p> </important> <p>For parameters that are string data type, you can specify the following options: </p> <ul> <li> <p>Use a string. For example, the <code>propertyAlias</code> value can be <code>&#39;/company/windfarm/3/turbine/7/temperature&#39;</code>.</p> </li> <li> <p>Use an expression. For example, the <code>propertyAlias</code> value can be <code>&#39;company/windfarm/${$input.TemperatureInput.sensorData.windfarmID}/turbine/${$input.TemperatureInput.sensorData.turbineID}/temperature&#39;</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/iotevents/latest/developerguide/iotevents-expressions.html">Expressions</a> in the <i>AWS IoT Events Developer Guide</i>.</p> </li> </ul></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IotSiteWiseAction {
     /// <p>The ID of the asset that has the specified property. You can specify an expression.</p>
     #[serde(rename = "assetId")]
@@ -626,7 +626,7 @@ pub struct IotSiteWiseAction {
 }
 
 /// <p>Information required to publish the MQTT message through the AWS IoT message broker.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IotTopicPublishAction {
     /// <p>The MQTT topic of the message. You can use a string expression that includes variables (<code>$variable.&lt;variable-name&gt;</code>) and input values (<code>$input.&lt;input-name&gt;.&lt;path-to-datum&gt;</code>) as the topic string.</p>
     #[serde(rename = "mqttTopic")]
@@ -638,7 +638,7 @@ pub struct IotTopicPublishAction {
 }
 
 /// <p>Calls a Lambda function, passing in information about the detector model instance and the event that triggered the action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LambdaAction {
     /// <p>The ARN of the Lambda function that is executed.</p>
     #[serde(rename = "functionArn")]
@@ -649,7 +649,7 @@ pub struct LambdaAction {
     pub payload: Option<Payload>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorModelVersionsRequest {
     /// <p>The name of the detector model whose versions are returned.</p>
@@ -665,7 +665,7 @@ pub struct ListDetectorModelVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorModelVersionsResponse {
     /// <p>Summary information about the detector model versions.</p>
@@ -678,7 +678,7 @@ pub struct ListDetectorModelVersionsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDetectorModelsRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -691,7 +691,7 @@ pub struct ListDetectorModelsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorModelsResponse {
     /// <p>Summary information about the detector models.</p>
@@ -704,7 +704,7 @@ pub struct ListDetectorModelsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInputsRequest {
     /// <p>The maximum number of results to return at one time.</p>
@@ -717,7 +717,7 @@ pub struct ListInputsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInputsResponse {
     /// <p>Summary information about the inputs.</p>
@@ -730,7 +730,7 @@ pub struct ListInputsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The ARN of the resource.</p>
@@ -738,7 +738,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The list of tags assigned to the resource.</p>
@@ -748,7 +748,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>The values of the AWS IoT Events logging options.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LoggingOptions {
     /// <p>Information that identifies those detector models and their detectors (instances) for which the logging level is given.</p>
     #[serde(rename = "detectorDebugOptions")]
@@ -766,7 +766,7 @@ pub struct LoggingOptions {
 }
 
 /// <p>When entering this state, perform these <code>actions</code> if the <code>condition</code> is TRUE.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OnEnterLifecycle {
     /// <p>Specifies the actions that are performed when the state is entered and the <code>condition</code> is <code>TRUE</code>.</p>
     #[serde(rename = "events")]
@@ -775,7 +775,7 @@ pub struct OnEnterLifecycle {
 }
 
 /// <p>When exiting this state, perform these <code>actions</code> if the specified <code>condition</code> is <code>TRUE</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OnExitLifecycle {
     /// <p>Specifies the <code>actions</code> that are performed when the state is exited and the <code>condition</code> is <code>TRUE</code>.</p>
     #[serde(rename = "events")]
@@ -784,7 +784,7 @@ pub struct OnExitLifecycle {
 }
 
 /// <p>Specifies the actions performed when the <code>condition</code> evaluates to TRUE.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OnInputLifecycle {
     /// <p>Specifies the actions performed when the <code>condition</code> evaluates to TRUE.</p>
     #[serde(rename = "events")]
@@ -797,7 +797,7 @@ pub struct OnInputLifecycle {
 }
 
 /// <p>Information needed to configure the payload.</p> <p>By default, AWS IoT Events generates a standard payload in JSON for any action. This action payload contains all attribute-value pairs that have the information about the detector model instance and the event triggered the action. To configure the action payload, you can use <code>contentExpression</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Payload {
     /// <p>The content of the payload. You can use a string expression that includes quoted strings (<code>'&lt;string&gt;'</code>), variables (<code>$variable.&lt;variable-name&gt;</code>), input values (<code>$input.&lt;input-name&gt;.&lt;path-to-datum&gt;</code>), string concatenations, and quoted strings that contain <code>${}</code> as the content. The recommended maximum size of a content expression is 1 KB.</p>
     #[serde(rename = "contentExpression")]
@@ -807,7 +807,7 @@ pub struct Payload {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutLoggingOptionsRequest {
     /// <p>The new values of the AWS IoT Events logging options.</p>
@@ -816,7 +816,7 @@ pub struct PutLoggingOptionsRequest {
 }
 
 /// <p>Information required to reset the timer. The timer is reset to the previously evaluated result of the duration. The duration expression isn't reevaluated when you reset the timer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ResetTimerAction {
     /// <p>The name of the timer to reset.</p>
     #[serde(rename = "timerName")]
@@ -824,7 +824,7 @@ pub struct ResetTimerAction {
 }
 
 /// <p>Information required to publish the Amazon SNS message.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SNSTopicPublishAction {
     /// <p>You can configure the action payload when you send a message as an Amazon SNS push notification.</p>
     #[serde(rename = "payload")]
@@ -836,7 +836,7 @@ pub struct SNSTopicPublishAction {
 }
 
 /// <p>Information needed to set the timer.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SetTimerAction {
     /// <p>The duration of the timer, in seconds. You can use a string expression that includes numbers, variables (<code>$variable.&lt;variable-name&gt;</code>), and input values (<code>$input.&lt;input-name&gt;.&lt;path-to-datum&gt;</code>) as the duration. The range of the duration is 1-31622400 seconds. To ensure accuracy, the minimum duration is 60 seconds. The evaluated result of the duration is rounded down to the nearest whole number. </p>
     #[serde(rename = "durationExpression")]
@@ -848,7 +848,7 @@ pub struct SetTimerAction {
 }
 
 /// <p>Information about the variable and its new value.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SetVariableAction {
     /// <p>The new value of the variable.</p>
     #[serde(rename = "value")]
@@ -859,7 +859,7 @@ pub struct SetVariableAction {
 }
 
 /// <p>Sends information about the detector model instance and the event that triggered the action to an Amazon SQS queue.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SqsAction {
     /// <p>You can configure the action payload when you send a message to an Amazon SQS queue.</p>
     #[serde(rename = "payload")]
@@ -875,7 +875,7 @@ pub struct SqsAction {
 }
 
 /// <p>Information that defines a state of a detector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct State {
     /// <p>When entering this state, perform these <code>actions</code> if the <code>condition</code> is TRUE.</p>
     #[serde(rename = "onEnter")]
@@ -895,7 +895,7 @@ pub struct State {
 }
 
 /// <p>Metadata that can be used to manage the resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The tag's key.</p>
     #[serde(rename = "key")]
@@ -905,7 +905,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource.</p>
@@ -916,12 +916,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Specifies the actions performed and the next state entered when a <code>condition</code> evaluates to TRUE.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TransitionEvent {
     /// <p>The actions to be performed.</p>
     #[serde(rename = "actions")]
@@ -938,7 +938,7 @@ pub struct TransitionEvent {
     pub next_state: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource.</p>
@@ -949,11 +949,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorModelRequest {
     /// <p>Information that defines how a detector operates.</p>
@@ -975,7 +975,7 @@ pub struct UpdateDetectorModelRequest {
     pub role_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorModelResponse {
     /// <p>Information about how the detector model is configured.</p>
@@ -984,7 +984,7 @@ pub struct UpdateDetectorModelResponse {
     pub detector_model_configuration: Option<DetectorModelConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInputRequest {
     /// <p>The definition of the input.</p>
@@ -999,7 +999,7 @@ pub struct UpdateInputRequest {
     pub input_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInputResponse {
     /// <p>Information about the configuration of the input.</p>
@@ -2101,6 +2101,7 @@ impl IotEventsClient {
 #[async_trait]
 impl IotEvents for IotEventsClient {
     /// <p>Creates a detector model.</p>
+    #[allow(unused_mut)]
     async fn create_detector_model(
         &self,
         input: CreateDetectorModelRequest,
@@ -2119,7 +2120,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDetectorModelResponse, _>()?;
 
@@ -2131,6 +2132,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Creates an input.</p>
+    #[allow(unused_mut)]
     async fn create_input(
         &self,
         input: CreateInputRequest,
@@ -2149,7 +2151,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateInputResponse, _>()?;
 
@@ -2161,6 +2163,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Deletes a detector model. Any active instances of the detector model are also deleted.</p>
+    #[allow(unused_mut)]
     async fn delete_detector_model(
         &self,
         input: DeleteDetectorModelRequest,
@@ -2179,7 +2182,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDetectorModelResponse, _>()?;
 
@@ -2191,6 +2194,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Deletes an input.</p>
+    #[allow(unused_mut)]
     async fn delete_input(
         &self,
         input: DeleteInputRequest,
@@ -2206,7 +2210,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteInputResponse, _>()?;
 
@@ -2218,6 +2222,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Describes a detector model. If the <code>version</code> parameter is not specified, information about the latest version is returned.</p>
+    #[allow(unused_mut)]
     async fn describe_detector_model(
         &self,
         input: DescribeDetectorModelRequest,
@@ -2242,7 +2247,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeDetectorModelResponse, _>()?;
 
@@ -2254,6 +2259,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Describes an input.</p>
+    #[allow(unused_mut)]
     async fn describe_input(
         &self,
         input: DescribeInputRequest,
@@ -2269,7 +2275,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeInputResponse, _>()?;
 
@@ -2281,6 +2287,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Retrieves the current settings of the AWS IoT Events logging options.</p>
+    #[allow(unused_mut)]
     async fn describe_logging_options(
         &self,
     ) -> Result<DescribeLoggingOptionsResponse, RusotoError<DescribeLoggingOptionsError>> {
@@ -2295,7 +2302,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeLoggingOptionsResponse, _>()?;
 
@@ -2307,6 +2314,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Lists all the versions of a detector model. Only the metadata associated with each detector model version is returned.</p>
+    #[allow(unused_mut)]
     async fn list_detector_model_versions(
         &self,
         input: ListDetectorModelVersionsRequest,
@@ -2335,7 +2343,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDetectorModelVersionsResponse, _>()?;
 
@@ -2347,6 +2355,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Lists the detector models you have created. Only the metadata associated with each detector model is returned.</p>
+    #[allow(unused_mut)]
     async fn list_detector_models(
         &self,
         input: ListDetectorModelsRequest,
@@ -2371,7 +2380,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDetectorModelsResponse, _>()?;
 
@@ -2383,6 +2392,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Lists the inputs you have created.</p>
+    #[allow(unused_mut)]
     async fn list_inputs(
         &self,
         input: ListInputsRequest,
@@ -2407,7 +2417,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInputsResponse, _>()?;
 
@@ -2419,6 +2429,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2438,7 +2449,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -2450,6 +2461,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Sets or updates the AWS IoT Events logging options.</p> <p>If you update the value of any <code>loggingOptions</code> field, it takes up to one minute for the change to take effect. If you change the policy attached to the role you specified in the <code>roleArn</code> field (for example, to correct an invalid policy), it takes up to five minutes for that change to take effect.</p>
+    #[allow(unused_mut)]
     async fn put_logging_options(
         &self,
         input: PutLoggingOptionsRequest,
@@ -2468,7 +2480,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2479,6 +2491,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -2501,7 +2514,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -2513,6 +2526,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Removes the given tags (metadata) from the resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -2535,7 +2549,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -2547,6 +2561,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Updates a detector model. Detectors (instances) spawned by the previous version are deleted and then re-created as new inputs arrive.</p>
+    #[allow(unused_mut)]
     async fn update_detector_model(
         &self,
         input: UpdateDetectorModelRequest,
@@ -2568,7 +2583,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDetectorModelResponse, _>()?;
 
@@ -2580,6 +2595,7 @@ impl IotEvents for IotEventsClient {
     }
 
     /// <p>Updates an input.</p>
+    #[allow(unused_mut)]
     async fn update_input(
         &self,
         input: UpdateInputRequest,
@@ -2598,7 +2614,7 @@ impl IotEvents for IotEventsClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateInputResponse, _>()?;
 

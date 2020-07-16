@@ -20,12 +20,39 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl FraudDetectorClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "frauddetector", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Provides the error of the batch create variable API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FraudDetectorBatchCreateVariableError {
     /// <p>The error code. </p>
@@ -42,7 +69,7 @@ pub struct FraudDetectorBatchCreateVariableError {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateVariableRequest {
     /// <p>The list of variables for the batch create variable request.</p>
@@ -50,7 +77,7 @@ pub struct BatchCreateVariableRequest {
     pub variable_entries: Vec<VariableEntry>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateVariableResult {
     /// <p>Provides the errors for the <code>BatchCreateVariable</code> request.</p>
@@ -60,7 +87,7 @@ pub struct BatchCreateVariableResult {
 }
 
 /// <p>Provides the error of the batch get variable API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FraudDetectorBatchGetVariableError {
     /// <p>The error code. </p>
@@ -77,7 +104,7 @@ pub struct FraudDetectorBatchGetVariableError {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchGetVariableRequest {
     /// <p>The list of variable names to get.</p>
@@ -85,7 +112,7 @@ pub struct BatchGetVariableRequest {
     pub names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetVariableResult {
     /// <p>The errors from the request.</p>
@@ -98,7 +125,7 @@ pub struct BatchGetVariableResult {
     pub variables: Option<Vec<Variable>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDetectorVersionRequest {
     /// <p>The description of the detector version.</p>
@@ -125,7 +152,7 @@ pub struct CreateDetectorVersionRequest {
     pub rules: Vec<Rule>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDetectorVersionResult {
     /// <p>The ID for the created version's parent detector.</p>
@@ -142,7 +169,7 @@ pub struct CreateDetectorVersionResult {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelVersionRequest {
     /// <p>The model version description.</p>
@@ -157,7 +184,7 @@ pub struct CreateModelVersionRequest {
     pub model_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelVersionResult {
     /// <p>The model ID. </p>
@@ -178,7 +205,7 @@ pub struct CreateModelVersionResult {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRuleRequest {
     /// <p>The rule description.</p>
@@ -202,7 +229,7 @@ pub struct CreateRuleRequest {
     pub rule_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRuleResult {
     /// <p>The created rule.</p>
@@ -211,7 +238,7 @@ pub struct CreateRuleResult {
     pub rule: Option<Rule>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVariableRequest {
     /// <p>The source of the data.</p>
@@ -236,11 +263,11 @@ pub struct CreateVariableRequest {
     pub variable_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVariableResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorRequest {
     /// <p>The ID of the detector to delete.</p>
@@ -248,11 +275,11 @@ pub struct DeleteDetectorRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDetectorVersionRequest {
     /// <p>The ID of the parent detector for the detector version to delete.</p>
@@ -263,11 +290,11 @@ pub struct DeleteDetectorVersionRequest {
     pub detector_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorVersionResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventRequest {
     /// <p>The ID of the event to delete.</p>
@@ -275,11 +302,11 @@ pub struct DeleteEventRequest {
     pub event_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteEventResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRuleVersionRequest {
     /// <p>The ID of the detector that includes the rule version to delete.</p>
@@ -293,11 +320,11 @@ pub struct DeleteRuleVersionRequest {
     pub rule_version: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRuleVersionResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDetectorRequest {
     /// <p>The detector ID.</p>
@@ -313,7 +340,7 @@ pub struct DescribeDetectorRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDetectorResult {
     /// <p>The detector ID.</p>
@@ -330,7 +357,7 @@ pub struct DescribeDetectorResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeModelVersionsRequest {
     /// <p>The maximum number of results to return.</p>
@@ -355,7 +382,7 @@ pub struct DescribeModelVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelVersionsResult {
     /// <p>The model version details.</p>
@@ -369,7 +396,7 @@ pub struct DescribeModelVersionsResult {
 }
 
 /// <p>The detector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Detector {
     /// <p>Timestamp of when the detector was created.</p>
@@ -391,7 +418,7 @@ pub struct Detector {
 }
 
 /// <p>The summary of the detector version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectorVersionSummary {
     /// <p>The detector version description. </p>
@@ -413,7 +440,7 @@ pub struct DetectorVersionSummary {
 }
 
 /// <p>The Amazon SageMaker model.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExternalModel {
     /// <p>Timestamp of when the model was last created.</p>
@@ -450,7 +477,7 @@ pub struct ExternalModel {
     pub role: Option<Role>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDetectorVersionRequest {
     /// <p>The detector ID.</p>
@@ -461,7 +488,7 @@ pub struct GetDetectorVersionRequest {
     pub detector_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorVersionResult {
     /// <p>The timestamp when the detector version was created. </p>
@@ -506,7 +533,7 @@ pub struct GetDetectorVersionResult {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDetectorsRequest {
     /// <p>The detector ID.</p>
@@ -523,7 +550,7 @@ pub struct GetDetectorsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorsResult {
     /// <p>The detectors.</p>
@@ -536,7 +563,7 @@ pub struct GetDetectorsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExternalModelsRequest {
     /// <p>The maximum number of objects to return for the request.</p>
@@ -553,7 +580,7 @@ pub struct GetExternalModelsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExternalModelsResult {
     /// <p>Gets the Amazon SageMaker models.</p>
@@ -566,7 +593,7 @@ pub struct GetExternalModelsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelVersionRequest {
     /// <p>The model ID. </p>
@@ -580,7 +607,7 @@ pub struct GetModelVersionRequest {
     pub model_version_number: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelVersionResult {
     /// <p>The model version description.</p>
@@ -605,7 +632,7 @@ pub struct GetModelVersionResult {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelsRequest {
     /// <p>The maximum results to return for the request.</p>
@@ -626,7 +653,7 @@ pub struct GetModelsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelsResult {
     /// <p>The returned models. </p>
@@ -639,7 +666,7 @@ pub struct GetModelsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOutcomesRequest {
     /// <p>The maximum number of objects to return for the request. </p>
@@ -656,7 +683,7 @@ pub struct GetOutcomesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOutcomesResult {
     /// <p>The next page token for subsequent requests.</p>
@@ -669,7 +696,7 @@ pub struct GetOutcomesResult {
     pub outcomes: Option<Vec<Outcome>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPredictionRequest {
     /// <p>The detector ID. </p>
@@ -693,7 +720,7 @@ pub struct GetPredictionRequest {
         Option<::std::collections::HashMap<String, ModelEndpointDataBlob>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPredictionResult {
     /// <p>The model scores for models used in the detector version.</p>
@@ -710,7 +737,7 @@ pub struct GetPredictionResult {
     pub rule_results: Option<Vec<RuleResult>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRulesRequest {
     /// <p>The detector ID.</p>
@@ -734,7 +761,7 @@ pub struct GetRulesRequest {
     pub rule_version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRulesResult {
     /// <p>The next page token to be used in subsequent requests.</p>
@@ -747,7 +774,7 @@ pub struct GetRulesResult {
     pub rule_details: Option<Vec<RuleDetail>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVariablesRequest {
     /// <p>The max size per page determined for the get variable request. </p>
@@ -764,7 +791,7 @@ pub struct GetVariablesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVariablesResult {
     /// <p>The next page token to be used in subsequent requests. </p>
@@ -778,7 +805,7 @@ pub struct GetVariablesResult {
 }
 
 /// <p>The label schema.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LabelSchema {
     /// <p>The label key.</p>
     #[serde(rename = "labelKey")]
@@ -789,7 +816,7 @@ pub struct LabelSchema {
 }
 
 /// <p>The model.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Model {
     /// <p>Timestamp of when the model was created.</p>
@@ -827,7 +854,7 @@ pub struct Model {
 }
 
 /// <p>A pre-formed Amazon SageMaker model input you can include if your detector version includes an imported Amazon SageMaker model endpoint with pass-through input configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModelEndpointDataBlob {
     /// <p>The byte buffer of the Amazon SageMaker model endpoint input data blob.</p>
@@ -846,7 +873,7 @@ pub struct ModelEndpointDataBlob {
 }
 
 /// <p>The model input configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ModelInputConfiguration {
     /// <p> Template for constructing the CSV input-data sent to SageMaker. At event-evaluation, the placeholders for variable-names in the template will be replaced with the variable values before being sent to SageMaker. </p>
     #[serde(rename = "csvInputTemplate")]
@@ -866,7 +893,7 @@ pub struct ModelInputConfiguration {
 }
 
 /// <p>Provides the model output configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ModelOutputConfiguration {
     /// <p>A map of CSV index values in the SageMaker response to the Amazon Fraud Detector variables. </p>
     #[serde(rename = "csvIndexToVariableMap")]
@@ -882,7 +909,7 @@ pub struct ModelOutputConfiguration {
 }
 
 /// <p>The fraud prediction scores.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModelScores {
     /// <p>The model version.</p>
@@ -896,7 +923,7 @@ pub struct ModelScores {
 }
 
 /// <p>The model variable.&gt;</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ModelVariable {
     /// <p>The model variable's index.&gt;</p>
     #[serde(rename = "index")]
@@ -908,7 +935,7 @@ pub struct ModelVariable {
 }
 
 /// <p>The model version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ModelVersion {
     /// <p>The parent model ID.</p>
     #[serde(rename = "modelId")]
@@ -922,7 +949,7 @@ pub struct ModelVersion {
 }
 
 /// <p>Provides the model version details. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModelVersionDetail {
     /// <p>The timestamp when the model was created.</p>
@@ -976,7 +1003,7 @@ pub struct ModelVersionDetail {
 }
 
 /// <p>The outcome.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Outcome {
     /// <p>The timestamp when the outcome was created.</p>
@@ -997,7 +1024,7 @@ pub struct Outcome {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutDetectorRequest {
     /// <p>The description of the detector.</p>
@@ -1009,11 +1036,11 @@ pub struct PutDetectorRequest {
     pub detector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDetectorResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutExternalModelRequest {
     /// <p>The model endpoint input configuration.</p>
@@ -1036,11 +1063,11 @@ pub struct PutExternalModelRequest {
     pub role: Role,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutExternalModelResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutModelRequest {
     /// <p>The model description. </p>
@@ -1064,11 +1091,11 @@ pub struct PutModelRequest {
     pub training_data_source: TrainingDataSource,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutModelResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutOutcomeRequest {
     /// <p>The outcome description.</p>
@@ -1080,12 +1107,12 @@ pub struct PutOutcomeRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutOutcomeResult {}
 
 /// <p>The role used to invoke external model endpoints.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Role {
     /// <p>The role ARN.</p>
     #[serde(rename = "arn")]
@@ -1096,7 +1123,7 @@ pub struct Role {
 }
 
 /// <p>A rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Rule {
     /// <p>The detector for which the rule is associated.</p>
     #[serde(rename = "detectorId")]
@@ -1110,7 +1137,7 @@ pub struct Rule {
 }
 
 /// <p>The details of the rule.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RuleDetail {
     /// <p>The timestamp of when the rule was created.</p>
@@ -1152,7 +1179,7 @@ pub struct RuleDetail {
 }
 
 /// <p>The rule results.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RuleResult {
     /// <p>The outcomes of the matched rule, based on the rule execution mode.</p>
@@ -1166,7 +1193,7 @@ pub struct RuleResult {
 }
 
 /// <p>The training data source.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TrainingDataSource {
     /// <p>The data access role ARN for the training data source.</p>
     #[serde(rename = "dataAccessRoleArn")]
@@ -1176,7 +1203,7 @@ pub struct TrainingDataSource {
     pub data_location: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorVersionMetadataRequest {
     /// <p>The description.</p>
@@ -1190,11 +1217,11 @@ pub struct UpdateDetectorVersionMetadataRequest {
     pub detector_version_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorVersionMetadataResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorVersionRequest {
     /// <p>The detector version description. </p>
@@ -1223,11 +1250,11 @@ pub struct UpdateDetectorVersionRequest {
     pub rules: Vec<Rule>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorVersionResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDetectorVersionStatusRequest {
     /// <p>The detector ID. </p>
@@ -1241,11 +1268,11 @@ pub struct UpdateDetectorVersionStatusRequest {
     pub status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorVersionStatusResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelVersionRequest {
     /// <p>The model description.</p>
@@ -1265,11 +1292,11 @@ pub struct UpdateModelVersionRequest {
     pub status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateModelVersionResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleMetadataRequest {
     /// <p>The rule description.</p>
@@ -1280,11 +1307,11 @@ pub struct UpdateRuleMetadataRequest {
     pub rule: Rule,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuleMetadataResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRuleVersionRequest {
     /// <p>The description.</p>
@@ -1305,7 +1332,7 @@ pub struct UpdateRuleVersionRequest {
     pub rule: Rule,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuleVersionResult {
     /// <p>The new rule version that was created.</p>
@@ -1314,7 +1341,7 @@ pub struct UpdateRuleVersionResult {
     pub rule: Option<Rule>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVariableRequest {
     /// <p>The new default value of the variable.</p>
@@ -1334,12 +1361,12 @@ pub struct UpdateVariableRequest {
     pub variable_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVariableResult {}
 
 /// <p>The variable.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Variable {
     /// <p>The time when the variable was created.</p>
@@ -1377,7 +1404,7 @@ pub struct Variable {
 }
 
 /// <p>The variable entry in a list.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VariableEntry {
     /// <p>The data source of the variable entry.</p>
@@ -2966,9 +2993,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: BatchCreateVariableRequest,
     ) -> Result<BatchCreateVariableResult, RusotoError<BatchCreateVariableError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.BatchCreateVariable",
@@ -2976,20 +3001,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<BatchCreateVariableResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchCreateVariableError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchCreateVariableError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchCreateVariableResult, _>()
     }
 
     /// <p>Gets a batch of variables.</p>
@@ -2997,26 +3014,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: BatchGetVariableRequest,
     ) -> Result<BatchGetVariableResult, RusotoError<BatchGetVariableError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.BatchGetVariable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<BatchGetVariableResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(BatchGetVariableError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, BatchGetVariableError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<BatchGetVariableResult, _>()
     }
 
     /// <p>Creates a detector version. The detector version starts in a <code>DRAFT</code> status.</p>
@@ -3024,9 +3032,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: CreateDetectorVersionRequest,
     ) -> Result<CreateDetectorVersionResult, RusotoError<CreateDetectorVersionError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.CreateDetectorVersion",
@@ -3034,20 +3040,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateDetectorVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDetectorVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDetectorVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDetectorVersionResult, _>()
     }
 
     /// <p>Creates a version of the model using the specified model type. </p>
@@ -3055,9 +3053,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: CreateModelVersionRequest,
     ) -> Result<CreateModelVersionResult, RusotoError<CreateModelVersionError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.CreateModelVersion",
@@ -3065,20 +3061,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateModelVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateModelVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateModelVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateModelVersionResult, _>()
     }
 
     /// <p>Creates a rule for use with the specified detector. </p>
@@ -3086,26 +3074,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: CreateRuleRequest,
     ) -> Result<CreateRuleResult, RusotoError<CreateRuleError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.CreateRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateRuleResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRuleError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateRuleResult, _>()
     }
 
     /// <p>Creates a variable.</p>
@@ -3113,26 +3092,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: CreateVariableRequest,
     ) -> Result<CreateVariableResult, RusotoError<CreateVariableError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.CreateVariable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateVariableResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVariableError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateVariableError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateVariableResult, _>()
     }
 
     /// <p>Deletes the detector. Before deleting a detector, you must first delete all detector versions and rule versions associated with the detector.</p>
@@ -3140,26 +3110,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: DeleteDetectorRequest,
     ) -> Result<DeleteDetectorResult, RusotoError<DeleteDetectorError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.DeleteDetector");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDetectorResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDetectorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDetectorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDetectorResult, _>()
     }
 
     /// <p>Deletes the detector version. You cannot delete detector versions that are in <code>ACTIVE</code> status.</p>
@@ -3167,9 +3128,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: DeleteDetectorVersionRequest,
     ) -> Result<DeleteDetectorVersionResult, RusotoError<DeleteDetectorVersionError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.DeleteDetectorVersion",
@@ -3177,20 +3136,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteDetectorVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDetectorVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDetectorVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDetectorVersionResult, _>()
     }
 
     /// <p>Deletes the specified event.</p>
@@ -3198,26 +3149,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: DeleteEventRequest,
     ) -> Result<DeleteEventResult, RusotoError<DeleteEventError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.DeleteEvent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteEventResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteEventError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteEventError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteEventResult, _>()
     }
 
     /// <p>Deletes the rule version. You cannot delete a rule version if it is used by an <code>ACTIVE</code> or <code>INACTIVE</code> detector version.</p>
@@ -3225,9 +3167,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: DeleteRuleVersionRequest,
     ) -> Result<DeleteRuleVersionResult, RusotoError<DeleteRuleVersionError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.DeleteRuleVersion",
@@ -3235,19 +3175,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteRuleVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRuleVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRuleVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteRuleVersionResult, _>()
     }
 
     /// <p>Gets all versions for a specified detector.</p>
@@ -3255,26 +3188,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: DescribeDetectorRequest,
     ) -> Result<DescribeDetectorResult, RusotoError<DescribeDetectorError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.DescribeDetector");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DescribeDetectorResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeDetectorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeDetectorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeDetectorResult, _>()
     }
 
     /// <p>Gets all of the model versions for the specified model type or for the specified model type and model ID. You can also get details for a single, specified model version. </p>
@@ -3282,9 +3206,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: DescribeModelVersionsRequest,
     ) -> Result<DescribeModelVersionsResult, RusotoError<DescribeModelVersionsError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.DescribeModelVersions",
@@ -3292,20 +3214,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeModelVersionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeModelVersionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeModelVersionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeModelVersionsResult, _>()
     }
 
     /// <p>Gets a particular detector version. </p>
@@ -3313,9 +3227,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: GetDetectorVersionRequest,
     ) -> Result<GetDetectorVersionResult, RusotoError<GetDetectorVersionError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.GetDetectorVersion",
@@ -3323,20 +3235,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDetectorVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDetectorVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDetectorVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDetectorVersionResult, _>()
     }
 
     /// <p>Gets all of detectors. This is a paginated API. If you provide a null <code>maxSizePerPage</code>, this actions retrieves a maximum of 10 records per page. If you provide a <code>maxSizePerPage</code>, the value must be between 5 and 10. To get the next page results, provide the pagination token from the <code>GetEventTypesResponse</code> as part of your request. A null pagination token fetches the records from the beginning. </p>
@@ -3344,26 +3248,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: GetDetectorsRequest,
     ) -> Result<GetDetectorsResult, RusotoError<GetDetectorsError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.GetDetectors");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDetectorsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDetectorsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDetectorsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDetectorsResult, _>()
     }
 
     /// <p>Gets the details for one or more Amazon SageMaker models that have been imported into the service. This is a paginated API. If you provide a null <code>maxSizePerPage</code>, this actions retrieves a maximum of 10 records per page. If you provide a <code>maxSizePerPage</code>, the value must be between 5 and 10. To get the next page results, provide the pagination token from the <code>GetExternalModelsResult</code> as part of your request. A null pagination token fetches the records from the beginning. </p>
@@ -3371,9 +3266,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: GetExternalModelsRequest,
     ) -> Result<GetExternalModelsResult, RusotoError<GetExternalModelsError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.GetExternalModels",
@@ -3381,19 +3274,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetExternalModelsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetExternalModelsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetExternalModelsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetExternalModelsResult, _>()
     }
 
     /// <p>Gets a model version. </p>
@@ -3401,26 +3287,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: GetModelVersionRequest,
     ) -> Result<GetModelVersionResult, RusotoError<GetModelVersionError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.GetModelVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetModelVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetModelVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetModelVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetModelVersionResult, _>()
     }
 
     /// <p>Gets all of the models for the AWS account, or the specified model type, or gets a single model for the specified model type, model ID combination. </p>
@@ -3428,26 +3305,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: GetModelsRequest,
     ) -> Result<GetModelsResult, RusotoError<GetModelsError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.GetModels");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetModelsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetModelsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetModelsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetModelsResult, _>()
     }
 
     /// <p>Gets one or more outcomes. This is a paginated API. If you provide a null <code>maxSizePerPage</code>, this actions retrieves a maximum of 10 records per page. If you provide a <code>maxSizePerPage</code>, the value must be between 50 and 100. To get the next page results, provide the pagination token from the <code>GetOutcomesResult</code> as part of your request. A null pagination token fetches the records from the beginning. </p>
@@ -3455,26 +3323,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: GetOutcomesRequest,
     ) -> Result<GetOutcomesResult, RusotoError<GetOutcomesError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.GetOutcomes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOutcomesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOutcomesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOutcomesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetOutcomesResult, _>()
     }
 
     /// <p>Evaluates an event against a detector version. If a version ID is not provided, the detector’s (<code>ACTIVE</code>) version is used. </p>
@@ -3482,26 +3341,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: GetPredictionRequest,
     ) -> Result<GetPredictionResult, RusotoError<GetPredictionError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.GetPrediction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetPredictionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetPredictionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetPredictionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPredictionResult, _>()
     }
 
     /// <p>Gets all rules available for the specified detector.</p>
@@ -3509,26 +3359,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: GetRulesRequest,
     ) -> Result<GetRulesResult, RusotoError<GetRulesError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.GetRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetRulesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRulesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRulesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRulesResult, _>()
     }
 
     /// <p>Gets all of the variables or the specific variable. This is a paginated API. Providing null <code>maxSizePerPage</code> results in retrieving maximum of 100 records per page. If you provide <code>maxSizePerPage</code> the value must be between 50 and 100. To get the next page result, a provide a pagination token from <code>GetVariablesResult</code> as part of your request. Null pagination token fetches the records from the beginning. </p>
@@ -3536,26 +3377,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: GetVariablesRequest,
     ) -> Result<GetVariablesResult, RusotoError<GetVariablesError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.GetVariables");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetVariablesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetVariablesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetVariablesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetVariablesResult, _>()
     }
 
     /// <p>Creates or updates a detector. </p>
@@ -3563,26 +3395,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: PutDetectorRequest,
     ) -> Result<PutDetectorResult, RusotoError<PutDetectorError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.PutDetector");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutDetectorResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutDetectorError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutDetectorError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutDetectorResult, _>()
     }
 
     /// <p>Creates or updates an Amazon SageMaker model endpoint. You can also use this action to update the configuration of the model endpoint, including the IAM role and/or the mapped variables. </p>
@@ -3590,26 +3413,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: PutExternalModelRequest,
     ) -> Result<PutExternalModelResult, RusotoError<PutExternalModelError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.PutExternalModel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutExternalModelResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutExternalModelError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutExternalModelError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutExternalModelResult, _>()
     }
 
     /// <p>Creates or updates a model. </p>
@@ -3617,26 +3431,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: PutModelRequest,
     ) -> Result<PutModelResult, RusotoError<PutModelError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.PutModel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutModelResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutModelError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutModelError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutModelResult, _>()
     }
 
     /// <p>Creates or updates an outcome. </p>
@@ -3644,26 +3449,17 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: PutOutcomeRequest,
     ) -> Result<PutOutcomeResult, RusotoError<PutOutcomeError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.PutOutcome");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PutOutcomeResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PutOutcomeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PutOutcomeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PutOutcomeResult, _>()
     }
 
     /// <p> Updates a detector version. The detector version attributes that you can update include models, external model endpoints, rules, and description. You can only update a <code>DRAFT</code> detector version.</p>
@@ -3671,9 +3467,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: UpdateDetectorVersionRequest,
     ) -> Result<UpdateDetectorVersionResult, RusotoError<UpdateDetectorVersionError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.UpdateDetectorVersion",
@@ -3681,20 +3475,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDetectorVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDetectorVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDetectorVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateDetectorVersionResult, _>()
     }
 
     /// <p>Updates the detector version's description. You can update the metadata for any detector version (<code>DRAFT, ACTIVE,</code> or <code>INACTIVE</code>). </p>
@@ -3703,9 +3489,7 @@ impl FraudDetector for FraudDetectorClient {
         input: UpdateDetectorVersionMetadataRequest,
     ) -> Result<UpdateDetectorVersionMetadataResult, RusotoError<UpdateDetectorVersionMetadataError>>
     {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.UpdateDetectorVersionMetadata",
@@ -3713,20 +3497,13 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDetectorVersionMetadataResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDetectorVersionMetadataError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDetectorVersionMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateDetectorVersionMetadataResult, _>()
     }
 
     /// <p>Updates the detector version’s status. You can perform the following promotions or demotions using <code>UpdateDetectorVersionStatus</code>: <code>DRAFT</code> to <code>ACTIVE</code>, <code>ACTIVE</code> to <code>INACTIVE</code>, and <code>INACTIVE</code> to <code>ACTIVE</code>.</p>
@@ -3735,9 +3512,7 @@ impl FraudDetector for FraudDetectorClient {
         input: UpdateDetectorVersionStatusRequest,
     ) -> Result<UpdateDetectorVersionStatusResult, RusotoError<UpdateDetectorVersionStatusError>>
     {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.UpdateDetectorVersionStatus",
@@ -3745,20 +3520,13 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDetectorVersionStatusResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDetectorVersionStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDetectorVersionStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateDetectorVersionStatusResult, _>()
     }
 
     /// <p><p>Updates a model version. You can update the description and status attributes using this action. You can perform the following status updates: </p> <ol> <li> <p>Change the <code>TRAINING<em>COMPLETE</code> status to <code>ACTIVE</code> </p> </li> <li> <p>Change <code>ACTIVE</code> back to <code>TRAINING</em>COMPLETE</code> </p> </li> </ol></p>
@@ -3766,9 +3534,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: UpdateModelVersionRequest,
     ) -> Result<UpdateModelVersionResult, RusotoError<UpdateModelVersionError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.UpdateModelVersion",
@@ -3776,20 +3542,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateModelVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateModelVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateModelVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateModelVersionResult, _>()
     }
 
     /// <p>Updates a rule's metadata. </p>
@@ -3797,9 +3555,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: UpdateRuleMetadataRequest,
     ) -> Result<UpdateRuleMetadataResult, RusotoError<UpdateRuleMetadataError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.UpdateRuleMetadata",
@@ -3807,20 +3563,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateRuleMetadataResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRuleMetadataError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRuleMetadataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateRuleMetadataResult, _>()
     }
 
     /// <p>Updates a rule version resulting in a new rule version. </p>
@@ -3828,9 +3576,7 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: UpdateRuleVersionRequest,
     ) -> Result<UpdateRuleVersionResult, RusotoError<UpdateRuleVersionError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSHawksNestServiceFacade.UpdateRuleVersion",
@@ -3838,19 +3584,12 @@ impl FraudDetector for FraudDetectorClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateRuleVersionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateRuleVersionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateRuleVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateRuleVersionResult, _>()
     }
 
     /// <p>Updates a variable.</p>
@@ -3858,25 +3597,16 @@ impl FraudDetector for FraudDetectorClient {
         &self,
         input: UpdateVariableRequest,
     ) -> Result<UpdateVariableResult, RusotoError<UpdateVariableError>> {
-        let mut request = SignedRequest::new("POST", "frauddetector", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "AWSHawksNestServiceFacade.UpdateVariable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateVariableResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVariableError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateVariableError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateVariableResult, _>()
     }
 }

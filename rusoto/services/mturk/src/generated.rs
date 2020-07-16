@@ -20,11 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl MechanicalTurkClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "mturk-requester", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptQualificationRequestRequest {
     /// <p> The value of the Qualification. You can omit this value if you are using the presence or absence of the Qualification as the basis for a HIT requirement. </p>
@@ -36,11 +63,11 @@ pub struct AcceptQualificationRequestRequest {
     pub qualification_request_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptQualificationRequestResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApproveAssignmentRequest {
     /// <p> The ID of the assignment. The assignment must correspond to a HIT created by the Requester. </p>
@@ -56,12 +83,12 @@ pub struct ApproveAssignmentRequest {
     pub requester_feedback: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApproveAssignmentResponse {}
 
 /// <p> The Assignment data structure represents a single assignment of a HIT to a Worker. The assignment tracks the Worker's efforts to complete the HIT, and contains the results for later retrieval. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Assignment {
     /// <p> The date and time the Worker accepted the assignment.</p>
@@ -114,7 +141,7 @@ pub struct Assignment {
     pub worker_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateQualificationWithWorkerRequest {
     /// <p>The value of the Qualification to assign.</p>
@@ -133,12 +160,12 @@ pub struct AssociateQualificationWithWorkerRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateQualificationWithWorkerResponse {}
 
 /// <p>An object representing a Bonus payment paid to a Worker.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BonusPayment {
     /// <p>The ID of the assignment associated with this bonus payment.</p>
@@ -162,7 +189,7 @@ pub struct BonusPayment {
     pub worker_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAdditionalAssignmentsForHITRequest {
     /// <p>The ID of the HIT to extend.</p>
@@ -177,11 +204,11 @@ pub struct CreateAdditionalAssignmentsForHITRequest {
     pub unique_request_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAdditionalAssignmentsForHITResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHITRequest {
     /// <p> The amount of time, in seconds, that a Worker has to complete the HIT after accepting it. If a Worker does not complete the assignment within the specified duration, the assignment is considered abandoned. If the HIT is still active (that is, its lifetime has not elapsed), the assignment becomes available for other users to find and accept. </p>
@@ -245,7 +272,7 @@ pub struct CreateHITRequest {
     pub unique_request_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHITResponse {
     /// <p> Contains the newly created HIT data. For a description of the HIT data structure as it appears in responses, see the HIT Data Structure documentation. </p>
@@ -254,7 +281,7 @@ pub struct CreateHITResponse {
     pub hit: Option<HIT>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHITTypeRequest {
     /// <p> The amount of time, in seconds, that a Worker has to complete the HIT after accepting it. If a Worker does not complete the assignment within the specified duration, the assignment is considered abandoned. If the HIT is still active (that is, its lifetime has not elapsed), the assignment becomes available for other users to find and accept. </p>
@@ -283,7 +310,7 @@ pub struct CreateHITTypeRequest {
     pub title: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHITTypeResponse {
     /// <p> The ID of the newly registered HIT type.</p>
@@ -292,7 +319,7 @@ pub struct CreateHITTypeResponse {
     pub hit_type_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateHITWithHITTypeRequest {
     /// <p> The Assignment-level Review Policy applies to the assignments under the HIT. You can specify for Mechanical Turk to take various actions based on the policy. </p>
@@ -335,7 +362,7 @@ pub struct CreateHITWithHITTypeRequest {
     pub unique_request_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHITWithHITTypeResponse {
     /// <p> Contains the newly created HIT data. For a description of the HIT data structure as it appears in responses, see the HIT Data Structure documentation. </p>
@@ -344,7 +371,7 @@ pub struct CreateHITWithHITTypeResponse {
     pub hit: Option<HIT>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQualificationTypeRequest {
     /// <p>The answers to the Qualification test specified in the Test parameter, in the form of an AnswerKey data structure.</p> <p>Constraints: Must not be longer than 65535 bytes.</p> <p>Constraints: None. If not specified, you must process Qualification requests manually.</p>
@@ -386,7 +413,7 @@ pub struct CreateQualificationTypeRequest {
     pub test_duration_in_seconds: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateQualificationTypeResponse {
     /// <p>The created Qualification type, returned as a QualificationType data structure.</p>
@@ -395,7 +422,7 @@ pub struct CreateQualificationTypeResponse {
     pub qualification_type: Option<QualificationType>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkerBlockRequest {
     /// <p>A message explaining the reason for blocking the Worker. This parameter enables you to keep track of your Workers. The Worker does not see this message.</p>
@@ -406,11 +433,11 @@ pub struct CreateWorkerBlockRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkerBlockResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHITRequest {
     /// <p>The ID of the HIT to be deleted.</p>
@@ -418,11 +445,11 @@ pub struct DeleteHITRequest {
     pub hit_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHITResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQualificationTypeRequest {
     /// <p>The ID of the QualificationType to dispose.</p>
@@ -430,11 +457,11 @@ pub struct DeleteQualificationTypeRequest {
     pub qualification_type_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteQualificationTypeResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkerBlockRequest {
     /// <p>A message that explains the reason for unblocking the Worker. The Worker does not see this message.</p>
@@ -446,11 +473,11 @@ pub struct DeleteWorkerBlockRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkerBlockResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateQualificationFromWorkerRequest {
     /// <p>The ID of the Qualification type of the Qualification to be revoked.</p>
@@ -465,15 +492,15 @@ pub struct DisassociateQualificationFromWorkerRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateQualificationFromWorkerResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountBalanceRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountBalanceResponse {
     #[serde(rename = "AvailableBalance")]
@@ -484,7 +511,7 @@ pub struct GetAccountBalanceResponse {
     pub on_hold_balance: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAssignmentRequest {
     /// <p>The ID of the Assignment to be retrieved.</p>
@@ -492,7 +519,7 @@ pub struct GetAssignmentRequest {
     pub assignment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssignmentResponse {
     /// <p> The assignment. The response includes one Assignment element. </p>
@@ -505,7 +532,7 @@ pub struct GetAssignmentResponse {
     pub hit: Option<HIT>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFileUploadURLRequest {
     /// <p>The ID of the assignment that contains the question with a FileUploadAnswer.</p>
@@ -516,7 +543,7 @@ pub struct GetFileUploadURLRequest {
     pub question_identifier: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFileUploadURLResponse {
     /// <p> A temporary URL for the file that the Worker uploaded for the answer. </p>
@@ -525,7 +552,7 @@ pub struct GetFileUploadURLResponse {
     pub file_upload_url: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetHITRequest {
     /// <p>The ID of the HIT to be retrieved.</p>
@@ -533,7 +560,7 @@ pub struct GetHITRequest {
     pub hit_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetHITResponse {
     /// <p> Contains the requested HIT data.</p>
@@ -542,7 +569,7 @@ pub struct GetHITResponse {
     pub hit: Option<HIT>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQualificationScoreRequest {
     /// <p>The ID of the QualificationType.</p>
@@ -553,7 +580,7 @@ pub struct GetQualificationScoreRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQualificationScoreResponse {
     /// <p> The Qualification data structure of the Qualification assigned to a user, including the Qualification type and the value (score). </p>
@@ -562,7 +589,7 @@ pub struct GetQualificationScoreResponse {
     pub qualification: Option<Qualification>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetQualificationTypeRequest {
     /// <p>The ID of the QualificationType.</p>
@@ -570,7 +597,7 @@ pub struct GetQualificationTypeRequest {
     pub qualification_type_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQualificationTypeResponse {
     /// <p> The returned Qualification Type</p>
@@ -580,7 +607,7 @@ pub struct GetQualificationTypeResponse {
 }
 
 /// <p> The HIT data structure represents a single HIT, including all the information necessary for a Worker to accept and complete the HIT.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HIT {
     /// <p> The length of time, in seconds, that a Worker has to complete the HIT after accepting it.</p>
@@ -669,7 +696,7 @@ pub struct HIT {
 }
 
 /// <p> The HITLayoutParameter data structure defines parameter values used with a HITLayout. A HITLayout is a reusable Amazon Mechanical Turk project template used to provide Human Intelligence Task (HIT) question data for CreateHIT. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HITLayoutParameter {
     /// <p> The name of the parameter in the HITLayout. </p>
@@ -680,7 +707,7 @@ pub struct HITLayoutParameter {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssignmentsForHITRequest {
     /// <p>The status of the assignments to return: Submitted | Approved | Rejected</p>
@@ -699,7 +726,7 @@ pub struct ListAssignmentsForHITRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssignmentsForHITResponse {
     /// <p> The collection of Assignment data structures returned by this call.</p>
@@ -715,7 +742,7 @@ pub struct ListAssignmentsForHITResponse {
     pub num_results: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBonusPaymentsRequest {
     /// <p>The ID of the assignment associated with the bonus payments to retrieve. If specified, only bonus payments for the given assignment are returned. Either the HITId parameter or the AssignmentId parameter must be specified</p>
@@ -735,7 +762,7 @@ pub struct ListBonusPaymentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBonusPaymentsResponse {
     /// <p>A successful request to the ListBonusPayments operation returns a list of BonusPayment objects. </p>
@@ -751,7 +778,7 @@ pub struct ListBonusPaymentsResponse {
     pub num_results: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHITsForQualificationTypeRequest {
     /// <p> Limit the number of results returned. </p>
@@ -767,7 +794,7 @@ pub struct ListHITsForQualificationTypeRequest {
     pub qualification_type_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHITsForQualificationTypeResponse {
     /// <p> The list of HIT elements returned by the query.</p>
@@ -783,7 +810,7 @@ pub struct ListHITsForQualificationTypeResponse {
     pub num_results: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHITsRequest {
     #[serde(rename = "MaxResults")]
@@ -795,7 +822,7 @@ pub struct ListHITsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHITsResponse {
     /// <p> The list of HIT elements returned by the query.</p>
@@ -811,7 +838,7 @@ pub struct ListHITsResponse {
     pub num_results: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQualificationRequestsRequest {
     /// <p> The maximum number of results to return in a single call. </p>
@@ -827,7 +854,7 @@ pub struct ListQualificationRequestsRequest {
     pub qualification_type_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQualificationRequestsResponse {
     #[serde(rename = "NextToken")]
@@ -843,7 +870,7 @@ pub struct ListQualificationRequestsResponse {
     pub qualification_requests: Option<Vec<QualificationRequest>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQualificationTypesRequest {
     /// <p> The maximum number of results to return in a single call. </p>
@@ -866,7 +893,7 @@ pub struct ListQualificationTypesRequest {
     pub query: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQualificationTypesResponse {
     #[serde(rename = "NextToken")]
@@ -882,7 +909,7 @@ pub struct ListQualificationTypesResponse {
     pub qualification_types: Option<Vec<QualificationType>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReviewPolicyResultsForHITRequest {
     /// <p>The unique identifier of the HIT to retrieve review results for.</p>
@@ -910,7 +937,7 @@ pub struct ListReviewPolicyResultsForHITRequest {
     pub retrieve_results: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReviewPolicyResultsForHITResponse {
     /// <p> The name of the Assignment-level Review Policy. This contains only the PolicyName element. </p>
@@ -938,7 +965,7 @@ pub struct ListReviewPolicyResultsForHITResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReviewableHITsRequest {
     /// <p> The ID of the HIT type of the HITs to consider for the query. If not specified, all HITs for the Reviewer are considered </p>
@@ -959,7 +986,7 @@ pub struct ListReviewableHITsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReviewableHITsResponse {
     /// <p> The list of HIT elements returned by the query.</p>
@@ -975,7 +1002,7 @@ pub struct ListReviewableHITsResponse {
     pub num_results: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkerBlocksRequest {
     #[serde(rename = "MaxResults")]
@@ -987,7 +1014,7 @@ pub struct ListWorkerBlocksRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkerBlocksResponse {
     #[serde(rename = "NextToken")]
@@ -1003,7 +1030,7 @@ pub struct ListWorkerBlocksResponse {
     pub worker_blocks: Option<Vec<WorkerBlock>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListWorkersWithQualificationTypeRequest {
     /// <p> Limit the number of results returned. </p>
@@ -1023,7 +1050,7 @@ pub struct ListWorkersWithQualificationTypeRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkersWithQualificationTypeResponse {
     #[serde(rename = "NextToken")]
@@ -1040,7 +1067,7 @@ pub struct ListWorkersWithQualificationTypeResponse {
 }
 
 /// <p>The Locale data structure represents a geographical region or location.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Locale {
     /// <p> The country of the locale. Must be a valid ISO 3166 country code. For example, the code US refers to the United States of America. </p>
     #[serde(rename = "Country")]
@@ -1052,7 +1079,7 @@ pub struct Locale {
 }
 
 /// <p>The NotificationSpecification data structure describes a HIT event notification for a HIT type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotificationSpecification {
     /// <p><p> The target for notification messages. The Destination’s format is determined by the specified Transport: </p> <ul> <li> <p>When Transport is Email, the Destination is your email address.</p> </li> <li> <p>When Transport is SQS, the Destination is your queue URL.</p> </li> <li> <p>When Transport is SNS, the Destination is the ARN of your topic.</p> </li> </ul></p>
@@ -1070,7 +1097,7 @@ pub struct NotificationSpecification {
 }
 
 /// <p> When MTurk encounters an issue with notifying the Workers you specified, it returns back this object with failure details. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotifyWorkersFailureStatus {
     /// <p> Encoded value for the failure type. </p>
@@ -1087,7 +1114,7 @@ pub struct NotifyWorkersFailureStatus {
     pub worker_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NotifyWorkersRequest {
     /// <p>The text of the email message to send. Can include up to 4,096 characters</p>
@@ -1101,7 +1128,7 @@ pub struct NotifyWorkersRequest {
     pub worker_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotifyWorkersResponse {
     /// <p> When MTurk sends notifications to the list of Workers, it returns back any failures it encounters in this list of NotifyWorkersFailureStatus objects. </p>
@@ -1111,7 +1138,7 @@ pub struct NotifyWorkersResponse {
 }
 
 /// <p> This data structure is the data type for the AnswerKey parameter of the ScoreMyKnownAnswers/2011-09-01 Review Policy. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ParameterMapEntry {
     /// <p> The QuestionID from the HIT that is used to identify which question requires Mechanical Turk to score as part of the ScoreMyKnownAnswers/2011-09-01 Review Policy. </p>
     #[serde(rename = "Key")]
@@ -1124,7 +1151,7 @@ pub struct ParameterMapEntry {
 }
 
 /// <p> Name of the parameter from the Review policy. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PolicyParameter {
     /// <p> Name of the parameter from the list of Review Polices. </p>
     #[serde(rename = "Key")]
@@ -1141,7 +1168,7 @@ pub struct PolicyParameter {
 }
 
 /// <p>The Qualification data structure represents a Qualification assigned to a user, including the Qualification type and the value (score).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Qualification {
     /// <p> The date and time the Qualification was granted to the Worker. If the Worker's Qualification was revoked, and then re-granted based on a new Qualification request, GrantTime is the date and time of the last call to the AcceptQualificationRequest operation.</p>
@@ -1170,7 +1197,7 @@ pub struct Qualification {
 }
 
 /// <p> The QualificationRequest data structure represents a request a Worker has made for a Qualification. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QualificationRequest {
     /// <p> The Worker's answers for the Qualification type's test contained in a QuestionFormAnswers document, if the type has a test and the Worker has submitted answers. If the Worker does not provide any answers, Answer may be empty. </p>
@@ -1200,7 +1227,7 @@ pub struct QualificationRequest {
 }
 
 /// <p> The QualificationRequirement data structure describes a Qualification that a Worker must have before the Worker is allowed to accept a HIT. A requirement may optionally state that a Worker must have the Qualification in order to preview the HIT, or see the HIT in search results. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct QualificationRequirement {
     /// <p> Setting this attribute prevents Workers whose Qualifications do not meet this QualificationRequirement from taking the specified action. Valid arguments include "Accept" (Worker cannot accept the HIT, but can preview the HIT and see it in their search results), "PreviewAndAccept" (Worker cannot accept or preview the HIT, but can see the HIT in their search results), and "DiscoverPreviewAndAccept" (Worker cannot accept, preview, or see the HIT in their search results). It's possible for you to create a HIT with multiple QualificationRequirements (which can have different values for the ActionGuarded attribute). In this case, the Worker is only permitted to perform an action when they have met all QualificationRequirements guarding the action. The actions in the order of least restrictive to most restrictive are Discover, Preview and Accept. For example, if a Worker meets all QualificationRequirements that are set to DiscoverPreviewAndAccept, but do not meet all requirements that are set with PreviewAndAccept, then the Worker will be able to Discover, i.e. see the HIT in their search result, but will not be able to Preview or Accept the HIT. ActionsGuarded should not be used in combination with the <code>RequiredToPreview</code> field. </p>
     #[serde(rename = "ActionsGuarded")]
@@ -1223,7 +1250,7 @@ pub struct QualificationRequirement {
 }
 
 /// <p> The QualificationType data structure represents a Qualification type, a description of a property of a Worker that must match the requirements of a HIT for the Worker to be able to accept the HIT. The type also describes how a Worker can obtain a Qualification of that type, such as through a Qualification test. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QualificationType {
     /// <p>The answers to the Qualification test specified in the Test parameter.</p>
@@ -1280,7 +1307,7 @@ pub struct QualificationType {
     pub test_duration_in_seconds: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectAssignmentRequest {
     /// <p> The ID of the assignment. The assignment must correspond to a HIT created by the Requester. </p>
@@ -1291,11 +1318,11 @@ pub struct RejectAssignmentRequest {
     pub requester_feedback: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectAssignmentResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectQualificationRequestRequest {
     /// <p> The ID of the Qualification request, as returned by the <code>ListQualificationRequests</code> operation. </p>
@@ -1307,12 +1334,12 @@ pub struct RejectQualificationRequestRequest {
     pub reason: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectQualificationRequestResponse {}
 
 /// <p> Both the AssignmentReviewReport and the HITReviewReport elements contains the ReviewActionDetail data structure. This structure is returned multiple times for each action specified in the Review Policy. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReviewActionDetail {
     /// <p>The unique identifier for the action.</p>
@@ -1350,7 +1377,7 @@ pub struct ReviewActionDetail {
 }
 
 /// <p> HIT Review Policy data structures represent HIT review policies, which you specify when you create a HIT. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ReviewPolicy {
     /// <p>Name of the parameter from the Review policy.</p>
     #[serde(rename = "Parameters")]
@@ -1362,7 +1389,7 @@ pub struct ReviewPolicy {
 }
 
 /// <p> Contains both ReviewResult and ReviewAction elements for a particular HIT. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReviewReport {
     /// <p> A list of ReviewAction objects for each action specified in the Review Policy. </p>
@@ -1376,7 +1403,7 @@ pub struct ReviewReport {
 }
 
 /// <p> This data structure is returned multiple times for each result specified in the Review Policy. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReviewResultDetail {
     /// <p> A unique identifier of the Review action result. </p>
@@ -1405,7 +1432,7 @@ pub struct ReviewResultDetail {
     pub value: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendBonusRequest {
     /// <p>The ID of the assignment for which this bonus is paid.</p>
@@ -1426,11 +1453,11 @@ pub struct SendBonusRequest {
     pub worker_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendBonusResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendTestEventNotificationRequest {
     /// <p> The notification specification to test. This value is identical to the value you would provide to the UpdateNotificationSettings operation when you establish the notification specification for a HIT type. </p>
@@ -1441,11 +1468,11 @@ pub struct SendTestEventNotificationRequest {
     pub test_event_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendTestEventNotificationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateExpirationForHITRequest {
     /// <p> The date and time at which you want the HIT to expire </p>
@@ -1456,11 +1483,11 @@ pub struct UpdateExpirationForHITRequest {
     pub hit_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateExpirationForHITResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateHITReviewStatusRequest {
     /// <p> The ID of the HIT to update. </p>
@@ -1472,11 +1499,11 @@ pub struct UpdateHITReviewStatusRequest {
     pub revert: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateHITReviewStatusResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateHITTypeOfHITRequest {
     /// <p>The HIT to update.</p>
@@ -1487,11 +1514,11 @@ pub struct UpdateHITTypeOfHITRequest {
     pub hit_type_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateHITTypeOfHITResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNotificationSettingsRequest {
     /// <p> Specifies whether notifications are sent for HITs of this HIT type, according to the notification specification. You must specify either the Notification parameter or the Active parameter for the call to UpdateNotificationSettings to succeed. </p>
@@ -1507,11 +1534,11 @@ pub struct UpdateNotificationSettingsRequest {
     pub notification: Option<NotificationSpecification>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotificationSettingsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateQualificationTypeRequest {
     /// <p>The answers to the Qualification test specified in the Test parameter, in the form of an AnswerKey data structure.</p>
@@ -1551,7 +1578,7 @@ pub struct UpdateQualificationTypeRequest {
     pub test_duration_in_seconds: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateQualificationTypeResponse {
     /// <p> Contains a QualificationType data structure.</p>
@@ -1561,7 +1588,7 @@ pub struct UpdateQualificationTypeResponse {
 }
 
 /// <p> The WorkerBlock data structure represents a Worker who has been blocked. It has two elements: the WorkerId and the Reason for the block. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkerBlock {
     /// <p> A message explaining the reason the Worker was blocked. </p>
@@ -3361,9 +3388,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         input: AcceptQualificationRequestRequest,
     ) -> Result<AcceptQualificationRequestResponse, RusotoError<AcceptQualificationRequestError>>
     {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.AcceptQualificationRequest",
@@ -3371,20 +3396,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AcceptQualificationRequestResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AcceptQualificationRequestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AcceptQualificationRequestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AcceptQualificationRequestResponse, _>()
     }
 
     /// <p> The <code>ApproveAssignment</code> operation approves the results of a completed assignment. </p> <p> Approving an assignment initiates two payments from the Requester's Amazon.com account </p> <ul> <li> <p> The Worker who submitted the results is paid the reward specified in the HIT. </p> </li> <li> <p> Amazon Mechanical Turk fees are debited. </p> </li> </ul> <p> If the Requester's account does not have adequate funds for these payments, the call to ApproveAssignment returns an exception, and the approval is not processed. You can include an optional feedback message with the approval, which the Worker can see in the Status section of the web site. </p> <p> You can also call this operation for assignments that were previous rejected and approve them by explicitly overriding the previous rejection. This only works on rejected assignments that were submitted within the previous 30 days and only if the assignment's related HIT has not been deleted. </p>
@@ -3392,9 +3410,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ApproveAssignmentRequest,
     ) -> Result<ApproveAssignmentResponse, RusotoError<ApproveAssignmentError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ApproveAssignment",
@@ -3402,20 +3418,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ApproveAssignmentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ApproveAssignmentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ApproveAssignmentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ApproveAssignmentResponse, _>()
     }
 
     /// <p><p> The <code>AssociateQualificationWithWorker</code> operation gives a Worker a Qualification. <code>AssociateQualificationWithWorker</code> does not require that the Worker submit a Qualification request. It gives the Qualification directly to the Worker. </p> <p> You can only assign a Qualification of a Qualification type that you created (using the <code>CreateQualificationType</code> operation). </p> <note> <p> Note: <code>AssociateQualificationWithWorker</code> does not affect any pending Qualification requests for the Qualification by the Worker. If you assign a Qualification to a Worker, then later grant a Qualification request made by the Worker, the granting of the request may modify the Qualification score. To resolve a pending Qualification request without affecting the Qualification the Worker already has, reject the request with the <code>RejectQualificationRequest</code> operation. </p> </note></p>
@@ -3426,9 +3434,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         AssociateQualificationWithWorkerResponse,
         RusotoError<AssociateQualificationWithWorkerError>,
     > {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.AssociateQualificationWithWorker",
@@ -3436,22 +3442,16 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateQualificationWithWorkerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateQualificationWithWorkerError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AssociateQualificationWithWorkerError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateQualificationWithWorkerResponse, _>()
     }
 
     /// <p><p> The <code>CreateAdditionalAssignmentsForHIT</code> operation increases the maximum number of assignments of an existing HIT. </p> <p> To extend the maximum number of assignments, specify the number of additional assignments.</p> <note> <ul> <li> <p>HITs created with fewer than 10 assignments cannot be extended to have 10 or more assignments. Attempting to add assignments in a way that brings the total number of assignments for a HIT from fewer than 10 assignments to 10 or more assignments will result in an <code>AWS.MechanicalTurk.InvalidMaximumAssignmentsIncrease</code> exception.</p> </li> <li> <p>HITs that were created before July 22, 2015 cannot be extended. Attempting to extend HITs that were created before July 22, 2015 will result in an <code>AWS.MechanicalTurk.HITTooOldForExtension</code> exception. </p> </li> </ul> </note></p>
@@ -3462,9 +3462,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         CreateAdditionalAssignmentsForHITResponse,
         RusotoError<CreateAdditionalAssignmentsForHITError>,
     > {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.CreateAdditionalAssignmentsForHIT",
@@ -3472,22 +3470,16 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateAdditionalAssignmentsForHITResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateAdditionalAssignmentsForHITError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreateAdditionalAssignmentsForHITError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateAdditionalAssignmentsForHITResponse, _>()
     }
 
     /// <p><p>The <code>CreateHIT</code> operation creates a new Human Intelligence Task (HIT). The new HIT is made available for Workers to find and accept on the Amazon Mechanical Turk website. </p> <p> This operation allows you to specify a new HIT by passing in values for the properties of the HIT, such as its title, reward amount and number of assignments. When you pass these values to <code>CreateHIT</code>, a new HIT is created for you, with a new <code>HITTypeID</code>. The HITTypeID can be used to create additional HITs in the future without needing to specify common parameters such as the title, description and reward amount each time.</p> <p> An alternative way to create HITs is to first generate a HITTypeID using the <code>CreateHITType</code> operation and then call the <code>CreateHITWithHITType</code> operation. This is the recommended best practice for Requesters who are creating large numbers of HITs. </p> <p>CreateHIT also supports several ways to provide question data: by providing a value for the <code>Question</code> parameter that fully specifies the contents of the HIT, or by providing a <code>HitLayoutId</code> and associated <code>HitLayoutParameters</code>. </p> <note> <p> If a HIT is created with 10 or more maximum assignments, there is an additional fee. For more information, see <a href="https://requester.mturk.com/pricing">Amazon Mechanical Turk Pricing</a>.</p> </note></p>
@@ -3495,26 +3487,17 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: CreateHITRequest,
     ) -> Result<CreateHITResponse, RusotoError<CreateHITError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "MTurkRequesterServiceV20170117.CreateHIT");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateHITResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateHITError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateHITError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateHITResponse, _>()
     }
 
     /// <p> The <code>CreateHITType</code> operation creates a new HIT type. This operation allows you to define a standard set of HIT properties to use when creating HITs. If you register a HIT type with values that match an existing HIT type, the HIT type ID of the existing type will be returned. </p>
@@ -3522,9 +3505,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: CreateHITTypeRequest,
     ) -> Result<CreateHITTypeResponse, RusotoError<CreateHITTypeError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.CreateHITType",
@@ -3532,19 +3513,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateHITTypeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateHITTypeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateHITTypeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateHITTypeResponse, _>()
     }
 
     /// <p><p> The <code>CreateHITWithHITType</code> operation creates a new Human Intelligence Task (HIT) using an existing HITTypeID generated by the <code>CreateHITType</code> operation. </p> <p> This is an alternative way to create HITs from the <code>CreateHIT</code> operation. This is the recommended best practice for Requesters who are creating large numbers of HITs. </p> <p>CreateHITWithHITType also supports several ways to provide question data: by providing a value for the <code>Question</code> parameter that fully specifies the contents of the HIT, or by providing a <code>HitLayoutId</code> and associated <code>HitLayoutParameters</code>. </p> <note> <p> If a HIT is created with 10 or more maximum assignments, there is an additional fee. For more information, see <a href="https://requester.mturk.com/pricing">Amazon Mechanical Turk Pricing</a>. </p> </note></p>
@@ -3552,9 +3526,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: CreateHITWithHITTypeRequest,
     ) -> Result<CreateHITWithHITTypeResponse, RusotoError<CreateHITWithHITTypeError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.CreateHITWithHITType",
@@ -3562,20 +3534,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateHITWithHITTypeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateHITWithHITTypeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateHITWithHITTypeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateHITWithHITTypeResponse, _>()
     }
 
     /// <p> The <code>CreateQualificationType</code> operation creates a new Qualification type, which is represented by a <code>QualificationType</code> data structure. </p>
@@ -3583,9 +3548,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: CreateQualificationTypeRequest,
     ) -> Result<CreateQualificationTypeResponse, RusotoError<CreateQualificationTypeError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.CreateQualificationType",
@@ -3593,20 +3556,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateQualificationTypeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateQualificationTypeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateQualificationTypeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateQualificationTypeResponse, _>()
     }
 
     /// <p>The <code>CreateWorkerBlock</code> operation allows you to prevent a Worker from working on your HITs. For example, you can block a Worker who is producing poor quality work. You can block up to 100,000 Workers.</p>
@@ -3614,9 +3570,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: CreateWorkerBlockRequest,
     ) -> Result<CreateWorkerBlockResponse, RusotoError<CreateWorkerBlockError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.CreateWorkerBlock",
@@ -3624,20 +3578,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateWorkerBlockResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateWorkerBlockError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateWorkerBlockError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkerBlockResponse, _>()
     }
 
     /// <p><p> The <code>DeleteHIT</code> operation is used to delete HIT that is no longer needed. Only the Requester who created the HIT can delete it. </p> <p> You can only dispose of HITs that are in the <code>Reviewable</code> state, with all of their submitted assignments already either approved or rejected. If you call the DeleteHIT operation on a HIT that is not in the <code>Reviewable</code> state (for example, that has not expired, or still has active assignments), or on a HIT that is Reviewable but without all of its submitted assignments already approved or rejected, the service will return an error. </p> <note> <ul> <li> <p> HITs are automatically disposed of after 120 days. </p> </li> <li> <p> After you dispose of a HIT, you can no longer approve the HIT&#39;s rejected assignments. </p> </li> <li> <p> Disposed HITs are not returned in results for the ListHITs operation. </p> </li> <li> <p> Disposing HITs can improve the performance of operations such as ListReviewableHITs and ListHITs. </p> </li> </ul> </note></p>
@@ -3645,26 +3591,17 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: DeleteHITRequest,
     ) -> Result<DeleteHITResponse, RusotoError<DeleteHITError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "MTurkRequesterServiceV20170117.DeleteHIT");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteHITResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteHITError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteHITError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteHITResponse, _>()
     }
 
     /// <p><p> The <code>DeleteQualificationType</code> deletes a Qualification type and deletes any HIT types that are associated with the Qualification type. </p> <p>This operation does not revoke Qualifications already assigned to Workers because the Qualifications might be needed for active HITs. If there are any pending requests for the Qualification type, Amazon Mechanical Turk rejects those requests. After you delete a Qualification type, you can no longer use it to create HITs or HIT types.</p> <note> <p>DeleteQualificationType must wait for all the HITs that use the deleted Qualification type to be deleted before completing. It may take up to 48 hours before DeleteQualificationType completes and the unique name of the Qualification type is available for reuse with CreateQualificationType.</p> </note></p>
@@ -3672,9 +3609,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: DeleteQualificationTypeRequest,
     ) -> Result<DeleteQualificationTypeResponse, RusotoError<DeleteQualificationTypeError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.DeleteQualificationType",
@@ -3682,20 +3617,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteQualificationTypeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteQualificationTypeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteQualificationTypeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteQualificationTypeResponse, _>()
     }
 
     /// <p>The <code>DeleteWorkerBlock</code> operation allows you to reinstate a blocked Worker to work on your HITs. This operation reverses the effects of the CreateWorkerBlock operation. You need the Worker ID to use this operation. If the Worker ID is missing or invalid, this operation fails and returns the message “WorkerId is invalid.” If the specified Worker is not blocked, this operation returns successfully.</p>
@@ -3703,9 +3631,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: DeleteWorkerBlockRequest,
     ) -> Result<DeleteWorkerBlockResponse, RusotoError<DeleteWorkerBlockError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.DeleteWorkerBlock",
@@ -3713,20 +3639,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteWorkerBlockResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteWorkerBlockError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteWorkerBlockError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteWorkerBlockResponse, _>()
     }
 
     /// <p> The <code>DisassociateQualificationFromWorker</code> revokes a previously granted Qualification from a user. </p> <p> You can provide a text message explaining why the Qualification was revoked. The user who had the Qualification can see this message. </p>
@@ -3737,9 +3655,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         DisassociateQualificationFromWorkerResponse,
         RusotoError<DisassociateQualificationFromWorkerError>,
     > {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.DisassociateQualificationFromWorker",
@@ -3747,51 +3663,35 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DisassociateQualificationFromWorkerResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DisassociateQualificationFromWorkerError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DisassociateQualificationFromWorkerError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateQualificationFromWorkerResponse, _>()
     }
 
     /// <p>The <code>GetAccountBalance</code> operation retrieves the amount of money in your Amazon Mechanical Turk account.</p>
     async fn get_account_balance(
         &self,
     ) -> Result<GetAccountBalanceResponse, RusotoError<GetAccountBalanceError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.GetAccountBalance",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAccountBalanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAccountBalanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAccountBalanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAccountBalanceResponse, _>()
     }
 
     /// <p> The <code>GetAssignment</code> operation retrieves the details of the specified Assignment. </p>
@@ -3799,9 +3699,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: GetAssignmentRequest,
     ) -> Result<GetAssignmentResponse, RusotoError<GetAssignmentError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.GetAssignment",
@@ -3809,19 +3707,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetAssignmentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAssignmentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAssignmentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAssignmentResponse, _>()
     }
 
     /// <p> The <code>GetFileUploadURL</code> operation generates and returns a temporary URL. You use the temporary URL to retrieve a file uploaded by a Worker as an answer to a FileUploadAnswer question for a HIT. The temporary URL is generated the instant the GetFileUploadURL operation is called, and is valid for 60 seconds. You can get a temporary file upload URL any time until the HIT is disposed. After the HIT is disposed, any uploaded files are deleted, and cannot be retrieved. Pending Deprecation on December 12, 2017. The Answer Specification structure will no longer support the <code>FileUploadAnswer</code> element to be used for the QuestionForm data structure. Instead, we recommend that Requesters who want to create HITs asking Workers to upload files to use Amazon S3. </p>
@@ -3829,9 +3720,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: GetFileUploadURLRequest,
     ) -> Result<GetFileUploadURLResponse, RusotoError<GetFileUploadURLError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.GetFileUploadURL",
@@ -3839,20 +3728,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFileUploadURLResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFileUploadURLError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetFileUploadURLError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetFileUploadURLResponse, _>()
     }
 
     /// <p> The <code>GetHIT</code> operation retrieves the details of the specified HIT. </p>
@@ -3860,26 +3741,17 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: GetHITRequest,
     ) -> Result<GetHITResponse, RusotoError<GetHITError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "MTurkRequesterServiceV20170117.GetHIT");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetHITResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetHITError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetHITError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetHITResponse, _>()
     }
 
     /// <p> The <code>GetQualificationScore</code> operation returns the value of a Worker's Qualification for a given Qualification type. </p> <p> To get a Worker's Qualification, you must know the Worker's ID. The Worker's ID is included in the assignment data returned by the <code>ListAssignmentsForHIT</code> operation. </p> <p>Only the owner of a Qualification type can query the value of a Worker's Qualification of that type.</p>
@@ -3887,9 +3759,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: GetQualificationScoreRequest,
     ) -> Result<GetQualificationScoreResponse, RusotoError<GetQualificationScoreError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.GetQualificationScore",
@@ -3897,20 +3767,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetQualificationScoreResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetQualificationScoreError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetQualificationScoreError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetQualificationScoreResponse, _>()
     }
 
     /// <p> The <code>GetQualificationType</code>operation retrieves information about a Qualification type using its ID. </p>
@@ -3918,9 +3781,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: GetQualificationTypeRequest,
     ) -> Result<GetQualificationTypeResponse, RusotoError<GetQualificationTypeError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.GetQualificationType",
@@ -3928,20 +3789,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetQualificationTypeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetQualificationTypeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetQualificationTypeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetQualificationTypeResponse, _>()
     }
 
     /// <p> The <code>ListAssignmentsForHIT</code> operation retrieves completed assignments for a HIT. You can use this operation to retrieve the results for a HIT. </p> <p> You can get assignments for a HIT at any time, even if the HIT is not yet Reviewable. If a HIT requested multiple assignments, and has received some results but has not yet become Reviewable, you can still retrieve the partial results with this operation. </p> <p> Use the AssignmentStatus parameter to control which set of assignments for a HIT are returned. The ListAssignmentsForHIT operation can return submitted assignments awaiting approval, or it can return assignments that have already been approved or rejected. You can set AssignmentStatus=Approved,Rejected to get assignments that have already been approved and rejected together in one result set. </p> <p> Only the Requester who created the HIT can retrieve the assignments for that HIT. </p> <p> Results are sorted and divided into numbered pages and the operation returns a single page of results. You can use the parameters of the operation to control sorting and pagination. </p>
@@ -3949,9 +3803,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListAssignmentsForHITRequest,
     ) -> Result<ListAssignmentsForHITResponse, RusotoError<ListAssignmentsForHITError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListAssignmentsForHIT",
@@ -3959,20 +3811,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListAssignmentsForHITResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListAssignmentsForHITError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListAssignmentsForHITError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListAssignmentsForHITResponse, _>()
     }
 
     /// <p> The <code>ListBonusPayments</code> operation retrieves the amounts of bonuses you have paid to Workers for a given HIT or assignment. </p>
@@ -3980,9 +3825,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListBonusPaymentsRequest,
     ) -> Result<ListBonusPaymentsResponse, RusotoError<ListBonusPaymentsError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListBonusPayments",
@@ -3990,20 +3833,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListBonusPaymentsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListBonusPaymentsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListBonusPaymentsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListBonusPaymentsResponse, _>()
     }
 
     /// <p> The <code>ListHITs</code> operation returns all of a Requester's HITs. The operation returns HITs of any status, except for HITs that have been deleted of with the DeleteHIT operation or that have been auto-deleted. </p>
@@ -4011,26 +3846,17 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListHITsRequest,
     ) -> Result<ListHITsResponse, RusotoError<ListHITsError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "MTurkRequesterServiceV20170117.ListHITs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListHITsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListHITsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListHITsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListHITsResponse, _>()
     }
 
     /// <p> The <code>ListHITsForQualificationType</code> operation returns the HITs that use the given Qualification type for a Qualification requirement. The operation returns HITs of any status, except for HITs that have been deleted with the <code>DeleteHIT</code> operation or that have been auto-deleted. </p>
@@ -4039,9 +3865,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         input: ListHITsForQualificationTypeRequest,
     ) -> Result<ListHITsForQualificationTypeResponse, RusotoError<ListHITsForQualificationTypeError>>
     {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListHITsForQualificationType",
@@ -4049,20 +3873,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListHITsForQualificationTypeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListHITsForQualificationTypeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListHITsForQualificationTypeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListHITsForQualificationTypeResponse, _>()
     }
 
     /// <p> The <code>ListQualificationRequests</code> operation retrieves requests for Qualifications of a particular Qualification type. The owner of the Qualification type calls this operation to poll for pending requests, and accepts them using the AcceptQualification operation. </p>
@@ -4071,9 +3888,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         input: ListQualificationRequestsRequest,
     ) -> Result<ListQualificationRequestsResponse, RusotoError<ListQualificationRequestsError>>
     {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListQualificationRequests",
@@ -4081,20 +3896,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListQualificationRequestsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListQualificationRequestsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListQualificationRequestsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListQualificationRequestsResponse, _>()
     }
 
     /// <p> The <code>ListQualificationTypes</code> operation returns a list of Qualification types, filtered by an optional search term. </p>
@@ -4102,9 +3910,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListQualificationTypesRequest,
     ) -> Result<ListQualificationTypesResponse, RusotoError<ListQualificationTypesError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListQualificationTypes",
@@ -4112,20 +3918,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListQualificationTypesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListQualificationTypesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListQualificationTypesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListQualificationTypesResponse, _>()
     }
 
     /// <p> The <code>ListReviewPolicyResultsForHIT</code> operation retrieves the computed results and the actions taken in the course of executing your Review Policies for a given HIT. For information about how to specify Review Policies when you call CreateHIT, see Review Policies. The ListReviewPolicyResultsForHIT operation can return results for both Assignment-level and HIT-level review results. </p>
@@ -4136,9 +3935,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         ListReviewPolicyResultsForHITResponse,
         RusotoError<ListReviewPolicyResultsForHITError>,
     > {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListReviewPolicyResultsForHIT",
@@ -4146,20 +3943,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListReviewPolicyResultsForHITResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListReviewPolicyResultsForHITError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListReviewPolicyResultsForHITError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListReviewPolicyResultsForHITResponse, _>()
     }
 
     /// <p> The <code>ListReviewableHITs</code> operation retrieves the HITs with Status equal to Reviewable or Status equal to Reviewing that belong to the Requester calling the operation. </p>
@@ -4167,9 +3957,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListReviewableHITsRequest,
     ) -> Result<ListReviewableHITsResponse, RusotoError<ListReviewableHITsError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListReviewableHITs",
@@ -4177,20 +3965,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListReviewableHITsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListReviewableHITsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListReviewableHITsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListReviewableHITsResponse, _>()
     }
 
     /// <p>The <code>ListWorkersBlocks</code> operation retrieves a list of Workers who are blocked from working on your HITs.</p>
@@ -4198,9 +3978,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListWorkerBlocksRequest,
     ) -> Result<ListWorkerBlocksResponse, RusotoError<ListWorkerBlocksError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListWorkerBlocks",
@@ -4208,20 +3986,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListWorkerBlocksResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListWorkerBlocksError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListWorkerBlocksError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListWorkerBlocksResponse, _>()
     }
 
     /// <p> The <code>ListWorkersWithQualificationType</code> operation returns all of the Workers that have been associated with a given Qualification type. </p>
@@ -4232,9 +4002,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         ListWorkersWithQualificationTypeResponse,
         RusotoError<ListWorkersWithQualificationTypeError>,
     > {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListWorkersWithQualificationType",
@@ -4242,22 +4010,16 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListWorkersWithQualificationTypeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListWorkersWithQualificationTypeError::from_response(
-                response,
-            ))
-        }
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListWorkersWithQualificationTypeError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListWorkersWithQualificationTypeResponse, _>()
     }
 
     /// <p> The <code>NotifyWorkers</code> operation sends an email to one or more Workers that you specify with the Worker ID. You can specify up to 100 Worker IDs to send the same message with a single call to the NotifyWorkers operation. The NotifyWorkers operation will send a notification email to a Worker only if you have previously approved or rejected work from the Worker. </p>
@@ -4265,9 +4027,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: NotifyWorkersRequest,
     ) -> Result<NotifyWorkersResponse, RusotoError<NotifyWorkersError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.NotifyWorkers",
@@ -4275,19 +4035,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<NotifyWorkersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(NotifyWorkersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, NotifyWorkersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<NotifyWorkersResponse, _>()
     }
 
     /// <p> The <code>RejectAssignment</code> operation rejects the results of a completed assignment. </p> <p> You can include an optional feedback message with the rejection, which the Worker can see in the Status section of the web site. When you include a feedback message with the rejection, it helps the Worker understand why the assignment was rejected, and can improve the quality of the results the Worker submits in the future. </p> <p> Only the Requester who created the HIT can reject an assignment for the HIT. </p>
@@ -4295,9 +4048,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: RejectAssignmentRequest,
     ) -> Result<RejectAssignmentResponse, RusotoError<RejectAssignmentError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.RejectAssignment",
@@ -4305,20 +4056,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RejectAssignmentResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RejectAssignmentError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RejectAssignmentError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RejectAssignmentResponse, _>()
     }
 
     /// <p> The <code>RejectQualificationRequest</code> operation rejects a user's request for a Qualification. </p> <p> You can provide a text message explaining why the request was rejected. The Worker who made the request can see this message.</p>
@@ -4327,9 +4070,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         input: RejectQualificationRequestRequest,
     ) -> Result<RejectQualificationRequestResponse, RusotoError<RejectQualificationRequestError>>
     {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.RejectQualificationRequest",
@@ -4337,20 +4078,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<RejectQualificationRequestResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RejectQualificationRequestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RejectQualificationRequestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<RejectQualificationRequestResponse, _>()
     }
 
     /// <p> The <code>SendBonus</code> operation issues a payment of money from your account to a Worker. This payment happens separately from the reward you pay to the Worker when you approve the Worker's assignment. The SendBonus operation requires the Worker's ID and the assignment ID as parameters to initiate payment of the bonus. You must include a message that explains the reason for the bonus payment, as the Worker may not be expecting the payment. Amazon Mechanical Turk collects a fee for bonus payments, similar to the HIT listing fee. This operation fails if your account does not have enough funds to pay for both the bonus and the fees. </p>
@@ -4358,26 +4092,17 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: SendBonusRequest,
     ) -> Result<SendBonusResponse, RusotoError<SendBonusError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "MTurkRequesterServiceV20170117.SendBonus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SendBonusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendBonusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SendBonusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SendBonusResponse, _>()
     }
 
     /// <p> The <code>SendTestEventNotification</code> operation causes Amazon Mechanical Turk to send a notification message as if a HIT event occurred, according to the provided notification specification. This allows you to test notifications without setting up notifications for a real HIT type and trying to trigger them using the website. When you call this operation, the service attempts to send the test notification immediately. </p>
@@ -4386,9 +4111,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         input: SendTestEventNotificationRequest,
     ) -> Result<SendTestEventNotificationResponse, RusotoError<SendTestEventNotificationError>>
     {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.SendTestEventNotification",
@@ -4396,20 +4119,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SendTestEventNotificationResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SendTestEventNotificationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SendTestEventNotificationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SendTestEventNotificationResponse, _>()
     }
 
     /// <p> The <code>UpdateExpirationForHIT</code> operation allows you update the expiration time of a HIT. If you update it to a time in the past, the HIT will be immediately expired. </p>
@@ -4417,9 +4133,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: UpdateExpirationForHITRequest,
     ) -> Result<UpdateExpirationForHITResponse, RusotoError<UpdateExpirationForHITError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.UpdateExpirationForHIT",
@@ -4427,20 +4141,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateExpirationForHITResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateExpirationForHITError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateExpirationForHITError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateExpirationForHITResponse, _>()
     }
 
     /// <p> The <code>UpdateHITReviewStatus</code> operation updates the status of a HIT. If the status is Reviewable, this operation can update the status to Reviewing, or it can revert a Reviewing HIT back to the Reviewable status. </p>
@@ -4448,9 +4155,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: UpdateHITReviewStatusRequest,
     ) -> Result<UpdateHITReviewStatusResponse, RusotoError<UpdateHITReviewStatusError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.UpdateHITReviewStatus",
@@ -4458,20 +4163,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateHITReviewStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateHITReviewStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateHITReviewStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateHITReviewStatusResponse, _>()
     }
 
     /// <p> The <code>UpdateHITTypeOfHIT</code> operation allows you to change the HITType properties of a HIT. This operation disassociates the HIT from its old HITType properties and associates it with the new HITType properties. The HIT takes on the properties of the new HITType in place of the old ones. </p>
@@ -4479,9 +4177,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: UpdateHITTypeOfHITRequest,
     ) -> Result<UpdateHITTypeOfHITResponse, RusotoError<UpdateHITTypeOfHITError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.UpdateHITTypeOfHIT",
@@ -4489,20 +4185,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateHITTypeOfHITResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateHITTypeOfHITError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateHITTypeOfHITError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateHITTypeOfHITResponse, _>()
     }
 
     /// <p> The <code>UpdateNotificationSettings</code> operation creates, updates, disables or re-enables notifications for a HIT type. If you call the UpdateNotificationSettings operation for a HIT type that already has a notification specification, the operation replaces the old specification with a new one. You can call the UpdateNotificationSettings operation to enable or disable notifications for the HIT type, without having to modify the notification specification itself by providing updates to the Active status without specifying a new notification specification. To change the Active status of a HIT type's notifications, the HIT type must already have a notification specification, or one must be provided in the same call to <code>UpdateNotificationSettings</code>. </p>
@@ -4511,9 +4199,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         input: UpdateNotificationSettingsRequest,
     ) -> Result<UpdateNotificationSettingsResponse, RusotoError<UpdateNotificationSettingsError>>
     {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.UpdateNotificationSettings",
@@ -4521,20 +4207,13 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateNotificationSettingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateNotificationSettingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateNotificationSettingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateNotificationSettingsResponse, _>()
     }
 
     /// <p> The <code>UpdateQualificationType</code> operation modifies the attributes of an existing Qualification type, which is represented by a QualificationType data structure. Only the owner of a Qualification type can modify its attributes. </p> <p> Most attributes of a Qualification type can be changed after the type has been created. However, the Name and Keywords fields cannot be modified. The RetryDelayInSeconds parameter can be modified or added to change the delay or to enable retries, but RetryDelayInSeconds cannot be used to disable retries. </p> <p> You can use this operation to update the test for a Qualification type. The test is updated based on the values specified for the Test, TestDurationInSeconds and AnswerKey parameters. All three parameters specify the updated test. If you are updating the test for a type, you must specify the Test and TestDurationInSeconds parameters. The AnswerKey parameter is optional; omitting it specifies that the updated test does not have an answer key. </p> <p> If you omit the Test parameter, the test for the Qualification type is unchanged. There is no way to remove a test from a Qualification type that has one. If the type already has a test, you cannot update it to be AutoGranted. If the Qualification type does not have a test and one is provided by an update, the type will henceforth have a test. </p> <p> If you want to update the test duration or answer key for an existing test without changing the questions, you must specify a Test parameter with the original questions, along with the updated values. </p> <p> If you provide an updated Test but no AnswerKey, the new test will not have an answer key. Requests for such Qualifications must be granted manually. </p> <p> You can also update the AutoGranted and AutoGrantedValue attributes of the Qualification type.</p>
@@ -4542,9 +4221,7 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: UpdateQualificationTypeRequest,
     ) -> Result<UpdateQualificationTypeResponse, RusotoError<UpdateQualificationTypeError>> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.UpdateQualificationType",
@@ -4552,19 +4229,12 @@ impl MechanicalTurk for MechanicalTurkClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateQualificationTypeResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateQualificationTypeError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateQualificationTypeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateQualificationTypeResponse, _>()
     }
 }

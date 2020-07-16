@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Information about how AWS Ground Station should configure an antenna for downlink during a contact.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AntennaDownlinkConfig {
     /// <p>Object that describes a spectral <code>Config</code>.</p>
     #[serde(rename = "spectrumConfig")]
@@ -34,7 +34,7 @@ pub struct AntennaDownlinkConfig {
 }
 
 /// <p>Information about how AWS Ground Station should conﬁgure an antenna for downlink demod decode during a contact.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AntennaDownlinkDemodDecodeConfig {
     /// <p>Information about the decode <code>Config</code>.</p>
     #[serde(rename = "decodeConfig")]
@@ -48,7 +48,7 @@ pub struct AntennaDownlinkDemodDecodeConfig {
 }
 
 /// <p>Information about the uplink <code>Config</code> of an antenna.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AntennaUplinkConfig {
     /// <p>Information about the uplink spectral <code>Config</code>.</p>
     #[serde(rename = "spectrumConfig")]
@@ -59,7 +59,7 @@ pub struct AntennaUplinkConfig {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelContactRequest {
     /// <p>UUID of a contact.</p>
@@ -68,7 +68,7 @@ pub struct CancelContactRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigIdResponse {
     /// <p>ARN of a <code>Config</code>.</p>
@@ -86,7 +86,7 @@ pub struct ConfigIdResponse {
 }
 
 /// <p>An item in a list of <code>Config</code> objects.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigListItem {
     /// <p>ARN of a <code>Config</code>.</p>
@@ -108,7 +108,7 @@ pub struct ConfigListItem {
 }
 
 /// <p>Object containing the parameters of a <code>Config</code>.</p> <p>See the subtype definitions for what each type of <code>Config</code> contains.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfigTypeData {
     /// <p>Information about how AWS Ground Station should configure an antenna for downlink during a contact.</p>
     #[serde(rename = "antennaDownlinkConfig")]
@@ -137,7 +137,7 @@ pub struct ConfigTypeData {
 }
 
 /// <p>Data describing a contact.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ContactData {
     /// <p>UUID of a contact.</p>
@@ -195,7 +195,7 @@ pub struct ContactData {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ContactIdResponse {
     /// <p>UUID of a contact.</p>
@@ -205,7 +205,7 @@ pub struct ContactIdResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigRequest {
     /// <p>Parameters of a <code>Config</code>.</p>
@@ -221,7 +221,7 @@ pub struct CreateConfigRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDataflowEndpointGroupRequest {
     /// <p>Endpoint details of each endpoint in the dataflow endpoint group.</p>
@@ -234,7 +234,7 @@ pub struct CreateDataflowEndpointGroupRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMissionProfileRequest {
     /// <p>Amount of time after a contact ends that you’d like to receive a CloudWatch event indicating the pass has finished.</p>
@@ -264,7 +264,7 @@ pub struct CreateMissionProfileRequest {
 }
 
 /// <p>Information about a dataflow endpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataflowEndpoint {
     /// <p>Socket address of a dataflow endpoint.</p>
     #[serde(rename = "address")]
@@ -281,7 +281,7 @@ pub struct DataflowEndpoint {
 }
 
 /// <p>Information about the dataflow endpoint <code>Config</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataflowEndpointConfig {
     /// <p>Name of a dataflow endpoint.</p>
     #[serde(rename = "dataflowEndpointName")]
@@ -293,7 +293,7 @@ pub struct DataflowEndpointConfig {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataflowEndpointGroupIdResponse {
     /// <p>UUID of a dataflow endpoint group.</p>
@@ -303,7 +303,7 @@ pub struct DataflowEndpointGroupIdResponse {
 }
 
 /// <p>Item in a list of <code>DataflowEndpoint</code> groups.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataflowEndpointListItem {
     /// <p>ARN of a dataflow endpoint group.</p>
@@ -317,7 +317,7 @@ pub struct DataflowEndpointListItem {
 }
 
 /// <p>Information about the decode <code>Config</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DecodeConfig {
     /// <p>Unvalidated JSON of a decode <code>Config</code>.</p>
     #[serde(rename = "unvalidatedJSON")]
@@ -325,7 +325,7 @@ pub struct DecodeConfig {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigRequest {
     /// <p>UUID of a <code>Config</code>.</p>
@@ -337,7 +337,7 @@ pub struct DeleteConfigRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDataflowEndpointGroupRequest {
     /// <p>UUID of a dataflow endpoint group.</p>
@@ -346,7 +346,7 @@ pub struct DeleteDataflowEndpointGroupRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMissionProfileRequest {
     /// <p>UUID of a mission profile.</p>
@@ -355,7 +355,7 @@ pub struct DeleteMissionProfileRequest {
 }
 
 /// <p>Information about the demodulation <code>Config</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DemodulationConfig {
     /// <p>Unvalidated JSON of a demodulation <code>Config</code>.</p>
     #[serde(rename = "unvalidatedJSON")]
@@ -363,7 +363,7 @@ pub struct DemodulationConfig {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeContactRequest {
     /// <p>UUID of a contact.</p>
@@ -372,7 +372,7 @@ pub struct DescribeContactRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeContactResponse {
     /// <p>UUID of a contact.</p>
@@ -430,7 +430,7 @@ pub struct DescribeContactResponse {
 }
 
 /// <p>Object that represents EIRP.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Eirp {
     /// <p>Units of an EIRP.</p>
     #[serde(rename = "units")]
@@ -441,7 +441,7 @@ pub struct Eirp {
 }
 
 /// <p>Elevation angle of the satellite in the sky during a contact.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Elevation {
     /// <p>Elevation angle units.</p>
@@ -453,7 +453,7 @@ pub struct Elevation {
 }
 
 /// <p>Information about the endpoint details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EndpointDetails {
     /// <p>A dataflow endpoint.</p>
     #[serde(rename = "endpoint")]
@@ -466,7 +466,7 @@ pub struct EndpointDetails {
 }
 
 /// <p>Object that describes the frequency.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Frequency {
     /// <p>Frequency units.</p>
     #[serde(rename = "units")]
@@ -477,7 +477,7 @@ pub struct Frequency {
 }
 
 /// <p>Object that describes the frequency bandwidth.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FrequencyBandwidth {
     /// <p>Frequency bandwidth units.</p>
     #[serde(rename = "units")]
@@ -488,7 +488,7 @@ pub struct FrequencyBandwidth {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigRequest {
     /// <p>UUID of a <code>Config</code>.</p>
@@ -500,7 +500,7 @@ pub struct GetConfigRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConfigResponse {
     /// <p>ARN of a <code>Config</code> </p>
@@ -526,7 +526,7 @@ pub struct GetConfigResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDataflowEndpointGroupRequest {
     /// <p>UUID of a dataflow endpoint group.</p>
@@ -535,7 +535,7 @@ pub struct GetDataflowEndpointGroupRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataflowEndpointGroupResponse {
     /// <p>ARN of a dataflow endpoint group.</p>
@@ -557,7 +557,7 @@ pub struct GetDataflowEndpointGroupResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMinuteUsageRequest {
     /// <p>The month being requested, with a value of 1-12.</p>
@@ -569,7 +569,7 @@ pub struct GetMinuteUsageRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMinuteUsageResponse {
     /// <p>Estimated number of minutes remaining for an account, specific to the month being requested.</p>
@@ -595,7 +595,7 @@ pub struct GetMinuteUsageResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMissionProfileRequest {
     /// <p>UUID of a mission profile.</p>
@@ -604,7 +604,7 @@ pub struct GetMissionProfileRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMissionProfileResponse {
     /// <p>Amount of time after a contact ends that you’d like to receive a CloudWatch event indicating the pass has finished.</p>
@@ -650,7 +650,7 @@ pub struct GetMissionProfileResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSatelliteRequest {
     /// <p>UUID of a satellite.</p>
@@ -659,7 +659,7 @@ pub struct GetSatelliteRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSatelliteResponse {
     /// <p>A list of ground stations to which the satellite is on-boarded.</p>
@@ -681,7 +681,7 @@ pub struct GetSatelliteResponse {
 }
 
 /// <p>Information about the ground station data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroundStationData {
     /// <p>UUID of a ground station.</p>
@@ -699,7 +699,7 @@ pub struct GroundStationData {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigsRequest {
     /// <p>Maximum number of <code>Configs</code> returned.</p>
@@ -713,7 +713,7 @@ pub struct ListConfigsRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConfigsResponse {
     /// <p>List of <code>Config</code> items.</p>
@@ -727,7 +727,7 @@ pub struct ListConfigsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContactsRequest {
     /// <p>End time of a contact.</p>
@@ -762,7 +762,7 @@ pub struct ListContactsRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListContactsResponse {
     /// <p>List of contacts.</p>
@@ -776,7 +776,7 @@ pub struct ListContactsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDataflowEndpointGroupsRequest {
     /// <p>Maximum number of dataflow endpoint groups returned.</p>
@@ -790,7 +790,7 @@ pub struct ListDataflowEndpointGroupsRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataflowEndpointGroupsResponse {
     /// <p>A list of dataflow endpoint groups.</p>
@@ -804,7 +804,7 @@ pub struct ListDataflowEndpointGroupsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroundStationsRequest {
     /// <p>Maximum number of ground stations returned.</p>
@@ -822,7 +822,7 @@ pub struct ListGroundStationsRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroundStationsResponse {
     /// <p>List of ground stations.</p>
@@ -836,7 +836,7 @@ pub struct ListGroundStationsResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMissionProfilesRequest {
     /// <p>Maximum number of mission profiles returned.</p>
@@ -850,7 +850,7 @@ pub struct ListMissionProfilesRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMissionProfilesResponse {
     /// <p>List of mission profiles.</p>
@@ -864,7 +864,7 @@ pub struct ListMissionProfilesResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSatellitesRequest {
     /// <p>Maximum number of satellites returned.</p>
@@ -878,7 +878,7 @@ pub struct ListSatellitesRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSatellitesResponse {
     /// <p>Next token that can be supplied in the next call to get the next page of satellites.</p>
@@ -892,7 +892,7 @@ pub struct ListSatellitesResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>ARN of a resource.</p>
@@ -901,7 +901,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>Tags assigned to a resource.</p>
@@ -911,7 +911,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MissionProfileIdResponse {
     /// <p>UUID of a mission profile.</p>
@@ -921,7 +921,7 @@ pub struct MissionProfileIdResponse {
 }
 
 /// <p>Item in a list of mission profiles.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MissionProfileListItem {
     /// <p>ARN of a mission profile.</p>
@@ -943,7 +943,7 @@ pub struct MissionProfileListItem {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ReserveContactRequest {
     /// <p>End time of a contact.</p>
@@ -968,7 +968,7 @@ pub struct ReserveContactRequest {
 }
 
 /// <p>Item in a list of satellites.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SatelliteListItem {
     /// <p>A list of ground stations to which the satellite is on-boarded.</p>
@@ -990,7 +990,7 @@ pub struct SatelliteListItem {
 }
 
 /// <p>Information about endpoints.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SecurityDetails {
     /// <p>ARN to a role needed for connecting streams to your instances. </p>
     #[serde(rename = "roleArn")]
@@ -1004,7 +1004,7 @@ pub struct SecurityDetails {
 }
 
 /// <p>Information about the socket address.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SocketAddress {
     /// <p>Name of a socket address.</p>
     #[serde(rename = "name")]
@@ -1015,7 +1015,7 @@ pub struct SocketAddress {
 }
 
 /// <p>Object that describes a spectral <code>Config</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpectrumConfig {
     /// <p>Bandwidth of a spectral <code>Config</code>.</p>
     #[serde(rename = "bandwidth")]
@@ -1030,7 +1030,7 @@ pub struct SpectrumConfig {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>ARN of a resource tag.</p>
@@ -1042,12 +1042,12 @@ pub struct TagResourceRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Object that determines whether tracking should be used during a contact executed with this <code>Config</code> in the mission profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TrackingConfig {
     /// <p>Current setting for autotrack.</p>
     #[serde(rename = "autotrack")]
@@ -1055,7 +1055,7 @@ pub struct TrackingConfig {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>ARN of a resource.</p>
@@ -1067,12 +1067,12 @@ pub struct UntagResourceRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigRequest {
     /// <p>Parameters of a <code>Config</code>.</p>
@@ -1090,7 +1090,7 @@ pub struct UpdateConfigRequest {
 }
 
 /// <p><p/></p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMissionProfileRequest {
     /// <p>Amount of time after a contact ends that you’d like to receive a CloudWatch event indicating the pass has finished.</p>
@@ -1123,7 +1123,7 @@ pub struct UpdateMissionProfileRequest {
 }
 
 /// <p>Information about an uplink echo <code>Config</code>.</p> <p>Parameters from the <code>AntennaUplinkConfig</code>, corresponding to the specified <code>AntennaUplinkConfigArn</code>, are used when this <code>UplinkEchoConfig</code> is used in a contact.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UplinkEchoConfig {
     /// <p>ARN of an uplink <code>Config</code>.</p>
     #[serde(rename = "antennaUplinkConfigArn")]
@@ -1134,7 +1134,7 @@ pub struct UplinkEchoConfig {
 }
 
 /// <p>Information about the uplink spectral <code>Config</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UplinkSpectrumConfig {
     /// <p>Center frequency of an uplink spectral <code>Config</code>.</p>
     #[serde(rename = "centerFrequency")]
@@ -2443,6 +2443,7 @@ impl GroundStationClient {
 #[async_trait]
 impl GroundStation for GroundStationClient {
     /// <p>Cancels a contact with a specified contact ID.</p>
+    #[allow(unused_mut)]
     async fn cancel_contact(
         &self,
         input: CancelContactRequest,
@@ -2458,7 +2459,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ContactIdResponse, _>()?;
 
@@ -2470,6 +2471,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Creates a <code>Config</code> with the specified <code>configData</code> parameters.</p> <p>Only one type of <code>configData</code> can be specified.</p>
+    #[allow(unused_mut)]
     async fn create_config(
         &self,
         input: CreateConfigRequest,
@@ -2488,7 +2490,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigIdResponse, _>()?;
 
@@ -2500,6 +2502,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Creates a <code>DataflowEndpoint</code> group containing the specified list of <code>DataflowEndpoint</code> objects.</p> <p>The <code>name</code> field in each endpoint is used in your mission profile <code>DataflowEndpointConfig</code> to specify which endpoints to use during a contact.</p> <p>When a contact uses multiple <code>DataflowEndpointConfig</code> objects, each <code>Config</code> must match a <code>DataflowEndpoint</code> in the same group.</p>
+    #[allow(unused_mut)]
     async fn create_dataflow_endpoint_group(
         &self,
         input: CreateDataflowEndpointGroupRequest,
@@ -2519,7 +2522,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DataflowEndpointGroupIdResponse, _>()?;
 
@@ -2531,6 +2534,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Creates a mission profile.</p> <p> <code>dataflowEdges</code> is a list of lists of strings. Each lower level list of strings has two elements: a <i>from</i> ARN and a <i>to</i> ARN.</p>
+    #[allow(unused_mut)]
     async fn create_mission_profile(
         &self,
         input: CreateMissionProfileRequest,
@@ -2549,7 +2553,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<MissionProfileIdResponse, _>()?;
 
@@ -2561,6 +2565,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Deletes a <code>Config</code>.</p>
+    #[allow(unused_mut)]
     async fn delete_config(
         &self,
         input: DeleteConfigRequest,
@@ -2580,7 +2585,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigIdResponse, _>()?;
 
@@ -2592,6 +2597,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Deletes a dataflow endpoint group.</p>
+    #[allow(unused_mut)]
     async fn delete_dataflow_endpoint_group(
         &self,
         input: DeleteDataflowEndpointGroupRequest,
@@ -2611,7 +2617,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DataflowEndpointGroupIdResponse, _>()?;
 
@@ -2623,6 +2629,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Deletes a mission profile.</p>
+    #[allow(unused_mut)]
     async fn delete_mission_profile(
         &self,
         input: DeleteMissionProfileRequest,
@@ -2641,7 +2648,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<MissionProfileIdResponse, _>()?;
 
@@ -2653,6 +2660,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Describes an existing contact.</p>
+    #[allow(unused_mut)]
     async fn describe_contact(
         &self,
         input: DescribeContactRequest,
@@ -2668,7 +2676,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeContactResponse, _>()?;
 
@@ -2680,6 +2688,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns <code>Config</code> information.</p> <p>Only one <code>Config</code> response can be returned.</p>
+    #[allow(unused_mut)]
     async fn get_config(
         &self,
         input: GetConfigRequest,
@@ -2699,7 +2708,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetConfigResponse, _>()?;
 
@@ -2711,6 +2720,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns the dataflow endpoint group.</p>
+    #[allow(unused_mut)]
     async fn get_dataflow_endpoint_group(
         &self,
         input: GetDataflowEndpointGroupRequest,
@@ -2729,7 +2739,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDataflowEndpointGroupResponse, _>()?;
 
@@ -2741,6 +2751,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns the number of minutes used by account.</p>
+    #[allow(unused_mut)]
     async fn get_minute_usage(
         &self,
         input: GetMinuteUsageRequest,
@@ -2759,7 +2770,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMinuteUsageResponse, _>()?;
 
@@ -2771,6 +2782,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a mission profile.</p>
+    #[allow(unused_mut)]
     async fn get_mission_profile(
         &self,
         input: GetMissionProfileRequest,
@@ -2789,7 +2801,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMissionProfileResponse, _>()?;
 
@@ -2801,6 +2813,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a satellite.</p>
+    #[allow(unused_mut)]
     async fn get_satellite(
         &self,
         input: GetSatelliteRequest,
@@ -2819,7 +2832,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetSatelliteResponse, _>()?;
 
@@ -2831,6 +2844,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of <code>Config</code> objects.</p>
+    #[allow(unused_mut)]
     async fn list_configs(
         &self,
         input: ListConfigsRequest,
@@ -2855,7 +2869,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListConfigsResponse, _>()?;
 
@@ -2867,6 +2881,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of contacts.</p> <p>If <code>statusList</code> contains AVAILABLE, the request must include <code>groundStation</code>, <code>missionprofileArn</code>, and <code>satelliteArn</code>. </p>
+    #[allow(unused_mut)]
     async fn list_contacts(
         &self,
         input: ListContactsRequest,
@@ -2885,7 +2900,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListContactsResponse, _>()?;
 
@@ -2897,6 +2912,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of <code>DataflowEndpoint</code> groups.</p>
+    #[allow(unused_mut)]
     async fn list_dataflow_endpoint_groups(
         &self,
         input: ListDataflowEndpointGroupsRequest,
@@ -2922,7 +2938,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDataflowEndpointGroupsResponse, _>()?;
 
@@ -2934,6 +2950,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of ground stations. </p>
+    #[allow(unused_mut)]
     async fn list_ground_stations(
         &self,
         input: ListGroundStationsRequest,
@@ -2961,7 +2978,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListGroundStationsResponse, _>()?;
 
@@ -2973,6 +2990,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of mission profiles.</p>
+    #[allow(unused_mut)]
     async fn list_mission_profiles(
         &self,
         input: ListMissionProfilesRequest,
@@ -2997,7 +3015,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMissionProfilesResponse, _>()?;
 
@@ -3009,6 +3027,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of satellites.</p>
+    #[allow(unused_mut)]
     async fn list_satellites(
         &self,
         input: ListSatellitesRequest,
@@ -3033,7 +3052,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListSatellitesResponse, _>()?;
 
@@ -3045,6 +3064,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Returns a list of tags for a specified resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3060,7 +3080,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -3072,6 +3092,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Reserves a contact using specified parameters.</p>
+    #[allow(unused_mut)]
     async fn reserve_contact(
         &self,
         input: ReserveContactRequest,
@@ -3090,7 +3111,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ContactIdResponse, _>()?;
 
@@ -3102,6 +3123,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Assigns a tag to a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3120,7 +3142,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -3132,6 +3154,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Deassigns a resource tag.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3153,7 +3176,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -3165,6 +3188,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Updates the <code>Config</code> used when scheduling contacts.</p> <p>Updating a <code>Config</code> will not update the execution parameters for existing future contacts scheduled with this <code>Config</code>.</p>
+    #[allow(unused_mut)]
     async fn update_config(
         &self,
         input: UpdateConfigRequest,
@@ -3187,7 +3211,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigIdResponse, _>()?;
 
@@ -3199,6 +3223,7 @@ impl GroundStation for GroundStationClient {
     }
 
     /// <p>Updates a mission profile.</p> <p>Updating a mission profile will not update the execution parameters for existing future contacts.</p>
+    #[allow(unused_mut)]
     async fn update_mission_profile(
         &self,
         input: UpdateMissionProfileRequest,
@@ -3220,7 +3245,7 @@ impl GroundStation for GroundStationClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<MissionProfileIdResponse, _>()?;
 

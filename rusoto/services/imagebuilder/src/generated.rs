@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p> Details of an EC2 AMI. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Ami {
     /// <p>The description of the EC2 AMI. </p>
@@ -51,7 +51,7 @@ pub struct Ami {
 }
 
 /// <p> Define and configure the output AMIs of the pipeline. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AmiDistributionConfiguration {
     /// <p>The tags to apply to AMIs distributed to this Region. </p>
     #[serde(rename = "amiTags")]
@@ -61,6 +61,10 @@ pub struct AmiDistributionConfiguration {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p> The KMS key identifier used to encrypt the distributed image. </p>
+    #[serde(rename = "kmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p> Launch permissions can be used to configure which AWS accounts can use the AMI to launch instances. </p>
     #[serde(rename = "launchPermission")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -71,7 +75,7 @@ pub struct AmiDistributionConfiguration {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CancelImageCreationRequest {
     /// <p>The idempotency token used to make this request idempotent.</p>
@@ -82,7 +86,7 @@ pub struct CancelImageCreationRequest {
     pub image_build_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelImageCreationResponse {
     /// <p>The idempotency token used to make this request idempotent.</p>
@@ -100,7 +104,7 @@ pub struct CancelImageCreationResponse {
 }
 
 /// <p>A detailed view of a component.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Component {
     /// <p>The Amazon Resource Name (ARN) of the component.</p>
@@ -162,7 +166,7 @@ pub struct Component {
 }
 
 /// <p> Configuration details of the component. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ComponentConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the component. </p>
     #[serde(rename = "componentArn")]
@@ -170,7 +174,7 @@ pub struct ComponentConfiguration {
 }
 
 /// <p>A high-level summary of a component.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComponentSummary {
     /// <p>The Amazon Resource Name (ARN) of the component.</p>
@@ -220,7 +224,7 @@ pub struct ComponentSummary {
 }
 
 /// <p>A high-level overview of a component semantic version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComponentVersion {
     /// <p>The Amazon Resource Name (ARN) of the component.</p>
@@ -261,7 +265,7 @@ pub struct ComponentVersion {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateComponentRequest {
     /// <p>The change description of the component. Describes what change has been made in this version, or what makes this version different from other versions of this component.</p>
@@ -306,7 +310,7 @@ pub struct CreateComponentRequest {
     pub uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateComponentResponse {
     /// <p>The idempotency token used to make this request idempotent.</p>
@@ -323,7 +327,7 @@ pub struct CreateComponentResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionConfigurationRequest {
     /// <p> The idempotency token of the distribution configuration. </p>
@@ -345,7 +349,7 @@ pub struct CreateDistributionConfigurationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDistributionConfigurationResponse {
     /// <p> The idempotency token used to make this request idempotent. </p>
@@ -362,7 +366,7 @@ pub struct CreateDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImagePipelineRequest {
     /// <p> The idempotency token used to make this request idempotent. </p>
@@ -407,7 +411,7 @@ pub struct CreateImagePipelineRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImagePipelineResponse {
     /// <p> The idempotency token used to make this request idempotent. </p>
@@ -424,7 +428,7 @@ pub struct CreateImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageRecipeRequest {
     /// <p>The block device mappings of the image recipe. </p>
@@ -454,9 +458,13 @@ pub struct CreateImageRecipeRequest {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The working directory to be used during build and test workflows.</p>
+    #[serde(rename = "workingDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub working_directory: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageRecipeResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -473,7 +481,7 @@ pub struct CreateImageRecipeResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageRequest {
     /// <p> The idempotency token used to make this request idempotent. </p>
@@ -503,7 +511,7 @@ pub struct CreateImageRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageResponse {
     /// <p> The idempotency token used to make this request idempotent. </p>
@@ -520,7 +528,7 @@ pub struct CreateImageResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInfrastructureConfigurationRequest {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -548,6 +556,10 @@ pub struct CreateInfrastructureConfigurationRequest {
     /// <p>The name of the infrastructure configuration. </p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>The tags attached to the resource created by Image Builder.</p>
+    #[serde(rename = "resourceTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The security group IDs to associate with the instance used to customize your EC2 AMI. </p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -570,7 +582,7 @@ pub struct CreateInfrastructureConfigurationRequest {
     pub terminate_instance_on_failure: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInfrastructureConfigurationResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -587,7 +599,7 @@ pub struct CreateInfrastructureConfigurationResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteComponentRequest {
     /// <p>The Amazon Resource Name (ARN) of the component build version to delete. </p>
@@ -595,7 +607,7 @@ pub struct DeleteComponentRequest {
     pub component_build_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteComponentResponse {
     /// <p>The Amazon Resource Name (ARN) of the component build version that was deleted. </p>
@@ -608,7 +620,7 @@ pub struct DeleteComponentResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDistributionConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration to delete. </p>
@@ -616,7 +628,7 @@ pub struct DeleteDistributionConfigurationRequest {
     pub distribution_configuration_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDistributionConfigurationResponse {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration that was deleted. </p>
@@ -629,7 +641,7 @@ pub struct DeleteDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImagePipelineRequest {
     /// <p>The Amazon Resource Name (ARN) of the image pipeline to delete. </p>
@@ -637,7 +649,7 @@ pub struct DeleteImagePipelineRequest {
     pub image_pipeline_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImagePipelineResponse {
     /// <p>The Amazon Resource Name (ARN) of the image pipeline that was deleted. </p>
@@ -650,7 +662,7 @@ pub struct DeleteImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageRecipeRequest {
     /// <p>The Amazon Resource Name (ARN) of the image recipe to delete. </p>
@@ -658,7 +670,7 @@ pub struct DeleteImageRecipeRequest {
     pub image_recipe_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageRecipeResponse {
     /// <p>The Amazon Resource Name (ARN) of the image recipe that was deleted. </p>
@@ -671,7 +683,7 @@ pub struct DeleteImageRecipeResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageRequest {
     /// <p>The Amazon Resource Name (ARN) of the image to delete. </p>
@@ -679,7 +691,7 @@ pub struct DeleteImageRequest {
     pub image_build_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageResponse {
     /// <p>The Amazon Resource Name (ARN) of the image that was deleted. </p>
@@ -692,7 +704,7 @@ pub struct DeleteImageResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInfrastructureConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration to delete. </p>
@@ -700,7 +712,7 @@ pub struct DeleteInfrastructureConfigurationRequest {
     pub infrastructure_configuration_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInfrastructureConfigurationResponse {
     /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that was deleted. </p>
@@ -714,7 +726,7 @@ pub struct DeleteInfrastructureConfigurationResponse {
 }
 
 /// <p> Defines the settings for a specific Region. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Distribution {
     /// <p>The specific AMI settings (for example, launch permissions, AMI tags). </p>
     #[serde(rename = "amiDistributionConfiguration")]
@@ -730,7 +742,7 @@ pub struct Distribution {
 }
 
 /// <p>A distribution configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DistributionConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration.</p>
@@ -767,7 +779,7 @@ pub struct DistributionConfiguration {
 }
 
 /// <p>A high-level overview of a distribution configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DistributionConfigurationSummary {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration.</p>
@@ -797,7 +809,7 @@ pub struct DistributionConfigurationSummary {
 }
 
 /// <p>Amazon EBS-specific block device mapping specifications.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EbsInstanceBlockDeviceSpecification {
     /// <p>Use to configure delete on termination of the associated device.</p>
     #[serde(rename = "deleteOnTermination")]
@@ -830,7 +842,7 @@ pub struct EbsInstanceBlockDeviceSpecification {
 }
 
 /// <p>A filter name and value pair that is used to return a more specific list of results from a list operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
     /// <p>The name of the filter. Filter names are case-sensitive. </p>
@@ -843,7 +855,7 @@ pub struct Filter {
     pub values: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComponentPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the component whose policy you want to retrieve. </p>
@@ -851,7 +863,7 @@ pub struct GetComponentPolicyRequest {
     pub component_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComponentPolicyResponse {
     /// <p>The component policy. </p>
@@ -864,7 +876,7 @@ pub struct GetComponentPolicyResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComponentRequest {
     /// <p>The Amazon Resource Name (ARN) of the component that you want to retrieve. Regex requires "/\d+$" suffix.</p>
@@ -872,7 +884,7 @@ pub struct GetComponentRequest {
     pub component_build_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComponentResponse {
     /// <p>The component object associated with the specified ARN. </p>
@@ -885,7 +897,7 @@ pub struct GetComponentResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the distribution configuration that you want to retrieve. </p>
@@ -893,7 +905,7 @@ pub struct GetDistributionConfigurationRequest {
     pub distribution_configuration_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDistributionConfigurationResponse {
     /// <p>The distribution configuration object. </p>
@@ -906,7 +918,7 @@ pub struct GetDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImagePipelineRequest {
     /// <p>The Amazon Resource Name (ARN) of the image pipeline that you want to retrieve. </p>
@@ -914,7 +926,7 @@ pub struct GetImagePipelineRequest {
     pub image_pipeline_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImagePipelineResponse {
     /// <p>The image pipeline object. </p>
@@ -927,7 +939,7 @@ pub struct GetImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImagePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the image whose policy you want to retrieve. </p>
@@ -935,7 +947,7 @@ pub struct GetImagePolicyRequest {
     pub image_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImagePolicyResponse {
     /// <p>The image policy object. </p>
@@ -948,7 +960,7 @@ pub struct GetImagePolicyResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRecipePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the image recipe whose policy you want to retrieve. </p>
@@ -956,7 +968,7 @@ pub struct GetImageRecipePolicyRequest {
     pub image_recipe_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageRecipePolicyResponse {
     /// <p>The image recipe policy object. </p>
@@ -969,7 +981,7 @@ pub struct GetImageRecipePolicyResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRecipeRequest {
     /// <p>The Amazon Resource Name (ARN) of the image recipe that you want to retrieve. </p>
@@ -977,7 +989,7 @@ pub struct GetImageRecipeRequest {
     pub image_recipe_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageRecipeResponse {
     /// <p>The image recipe object. </p>
@@ -990,7 +1002,7 @@ pub struct GetImageRecipeResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRequest {
     /// <p>The Amazon Resource Name (ARN) of the image that you want to retrieve. </p>
@@ -998,7 +1010,7 @@ pub struct GetImageRequest {
     pub image_build_version_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageResponse {
     /// <p>The image object. </p>
@@ -1012,7 +1024,7 @@ pub struct GetImageResponse {
 }
 
 /// <p> GetInfrastructureConfiguration request object. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInfrastructureConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that you want to retrieve. </p>
@@ -1021,7 +1033,7 @@ pub struct GetInfrastructureConfigurationRequest {
 }
 
 /// <p>GetInfrastructureConfiguration response object. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInfrastructureConfigurationResponse {
     /// <p>The infrastructure configuration object. </p>
@@ -1035,7 +1047,7 @@ pub struct GetInfrastructureConfigurationResponse {
 }
 
 /// <p>An image build version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Image {
     /// <p>The Amazon Resource Name (ARN) of the image.</p>
@@ -1105,7 +1117,7 @@ pub struct Image {
 }
 
 /// <p>Details of an image pipeline.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImagePipeline {
     /// <p>The Amazon Resource Name (ARN) of the image pipeline.</p>
@@ -1175,7 +1187,7 @@ pub struct ImagePipeline {
 }
 
 /// <p>An image recipe.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageRecipe {
     /// <p>The Amazon Resource Name (ARN) of the image recipe.</p>
@@ -1222,10 +1234,14 @@ pub struct ImageRecipe {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+    /// <p>The working directory to be used during build and test workflows.</p>
+    #[serde(rename = "workingDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub working_directory: Option<String>,
 }
 
 /// <p>A summary of an image recipe.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageRecipeSummary {
     /// <p>The Amazon Resource Name (ARN) of the image recipe.</p>
@@ -1259,7 +1275,7 @@ pub struct ImageRecipeSummary {
 }
 
 /// <p> Image state shows the image status and the reason for that status. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageState {
     /// <p>The reason for the image's status. </p>
@@ -1273,7 +1289,7 @@ pub struct ImageState {
 }
 
 /// <p>An image summary.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageSummary {
     /// <p>The Amazon Resource Name (ARN) of the image.</p>
@@ -1319,7 +1335,7 @@ pub struct ImageSummary {
 }
 
 /// <p>Image tests configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ImageTestsConfiguration {
     /// <p>Defines if tests should be executed when building this image.</p>
     #[serde(rename = "imageTestsEnabled")]
@@ -1332,7 +1348,7 @@ pub struct ImageTestsConfiguration {
 }
 
 /// <p>An image semantic version.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageVersion {
     /// <p>The Amazon Resource Name (ARN) of the image semantic version.</p>
@@ -1365,7 +1381,7 @@ pub struct ImageVersion {
     pub version: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportComponentRequest {
     /// <p>The change description of the component. Describes what change has been made in this version, or what makes this version different from other versions of this component. </p>
@@ -1412,7 +1428,7 @@ pub struct ImportComponentRequest {
     pub uri: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportComponentResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -1430,7 +1446,7 @@ pub struct ImportComponentResponse {
 }
 
 /// <p>Details of the infrastructure configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InfrastructureConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration.</p>
@@ -1469,6 +1485,10 @@ pub struct InfrastructureConfiguration {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags attached to the resource created by Image Builder.</p>
+    #[serde(rename = "resourceTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The security group IDs of the infrastructure configuration.</p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1492,7 +1512,7 @@ pub struct InfrastructureConfiguration {
 }
 
 /// <p>The infrastructure used when building EC2 AMIs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InfrastructureConfigurationSummary {
     /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration.</p>
@@ -1515,6 +1535,10 @@ pub struct InfrastructureConfigurationSummary {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags attached to the image created by Image Builder.</p>
+    #[serde(rename = "resourceTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The tags of the infrastructure configuration.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1522,7 +1546,7 @@ pub struct InfrastructureConfigurationSummary {
 }
 
 /// <p>Defines block device mappings for the instance used to configure your image.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InstanceBlockDeviceMapping {
     /// <p>The device to which these mappings apply.</p>
     #[serde(rename = "deviceName")]
@@ -1542,8 +1566,8 @@ pub struct InstanceBlockDeviceMapping {
     pub virtual_name: Option<String>,
 }
 
-/// <p>Describes the configuration for a launch permission. The launch permission modification request is sent to the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a> API on behalf of the user for each Region they have selected to distribute the AMI.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+/// <p>Describes the configuration for a launch permission. The launch permission modification request is sent to the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a> API on behalf of the user for each Region they have selected to distribute the AMI. To make an AMI public, set the launch permission authorized accounts to <code>all</code>. See the examples for making an AMI public at <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a>. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LaunchPermissionConfiguration {
     /// <p>The name of the group. </p>
     #[serde(rename = "userGroups")]
@@ -1555,7 +1579,7 @@ pub struct LaunchPermissionConfiguration {
     pub user_ids: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComponentBuildVersionsRequest {
     /// <p>The component version Amazon Resource Name (ARN) whose versions you want to list. </p>
@@ -1571,7 +1595,7 @@ pub struct ListComponentBuildVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComponentBuildVersionsResponse {
     /// <p>The list of component summaries for the specified semantic version. </p>
@@ -1588,7 +1612,7 @@ pub struct ListComponentBuildVersionsResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComponentsRequest {
     /// <p>The filters. </p>
@@ -1609,7 +1633,7 @@ pub struct ListComponentsRequest {
     pub owner: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComponentsResponse {
     /// <p>The list of component semantic versions. </p>
@@ -1626,7 +1650,7 @@ pub struct ListComponentsResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionConfigurationsRequest {
     /// <p>The filters. </p>
@@ -1643,7 +1667,7 @@ pub struct ListDistributionConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDistributionConfigurationsResponse {
     /// <p>The list of distributions. </p>
@@ -1660,7 +1684,7 @@ pub struct ListDistributionConfigurationsResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImageBuildVersionsRequest {
     /// <p>The filters. </p>
@@ -1680,7 +1704,7 @@ pub struct ListImageBuildVersionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImageBuildVersionsResponse {
     /// <p>The list of image build versions. </p>
@@ -1697,7 +1721,7 @@ pub struct ListImageBuildVersionsResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagePipelineImagesRequest {
     /// <p>The filters. </p>
@@ -1717,7 +1741,7 @@ pub struct ListImagePipelineImagesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagePipelineImagesResponse {
     /// <p>The list of images built by this pipeline. </p>
@@ -1734,7 +1758,7 @@ pub struct ListImagePipelineImagesResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagePipelinesRequest {
     /// <p>The filters. </p>
@@ -1751,7 +1775,7 @@ pub struct ListImagePipelinesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagePipelinesResponse {
     /// <p>The list of image pipelines. </p>
@@ -1768,7 +1792,7 @@ pub struct ListImagePipelinesResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImageRecipesRequest {
     /// <p>The filters. </p>
@@ -1789,7 +1813,7 @@ pub struct ListImageRecipesRequest {
     pub owner: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImageRecipesResponse {
     /// <p>The list of image pipelines. </p>
@@ -1806,7 +1830,7 @@ pub struct ListImageRecipesResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagesRequest {
     /// <p>The filters. </p>
@@ -1827,7 +1851,7 @@ pub struct ListImagesRequest {
     pub owner: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagesResponse {
     /// <p>The list of image semantic versions. </p>
@@ -1844,7 +1868,7 @@ pub struct ListImagesResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInfrastructureConfigurationsRequest {
     /// <p>The filters. </p>
@@ -1861,7 +1885,7 @@ pub struct ListInfrastructureConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInfrastructureConfigurationsResponse {
     /// <p>The list of infrastructure configurations. </p>
@@ -1878,7 +1902,7 @@ pub struct ListInfrastructureConfigurationsResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource whose tags you want to retrieve. </p>
@@ -1886,7 +1910,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags for the specified resource. </p>
@@ -1896,7 +1920,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>Logging configuration defines where Image Builder uploads your logs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Logging {
     /// <p>The Amazon S3 logging configuration.</p>
     #[serde(rename = "s3Logs")]
@@ -1905,7 +1929,7 @@ pub struct Logging {
 }
 
 /// <p>The resources produced by this image. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputResources {
     /// <p>The EC2 AMIs created by this image. </p>
@@ -1914,7 +1938,7 @@ pub struct OutputResources {
     pub amis: Option<Vec<Ami>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutComponentPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the component that this policy should be applied to. </p>
@@ -1925,7 +1949,7 @@ pub struct PutComponentPolicyRequest {
     pub policy: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutComponentPolicyResponse {
     /// <p>The Amazon Resource Name (ARN) of the component that this policy was applied to. </p>
@@ -1938,7 +1962,7 @@ pub struct PutComponentPolicyResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImagePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the image that this policy should be applied to. </p>
@@ -1949,7 +1973,7 @@ pub struct PutImagePolicyRequest {
     pub policy: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImagePolicyResponse {
     /// <p>The Amazon Resource Name (ARN) of the image that this policy was applied to. </p>
@@ -1962,7 +1986,7 @@ pub struct PutImagePolicyResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageRecipePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the image recipe that this policy should be applied to. </p>
@@ -1973,7 +1997,7 @@ pub struct PutImageRecipePolicyRequest {
     pub policy: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImageRecipePolicyResponse {
     /// <p>The Amazon Resource Name (ARN) of the image recipe that this policy was applied to. </p>
@@ -1987,7 +2011,7 @@ pub struct PutImageRecipePolicyResponse {
 }
 
 /// <p>Amazon S3 logging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Logs {
     /// <p>The Amazon S3 bucket in which to store the logs.</p>
     #[serde(rename = "s3BucketName")]
@@ -2000,7 +2024,7 @@ pub struct S3Logs {
 }
 
 /// <p>A schedule configures how often and when a pipeline will automatically create a new image. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Schedule {
     /// <p>The condition configures when the pipeline should trigger a new image build. When the <code>pipelineExecutionStartCondition</code> is set to <code>EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE</code>, EC2 Image Builder will build a new image only when there are known changes pending. When it is set to <code>EXPRESSION_MATCH_ONLY</code>, it will build a new image every time the CRON expression matches the current time.</p>
     #[serde(rename = "pipelineExecutionStartCondition")]
@@ -2012,7 +2036,7 @@ pub struct Schedule {
     pub schedule_expression: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImagePipelineExecutionRequest {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2023,7 +2047,7 @@ pub struct StartImagePipelineExecutionRequest {
     pub image_pipeline_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImagePipelineExecutionResponse {
     /// <p>The idempotency token used to make this request idempotent.</p>
@@ -2040,7 +2064,7 @@ pub struct StartImagePipelineExecutionResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to tag. </p>
@@ -2051,11 +2075,11 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to untag. </p>
@@ -2066,11 +2090,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDistributionConfigurationRequest {
     /// <p>The idempotency token of the distribution configuration. </p>
@@ -2088,7 +2112,7 @@ pub struct UpdateDistributionConfigurationRequest {
     pub distributions: Vec<Distribution>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDistributionConfigurationResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2105,7 +2129,7 @@ pub struct UpdateDistributionConfigurationResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateImagePipelineRequest {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2146,7 +2170,7 @@ pub struct UpdateImagePipelineRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateImagePipelineResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2163,7 +2187,7 @@ pub struct UpdateImagePipelineResponse {
     pub request_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInfrastructureConfigurationRequest {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2191,6 +2215,10 @@ pub struct UpdateInfrastructureConfigurationRequest {
     #[serde(rename = "logging")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging: Option<Logging>,
+    /// <p>The tags attached to the resource created by Image Builder.</p>
+    #[serde(rename = "resourceTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The security group IDs to associate with the instance used to customize your EC2 AMI. </p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2209,7 +2237,7 @@ pub struct UpdateInfrastructureConfigurationRequest {
     pub terminate_instance_on_failure: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInfrastructureConfigurationResponse {
     /// <p>The idempotency token used to make this request idempotent. </p>
@@ -2327,6 +2355,8 @@ pub enum CreateComponentError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2370,6 +2400,11 @@ impl CreateComponentError {
                 "ServiceException" => {
                     return RusotoError::Service(CreateComponentError::Service(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateComponentError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateComponentError::ServiceUnavailable(err.msg))
                 }
@@ -2393,6 +2428,7 @@ impl fmt::Display for CreateComponentError {
             CreateComponentError::InvalidVersionNumber(ref cause) => write!(f, "{}", cause),
             CreateComponentError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateComponentError::Service(ref cause) => write!(f, "{}", cause),
+            CreateComponentError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateComponentError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2419,6 +2455,8 @@ pub enum CreateDistributionConfigurationError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2474,6 +2512,11 @@ impl CreateDistributionConfigurationError {
                         err.msg,
                     ))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        CreateDistributionConfigurationError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         CreateDistributionConfigurationError::ServiceUnavailable(err.msg),
@@ -2511,6 +2554,9 @@ impl fmt::Display for CreateDistributionConfigurationError {
                 write!(f, "{}", cause)
             }
             CreateDistributionConfigurationError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDistributionConfigurationError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateDistributionConfigurationError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -2535,6 +2581,8 @@ pub enum CreateImageError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2566,6 +2614,9 @@ impl CreateImageError {
                 "ServiceException" => {
                     return RusotoError::Service(CreateImageError::Service(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateImageError::ServiceQuotaExceeded(err.msg))
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateImageError::ServiceUnavailable(err.msg))
                 }
@@ -2587,6 +2638,7 @@ impl fmt::Display for CreateImageError {
             CreateImageError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             CreateImageError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateImageError::Service(ref cause) => write!(f, "{}", cause),
+            CreateImageError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateImageError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2611,6 +2663,8 @@ pub enum CreateImagePipelineError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2649,6 +2703,11 @@ impl CreateImagePipelineError {
                 "ServiceException" => {
                     return RusotoError::Service(CreateImagePipelineError::Service(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateImagePipelineError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateImagePipelineError::ServiceUnavailable(
                         err.msg,
@@ -2675,6 +2734,7 @@ impl fmt::Display for CreateImagePipelineError {
             CreateImagePipelineError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateImagePipelineError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateImagePipelineError::Service(ref cause) => write!(f, "{}", cause),
+            CreateImagePipelineError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateImagePipelineError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2701,6 +2761,8 @@ pub enum CreateImageRecipeError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2744,6 +2806,11 @@ impl CreateImageRecipeError {
                 "ServiceException" => {
                     return RusotoError::Service(CreateImageRecipeError::Service(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateImageRecipeError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(CreateImageRecipeError::ServiceUnavailable(
                         err.msg,
@@ -2771,6 +2838,7 @@ impl fmt::Display for CreateImageRecipeError {
             CreateImageRecipeError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateImageRecipeError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateImageRecipeError::Service(ref cause) => write!(f, "{}", cause),
+            CreateImageRecipeError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateImageRecipeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -2795,6 +2863,8 @@ pub enum CreateInfrastructureConfigurationError {
     ResourceInUse(String),
     /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
     Service(String),
+    /// <p>You have exceeded the number of permitted resources or operations for this service. For service quotas, see <a href="https://docs.aws.amazon.com/general/latest/gr/imagebuilder.html#limits_imagebuilder">EC2 Image Builder endpoints and quotas</a>.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The service is unable to process your request at this time.</p>
     ServiceUnavailable(String),
 }
@@ -2847,6 +2917,11 @@ impl CreateInfrastructureConfigurationError {
                         err.msg,
                     ))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        CreateInfrastructureConfigurationError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(
                         CreateInfrastructureConfigurationError::ServiceUnavailable(err.msg),
@@ -2881,6 +2956,9 @@ impl fmt::Display for CreateInfrastructureConfigurationError {
                 write!(f, "{}", cause)
             }
             CreateInfrastructureConfigurationError::Service(ref cause) => write!(f, "{}", cause),
+            CreateInfrastructureConfigurationError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
             CreateInfrastructureConfigurationError::ServiceUnavailable(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -5661,7 +5739,7 @@ pub trait ImageBuilder {
         RusotoError<ListDistributionConfigurationsError>,
     >;
 
-    /// <p> Returns a list of distribution configurations. </p>
+    /// <p> Returns a list of image build versions. </p>
     async fn list_image_build_versions(
         &self,
         input: ListImageBuildVersionsRequest,
@@ -5685,7 +5763,7 @@ pub trait ImageBuilder {
         input: ListImageRecipesRequest,
     ) -> Result<ListImageRecipesResponse, RusotoError<ListImageRecipesError>>;
 
-    /// <p> Returns the list of image build versions for the specified semantic version. </p>
+    /// <p> Returns the list of images that you have access to. </p>
     async fn list_images(
         &self,
         input: ListImagesRequest,
@@ -5807,6 +5885,7 @@ impl ImageBuilderClient {
 #[async_trait]
 impl ImageBuilder for ImageBuilderClient {
     /// <p>CancelImageCreation cancels the creation of Image. This operation can only be used on images in a non-terminal state.</p>
+    #[allow(unused_mut)]
     async fn cancel_image_creation(
         &self,
         input: CancelImageCreationRequest,
@@ -5825,7 +5904,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CancelImageCreationResponse, _>()?;
 
@@ -5837,6 +5916,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Creates a new component that can be used to build, validate, test, and assess your image.</p>
+    #[allow(unused_mut)]
     async fn create_component(
         &self,
         input: CreateComponentRequest,
@@ -5855,7 +5935,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateComponentResponse, _>()?;
 
@@ -5867,6 +5947,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Creates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
+    #[allow(unused_mut)]
     async fn create_distribution_configuration(
         &self,
         input: CreateDistributionConfigurationRequest,
@@ -5888,7 +5969,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateDistributionConfigurationResponse, _>()?;
 
@@ -5902,6 +5983,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Creates a new image. This request will create a new image along with all of the configured output resources defined in the distribution configuration. </p>
+    #[allow(unused_mut)]
     async fn create_image(
         &self,
         input: CreateImageRequest,
@@ -5920,7 +6002,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateImageResponse, _>()?;
 
@@ -5932,6 +6014,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Creates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
+    #[allow(unused_mut)]
     async fn create_image_pipeline(
         &self,
         input: CreateImagePipelineRequest,
@@ -5950,7 +6033,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateImagePipelineResponse, _>()?;
 
@@ -5962,6 +6045,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Creates a new image recipe. Image recipes define how images are configured, tested, and assessed. </p>
+    #[allow(unused_mut)]
     async fn create_image_recipe(
         &self,
         input: CreateImageRecipeRequest,
@@ -5980,7 +6064,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateImageRecipeResponse, _>()?;
 
@@ -5992,6 +6076,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Creates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
+    #[allow(unused_mut)]
     async fn create_infrastructure_configuration(
         &self,
         input: CreateInfrastructureConfigurationRequest,
@@ -6013,7 +6098,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateInfrastructureConfigurationResponse, _>()?;
 
@@ -6027,6 +6112,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes a component build version. </p>
+    #[allow(unused_mut)]
     async fn delete_component(
         &self,
         input: DeleteComponentRequest,
@@ -6049,7 +6135,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteComponentResponse, _>()?;
 
@@ -6061,6 +6147,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes a distribution configuration. </p>
+    #[allow(unused_mut)]
     async fn delete_distribution_configuration(
         &self,
         input: DeleteDistributionConfigurationRequest,
@@ -6086,7 +6173,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteDistributionConfigurationResponse, _>()?;
 
@@ -6100,6 +6187,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes an image. </p>
+    #[allow(unused_mut)]
     async fn delete_image(
         &self,
         input: DeleteImageRequest,
@@ -6119,7 +6207,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteImageResponse, _>()?;
 
@@ -6131,6 +6219,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes an image pipeline. </p>
+    #[allow(unused_mut)]
     async fn delete_image_pipeline(
         &self,
         input: DeleteImagePipelineRequest,
@@ -6150,7 +6239,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteImagePipelineResponse, _>()?;
 
@@ -6162,6 +6251,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes an image recipe. </p>
+    #[allow(unused_mut)]
     async fn delete_image_recipe(
         &self,
         input: DeleteImageRecipeRequest,
@@ -6181,7 +6271,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteImageRecipeResponse, _>()?;
 
@@ -6193,6 +6283,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Deletes an infrastructure configuration. </p>
+    #[allow(unused_mut)]
     async fn delete_infrastructure_configuration(
         &self,
         input: DeleteInfrastructureConfigurationRequest,
@@ -6218,7 +6309,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteInfrastructureConfigurationResponse, _>()?;
 
@@ -6232,6 +6323,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets a component object. </p>
+    #[allow(unused_mut)]
     async fn get_component(
         &self,
         input: GetComponentRequest,
@@ -6254,7 +6346,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetComponentResponse, _>()?;
 
@@ -6266,6 +6358,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets a component policy. </p>
+    #[allow(unused_mut)]
     async fn get_component_policy(
         &self,
         input: GetComponentPolicyRequest,
@@ -6285,7 +6378,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetComponentPolicyResponse, _>()?;
 
@@ -6297,6 +6390,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets a distribution configuration. </p>
+    #[allow(unused_mut)]
     async fn get_distribution_configuration(
         &self,
         input: GetDistributionConfigurationRequest,
@@ -6320,7 +6414,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetDistributionConfigurationResponse, _>()?;
 
@@ -6332,6 +6426,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an image. </p>
+    #[allow(unused_mut)]
     async fn get_image(
         &self,
         input: GetImageRequest,
@@ -6351,7 +6446,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetImageResponse, _>()?;
 
@@ -6363,6 +6458,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an image pipeline. </p>
+    #[allow(unused_mut)]
     async fn get_image_pipeline(
         &self,
         input: GetImagePipelineRequest,
@@ -6382,7 +6478,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetImagePipelineResponse, _>()?;
 
@@ -6394,6 +6490,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an image policy. </p>
+    #[allow(unused_mut)]
     async fn get_image_policy(
         &self,
         input: GetImagePolicyRequest,
@@ -6413,7 +6510,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetImagePolicyResponse, _>()?;
 
@@ -6425,6 +6522,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an image recipe. </p>
+    #[allow(unused_mut)]
     async fn get_image_recipe(
         &self,
         input: GetImageRecipeRequest,
@@ -6444,7 +6542,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetImageRecipeResponse, _>()?;
 
@@ -6456,6 +6554,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an image recipe policy. </p>
+    #[allow(unused_mut)]
     async fn get_image_recipe_policy(
         &self,
         input: GetImageRecipePolicyRequest,
@@ -6475,7 +6574,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetImageRecipePolicyResponse, _>()?;
 
@@ -6487,6 +6586,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Gets an infrastructure configuration. </p>
+    #[allow(unused_mut)]
     async fn get_infrastructure_configuration(
         &self,
         input: GetInfrastructureConfigurationRequest,
@@ -6512,7 +6612,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetInfrastructureConfigurationResponse, _>()?;
 
@@ -6524,6 +6624,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Imports a component and transforms its data into a component document. </p>
+    #[allow(unused_mut)]
     async fn import_component(
         &self,
         input: ImportComponentRequest,
@@ -6542,7 +6643,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ImportComponentResponse, _>()?;
 
@@ -6554,6 +6655,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns the list of component build versions for the specified semantic version. </p>
+    #[allow(unused_mut)]
     async fn list_component_build_versions(
         &self,
         input: ListComponentBuildVersionsRequest,
@@ -6573,7 +6675,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListComponentBuildVersionsResponse, _>()?;
 
@@ -6585,6 +6687,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Returns the list of component build versions for the specified semantic version. </p>
+    #[allow(unused_mut)]
     async fn list_components(
         &self,
         input: ListComponentsRequest,
@@ -6603,7 +6706,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListComponentsResponse, _>()?;
 
@@ -6615,6 +6718,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns a list of distribution configurations. </p>
+    #[allow(unused_mut)]
     async fn list_distribution_configurations(
         &self,
         input: ListDistributionConfigurationsRequest,
@@ -6636,7 +6740,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListDistributionConfigurationsResponse, _>()?;
 
@@ -6647,7 +6751,8 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns a list of distribution configurations. </p>
+    /// <p> Returns a list of image build versions. </p>
+    #[allow(unused_mut)]
     async fn list_image_build_versions(
         &self,
         input: ListImageBuildVersionsRequest,
@@ -6666,7 +6771,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListImageBuildVersionsResponse, _>()?;
 
@@ -6678,6 +6783,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns a list of images created by the specified pipeline. </p>
+    #[allow(unused_mut)]
     async fn list_image_pipeline_images(
         &self,
         input: ListImagePipelineImagesRequest,
@@ -6696,7 +6802,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListImagePipelineImagesResponse, _>()?;
 
@@ -6708,6 +6814,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Returns a list of image pipelines. </p>
+    #[allow(unused_mut)]
     async fn list_image_pipelines(
         &self,
         input: ListImagePipelinesRequest,
@@ -6726,7 +6833,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListImagePipelinesResponse, _>()?;
 
@@ -6738,6 +6845,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns a list of image recipes. </p>
+    #[allow(unused_mut)]
     async fn list_image_recipes(
         &self,
         input: ListImageRecipesRequest,
@@ -6756,7 +6864,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListImageRecipesResponse, _>()?;
 
@@ -6767,7 +6875,8 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns the list of image build versions for the specified semantic version. </p>
+    /// <p> Returns the list of images that you have access to. </p>
+    #[allow(unused_mut)]
     async fn list_images(
         &self,
         input: ListImagesRequest,
@@ -6786,7 +6895,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListImagesResponse, _>()?;
 
@@ -6798,6 +6907,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns a list of infrastructure configurations. </p>
+    #[allow(unused_mut)]
     async fn list_infrastructure_configurations(
         &self,
         input: ListInfrastructureConfigurationsRequest,
@@ -6819,7 +6929,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListInfrastructureConfigurationsResponse, _>()?;
 
@@ -6833,6 +6943,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Returns the list of tags for the specified resource. </p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -6848,7 +6959,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -6860,6 +6971,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Applies a policy to a component. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutComponentPolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    #[allow(unused_mut)]
     async fn put_component_policy(
         &self,
         input: PutComponentPolicyRequest,
@@ -6878,7 +6990,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutComponentPolicyResponse, _>()?;
 
@@ -6890,6 +7002,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p>Applies a policy to an image. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImagePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    #[allow(unused_mut)]
     async fn put_image_policy(
         &self,
         input: PutImagePolicyRequest,
@@ -6908,7 +7021,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutImagePolicyResponse, _>()?;
 
@@ -6920,6 +7033,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Applies a policy to an image recipe. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImageRecipePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    #[allow(unused_mut)]
     async fn put_image_recipe_policy(
         &self,
         input: PutImageRecipePolicyRequest,
@@ -6938,7 +7052,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutImageRecipePolicyResponse, _>()?;
 
@@ -6950,6 +7064,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Manually triggers a pipeline to create an image. </p>
+    #[allow(unused_mut)]
     async fn start_image_pipeline_execution(
         &self,
         input: StartImagePipelineExecutionRequest,
@@ -6969,7 +7084,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartImagePipelineExecutionResponse, _>()?;
 
@@ -6981,6 +7096,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Adds a tag to a resource. </p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -6999,7 +7115,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -7011,6 +7127,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Removes a tag from a resource. </p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -7032,7 +7149,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -7044,6 +7161,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Updates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
+    #[allow(unused_mut)]
     async fn update_distribution_configuration(
         &self,
         input: UpdateDistributionConfigurationRequest,
@@ -7065,7 +7183,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateDistributionConfigurationResponse, _>()?;
 
@@ -7079,6 +7197,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Updates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
+    #[allow(unused_mut)]
     async fn update_image_pipeline(
         &self,
         input: UpdateImagePipelineRequest,
@@ -7097,7 +7216,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateImagePipelineResponse, _>()?;
 
@@ -7109,6 +7228,7 @@ impl ImageBuilder for ImageBuilderClient {
     }
 
     /// <p> Updates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
+    #[allow(unused_mut)]
     async fn update_infrastructure_configuration(
         &self,
         input: UpdateInfrastructureConfigurationRequest,
@@ -7130,7 +7250,7 @@ impl ImageBuilder for ImageBuilderClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateInfrastructureConfigurationResponse, _>()?;
 

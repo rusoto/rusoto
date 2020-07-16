@@ -71,6 +71,19 @@ impl ProfileProvider {
         ProfileProvider::with_configuration(file_path, ProfileProvider::default_profile_name())
     }
 
+    /// Create a new `ProfileProvider` for the default credentials file path using
+    /// the given profile.
+    pub fn with_default_credentials<P>(profile: P) -> Result<ProfileProvider, CredentialsError>
+        where
+            P: Into<String>,
+    {
+        let profile_location = ProfileProvider::default_profile_location()?;
+        Ok(ProfileProvider {
+            file_path: profile_location.into(),
+            profile: profile.into(),
+        })
+    }
+
     /// Attempts to resolve a region value associated with the current default profile from
     /// `~/.aws/config` or the file associated with the `AWS_CONFIG_FILE` environment variable.
     /// As these fields do not require a region field to be defined, an `Option` type is returned

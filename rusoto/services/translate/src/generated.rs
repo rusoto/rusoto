@@ -20,12 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl TranslateClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "translate", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>The custom terminology applied to the input text by Amazon Translate for the translated text response. This is optional in the response and will only be present if you specified terminology input in the request. Currently, only one terminology can be applied per TranslateText request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppliedTerminology {
     /// <p>The name of the custom terminology applied to the input text by Amazon Translate for the translated text response.</p>
@@ -38,7 +64,7 @@ pub struct AppliedTerminology {
     pub terms: Option<Vec<Term>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTerminologyRequest {
     /// <p>The name of the custom terminology being deleted. </p>
@@ -46,7 +72,7 @@ pub struct DeleteTerminologyRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeTextTranslationJobRequest {
     /// <p>The identifier that Amazon Translate generated for the job. The <a>StartTextTranslationJob</a> operation returns this identifier in its response.</p>
@@ -54,7 +80,7 @@ pub struct DescribeTextTranslationJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTextTranslationJobResponse {
     /// <p>An object that contains the properties associated with an asynchronous batch translation job.</p>
@@ -64,7 +90,7 @@ pub struct DescribeTextTranslationJobResponse {
 }
 
 /// <p>The encryption key used to encrypt the custom terminologies used by Amazon Translate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionKey {
     /// <p>The Amazon Resource Name (ARN) of the encryption key being used to encrypt the custom terminology.</p>
     #[serde(rename = "Id")]
@@ -74,7 +100,7 @@ pub struct EncryptionKey {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTerminologyRequest {
     /// <p>The name of the custom terminology being retrieved.</p>
@@ -85,7 +111,7 @@ pub struct GetTerminologyRequest {
     pub terminology_data_format: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTerminologyResponse {
     /// <p>The data location of the custom terminology being retrieved. The custom terminology file is returned in a presigned url that has a 30 minute expiration.</p>
@@ -98,7 +124,7 @@ pub struct GetTerminologyResponse {
     pub terminology_properties: Option<TerminologyProperties>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportTerminologyRequest {
     /// <p>The description of the custom terminology being imported.</p>
@@ -120,7 +146,7 @@ pub struct ImportTerminologyRequest {
     pub terminology_data: TerminologyData,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportTerminologyResponse {
     /// <p>The properties of the custom terminology being imported.</p>
@@ -130,7 +156,7 @@ pub struct ImportTerminologyResponse {
 }
 
 /// <p>The input configuration properties for requesting a batch translation job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputDataConfig {
     /// <p>The multipurpose internet mail extension (MIME) type of the input files. Valid values are <code>text/plain</code> for plaintext files and <code>text/html</code> for HTML files.</p>
     #[serde(rename = "ContentType")]
@@ -141,7 +167,7 @@ pub struct InputDataConfig {
 }
 
 /// <p>The number of documents successfully and unsuccessfully processed during a translation job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobDetails {
     /// <p>The number of documents that could not be processed during a translation job.</p>
@@ -158,7 +184,7 @@ pub struct JobDetails {
     pub translated_documents_count: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTerminologiesRequest {
     /// <p>The maximum number of custom terminologies returned per list request.</p>
@@ -171,7 +197,7 @@ pub struct ListTerminologiesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTerminologiesResponse {
     /// <p> If the response to the ListTerminologies was truncated, the NextToken fetches the next group of custom terminologies.</p>
@@ -184,7 +210,7 @@ pub struct ListTerminologiesResponse {
     pub terminology_properties_list: Option<Vec<TerminologyProperties>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTextTranslationJobsRequest {
     /// <p>The parameters that specify which batch translation jobs to retrieve. Filters include job name, job status, and submission time. You can only set one filter at a time.</p>
@@ -201,7 +227,7 @@ pub struct ListTextTranslationJobsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTextTranslationJobsResponse {
     /// <p>The token to use to retreive the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -215,14 +241,14 @@ pub struct ListTextTranslationJobsResponse {
 }
 
 /// <p>The output configuration properties for a batch translation job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputDataConfig {
     /// <p>The URI of the S3 folder that contains a translation job's output file. The folder must be in the same Region as the API endpoint that you are calling.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTextTranslationJobRequest {
     /// <p>The client token of the EC2 instance calling the request. This token is auto-generated when using the Amazon Translate SDK. Otherwise, use the <a href="docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">DescribeInstances</a> EC2 operation to retreive an instance's client token. For more information, see <a href="docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html#client-tokens">Client Tokens</a> in the EC2 User Guide.</p>
@@ -253,7 +279,7 @@ pub struct StartTextTranslationJobRequest {
     pub terminology_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTextTranslationJobResponse {
     /// <p>The identifier generated for the job. To get the status of a job, use this ID with the <a>DescribeTextTranslationJob</a> operation.</p>
@@ -266,7 +292,7 @@ pub struct StartTextTranslationJobResponse {
     pub job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopTextTranslationJobRequest {
     /// <p>The job ID of the job to be stopped.</p>
@@ -274,7 +300,7 @@ pub struct StopTextTranslationJobRequest {
     pub job_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopTextTranslationJobResponse {
     /// <p>The job ID of the stopped batch translation job.</p>
@@ -288,7 +314,7 @@ pub struct StopTextTranslationJobResponse {
 }
 
 /// <p>The term being translated by the custom terminology.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Term {
     /// <p>The source text of the term being translated by the custom terminology.</p>
@@ -302,7 +328,7 @@ pub struct Term {
 }
 
 /// <p>The data associated with the custom terminology.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TerminologyData {
     /// <p>The file containing the custom terminology data. Your version of the AWS SDK performs a Base64-encoding on this field before sending a request to the AWS service. Users of the SDK should not perform Base64-encoding themselves.</p>
@@ -319,7 +345,7 @@ pub struct TerminologyData {
 }
 
 /// <p>The location of the custom terminology data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminologyDataLocation {
     /// <p>The location of the custom terminology data.</p>
@@ -331,7 +357,7 @@ pub struct TerminologyDataLocation {
 }
 
 /// <p>The properties of the custom terminology.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminologyProperties {
     /// <p> The Amazon Resource Name (ARN) of the custom terminology. </p>
@@ -377,7 +403,7 @@ pub struct TerminologyProperties {
 }
 
 /// <p>Provides information for filtering a list of translation jobs. For more information, see <a>ListTextTranslationJobs</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TextTranslationJobFilter {
     /// <p>Filters the list of jobs by name.</p>
@@ -399,7 +425,7 @@ pub struct TextTranslationJobFilter {
 }
 
 /// <p>Provides information about a translation job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TextTranslationJobProperties {
     /// <p>The Amazon Resource Name (ARN) of an AWS Identity Access and Management (IAM) role that granted Amazon Translate read access to the job's input data.</p>
@@ -456,7 +482,7 @@ pub struct TextTranslationJobProperties {
     pub terminology_names: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TranslateTextRequest {
     /// <p>The language code for the language of the source text. The language must be a language supported by Amazon Translate. For a list of language codes, see <a>what-is-languages</a>.</p> <p>To have Amazon Translate determine the source language of your text, you can specify <code>auto</code> in the <code>SourceLanguageCode</code> field. If you specify <code>auto</code>, Amazon Translate will call <a href="https://docs.aws.amazon.com/comprehend/latest/dg/comprehend-general.html">Amazon Comprehend</a> to determine the source language.</p>
@@ -474,7 +500,7 @@ pub struct TranslateTextRequest {
     pub text: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TranslateTextResponse {
     /// <p>The names of the custom terminologies applied to the input text by Amazon Translate for the translated text response.</p>
@@ -1076,9 +1102,7 @@ impl Translate for TranslateClient {
         &self,
         input: DeleteTerminologyRequest,
     ) -> Result<(), RusotoError<DeleteTerminologyError>> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.DeleteTerminology",
@@ -1086,19 +1110,11 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTerminologyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTerminologyError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Gets the properties associated with an asycnhronous batch translation job including name, ID, status, source and target languages, input/output S3 buckets, and so on.</p>
@@ -1107,9 +1123,7 @@ impl Translate for TranslateClient {
         input: DescribeTextTranslationJobRequest,
     ) -> Result<DescribeTextTranslationJobResponse, RusotoError<DescribeTextTranslationJobError>>
     {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.DescribeTextTranslationJob",
@@ -1117,20 +1131,13 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeTextTranslationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeTextTranslationJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeTextTranslationJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeTextTranslationJobResponse, _>()
     }
 
     /// <p>Retrieves a custom terminology.</p>
@@ -1138,9 +1145,7 @@ impl Translate for TranslateClient {
         &self,
         input: GetTerminologyRequest,
     ) -> Result<GetTerminologyResponse, RusotoError<GetTerminologyError>> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.GetTerminology",
@@ -1148,19 +1153,12 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTerminologyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTerminologyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTerminologyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTerminologyResponse, _>()
     }
 
     /// <p>Creates or updates a custom terminology, depending on whether or not one already exists for the given terminology name. Importing a terminology with the same name as an existing one will merge the terminologies based on the chosen merge strategy. Currently, the only supported merge strategy is OVERWRITE, and so the imported terminology will overwrite an existing terminology of the same name.</p> <p>If you import a terminology that overwrites an existing one, the new terminology take up to 10 minutes to fully propagate and be available for use in a translation due to cache policies with the DataPlane service that performs the translations.</p>
@@ -1168,9 +1166,7 @@ impl Translate for TranslateClient {
         &self,
         input: ImportTerminologyRequest,
     ) -> Result<ImportTerminologyResponse, RusotoError<ImportTerminologyError>> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.ImportTerminology",
@@ -1178,20 +1174,12 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ImportTerminologyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ImportTerminologyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ImportTerminologyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ImportTerminologyResponse, _>()
     }
 
     /// <p>Provides a list of custom terminologies associated with your account.</p>
@@ -1199,9 +1187,7 @@ impl Translate for TranslateClient {
         &self,
         input: ListTerminologiesRequest,
     ) -> Result<ListTerminologiesResponse, RusotoError<ListTerminologiesError>> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.ListTerminologies",
@@ -1209,20 +1195,12 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTerminologiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTerminologiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTerminologiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTerminologiesResponse, _>()
     }
 
     /// <p>Gets a list of the batch translation jobs that you have submitted.</p>
@@ -1230,9 +1208,7 @@ impl Translate for TranslateClient {
         &self,
         input: ListTextTranslationJobsRequest,
     ) -> Result<ListTextTranslationJobsResponse, RusotoError<ListTextTranslationJobsError>> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.ListTextTranslationJobs",
@@ -1240,20 +1216,13 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTextTranslationJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTextTranslationJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTextTranslationJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListTextTranslationJobsResponse, _>()
     }
 
     /// <p><p>Starts an asynchronous batch translation job. Batch translation jobs can be used to translate large volumes of text across multiple documents at once. For more information, see <a>async</a>.</p> <p>Batch translation jobs can be described with the <a>DescribeTextTranslationJob</a> operation, listed with the <a>ListTextTranslationJobs</a> operation, and stopped with the <a>StopTextTranslationJob</a> operation.</p> <note> <p>Amazon Translate does not support batch translation of multiple source languages at once.</p> </note></p>
@@ -1261,9 +1230,7 @@ impl Translate for TranslateClient {
         &self,
         input: StartTextTranslationJobRequest,
     ) -> Result<StartTextTranslationJobResponse, RusotoError<StartTextTranslationJobError>> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.StartTextTranslationJob",
@@ -1271,20 +1238,13 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartTextTranslationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartTextTranslationJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartTextTranslationJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartTextTranslationJobResponse, _>()
     }
 
     /// <p>Stops an asynchronous batch translation job that is in progress.</p> <p>If the job's state is <code>IN_PROGRESS</code>, the job will be marked for termination and put into the <code>STOP_REQUESTED</code> state. If the job completes before it can be stopped, it is put into the <code>COMPLETED</code> state. Otherwise, the job is put into the <code>STOPPED</code> state.</p> <p>Asynchronous batch translation jobs are started with the <a>StartTextTranslationJob</a> operation. You can use the <a>DescribeTextTranslationJob</a> or <a>ListTextTranslationJobs</a> operations to get a batch translation job's <code>JobId</code>.</p>
@@ -1292,9 +1252,7 @@ impl Translate for TranslateClient {
         &self,
         input: StopTextTranslationJobRequest,
     ) -> Result<StopTextTranslationJobResponse, RusotoError<StopTextTranslationJobError>> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.StopTextTranslationJob",
@@ -1302,20 +1260,13 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopTextTranslationJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopTextTranslationJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopTextTranslationJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopTextTranslationJobResponse, _>()
     }
 
     /// <p>Translates input text from the source language to the target language. For a list of available languages and language codes, see <a>what-is-languages</a>.</p>
@@ -1323,9 +1274,7 @@ impl Translate for TranslateClient {
         &self,
         input: TranslateTextRequest,
     ) -> Result<TranslateTextResponse, RusotoError<TranslateTextError>> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.TranslateText",
@@ -1333,18 +1282,11 @@ impl Translate for TranslateClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TranslateTextResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TranslateTextError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TranslateTextError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TranslateTextResponse, _>()
     }
 }

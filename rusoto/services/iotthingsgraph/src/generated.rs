@@ -20,11 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl IotThingsGraphClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request =
+            SignedRequest::new(http_method, "iotthingsgraph", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateEntityToThingRequest {
     /// <p>The ID of the device to be associated with the thing.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:device:DEVICENAME</code> </p>
@@ -39,11 +66,11 @@ pub struct AssociateEntityToThingRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateEntityToThingResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateFlowTemplateRequest {
     /// <p>The namespace version in which the workflow is to be created.</p> <p>If no value is specified, the latest version is used by default.</p>
@@ -55,7 +82,7 @@ pub struct CreateFlowTemplateRequest {
     pub definition: DefinitionDocument,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFlowTemplateResponse {
     /// <p>The summary object that describes the created workflow.</p>
@@ -64,7 +91,7 @@ pub struct CreateFlowTemplateResponse {
     pub summary: Option<FlowTemplateSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSystemInstanceRequest {
     #[serde(rename = "definition")]
@@ -93,7 +120,7 @@ pub struct CreateSystemInstanceRequest {
     pub target: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSystemInstanceResponse {
     /// <p>The summary object that describes the new system instance.</p>
@@ -102,7 +129,7 @@ pub struct CreateSystemInstanceResponse {
     pub summary: Option<SystemInstanceSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSystemTemplateRequest {
     /// <p>The namespace version in which the system is to be created.</p> <p>If no value is specified, the latest version is used by default.</p>
@@ -114,7 +141,7 @@ pub struct CreateSystemTemplateRequest {
     pub definition: DefinitionDocument,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSystemTemplateResponse {
     /// <p>The summary object that describes the created system.</p>
@@ -124,7 +151,7 @@ pub struct CreateSystemTemplateResponse {
 }
 
 /// <p>A document that defines an entity. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DefinitionDocument {
     /// <p>The language used to define the entity. <code>GRAPHQL</code> is the only valid value.</p>
     #[serde(rename = "language")]
@@ -134,7 +161,7 @@ pub struct DefinitionDocument {
     pub text: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteFlowTemplateRequest {
     /// <p>The ID of the workflow to be deleted.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:workflow:WORKFLOWNAME</code> </p>
@@ -142,15 +169,15 @@ pub struct DeleteFlowTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFlowTemplateResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNamespaceRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNamespaceResponse {
     /// <p>The ARN of the namespace to be deleted.</p>
@@ -163,7 +190,7 @@ pub struct DeleteNamespaceResponse {
     pub namespace_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSystemInstanceRequest {
     /// <p>The ID of the system instance to be deleted.</p>
@@ -172,11 +199,11 @@ pub struct DeleteSystemInstanceRequest {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSystemInstanceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteSystemTemplateRequest {
     /// <p>The ID of the system to be deleted.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:system:SYSTEMNAME</code> </p>
@@ -184,12 +211,12 @@ pub struct DeleteSystemTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSystemTemplateResponse {}
 
 /// <p>An object that contains the ID and revision number of a workflow or system that is part of a deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DependencyRevision {
     /// <p>The ID of the workflow or system.</p>
@@ -202,7 +229,7 @@ pub struct DependencyRevision {
     pub revision_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeploySystemInstanceRequest {
     /// <p>The ID of the system instance. This value is returned by the <code>CreateSystemInstance</code> action.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:deployment:DEPLOYMENTNAME</code> </p>
@@ -211,7 +238,7 @@ pub struct DeploySystemInstanceRequest {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploySystemInstanceResponse {
     /// <p>The ID of the Greengrass deployment used to deploy the system instance.</p>
@@ -223,7 +250,7 @@ pub struct DeploySystemInstanceResponse {
     pub summary: SystemInstanceSummary,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateFlowTemplateRequest {
     /// <p>The ID of the workflow to be deleted.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:workflow:WORKFLOWNAME</code> </p>
@@ -231,11 +258,11 @@ pub struct DeprecateFlowTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeprecateFlowTemplateResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeprecateSystemTemplateRequest {
     /// <p>The ID of the system to delete.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:system:SYSTEMNAME</code> </p>
@@ -243,11 +270,11 @@ pub struct DeprecateSystemTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeprecateSystemTemplateResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNamespaceRequest {
     /// <p>The name of the user's namespace. Set this to <code>aws</code> to get the public namespace.</p>
@@ -256,7 +283,7 @@ pub struct DescribeNamespaceRequest {
     pub namespace_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNamespaceResponse {
     /// <p>The ARN of the namespace.</p>
@@ -281,7 +308,7 @@ pub struct DescribeNamespaceResponse {
     pub tracking_namespace_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DissociateEntityFromThingRequest {
     /// <p>The entity type from which to disassociate the thing.</p>
@@ -292,12 +319,12 @@ pub struct DissociateEntityFromThingRequest {
     pub thing_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DissociateEntityFromThingResponse {}
 
 /// <p>Describes the properties of an entity.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EntityDescription {
     /// <p>The entity ARN.</p>
@@ -323,7 +350,7 @@ pub struct EntityDescription {
 }
 
 /// <p>An object that filters an entity search. Multiple filters function as OR criteria in the search. For example a search that includes a <code>NAMESPACE</code> and a <code>REFERENCED_ENTITY_ID</code> filter searches for entities in the specified namespace that use the entity specified by the value of <code>REFERENCED_ENTITY_ID</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EntityFilter {
     /// <p>The name of the entity search filter field. <code>REFERENCED_ENTITY_ID</code> filters on entities that are used by the entity in the result set. For example, you can filter on the ID of a property that is used in a state.</p>
@@ -337,7 +364,7 @@ pub struct EntityFilter {
 }
 
 /// <p>An object that contains information about a flow event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlowExecutionMessage {
     /// <p>The type of flow event .</p>
@@ -359,7 +386,7 @@ pub struct FlowExecutionMessage {
 }
 
 /// <p>An object that contains summary information about a flow execution.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlowExecutionSummary {
     /// <p>The date and time when the flow execution summary was created.</p>
@@ -389,7 +416,7 @@ pub struct FlowExecutionSummary {
 }
 
 /// <p>An object that contains a workflow's definition and summary information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlowTemplateDescription {
     /// <p>A workflow's definition document.</p>
@@ -407,7 +434,7 @@ pub struct FlowTemplateDescription {
 }
 
 /// <p>An object that filters a workflow search.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlowTemplateFilter {
     /// <p>The name of the search filter field.</p>
@@ -419,7 +446,7 @@ pub struct FlowTemplateFilter {
 }
 
 /// <p>An object that contains summary information about a workflow.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FlowTemplateSummary {
     /// <p>The ARN of the workflow.</p>
@@ -440,7 +467,7 @@ pub struct FlowTemplateSummary {
     pub revision_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEntitiesRequest {
     /// <p>An array of entity IDs.</p> <p>The IDs should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:device:DEVICENAME</code> </p>
@@ -452,7 +479,7 @@ pub struct GetEntitiesRequest {
     pub namespace_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEntitiesResponse {
     /// <p>An array of descriptions for the specified entities.</p>
@@ -461,7 +488,7 @@ pub struct GetEntitiesResponse {
     pub descriptions: Option<Vec<EntityDescription>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFlowTemplateRequest {
     /// <p>The ID of the workflow.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:workflow:WORKFLOWNAME</code> </p>
@@ -473,7 +500,7 @@ pub struct GetFlowTemplateRequest {
     pub revision_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFlowTemplateResponse {
     /// <p>The object that describes the specified workflow.</p>
@@ -482,7 +509,7 @@ pub struct GetFlowTemplateResponse {
     pub description: Option<FlowTemplateDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFlowTemplateRevisionsRequest {
     /// <p>The ID of the workflow.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:workflow:WORKFLOWNAME</code> </p>
@@ -498,7 +525,7 @@ pub struct GetFlowTemplateRevisionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFlowTemplateRevisionsResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results.</p>
@@ -511,11 +538,11 @@ pub struct GetFlowTemplateRevisionsResponse {
     pub summaries: Option<Vec<FlowTemplateSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNamespaceDeletionStatusRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNamespaceDeletionStatusResponse {
     /// <p>An error code returned by the namespace deletion task.</p>
@@ -540,7 +567,7 @@ pub struct GetNamespaceDeletionStatusResponse {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSystemInstanceRequest {
     /// <p>The ID of the system deployment instance. This value is returned by <code>CreateSystemInstance</code>.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:deployment:DEPLOYMENTNAME</code> </p>
@@ -548,7 +575,7 @@ pub struct GetSystemInstanceRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSystemInstanceResponse {
     /// <p>An object that describes the system instance.</p>
@@ -557,7 +584,7 @@ pub struct GetSystemInstanceResponse {
     pub description: Option<SystemInstanceDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSystemTemplateRequest {
     /// <p>The ID of the system to get. This ID must be in the user's namespace.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:system:SYSTEMNAME</code> </p>
@@ -569,7 +596,7 @@ pub struct GetSystemTemplateRequest {
     pub revision_number: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSystemTemplateResponse {
     /// <p>An object that contains summary data about the system.</p>
@@ -578,7 +605,7 @@ pub struct GetSystemTemplateResponse {
     pub description: Option<SystemTemplateDescription>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSystemTemplateRevisionsRequest {
     /// <p>The ID of the system template.</p> <p>The ID should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:system:SYSTEMNAME</code> </p>
@@ -594,7 +621,7 @@ pub struct GetSystemTemplateRevisionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSystemTemplateRevisionsResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results. </p>
@@ -607,7 +634,7 @@ pub struct GetSystemTemplateRevisionsResponse {
     pub summaries: Option<Vec<SystemTemplateSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUploadStatusRequest {
     /// <p>The ID of the upload. This value is returned by the <code>UploadEntityDefinitions</code> action.</p>
@@ -615,7 +642,7 @@ pub struct GetUploadStatusRequest {
     pub upload_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUploadStatusResponse {
     /// <p>The date at which the upload was created.</p>
@@ -645,7 +672,7 @@ pub struct GetUploadStatusResponse {
     pub upload_status: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListFlowExecutionMessagesRequest {
     /// <p>The ID of the flow execution.</p>
@@ -661,7 +688,7 @@ pub struct ListFlowExecutionMessagesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFlowExecutionMessagesResponse {
     /// <p>A list of objects that contain information about events in the specified flow execution.</p>
@@ -674,7 +701,7 @@ pub struct ListFlowExecutionMessagesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The maximum number of tags to return.</p>
@@ -690,7 +717,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The token that specifies the next page of results to return.</p>
@@ -704,7 +731,7 @@ pub struct ListTagsForResourceResponse {
 }
 
 /// <p>An object that specifies whether cloud metrics are collected in a deployment and, if so, what role is used to collect metrics.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MetricsConfiguration {
     /// <p>A Boolean that specifies whether cloud metrics are collected.</p>
     #[serde(rename = "cloudMetricEnabled")]
@@ -716,7 +743,7 @@ pub struct MetricsConfiguration {
     pub metric_rule_role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchEntitiesRequest {
     /// <p>The entity types for which to search.</p>
@@ -740,7 +767,7 @@ pub struct SearchEntitiesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchEntitiesResponse {
     /// <p>An array of descriptions for each entity returned in the search result.</p>
@@ -753,7 +780,7 @@ pub struct SearchEntitiesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchFlowExecutionsRequest {
     /// <p>The date and time of the latest flow execution to return.</p>
@@ -781,7 +808,7 @@ pub struct SearchFlowExecutionsRequest {
     pub system_instance_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchFlowExecutionsResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results.</p>
@@ -794,7 +821,7 @@ pub struct SearchFlowExecutionsResponse {
     pub summaries: Option<Vec<FlowExecutionSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchFlowTemplatesRequest {
     /// <p>An array of objects that limit the result set. The only valid filter is <code>DEVICE_MODEL_ID</code>.</p>
@@ -811,7 +838,7 @@ pub struct SearchFlowTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchFlowTemplatesResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results.</p>
@@ -824,7 +851,7 @@ pub struct SearchFlowTemplatesResponse {
     pub summaries: Option<Vec<FlowTemplateSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSystemInstancesRequest {
     /// <p>Optional filter to apply to the search. Valid filters are <code>SYSTEM_TEMPLATE_ID</code>, <code>STATUS</code>, and <code>GREENGRASS_GROUP_NAME</code>.</p> <p>Multiple filters function as OR criteria in the query. Multiple values passed inside the filter function as AND criteria.</p>
@@ -841,7 +868,7 @@ pub struct SearchSystemInstancesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchSystemInstancesResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results. </p>
@@ -854,7 +881,7 @@ pub struct SearchSystemInstancesResponse {
     pub summaries: Option<Vec<SystemInstanceSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchSystemTemplatesRequest {
     /// <p>An array of filters that limit the result set. The only valid filter is <code>FLOW_TEMPLATE_ID</code>.</p>
@@ -871,7 +898,7 @@ pub struct SearchSystemTemplatesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchSystemTemplatesResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results.</p>
@@ -884,7 +911,7 @@ pub struct SearchSystemTemplatesResponse {
     pub summaries: Option<Vec<SystemTemplateSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchThingsRequest {
     /// <p>The ID of the entity to which the things are associated.</p> <p>The IDs should be in the following format.</p> <p> <code>urn:tdm:REGION/ACCOUNT ID/default:device:DEVICENAME</code> </p>
@@ -904,7 +931,7 @@ pub struct SearchThingsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchThingsResponse {
     /// <p>The string to specify as <code>nextToken</code> when you request the next page of results.</p>
@@ -918,7 +945,7 @@ pub struct SearchThingsResponse {
 }
 
 /// <p>An object that contains a system instance definition and summary information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SystemInstanceDescription {
     #[serde(rename = "definition")]
@@ -950,7 +977,7 @@ pub struct SystemInstanceDescription {
 }
 
 /// <p>An object that filters a system instance search. Multiple filters function as OR criteria in the search. For example a search that includes a GREENGRASS_GROUP_NAME and a STATUS filter searches for system instances in the specified Greengrass group that have the specified status.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SystemInstanceFilter {
     /// <p>The name of the search filter field.</p>
@@ -964,7 +991,7 @@ pub struct SystemInstanceFilter {
 }
 
 /// <p>An object that contains summary information about a system instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SystemInstanceSummary {
     /// <p>The ARN of the system instance.</p>
@@ -1006,7 +1033,7 @@ pub struct SystemInstanceSummary {
 }
 
 /// <p>An object that contains a system's definition document and summary information.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SystemTemplateDescription {
     /// <p>The definition document of a system.</p>
@@ -1024,7 +1051,7 @@ pub struct SystemTemplateDescription {
 }
 
 /// <p>An object that filters a system search.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SystemTemplateFilter {
     /// <p>The name of the system search filter field.</p>
@@ -1036,7 +1063,7 @@ pub struct SystemTemplateFilter {
 }
 
 /// <p>An object that contains information about a system.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SystemTemplateSummary {
     /// <p>The ARN of the system.</p>
@@ -1058,7 +1085,7 @@ pub struct SystemTemplateSummary {
 }
 
 /// <p>Metadata assigned to an AWS IoT Things Graph resource consisting of a key-value pair.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The required name of the tag. The string value can be from 1 to 128 Unicode characters in length.</p>
     #[serde(rename = "key")]
@@ -1068,7 +1095,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource whose tags are returned.</p>
@@ -1079,12 +1106,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>An AWS IoT thing.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Thing {
     /// <p>The ARN of the thing.</p>
@@ -1097,7 +1124,7 @@ pub struct Thing {
     pub thing_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UndeploySystemInstanceRequest {
     /// <p>The ID of the system instance to remove from its target.</p>
@@ -1106,7 +1133,7 @@ pub struct UndeploySystemInstanceRequest {
     pub id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UndeploySystemInstanceResponse {
     /// <p>An object that contains summary information about the system instance that was removed from its target.</p>
@@ -1115,7 +1142,7 @@ pub struct UndeploySystemInstanceResponse {
     pub summary: Option<SystemInstanceSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource whose tags are to be removed.</p>
@@ -1126,11 +1153,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFlowTemplateRequest {
     /// <p>The version of the user's namespace.</p> <p>If no value is specified, the latest version is used by default. Use the <code>GetFlowTemplateRevisions</code> if you want to find earlier revisions of the flow to update.</p>
@@ -1145,7 +1172,7 @@ pub struct UpdateFlowTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFlowTemplateResponse {
     /// <p>An object containing summary information about the updated workflow.</p>
@@ -1154,7 +1181,7 @@ pub struct UpdateFlowTemplateResponse {
     pub summary: Option<FlowTemplateSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateSystemTemplateRequest {
     /// <p>The version of the user's namespace. Defaults to the latest version of the user's namespace.</p> <p>If no value is specified, the latest version is used by default.</p>
@@ -1169,7 +1196,7 @@ pub struct UpdateSystemTemplateRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSystemTemplateResponse {
     /// <p>An object containing summary information about the updated system.</p>
@@ -1178,7 +1205,7 @@ pub struct UpdateSystemTemplateResponse {
     pub summary: Option<SystemTemplateSummary>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UploadEntityDefinitionsRequest {
     /// <p>A Boolean that specifies whether to deprecate all entities in the latest version before uploading the new <code>DefinitionDocument</code>. If set to <code>true</code>, the upload will create a new namespace version.</p>
@@ -1195,7 +1222,7 @@ pub struct UploadEntityDefinitionsRequest {
     pub sync_with_public_namespace: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UploadEntityDefinitionsResponse {
     /// <p>The ID that specifies the upload action. You can use this to track the status of the upload.</p>
@@ -3221,9 +3248,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: AssociateEntityToThingRequest,
     ) -> Result<AssociateEntityToThingResponse, RusotoError<AssociateEntityToThingError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.AssociateEntityToThing",
@@ -3231,20 +3256,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<AssociateEntityToThingResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(AssociateEntityToThingError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, AssociateEntityToThingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateEntityToThingResponse, _>()
     }
 
     /// <p>Creates a workflow template. Workflows can be created only in the user's namespace. (The public namespace contains only entities.) The workflow can contain only entities in the specified namespace. The workflow is validated against the entities in the latest version of the user's namespace unless another namespace version is specified in the request.</p>
@@ -3252,9 +3270,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: CreateFlowTemplateRequest,
     ) -> Result<CreateFlowTemplateResponse, RusotoError<CreateFlowTemplateError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.CreateFlowTemplate",
@@ -3262,20 +3278,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateFlowTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateFlowTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateFlowTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateFlowTemplateResponse, _>()
     }
 
     /// <p>Creates a system instance. </p> <p>This action validates the system instance, prepares the deployment-related resources. For Greengrass deployments, it updates the Greengrass group that is specified by the <code>greengrassGroupName</code> parameter. It also adds a file to the S3 bucket specified by the <code>s3BucketName</code> parameter. You need to call <code>DeploySystemInstance</code> after running this action.</p> <p>For Greengrass deployments, since this action modifies and adds resources to a Greengrass group and an S3 bucket on the caller's behalf, the calling identity must have write permissions to both the specified Greengrass group and S3 bucket. Otherwise, the call will fail with an authorization error.</p> <p>For cloud deployments, this action requires a <code>flowActionsRoleArn</code> value. This is an IAM role that has permissions to access AWS services, such as AWS Lambda and AWS IoT, that the flow uses when it executes.</p> <p>If the definition document doesn't specify a version of the user's namespace, the latest version will be used by default.</p>
@@ -3283,9 +3291,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: CreateSystemInstanceRequest,
     ) -> Result<CreateSystemInstanceResponse, RusotoError<CreateSystemInstanceError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.CreateSystemInstance",
@@ -3293,20 +3299,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSystemInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSystemInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSystemInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateSystemInstanceResponse, _>()
     }
 
     /// <p>Creates a system. The system is validated against the entities in the latest version of the user's namespace unless another namespace version is specified in the request.</p>
@@ -3314,9 +3313,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: CreateSystemTemplateRequest,
     ) -> Result<CreateSystemTemplateResponse, RusotoError<CreateSystemTemplateError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.CreateSystemTemplate",
@@ -3324,20 +3321,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateSystemTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateSystemTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateSystemTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateSystemTemplateResponse, _>()
     }
 
     /// <p>Deletes a workflow. Any new system or deployment that contains this workflow will fail to update or deploy. Existing deployments that contain the workflow will continue to run (since they use a snapshot of the workflow taken at the time of deployment).</p>
@@ -3345,9 +3335,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: DeleteFlowTemplateRequest,
     ) -> Result<DeleteFlowTemplateResponse, RusotoError<DeleteFlowTemplateError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.DeleteFlowTemplate",
@@ -3355,48 +3343,31 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteFlowTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteFlowTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteFlowTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteFlowTemplateResponse, _>()
     }
 
     /// <p>Deletes the specified namespace. This action deletes all of the entities in the namespace. Delete the systems and flows that use entities in the namespace before performing this action.</p>
     async fn delete_namespace(
         &self,
     ) -> Result<DeleteNamespaceResponse, RusotoError<DeleteNamespaceError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.DeleteNamespace",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNamespaceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteNamespaceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteNamespaceResponse, _>()
     }
 
     /// <p>Deletes a system instance. Only system instances that have never been deployed, or that have been undeployed can be deleted.</p> <p>Users can create a new system instance that has the same ID as a deleted system instance.</p>
@@ -3404,9 +3375,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: DeleteSystemInstanceRequest,
     ) -> Result<DeleteSystemInstanceResponse, RusotoError<DeleteSystemInstanceError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.DeleteSystemInstance",
@@ -3414,20 +3383,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSystemInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSystemInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSystemInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteSystemInstanceResponse, _>()
     }
 
     /// <p>Deletes a system. New deployments can't contain the system after its deletion. Existing deployments that contain the system will continue to work because they use a snapshot of the system that is taken when it is deployed.</p>
@@ -3435,9 +3397,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: DeleteSystemTemplateRequest,
     ) -> Result<DeleteSystemTemplateResponse, RusotoError<DeleteSystemTemplateError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.DeleteSystemTemplate",
@@ -3445,20 +3405,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteSystemTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteSystemTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteSystemTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteSystemTemplateResponse, _>()
     }
 
     /// <p> <b>Greengrass and Cloud Deployments</b> </p> <p>Deploys the system instance to the target specified in <code>CreateSystemInstance</code>. </p> <p> <b>Greengrass Deployments</b> </p> <p>If the system or any workflows and entities have been updated before this action is called, then the deployment will create a new Amazon Simple Storage Service resource file and then deploy it.</p> <p>Since this action creates a Greengrass deployment on the caller's behalf, the calling identity must have write permissions to the specified Greengrass group. Otherwise, the call will fail with an authorization error.</p> <p>For information about the artifacts that get added to your Greengrass core device when you use this API, see <a href="https://docs.aws.amazon.com/thingsgraph/latest/ug/iot-tg-greengrass.html">AWS IoT Things Graph and AWS IoT Greengrass</a>.</p>
@@ -3466,9 +3419,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: DeploySystemInstanceRequest,
     ) -> Result<DeploySystemInstanceResponse, RusotoError<DeploySystemInstanceError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.DeploySystemInstance",
@@ -3476,20 +3427,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeploySystemInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeploySystemInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeploySystemInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeploySystemInstanceResponse, _>()
     }
 
     /// <p>Deprecates the specified workflow. This action marks the workflow for deletion. Deprecated flows can't be deployed, but existing deployments will continue to run.</p>
@@ -3497,9 +3441,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: DeprecateFlowTemplateRequest,
     ) -> Result<DeprecateFlowTemplateResponse, RusotoError<DeprecateFlowTemplateError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.DeprecateFlowTemplate",
@@ -3507,20 +3449,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeprecateFlowTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeprecateFlowTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeprecateFlowTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeprecateFlowTemplateResponse, _>()
     }
 
     /// <p>Deprecates the specified system.</p>
@@ -3528,9 +3463,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: DeprecateSystemTemplateRequest,
     ) -> Result<DeprecateSystemTemplateResponse, RusotoError<DeprecateSystemTemplateError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.DeprecateSystemTemplate",
@@ -3538,20 +3471,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeprecateSystemTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeprecateSystemTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeprecateSystemTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeprecateSystemTemplateResponse, _>()
     }
 
     /// <p>Gets the latest version of the user's namespace and the public version that it is tracking.</p>
@@ -3559,9 +3485,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: DescribeNamespaceRequest,
     ) -> Result<DescribeNamespaceResponse, RusotoError<DescribeNamespaceError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.DescribeNamespace",
@@ -3569,20 +3493,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeNamespaceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DescribeNamespaceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DescribeNamespaceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeNamespaceResponse, _>()
     }
 
     /// <p>Dissociates a device entity from a concrete thing. The action takes only the type of the entity that you need to dissociate because only one entity of a particular type can be associated with a thing.</p>
@@ -3591,9 +3507,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         input: DissociateEntityFromThingRequest,
     ) -> Result<DissociateEntityFromThingResponse, RusotoError<DissociateEntityFromThingError>>
     {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.DissociateEntityFromThing",
@@ -3601,20 +3515,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DissociateEntityFromThingResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DissociateEntityFromThingError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DissociateEntityFromThingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DissociateEntityFromThingResponse, _>()
     }
 
     /// <p>Gets definitions of the specified entities. Uses the latest version of the user's namespace by default. This API returns the following TDM entities.</p> <ul> <li> <p>Properties</p> </li> <li> <p>States</p> </li> <li> <p>Events</p> </li> <li> <p>Actions</p> </li> <li> <p>Capabilities</p> </li> <li> <p>Mappings</p> </li> <li> <p>Devices</p> </li> <li> <p>Device Models</p> </li> <li> <p>Services</p> </li> </ul> <p>This action doesn't return definitions for systems, flows, and deployments.</p>
@@ -3622,26 +3529,17 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: GetEntitiesRequest,
     ) -> Result<GetEntitiesResponse, RusotoError<GetEntitiesError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "IotThingsGraphFrontEndService.GetEntities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetEntitiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetEntitiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetEntitiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetEntitiesResponse, _>()
     }
 
     /// <p>Gets the latest version of the <code>DefinitionDocument</code> and <code>FlowTemplateSummary</code> for the specified workflow.</p>
@@ -3649,9 +3547,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: GetFlowTemplateRequest,
     ) -> Result<GetFlowTemplateResponse, RusotoError<GetFlowTemplateError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.GetFlowTemplate",
@@ -3659,19 +3555,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetFlowTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFlowTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetFlowTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetFlowTemplateResponse, _>()
     }
 
     /// <p>Gets revisions of the specified workflow. Only the last 100 revisions are stored. If the workflow has been deprecated, this action will return revisions that occurred before the deprecation. This action won't work for workflows that have been deleted.</p>
@@ -3679,9 +3568,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: GetFlowTemplateRevisionsRequest,
     ) -> Result<GetFlowTemplateRevisionsResponse, RusotoError<GetFlowTemplateRevisionsError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.GetFlowTemplateRevisions",
@@ -3689,20 +3576,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetFlowTemplateRevisionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetFlowTemplateRevisionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetFlowTemplateRevisionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetFlowTemplateRevisionsResponse, _>()
     }
 
     /// <p>Gets the status of a namespace deletion task.</p>
@@ -3710,29 +3590,20 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
     ) -> Result<GetNamespaceDeletionStatusResponse, RusotoError<GetNamespaceDeletionStatusError>>
     {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.GetNamespaceDeletionStatus",
         );
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetNamespaceDeletionStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetNamespaceDeletionStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetNamespaceDeletionStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetNamespaceDeletionStatusResponse, _>()
     }
 
     /// <p>Gets a system instance.</p>
@@ -3740,9 +3611,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: GetSystemInstanceRequest,
     ) -> Result<GetSystemInstanceResponse, RusotoError<GetSystemInstanceError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.GetSystemInstance",
@@ -3750,20 +3619,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSystemInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSystemInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSystemInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetSystemInstanceResponse, _>()
     }
 
     /// <p>Gets a system.</p>
@@ -3771,9 +3632,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: GetSystemTemplateRequest,
     ) -> Result<GetSystemTemplateResponse, RusotoError<GetSystemTemplateError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.GetSystemTemplate",
@@ -3781,20 +3640,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSystemTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSystemTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSystemTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetSystemTemplateResponse, _>()
     }
 
     /// <p>Gets revisions made to the specified system template. Only the previous 100 revisions are stored. If the system has been deprecated, this action will return the revisions that occurred before its deprecation. This action won't work with systems that have been deleted.</p>
@@ -3803,9 +3654,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         input: GetSystemTemplateRevisionsRequest,
     ) -> Result<GetSystemTemplateRevisionsResponse, RusotoError<GetSystemTemplateRevisionsError>>
     {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.GetSystemTemplateRevisions",
@@ -3813,20 +3662,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetSystemTemplateRevisionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSystemTemplateRevisionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSystemTemplateRevisionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetSystemTemplateRevisionsResponse, _>()
     }
 
     /// <p>Gets the status of the specified upload.</p>
@@ -3834,9 +3676,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: GetUploadStatusRequest,
     ) -> Result<GetUploadStatusResponse, RusotoError<GetUploadStatusError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.GetUploadStatus",
@@ -3844,19 +3684,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetUploadStatusResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUploadStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetUploadStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetUploadStatusResponse, _>()
     }
 
     /// <p>Returns a list of objects that contain information about events in a flow execution.</p>
@@ -3865,9 +3698,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         input: ListFlowExecutionMessagesRequest,
     ) -> Result<ListFlowExecutionMessagesResponse, RusotoError<ListFlowExecutionMessagesError>>
     {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.ListFlowExecutionMessages",
@@ -3875,20 +3706,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListFlowExecutionMessagesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListFlowExecutionMessagesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListFlowExecutionMessagesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListFlowExecutionMessagesResponse, _>()
     }
 
     /// <p>Lists all tags on an AWS IoT Things Graph resource.</p>
@@ -3896,9 +3720,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.ListTagsForResource",
@@ -3906,20 +3728,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
     /// <p>Searches for entities of the specified type. You can search for entities in your namespace and the public namespace that you're tracking.</p>
@@ -3927,9 +3741,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: SearchEntitiesRequest,
     ) -> Result<SearchEntitiesResponse, RusotoError<SearchEntitiesError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.SearchEntities",
@@ -3937,19 +3749,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchEntitiesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchEntitiesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchEntitiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchEntitiesResponse, _>()
     }
 
     /// <p>Searches for AWS IoT Things Graph workflow execution instances.</p>
@@ -3957,9 +3762,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: SearchFlowExecutionsRequest,
     ) -> Result<SearchFlowExecutionsResponse, RusotoError<SearchFlowExecutionsError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.SearchFlowExecutions",
@@ -3967,20 +3770,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchFlowExecutionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchFlowExecutionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchFlowExecutionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SearchFlowExecutionsResponse, _>()
     }
 
     /// <p>Searches for summary information about workflows.</p>
@@ -3988,9 +3784,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: SearchFlowTemplatesRequest,
     ) -> Result<SearchFlowTemplatesResponse, RusotoError<SearchFlowTemplatesError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.SearchFlowTemplates",
@@ -3998,20 +3792,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchFlowTemplatesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchFlowTemplatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchFlowTemplatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchFlowTemplatesResponse, _>()
     }
 
     /// <p>Searches for system instances in the user's account.</p>
@@ -4019,9 +3805,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: SearchSystemInstancesRequest,
     ) -> Result<SearchSystemInstancesResponse, RusotoError<SearchSystemInstancesError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.SearchSystemInstances",
@@ -4029,20 +3813,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchSystemInstancesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchSystemInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchSystemInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SearchSystemInstancesResponse, _>()
     }
 
     /// <p>Searches for summary information about systems in the user's account. You can filter by the ID of a workflow to return only systems that use the specified workflow.</p>
@@ -4050,9 +3827,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: SearchSystemTemplatesRequest,
     ) -> Result<SearchSystemTemplatesResponse, RusotoError<SearchSystemTemplatesError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.SearchSystemTemplates",
@@ -4060,20 +3835,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<SearchSystemTemplatesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchSystemTemplatesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchSystemTemplatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SearchSystemTemplatesResponse, _>()
     }
 
     /// <p>Searches for things associated with the specified entity. You can search by both device and device model.</p> <p>For example, if two different devices, camera1 and camera2, implement the camera device model, the user can associate thing1 to camera1 and thing2 to camera2. <code>SearchThings(camera2)</code> will return only thing2, but <code>SearchThings(camera)</code> will return both thing1 and thing2.</p> <p>This action searches for exact matches and doesn't perform partial text matching.</p>
@@ -4081,26 +3849,17 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: SearchThingsRequest,
     ) -> Result<SearchThingsResponse, RusotoError<SearchThingsError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "IotThingsGraphFrontEndService.SearchThings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<SearchThingsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(SearchThingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, SearchThingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<SearchThingsResponse, _>()
     }
 
     /// <p>Creates a tag for the specified resource.</p>
@@ -4108,26 +3867,17 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "IotThingsGraphFrontEndService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
     /// <p>Removes a system instance from its target (Cloud or Greengrass).</p>
@@ -4135,9 +3885,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: UndeploySystemInstanceRequest,
     ) -> Result<UndeploySystemInstanceResponse, RusotoError<UndeploySystemInstanceError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.UndeploySystemInstance",
@@ -4145,20 +3893,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UndeploySystemInstanceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UndeploySystemInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UndeploySystemInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UndeploySystemInstanceResponse, _>()
     }
 
     /// <p>Removes a tag from the specified resource.</p>
@@ -4166,9 +3907,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.UntagResource",
@@ -4176,19 +3915,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
     /// <p>Updates the specified workflow. All deployed systems and system instances that use the workflow will see the changes in the flow when it is redeployed. If you don't want this behavior, copy the workflow (creating a new workflow with a different ID), and update the copy. The workflow can contain only entities in the specified namespace. </p>
@@ -4196,9 +3928,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: UpdateFlowTemplateRequest,
     ) -> Result<UpdateFlowTemplateResponse, RusotoError<UpdateFlowTemplateError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.UpdateFlowTemplate",
@@ -4206,20 +3936,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateFlowTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateFlowTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateFlowTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateFlowTemplateResponse, _>()
     }
 
     /// <p>Updates the specified system. You don't need to run this action after updating a workflow. Any deployment that uses the system will see the changes in the system when it is redeployed.</p>
@@ -4227,9 +3949,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: UpdateSystemTemplateRequest,
     ) -> Result<UpdateSystemTemplateResponse, RusotoError<UpdateSystemTemplateError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.UpdateSystemTemplate",
@@ -4237,20 +3957,13 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateSystemTemplateResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateSystemTemplateError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateSystemTemplateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateSystemTemplateResponse, _>()
     }
 
     /// <p>Asynchronously uploads one or more entity definitions to the user's namespace. The <code>document</code> parameter is required if <code>syncWithPublicNamespace</code> and <code>deleteExistingEntites</code> are false. If the <code>syncWithPublicNamespace</code> parameter is set to <code>true</code>, the user's namespace will synchronize with the latest version of the public namespace. If <code>deprecateExistingEntities</code> is set to true, all entities in the latest version will be deleted before the new <code>DefinitionDocument</code> is uploaded.</p> <p>When a user uploads entity definitions for the first time, the service creates a new namespace for the user. The new namespace tracks the public namespace. Currently users can have only one namespace. The namespace version increments whenever a user uploads entity definitions that are backwards-incompatible and whenever a user sets the <code>syncWithPublicNamespace</code> parameter or the <code>deprecateExistingEntities</code> parameter to <code>true</code>.</p> <p>The IDs for all of the entities should be in URN format. Each entity must be in the user's namespace. Users can't create entities in the public namespace, but entity definitions can refer to entities in the public namespace.</p> <p>Valid entities are <code>Device</code>, <code>DeviceModel</code>, <code>Service</code>, <code>Capability</code>, <code>State</code>, <code>Action</code>, <code>Event</code>, <code>Property</code>, <code>Mapping</code>, <code>Enum</code>. </p>
@@ -4258,9 +3971,7 @@ impl IotThingsGraph for IotThingsGraphClient {
         &self,
         input: UploadEntityDefinitionsRequest,
     ) -> Result<UploadEntityDefinitionsResponse, RusotoError<UploadEntityDefinitionsError>> {
-        let mut request = SignedRequest::new("POST", "iotthingsgraph", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "IotThingsGraphFrontEndService.UploadEntityDefinitions",
@@ -4268,19 +3979,12 @@ impl IotThingsGraph for IotThingsGraphClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UploadEntityDefinitionsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UploadEntityDefinitionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UploadEntityDefinitionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UploadEntityDefinitionsResponse, _>()
     }
 }

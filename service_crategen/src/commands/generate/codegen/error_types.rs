@@ -188,8 +188,8 @@ impl XmlErrorTypes {
         if service.service_id() == Some("EC2") {
             // https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html
             "
-            start_element(\"Response\", stack)?;
-            start_element(\"Errors\", stack)?;
+            xml_util::start_element(\"Response\", stack)?;
+            xml_util::start_element(\"Errors\", stack)?;
             XmlErrorDeserializer::deserialize(\"Error\", stack)
             "
             .to_owned()
@@ -198,7 +198,7 @@ impl XmlErrorTypes {
             "XmlErrorDeserializer::deserialize(\"Error\", stack)".to_owned()
         } else {
             "
-            start_element(\"ErrorResponse\", stack)?;
+            xml_util::start_element(\"ErrorResponse\", stack)?;
             XmlErrorDeserializer::deserialize(\"Error\", stack)
             "
             .to_owned()

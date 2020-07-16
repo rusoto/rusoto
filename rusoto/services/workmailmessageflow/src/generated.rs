@@ -23,7 +23,7 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRawMessageContentRequest {
     /// <p>The identifier of the email message to retrieve.</p>
@@ -31,7 +31,7 @@ pub struct GetRawMessageContentRequest {
     pub message_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct GetRawMessageContentResponse {
     /// <p>The raw content of the email message, in MIME format.</p>
     pub message_content: bytes::Bytes,
@@ -119,6 +119,7 @@ impl WorkmailMessageFlowClient {
 #[async_trait]
 impl WorkmailMessageFlow for WorkmailMessageFlowClient {
     /// <p>Retrieves the raw content of an in-transit email message, in MIME format. </p>
+    #[allow(unused_mut)]
     async fn get_raw_message_content(
         &self,
         input: GetRawMessageContentRequest,
@@ -135,7 +136,7 @@ impl WorkmailMessageFlow for WorkmailMessageFlowClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = GetRawMessageContentResponse::default();
             result.message_content = response.body;

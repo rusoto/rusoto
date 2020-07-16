@@ -45,12 +45,12 @@ impl ByteStream {
     }
 
     /// Return an implementation of `AsyncRead` that uses async i/o to consume the stream.
-    pub fn into_async_read(self) -> impl AsyncRead + Send {
+    pub fn into_async_read(self) -> impl AsyncRead + Send + Sync {
         ImplAsyncRead::new(self.inner)
     }
 
     /// Return an implementation of `Read` that uses blocking i/o to consume the stream.
-    pub fn into_blocking_read(self) -> impl io::Read + Send {
+    pub fn into_blocking_read(self) -> impl io::Read + Send + Sync {
         ImplBlockingRead::new(self.inner)
     }
 }
@@ -83,11 +83,11 @@ impl Stream for ByteStream {
 struct ImplAsyncRead {
     buffer: BytesMut,
     #[pin]
-    stream: futures::stream::Fuse<Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>>,
+    stream: futures::stream::Fuse<Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>>,
 }
 
 impl ImplAsyncRead {
-    fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send>>) -> Self {
+    fn new(stream: Pin<Box<dyn Stream<Item = Result<Bytes, io::Error>> + Send + Sync>>) -> Self {
         ImplAsyncRead {
             buffer: BytesMut::new(),
             stream: stream.fuse(),

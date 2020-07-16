@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AcceptResourceShareInvitationRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -37,7 +37,7 @@ pub struct AcceptResourceShareInvitationRequest {
     pub resource_share_invitation_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptResourceShareInvitationResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -50,7 +50,7 @@ pub struct AcceptResourceShareInvitationResponse {
     pub resource_share_invitation: Option<ResourceShareInvitation>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResourceSharePermissionRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -69,7 +69,7 @@ pub struct AssociateResourceSharePermissionRequest {
     pub resource_share_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateResourceSharePermissionResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -82,7 +82,7 @@ pub struct AssociateResourceSharePermissionResponse {
     pub return_value: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResourceShareRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -102,7 +102,7 @@ pub struct AssociateResourceShareRequest {
     pub resource_share_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateResourceShareResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -115,7 +115,7 @@ pub struct AssociateResourceShareResponse {
     pub resource_share_associations: Option<Vec<ResourceShareAssociation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceShareRequest {
     /// <p>Indicates whether principals outside your AWS organization can be associated with a resource share.</p>
@@ -147,7 +147,7 @@ pub struct CreateResourceShareRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceShareResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -160,7 +160,7 @@ pub struct CreateResourceShareResponse {
     pub resource_share: Option<ResourceShare>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceShareRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -172,7 +172,7 @@ pub struct DeleteResourceShareRequest {
     pub resource_share_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourceShareResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -185,7 +185,7 @@ pub struct DeleteResourceShareResponse {
     pub return_value: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateResourceSharePermissionRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -200,7 +200,7 @@ pub struct DisassociateResourceSharePermissionRequest {
     pub resource_share_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateResourceSharePermissionResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -213,7 +213,7 @@ pub struct DisassociateResourceSharePermissionResponse {
     pub return_value: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateResourceShareRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -233,7 +233,7 @@ pub struct DisassociateResourceShareRequest {
     pub resource_share_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateResourceShareResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -246,11 +246,11 @@ pub struct DisassociateResourceShareResponse {
     pub resource_share_associations: Option<Vec<ResourceShareAssociation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnableSharingWithAwsOrganizationRequest {}
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableSharingWithAwsOrganizationResponse {
     /// <p>Indicates whether the request succeeded.</p>
@@ -259,7 +259,7 @@ pub struct EnableSharingWithAwsOrganizationResponse {
     pub return_value: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPermissionRequest {
     /// <p>The ARN of the permission.</p>
@@ -271,7 +271,7 @@ pub struct GetPermissionRequest {
     pub permission_version: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPermissionResponse {
     /// <p>Information about the permission.</p>
@@ -280,7 +280,7 @@ pub struct GetPermissionResponse {
     pub permission: Option<ResourceSharePermissionDetail>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcePoliciesRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
@@ -300,7 +300,7 @@ pub struct GetResourcePoliciesRequest {
     pub resource_arns: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourcePoliciesResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -313,7 +313,7 @@ pub struct GetResourcePoliciesResponse {
     pub policies: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceShareAssociationsRequest {
     /// <p>The association status.</p>
@@ -345,7 +345,7 @@ pub struct GetResourceShareAssociationsRequest {
     pub resource_share_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceShareAssociationsResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -358,7 +358,7 @@ pub struct GetResourceShareAssociationsResponse {
     pub resource_share_associations: Option<Vec<ResourceShareAssociation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceShareInvitationsRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
@@ -379,7 +379,7 @@ pub struct GetResourceShareInvitationsRequest {
     pub resource_share_invitation_arns: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceShareInvitationsResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -392,7 +392,7 @@ pub struct GetResourceShareInvitationsResponse {
     pub resource_share_invitations: Option<Vec<ResourceShareInvitation>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceSharesRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
@@ -424,7 +424,7 @@ pub struct GetResourceSharesRequest {
     pub tag_filters: Option<Vec<TagFilter>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceSharesResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -437,7 +437,7 @@ pub struct GetResourceSharesResponse {
     pub resource_shares: Option<Vec<ResourceShare>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPendingInvitationResourcesRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
@@ -453,7 +453,7 @@ pub struct ListPendingInvitationResourcesRequest {
     pub resource_share_invitation_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPendingInvitationResourcesResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -466,7 +466,7 @@ pub struct ListPendingInvitationResourcesResponse {
     pub resources: Option<Vec<Resource>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPermissionsRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
@@ -483,7 +483,7 @@ pub struct ListPermissionsRequest {
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPermissionsResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -496,7 +496,7 @@ pub struct ListPermissionsResponse {
     pub permissions: Option<Vec<ResourceSharePermissionSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPrincipalsRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
@@ -528,7 +528,7 @@ pub struct ListPrincipalsRequest {
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPrincipalsResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -541,7 +541,7 @@ pub struct ListPrincipalsResponse {
     pub principals: Option<Vec<Principal>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceSharePermissionsRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
@@ -557,7 +557,7 @@ pub struct ListResourceSharePermissionsRequest {
     pub resource_share_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceSharePermissionsResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -570,7 +570,7 @@ pub struct ListResourceSharePermissionsResponse {
     pub permissions: Option<Vec<ResourceSharePermissionSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourceTypesRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
@@ -583,7 +583,7 @@ pub struct ListResourceTypesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceTypesResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -596,7 +596,7 @@ pub struct ListResourceTypesResponse {
     pub resource_types: Option<Vec<ServiceNameAndResourceType>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListResourcesRequest {
     /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
@@ -628,7 +628,7 @@ pub struct ListResourcesRequest {
     pub resource_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -642,7 +642,7 @@ pub struct ListResourcesResponse {
 }
 
 /// <p>Describes a principal for use with AWS Resource Access Manager.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Principal {
     /// <p>The time when the principal was associated with the resource share.</p>
@@ -667,7 +667,7 @@ pub struct Principal {
     pub resource_share_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PromoteResourceShareCreatedFromPolicyRequest {
     /// <p>The ARN of the resource share to promote.</p>
@@ -675,7 +675,7 @@ pub struct PromoteResourceShareCreatedFromPolicyRequest {
     pub resource_share_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PromoteResourceShareCreatedFromPolicyResponse {
     /// <p>Indicates whether the request succeeded.</p>
@@ -684,7 +684,7 @@ pub struct PromoteResourceShareCreatedFromPolicyResponse {
     pub return_value: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RejectResourceShareInvitationRequest {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -696,7 +696,7 @@ pub struct RejectResourceShareInvitationRequest {
     pub resource_share_invitation_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectResourceShareInvitationResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -710,7 +710,7 @@ pub struct RejectResourceShareInvitationResponse {
 }
 
 /// <p>Describes a resource associated with a resource share.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resource {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
@@ -748,7 +748,7 @@ pub struct Resource {
 }
 
 /// <p>Describes a resource share.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceShare {
     /// <p>Indicates whether principals outside your AWS organization can be associated with a resource share.</p>
@@ -794,7 +794,7 @@ pub struct ResourceShare {
 }
 
 /// <p>Describes an association with a resource share.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceShareAssociation {
     /// <p>The associated entity. For resource associations, this is the ARN of the resource. For principal associations, this is the ID of an AWS account or the ARN of an OU or organization from AWS Organizations.</p>
@@ -836,7 +836,7 @@ pub struct ResourceShareAssociation {
 }
 
 /// <p>Describes an invitation to join a resource share.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceShareInvitation {
     /// <p>The date and time when the invitation was sent.</p>
@@ -870,7 +870,7 @@ pub struct ResourceShareInvitation {
 }
 
 /// <p>Information about an AWS RAM permission.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceSharePermissionDetail {
     /// <p>The ARN of the permission.</p>
@@ -908,7 +908,7 @@ pub struct ResourceSharePermissionDetail {
 }
 
 /// <p>Information about a permission that is associated with a resource share.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceSharePermissionSummary {
     /// <p>The ARN of the permission.</p>
@@ -946,7 +946,7 @@ pub struct ResourceSharePermissionSummary {
 }
 
 /// <p>Information about the shareable resource types and the AWS services to which they belong.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceNameAndResourceType {
     /// <p>The shareable resource types.</p>
@@ -960,7 +960,7 @@ pub struct ServiceNameAndResourceType {
 }
 
 /// <p>Information about a tag.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The key of the tag.</p>
     #[serde(rename = "key")]
@@ -973,7 +973,7 @@ pub struct Tag {
 }
 
 /// <p>Used to filter information based on tags.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagFilter {
     /// <p>The tag key.</p>
@@ -986,7 +986,7 @@ pub struct TagFilter {
     pub tag_values: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource share.</p>
@@ -997,11 +997,11 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource share.</p>
@@ -1012,11 +1012,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceShareRequest {
     /// <p>Indicates whether principals outside your AWS organization can be associated with a resource share.</p>
@@ -1036,7 +1036,7 @@ pub struct UpdateResourceShareRequest {
     pub resource_share_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceShareResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
@@ -3301,6 +3301,7 @@ impl RamClient {
 #[async_trait]
 impl Ram for RamClient {
     /// <p>Accepts an invitation to a resource share from another AWS account.</p>
+    #[allow(unused_mut)]
     async fn accept_resource_share_invitation(
         &self,
         input: AcceptResourceShareInvitationRequest,
@@ -3322,7 +3323,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AcceptResourceShareInvitationResponse, _>()?;
 
@@ -3334,6 +3335,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Associates the specified resource share with the specified principals and resources.</p>
+    #[allow(unused_mut)]
     async fn associate_resource_share(
         &self,
         input: AssociateResourceShareRequest,
@@ -3352,7 +3354,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateResourceShareResponse, _>()?;
 
@@ -3364,6 +3366,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Associates a permission with a resource share.</p>
+    #[allow(unused_mut)]
     async fn associate_resource_share_permission(
         &self,
         input: AssociateResourceSharePermissionRequest,
@@ -3385,7 +3388,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateResourceSharePermissionResponse, _>()?;
 
@@ -3399,6 +3402,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Creates a resource share.</p>
+    #[allow(unused_mut)]
     async fn create_resource_share(
         &self,
         input: CreateResourceShareRequest,
@@ -3417,7 +3421,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateResourceShareResponse, _>()?;
 
@@ -3429,6 +3433,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Deletes the specified resource share.</p>
+    #[allow(unused_mut)]
     async fn delete_resource_share(
         &self,
         input: DeleteResourceShareRequest,
@@ -3451,7 +3456,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteResourceShareResponse, _>()?;
 
@@ -3463,6 +3468,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Disassociates the specified principals or resources from the specified resource share.</p>
+    #[allow(unused_mut)]
     async fn disassociate_resource_share(
         &self,
         input: DisassociateResourceShareRequest,
@@ -3482,7 +3488,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateResourceShareResponse, _>()?;
 
@@ -3494,6 +3500,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Disassociates an AWS RAM permission from a resource share.</p>
+    #[allow(unused_mut)]
     async fn disassociate_resource_share_permission(
         &self,
         input: DisassociateResourceSharePermissionRequest,
@@ -3515,7 +3522,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateResourceSharePermissionResponse, _>()?;
 
@@ -3529,6 +3536,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Enables resource sharing within your AWS Organization.</p> <p>The caller must be the master account for the AWS Organization.</p>
+    #[allow(unused_mut)]
     async fn enable_sharing_with_aws_organization(
         &self,
     ) -> Result<
@@ -3546,7 +3554,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<EnableSharingWithAwsOrganizationResponse, _>()?;
 
@@ -3560,6 +3568,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Gets the contents of an AWS RAM permission in JSON format.</p>
+    #[allow(unused_mut)]
     async fn get_permission(
         &self,
         input: GetPermissionRequest,
@@ -3578,7 +3587,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPermissionResponse, _>()?;
 
@@ -3590,6 +3599,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Gets the policies for the specified resources that you own and have shared.</p>
+    #[allow(unused_mut)]
     async fn get_resource_policies(
         &self,
         input: GetResourcePoliciesRequest,
@@ -3608,7 +3618,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetResourcePoliciesResponse, _>()?;
 
@@ -3620,6 +3630,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Gets the resources or principals for the resource shares that you own.</p>
+    #[allow(unused_mut)]
     async fn get_resource_share_associations(
         &self,
         input: GetResourceShareAssociationsRequest,
@@ -3639,7 +3650,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetResourceShareAssociationsResponse, _>()?;
 
@@ -3651,6 +3662,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Gets the invitations for resource sharing that you've received.</p>
+    #[allow(unused_mut)]
     async fn get_resource_share_invitations(
         &self,
         input: GetResourceShareInvitationsRequest,
@@ -3670,7 +3682,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetResourceShareInvitationsResponse, _>()?;
 
@@ -3682,6 +3694,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Gets the resource shares that you own or the resource shares that are shared with you.</p>
+    #[allow(unused_mut)]
     async fn get_resource_shares(
         &self,
         input: GetResourceSharesRequest,
@@ -3700,7 +3713,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetResourceSharesResponse, _>()?;
 
@@ -3712,6 +3725,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the resources in a resource share that is shared with you but that the invitation is still pending for.</p>
+    #[allow(unused_mut)]
     async fn list_pending_invitation_resources(
         &self,
         input: ListPendingInvitationResourcesRequest,
@@ -3733,7 +3747,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPendingInvitationResourcesResponse, _>()?;
 
@@ -3745,6 +3759,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the AWS RAM permissions.</p>
+    #[allow(unused_mut)]
     async fn list_permissions(
         &self,
         input: ListPermissionsRequest,
@@ -3763,7 +3778,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPermissionsResponse, _>()?;
 
@@ -3775,6 +3790,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the principals that you have shared resources with or that have shared resources with you.</p>
+    #[allow(unused_mut)]
     async fn list_principals(
         &self,
         input: ListPrincipalsRequest,
@@ -3793,7 +3809,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPrincipalsResponse, _>()?;
 
@@ -3805,6 +3821,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the AWS RAM permissions that are associated with a resource share.</p>
+    #[allow(unused_mut)]
     async fn list_resource_share_permissions(
         &self,
         input: ListResourceSharePermissionsRequest,
@@ -3824,7 +3841,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListResourceSharePermissionsResponse, _>()?;
 
@@ -3836,6 +3853,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the shareable resource types supported by AWS RAM.</p>
+    #[allow(unused_mut)]
     async fn list_resource_types(
         &self,
         input: ListResourceTypesRequest,
@@ -3854,7 +3872,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListResourceTypesResponse, _>()?;
 
@@ -3866,6 +3884,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Lists the resources that you added to a resource shares or the resources that are shared with you.</p>
+    #[allow(unused_mut)]
     async fn list_resources(
         &self,
         input: ListResourcesRequest,
@@ -3884,7 +3903,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListResourcesResponse, _>()?;
 
@@ -3896,6 +3915,7 @@ impl Ram for RamClient {
     }
 
     /// <p><p>Resource shares that were created by attaching a policy to a resource are visible only to the resource share owner, and the resource share cannot be modified in AWS RAM.</p> <p>Use this API action to promote the resource share. When you promote the resource share, it becomes:</p> <ul> <li> <p>Visible to all principals that it is shared with.</p> </li> <li> <p>Modifiable in AWS RAM.</p> </li> </ul></p>
+    #[allow(unused_mut)]
     async fn promote_resource_share_created_from_policy(
         &self,
         input: PromoteResourceShareCreatedFromPolicyRequest,
@@ -3918,7 +3938,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PromoteResourceShareCreatedFromPolicyResponse, _>()?;
 
@@ -3932,6 +3952,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Rejects an invitation to a resource share from another AWS account.</p>
+    #[allow(unused_mut)]
     async fn reject_resource_share_invitation(
         &self,
         input: RejectResourceShareInvitationRequest,
@@ -3953,7 +3974,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RejectResourceShareInvitationResponse, _>()?;
 
@@ -3965,6 +3986,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Adds the specified tags to the specified resource share that you own.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3983,7 +4005,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TagResourceResponse, _>()?;
 
@@ -3995,6 +4017,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Removes the specified tags from the specified resource share that you own.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -4013,7 +4036,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UntagResourceResponse, _>()?;
 
@@ -4025,6 +4048,7 @@ impl Ram for RamClient {
     }
 
     /// <p>Updates the specified resource share that you own.</p>
+    #[allow(unused_mut)]
     async fn update_resource_share(
         &self,
         input: UpdateResourceShareRequest,
@@ -4043,7 +4067,7 @@ impl Ram for RamClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateResourceShareResponse, _>()?;
 

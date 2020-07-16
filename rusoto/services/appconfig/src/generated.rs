@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Application {
     /// <p>The description of the application.</p>
@@ -42,7 +42,7 @@ pub struct Application {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Applications {
     /// <p>The elements from this collection.</p>
@@ -55,7 +55,7 @@ pub struct Applications {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct Configuration {
     /// <p>The configuration version.</p>
     pub configuration_version: Option<String>,
@@ -65,7 +65,7 @@ pub struct Configuration {
     pub content_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationProfile {
     /// <p>The application ID.</p>
@@ -99,7 +99,7 @@ pub struct ConfigurationProfile {
 }
 
 /// <p>A summary of a configuration profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationProfileSummary {
     /// <p>The application ID.</p>
@@ -124,7 +124,7 @@ pub struct ConfigurationProfileSummary {
     pub validator_types: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfigurationProfiles {
     /// <p>The elements from this collection.</p>
@@ -137,7 +137,7 @@ pub struct ConfigurationProfiles {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApplicationRequest {
     /// <p>A description of the application.</p>
@@ -153,7 +153,7 @@ pub struct CreateApplicationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateConfigurationProfileRequest {
     /// <p>The application ID.</p>
@@ -171,7 +171,8 @@ pub struct CreateConfigurationProfileRequest {
     pub name: String,
     /// <p>The ARN of an IAM role with permission to access the configuration at the specified LocationUri.</p>
     #[serde(rename = "RetrievalRoleArn")]
-    pub retrieval_role_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retrieval_role_arn: Option<String>,
     /// <p>Metadata to assign to the configuration profile. Tags help organize and categorize your AppConfig resources. Each tag consists of a key and an optional value, both of which you define.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -182,7 +183,7 @@ pub struct CreateConfigurationProfileRequest {
     pub validators: Option<Vec<Validator>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentStrategyRequest {
     /// <p>Total amount of time for a deployment to last.</p>
@@ -215,7 +216,7 @@ pub struct CreateDeploymentStrategyRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEnvironmentRequest {
     /// <p>The application ID.</p>
@@ -238,7 +239,37 @@ pub struct CreateEnvironmentRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateHostedConfigurationVersionRequest {
+    /// <p>The application ID.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The configuration profile ID.</p>
+    #[serde(rename = "ConfigurationProfileId")]
+    pub configuration_profile_id: String,
+    /// <p>The content of the configuration or the configuration data.</p>
+    #[serde(rename = "Content")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
+    pub content: bytes::Bytes,
+    /// <p>A standard MIME type describing the format of the configuration content. For more information, see <a href="https://docs.aws.amazon.com/https:/www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17">Content-Type</a>.</p>
+    #[serde(rename = "ContentType")]
+    pub content_type: String,
+    /// <p>A description of the configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>An optional locking token used to prevent race conditions from overwriting configuration updates when creating a new version. To ensure your data is not overwritten when creating multiple hosted configuration versions in rapid succession, specify the version of the latest hosted configuration version.</p>
+    #[serde(rename = "LatestVersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_version_number: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationRequest {
     /// <p>The ID of the application to delete.</p>
@@ -246,7 +277,7 @@ pub struct DeleteApplicationRequest {
     pub application_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteConfigurationProfileRequest {
     /// <p>The application ID that includes the configuration profile you want to delete.</p>
@@ -257,7 +288,7 @@ pub struct DeleteConfigurationProfileRequest {
     pub configuration_profile_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentStrategyRequest {
     /// <p>The ID of the deployment strategy you want to delete.</p>
@@ -265,7 +296,7 @@ pub struct DeleteDeploymentStrategyRequest {
     pub deployment_strategy_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEnvironmentRequest {
     /// <p>The application ID that includes the environment you want to delete.</p>
@@ -276,7 +307,21 @@ pub struct DeleteEnvironmentRequest {
     pub environment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteHostedConfigurationVersionRequest {
+    /// <p>The application ID.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The configuration profile ID.</p>
+    #[serde(rename = "ConfigurationProfileId")]
+    pub configuration_profile_id: String,
+    /// <p>The versions number to delete.</p>
+    #[serde(rename = "VersionNumber")]
+    pub version_number: i64,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployment {
     /// <p>The ID of the application that was deployed.</p>
@@ -354,7 +399,7 @@ pub struct Deployment {
 }
 
 /// <p>An object that describes a deployment event.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentEvent {
     /// <p>A description of the deployment event. Descriptions include, but are not limited to, the user account or the CloudWatch alarm ARN that initiated a rollback, the percentage of hosts that received the deployment, or in the case of an internal error, a recommendation to attempt a new deployment.</p>
@@ -375,7 +420,7 @@ pub struct DeploymentEvent {
     pub triggered_by: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentStrategies {
     /// <p>The elements from this collection.</p>
@@ -388,7 +433,7 @@ pub struct DeploymentStrategies {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentStrategy {
     /// <p>Total amount of time the deployment lasted.</p>
@@ -426,7 +471,7 @@ pub struct DeploymentStrategy {
 }
 
 /// <p>Information about the deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentSummary {
     /// <p>Time the deployment completed.</p>
@@ -475,7 +520,7 @@ pub struct DeploymentSummary {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployments {
     /// <p>The elements from this collection.</p>
@@ -488,7 +533,7 @@ pub struct Deployments {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Environment {
     /// <p>The application ID.</p>
@@ -517,7 +562,7 @@ pub struct Environment {
     pub state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Environments {
     /// <p>The elements from this collection.</p>
@@ -530,7 +575,7 @@ pub struct Environments {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApplicationRequest {
     /// <p>The ID of the application you want to get.</p>
@@ -538,7 +583,7 @@ pub struct GetApplicationRequest {
     pub application_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationProfileRequest {
     /// <p>The ID of the application that includes the configuration profile you want to get.</p>
@@ -549,7 +594,7 @@ pub struct GetConfigurationProfileRequest {
     pub configuration_profile_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetConfigurationRequest {
     /// <p>The application to get. Specify either the application name or the application ID.</p>
@@ -570,7 +615,7 @@ pub struct GetConfigurationRequest {
     pub environment: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentRequest {
     /// <p>The ID of the application that includes the deployment you want to get. </p>
@@ -584,7 +629,7 @@ pub struct GetDeploymentRequest {
     pub environment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentStrategyRequest {
     /// <p>The ID of the deployment strategy to get.</p>
@@ -592,7 +637,7 @@ pub struct GetDeploymentStrategyRequest {
     pub deployment_strategy_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEnvironmentRequest {
     /// <p>The ID of the application that includes the environment you want to get.</p>
@@ -603,7 +648,76 @@ pub struct GetEnvironmentRequest {
     pub environment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetHostedConfigurationVersionRequest {
+    /// <p>The application ID.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The configuration profile ID.</p>
+    #[serde(rename = "ConfigurationProfileId")]
+    pub configuration_profile_id: String,
+    /// <p>The version.</p>
+    #[serde(rename = "VersionNumber")]
+    pub version_number: i64,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct HostedConfigurationVersion {
+    /// <p>The application ID.</p>
+    pub application_id: Option<String>,
+    /// <p>The configuration profile ID.</p>
+    pub configuration_profile_id: Option<String>,
+    /// <p>The content of the configuration or the configuration data.</p>
+    pub content: Option<bytes::Bytes>,
+    /// <p>A standard MIME type describing the format of the configuration content. For more information, see <a href="https://docs.aws.amazon.com/https:/www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17">Content-Type</a>.</p>
+    pub content_type: Option<String>,
+    /// <p>A description of the configuration.</p>
+    pub description: Option<String>,
+    /// <p>The configuration version.</p>
+    pub version_number: Option<i64>,
+}
+
+/// <p>Information about the configuration.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HostedConfigurationVersionSummary {
+    /// <p>The application ID.</p>
+    #[serde(rename = "ApplicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    /// <p>The configuration profile ID.</p>
+    #[serde(rename = "ConfigurationProfileId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_profile_id: Option<String>,
+    /// <p>A standard MIME type describing the format of the configuration content. For more information, see <a href="https://docs.aws.amazon.com/https:/www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17">Content-Type</a>.</p>
+    #[serde(rename = "ContentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    /// <p>A description of the configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The configuration version.</p>
+    #[serde(rename = "VersionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HostedConfigurationVersions {
+    /// <p>The elements from this collection.</p>
+    #[serde(rename = "Items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<HostedConfigurationVersionSummary>>,
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
@@ -616,7 +730,7 @@ pub struct ListApplicationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListConfigurationProfilesRequest {
     /// <p>The application ID.</p>
@@ -632,7 +746,7 @@ pub struct ListConfigurationProfilesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentStrategiesRequest {
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
@@ -645,7 +759,7 @@ pub struct ListDeploymentStrategiesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeploymentsRequest {
     /// <p>The application ID.</p>
@@ -664,7 +778,7 @@ pub struct ListDeploymentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEnvironmentsRequest {
     /// <p>The application ID.</p>
@@ -680,7 +794,26 @@ pub struct ListEnvironmentsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListHostedConfigurationVersionsRequest {
+    /// <p>The application ID.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The configuration profile ID.</p>
+    #[serde(rename = "ConfigurationProfileId")]
+    pub configuration_profile_id: String,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to start the list. Use this token to get the next set of results. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The resource ARN.</p>
@@ -689,7 +822,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 /// <p>Amazon CloudWatch alarms to monitor during the deployment process.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Monitor {
     /// <p>ARN of the Amazon CloudWatch alarm.</p>
     #[serde(rename = "AlarmArn")]
@@ -701,7 +834,7 @@ pub struct Monitor {
     pub alarm_role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceTags {
     /// <p>Metadata to assign to AppConfig resources. Tags help organize and categorize your AppConfig resources. Each tag consists of a key and an optional value, both of which you define.</p>
@@ -710,7 +843,7 @@ pub struct ResourceTags {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartDeploymentRequest {
     /// <p>The application ID.</p>
@@ -738,7 +871,7 @@ pub struct StartDeploymentRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDeploymentRequest {
     /// <p>The application ID.</p>
@@ -752,7 +885,7 @@ pub struct StopDeploymentRequest {
     pub environment_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The ARN of the resource for which to retrieve tags.</p>
@@ -763,7 +896,7 @@ pub struct TagResourceRequest {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The ARN of the resource for which to remove tags.</p>
@@ -774,7 +907,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
     /// <p>The application ID.</p>
@@ -790,7 +923,7 @@ pub struct UpdateApplicationRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateConfigurationProfileRequest {
     /// <p>The application ID.</p>
@@ -817,7 +950,7 @@ pub struct UpdateConfigurationProfileRequest {
     pub validators: Option<Vec<Validator>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentStrategyRequest {
     /// <p>Total amount of time for a deployment to last.</p>
@@ -845,7 +978,7 @@ pub struct UpdateDeploymentStrategyRequest {
     pub growth_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnvironmentRequest {
     /// <p>The application ID.</p>
@@ -868,7 +1001,7 @@ pub struct UpdateEnvironmentRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ValidateConfigurationRequest {
     /// <p>The application ID.</p>
@@ -883,7 +1016,7 @@ pub struct ValidateConfigurationRequest {
 }
 
 /// <p>A validator provides a syntactic or semantic check to ensure the configuration you want to deploy functions as intended. To validate your application configuration data, you provide a schema or a Lambda function that runs against the configuration. The configuration deployment or update can only proceed when the configuration data is valid.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Validator {
     /// <p>Either the JSON Schema content or the Amazon Resource Name (ARN) of an AWS Lambda function.</p>
     #[serde(rename = "Content")]
@@ -1059,6 +1192,88 @@ impl fmt::Display for CreateEnvironmentError {
     }
 }
 impl Error for CreateEnvironmentError {}
+/// Errors returned by CreateHostedConfigurationVersion
+#[derive(Debug, PartialEq)]
+pub enum CreateHostedConfigurationVersionError {
+    /// <p>The input fails to satisfy the constraints specified by an AWS service.</p>
+    BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
+    /// <p>There was an internal failure in the AppConfig service.</p>
+    InternalServer(String),
+    /// <p>The configuration size is too large.</p>
+    PayloadTooLarge(String),
+    /// <p>The requested resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of hosted configuration versions exceeds the limit for the AppConfig configuration store. Delete one or more versions and try again.</p>
+    ServiceQuotaExceeded(String),
+}
+
+impl CreateHostedConfigurationVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateHostedConfigurationVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateHostedConfigurationVersionError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateHostedConfigurationVersionError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        CreateHostedConfigurationVersionError::InternalServer(err.msg),
+                    )
+                }
+                "PayloadTooLargeException" => {
+                    return RusotoError::Service(
+                        CreateHostedConfigurationVersionError::PayloadTooLarge(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateHostedConfigurationVersionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        CreateHostedConfigurationVersionError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateHostedConfigurationVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateHostedConfigurationVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateHostedConfigurationVersionError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateHostedConfigurationVersionError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateHostedConfigurationVersionError::PayloadTooLarge(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateHostedConfigurationVersionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateHostedConfigurationVersionError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateHostedConfigurationVersionError {}
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
@@ -1251,6 +1466,60 @@ impl fmt::Display for DeleteEnvironmentError {
     }
 }
 impl Error for DeleteEnvironmentError {}
+/// Errors returned by DeleteHostedConfigurationVersion
+#[derive(Debug, PartialEq)]
+pub enum DeleteHostedConfigurationVersionError {
+    /// <p>The input fails to satisfy the constraints specified by an AWS service.</p>
+    BadRequest(String),
+    /// <p>There was an internal failure in the AppConfig service.</p>
+    InternalServer(String),
+    /// <p>The requested resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteHostedConfigurationVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteHostedConfigurationVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteHostedConfigurationVersionError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        DeleteHostedConfigurationVersionError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteHostedConfigurationVersionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteHostedConfigurationVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteHostedConfigurationVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteHostedConfigurationVersionError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteHostedConfigurationVersionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteHostedConfigurationVersionError {}
 /// Errors returned by GetApplication
 #[derive(Debug, PartialEq)]
 pub enum GetApplicationError {
@@ -1511,6 +1780,58 @@ impl fmt::Display for GetEnvironmentError {
     }
 }
 impl Error for GetEnvironmentError {}
+/// Errors returned by GetHostedConfigurationVersion
+#[derive(Debug, PartialEq)]
+pub enum GetHostedConfigurationVersionError {
+    /// <p>The input fails to satisfy the constraints specified by an AWS service.</p>
+    BadRequest(String),
+    /// <p>There was an internal failure in the AppConfig service.</p>
+    InternalServer(String),
+    /// <p>The requested resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl GetHostedConfigurationVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetHostedConfigurationVersionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetHostedConfigurationVersionError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        GetHostedConfigurationVersionError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetHostedConfigurationVersionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetHostedConfigurationVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetHostedConfigurationVersionError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetHostedConfigurationVersionError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetHostedConfigurationVersionError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetHostedConfigurationVersionError {}
 /// Errors returned by ListApplications
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationsError {
@@ -1717,6 +2038,60 @@ impl fmt::Display for ListEnvironmentsError {
     }
 }
 impl Error for ListEnvironmentsError {}
+/// Errors returned by ListHostedConfigurationVersions
+#[derive(Debug, PartialEq)]
+pub enum ListHostedConfigurationVersionsError {
+    /// <p>The input fails to satisfy the constraints specified by an AWS service.</p>
+    BadRequest(String),
+    /// <p>There was an internal failure in the AppConfig service.</p>
+    InternalServer(String),
+    /// <p>The requested resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListHostedConfigurationVersionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListHostedConfigurationVersionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListHostedConfigurationVersionsError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        ListHostedConfigurationVersionsError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListHostedConfigurationVersionsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListHostedConfigurationVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListHostedConfigurationVersionsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListHostedConfigurationVersionsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListHostedConfigurationVersionsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListHostedConfigurationVersionsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -2188,6 +2563,12 @@ pub trait AppConfig {
         input: CreateEnvironmentRequest,
     ) -> Result<Environment, RusotoError<CreateEnvironmentError>>;
 
+    /// <p>Create a new configuration in the AppConfig configuration store.</p>
+    async fn create_hosted_configuration_version(
+        &self,
+        input: CreateHostedConfigurationVersionRequest,
+    ) -> Result<HostedConfigurationVersion, RusotoError<CreateHostedConfigurationVersionError>>;
+
     /// <p>Delete an application. Deleting an application does not delete a configuration from a host.</p>
     async fn delete_application(
         &self,
@@ -2211,6 +2592,12 @@ pub trait AppConfig {
         &self,
         input: DeleteEnvironmentRequest,
     ) -> Result<(), RusotoError<DeleteEnvironmentError>>;
+
+    /// <p>Delete a version of a configuration from the AppConfig configuration store.</p>
+    async fn delete_hosted_configuration_version(
+        &self,
+        input: DeleteHostedConfigurationVersionRequest,
+    ) -> Result<(), RusotoError<DeleteHostedConfigurationVersionError>>;
 
     /// <p>Retrieve information about an application.</p>
     async fn get_application(
@@ -2248,6 +2635,12 @@ pub trait AppConfig {
         input: GetEnvironmentRequest,
     ) -> Result<Environment, RusotoError<GetEnvironmentError>>;
 
+    /// <p>Get information about a specific configuration version.</p>
+    async fn get_hosted_configuration_version(
+        &self,
+        input: GetHostedConfigurationVersionRequest,
+    ) -> Result<HostedConfigurationVersion, RusotoError<GetHostedConfigurationVersionError>>;
+
     /// <p>List all applications in your AWS account.</p>
     async fn list_applications(
         &self,
@@ -2277,6 +2670,12 @@ pub trait AppConfig {
         &self,
         input: ListEnvironmentsRequest,
     ) -> Result<Environments, RusotoError<ListEnvironmentsError>>;
+
+    /// <p>View a list of configurations stored in the AppConfig configuration store by version.</p>
+    async fn list_hosted_configuration_versions(
+        &self,
+        input: ListHostedConfigurationVersionsRequest,
+    ) -> Result<HostedConfigurationVersions, RusotoError<ListHostedConfigurationVersionsError>>;
 
     /// <p>Retrieves the list of key-value tags assigned to the resource.</p>
     async fn list_tags_for_resource(
@@ -2379,6 +2778,7 @@ impl AppConfigClient {
 #[async_trait]
 impl AppConfig for AppConfigClient {
     /// <p>An application in AppConfig is a logical unit of code that provides capabilities for your customers. For example, an application can be a microservice that runs on Amazon EC2 instances, a mobile application installed by your users, a serverless application using Amazon API Gateway and AWS Lambda, or any system you run on behalf of others.</p>
+    #[allow(unused_mut)]
     async fn create_application(
         &self,
         input: CreateApplicationRequest,
@@ -2397,7 +2797,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
 
@@ -2409,6 +2809,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Information that enables AppConfig to access the configuration source. Valid configuration sources include Systems Manager (SSM) documents, SSM Parameter Store parameters, and Amazon S3 objects. A configuration profile includes the following information.</p> <ul> <li> <p>The Uri location of the configuration data.</p> </li> <li> <p>The AWS Identity and Access Management (IAM) role that provides access to the configuration data.</p> </li> <li> <p>A validator for the configuration data. Available validators include either a JSON Schema or an AWS Lambda function.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/appconfig-creating-configuration-and-profile.html">Create a Configuration and a Configuration Profile</a> in the <i>AWS AppConfig User Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_configuration_profile(
         &self,
         input: CreateConfigurationProfileRequest,
@@ -2430,7 +2831,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigurationProfile, _>()?;
 
@@ -2442,6 +2843,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>A deployment strategy defines important criteria for rolling out your configuration to the designated targets. A deployment strategy includes: the overall duration required, a percentage of targets to receive the deployment during each interval, an algorithm that defines how percentage grows, and bake time.</p>
+    #[allow(unused_mut)]
     async fn create_deployment_strategy(
         &self,
         input: CreateDeploymentStrategyRequest,
@@ -2460,7 +2862,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeploymentStrategy, _>()?;
 
@@ -2472,6 +2874,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>For each application, you define one or more environments. An environment is a logical deployment group of AppConfig targets, such as applications in a <code>Beta</code> or <code>Production</code> environment. You can also define environments for application subcomponents such as the <code>Web</code>, <code>Mobile</code> and <code>Back-end</code> components for your application. You can configure Amazon CloudWatch alarms for each environment. The system monitors alarms during a configuration deployment. If an alarm is triggered, the system rolls back the configuration.</p>
+    #[allow(unused_mut)]
     async fn create_environment(
         &self,
         input: CreateEnvironmentRequest,
@@ -2493,7 +2896,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
 
@@ -2504,7 +2907,58 @@ impl AppConfig for AppConfigClient {
         }
     }
 
+    /// <p>Create a new configuration in the AppConfig configuration store.</p>
+    #[allow(unused_mut)]
+    async fn create_hosted_configuration_version(
+        &self,
+        input: CreateHostedConfigurationVersionRequest,
+    ) -> Result<HostedConfigurationVersion, RusotoError<CreateHostedConfigurationVersionError>>
+    {
+        let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id);
+
+        let mut request = SignedRequest::new("POST", "appconfig", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(input.content.to_owned());
+        request.set_payload(encoded);
+        request.add_header("Content-Type", &input.content_type.to_string());
+        request.add_optional_header("Description", input.description.as_ref());
+        request.add_optional_header(
+            "Latest-Version-Number",
+            input.latest_version_number.as_ref(),
+        );
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+
+            let mut result = HostedConfigurationVersion::default();
+            result.content = Some(response.body);
+
+            result.application_id = response.headers.remove("Application-Id");
+            result.configuration_profile_id = response.headers.remove("Configuration-Profile-Id");
+            result.content_type = response.headers.remove("Content-Type");
+            result.description = response.headers.remove("Description");
+            result.version_number = response
+                .headers
+                .remove("Version-Number")
+                .map(|value| value.parse::<i64>().unwrap());
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateHostedConfigurationVersionError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Delete an application. Deleting an application does not delete a configuration from a host.</p>
+    #[allow(unused_mut)]
     async fn delete_application(
         &self,
         input: DeleteApplicationRequest,
@@ -2523,7 +2977,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2534,6 +2988,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Delete a configuration profile. Deleting a configuration profile does not delete a configuration from a host.</p>
+    #[allow(unused_mut)]
     async fn delete_configuration_profile(
         &self,
         input: DeleteConfigurationProfileRequest,
@@ -2553,7 +3008,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2564,6 +3019,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Delete a deployment strategy. Deleting a deployment strategy does not delete a configuration from a host.</p>
+    #[allow(unused_mut)]
     async fn delete_deployment_strategy(
         &self,
         input: DeleteDeploymentStrategyRequest,
@@ -2582,7 +3038,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2593,6 +3049,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Delete an environment. Deleting an environment does not delete a configuration from a host.</p>
+    #[allow(unused_mut)]
     async fn delete_environment(
         &self,
         input: DeleteEnvironmentRequest,
@@ -2612,7 +3069,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2622,7 +3079,37 @@ impl AppConfig for AppConfigClient {
         }
     }
 
+    /// <p>Delete a version of a configuration from the AppConfig configuration store.</p>
+    #[allow(unused_mut)]
+    async fn delete_hosted_configuration_version(
+        &self,
+        input: DeleteHostedConfigurationVersionRequest,
+    ) -> Result<(), RusotoError<DeleteHostedConfigurationVersionError>> {
+        let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions/{version_number}", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id, version_number = input.version_number);
+
+        let mut request = SignedRequest::new("DELETE", "appconfig", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteHostedConfigurationVersionError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Retrieve information about an application.</p>
+    #[allow(unused_mut)]
     async fn get_application(
         &self,
         input: GetApplicationRequest,
@@ -2641,7 +3128,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
 
@@ -2653,6 +3140,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p><p>Receive information about a configuration.</p> <important> <p>AWS AppConfig uses the value of the <code>ClientConfigurationVersion</code> parameter to identify the configuration version on your clients. If you don’t send <code>ClientConfigurationVersion</code> with each call to <code>GetConfiguration</code>, your clients receive the current configuration. You are charged each time your clients receive a configuration.</p> <p>To avoid excess charges, we recommend that you include the <code>ClientConfigurationVersion</code> value with every call to <code>GetConfiguration</code>. This value must be saved on your client. Subsequent calls to <code>GetConfiguration</code> must pass this value by using the <code>ClientConfigurationVersion</code> parameter. </p> </important></p>
+    #[allow(unused_mut)]
     async fn get_configuration(
         &self,
         input: GetConfigurationRequest,
@@ -2680,19 +3168,13 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = Configuration::default();
             result.content = Some(response.body);
 
-            if let Some(configuration_version) = response.headers.get("Configuration-Version") {
-                let value = configuration_version.to_owned();
-                result.configuration_version = Some(value)
-            };
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
+            result.configuration_version = response.headers.remove("Configuration-Version");
+            result.content_type = response.headers.remove("Content-Type");
 
             Ok(result)
         } else {
@@ -2702,6 +3184,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Retrieve information about a configuration profile.</p>
+    #[allow(unused_mut)]
     async fn get_configuration_profile(
         &self,
         input: GetConfigurationProfileRequest,
@@ -2721,7 +3204,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigurationProfile, _>()?;
 
@@ -2733,6 +3216,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Retrieve information about a configuration deployment.</p>
+    #[allow(unused_mut)]
     async fn get_deployment(
         &self,
         input: GetDeploymentRequest,
@@ -2748,7 +3232,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -2760,6 +3244,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Retrieve information about a deployment strategy. A deployment strategy defines important criteria for rolling out your configuration to the designated targets. A deployment strategy includes: the overall duration required, a percentage of targets to receive the deployment during each interval, an algorithm that defines how percentage grows, and bake time.</p>
+    #[allow(unused_mut)]
     async fn get_deployment_strategy(
         &self,
         input: GetDeploymentStrategyRequest,
@@ -2778,7 +3263,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeploymentStrategy, _>()?;
 
@@ -2790,6 +3275,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Retrieve information about an environment. An environment is a logical deployment group of AppConfig applications, such as applications in a <code>Production</code> environment or in an <code>EU_Region</code> environment. Each configuration deployment targets an environment. You can enable one or more Amazon CloudWatch alarms for an environment. If an alarm is triggered during a deployment, AppConfig roles back the configuration.</p>
+    #[allow(unused_mut)]
     async fn get_environment(
         &self,
         input: GetEnvironmentRequest,
@@ -2809,7 +3295,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
 
@@ -2820,7 +3306,46 @@ impl AppConfig for AppConfigClient {
         }
     }
 
+    /// <p>Get information about a specific configuration version.</p>
+    #[allow(unused_mut)]
+    async fn get_hosted_configuration_version(
+        &self,
+        input: GetHostedConfigurationVersionRequest,
+    ) -> Result<HostedConfigurationVersion, RusotoError<GetHostedConfigurationVersionError>> {
+        let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions/{version_number}", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id, version_number = input.version_number);
+
+        let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+
+            let mut result = HostedConfigurationVersion::default();
+            result.content = Some(response.body);
+
+            result.application_id = response.headers.remove("Application-Id");
+            result.configuration_profile_id = response.headers.remove("Configuration-Profile-Id");
+            result.content_type = response.headers.remove("Content-Type");
+            result.description = response.headers.remove("Description");
+            result.version_number = response
+                .headers
+                .remove("Version-Number")
+                .map(|value| value.parse::<i64>().unwrap());
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetHostedConfigurationVersionError::from_response(response))
+        }
+    }
+
     /// <p>List all applications in your AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_applications(
         &self,
         input: ListApplicationsRequest,
@@ -2845,7 +3370,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Applications, _>()?;
 
@@ -2857,6 +3382,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Lists the configuration profiles for an application.</p>
+    #[allow(unused_mut)]
     async fn list_configuration_profiles(
         &self,
         input: ListConfigurationProfilesRequest,
@@ -2884,7 +3410,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigurationProfiles, _>()?;
 
@@ -2896,6 +3422,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>List deployment strategies.</p>
+    #[allow(unused_mut)]
     async fn list_deployment_strategies(
         &self,
         input: ListDeploymentStrategiesRequest,
@@ -2920,7 +3447,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeploymentStrategies, _>()?;
 
@@ -2932,6 +3459,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Lists the deployments for an environment.</p>
+    #[allow(unused_mut)]
     async fn list_deployments(
         &self,
         input: ListDeploymentsRequest,
@@ -2960,7 +3488,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployments, _>()?;
 
@@ -2972,6 +3500,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>List the environments for an application.</p>
+    #[allow(unused_mut)]
     async fn list_environments(
         &self,
         input: ListEnvironmentsRequest,
@@ -2999,7 +3528,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Environments, _>()?;
 
@@ -3010,7 +3539,48 @@ impl AppConfig for AppConfigClient {
         }
     }
 
+    /// <p>View a list of configurations stored in the AppConfig configuration store by version.</p>
+    #[allow(unused_mut)]
+    async fn list_hosted_configuration_versions(
+        &self,
+        input: ListHostedConfigurationVersionsRequest,
+    ) -> Result<HostedConfigurationVersions, RusotoError<ListHostedConfigurationVersionsError>>
+    {
+        let request_uri = format!("/applications/{application_id}/configurationprofiles/{configuration_profile_id}/hostedconfigurationversions", application_id = input.application_id, configuration_profile_id = input.configuration_profile_id);
+
+        let mut request = SignedRequest::new("GET", "appconfig", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max_results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next_token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<HostedConfigurationVersions, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListHostedConfigurationVersionsError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Retrieves the list of key-value tags assigned to the resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -3026,7 +3596,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ResourceTags, _>()?;
 
@@ -3038,6 +3608,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Starts a deployment.</p>
+    #[allow(unused_mut)]
     async fn start_deployment(
         &self,
         input: StartDeploymentRequest,
@@ -3060,7 +3631,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -3072,6 +3643,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Stops a deployment. This API action works only on deployments that have a status of <code>DEPLOYING</code>. This action moves the deployment to a status of <code>ROLLED_BACK</code>.</p>
+    #[allow(unused_mut)]
     async fn stop_deployment(
         &self,
         input: StopDeploymentRequest,
@@ -3087,7 +3659,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -3099,6 +3671,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Metadata to assign to an AppConfig resource. Tags help organize and categorize your AppConfig resources. Each tag consists of a key and an optional value, both of which you define. You can specify a maximum of 50 tags for a resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3117,7 +3690,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3128,6 +3701,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Deletes a tag key and value from an AppConfig resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -3149,7 +3723,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -3160,6 +3734,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Updates an application.</p>
+    #[allow(unused_mut)]
     async fn update_application(
         &self,
         input: UpdateApplicationRequest,
@@ -3181,7 +3756,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Application, _>()?;
 
@@ -3193,6 +3768,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Updates a configuration profile.</p>
+    #[allow(unused_mut)]
     async fn update_configuration_profile(
         &self,
         input: UpdateConfigurationProfileRequest,
@@ -3215,7 +3791,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ConfigurationProfile, _>()?;
 
@@ -3227,6 +3803,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Updates a deployment strategy.</p>
+    #[allow(unused_mut)]
     async fn update_deployment_strategy(
         &self,
         input: UpdateDeploymentStrategyRequest,
@@ -3248,7 +3825,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeploymentStrategy, _>()?;
 
@@ -3260,6 +3837,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Updates an environment.</p>
+    #[allow(unused_mut)]
     async fn update_environment(
         &self,
         input: UpdateEnvironmentRequest,
@@ -3282,7 +3860,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Environment, _>()?;
 
@@ -3294,6 +3872,7 @@ impl AppConfig for AppConfigClient {
     }
 
     /// <p>Uses the validators in a configuration profile to validate a configuration.</p>
+    #[allow(unused_mut)]
     async fn validate_configuration(
         &self,
         input: ValidateConfigurationRequest,
@@ -3313,7 +3892,7 @@ impl AppConfig for AppConfigClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)

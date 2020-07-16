@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>A MediaPackage VOD Asset resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssetShallow {
     /// <p>The ARN of the Asset.</p>
@@ -62,15 +62,26 @@ pub struct AssetShallow {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>CDN Authorization credentials</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Authorization {
+    /// <p>The Amazon Resource Name (ARN) for the secret in AWS Secrets Manager that is used for CDN authorization.</p>
+    #[serde(rename = "CdnIdentifierSecret")]
+    pub cdn_identifier_secret: String,
+    /// <p>The Amazon Resource Name (ARN) for the IAM role that allows MediaPackage to communicate with AWS Secrets Manager.</p>
+    #[serde(rename = "SecretsRoleArn")]
+    pub secrets_role_arn: String,
+}
+
 /// <p>A CMAF encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CmafEncryption {
     #[serde(rename = "SpekeKeyProvider")]
     pub speke_key_provider: SpekeKeyProvider,
 }
 
 /// <p>A CMAF packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CmafPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,7 +97,7 @@ pub struct CmafPackage {
 }
 
 /// <p>A new MediaPackage VOD Asset configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssetRequest {
     /// <p>The unique identifier for the Asset.</p>
@@ -110,7 +121,7 @@ pub struct CreateAssetRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssetResponse {
     /// <p>The ARN of the Asset.</p>
@@ -151,7 +162,7 @@ pub struct CreateAssetResponse {
 }
 
 /// <p>A new MediaPackage VOD PackagingConfiguration resource configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePackagingConfigurationRequest {
     #[serde(rename = "CmafPackage")]
@@ -177,7 +188,7 @@ pub struct CreatePackagingConfigurationRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePackagingConfigurationResponse {
     /// <p>The ARN of the PackagingConfiguration.</p>
@@ -210,9 +221,12 @@ pub struct CreatePackagingConfigurationResponse {
 }
 
 /// <p>A new MediaPackage VOD PackagingGroup resource configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePackagingGroupRequest {
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
     /// <p>The ID of the PackagingGroup.</p>
     #[serde(rename = "Id")]
     pub id: String,
@@ -221,13 +235,16 @@ pub struct CreatePackagingGroupRequest {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePackagingGroupResponse {
     /// <p>The ARN of the PackagingGroup.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
     /// <p>The fully qualified domain name for Assets in the PackagingGroup.</p>
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -242,14 +259,14 @@ pub struct CreatePackagingGroupResponse {
 }
 
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DashEncryption {
     #[serde(rename = "SpekeKeyProvider")]
     pub speke_key_provider: SpekeKeyProvider,
 }
 
 /// <p>A DASH manifest configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DashManifest {
     /// <p>Determines the position of some tags in the Media Presentation Description (MPD).  When set to FULL, elements like SegmentTemplate and ContentProtection are included in each Representation.  When set to COMPACT, duplicate elements are combined and presented at the AdaptationSet level.</p>
     #[serde(rename = "ManifestLayout")]
@@ -273,7 +290,7 @@ pub struct DashManifest {
 }
 
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DashPackage {
     /// <p>A list of DASH manifest configurations.</p>
     #[serde(rename = "DashManifests")]
@@ -299,7 +316,7 @@ pub struct DashPackage {
     pub segment_template_format: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAssetRequest {
     /// <p>The ID of the MediaPackage VOD Asset resource to delete.</p>
@@ -307,11 +324,11 @@ pub struct DeleteAssetRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAssetResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePackagingConfigurationRequest {
     /// <p>The ID of the MediaPackage VOD PackagingConfiguration resource to delete.</p>
@@ -319,11 +336,11 @@ pub struct DeletePackagingConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePackagingConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePackagingGroupRequest {
     /// <p>The ID of the MediaPackage VOD PackagingGroup resource to delete.</p>
@@ -331,11 +348,11 @@ pub struct DeletePackagingGroupRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePackagingGroupResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAssetRequest {
     /// <p>The ID of an MediaPackage VOD Asset resource.</p>
@@ -343,7 +360,7 @@ pub struct DescribeAssetRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssetResponse {
     /// <p>The ARN of the Asset.</p>
@@ -383,7 +400,7 @@ pub struct DescribeAssetResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePackagingConfigurationRequest {
     /// <p>The ID of a MediaPackage VOD PackagingConfiguration resource.</p>
@@ -391,7 +408,7 @@ pub struct DescribePackagingConfigurationRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePackagingConfigurationResponse {
     /// <p>The ARN of the PackagingConfiguration.</p>
@@ -423,7 +440,7 @@ pub struct DescribePackagingConfigurationResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribePackagingGroupRequest {
     /// <p>The ID of a MediaPackage VOD PackagingGroup resource.</p>
@@ -431,13 +448,16 @@ pub struct DescribePackagingGroupRequest {
     pub id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePackagingGroupResponse {
     /// <p>The ARN of the PackagingGroup.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
     /// <p>The fully qualified domain name for Assets in the PackagingGroup.</p>
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -452,7 +472,7 @@ pub struct DescribePackagingGroupResponse {
 }
 
 /// <p>The endpoint URL used to access an Asset using one PackagingConfiguration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EgressEndpoint {
     /// <p>The ID of the PackagingConfiguration being applied to the Asset.</p>
@@ -466,7 +486,7 @@ pub struct EgressEndpoint {
 }
 
 /// <p>An HTTP Live Streaming (HLS) encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsEncryption {
     /// <p>A constant initialization vector for encryption (optional).
     /// When not specified the initialization vector will be periodically rotated.</p>
@@ -482,7 +502,7 @@ pub struct HlsEncryption {
 }
 
 /// <p>An HTTP Live Streaming (HLS) manifest configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsManifest {
     /// <p>This setting controls how ad markers are included in the packaged OriginEndpoint.
     /// &quot;NONE&quot; will omit all SCTE-35 ad markers from the output.
@@ -523,7 +543,7 @@ pub struct HlsManifest {
 }
 
 /// <p>An HTTP Live Streaming (HLS) packaging configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -542,7 +562,7 @@ pub struct HlsPackage {
     pub use_audio_rendition_group: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAssetsRequest {
     /// <p>Upper bound on number of records to return.</p>
@@ -559,7 +579,7 @@ pub struct ListAssetsRequest {
     pub packaging_group_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssetsResponse {
     /// <p>A list of MediaPackage VOD Asset resources.</p>
@@ -572,7 +592,7 @@ pub struct ListAssetsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPackagingConfigurationsRequest {
     /// <p>Upper bound on number of records to return.</p>
@@ -589,7 +609,7 @@ pub struct ListPackagingConfigurationsRequest {
     pub packaging_group_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPackagingConfigurationsResponse {
     /// <p>A token that can be used to resume pagination from the end of the collection.</p>
@@ -602,7 +622,7 @@ pub struct ListPackagingConfigurationsResponse {
     pub packaging_configurations: Option<Vec<PackagingConfiguration>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPackagingGroupsRequest {
     /// <p>Upper bound on number of records to return.</p>
@@ -615,7 +635,7 @@ pub struct ListPackagingGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPackagingGroupsResponse {
     /// <p>A token that can be used to resume pagination from the end of the collection.</p>
@@ -628,30 +648,32 @@ pub struct ListPackagingGroupsResponse {
     pub packaging_groups: Option<Vec<PackagingGroup>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) for the resource. You can get this from the response to any request to the resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
+    /// <p>A collection of tags associated with a resource</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A Microsoft Smooth Streaming (MSS) encryption configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MssEncryption {
     #[serde(rename = "SpekeKeyProvider")]
     pub speke_key_provider: SpekeKeyProvider,
 }
 
 /// <p>A Microsoft Smooth Streaming (MSS) manifest configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MssManifest {
     /// <p>An optional string to include in the name of the manifest.</p>
     #[serde(rename = "ManifestName")]
@@ -663,7 +685,7 @@ pub struct MssManifest {
 }
 
 /// <p>A Microsoft Smooth Streaming (MSS) PackagingConfiguration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MssPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -678,7 +700,7 @@ pub struct MssPackage {
 }
 
 /// <p>A MediaPackage VOD PackagingConfiguration resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PackagingConfiguration {
     /// <p>The ARN of the PackagingConfiguration.</p>
@@ -711,13 +733,16 @@ pub struct PackagingConfiguration {
 }
 
 /// <p>A MediaPackage VOD PackagingGroup resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PackagingGroup {
     /// <p>The ARN of the PackagingGroup.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
     /// <p>The fully qualified domain name for Assets in the PackagingGroup.</p>
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -732,7 +757,7 @@ pub struct PackagingGroup {
 }
 
 /// <p>A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpekeKeyProvider {
     /// <p>An Amazon Resource Name (ARN) of an IAM role that AWS Elemental
     /// MediaPackage will assume when accessing the key provider service.</p>
@@ -747,7 +772,7 @@ pub struct SpekeKeyProvider {
 }
 
 /// <p>A StreamSelection configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StreamSelection {
     /// <p>The maximum video bitrate (bps) to include in output.</p>
     #[serde(rename = "MaxVideoBitsPerSecond")]
@@ -763,23 +788,61 @@ pub struct StreamSelection {
     pub stream_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) for the resource. You can get this from the response to any request to the resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
+    /// <p>A collection of tags associated with a resource</p>
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) for the resource. You can get this from the response to any request to the resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>The key(s) of tag to be deleted</p>
+    /// <p>A comma-separated list of the tag keys to remove from the resource.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
+}
+
+/// <p>A MediaPackage VOD PackagingGroup resource configuration.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdatePackagingGroupRequest {
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
+    /// <p>The ID of a MediaPackage VOD PackagingGroup resource.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdatePackagingGroupResponse {
+    /// <p>The ARN of the PackagingGroup.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
+    /// <p>The fully qualified domain name for Assets in the PackagingGroup.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The ID of the PackagingGroup.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// Errors returned by CreateAsset
@@ -1680,6 +1743,74 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdatePackagingGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdatePackagingGroupError {
+    /// <p>The client is not authorized to access the requested resource.</p>
+    Forbidden(String),
+    /// <p>An unexpected error occurred.</p>
+    InternalServerError(String),
+    /// <p>The requested resource does not exist.</p>
+    NotFound(String),
+    /// <p>An unexpected error occurred.</p>
+    ServiceUnavailable(String),
+    /// <p>The client has exceeded their resource or throttling limits.</p>
+    TooManyRequests(String),
+    /// <p>The parameters sent in the request are not valid.</p>
+    UnprocessableEntity(String),
+}
+
+impl UpdatePackagingGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePackagingGroupError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdatePackagingGroupError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdatePackagingGroupError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdatePackagingGroupError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdatePackagingGroupError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdatePackagingGroupError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(UpdatePackagingGroupError::UnprocessableEntity(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdatePackagingGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdatePackagingGroupError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdatePackagingGroupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdatePackagingGroupError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdatePackagingGroupError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdatePackagingGroupError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdatePackagingGroupError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdatePackagingGroupError {}
 /// Trait representing the capabilities of the MediaPackage Vod API. MediaPackage Vod clients implement this trait.
 #[async_trait]
 pub trait MediaPackageVod {
@@ -1758,23 +1889,29 @@ pub trait MediaPackageVod {
         input: ListPackagingGroupsRequest,
     ) -> Result<ListPackagingGroupsResponse, RusotoError<ListPackagingGroupsError>>;
 
-    /// <p>List tags for a given MediaPackage VOD resource</p>
+    /// <p>Returns a list of the tags assigned to the specified resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>Set tags for a given MediaPackage VOD resource</p>
+    /// <p>Adds tags to the specified resource. You can specify one or more tags to add.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>>;
 
-    /// <p>Delete tags for a given MediaPackage VOD resource</p>
+    /// <p>Removes tags from the specified resource. You can specify one or more tags to remove.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>>;
+
+    /// <p>Updates a specific packaging group. You can&#39;t change the id attribute or any other system-generated attributes.</p>
+    async fn update_packaging_group(
+        &self,
+        input: UpdatePackagingGroupRequest,
+    ) -> Result<UpdatePackagingGroupResponse, RusotoError<UpdatePackagingGroupError>>;
 }
 /// A client for the MediaPackage Vod API.
 #[derive(Clone)]
@@ -1817,6 +1954,7 @@ impl MediaPackageVodClient {
 #[async_trait]
 impl MediaPackageVod for MediaPackageVodClient {
     /// <p>Creates a new MediaPackage VOD Asset resource.</p>
+    #[allow(unused_mut)]
     async fn create_asset(
         &self,
         input: CreateAssetRequest,
@@ -1836,7 +1974,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateAssetResponse, _>()?;
 
@@ -1848,6 +1986,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Creates a new MediaPackage VOD PackagingConfiguration resource.</p>
+    #[allow(unused_mut)]
     async fn create_packaging_configuration(
         &self,
         input: CreatePackagingConfigurationRequest,
@@ -1868,7 +2007,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePackagingConfigurationResponse, _>()?;
 
@@ -1880,6 +2019,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Creates a new MediaPackage VOD PackagingGroup resource.</p>
+    #[allow(unused_mut)]
     async fn create_packaging_group(
         &self,
         input: CreatePackagingGroupRequest,
@@ -1899,7 +2039,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePackagingGroupResponse, _>()?;
 
@@ -1911,6 +2051,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Deletes an existing MediaPackage VOD Asset resource.</p>
+    #[allow(unused_mut)]
     async fn delete_asset(
         &self,
         input: DeleteAssetRequest,
@@ -1927,7 +2068,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteAssetResponse, _>()?;
 
@@ -1939,6 +2080,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Deletes a MediaPackage VOD PackagingConfiguration resource.</p>
+    #[allow(unused_mut)]
     async fn delete_packaging_configuration(
         &self,
         input: DeletePackagingConfigurationRequest,
@@ -1956,7 +2098,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeletePackagingConfigurationResponse, _>()?;
 
@@ -1968,6 +2110,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Deletes a MediaPackage VOD PackagingGroup resource.</p>
+    #[allow(unused_mut)]
     async fn delete_packaging_group(
         &self,
         input: DeletePackagingGroupRequest,
@@ -1984,7 +2127,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeletePackagingGroupResponse, _>()?;
 
@@ -1996,6 +2139,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a description of a MediaPackage VOD Asset resource.</p>
+    #[allow(unused_mut)]
     async fn describe_asset(
         &self,
         input: DescribeAssetRequest,
@@ -2011,7 +2155,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeAssetResponse, _>()?;
 
@@ -2023,6 +2167,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a description of a MediaPackage VOD PackagingConfiguration resource.</p>
+    #[allow(unused_mut)]
     async fn describe_packaging_configuration(
         &self,
         input: DescribePackagingConfigurationRequest,
@@ -2041,7 +2186,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribePackagingConfigurationResponse, _>()?;
 
@@ -2053,6 +2198,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a description of a MediaPackage VOD PackagingGroup resource.</p>
+    #[allow(unused_mut)]
     async fn describe_packaging_group(
         &self,
         input: DescribePackagingGroupRequest,
@@ -2068,7 +2214,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribePackagingGroupResponse, _>()?;
 
@@ -2080,6 +2226,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a collection of MediaPackage VOD Asset resources.</p>
+    #[allow(unused_mut)]
     async fn list_assets(
         &self,
         input: ListAssetsRequest,
@@ -2107,7 +2254,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAssetsResponse, _>()?;
 
@@ -2119,6 +2266,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a collection of MediaPackage VOD PackagingConfiguration resources.</p>
+    #[allow(unused_mut)]
     async fn list_packaging_configurations(
         &self,
         input: ListPackagingConfigurationsRequest,
@@ -2147,7 +2295,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPackagingConfigurationsResponse, _>()?;
 
@@ -2159,6 +2307,7 @@ impl MediaPackageVod for MediaPackageVodClient {
     }
 
     /// <p>Returns a collection of MediaPackage VOD PackagingGroup resources.</p>
+    #[allow(unused_mut)]
     async fn list_packaging_groups(
         &self,
         input: ListPackagingGroupsRequest,
@@ -2183,7 +2332,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPackagingGroupsResponse, _>()?;
 
@@ -2194,7 +2343,8 @@ impl MediaPackageVod for MediaPackageVodClient {
         }
     }
 
-    /// <p>List tags for a given MediaPackage VOD resource</p>
+    /// <p>Returns a list of the tags assigned to the specified resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2210,7 +2360,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -2221,7 +2371,8 @@ impl MediaPackageVod for MediaPackageVodClient {
         }
     }
 
-    /// <p>Set tags for a given MediaPackage VOD resource</p>
+    /// <p>Adds tags to the specified resource. You can specify one or more tags to add.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -2241,7 +2392,7 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -2251,7 +2402,8 @@ impl MediaPackageVod for MediaPackageVodClient {
         }
     }
 
-    /// <p>Delete tags for a given MediaPackage VOD resource</p>
+    /// <p>Removes tags from the specified resource. You can specify one or more tags to remove.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -2274,13 +2426,44 @@ impl MediaPackageVod for MediaPackageVodClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UntagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Updates a specific packaging group. You can&#39;t change the id attribute or any other system-generated attributes.</p>
+    #[allow(unused_mut)]
+    async fn update_packaging_group(
+        &self,
+        input: UpdatePackagingGroupRequest,
+    ) -> Result<UpdatePackagingGroupResponse, RusotoError<UpdatePackagingGroupError>> {
+        let request_uri = format!("/packaging_groups/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("PUT", "mediapackage-vod", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdatePackagingGroupResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdatePackagingGroupError::from_response(response))
         }
     }
 }

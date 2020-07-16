@@ -20,12 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl DeviceFarmClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "devicefarm", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>A container for account-level settings in AWS Device Farm.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccountSettings {
     /// <p>The AWS account number specified in the <code>AccountSettings</code> container.</p>
@@ -63,7 +89,7 @@ pub struct AccountSettings {
 }
 
 /// <p>Represents the output of a test. Examples of artifacts include logs and screenshots.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Artifact {
     /// <p>The artifact's ARN.</p>
@@ -89,7 +115,7 @@ pub struct Artifact {
 }
 
 /// <p>Represents the amount of CPU that an app is using on a physical device. Does not represent system-wide CPU usage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CPU {
     /// <p>The CPU's architecture (for example, x86 or ARM).</p>
@@ -107,7 +133,7 @@ pub struct CPU {
 }
 
 /// <p>Represents entity counters.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Counters {
     /// <p>The number of errored entities.</p>
@@ -141,7 +167,7 @@ pub struct Counters {
 }
 
 /// <p>Represents a request to the create device pool operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDevicePoolRequest {
     /// <p>The device pool's description.</p>
@@ -164,7 +190,7 @@ pub struct CreateDevicePoolRequest {
 }
 
 /// <p>Represents the result of a create device pool request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDevicePoolResult {
     /// <p>The newly created device pool.</p>
@@ -173,7 +199,7 @@ pub struct CreateDevicePoolResult {
     pub device_pool: Option<DevicePool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInstanceProfileRequest {
     /// <p>The description of your instance profile.</p>
@@ -197,7 +223,7 @@ pub struct CreateInstanceProfileRequest {
     pub reboot_after_use: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInstanceProfileResult {
     /// <p>An object that contains information about your instance profile.</p>
@@ -206,7 +232,7 @@ pub struct CreateInstanceProfileResult {
     pub instance_profile: Option<InstanceProfile>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNetworkProfileRequest {
     /// <p>The description of the network profile.</p>
@@ -257,7 +283,7 @@ pub struct CreateNetworkProfileRequest {
     pub uplink_loss_percent: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNetworkProfileResult {
     /// <p>The network profile that is returned by the create network profile request.</p>
@@ -267,7 +293,7 @@ pub struct CreateNetworkProfileResult {
 }
 
 /// <p>Represents a request to the create project operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectRequest {
     /// <p>Sets the execution timeout value (in minutes) for a project. All test runs in this project use the specified execution timeout value unless overridden when scheduling a run.</p>
@@ -280,7 +306,7 @@ pub struct CreateProjectRequest {
 }
 
 /// <p>Represents the result of a create project request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectResult {
     /// <p>The newly created project.</p>
@@ -290,7 +316,7 @@ pub struct CreateProjectResult {
 }
 
 /// <p>Configuration settings for a remote access session, including billing method.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRemoteAccessSessionConfiguration {
     /// <p>The billing method for the remote access session.</p>
@@ -304,7 +330,7 @@ pub struct CreateRemoteAccessSessionConfiguration {
 }
 
 /// <p>Creates and submits a request to start a remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRemoteAccessSessionRequest {
     /// <p>Unique identifier for the client. If you want access to multiple devices on the same client, you should pass the same <code>clientId</code> value in each call to <code>CreateRemoteAccessSession</code>. This identifier is required only if <code>remoteDebugEnabled</code> is set to <code>true</code>.</p> <p>Remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>.</p>
@@ -356,7 +382,7 @@ pub struct CreateRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the server response from a request to create a remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRemoteAccessSessionResult {
     /// <p>A container that describes the remote access session when the request to create a remote access session is sent.</p>
@@ -365,7 +391,7 @@ pub struct CreateRemoteAccessSessionResult {
     pub remote_access_session: Option<RemoteAccessSession>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTestGridProjectRequest {
     /// <p>Human-readable description of the project.</p>
@@ -377,7 +403,7 @@ pub struct CreateTestGridProjectRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTestGridProjectResult {
     /// <p>ARN of the Selenium testing project that was created.</p>
@@ -386,7 +412,7 @@ pub struct CreateTestGridProjectResult {
     pub test_grid_project: Option<TestGridProject>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTestGridUrlRequest {
     /// <p>Lifetime, in seconds, of the URL.</p>
@@ -397,7 +423,7 @@ pub struct CreateTestGridUrlRequest {
     pub project_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTestGridUrlResult {
     /// <p>The number of seconds the URL from <a>CreateTestGridUrlResult$url</a> stays active.</p>
@@ -411,7 +437,7 @@ pub struct CreateTestGridUrlResult {
 }
 
 /// <p>Represents a request to the create upload operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUploadRequest {
     /// <p>The upload's content type (for example, <code>application/octet-stream</code>).</p>
@@ -430,7 +456,7 @@ pub struct CreateUploadRequest {
 }
 
 /// <p>Represents the result of a create upload request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUploadResult {
     /// <p>The newly created upload.</p>
@@ -439,7 +465,7 @@ pub struct CreateUploadResult {
     pub upload: Option<Upload>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVPCEConfigurationRequest {
     /// <p>The DNS name of the service running in your VPC that you want Device Farm to test.</p>
@@ -457,7 +483,7 @@ pub struct CreateVPCEConfigurationRequest {
     pub vpce_service_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVPCEConfigurationResult {
     /// <p>An object that contains information about your VPC endpoint configuration.</p>
@@ -467,7 +493,7 @@ pub struct CreateVPCEConfigurationResult {
 }
 
 /// <p>A JSON object that specifies the paths where the artifacts generated by the customer's tests, on the device or in the test environment, are pulled from.</p> <p>Specify <code>deviceHostPaths</code> and optionally specify either <code>iosPaths</code> or <code>androidPaths</code>.</p> <p>For web app tests, you can specify both <code>iosPaths</code> and <code>androidPaths</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CustomerArtifactPaths {
     /// <p>Comma-separated list of paths on the Android device where the artifacts generated by the customer's tests are pulled from.</p>
     #[serde(rename = "androidPaths")]
@@ -484,7 +510,7 @@ pub struct CustomerArtifactPaths {
 }
 
 /// <p>Represents a request to the delete device pool operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDevicePoolRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm device pool to delete.</p>
@@ -493,11 +519,11 @@ pub struct DeleteDevicePoolRequest {
 }
 
 /// <p>Represents the result of a delete device pool request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDevicePoolResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance profile you are requesting to delete.</p>
@@ -505,11 +531,11 @@ pub struct DeleteInstanceProfileRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInstanceProfileResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteNetworkProfileRequest {
     /// <p>The ARN of the network profile to delete.</p>
@@ -517,12 +543,12 @@ pub struct DeleteNetworkProfileRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteNetworkProfileResult {}
 
 /// <p>Represents a request to the delete project operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProjectRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm project to delete.</p>
@@ -531,12 +557,12 @@ pub struct DeleteProjectRequest {
 }
 
 /// <p>Represents the result of a delete project request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectResult {}
 
 /// <p>Represents the request to delete the specified remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the session for which you want to delete remote access.</p>
@@ -545,12 +571,12 @@ pub struct DeleteRemoteAccessSessionRequest {
 }
 
 /// <p>The response from the server when a request is made to delete the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRemoteAccessSessionResult {}
 
 /// <p>Represents a request to the delete run operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRunRequest {
     /// <p>The Amazon Resource Name (ARN) for the run to delete.</p>
@@ -559,11 +585,11 @@ pub struct DeleteRunRequest {
 }
 
 /// <p>Represents the result of a delete run request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRunResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTestGridProjectRequest {
     /// <p>The ARN of the project to delete, from <a>CreateTestGridProject</a> or <a>ListTestGridProjects</a>.</p>
@@ -571,12 +597,12 @@ pub struct DeleteTestGridProjectRequest {
     pub project_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTestGridProjectResult {}
 
 /// <p>Represents a request to the delete upload operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUploadRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm upload to delete.</p>
@@ -585,11 +611,11 @@ pub struct DeleteUploadRequest {
 }
 
 /// <p>Represents the result of a delete upload request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUploadResult {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVPCEConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to delete.</p>
@@ -597,12 +623,12 @@ pub struct DeleteVPCEConfigurationRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVPCEConfigurationResult {}
 
 /// <p>Represents a device type that an app is tested against.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Device {
     /// <p>The device's ARN.</p>
@@ -692,7 +718,7 @@ pub struct Device {
 }
 
 /// <p>Represents a device filter used to select a set of devices to be included in a test run. This data structure is passed in as the <code>deviceSelectionConfiguration</code> parameter to <code>ScheduleRun</code>. For an example of the JSON request syntax, see <a>ScheduleRun</a>.</p> <p>It is also passed in as the <code>filters</code> parameter to <code>ListDevices</code>. For an example of the JSON request syntax, see <a>ListDevices</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeviceFilter {
     /// <p><p>The aspect of a device such as platform or model used as the selection criteria in a device filter.</p> <p>The supported operators for each attribute are provided in the following list.</p> <dl> <dt>ARN</dt> <dd> <p>The Amazon Resource Name (ARN) of the device (for example, <code>arn:aws:devicefarm:us-west-2::device:12345Example</code>).</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>PLATFORM</dt> <dd> <p>The device platform. Valid values are ANDROID or IOS.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>OS</em>VERSION</dt> <dd> <p>The operating system version (for example, 10.3.2).</p> <p>Supported operators: <code>EQUALS</code>, <code>GREATER<em>THAN</code>, <code>GREATER</em>THAN<em>OR</em>EQUALS</code>, <code>IN</code>, <code>LESS<em>THAN</code>, <code>LESS</em>THAN<em>OR</em>EQUALS</code>, <code>NOT<em>IN</code> </p> </dd> <dt>MODEL</dt> <dd> <p>The device model (for example, iPad 5th Gen).</p> <p>Supported operators: <code>CONTAINS</code>, <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>AVAILABILITY</dt> <dd> <p>The current availability of the device. Valid values are AVAILABLE, HIGHLY<em>AVAILABLE, BUSY, or TEMPORARY</em>NOT<em>AVAILABLE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>FORM</em>FACTOR</dt> <dd> <p>The device form factor. Valid values are PHONE or TABLET.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>MANUFACTURER</dt> <dd> <p>The device manufacturer (for example, Apple).</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>REMOTE</em>ACCESS<em>ENABLED</dt> <dd> <p>Whether the device is enabled for remote access. Valid values are TRUE or FALSE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>REMOTE</em>DEBUG<em>ENABLED</dt> <dd> <p>Whether the device is enabled for remote debugging. Valid values are TRUE or FALSE.</p> <p>Supported operators: <code>EQUALS</code> </p> <p>Because remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>, this filter is ignored.</p> </dd> <dt>INSTANCE</em>ARN</dt> <dd> <p>The Amazon Resource Name (ARN) of the device instance.</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>INSTANCE</em>LABELS</dt> <dd> <p>The label of the device instance.</p> <p>Supported operators: <code>CONTAINS</code> </p> </dd> <dt>FLEET_TYPE</dt> <dd> <p>The fleet type. Valid values are PUBLIC or PRIVATE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> </dl></p>
     #[serde(rename = "attribute")]
@@ -709,7 +735,7 @@ pub struct DeviceFilter {
 }
 
 /// <p>Represents the device instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceInstance {
     /// <p>The Amazon Resource Name (ARN) of the device instance.</p>
@@ -739,7 +765,7 @@ pub struct DeviceInstance {
 }
 
 /// <p>Represents the total (metered or unmetered) minutes used by the resource to run tests. Contains the sum of minutes consumed by all children.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceMinutes {
     /// <p>When specified, represents only the sum of metered minutes used by the resource to run tests.</p>
@@ -757,7 +783,7 @@ pub struct DeviceMinutes {
 }
 
 /// <p>Represents a collection of device types.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DevicePool {
     /// <p>The device pool's ARN.</p>
@@ -787,7 +813,7 @@ pub struct DevicePool {
 }
 
 /// <p>Represents a device pool compatibility result.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DevicePoolCompatibilityResult {
     /// <p>Whether the result was compatible with the device pool.</p>
@@ -805,7 +831,7 @@ pub struct DevicePoolCompatibilityResult {
 }
 
 /// <p>Represents the device filters used in a test run and the maximum number of devices to be included in the run. It is passed in as the <code>deviceSelectionConfiguration</code> request parameter in <a>ScheduleRun</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeviceSelectionConfiguration {
     /// <p><p>Used to dynamically select a set of devices for a test run. A filter is made up of an attribute, an operator, and one or more values.</p> <ul> <li> <p> <b>Attribute</b> </p> <p>The aspect of a device such as platform or model used as the selection criteria in a device filter.</p> <p>Allowed values include:</p> <ul> <li> <p>ARN: The Amazon Resource Name (ARN) of the device (for example, <code>arn:aws:devicefarm:us-west-2::device:12345Example</code>).</p> </li> <li> <p>PLATFORM: The device platform. Valid values are ANDROID or IOS.</p> </li> <li> <p>OS<em>VERSION: The operating system version (for example, 10.3.2).</p> </li> <li> <p>MODEL: The device model (for example, iPad 5th Gen).</p> </li> <li> <p>AVAILABILITY: The current availability of the device. Valid values are AVAILABLE, HIGHLY</em>AVAILABLE, BUSY, or TEMPORARY<em>NOT</em>AVAILABLE.</p> </li> <li> <p>FORM<em>FACTOR: The device form factor. Valid values are PHONE or TABLET.</p> </li> <li> <p>MANUFACTURER: The device manufacturer (for example, Apple).</p> </li> <li> <p>REMOTE</em>ACCESS<em>ENABLED: Whether the device is enabled for remote access. Valid values are TRUE or FALSE.</p> </li> <li> <p>REMOTE</em>DEBUG<em>ENABLED: Whether the device is enabled for remote debugging. Valid values are TRUE or FALSE. Because remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>, this filter is ignored.</p> </li> <li> <p>INSTANCE</em>ARN: The Amazon Resource Name (ARN) of the device instance.</p> </li> <li> <p>INSTANCE<em>LABELS: The label of the device instance.</p> </li> <li> <p>FLEET</em>TYPE: The fleet type. Valid values are PUBLIC or PRIVATE.</p> </li> </ul> </li> <li> <p> <b>Operator</b> </p> <p>The filter operator.</p> <ul> <li> <p>The EQUALS operator is available for every attribute except INSTANCE<em>LABELS.</p> </li> <li> <p>The CONTAINS operator is available for the INSTANCE</em>LABELS and MODEL attributes.</p> </li> <li> <p>The IN and NOT<em>IN operators are available for the ARN, OS</em>VERSION, MODEL, MANUFACTURER, and INSTANCE<em>ARN attributes.</p> </li> <li> <p>The LESS</em>THAN, GREATER<em>THAN, LESS</em>THAN<em>OR</em>EQUALS, and GREATER<em>THAN</em>OR<em>EQUALS operators are also available for the OS</em>VERSION attribute.</p> </li> </ul> </li> <li> <p> <b>Values</b> </p> <p>An array of one or more filter values.</p> <p class="title"> <b>Operator Values</b> </p> <ul> <li> <p>The IN and NOT<em>IN operators can take a values array that has more than one element.</p> </li> <li> <p>The other operators require an array with a single element.</p> </li> </ul> <p class="title"> <b>Attribute Values</b> </p> <ul> <li> <p>The PLATFORM attribute can be set to ANDROID or IOS.</p> </li> <li> <p>The AVAILABILITY attribute can be set to AVAILABLE, HIGHLY</em>AVAILABLE, BUSY, or TEMPORARY<em>NOT</em>AVAILABLE.</p> </li> <li> <p>The FORM<em>FACTOR attribute can be set to PHONE or TABLET.</p> </li> <li> <p>The FLEET</em>TYPE attribute can be set to PUBLIC or PRIVATE.</p> </li> </ul> </li> </ul></p>
@@ -817,7 +843,7 @@ pub struct DeviceSelectionConfiguration {
 }
 
 /// <p>Contains the run results requested by the device selection configuration and how many devices were returned. For an example of the JSON response syntax, see <a>ScheduleRun</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceSelectionResult {
     /// <p>The filters in a device selection result.</p>
@@ -835,7 +861,7 @@ pub struct DeviceSelectionResult {
 }
 
 /// <p>Represents configuration information about a test run, such as the execution timeout (in minutes).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExecutionConfiguration {
     /// <p>True if account cleanup is enabled at the beginning of the test. Otherwise, false.</p>
@@ -861,12 +887,12 @@ pub struct ExecutionConfiguration {
 }
 
 /// <p>Represents the request sent to retrieve the account settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountSettingsRequest {}
 
 /// <p>Represents the account settings return values from the <code>GetAccountSettings</code> request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountSettingsResult {
     /// <p>The account settings.</p>
@@ -875,7 +901,7 @@ pub struct GetAccountSettingsResult {
     pub account_settings: Option<AccountSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceInstanceRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance you're requesting information about.</p>
@@ -883,7 +909,7 @@ pub struct GetDeviceInstanceRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceInstanceResult {
     /// <p>An object that contains information about your device instance.</p>
@@ -893,7 +919,7 @@ pub struct GetDeviceInstanceResult {
 }
 
 /// <p>Represents a request to the get device pool compatibility operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicePoolCompatibilityRequest {
     /// <p>The ARN of the app that is associated with the specified device pool.</p>
@@ -918,7 +944,7 @@ pub struct GetDevicePoolCompatibilityRequest {
 }
 
 /// <p>Represents the result of describe device pool compatibility request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicePoolCompatibilityResult {
     /// <p>Information about compatible devices.</p>
@@ -932,7 +958,7 @@ pub struct GetDevicePoolCompatibilityResult {
 }
 
 /// <p>Represents a request to the get device pool operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDevicePoolRequest {
     /// <p>The device pool's ARN.</p>
@@ -941,7 +967,7 @@ pub struct GetDevicePoolRequest {
 }
 
 /// <p>Represents the result of a get device pool request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDevicePoolResult {
     /// <p>An object that contains information about the requested device pool.</p>
@@ -951,7 +977,7 @@ pub struct GetDevicePoolResult {
 }
 
 /// <p>Represents a request to the get device request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeviceRequest {
     /// <p>The device type's ARN.</p>
@@ -960,7 +986,7 @@ pub struct GetDeviceRequest {
 }
 
 /// <p>Represents the result of a get device request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceResult {
     /// <p>An object that contains information about the requested device.</p>
@@ -969,7 +995,7 @@ pub struct GetDeviceResult {
     pub device: Option<Device>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInstanceProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of an instance profile.</p>
@@ -977,7 +1003,7 @@ pub struct GetInstanceProfileRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceProfileResult {
     /// <p>An object that contains information about an instance profile.</p>
@@ -987,7 +1013,7 @@ pub struct GetInstanceProfileResult {
 }
 
 /// <p>Represents a request to the get job operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetJobRequest {
     /// <p>The job's ARN.</p>
@@ -996,7 +1022,7 @@ pub struct GetJobRequest {
 }
 
 /// <p>Represents the result of a get job request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResult {
     /// <p>An object that contains information about the requested job.</p>
@@ -1005,7 +1031,7 @@ pub struct GetJobResult {
     pub job: Option<Job>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetNetworkProfileRequest {
     /// <p>The ARN of the network profile to return information about.</p>
@@ -1013,7 +1039,7 @@ pub struct GetNetworkProfileRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetNetworkProfileResult {
     /// <p>The network profile.</p>
@@ -1023,7 +1049,7 @@ pub struct GetNetworkProfileResult {
 }
 
 /// <p>Represents the request to retrieve the offering status for the specified customer or account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetOfferingStatusRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1033,7 +1059,7 @@ pub struct GetOfferingStatusRequest {
 }
 
 /// <p>Returns the status result for a device offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOfferingStatusResult {
     /// <p>When specified, gets the offering status for the current period.</p>
@@ -1051,7 +1077,7 @@ pub struct GetOfferingStatusResult {
 }
 
 /// <p>Represents a request to the get project operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProjectRequest {
     /// <p>The project's ARN.</p>
@@ -1060,7 +1086,7 @@ pub struct GetProjectRequest {
 }
 
 /// <p>Represents the result of a get project request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProjectResult {
     /// <p>The project to get information about.</p>
@@ -1070,7 +1096,7 @@ pub struct GetProjectResult {
 }
 
 /// <p>Represents the request to get information about the specified remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the remote access session about which you want to get session information.</p>
@@ -1079,7 +1105,7 @@ pub struct GetRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the response from the server that lists detailed information about the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRemoteAccessSessionResult {
     /// <p>A container that lists detailed information about the remote access session.</p>
@@ -1089,7 +1115,7 @@ pub struct GetRemoteAccessSessionResult {
 }
 
 /// <p>Represents a request to the get run operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRunRequest {
     /// <p>The run's ARN.</p>
@@ -1098,7 +1124,7 @@ pub struct GetRunRequest {
 }
 
 /// <p>Represents the result of a get run request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRunResult {
     /// <p>The run to get results from.</p>
@@ -1108,7 +1134,7 @@ pub struct GetRunResult {
 }
 
 /// <p>Represents a request to the get suite operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSuiteRequest {
     /// <p>The suite's ARN.</p>
@@ -1117,7 +1143,7 @@ pub struct GetSuiteRequest {
 }
 
 /// <p>Represents the result of a get suite request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSuiteResult {
     /// <p>A collection of one or more tests.</p>
@@ -1126,7 +1152,7 @@ pub struct GetSuiteResult {
     pub suite: Option<Suite>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTestGridProjectRequest {
     /// <p>The ARN of the Selenium testing project, from either <a>CreateTestGridProject</a> or <a>ListTestGridProjects</a>.</p>
@@ -1134,7 +1160,7 @@ pub struct GetTestGridProjectRequest {
     pub project_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTestGridProjectResult {
     /// <p>A <a>TestGridProject</a>.</p>
@@ -1143,7 +1169,7 @@ pub struct GetTestGridProjectResult {
     pub test_grid_project: Option<TestGridProject>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTestGridSessionRequest {
     /// <p>The ARN for the project that this session belongs to. See <a>CreateTestGridProject</a> and <a>ListTestGridProjects</a>.</p>
@@ -1160,7 +1186,7 @@ pub struct GetTestGridSessionRequest {
     pub session_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTestGridSessionResult {
     /// <p>The <a>TestGridSession</a> that was requested.</p>
@@ -1170,7 +1196,7 @@ pub struct GetTestGridSessionResult {
 }
 
 /// <p>Represents a request to the get test operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTestRequest {
     /// <p>The test's ARN.</p>
@@ -1179,7 +1205,7 @@ pub struct GetTestRequest {
 }
 
 /// <p>Represents the result of a get test request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTestResult {
     /// <p>A test condition that is evaluated.</p>
@@ -1189,7 +1215,7 @@ pub struct GetTestResult {
 }
 
 /// <p>Represents a request to the get upload operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUploadRequest {
     /// <p>The upload's ARN.</p>
@@ -1198,7 +1224,7 @@ pub struct GetUploadRequest {
 }
 
 /// <p>Represents the result of a get upload request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUploadResult {
     /// <p>An app or a set of one or more tests to upload or that have been uploaded.</p>
@@ -1207,7 +1233,7 @@ pub struct GetUploadResult {
     pub upload: Option<Upload>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVPCEConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to describe.</p>
@@ -1215,7 +1241,7 @@ pub struct GetVPCEConfigurationRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVPCEConfigurationResult {
     /// <p>An object that contains information about your VPC endpoint configuration.</p>
@@ -1225,7 +1251,7 @@ pub struct GetVPCEConfigurationResult {
 }
 
 /// <p>Represents information about incompatibility.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IncompatibilityMessage {
     /// <p>A message about the incompatibility.</p>
@@ -1239,7 +1265,7 @@ pub struct IncompatibilityMessage {
 }
 
 /// <p>Represents the request to install an Android application (in .apk format) or an iOS application (in .ipa format) as part of a remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstallToRemoteAccessSessionRequest {
     /// <p>The ARN of the app about which you are requesting information.</p>
@@ -1251,7 +1277,7 @@ pub struct InstallToRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the response from the server after AWS Device Farm makes a request to install to a remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstallToRemoteAccessSessionResult {
     /// <p>An app to upload or that has been uploaded.</p>
@@ -1261,7 +1287,7 @@ pub struct InstallToRemoteAccessSessionResult {
 }
 
 /// <p>Represents the instance profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceProfile {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
@@ -1291,7 +1317,7 @@ pub struct InstanceProfile {
 }
 
 /// <p>Represents a device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
     /// <p>The job's ARN.</p>
@@ -1357,7 +1383,7 @@ pub struct Job {
 }
 
 /// <p>Represents a request to the list artifacts operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListArtifactsRequest {
     /// <p>The run, job, suite, or test ARN.</p>
@@ -1373,7 +1399,7 @@ pub struct ListArtifactsRequest {
 }
 
 /// <p>Represents the result of a list artifacts operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListArtifactsResult {
     /// <p>Information about the artifacts.</p>
@@ -1386,7 +1412,7 @@ pub struct ListArtifactsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDeviceInstancesRequest {
     /// <p>An integer that specifies the maximum number of items you want to return in the API response.</p>
@@ -1399,7 +1425,7 @@ pub struct ListDeviceInstancesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceInstancesResult {
     /// <p>An object that contains information about your device instances.</p>
@@ -1413,7 +1439,7 @@ pub struct ListDeviceInstancesResult {
 }
 
 /// <p>Represents the result of a list device pools request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicePoolsRequest {
     /// <p>The project ARN.</p>
@@ -1430,7 +1456,7 @@ pub struct ListDevicePoolsRequest {
 }
 
 /// <p>Represents the result of a list device pools request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicePoolsResult {
     /// <p>Information about the device pools.</p>
@@ -1444,7 +1470,7 @@ pub struct ListDevicePoolsResult {
 }
 
 /// <p>Represents the result of a list devices request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDevicesRequest {
     /// <p>The Amazon Resource Name (ARN) of the project.</p>
@@ -1462,7 +1488,7 @@ pub struct ListDevicesRequest {
 }
 
 /// <p>Represents the result of a list devices operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResult {
     /// <p>Information about the devices.</p>
@@ -1475,7 +1501,7 @@ pub struct ListDevicesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceProfilesRequest {
     /// <p>An integer that specifies the maximum number of items you want to return in the API response.</p>
@@ -1488,7 +1514,7 @@ pub struct ListInstanceProfilesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInstanceProfilesResult {
     /// <p>An object that contains information about your instance profiles.</p>
@@ -1502,7 +1528,7 @@ pub struct ListInstanceProfilesResult {
 }
 
 /// <p>Represents a request to the list jobs operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListJobsRequest {
     /// <p>The run's Amazon Resource Name (ARN).</p>
@@ -1515,7 +1541,7 @@ pub struct ListJobsRequest {
 }
 
 /// <p>Represents the result of a list jobs request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResult {
     /// <p>Information about the jobs.</p>
@@ -1528,7 +1554,7 @@ pub struct ListJobsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNetworkProfilesRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to list network profiles.</p>
@@ -1544,7 +1570,7 @@ pub struct ListNetworkProfilesRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNetworkProfilesResult {
     /// <p>A list of the available network profiles.</p>
@@ -1557,7 +1583,7 @@ pub struct ListNetworkProfilesResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingPromotionsRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1566,7 +1592,7 @@ pub struct ListOfferingPromotionsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingPromotionsResult {
     /// <p>An identifier to be used in the next call to this operation, to return the next set of items in the list.</p>
@@ -1580,7 +1606,7 @@ pub struct ListOfferingPromotionsResult {
 }
 
 /// <p>Represents the request to list the offering transaction history.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingTransactionsRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1590,7 +1616,7 @@ pub struct ListOfferingTransactionsRequest {
 }
 
 /// <p>Returns the transaction log of the specified offerings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingTransactionsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1604,7 +1630,7 @@ pub struct ListOfferingTransactionsResult {
 }
 
 /// <p>Represents the request to list all offerings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListOfferingsRequest {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1614,7 +1640,7 @@ pub struct ListOfferingsRequest {
 }
 
 /// <p>Represents the return values of the list of offerings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOfferingsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1628,7 +1654,7 @@ pub struct ListOfferingsResult {
 }
 
 /// <p>Represents a request to the list projects operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProjectsRequest {
     /// <p>Optional. If no Amazon Resource Name (ARN) is specified, then AWS Device Farm returns a list of all projects for the AWS account. You can also specify a project ARN.</p>
@@ -1642,7 +1668,7 @@ pub struct ListProjectsRequest {
 }
 
 /// <p>Represents the result of a list projects request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1656,7 +1682,7 @@ pub struct ListProjectsResult {
 }
 
 /// <p>Represents the request to return information about the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRemoteAccessSessionsRequest {
     /// <p>The Amazon Resource Name (ARN) of the project about which you are requesting information.</p>
@@ -1669,7 +1695,7 @@ pub struct ListRemoteAccessSessionsRequest {
 }
 
 /// <p>Represents the response from the server after AWS Device Farm makes a request to return information about the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRemoteAccessSessionsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -1683,7 +1709,7 @@ pub struct ListRemoteAccessSessionsResult {
 }
 
 /// <p>Represents a request to the list runs operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRunsRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to list runs.</p>
@@ -1696,7 +1722,7 @@ pub struct ListRunsRequest {
 }
 
 /// <p>Represents the result of a list runs request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRunsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1710,7 +1736,7 @@ pub struct ListRunsResult {
 }
 
 /// <p>Represents a request to the list samples operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSamplesRequest {
     /// <p>The Amazon Resource Name (ARN) of the job used to list samples.</p>
@@ -1723,7 +1749,7 @@ pub struct ListSamplesRequest {
 }
 
 /// <p>Represents the result of a list samples request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSamplesResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1737,7 +1763,7 @@ pub struct ListSamplesResult {
 }
 
 /// <p>Represents a request to the list suites operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSuitesRequest {
     /// <p>The job's Amazon Resource Name (ARN).</p>
@@ -1750,7 +1776,7 @@ pub struct ListSuitesRequest {
 }
 
 /// <p>Represents the result of a list suites request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSuitesResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1763,7 +1789,7 @@ pub struct ListSuitesResult {
     pub suites: Option<Vec<Suite>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource or resources for which to list tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
@@ -1771,7 +1797,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters. Tag values can have a maximum length of 256 characters.</p>
@@ -1780,7 +1806,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridProjectsRequest {
     /// <p>Return no more than this number of results.</p>
@@ -1793,7 +1819,7 @@ pub struct ListTestGridProjectsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridProjectsResult {
     /// <p>Used for pagination. Pass into <a>ListTestGridProjects</a> to get more results in a paginated request.</p>
@@ -1806,7 +1832,7 @@ pub struct ListTestGridProjectsResult {
     pub test_grid_projects: Option<Vec<TestGridProject>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridSessionActionsRequest {
     /// <p>The maximum number of sessions to return per response.</p>
@@ -1822,7 +1848,7 @@ pub struct ListTestGridSessionActionsRequest {
     pub session_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridSessionActionsResult {
     /// <p>The action taken by the session.</p>
@@ -1835,7 +1861,7 @@ pub struct ListTestGridSessionActionsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridSessionArtifactsRequest {
     /// <p>The maximum number of results to be returned by a request.</p>
@@ -1855,7 +1881,7 @@ pub struct ListTestGridSessionArtifactsRequest {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridSessionArtifactsResult {
     /// <p>A list of test grid session artifacts for a <a>TestGridSession</a>.</p>
@@ -1868,7 +1894,7 @@ pub struct ListTestGridSessionArtifactsResult {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestGridSessionsRequest {
     /// <p>Return only sessions created after this time.</p>
@@ -1904,7 +1930,7 @@ pub struct ListTestGridSessionsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestGridSessionsResult {
     /// <p>Pagination token.</p>
@@ -1918,7 +1944,7 @@ pub struct ListTestGridSessionsResult {
 }
 
 /// <p>Represents a request to the list tests operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTestsRequest {
     /// <p>The test suite's Amazon Resource Name (ARN).</p>
@@ -1931,7 +1957,7 @@ pub struct ListTestsRequest {
 }
 
 /// <p>Represents the result of a list tests request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTestsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1945,7 +1971,7 @@ pub struct ListTestsResult {
 }
 
 /// <p>Represents a request to the list unique problems operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUniqueProblemsRequest {
     /// <p>The unique problems' ARNs.</p>
@@ -1958,7 +1984,7 @@ pub struct ListUniqueProblemsRequest {
 }
 
 /// <p>Represents the result of a list unique problems request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUniqueProblemsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -1972,7 +1998,7 @@ pub struct ListUniqueProblemsResult {
 }
 
 /// <p>Represents a request to the list uploads operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUploadsRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to list uploads.</p>
@@ -1989,7 +2015,7 @@ pub struct ListUploadsRequest {
 }
 
 /// <p>Represents the result of a list uploads request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUploadsResult {
     /// <p>If the number of items that are returned is significantly large, this is an identifier that is also returned. It can be used in a subsequent call to this operation to return the next set of items in the list.</p>
@@ -2002,7 +2028,7 @@ pub struct ListUploadsResult {
     pub uploads: Option<Vec<Upload>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVPCEConfigurationsRequest {
     /// <p>An integer that specifies the maximum number of items you want to return in the API response.</p>
@@ -2015,7 +2041,7 @@ pub struct ListVPCEConfigurationsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVPCEConfigurationsResult {
     /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
@@ -2029,7 +2055,7 @@ pub struct ListVPCEConfigurationsResult {
 }
 
 /// <p>Represents a latitude and longitude pair, expressed in geographic coordinate system degrees (for example, 47.6204, -122.3491).</p> <p>Elevation is currently not supported.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Location {
     /// <p>The latitude.</p>
     #[serde(rename = "latitude")]
@@ -2040,7 +2066,7 @@ pub struct Location {
 }
 
 /// <p>A number that represents the monetary amount for an offering or transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MonetaryAmount {
     /// <p>The numerical amount of an offering or transaction.</p>
@@ -2054,7 +2080,7 @@ pub struct MonetaryAmount {
 }
 
 /// <p>An array of settings that describes characteristics of a network profile.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkProfile {
     /// <p>The Amazon Resource Name (ARN) of the network profile.</p>
@@ -2108,7 +2134,7 @@ pub struct NetworkProfile {
 }
 
 /// <p>Represents the metadata of a device offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Offering {
     /// <p>A string that describes the offering.</p>
@@ -2134,7 +2160,7 @@ pub struct Offering {
 }
 
 /// <p>Represents information about an offering promotion.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OfferingPromotion {
     /// <p>A string that describes the offering promotion.</p>
@@ -2148,7 +2174,7 @@ pub struct OfferingPromotion {
 }
 
 /// <p>The status of the offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OfferingStatus {
     /// <p>The date on which the offering is effective.</p>
@@ -2170,7 +2196,7 @@ pub struct OfferingStatus {
 }
 
 /// <p>Represents the metadata of an offering transaction.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OfferingTransaction {
     /// <p>The cost of an offering transaction.</p>
@@ -2196,7 +2222,7 @@ pub struct OfferingTransaction {
 }
 
 /// <p>Represents a specific warning or failure.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Problem {
     /// <p>Information about the associated device.</p>
@@ -2230,7 +2256,7 @@ pub struct Problem {
 }
 
 /// <p>Information about a problem detail.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProblemDetail {
     /// <p>The problem detail's ARN.</p>
@@ -2244,7 +2270,7 @@ pub struct ProblemDetail {
 }
 
 /// <p>Represents an operating-system neutral workspace for running and managing tests.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Project {
     /// <p>The project's ARN.</p>
@@ -2266,7 +2292,7 @@ pub struct Project {
 }
 
 /// <p>Represents a request for a purchase offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PurchaseOfferingRequest {
     /// <p>The ID of the offering.</p>
@@ -2284,7 +2310,7 @@ pub struct PurchaseOfferingRequest {
 }
 
 /// <p>The result of the purchase offering (for example, success or failure).</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PurchaseOfferingResult {
     /// <p>Represents the offering transaction for the purchase result.</p>
@@ -2294,7 +2320,7 @@ pub struct PurchaseOfferingResult {
 }
 
 /// <p>Represents the set of radios and their states on a device. Examples of radios include Wi-Fi, GPS, Bluetooth, and NFC.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Radios {
     /// <p>True if Bluetooth is enabled at the beginning of the test. Otherwise, false.</p>
     #[serde(rename = "bluetooth")]
@@ -2315,7 +2341,7 @@ pub struct Radios {
 }
 
 /// <p>Specifies whether charges for devices are recurring.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecurringCharge {
     /// <p>The cost of the recurring charge.</p>
@@ -2329,7 +2355,7 @@ pub struct RecurringCharge {
 }
 
 /// <p>Represents information about the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoteAccessSession {
     /// <p>The Amazon Resource Name (ARN) of the remote access session.</p>
@@ -2419,7 +2445,7 @@ pub struct RemoteAccessSession {
 }
 
 /// <p>A request that represents an offering renewal.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenewOfferingRequest {
     /// <p>The ID of a request to renew an offering.</p>
@@ -2433,7 +2459,7 @@ pub struct RenewOfferingRequest {
 }
 
 /// <p>The result of a renewal offering.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RenewOfferingResult {
     /// <p>Represents the status of the offering transaction for the renewal.</p>
@@ -2443,7 +2469,7 @@ pub struct RenewOfferingResult {
 }
 
 /// <p>Represents the screen resolution of a device in height and width, expressed in pixels.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resolution {
     /// <p>The screen resolution's height, expressed in pixels.</p>
@@ -2457,7 +2483,7 @@ pub struct Resolution {
 }
 
 /// <p>Represents a condition for a device pool.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Rule {
     /// <p><p>The rule&#39;s stringified attribute. For example, specify the value as <code>&quot;&quot;abc&quot;&quot;</code>.</p> <p>The supported operators for each attribute are provided in the following list.</p> <dl> <dt>APPIUM<em>VERSION</dt> <dd> <p>The Appium version for the test.</p> <p>Supported operators: <code>CONTAINS</code> </p> </dd> <dt>ARN</dt> <dd> <p>The Amazon Resource Name (ARN) of the device (for example, <code>arn:aws:devicefarm:us-west-2::device:12345Example</code>.</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>AVAILABILITY</dt> <dd> <p>The current availability of the device. Valid values are AVAILABLE, HIGHLY<em>AVAILABLE, BUSY, or TEMPORARY</em>NOT<em>AVAILABLE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>FLEET</em>TYPE</dt> <dd> <p>The fleet type. Valid values are PUBLIC or PRIVATE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>FORM<em>FACTOR</dt> <dd> <p>The device form factor. Valid values are PHONE or TABLET.</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>INSTANCE<em>ARN</dt> <dd> <p>The Amazon Resource Name (ARN) of the device instance.</p> <p>Supported operators: <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>INSTANCE<em>LABELS</dt> <dd> <p>The label of the device instance.</p> <p>Supported operators: <code>CONTAINS</code> </p> </dd> <dt>MANUFACTURER</dt> <dd> <p>The device manufacturer (for example, Apple).</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>MODEL</dt> <dd> <p>The device model, such as Apple iPad Air 2 or Google Pixel.</p> <p>Supported operators: <code>CONTAINS</code>, <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>OS</em>VERSION</dt> <dd> <p>The operating system version (for example, 10.3.2).</p> <p>Supported operators: <code>EQUALS</code>, <code>GREATER<em>THAN</code>, <code>GREATER</em>THAN<em>OR</em>EQUALS</code>, <code>IN</code>, <code>LESS<em>THAN</code>, <code>LESS</em>THAN<em>OR</em>EQUALS</code>, <code>NOT<em>IN</code> </p> </dd> <dt>PLATFORM</dt> <dd> <p>The device platform. Valid values are ANDROID or IOS.</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>REMOTE<em>ACCESS</em>ENABLED</dt> <dd> <p>Whether the device is enabled for remote access. Valid values are TRUE or FALSE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>REMOTE<em>DEBUG</em>ENABLED</dt> <dd> <p>Whether the device is enabled for remote debugging. Valid values are TRUE or FALSE.</p> <p>Supported operators: <code>EQUALS</code> </p> <p>Because remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>, this filter is ignored.</p> </dd> </dl></p>
     #[serde(rename = "attribute")]
@@ -2474,7 +2500,7 @@ pub struct Rule {
 }
 
 /// <p>Represents a test run on a set of devices with a given app package, test parameters, and so on.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Run {
     /// <p>An app to upload or that has been uploaded.</p>
@@ -2604,7 +2630,7 @@ pub struct Run {
 }
 
 /// <p>Represents a sample of performance data.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Sample {
     /// <p>The sample's ARN.</p>
@@ -2622,7 +2648,7 @@ pub struct Sample {
 }
 
 /// <p>Represents the settings for a run. Includes things like location, radio states, auxiliary apps, and network profiles.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleRunConfiguration {
     /// <p>A list of upload ARNs for app packages to be installed with your app.</p>
@@ -2664,7 +2690,7 @@ pub struct ScheduleRunConfiguration {
 }
 
 /// <p>Represents a request to the schedule run operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleRunRequest {
     /// <p>The ARN of an application package to run tests against, created with <a>CreateUpload</a>. See <a>ListUploads</a>.</p>
@@ -2700,7 +2726,7 @@ pub struct ScheduleRunRequest {
 }
 
 /// <p>Represents the result of a schedule run request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScheduleRunResult {
     /// <p>Information about the scheduled run.</p>
@@ -2710,7 +2736,7 @@ pub struct ScheduleRunResult {
 }
 
 /// <p>Represents test settings. This data structure is passed in as the test parameter to ScheduleRun. For an example of the JSON request syntax, see <a>ScheduleRun</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduleRunTest {
     /// <p>The test's filter.</p>
@@ -2734,7 +2760,7 @@ pub struct ScheduleRunTest {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopJobRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm job to stop.</p>
@@ -2742,7 +2768,7 @@ pub struct StopJobRequest {
     pub arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopJobResult {
     /// <p>The job that was stopped.</p>
@@ -2752,7 +2778,7 @@ pub struct StopJobResult {
 }
 
 /// <p>Represents the request to stop the remote access session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRemoteAccessSessionRequest {
     /// <p>The Amazon Resource Name (ARN) of the remote access session to stop.</p>
@@ -2761,7 +2787,7 @@ pub struct StopRemoteAccessSessionRequest {
 }
 
 /// <p>Represents the response from the server that describes the remote access session when AWS Device Farm stops the session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopRemoteAccessSessionResult {
     /// <p>A container that represents the metadata from the service about the remote access session you are stopping.</p>
@@ -2771,7 +2797,7 @@ pub struct StopRemoteAccessSessionResult {
 }
 
 /// <p>Represents the request to stop a specific run.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopRunRequest {
     /// <p>Represents the Amazon Resource Name (ARN) of the Device Farm run to stop.</p>
@@ -2780,7 +2806,7 @@ pub struct StopRunRequest {
 }
 
 /// <p>Represents the results of your stop run attempt.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopRunResult {
     /// <p>The run that was stopped.</p>
@@ -2790,7 +2816,7 @@ pub struct StopRunResult {
 }
 
 /// <p>Represents a collection of one or more tests.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Suite {
     /// <p>The suite's ARN.</p>
@@ -2840,7 +2866,7 @@ pub struct Suite {
 }
 
 /// <p>The metadata that you apply to a resource to help you categorize and organize it. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters. Tag values can have a maximum length of 256 characters. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>One part of a key-value pair that makes up a tag. A <code>key</code> is a general label that acts like a category for more specific tag values.</p>
     #[serde(rename = "Key")]
@@ -2850,7 +2876,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource or resources to which to add tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
@@ -2861,12 +2887,12 @@ pub struct TagResourceRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Represents a condition that is evaluated.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Test {
     /// <p>The test's ARN.</p>
@@ -2916,7 +2942,7 @@ pub struct Test {
 }
 
 /// <p>A Selenium testing project. Projects are used to collect and collate sessions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestGridProject {
     /// <p>The ARN for the project.</p>
@@ -2938,7 +2964,7 @@ pub struct TestGridProject {
 }
 
 /// <p>A <a>TestGridSession</a> is a single instance of a browser launched from the URL provided by a call to <a>CreateTestGridUrl</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestGridSession {
     /// <p>The ARN of the session.</p>
@@ -2968,7 +2994,7 @@ pub struct TestGridSession {
 }
 
 /// <p>An action taken by a <a>TestGridSession</a> browser instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestGridSessionAction {
     /// <p>The action taken by the session.</p>
@@ -2994,7 +3020,7 @@ pub struct TestGridSessionAction {
 }
 
 /// <p><p>Artifacts are video and other files that are produced in the process of running a browser in an automated context. </p> <note> <p>Video elements might be broken up into multiple artifacts as they grow in size during creation. </p> </note></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestGridSessionArtifact {
     /// <p>The file name of the artifact.</p>
@@ -3012,7 +3038,7 @@ pub struct TestGridSessionArtifact {
 }
 
 /// <p>Represents information about free trial device minutes for an AWS account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TrialMinutes {
     /// <p>The number of free trial minutes remaining in the account.</p>
@@ -3026,7 +3052,7 @@ pub struct TrialMinutes {
 }
 
 /// <p>A collection of one or more problems, grouped by their result.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UniqueProblem {
     /// <p>A message about the unique problems' result.</p>
@@ -3039,7 +3065,7 @@ pub struct UniqueProblem {
     pub problems: Option<Vec<Problem>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource or resources from which to delete tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
@@ -3050,11 +3076,11 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeviceInstanceRequest {
     /// <p>The Amazon Resource Name (ARN) of the device instance.</p>
@@ -3070,7 +3096,7 @@ pub struct UpdateDeviceInstanceRequest {
     pub profile_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceInstanceResult {
     /// <p>An object that contains information about your device instance.</p>
@@ -3080,7 +3106,7 @@ pub struct UpdateDeviceInstanceResult {
 }
 
 /// <p>Represents a request to the update device pool operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDevicePoolRequest {
     /// <p>The Amazon Resource Name (ARN) of the Device Farm device pool to update.</p>
@@ -3109,7 +3135,7 @@ pub struct UpdateDevicePoolRequest {
 }
 
 /// <p>Represents the result of an update device pool request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDevicePoolResult {
     /// <p>The device pool you just updated.</p>
@@ -3118,7 +3144,7 @@ pub struct UpdateDevicePoolResult {
     pub device_pool: Option<DevicePool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInstanceProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
@@ -3146,7 +3172,7 @@ pub struct UpdateInstanceProfileRequest {
     pub reboot_after_use: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInstanceProfileResult {
     /// <p>An object that contains information about your instance profile.</p>
@@ -3155,7 +3181,7 @@ pub struct UpdateInstanceProfileResult {
     pub instance_profile: Option<InstanceProfile>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNetworkProfileRequest {
     /// <p>The Amazon Resource Name (ARN) of the project for which you want to update network profile settings.</p>
@@ -3207,7 +3233,7 @@ pub struct UpdateNetworkProfileRequest {
     pub uplink_loss_percent: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNetworkProfileResult {
     /// <p>A list of the available network profiles.</p>
@@ -3217,7 +3243,7 @@ pub struct UpdateNetworkProfileResult {
 }
 
 /// <p>Represents a request to the update project operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProjectRequest {
     /// <p>The Amazon Resource Name (ARN) of the project whose name to update.</p>
@@ -3234,7 +3260,7 @@ pub struct UpdateProjectRequest {
 }
 
 /// <p>Represents the result of an update project request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectResult {
     /// <p>The project to update.</p>
@@ -3243,7 +3269,7 @@ pub struct UpdateProjectResult {
     pub project: Option<Project>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateTestGridProjectRequest {
     /// <p>Human-readable description for the project.</p>
@@ -3259,7 +3285,7 @@ pub struct UpdateTestGridProjectRequest {
     pub project_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTestGridProjectResult {
     /// <p>The project, including updated information.</p>
@@ -3268,7 +3294,7 @@ pub struct UpdateTestGridProjectResult {
     pub test_grid_project: Option<TestGridProject>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUploadRequest {
     /// <p>The Amazon Resource Name (ARN) of the uploaded test spec.</p>
@@ -3288,7 +3314,7 @@ pub struct UpdateUploadRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUploadResult {
     /// <p>A test spec uploaded to Device Farm.</p>
@@ -3297,7 +3323,7 @@ pub struct UpdateUploadResult {
     pub upload: Option<Upload>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVPCEConfigurationRequest {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration you want to update.</p>
@@ -3321,7 +3347,7 @@ pub struct UpdateVPCEConfigurationRequest {
     pub vpce_service_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVPCEConfigurationResult {
     /// <p>An object that contains information about your VPC endpoint configuration.</p>
@@ -3331,7 +3357,7 @@ pub struct UpdateVPCEConfigurationResult {
 }
 
 /// <p>An app or a set of one or more tests to upload or that have been uploaded.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Upload {
     /// <p>The upload's ARN.</p>
@@ -3377,7 +3403,7 @@ pub struct Upload {
 }
 
 /// <p>Represents an Amazon Virtual Private Cloud (VPC) endpoint configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VPCEConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the VPC endpoint configuration.</p>
@@ -7629,26 +7655,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateDevicePoolRequest,
     ) -> Result<CreateDevicePoolResult, RusotoError<CreateDevicePoolError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateDevicePool");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateDevicePoolResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateDevicePoolError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateDevicePoolError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDevicePoolResult, _>()
     }
 
     /// <p>Creates a profile that can be applied to one or more private fleet device instances.</p>
@@ -7656,27 +7673,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateInstanceProfileRequest,
     ) -> Result<CreateInstanceProfileResult, RusotoError<CreateInstanceProfileError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateInstanceProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateInstanceProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateInstanceProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateInstanceProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateInstanceProfileResult, _>()
     }
 
     /// <p>Creates a network profile.</p>
@@ -7684,27 +7691,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateNetworkProfileRequest,
     ) -> Result<CreateNetworkProfileResult, RusotoError<CreateNetworkProfileError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateNetworkProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateNetworkProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateNetworkProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateNetworkProfileResult, _>()
     }
 
     /// <p>Creates a project.</p>
@@ -7712,26 +7709,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateProjectRequest,
     ) -> Result<CreateProjectResult, RusotoError<CreateProjectError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateProjectResult, _>()
     }
 
     /// <p>Specifies and starts a remote access session.</p>
@@ -7739,9 +7727,7 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateRemoteAccessSessionRequest,
     ) -> Result<CreateRemoteAccessSessionResult, RusotoError<CreateRemoteAccessSessionError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.CreateRemoteAccessSession",
@@ -7749,20 +7735,13 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateRemoteAccessSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateRemoteAccessSessionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateRemoteAccessSessionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateRemoteAccessSessionResult, _>()
     }
 
     /// <p>Creates a Selenium testing project. Projects are used to track <a>TestGridSession</a> instances.</p>
@@ -7770,27 +7749,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateTestGridProjectRequest,
     ) -> Result<CreateTestGridProjectResult, RusotoError<CreateTestGridProjectError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateTestGridProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateTestGridProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTestGridProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateTestGridProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateTestGridProjectResult, _>()
     }
 
     /// <p>Creates a signed, short-term URL that can be passed to a Selenium <code>RemoteWebDriver</code> constructor.</p>
@@ -7798,26 +7767,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateTestGridUrlRequest,
     ) -> Result<CreateTestGridUrlResult, RusotoError<CreateTestGridUrlError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateTestGridUrl");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateTestGridUrlResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateTestGridUrlError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateTestGridUrlError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateTestGridUrlResult, _>()
     }
 
     /// <p>Uploads an app or test scripts.</p>
@@ -7825,26 +7785,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateUploadRequest,
     ) -> Result<CreateUploadResult, RusotoError<CreateUploadError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateUpload");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<CreateUploadResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateUploadError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateUploadError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateUploadResult, _>()
     }
 
     /// <p>Creates a configuration record in Device Farm for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
@@ -7852,9 +7803,7 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateVPCEConfigurationRequest,
     ) -> Result<CreateVPCEConfigurationResult, RusotoError<CreateVPCEConfigurationError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.CreateVPCEConfiguration",
@@ -7862,20 +7811,13 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateVPCEConfigurationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVPCEConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateVPCEConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateVPCEConfigurationResult, _>()
     }
 
     /// <p>Deletes a device pool given the pool ARN. Does not allow deletion of curated pools owned by the system.</p>
@@ -7883,26 +7825,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteDevicePoolRequest,
     ) -> Result<DeleteDevicePoolResult, RusotoError<DeleteDevicePoolError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteDevicePool");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteDevicePoolResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteDevicePoolError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteDevicePoolError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDevicePoolResult, _>()
     }
 
     /// <p>Deletes a profile that can be applied to one or more private device instances.</p>
@@ -7910,27 +7843,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteInstanceProfileRequest,
     ) -> Result<DeleteInstanceProfileResult, RusotoError<DeleteInstanceProfileError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteInstanceProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteInstanceProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteInstanceProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteInstanceProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteInstanceProfileResult, _>()
     }
 
     /// <p>Deletes a network profile.</p>
@@ -7938,27 +7861,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteNetworkProfileRequest,
     ) -> Result<DeleteNetworkProfileResult, RusotoError<DeleteNetworkProfileError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteNetworkProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteNetworkProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteNetworkProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteNetworkProfileResult, _>()
     }
 
     /// <p>Deletes an AWS Device Farm project, given the project ARN.</p> <p> Deleting this resource does not stop an in-progress run.</p>
@@ -7966,26 +7879,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteProjectRequest,
     ) -> Result<DeleteProjectResult, RusotoError<DeleteProjectError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteProjectResult, _>()
     }
 
     /// <p>Deletes a completed remote access session and its results.</p>
@@ -7993,9 +7897,7 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteRemoteAccessSessionRequest,
     ) -> Result<DeleteRemoteAccessSessionResult, RusotoError<DeleteRemoteAccessSessionError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.DeleteRemoteAccessSession",
@@ -8003,20 +7905,13 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteRemoteAccessSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRemoteAccessSessionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRemoteAccessSessionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteRemoteAccessSessionResult, _>()
     }
 
     /// <p>Deletes the run, given the run ARN.</p> <p> Deleting this resource does not stop an in-progress run.</p>
@@ -8024,26 +7919,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteRunRequest,
     ) -> Result<DeleteRunResult, RusotoError<DeleteRunError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteRunResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteRunResult, _>()
     }
 
     /// <p><p> Deletes a Selenium testing project and all content generated under it. </p> <important> <p>You cannot undo this operation.</p> </important> <note> <p>You cannot delete a project if it has active sessions.</p> </note></p>
@@ -8051,27 +7937,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteTestGridProjectRequest,
     ) -> Result<DeleteTestGridProjectResult, RusotoError<DeleteTestGridProjectError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteTestGridProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteTestGridProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTestGridProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTestGridProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteTestGridProjectResult, _>()
     }
 
     /// <p>Deletes an upload given the upload ARN.</p>
@@ -8079,26 +7955,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteUploadRequest,
     ) -> Result<DeleteUploadResult, RusotoError<DeleteUploadError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteUpload");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<DeleteUploadResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteUploadError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteUploadError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteUploadResult, _>()
     }
 
     /// <p>Deletes a configuration for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
@@ -8106,9 +7973,7 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteVPCEConfigurationRequest,
     ) -> Result<DeleteVPCEConfigurationResult, RusotoError<DeleteVPCEConfigurationError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.DeleteVPCEConfiguration",
@@ -8116,46 +7981,29 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<DeleteVPCEConfigurationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteVPCEConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteVPCEConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteVPCEConfigurationResult, _>()
     }
 
     /// <p>Returns the number of unmetered iOS or unmetered Android devices that have been purchased by the account.</p>
     async fn get_account_settings(
         &self,
     ) -> Result<GetAccountSettingsResult, RusotoError<GetAccountSettingsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetAccountSettings");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetAccountSettingsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetAccountSettingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetAccountSettingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetAccountSettingsResult, _>()
     }
 
     /// <p>Gets information about a unique device type.</p>
@@ -8163,26 +8011,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetDeviceRequest,
     ) -> Result<GetDeviceResult, RusotoError<GetDeviceError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetDevice");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDeviceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeviceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDeviceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDeviceResult, _>()
     }
 
     /// <p>Returns information about a device instance that belongs to a private device fleet.</p>
@@ -8190,26 +8029,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetDeviceInstanceRequest,
     ) -> Result<GetDeviceInstanceResult, RusotoError<GetDeviceInstanceError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetDeviceInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDeviceInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDeviceInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDeviceInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDeviceInstanceResult, _>()
     }
 
     /// <p>Gets information about a device pool.</p>
@@ -8217,26 +8047,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetDevicePoolRequest,
     ) -> Result<GetDevicePoolResult, RusotoError<GetDevicePoolError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetDevicePool");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetDevicePoolResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDevicePoolError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDevicePoolError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDevicePoolResult, _>()
     }
 
     /// <p>Gets information about compatibility with a device pool.</p>
@@ -8245,9 +8066,7 @@ impl DeviceFarm for DeviceFarmClient {
         input: GetDevicePoolCompatibilityRequest,
     ) -> Result<GetDevicePoolCompatibilityResult, RusotoError<GetDevicePoolCompatibilityError>>
     {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.GetDevicePoolCompatibility",
@@ -8255,20 +8074,13 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetDevicePoolCompatibilityResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetDevicePoolCompatibilityError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetDevicePoolCompatibilityError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDevicePoolCompatibilityResult, _>()
     }
 
     /// <p>Returns information about the specified instance profile.</p>
@@ -8276,27 +8088,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetInstanceProfileRequest,
     ) -> Result<GetInstanceProfileResult, RusotoError<GetInstanceProfileError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetInstanceProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetInstanceProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetInstanceProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetInstanceProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetInstanceProfileResult, _>()
     }
 
     /// <p>Gets information about a job.</p>
@@ -8304,26 +8106,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetJobRequest,
     ) -> Result<GetJobResult, RusotoError<GetJobError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetJobResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetJobResult, _>()
     }
 
     /// <p>Returns information about a network profile.</p>
@@ -8331,26 +8124,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetNetworkProfileRequest,
     ) -> Result<GetNetworkProfileResult, RusotoError<GetNetworkProfileError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetNetworkProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetNetworkProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetNetworkProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetNetworkProfileResult, _>()
     }
 
     /// <p>Gets the current status and future status of all offerings purchased by an AWS account. The response indicates how many offerings are currently available and the offerings that will be available in the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
@@ -8358,26 +8142,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetOfferingStatusRequest,
     ) -> Result<GetOfferingStatusResult, RusotoError<GetOfferingStatusError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetOfferingStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetOfferingStatusResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetOfferingStatusError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetOfferingStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetOfferingStatusResult, _>()
     }
 
     /// <p>Gets information about a project.</p>
@@ -8385,26 +8160,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetProjectRequest,
     ) -> Result<GetProjectResult, RusotoError<GetProjectError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetProjectResult, _>()
     }
 
     /// <p>Returns a link to a currently running remote access session.</p>
@@ -8412,27 +8178,18 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetRemoteAccessSessionRequest,
     ) -> Result<GetRemoteAccessSessionResult, RusotoError<GetRemoteAccessSessionError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetRemoteAccessSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetRemoteAccessSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRemoteAccessSessionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRemoteAccessSessionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetRemoteAccessSessionResult, _>()
     }
 
     /// <p>Gets information about a run.</p>
@@ -8440,26 +8197,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetRunRequest,
     ) -> Result<GetRunResult, RusotoError<GetRunError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetRunResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetRunResult, _>()
     }
 
     /// <p>Gets information about a suite.</p>
@@ -8467,26 +8215,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetSuiteRequest,
     ) -> Result<GetSuiteResult, RusotoError<GetSuiteError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetSuite");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetSuiteResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetSuiteError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetSuiteError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetSuiteResult, _>()
     }
 
     /// <p>Gets information about a test.</p>
@@ -8494,26 +8233,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetTestRequest,
     ) -> Result<GetTestResult, RusotoError<GetTestError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetTest");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetTestResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTestError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTestError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTestResult, _>()
     }
 
     /// <p>Retrieves information about a Selenium testing project.</p>
@@ -8521,27 +8251,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetTestGridProjectRequest,
     ) -> Result<GetTestGridProjectResult, RusotoError<GetTestGridProjectError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetTestGridProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTestGridProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTestGridProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTestGridProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTestGridProjectResult, _>()
     }
 
     /// <p><p>A session is an instance of a browser created through a <code>RemoteWebDriver</code> with the URL from <a>CreateTestGridUrlResult$url</a>. You can use the following to look up sessions:</p> <ul> <li> <p>The session ARN (<a>GetTestGridSessionRequest$sessionArn</a>).</p> </li> <li> <p>The project ARN and a session ID (<a>GetTestGridSessionRequest$projectArn</a> and <a>GetTestGridSessionRequest$sessionId</a>).</p> </li> </ul> <p/></p>
@@ -8549,27 +8269,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetTestGridSessionRequest,
     ) -> Result<GetTestGridSessionResult, RusotoError<GetTestGridSessionError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetTestGridSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTestGridSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTestGridSessionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTestGridSessionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTestGridSessionResult, _>()
     }
 
     /// <p>Gets information about an upload.</p>
@@ -8577,26 +8287,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetUploadRequest,
     ) -> Result<GetUploadResult, RusotoError<GetUploadError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetUpload");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetUploadResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetUploadError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetUploadError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetUploadResult, _>()
     }
 
     /// <p>Returns information about the configuration settings for your Amazon Virtual Private Cloud (VPC) endpoint.</p>
@@ -8604,27 +8305,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetVPCEConfigurationRequest,
     ) -> Result<GetVPCEConfigurationResult, RusotoError<GetVPCEConfigurationError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetVPCEConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVPCEConfigurationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetVPCEConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetVPCEConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetVPCEConfigurationResult, _>()
     }
 
     /// <p>Installs an application to the device in a remote access session. For Android applications, the file must be in .apk format. For iOS applications, the file must be in .ipa format.</p>
@@ -8633,9 +8324,7 @@ impl DeviceFarm for DeviceFarmClient {
         input: InstallToRemoteAccessSessionRequest,
     ) -> Result<InstallToRemoteAccessSessionResult, RusotoError<InstallToRemoteAccessSessionError>>
     {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.InstallToRemoteAccessSession",
@@ -8643,20 +8332,13 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<InstallToRemoteAccessSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(InstallToRemoteAccessSessionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, InstallToRemoteAccessSessionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<InstallToRemoteAccessSessionResult, _>()
     }
 
     /// <p>Gets information about artifacts.</p>
@@ -8664,26 +8346,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListArtifactsRequest,
     ) -> Result<ListArtifactsResult, RusotoError<ListArtifactsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListArtifacts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListArtifactsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListArtifactsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListArtifactsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListArtifactsResult, _>()
     }
 
     /// <p>Returns information about the private device instances associated with one or more AWS accounts.</p>
@@ -8691,27 +8364,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListDeviceInstancesRequest,
     ) -> Result<ListDeviceInstancesResult, RusotoError<ListDeviceInstancesError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListDeviceInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListDeviceInstancesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDeviceInstancesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDeviceInstancesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDeviceInstancesResult, _>()
     }
 
     /// <p>Gets information about device pools.</p>
@@ -8719,26 +8382,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListDevicePoolsRequest,
     ) -> Result<ListDevicePoolsResult, RusotoError<ListDevicePoolsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListDevicePools");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListDevicePoolsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDevicePoolsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDevicePoolsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDevicePoolsResult, _>()
     }
 
     /// <p>Gets information about unique device types.</p>
@@ -8746,26 +8400,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListDevicesRequest,
     ) -> Result<ListDevicesResult, RusotoError<ListDevicesError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListDevices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListDevicesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListDevicesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListDevicesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListDevicesResult, _>()
     }
 
     /// <p>Returns information about all the instance profiles in an AWS account.</p>
@@ -8773,27 +8418,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListInstanceProfilesRequest,
     ) -> Result<ListInstanceProfilesResult, RusotoError<ListInstanceProfilesError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListInstanceProfiles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListInstanceProfilesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListInstanceProfilesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListInstanceProfilesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListInstanceProfilesResult, _>()
     }
 
     /// <p>Gets information about jobs for a given test run.</p>
@@ -8801,26 +8436,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListJobsRequest,
     ) -> Result<ListJobsResult, RusotoError<ListJobsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResult, _>()
     }
 
     /// <p>Returns the list of available network profiles.</p>
@@ -8828,27 +8454,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListNetworkProfilesRequest,
     ) -> Result<ListNetworkProfilesResult, RusotoError<ListNetworkProfilesError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListNetworkProfiles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListNetworkProfilesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListNetworkProfilesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListNetworkProfilesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListNetworkProfilesResult, _>()
     }
 
     /// <p>Returns a list of offering promotions. Each offering promotion record contains the ID and description of the promotion. The API returns a <code>NotEligible</code> error if the caller is not permitted to invoke the operation. Contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you must be able to invoke this operation.</p>
@@ -8856,27 +8472,18 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListOfferingPromotionsRequest,
     ) -> Result<ListOfferingPromotionsResult, RusotoError<ListOfferingPromotionsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListOfferingPromotions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOfferingPromotionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOfferingPromotionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListOfferingPromotionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListOfferingPromotionsResult, _>()
     }
 
     /// <p>Returns a list of all historical purchases, renewals, and system renewal transactions for an AWS account. The list is paginated and ordered by a descending timestamp (most recent transactions are first). The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
@@ -8884,9 +8491,7 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListOfferingTransactionsRequest,
     ) -> Result<ListOfferingTransactionsResult, RusotoError<ListOfferingTransactionsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.ListOfferingTransactions",
@@ -8894,20 +8499,13 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListOfferingTransactionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOfferingTransactionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListOfferingTransactionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListOfferingTransactionsResult, _>()
     }
 
     /// <p>Returns a list of products or offerings that the user can manage through the API. Each offering record indicates the recurring price per unit and the frequency for that offering. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
@@ -8915,26 +8513,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListOfferingsRequest,
     ) -> Result<ListOfferingsResult, RusotoError<ListOfferingsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListOfferings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListOfferingsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListOfferingsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListOfferingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListOfferingsResult, _>()
     }
 
     /// <p>Gets information about projects.</p>
@@ -8942,26 +8531,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListProjectsRequest,
     ) -> Result<ListProjectsResult, RusotoError<ListProjectsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListProjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListProjectsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListProjectsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListProjectsResult, _>()
     }
 
     /// <p>Returns a list of all currently running remote access sessions.</p>
@@ -8969,9 +8549,7 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListRemoteAccessSessionsRequest,
     ) -> Result<ListRemoteAccessSessionsResult, RusotoError<ListRemoteAccessSessionsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.ListRemoteAccessSessions",
@@ -8979,20 +8557,13 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListRemoteAccessSessionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRemoteAccessSessionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRemoteAccessSessionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListRemoteAccessSessionsResult, _>()
     }
 
     /// <p>Gets information about runs, given an AWS Device Farm project ARN.</p>
@@ -9000,26 +8571,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListRunsRequest,
     ) -> Result<ListRunsResult, RusotoError<ListRunsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListRuns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListRunsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListRunsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListRunsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListRunsResult, _>()
     }
 
     /// <p>Gets information about samples, given an AWS Device Farm job ARN.</p>
@@ -9027,26 +8589,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListSamplesRequest,
     ) -> Result<ListSamplesResult, RusotoError<ListSamplesError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListSamples");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListSamplesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSamplesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSamplesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListSamplesResult, _>()
     }
 
     /// <p>Gets information about test suites for a given job.</p>
@@ -9054,26 +8607,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListSuitesRequest,
     ) -> Result<ListSuitesResult, RusotoError<ListSuitesError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListSuites");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListSuitesResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListSuitesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListSuitesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListSuitesResult, _>()
     }
 
     /// <p>List the tags for an AWS Device Farm resource.</p>
@@ -9081,27 +8625,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTagsForResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTagsForResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
     /// <p>Gets a list of all Selenium testing projects in your account.</p>
@@ -9109,27 +8643,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListTestGridProjectsRequest,
     ) -> Result<ListTestGridProjectsResult, RusotoError<ListTestGridProjectsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListTestGridProjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTestGridProjectsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTestGridProjectsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTestGridProjectsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTestGridProjectsResult, _>()
     }
 
     /// <p>Returns a list of the actions taken in a <a>TestGridSession</a>.</p>
@@ -9138,9 +8662,7 @@ impl DeviceFarm for DeviceFarmClient {
         input: ListTestGridSessionActionsRequest,
     ) -> Result<ListTestGridSessionActionsResult, RusotoError<ListTestGridSessionActionsError>>
     {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.ListTestGridSessionActions",
@@ -9148,20 +8670,13 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTestGridSessionActionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTestGridSessionActionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTestGridSessionActionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListTestGridSessionActionsResult, _>()
     }
 
     /// <p>Retrieves a list of artifacts created during the session.</p>
@@ -9170,9 +8685,7 @@ impl DeviceFarm for DeviceFarmClient {
         input: ListTestGridSessionArtifactsRequest,
     ) -> Result<ListTestGridSessionArtifactsResult, RusotoError<ListTestGridSessionArtifactsError>>
     {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.ListTestGridSessionArtifacts",
@@ -9180,20 +8693,13 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTestGridSessionArtifactsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTestGridSessionArtifactsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTestGridSessionArtifactsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListTestGridSessionArtifactsResult, _>()
     }
 
     /// <p>Retrieves a list of sessions for a <a>TestGridProject</a>.</p>
@@ -9201,27 +8707,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListTestGridSessionsRequest,
     ) -> Result<ListTestGridSessionsResult, RusotoError<ListTestGridSessionsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListTestGridSessions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTestGridSessionsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTestGridSessionsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTestGridSessionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTestGridSessionsResult, _>()
     }
 
     /// <p>Gets information about tests in a given test suite.</p>
@@ -9229,26 +8725,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListTestsRequest,
     ) -> Result<ListTestsResult, RusotoError<ListTestsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListTests");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListTestsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTestsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTestsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTestsResult, _>()
     }
 
     /// <p>Gets information about unique problems, such as exceptions or crashes.</p> <p>Unique problems are defined as a single instance of an error across a run, job, or suite. For example, if a call in your application consistently raises an exception (<code>OutOfBoundsException in MyActivity.java:386</code>), <code>ListUniqueProblems</code> returns a single entry instead of many individual entries for that exception.</p>
@@ -9256,27 +8743,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListUniqueProblemsRequest,
     ) -> Result<ListUniqueProblemsResult, RusotoError<ListUniqueProblemsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListUniqueProblems");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListUniqueProblemsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListUniqueProblemsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListUniqueProblemsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListUniqueProblemsResult, _>()
     }
 
     /// <p>Gets information about uploads, given an AWS Device Farm project ARN.</p>
@@ -9284,26 +8761,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListUploadsRequest,
     ) -> Result<ListUploadsResult, RusotoError<ListUploadsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListUploads");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ListUploadsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListUploadsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListUploadsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListUploadsResult, _>()
     }
 
     /// <p>Returns information about all Amazon Virtual Private Cloud (VPC) endpoint configurations in the AWS account.</p>
@@ -9311,27 +8779,18 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListVPCEConfigurationsRequest,
     ) -> Result<ListVPCEConfigurationsResult, RusotoError<ListVPCEConfigurationsError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListVPCEConfigurations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVPCEConfigurationsResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListVPCEConfigurationsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListVPCEConfigurationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListVPCEConfigurationsResult, _>()
     }
 
     /// <p>Immediately purchases offerings for an AWS account. Offerings renew with the latest total purchased quantity for an offering, unless the renewal was overridden. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
@@ -9339,26 +8798,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: PurchaseOfferingRequest,
     ) -> Result<PurchaseOfferingResult, RusotoError<PurchaseOfferingError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.PurchaseOffering");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<PurchaseOfferingResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(PurchaseOfferingError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, PurchaseOfferingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<PurchaseOfferingResult, _>()
     }
 
     /// <p>Explicitly sets the quantity of devices to renew for an offering, starting from the <code>effectiveDate</code> of the next period. The API returns a <code>NotEligible</code> error if the user is not permitted to invoke the operation. If you must be able to invoke this operation, contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a>.</p>
@@ -9366,26 +8816,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: RenewOfferingRequest,
     ) -> Result<RenewOfferingResult, RusotoError<RenewOfferingError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.RenewOffering");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<RenewOfferingResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(RenewOfferingError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, RenewOfferingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RenewOfferingResult, _>()
     }
 
     /// <p>Schedules a run.</p>
@@ -9393,26 +8834,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ScheduleRunRequest,
     ) -> Result<ScheduleRunResult, RusotoError<ScheduleRunError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.ScheduleRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<ScheduleRunResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ScheduleRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ScheduleRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ScheduleRunResult, _>()
     }
 
     /// <p>Initiates a stop request for the current job. AWS Device Farm immediately stops the job on the device where tests have not started. You are not billed for this device. On the device where tests have started, setup suite and teardown suite tests run to completion on the device. You are billed for setup, teardown, and any tests that were in progress or already completed.</p>
@@ -9420,26 +8852,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: StopJobRequest,
     ) -> Result<StopJobResult, RusotoError<StopJobError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.StopJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopJobResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopJobResult, _>()
     }
 
     /// <p>Ends a specified remote access session.</p>
@@ -9447,9 +8870,7 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: StopRemoteAccessSessionRequest,
     ) -> Result<StopRemoteAccessSessionResult, RusotoError<StopRemoteAccessSessionError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.StopRemoteAccessSession",
@@ -9457,20 +8878,13 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StopRemoteAccessSessionResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopRemoteAccessSessionError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopRemoteAccessSessionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StopRemoteAccessSessionResult, _>()
     }
 
     /// <p>Initiates a stop request for the current test run. AWS Device Farm immediately stops the run on devices where tests have not started. You are not billed for these devices. On devices where tests have started executing, setup suite and teardown suite tests run to completion on those devices. You are billed for setup, teardown, and any tests that were in progress or already completed.</p>
@@ -9478,26 +8892,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: StopRunRequest,
     ) -> Result<StopRunResult, RusotoError<StopRunError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.StopRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<StopRunResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StopRunError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StopRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StopRunResult, _>()
     }
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are also deleted.</p>
@@ -9505,26 +8910,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(TagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
     /// <p>Deletes the specified tags from a resource.</p>
@@ -9532,26 +8928,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UntagResourceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
     /// <p>Updates information about a private device instance.</p>
@@ -9559,27 +8946,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateDeviceInstanceRequest,
     ) -> Result<UpdateDeviceInstanceResult, RusotoError<UpdateDeviceInstanceError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateDeviceInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateDeviceInstanceResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDeviceInstanceError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDeviceInstanceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateDeviceInstanceResult, _>()
     }
 
     /// <p>Modifies the name, description, and rules in a device pool given the attributes and the pool ARN. Rule updates are all-or-nothing, meaning they can only be updated as a whole (or not at all).</p>
@@ -9587,26 +8964,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateDevicePoolRequest,
     ) -> Result<UpdateDevicePoolResult, RusotoError<UpdateDevicePoolError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateDevicePool");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateDevicePoolResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateDevicePoolError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateDevicePoolError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateDevicePoolResult, _>()
     }
 
     /// <p>Updates information about an existing private device instance profile.</p>
@@ -9614,27 +8982,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateInstanceProfileRequest,
     ) -> Result<UpdateInstanceProfileResult, RusotoError<UpdateInstanceProfileError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateInstanceProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateInstanceProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateInstanceProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateInstanceProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateInstanceProfileResult, _>()
     }
 
     /// <p>Updates the network profile.</p>
@@ -9642,27 +9000,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateNetworkProfileRequest,
     ) -> Result<UpdateNetworkProfileResult, RusotoError<UpdateNetworkProfileError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateNetworkProfileResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateNetworkProfileError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateNetworkProfileError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateNetworkProfileResult, _>()
     }
 
     /// <p>Modifies the specified project name, given the project ARN and a new name.</p>
@@ -9670,26 +9018,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateProjectRequest,
     ) -> Result<UpdateProjectResult, RusotoError<UpdateProjectError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateProjectResult, _>()
     }
 
     /// <p>Change details of a project.</p>
@@ -9697,27 +9036,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateTestGridProjectRequest,
     ) -> Result<UpdateTestGridProjectResult, RusotoError<UpdateTestGridProjectError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateTestGridProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateTestGridProjectResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateTestGridProjectError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateTestGridProjectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateTestGridProjectResult, _>()
     }
 
     /// <p>Updates an uploaded test spec.</p>
@@ -9725,26 +9054,17 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateUploadRequest,
     ) -> Result<UpdateUploadResult, RusotoError<UpdateUploadError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateUpload");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<UpdateUploadResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateUploadError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateUploadError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateUploadResult, _>()
     }
 
     /// <p>Updates information about an Amazon Virtual Private Cloud (VPC) endpoint configuration.</p>
@@ -9752,9 +9072,7 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateVPCEConfigurationRequest,
     ) -> Result<UpdateVPCEConfigurationResult, RusotoError<UpdateVPCEConfigurationError>> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.UpdateVPCEConfiguration",
@@ -9762,19 +9080,12 @@ impl DeviceFarm for DeviceFarmClient {
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateVPCEConfigurationResult, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVPCEConfigurationError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateVPCEConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateVPCEConfigurationResult, _>()
     }
 }

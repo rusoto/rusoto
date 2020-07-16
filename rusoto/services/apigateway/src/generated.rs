@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>Access log settings, including the access log format and access log destination ARN.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccessLogSettings {
     /// <p>The Amazon Resource Name (ARN) of the CloudWatch Logs log group or Kinesis Data Firehose delivery stream to receive access logs. If you specify a Kinesis Data Firehose delivery stream, the stream name must begin with <code>amazon-apigateway-</code>.</p>
@@ -40,7 +40,7 @@ pub struct AccessLogSettings {
 }
 
 /// <p><p>Represents an AWS account that is associated with API Gateway.</p> <div class="remarks"> <p>To view the account info, call <code>GET</code> on this resource.</p> <h4>Error Codes</h4> <p>The following exception may be thrown when the request fails.</p> <ul> <li>UnauthorizedException</li> <li>NotFoundException</li> <li>TooManyRequestsException</li> </ul> <p>For detailed error code information, including the corresponding HTTP Status Codes, see <a href="https://docs.aws.amazon.com/apigateway/api-reference/handling-errors/#api-error-codes">API Gateway Error Codes</a></p> <h4>Example: Get the information about an account.</h4> <h5>Request</h5> <pre><code>GET /account HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160531T184618Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/account-apigateway-{rel}.html&quot;, &quot;name&quot;: &quot;account&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/account&quot; }, &quot;account:update&quot;: { &quot;href&quot;: &quot;/account&quot; } }, &quot;cloudwatchRoleArn&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;throttleSettings&quot;: { &quot;rateLimit&quot;: 500, &quot;burstLimit&quot;: 1000 } } </code></pre> <p>In addition to making the REST API call directly, you can use the AWS CLI and an AWS SDK to access this resource.</p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-limits.html">API Gateway Limits</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html">Developer Guide</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-account.html">AWS CLI</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Account {
     /// <p>The version of the API keys used for the account.</p>
@@ -62,7 +62,7 @@ pub struct Account {
 }
 
 /// <p><p>A resource that can be distributed to callers for executing <a>Method</a> resources that require an API key. API keys can be mapped to any <a>Stage</a> on any <a>RestApi</a>, which indicates that the callers with the API key can make requests to that stage.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiKey {
     /// <p>The timestamp when the API Key was created.</p>
@@ -108,7 +108,7 @@ pub struct ApiKey {
 }
 
 /// <p>The identifier of an <a>ApiKey</a> used in a <a>UsagePlan</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiKeyIds {
     /// <p>A list of all the <a>ApiKey</a> identifiers.</p>
@@ -122,7 +122,7 @@ pub struct ApiKeyIds {
 }
 
 /// <p><p>Represents a collection of API keys as represented by an <a>ApiKeys</a> resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiKeys {
     /// <p>The current page of elements from this collection.</p>
@@ -139,7 +139,7 @@ pub struct ApiKeys {
 }
 
 /// <p>API stage name of the associated API stage in a usage plan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ApiStage {
     /// <p>API Id of the associated API stage in a usage plan.</p>
     #[serde(rename = "apiId")]
@@ -156,7 +156,7 @@ pub struct ApiStage {
 }
 
 /// <p><p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Authorizer {
     /// <p>Optional customer-defined field, used in OpenAPI imports and exports without functional impact.</p>
@@ -202,7 +202,7 @@ pub struct Authorizer {
 }
 
 /// <p><p>Represents a collection of <a>Authorizer</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Authorizers {
     /// <p>The current page of elements from this collection.</p>
@@ -215,7 +215,7 @@ pub struct Authorizers {
 }
 
 /// <p><p>Represents the base path that callers of the API must provide as part of the URL after the domain name.</p> <div class="remarks">A custom domain name plus a <code>BasePathMapping</code> specification identifies a deployed <a>RestApi</a> in a given stage of the owner <a>Account</a>.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BasePathMapping {
     /// <p>The base path name that callers of the API must provide as part of the URL after the domain name.</p>
@@ -233,7 +233,7 @@ pub struct BasePathMapping {
 }
 
 /// <p><p>Represents a collection of <a>BasePathMapping</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BasePathMappings {
     /// <p>The current page of elements from this collection.</p>
@@ -246,7 +246,7 @@ pub struct BasePathMappings {
 }
 
 /// <p>Configuration settings of a canary deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CanarySettings {
     /// <p>The ID of the canary deployment.</p>
     #[serde(rename = "deploymentId")]
@@ -267,7 +267,7 @@ pub struct CanarySettings {
 }
 
 /// <p><p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class="remarks">Client certificates are used to authenticate an API by the backend server. To authenticate an API client (or user), use IAM roles and policies, a custom <a>Authorizer</a> or an Amazon Cognito user pool.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClientCertificate {
     /// <p>The identifier of the client certificate.</p>
@@ -297,7 +297,7 @@ pub struct ClientCertificate {
 }
 
 /// <p><p>Represents a collection of <a>ClientCertificate</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClientCertificates {
     /// <p>The current page of elements from this collection.</p>
@@ -310,7 +310,7 @@ pub struct ClientCertificates {
 }
 
 /// <p>Request to create an <a>ApiKey</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateApiKeyRequest {
     /// <p>An AWS Marketplace customer identifier , when integrating with the AWS SaaS Marketplace.</p>
@@ -348,7 +348,7 @@ pub struct CreateApiKeyRequest {
 }
 
 /// <p>Request to add a new <a>Authorizer</a> to an existing <a>RestApi</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAuthorizerRequest {
     /// <p>Optional customer-defined field, used in OpenAPI imports and exports without functional impact.</p>
@@ -391,7 +391,7 @@ pub struct CreateAuthorizerRequest {
 }
 
 /// <p>Requests API Gateway to create a new <a>BasePathMapping</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBasePathMappingRequest {
     /// <p>The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Specify '(none)' if you do not want callers to specify a base path name after the domain name.</p>
@@ -411,7 +411,7 @@ pub struct CreateBasePathMappingRequest {
 }
 
 /// <p>Requests API Gateway to create a <a>Deployment</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDeploymentRequest {
     /// <p>Enables a cache cluster for the <a>Stage</a> resource specified in the input.</p>
@@ -452,7 +452,7 @@ pub struct CreateDeploymentRequest {
 }
 
 /// <p>Creates a new documentation part of a given API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentationPartRequest {
     /// <p>[Required] The location of the targeted API entity of the to-be-created documentation part.</p>
@@ -467,7 +467,7 @@ pub struct CreateDocumentationPartRequest {
 }
 
 /// <p>Creates a new documentation version of a given API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentationVersionRequest {
     /// <p>A description about the new documentation snapshot.</p>
@@ -487,7 +487,7 @@ pub struct CreateDocumentationVersionRequest {
 }
 
 /// <p>A request to create a new domain name.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDomainNameRequest {
     /// <p>The reference to an AWS-managed certificate that will be used by edge-optimized endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
@@ -536,7 +536,7 @@ pub struct CreateDomainNameRequest {
 }
 
 /// <p>Request to add a new <a>Model</a> to an existing <a>RestApi</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateModelRequest {
     /// <p>[Required] The content-type for the model.</p>
@@ -559,7 +559,7 @@ pub struct CreateModelRequest {
 }
 
 /// <p>Creates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRequestValidatorRequest {
     /// <p>The name of the to-be-created <a>RequestValidator</a>.</p>
@@ -580,7 +580,7 @@ pub struct CreateRequestValidatorRequest {
 }
 
 /// <p>Requests API Gateway to create a <a>Resource</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResourceRequest {
     /// <p>[Required] The parent resource's identifier.</p>
@@ -595,7 +595,7 @@ pub struct CreateResourceRequest {
 }
 
 /// <p>The POST Request to add a new <a>RestApi</a> resource to your collection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRestApiRequest {
     /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
@@ -640,7 +640,7 @@ pub struct CreateRestApiRequest {
 }
 
 /// <p>Requests API Gateway to create a <a>Stage</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateStageRequest {
     /// <p>Whether cache clustering is enabled for the stage.</p>
@@ -687,7 +687,7 @@ pub struct CreateStageRequest {
 }
 
 /// <p>The POST request to create a usage plan key for adding an existing API key to a usage plan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUsagePlanKeyRequest {
     /// <p>[Required] The identifier of a <a>UsagePlanKey</a> resource for a plan customer.</p>
@@ -702,7 +702,7 @@ pub struct CreateUsagePlanKeyRequest {
 }
 
 /// <p>The POST request to create a usage plan with the name, description, throttle limits and quota limits, as well as the associated API stages, specified in the payload.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUsagePlanRequest {
     /// <p>The associated API stages of the usage plan.</p>
@@ -731,7 +731,7 @@ pub struct CreateUsagePlanRequest {
 }
 
 /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVpcLinkRequest {
     /// <p>The description of the VPC link.</p>
@@ -751,7 +751,7 @@ pub struct CreateVpcLinkRequest {
 }
 
 /// <p>A request to delete the <a>ApiKey</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApiKeyRequest {
     /// <p>[Required] The identifier of the <a>ApiKey</a> resource to be deleted.</p>
@@ -760,7 +760,7 @@ pub struct DeleteApiKeyRequest {
 }
 
 /// <p>Request to delete an existing <a>Authorizer</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAuthorizerRequest {
     /// <p>[Required] The identifier of the <a>Authorizer</a> resource.</p>
@@ -772,7 +772,7 @@ pub struct DeleteAuthorizerRequest {
 }
 
 /// <p>A request to delete the <a>BasePathMapping</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteBasePathMappingRequest {
     /// <p>[Required] The base path name of the <a>BasePathMapping</a> resource to delete.</p> <p>To specify an empty base path, set this parameter to <code>'(none)'</code>.</p>
@@ -784,7 +784,7 @@ pub struct DeleteBasePathMappingRequest {
 }
 
 /// <p>A request to delete the <a>ClientCertificate</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteClientCertificateRequest {
     /// <p>[Required] The identifier of the <a>ClientCertificate</a> resource to be deleted.</p>
@@ -793,7 +793,7 @@ pub struct DeleteClientCertificateRequest {
 }
 
 /// <p>Requests API Gateway to delete a <a>Deployment</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDeploymentRequest {
     /// <p>[Required] The identifier of the <a>Deployment</a> resource to delete.</p>
@@ -805,7 +805,7 @@ pub struct DeleteDeploymentRequest {
 }
 
 /// <p>Deletes an existing documentation part of an API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentationPartRequest {
     /// <p>[Required] The identifier of the to-be-deleted documentation part.</p>
@@ -817,7 +817,7 @@ pub struct DeleteDocumentationPartRequest {
 }
 
 /// <p>Deletes an existing documentation version of an API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDocumentationVersionRequest {
     /// <p>[Required] The version identifier of a to-be-deleted documentation snapshot.</p>
@@ -829,7 +829,7 @@ pub struct DeleteDocumentationVersionRequest {
 }
 
 /// <p>A request to delete the <a>DomainName</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDomainNameRequest {
     /// <p>[Required] The name of the <a>DomainName</a> resource to be deleted.</p>
@@ -838,7 +838,7 @@ pub struct DeleteDomainNameRequest {
 }
 
 /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteGatewayResponseRequest {
     /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
@@ -850,7 +850,7 @@ pub struct DeleteGatewayResponseRequest {
 }
 
 /// <p>Represents a delete integration request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationRequest {
     /// <p>[Required] Specifies a delete integration request's HTTP method.</p>
@@ -865,7 +865,7 @@ pub struct DeleteIntegrationRequest {
 }
 
 /// <p>Represents a delete integration response request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationResponseRequest {
     /// <p>[Required] Specifies a delete integration response request's HTTP method.</p>
@@ -883,7 +883,7 @@ pub struct DeleteIntegrationResponseRequest {
 }
 
 /// <p>Request to delete an existing <a>Method</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMethodRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
@@ -898,7 +898,7 @@ pub struct DeleteMethodRequest {
 }
 
 /// <p>A request to delete an existing <a>MethodResponse</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMethodResponseRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
@@ -916,7 +916,7 @@ pub struct DeleteMethodResponseRequest {
 }
 
 /// <p>Request to delete an existing model in an existing <a>RestApi</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteModelRequest {
     /// <p>[Required] The name of the model to delete.</p>
@@ -928,7 +928,7 @@ pub struct DeleteModelRequest {
 }
 
 /// <p>Deletes a specified <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRequestValidatorRequest {
     /// <p>[Required] The identifier of the <a>RequestValidator</a> to be deleted.</p>
@@ -940,7 +940,7 @@ pub struct DeleteRequestValidatorRequest {
 }
 
 /// <p>Request to delete a <a>Resource</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteResourceRequest {
     /// <p>[Required] The identifier of the <a>Resource</a> resource.</p>
@@ -952,7 +952,7 @@ pub struct DeleteResourceRequest {
 }
 
 /// <p>Request to delete the specified API from your collection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRestApiRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
@@ -961,7 +961,7 @@ pub struct DeleteRestApiRequest {
 }
 
 /// <p>Requests API Gateway to delete a <a>Stage</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteStageRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
@@ -973,7 +973,7 @@ pub struct DeleteStageRequest {
 }
 
 /// <p>The DELETE request to delete a usage plan key and remove the underlying API key from the associated usage plan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUsagePlanKeyRequest {
     /// <p>[Required] The Id of the <a>UsagePlanKey</a> resource to be deleted.</p>
@@ -985,7 +985,7 @@ pub struct DeleteUsagePlanKeyRequest {
 }
 
 /// <p>The DELETE request to delete a usage plan of a given plan Id.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUsagePlanRequest {
     /// <p>[Required] The Id of the to-be-deleted usage plan.</p>
@@ -994,7 +994,7 @@ pub struct DeleteUsagePlanRequest {
 }
 
 /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVpcLinkRequest {
     /// <p>[Required] The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
@@ -1003,7 +1003,7 @@ pub struct DeleteVpcLinkRequest {
 }
 
 /// <p><p>An immutable representation of a <a>RestApi</a> resource that can be called by users using <a>Stages</a>. A deployment must be associated with a <a>Stage</a> for it to be callable over the Internet.</p> <div class="remarks">To create a deployment, call <code>POST</code> on the <a>Deployments</a> resource of a <a>RestApi</a>. To view, update, or delete a deployment, call <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> on the specified deployment resource (<code>/restapis/{restapi<em>id}/deployments/{deployment</em>id}</code>).</div> <div class="seeAlso"><a>RestApi</a>, <a>Deployments</a>, <a>Stage</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployment {
     /// <p>A summary of the <a>RestApi</a> at the date and time that the deployment resource was created.</p>
@@ -1027,7 +1027,7 @@ pub struct Deployment {
 }
 
 /// <p>The input configuration for a canary deployment.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeploymentCanarySettings {
     /// <p>The percentage (0.0-100.0) of traffic routed to the canary deployment.</p>
@@ -1045,7 +1045,7 @@ pub struct DeploymentCanarySettings {
 }
 
 /// <p><p>Represents a collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p> <div class="remarks">To create a new deployment of a <a>RestApi</a>, make a <code>POST</code> request against this resource. To view, update, or delete an existing deployment, make a <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> request, respectively, on a specified <a>Deployment</a> resource.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploying an API</a>, <a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployments {
     /// <p>The current page of elements from this collection.</p>
@@ -1058,7 +1058,7 @@ pub struct Deployments {
 }
 
 /// <p><p>A documentation part for a targeted API entity.</p> <div class="remarks"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH<em>PARAMETER</code>, <code>QUERY</em>PARAMETER</code>, <code>REQUEST<em>HEADER</code>, <code>REQUEST</em>BODY</code>, <code>RESPONSE</code>, <code>RESPONSE<em>HEADER</code>, and <code>RESPONSE</em>BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the OpenAPI-compliant documentation fields will be injected into the associated API entity definition in the exported OpenAPI definition file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationParts</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentationPart {
     /// <p>The <a>DocumentationPart</a> identifier, generated by API Gateway when the <code>DocumentationPart</code> is created.</p>
@@ -1076,7 +1076,7 @@ pub struct DocumentationPart {
 }
 
 /// <p><p>A collection of the imported <a>DocumentationPart</a> identifiers.</p> <div class="remarks">This is used to return the result when documentation parts in an external (e.g., OpenAPI) file are imported into API Gateway</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a href="https://docs.aws.amazon.com/apigateway/api-reference/link-relation/documentationpart-import/">documentationpart:import</a>, <a>DocumentationPart</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentationPartIds {
     /// <p>A list of the returned documentation part identifiers.</p>
@@ -1090,7 +1090,7 @@ pub struct DocumentationPartIds {
 }
 
 /// <p>Specifies the target API entity to which the documentation applies.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentationPartLocation {
     /// <p>The HTTP verb of a method. It is a valid field for the API entity types of <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. The default value is <code>*</code> for any method. When an applicable child entity inherits the content of an entity of the same type with more general specifications of the other <code>location</code> attributes, the child entity's <code>method</code> attribute must match that of the parent entity exactly.</p>
     #[serde(rename = "method")]
@@ -1114,7 +1114,7 @@ pub struct DocumentationPartLocation {
 }
 
 /// <p><p>The collection of documentation parts of an API.</p> <div class="remarks"/> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentationParts {
     /// <p>The current page of elements from this collection.</p>
@@ -1127,7 +1127,7 @@ pub struct DocumentationParts {
 }
 
 /// <p><p>A snapshot of the documentation of an API.</p> <div class="remarks"><p>Publishing API documentation involves creating a documentation version associated with an API stage and exporting the versioned documentation to an external (e.g., OpenAPI) file.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersions</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentationVersion {
     /// <p>The date when the API documentation snapshot is created.</p>
@@ -1145,7 +1145,7 @@ pub struct DocumentationVersion {
 }
 
 /// <p><p>The collection of documentation snapshots of an API. </p> <div class="remarks"><p>Use the <a>DocumentationVersions</a> to manage documentation snapshots associated with various API stages.</p></div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersion</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentationVersions {
     /// <p>The current page of elements from this collection.</p>
@@ -1158,7 +1158,7 @@ pub struct DocumentationVersions {
 }
 
 /// <p><p>Represents a custom domain name as a user-friendly host name of an API (<a>RestApi</a>).</p> <div class="Remarks"> <p>When you deploy an API, API Gateway creates a default host name for the API. This default API host name is of the <code>{restapi-id}.execute-api.{region}.amazonaws.com</code> format. With the default host name, you can access the API&#39;s root resource with the URL of <code>https://{restapi-id}.execute-api.{region}.amazonaws.com/{stage}/</code>. When you set up a custom domain name of <code>apis.example.com</code> for this API, you can then access the same resource using the URL of the <code>https://apis.examples.com/myApi</code>, where <code>myApi</code> is the base path mapping (<a>BasePathMapping</a>) of your API under the custom domain name. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Set a Custom Host Name for an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainName {
     /// <p>The reference to an AWS-managed certificate that will be used by edge-optimized endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
@@ -1224,7 +1224,7 @@ pub struct DomainName {
 }
 
 /// <p><p>Represents a collection of <a>DomainName</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainNames {
     /// <p>The current page of elements from this collection.</p>
@@ -1237,7 +1237,7 @@ pub struct DomainNames {
 }
 
 /// <p>The endpoint configuration to indicate the types of endpoints an API (<a>RestApi</a>) or its custom domain name (<a>DomainName</a>) has. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EndpointConfiguration {
     /// <p>A list of endpoint types of an API (<a>RestApi</a>) or its custom domain name (<a>DomainName</a>). For an edge-optimized API and its custom domain name, the endpoint type is <code>"EDGE"</code>. For a regional API and its custom domain name, the endpoint type is <code>REGIONAL</code>. For a private API, the endpoint type is <code>PRIVATE</code>.</p>
     #[serde(rename = "types")]
@@ -1250,7 +1250,7 @@ pub struct EndpointConfiguration {
 }
 
 /// <p>The binary blob response to <a>GetExport</a>, which contains the generated SDK.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct ExportResponse {
     /// <p>The binary blob response to <a>GetExport</a>, which contains the export.</p>
     pub body: Option<bytes::Bytes>,
@@ -1261,7 +1261,7 @@ pub struct ExportResponse {
 }
 
 /// <p>Request to flush authorizer cache entries on a specified stage.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlushStageAuthorizersCacheRequest {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
@@ -1273,7 +1273,7 @@ pub struct FlushStageAuthorizersCacheRequest {
 }
 
 /// <p>Requests API Gateway to flush a stage's cache.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlushStageCacheRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
@@ -1285,7 +1285,7 @@ pub struct FlushStageCacheRequest {
 }
 
 /// <p><p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING<em>AUTHENTICATION</em>TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; } }, &quot;defaultResponse&quot;: false, &quot;responseParameters&quot;: { &quot;gatewayresponse.header.x-request-path&quot;: &quot;method.request.path.petId&quot;, &quot;gatewayresponse.header.Access-Control-Allow-Origin&quot;: &quot;&apos;a.b.c&apos;&quot;, &quot;gatewayresponse.header.x-request-query&quot;: &quot;method.request.querystring.q&quot;, &quot;gatewayresponse.header.x-request-header&quot;: &quot;method.request.header.Accept&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;message&quot;: $context.error.messageString,\n &quot;type&quot;: &quot;$context.error.responseType&quot;,\n &quot;stage&quot;: &quot;$context.stage&quot;,\n &quot;resourcePath&quot;: &quot;$context.resourcePath&quot;,\n &quot;stageVariables.a&quot;: &quot;$stageVariables.a&quot;,\n &quot;statusCode&quot;: &quot;&apos;404&apos;&quot;\n}&quot; }, &quot;responseType&quot;: &quot;MISSING</em>AUTHENTICATION_TOKEN&quot;, &quot;statusCode&quot;: &quot;404&quot; }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GatewayResponse {
     /// <p>A Boolean flag to indicate whether this <a>GatewayResponse</a> is the default gateway response (<code>true</code>) or not (<code>false</code>). A default gateway response is one generated by API Gateway without any customization by an API developer. </p>
@@ -1311,7 +1311,7 @@ pub struct GatewayResponse {
 }
 
 /// <p><p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p></p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;first&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;gatewayresponse:by-type&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;item&quot;: [ { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>FAILURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>5XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>4XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED<em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS</em>DENIED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA<em>EXCEEDED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>TIMEOUT&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>SIGNATURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>FAILURE&quot; } ] }, &quot;<em>embedded&quot;: { &quot;item&quot;: [ { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE</em>NOT<em>FOUND&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;RESOURCE<em>NOT</em>FOUND&quot;, &quot;statusCode&quot;: &quot;404&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST</em>TOO<em>LARGE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;REQUEST<em>TOO</em>LARGE&quot;, &quot;statusCode&quot;: &quot;413&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;THROTTLED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED</em>MEDIA<em>TYPE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNSUPPORTED<em>MEDIA</em>TYPE&quot;, &quot;statusCode&quot;: &quot;415&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT<em>5XX&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT</em>4XX&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>PARAMETERS&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>PARAMETERS&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>BODY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>BODY&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;EXPIRED<em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;ACCESS</em>DENIED&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>API<em>KEY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>API</em>KEY&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNAUTHORIZED&quot;, &quot;statusCode&quot;: &quot;401&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;API<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;QUOTA<em>EXCEEDED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>TIMEOUT&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;MISSING<em>AUTHENTICATION</em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>SIGNATURE&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;500&quot; } ] } }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GatewayResponses {
     /// <p>Returns the entire collection, because of no pagination support.</p>
@@ -1324,7 +1324,7 @@ pub struct GatewayResponses {
 }
 
 /// <p>A request to generate a <a>ClientCertificate</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GenerateClientCertificateRequest {
     /// <p>The description of the <a>ClientCertificate</a>.</p>
@@ -1338,12 +1338,12 @@ pub struct GenerateClientCertificateRequest {
 }
 
 /// <p>Requests API Gateway to get information about the current <a>Account</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountRequest {}
 
 /// <p>A request to get information about the current <a>ApiKey</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiKeyRequest {
     /// <p>[Required] The identifier of the <a>ApiKey</a> resource.</p>
@@ -1356,7 +1356,7 @@ pub struct GetApiKeyRequest {
 }
 
 /// <p>A request to get information about the current <a>ApiKeys</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetApiKeysRequest {
     /// <p>The identifier of a customer in AWS Marketplace or an external system, such as a developer portal.</p>
@@ -1382,7 +1382,7 @@ pub struct GetApiKeysRequest {
 }
 
 /// <p>Request to describe an existing <a>Authorizer</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizerRequest {
     /// <p>[Required] The identifier of the <a>Authorizer</a> resource.</p>
@@ -1394,7 +1394,7 @@ pub struct GetAuthorizerRequest {
 }
 
 /// <p>Request to describe an existing <a>Authorizers</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAuthorizersRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1411,7 +1411,7 @@ pub struct GetAuthorizersRequest {
 }
 
 /// <p>Request to describe a <a>BasePathMapping</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBasePathMappingRequest {
     /// <p>[Required] The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Specify '(none)' if you do not want callers to specify any base path name after the domain name.</p>
@@ -1423,7 +1423,7 @@ pub struct GetBasePathMappingRequest {
 }
 
 /// <p>A request to get information about a collection of <a>BasePathMapping</a> resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBasePathMappingsRequest {
     /// <p>[Required] The domain name of a <a>BasePathMapping</a> resource.</p>
@@ -1440,7 +1440,7 @@ pub struct GetBasePathMappingsRequest {
 }
 
 /// <p>A request to get information about the current <a>ClientCertificate</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClientCertificateRequest {
     /// <p>[Required] The identifier of the <a>ClientCertificate</a> resource to be described.</p>
@@ -1449,7 +1449,7 @@ pub struct GetClientCertificateRequest {
 }
 
 /// <p>A request to get information about a collection of <a>ClientCertificate</a> resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetClientCertificatesRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1463,7 +1463,7 @@ pub struct GetClientCertificatesRequest {
 }
 
 /// <p>Requests API Gateway to get information about a <a>Deployment</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentRequest {
     /// <p>[Required] The identifier of the <a>Deployment</a> resource to get information about.</p>
@@ -1479,7 +1479,7 @@ pub struct GetDeploymentRequest {
 }
 
 /// <p>Requests API Gateway to get information about a <a>Deployments</a> collection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeploymentsRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1496,7 +1496,7 @@ pub struct GetDeploymentsRequest {
 }
 
 /// <p>Gets a specified documentation part of a given API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationPartRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
@@ -1508,7 +1508,7 @@ pub struct GetDocumentationPartRequest {
 }
 
 /// <p>Gets the documentation parts of an API. The result may be filtered by the type, name, or path of API entities (targets).</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationPartsRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1541,7 +1541,7 @@ pub struct GetDocumentationPartsRequest {
 }
 
 /// <p>Gets a documentation snapshot of an API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationVersionRequest {
     /// <p>[Required] The version identifier of the to-be-retrieved documentation snapshot.</p>
@@ -1553,7 +1553,7 @@ pub struct GetDocumentationVersionRequest {
 }
 
 /// <p>Gets the documentation versions of an API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDocumentationVersionsRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1570,7 +1570,7 @@ pub struct GetDocumentationVersionsRequest {
 }
 
 /// <p>Request to get the name of a <a>DomainName</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNameRequest {
     /// <p>[Required] The name of the <a>DomainName</a> resource.</p>
@@ -1579,7 +1579,7 @@ pub struct GetDomainNameRequest {
 }
 
 /// <p>Request to describe a collection of <a>DomainName</a> resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDomainNamesRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1593,7 +1593,7 @@ pub struct GetDomainNamesRequest {
 }
 
 /// <p>Request a new export of a <a>RestApi</a> for a particular <a>Stage</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetExportRequest {
     /// <p>The content-type of the export, for example <code>application/json</code>. Currently <code>application/json</code> and <code>application/yaml</code> are supported for <code>exportType</code> of<code>oas30</code> and <code>swagger</code>. This should be specified in the <code>Accept</code> header for direct API requests.</p>
@@ -1616,7 +1616,7 @@ pub struct GetExportRequest {
 }
 
 /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayResponseRequest {
     /// <p>[Required] <p>The response type of the associated <a>GatewayResponse</a>. Valid values are <ul><li>ACCESS_DENIED</li><li>API_CONFIGURATION_ERROR</li><li>AUTHORIZER_FAILURE</li><li> AUTHORIZER_CONFIGURATION_ERROR</li><li>BAD_REQUEST_PARAMETERS</li><li>BAD_REQUEST_BODY</li><li>DEFAULT_4XX</li><li>DEFAULT_5XX</li><li>EXPIRED_TOKEN</li><li>INVALID_SIGNATURE</li><li>INTEGRATION_FAILURE</li><li>INTEGRATION_TIMEOUT</li><li>INVALID_API_KEY</li><li>MISSING_AUTHENTICATION_TOKEN</li><li> QUOTA_EXCEEDED</li><li>REQUEST_TOO_LARGE</li><li>RESOURCE_NOT_FOUND</li><li>THROTTLED</li><li>UNAUTHORIZED</li><li>UNSUPPORTED_MEDIA_TYPE</li></ul> </p></p>
@@ -1628,7 +1628,7 @@ pub struct GetGatewayResponseRequest {
 }
 
 /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetGatewayResponsesRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500. The <a>GatewayResponses</a> collection does not support pagination and the limit does not apply here.</p>
@@ -1645,7 +1645,7 @@ pub struct GetGatewayResponsesRequest {
 }
 
 /// <p>Represents a request to get the integration configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationRequest {
     /// <p>[Required] Specifies a get integration request's HTTP method.</p>
@@ -1660,7 +1660,7 @@ pub struct GetIntegrationRequest {
 }
 
 /// <p>Represents a get integration response request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetIntegrationResponseRequest {
     /// <p>[Required] Specifies a get integration response request's HTTP method.</p>
@@ -1678,7 +1678,7 @@ pub struct GetIntegrationResponseRequest {
 }
 
 /// <p>Request to describe an existing <a>Method</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMethodRequest {
     /// <p>[Required] Specifies the method request's HTTP method type.</p>
@@ -1693,7 +1693,7 @@ pub struct GetMethodRequest {
 }
 
 /// <p>Request to describe a <a>MethodResponse</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMethodResponseRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
@@ -1711,7 +1711,7 @@ pub struct GetMethodResponseRequest {
 }
 
 /// <p>Request to list information about a model in an existing <a>RestApi</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelRequest {
     /// <p>A query parameter of a Boolean value to resolve (<code>true</code>) all external model references and returns a flattened model schema or not (<code>false</code>) The default is <code>false</code>.</p>
@@ -1727,7 +1727,7 @@ pub struct GetModelRequest {
 }
 
 /// <p>Request to generate a sample mapping template used to transform the payload.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelTemplateRequest {
     /// <p>[Required] The name of the model for which to generate a template.</p>
@@ -1739,7 +1739,7 @@ pub struct GetModelTemplateRequest {
 }
 
 /// <p>Request to list existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetModelsRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1756,7 +1756,7 @@ pub struct GetModelsRequest {
 }
 
 /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRequestValidatorRequest {
     /// <p>[Required] The identifier of the <a>RequestValidator</a> to be retrieved.</p>
@@ -1768,7 +1768,7 @@ pub struct GetRequestValidatorRequest {
 }
 
 /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRequestValidatorsRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1785,7 +1785,7 @@ pub struct GetRequestValidatorsRequest {
 }
 
 /// <p>Request to list information about a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceRequest {
     /// <p>A query parameter to retrieve the specified resources embedded in the returned <a>Resource</a> representation in the response. This <code>embed</code> parameter value is a list of comma-separated strings. Currently, the request supports only retrieval of the embedded <a>Method</a> resources this way. The query parameter value must be a single-valued list and contain the <code>"methods"</code> string. For example, <code>GET /restapis/{restapi_id}/resources/{resource_id}?embed=methods</code>.</p>
@@ -1801,7 +1801,7 @@ pub struct GetResourceRequest {
 }
 
 /// <p>Request to list information about a collection of resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourcesRequest {
     /// <p>A query parameter used to retrieve the specified resources embedded in the returned <a>Resources</a> resource in the response. This <code>embed</code> parameter value is a list of comma-separated strings. Currently, the request supports only retrieval of the embedded <a>Method</a> resources this way. The query parameter value must be a single-valued list and contain the <code>"methods"</code> string. For example, <code>GET /restapis/{restapi_id}/resources?embed=methods</code>.</p>
@@ -1822,7 +1822,7 @@ pub struct GetResourcesRequest {
 }
 
 /// <p>The GET request to list an existing <a>RestApi</a> defined for your collection. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRestApiRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
@@ -1831,7 +1831,7 @@ pub struct GetRestApiRequest {
 }
 
 /// <p>The GET request to list existing <a>RestApis</a> defined for your collection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRestApisRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1845,7 +1845,7 @@ pub struct GetRestApisRequest {
 }
 
 /// <p>Request a new generated client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSdkRequest {
     /// <p>A string-to-string key-value map of query parameters <code>sdkType</code>-dependent properties of the SDK. For <code>sdkType</code> of <code>objectivec</code> or <code>swift</code>, a parameter named <code>classPrefix</code> is required. For <code>sdkType</code> of <code>android</code>, parameters named <code>groupId</code>, <code>artifactId</code>, <code>artifactVersion</code>, and <code>invokerPackage</code> are required. For <code>sdkType</code> of <code>java</code>, parameters named <code>serviceName</code> and <code>javaPackageName</code> are required. </p>
@@ -1864,7 +1864,7 @@ pub struct GetSdkRequest {
 }
 
 /// <p>Get an <a>SdkType</a> instance.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSdkTypeRequest {
     /// <p>[Required] The identifier of the queried <a>SdkType</a> instance.</p>
@@ -1873,7 +1873,7 @@ pub struct GetSdkTypeRequest {
 }
 
 /// <p>Get the <a>SdkTypes</a> collection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSdkTypesRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1887,7 +1887,7 @@ pub struct GetSdkTypesRequest {
 }
 
 /// <p>Requests API Gateway to get information about a <a>Stage</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStageRequest {
     /// <p>[Required] The string identifier of the associated <a>RestApi</a>.</p>
@@ -1899,7 +1899,7 @@ pub struct GetStageRequest {
 }
 
 /// <p>Requests API Gateway to get information about one or more <a>Stage</a> resources.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetStagesRequest {
     /// <p>The stages' deployment identifiers.</p>
@@ -1912,7 +1912,7 @@ pub struct GetStagesRequest {
 }
 
 /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
     /// <p>(Not currently supported) The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1929,7 +1929,7 @@ pub struct GetTagsRequest {
 }
 
 /// <p>The GET request to get a usage plan key of a given key identifier.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlanKeyRequest {
     /// <p>[Required] The key Id of the to-be-retrieved <a>UsagePlanKey</a> resource representing a plan customer.</p>
@@ -1941,7 +1941,7 @@ pub struct GetUsagePlanKeyRequest {
 }
 
 /// <p>The GET request to get all the usage plan keys representing the API keys added to a specified usage plan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlanKeysRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -1962,7 +1962,7 @@ pub struct GetUsagePlanKeysRequest {
 }
 
 /// <p>The GET request to get a usage plan of a given plan identifier.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlanRequest {
     /// <p>[Required] The identifier of the <a>UsagePlan</a> resource to be retrieved.</p>
@@ -1971,7 +1971,7 @@ pub struct GetUsagePlanRequest {
 }
 
 /// <p>The GET request to get all the usage plans of the caller's account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsagePlansRequest {
     /// <p>The identifier of the API key associated with the usage plans.</p>
@@ -1989,7 +1989,7 @@ pub struct GetUsagePlansRequest {
 }
 
 /// <p>The GET request to get the usage data of a usage plan in a specified time interval.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsageRequest {
     /// <p>[Required] The ending date (e.g., 2016-12-31) of the usage data.</p>
@@ -2016,7 +2016,7 @@ pub struct GetUsageRequest {
 }
 
 /// <p>Gets a specified VPC link under the caller's account in a region.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVpcLinkRequest {
     /// <p>[Required] The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
@@ -2025,7 +2025,7 @@ pub struct GetVpcLinkRequest {
 }
 
 /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVpcLinksRequest {
     /// <p>The maximum number of returned results per page. The default value is 25 and the maximum value is 500.</p>
@@ -2039,7 +2039,7 @@ pub struct GetVpcLinksRequest {
 }
 
 /// <p>The POST request to import API keys from an external source, such as a CSV-formatted file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportApiKeysRequest {
     /// <p>The payload of the POST request to import API keys. For the payload format, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-key-file-format.html">API Key File Format</a>.</p>
@@ -2060,7 +2060,7 @@ pub struct ImportApiKeysRequest {
 }
 
 /// <p>Import documentation parts from an external (e.g., OpenAPI) definition file. </p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportDocumentationPartsRequest {
     /// <p>[Required] Raw byte array representing the to-be-imported documentation parts. To import from an OpenAPI file, this is a JSON object.</p>
@@ -2085,10 +2085,10 @@ pub struct ImportDocumentationPartsRequest {
 }
 
 /// <p>A POST request to import an API to API Gateway using an input of an API definition file.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportRestApiRequest {
-    /// <p>[Required] The POST request body containing external API definitions. Currently, only OpenAPI definition JSON/YAML files are supported. The maximum size of the API definition file is 2MB.</p>
+    /// <p>[Required] The POST request body containing external API definitions. Currently, only OpenAPI definition JSON/YAML files are supported. The maximum size of the API definition file is 6MB.</p>
     #[serde(rename = "body")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -2107,14 +2107,14 @@ pub struct ImportRestApiRequest {
 }
 
 /// <p><p>Represents an HTTP, HTTP<em>PROXY, AWS, AWS</em>PROXY, or Mock integration.</p> <div class="remarks">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Integration {
     /// <p>A list of request parameters whose values API Gateway caches. To be valid values for <code>cacheKeyParameters</code>, these parameters must also be specified for <a>Method</a> <code>requestParameters</code>.</p>
     #[serde(rename = "cacheKeyParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_key_parameters: Option<Vec<String>>,
-    /// <p>An API-specific tag group of related cached parameters. To be valid values for <code>cacheKeyParameters</code>, these parameters must also be specified for <a>Method</a> <code>requestParameters</code>.</p>
+    /// <p>Specifies a group of related cached parameters. By default, API Gateway uses the resource ID as the <code>cacheNamespace</code>. You can specify the same <code>cacheNamespace</code> across resources to return the same cached data for requests to different resources.</p>
     #[serde(rename = "cacheNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_namespace: Option<String>,
@@ -2158,6 +2158,10 @@ pub struct Integration {
     #[serde(rename = "timeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+    /// <p>Specifies the TLS configuration for an integration.</p>
+    #[serde(rename = "tlsConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_config: Option<TlsConfig>,
     /// <p>Specifies an API method integration type. The valid value is one of the following:</p> <ul> <li><code>AWS</code>: for integrating the API method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</li> <li><code>AWS_PROXY</code>: for integrating the API method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as the Lambda proxy integration.</li> <li><code>HTTP</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</li> <li><code>HTTP_PROXY</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as the HTTP proxy integration.</li> <li><code>MOCK</code>: for integrating the API method request with API Gateway as a "loop-back" endpoint without invoking any backend.</li> </ul> <p>For the HTTP and HTTP proxy integrations, each integration can specify a protocol (<code>http/https</code>), port and path. Standard 80 and 443 ports are supported as well as custom ports above 1024. An HTTP or HTTP proxy integration with a <code>connectionType</code> of <code>VPC_LINK</code> is referred to as a private integration and uses a <a>VpcLink</a> to connect API Gateway to a network load balancer of a VPC.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2169,7 +2173,7 @@ pub struct Integration {
 }
 
 /// <p><p>Represents an integration response. The status code must map to an existing <a>MethodResponse</a>, and parameters and templates can be used to transform the back-end response.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IntegrationResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>
@@ -2195,7 +2199,7 @@ pub struct IntegrationResponse {
 }
 
 /// <p><p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class="remarks"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: true, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E&quot;)&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference">$util.urlDecode()</a> helper function.</p> </div> <div class="seeAlso"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html">Set up an API&#39;s method</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Method {
     /// <p>A boolean flag specifying whether a valid <a>ApiKey</a> is required to invoke this method.</p>
@@ -2245,7 +2249,7 @@ pub struct Method {
 }
 
 /// <p><p>Represents a method response of a given HTTP status code returned to the client. The method response is passed from the back end through the associated integration response that can be transformed using a mapping template. </p> <div class="remarks"> <p/> <h4>Example: A <b>MethodResponse</b> instance of an API</h4> <h5>Request</h5> <p>The example request retrieves a <b>MethodResponse</b> of the 200 status code.</p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T222952Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;https://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a>Method</a>, <a>IntegrationResponse</a>, <a>Integration</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MethodResponse {
     /// <p>Specifies the <a>Model</a> resources used for the response's content-type. Response models are represented as a key/value map, with a content-type as the key and a <a>Model</a> name as the value.</p>
@@ -2263,7 +2267,7 @@ pub struct MethodResponse {
 }
 
 /// <p>Specifies the method setting properties.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MethodSetting {
     /// <p>Specifies whether the cached responses are encrypted. The PATCH path for this setting is <code>/{method_setting_key}/caching/dataEncrypted</code>, and the value is a Boolean.</p>
@@ -2309,7 +2313,7 @@ pub struct MethodSetting {
 }
 
 /// <p>Represents a summary of a <a>Method</a> resource, given a particular date and time.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MethodSnapshot {
     /// <p>Specifies whether the method requires a valid <a>ApiKey</a>.</p>
@@ -2323,7 +2327,7 @@ pub struct MethodSnapshot {
 }
 
 /// <p><p>Represents the data structure of a method&#39;s request or response payload.</p> <div class="remarks"> <p>A request model defines the data structure of the client-supplied request payload. A response model defines the data structure of the response payload returned by the back end. Although not required, models are useful for mapping payloads between the front end and back end.</p> <p>A model is used for generating an API&#39;s SDK, validating the input request body, and creating a skeletal mapping template.</p> </div> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Model {
     /// <p>The content-type for the model.</p>
@@ -2349,7 +2353,7 @@ pub struct Model {
 }
 
 /// <p><p>Represents a collection of <a>Model</a> resources.</p> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Models {
     /// <p>The current page of elements from this collection.</p>
@@ -2362,7 +2366,7 @@ pub struct Models {
 }
 
 /// <p>A single patch operation to apply to the specified resource. Please refer to http://tools.ietf.org/html/rfc6902#section-4 for an explanation of how each operation is used.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PatchOperation {
     /// <p>The <code>copy</code> update operation's source as identified by a <code>JSON-Pointer</code> value referencing the location within the targeted resource to copy the value from. For example, to promote a canary deployment, you copy the canary deployment ID to the affiliated deployment ID by calling a PATCH request on a <a>Stage</a> resource with <code>"op":"copy"</code>, <code>"from":"/canarySettings/deploymentId"</code> and <code>"path":"/deploymentId"</code>.</p>
@@ -2384,7 +2388,7 @@ pub struct PatchOperation {
 }
 
 /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutGatewayResponseRequest {
     /// <p><p>Response parameters (paths, query strings and headers) of the <a>GatewayResponse</a> as a string-to-string map of key-value pairs.</p></p>
@@ -2408,14 +2412,14 @@ pub struct PutGatewayResponseRequest {
 }
 
 /// <p>Sets up a method's integration.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutIntegrationRequest {
-    /// <p>An API-specific tag group of related cached parameters.</p>
+    /// <p>A list of request parameters whose values API Gateway caches. To be valid values for <code>cacheKeyParameters</code>, these parameters must also be specified for <a>Method</a> <code>requestParameters</code>.</p>
     #[serde(rename = "cacheKeyParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_key_parameters: Option<Vec<String>>,
-    /// <p>A list of request parameters whose values are to be cached.</p>
+    /// <p>Specifies a group of related cached parameters. By default, API Gateway uses the resource ID as the <code>cacheNamespace</code>. You can specify the same <code>cacheNamespace</code> across resources to return the same cached data for requests to different resources.</p>
     #[serde(rename = "cacheNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_namespace: Option<String>,
@@ -2464,6 +2468,9 @@ pub struct PutIntegrationRequest {
     #[serde(rename = "timeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+    #[serde(rename = "tlsConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_config: Option<TlsConfig>,
     /// <p>[Required] Specifies a put integration input's type.</p>
     #[serde(rename = "type")]
     pub type_: String,
@@ -2474,7 +2481,7 @@ pub struct PutIntegrationRequest {
 }
 
 /// <p>Represents a put integration response request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutIntegrationResponseRequest {
     /// <p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>
@@ -2508,7 +2515,7 @@ pub struct PutIntegrationResponseRequest {
 }
 
 /// <p>Request to add a method to an existing <a>Resource</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMethodRequest {
     /// <p>Specifies whether the method required a valid <a>ApiKey</a>.</p>
@@ -2554,7 +2561,7 @@ pub struct PutMethodRequest {
 }
 
 /// <p>Request to add a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutMethodResponseRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
@@ -2580,10 +2587,10 @@ pub struct PutMethodResponseRequest {
 }
 
 /// <p>A PUT request to update an existing API, with external API definitions specified as the request body.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRestApiRequest {
-    /// <p>[Required] The PUT request body containing external API definitions. Currently, only OpenAPI definition JSON/YAML files are supported. The maximum size of the API definition file is 2MB.</p>
+    /// <p>[Required] The PUT request body containing external API definitions. Currently, only OpenAPI definition JSON/YAML files are supported. The maximum size of the API definition file is 6MB.</p>
     #[serde(rename = "body")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -2609,7 +2616,7 @@ pub struct PutRestApiRequest {
 }
 
 /// <p>Quotas configured for a usage plan.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct QuotaSettings {
     /// <p>The maximum number of requests that can be made in a given time period.</p>
     #[serde(rename = "limit")]
@@ -2626,7 +2633,7 @@ pub struct QuotaSettings {
 }
 
 /// <p><p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class="remarks"> <p>In OpenAPI, a <a>RequestValidator</a> of an API is defined by the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestValidator {
     /// <p>The identifier of this <a>RequestValidator</a>.</p>
@@ -2648,7 +2655,7 @@ pub struct RequestValidator {
 }
 
 /// <p><p>A collection of <a>RequestValidator</a> resources of a given <a>RestApi</a>.</p> <div class="remarks"> <p>In OpenAPI, the <a>RequestValidators</a> of an API is defined by the <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.html">x-amazon-apigateway-request-validators</a> extension.</p> </div> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestValidators {
     /// <p>The current page of elements from this collection.</p>
@@ -2661,7 +2668,7 @@ pub struct RequestValidators {
 }
 
 /// <p><p>Represents an API resource.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resource {
     /// <p>The resource's identifier.</p>
@@ -2687,7 +2694,7 @@ pub struct Resource {
 }
 
 /// <p><p>Represents a collection of <a>Resource</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resources {
     /// <p>The current page of elements from this collection.</p>
@@ -2700,7 +2707,7 @@ pub struct Resources {
 }
 
 /// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestApi {
     /// <p>The source of the API key for metering requests according to a usage plan. Valid values are: <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
@@ -2754,7 +2761,7 @@ pub struct RestApi {
 }
 
 /// <p><p>Contains references to your APIs and links that guide you in how to interact with your collection. A collection offers a paginated view of your APIs.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestApis {
     /// <p>The current page of elements from this collection.</p>
@@ -2767,7 +2774,7 @@ pub struct RestApis {
 }
 
 /// <p>A configuration property of an SDK type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SdkConfigurationProperty {
     /// <p>The default value of an <a>SdkType</a> configuration property.</p>
@@ -2793,7 +2800,7 @@ pub struct SdkConfigurationProperty {
 }
 
 /// <p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct SdkResponse {
     /// <p>The binary blob response to <a>GetSdk</a>, which contains the generated SDK.</p>
     pub body: Option<bytes::Bytes>,
@@ -2804,7 +2811,7 @@ pub struct SdkResponse {
 }
 
 /// <p>A type of SDK that API Gateway can generate.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SdkType {
     /// <p>A list of configuration properties of an <a>SdkType</a>.</p>
@@ -2826,7 +2833,7 @@ pub struct SdkType {
 }
 
 /// <p>The collection of <a>SdkType</a> instances.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SdkTypes {
     /// <p>The current page of elements from this collection.</p>
@@ -2839,7 +2846,7 @@ pub struct SdkTypes {
 }
 
 /// <p><p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploy an API</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Stage {
     /// <p>Settings for logging access in this stage.</p>
@@ -2913,7 +2920,7 @@ pub struct Stage {
 }
 
 /// <p>A reference to a unique stage identified in the format <code>{restApiId}/{stage}</code>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StageKey {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
@@ -2927,7 +2934,7 @@ pub struct StageKey {
 }
 
 /// <p><p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/stages.html">Deploying API in Stages</a></div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Stages {
     /// <p>The current page of elements from this collection.</p>
@@ -2937,7 +2944,7 @@ pub struct Stages {
 }
 
 /// <p>Adds or updates a tag on a given resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>[Required] The ARN of a resource that can be tagged.</p>
@@ -2949,7 +2956,7 @@ pub struct TagResourceRequest {
 }
 
 /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Tags {
     /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
@@ -2959,7 +2966,7 @@ pub struct Tags {
 }
 
 /// <p><p>Represents a mapping template used to transform a payload.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html#models-mappings-mappings">Mapping Templates</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Template {
     /// <p>The Apache <a href="https://velocity.apache.org/engine/devel/vtl-reference.html" target="_blank">Velocity Template Language (VTL)</a> template content used for the template resource.</p>
@@ -2969,7 +2976,7 @@ pub struct Template {
 }
 
 /// <p>Make a request to simulate the execution of an <a>Authorizer</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestInvokeAuthorizerRequest {
     /// <p>[Optional] A key-value map of additional context variables.</p>
@@ -3005,7 +3012,7 @@ pub struct TestInvokeAuthorizerRequest {
 }
 
 /// <p>Represents the response of the test invoke request for a custom <a>Authorizer</a></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestInvokeAuthorizerResponse {
     #[serde(rename = "authorization")]
@@ -3038,7 +3045,7 @@ pub struct TestInvokeAuthorizerResponse {
 }
 
 /// <p>Make a request to simulate the execution of a <a>Method</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestInvokeMethodRequest {
     /// <p>The simulated request body of an incoming invocation request.</p>
@@ -3077,7 +3084,7 @@ pub struct TestInvokeMethodRequest {
 }
 
 /// <p><p>Represents the response of the test invoke request in the HTTP method.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-test-method.html#how-to-test-method-console">Test API using the API Gateway console</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestInvokeMethodResponse {
     /// <p>The body of the HTTP response.</p>
@@ -3107,7 +3114,7 @@ pub struct TestInvokeMethodResponse {
 }
 
 /// <p> The API request rate limits.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ThrottleSettings {
     /// <p>The API request burst limit, the maximum rate limit over a time ranging from one to a few seconds, depending upon whether the underlying token bucket is at its full capacity.</p>
     #[serde(rename = "burstLimit")]
@@ -3119,8 +3126,16 @@ pub struct ThrottleSettings {
     pub rate_limit: Option<f64>,
 }
 
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TlsConfig {
+    /// <p>Specifies whether or not API Gateway skips verification that the certificate for an integration endpoint is issued by a <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-supported-certificate-authorities-for-http-endpoints.html">supported certificate authority</a>. This isn’t recommended, but it enables you to use certificates that are signed by private certificate authorities, or certificates that are self-signed. If enabled, API Gateway still performs basic certificate validation, which includes checking the certificate's expiration date, hostname, and presence of a root certificate authority. Supported only for <code>HTTP</code> and <code>HTTP_PROXY</code> integrations.</p>
+    #[serde(rename = "insecureSkipVerification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insecure_skip_verification: Option<bool>,
+}
+
 /// <p>Removes a tag from a given resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>[Required] The ARN of a resource that can be tagged.</p>
@@ -3132,7 +3147,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>Requests API Gateway to change information about the current <a>Account</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -3142,7 +3157,7 @@ pub struct UpdateAccountRequest {
 }
 
 /// <p>A request to change information about an <a>ApiKey</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApiKeyRequest {
     /// <p>[Required] The identifier of the <a>ApiKey</a> resource to be updated.</p>
@@ -3155,7 +3170,7 @@ pub struct UpdateApiKeyRequest {
 }
 
 /// <p>Request to update an existing <a>Authorizer</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAuthorizerRequest {
     /// <p>[Required] The identifier of the <a>Authorizer</a> resource.</p>
@@ -3171,7 +3186,7 @@ pub struct UpdateAuthorizerRequest {
 }
 
 /// <p>A request to change information about the <a>BasePathMapping</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBasePathMappingRequest {
     /// <p>[Required] The base path of the <a>BasePathMapping</a> resource to change.</p> <p>To specify an empty base path, set this parameter to <code>'(none)'</code>.</p>
@@ -3187,7 +3202,7 @@ pub struct UpdateBasePathMappingRequest {
 }
 
 /// <p>A request to change information about an <a>ClientCertificate</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateClientCertificateRequest {
     /// <p>[Required] The identifier of the <a>ClientCertificate</a> resource to be updated.</p>
@@ -3200,7 +3215,7 @@ pub struct UpdateClientCertificateRequest {
 }
 
 /// <p>Requests API Gateway to change information about a <a>Deployment</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDeploymentRequest {
     /// <p>The replacement identifier for the <a>Deployment</a> resource to change information about.</p>
@@ -3216,7 +3231,7 @@ pub struct UpdateDeploymentRequest {
 }
 
 /// <p>Updates an existing documentation part of a given API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentationPartRequest {
     /// <p>[Required] The identifier of the to-be-updated documentation part.</p>
@@ -3232,7 +3247,7 @@ pub struct UpdateDocumentationPartRequest {
 }
 
 /// <p>Updates an existing documentation version of an API.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDocumentationVersionRequest {
     /// <p>[Required] The version identifier of the to-be-updated documentation version.</p>
@@ -3248,7 +3263,7 @@ pub struct UpdateDocumentationVersionRequest {
 }
 
 /// <p>A request to change information about the <a>DomainName</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainNameRequest {
     /// <p>[Required] The name of the <a>DomainName</a> resource to be changed.</p>
@@ -3261,7 +3276,7 @@ pub struct UpdateDomainNameRequest {
 }
 
 /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayResponseRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -3277,7 +3292,7 @@ pub struct UpdateGatewayResponseRequest {
 }
 
 /// <p>Represents an update integration request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationRequest {
     /// <p>[Required] Represents an update integration request's HTTP method.</p>
@@ -3296,7 +3311,7 @@ pub struct UpdateIntegrationRequest {
 }
 
 /// <p>Represents an update integration response request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIntegrationResponseRequest {
     /// <p>[Required] Specifies an update integration response request's HTTP method.</p>
@@ -3318,7 +3333,7 @@ pub struct UpdateIntegrationResponseRequest {
 }
 
 /// <p>Request to update an existing <a>Method</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMethodRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
@@ -3337,7 +3352,7 @@ pub struct UpdateMethodRequest {
 }
 
 /// <p>A request to update an existing <a>MethodResponse</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMethodResponseRequest {
     /// <p>[Required] The HTTP verb of the <a>Method</a> resource.</p>
@@ -3359,7 +3374,7 @@ pub struct UpdateMethodResponseRequest {
 }
 
 /// <p>Request to update an existing model in an existing <a>RestApi</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateModelRequest {
     /// <p>[Required] The name of the model to update.</p>
@@ -3375,7 +3390,7 @@ pub struct UpdateModelRequest {
 }
 
 /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRequestValidatorRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -3391,7 +3406,7 @@ pub struct UpdateRequestValidatorRequest {
 }
 
 /// <p>Request to change information about a <a>Resource</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResourceRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -3407,7 +3422,7 @@ pub struct UpdateResourceRequest {
 }
 
 /// <p>Request to update an existing <a>RestApi</a> resource in your collection.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRestApiRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -3420,7 +3435,7 @@ pub struct UpdateRestApiRequest {
 }
 
 /// <p>Requests API Gateway to change information about a <a>Stage</a> resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateStageRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -3436,7 +3451,7 @@ pub struct UpdateStageRequest {
 }
 
 /// <p>The PATCH request to update a usage plan of a given plan Id.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUsagePlanRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -3449,7 +3464,7 @@ pub struct UpdateUsagePlanRequest {
 }
 
 /// <p>The PATCH request to grant a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUsageRequest {
     /// <p>[Required] The identifier of the API key associated with the usage plan in which a temporary extension is granted to the remaining quota.</p>
@@ -3465,7 +3480,7 @@ pub struct UpdateUsageRequest {
 }
 
 /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVpcLinkRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -3478,7 +3493,7 @@ pub struct UpdateVpcLinkRequest {
 }
 
 /// <p><p>Represents the usage data of a usage plan.</p> <div class="remarks"/> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-usage-plans-with-console.html#api-gateway-usage-plan-manage-usage">Manage Usage in a Usage Plan</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Usage {
     /// <p>The ending date of the usage data.</p>
@@ -3503,7 +3518,7 @@ pub struct Usage {
 }
 
 /// <p><p>Represents a usage plan than can specify who can assess associated API stages with specified request limits and quotas.</p> <div class="remarks"> <p>In a usage plan, you associate an API by specifying the API&#39;s Id and a stage name of the specified API. You add plan customers by adding API keys to the plan. </p> </div> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UsagePlan {
     /// <p>The associated API stages of a usage plan.</p>
@@ -3541,7 +3556,7 @@ pub struct UsagePlan {
 }
 
 /// <p><p>Represents a usage plan key to identify a plan customer.</p> <div class="remarks"> <p>To associate an API stage with a selected API key in a usage plan, you must create a UsagePlanKey resource to represent the selected <a>ApiKey</a>.</p> </div>&quot; <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UsagePlanKey {
     /// <p>The Id of a usage plan key.</p>
@@ -3563,7 +3578,7 @@ pub struct UsagePlanKey {
 }
 
 /// <p><p>Represents the collection of usage plan keys added to usage plans for the associated API keys and, possibly, other types of keys.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UsagePlanKeys {
     /// <p>The current page of elements from this collection.</p>
@@ -3576,7 +3591,7 @@ pub struct UsagePlanKeys {
 }
 
 /// <p><p>Represents a collection of usage plans for an AWS account.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UsagePlans {
     /// <p>The current page of elements from this collection.</p>
@@ -3589,7 +3604,7 @@ pub struct UsagePlans {
 }
 
 /// <p><p>An API Gateway VPC link for a <a>RestApi</a> to access resources in an Amazon Virtual Private Cloud (VPC).</p> <div class="remarks"> <p><p>To enable access to a resource in an Amazon Virtual Private Cloud through Amazon API Gateway, you, as an API developer, create a <a>VpcLink</a> resource targeted for one or more network load balancers of the VPC and then integrate an API method with a private integration that uses the <a>VpcLink</a>. The private integration has an integration type of <code>HTTP</code> or <code>HTTP<em>PROXY</code> and has a connection type of <code>VPC</em>LINK</code>. The integration uses the <code>connectionId</code> property to identify the <a>VpcLink</a> used.</p> </p> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcLink {
     /// <p>The description of the VPC link.</p>
@@ -3623,7 +3638,7 @@ pub struct VpcLink {
 }
 
 /// <p><p>The collection of VPC links under the caller&#39;s account in a region.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-with-private-integration.html">Getting Started with Private Integrations</a>, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-private-integration.html">Set up Private Integrations</a> </div></p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcLinks {
     /// <p>The current page of elements from this collection.</p>
@@ -10494,6 +10509,7 @@ impl ApiGatewayClient {
 #[async_trait]
 impl ApiGateway for ApiGatewayClient {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn create_api_key(
         &self,
         input: CreateApiKeyRequest,
@@ -10512,7 +10528,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
 
             Ok(result)
@@ -10523,6 +10539,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn create_authorizer(
         &self,
         input: CreateAuthorizerRequest,
@@ -10544,7 +10561,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
 
@@ -10556,6 +10573,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
+    #[allow(unused_mut)]
     async fn create_base_path_mapping(
         &self,
         input: CreateBasePathMappingRequest,
@@ -10577,7 +10595,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<BasePathMapping, _>()?;
 
@@ -10589,6 +10607,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
+    #[allow(unused_mut)]
     async fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
@@ -10610,7 +10629,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -10621,6 +10640,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn create_documentation_part(
         &self,
         input: CreateDocumentationPartRequest,
@@ -10642,7 +10662,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationPart, _>()?;
 
@@ -10653,6 +10673,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn create_documentation_version(
         &self,
         input: CreateDocumentationVersionRequest,
@@ -10674,7 +10695,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationVersion, _>()?;
 
@@ -10686,6 +10707,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a new domain name.</p>
+    #[allow(unused_mut)]
     async fn create_domain_name(
         &self,
         input: CreateDomainNameRequest,
@@ -10704,7 +10726,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
 
@@ -10716,6 +10738,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
+    #[allow(unused_mut)]
     async fn create_model(
         &self,
         input: CreateModelRequest,
@@ -10737,7 +10760,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
 
             Ok(result)
@@ -10748,6 +10771,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn create_request_validator(
         &self,
         input: CreateRequestValidatorRequest,
@@ -10769,7 +10793,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RequestValidator, _>()?;
 
@@ -10781,6 +10805,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a <a>Resource</a> resource.</p>
+    #[allow(unused_mut)]
     async fn create_resource(
         &self,
         input: CreateResourceRequest,
@@ -10803,7 +10828,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
 
@@ -10815,6 +10840,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a new <a>RestApi</a> resource.</p>
+    #[allow(unused_mut)]
     async fn create_rest_api(
         &self,
         input: CreateRestApiRequest,
@@ -10833,7 +10859,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
@@ -10845,6 +10871,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
+    #[allow(unused_mut)]
     async fn create_stage(
         &self,
         input: CreateStageRequest,
@@ -10866,7 +10893,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
 
             Ok(result)
@@ -10877,6 +10904,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
+    #[allow(unused_mut)]
     async fn create_usage_plan(
         &self,
         input: CreateUsagePlanRequest,
@@ -10895,7 +10923,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
 
@@ -10907,6 +10935,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
+    #[allow(unused_mut)]
     async fn create_usage_plan_key(
         &self,
         input: CreateUsagePlanKeyRequest,
@@ -10928,7 +10957,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlanKey, _>()?;
 
@@ -10940,6 +10969,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
+    #[allow(unused_mut)]
     async fn create_vpc_link(
         &self,
         input: CreateVpcLinkRequest,
@@ -10958,7 +10988,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
 
@@ -10970,6 +11000,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes the <a>ApiKey</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_api_key(
         &self,
         input: DeleteApiKeyRequest,
@@ -10985,7 +11016,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -10996,6 +11027,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn delete_authorizer(
         &self,
         input: DeleteAuthorizerRequest,
@@ -11015,7 +11047,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11026,6 +11058,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_base_path_mapping(
         &self,
         input: DeleteBasePathMappingRequest,
@@ -11045,7 +11078,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11056,6 +11089,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_client_certificate(
         &self,
         input: DeleteClientCertificateRequest,
@@ -11074,7 +11108,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11085,6 +11119,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
+    #[allow(unused_mut)]
     async fn delete_deployment(
         &self,
         input: DeleteDeploymentRequest,
@@ -11104,7 +11139,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11114,6 +11149,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn delete_documentation_part(
         &self,
         input: DeleteDocumentationPartRequest,
@@ -11133,7 +11169,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11143,6 +11179,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn delete_documentation_version(
         &self,
         input: DeleteDocumentationVersionRequest,
@@ -11162,7 +11199,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11173,6 +11210,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes the <a>DomainName</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_domain_name(
         &self,
         input: DeleteDomainNameRequest,
@@ -11191,7 +11229,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11202,6 +11240,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
+    #[allow(unused_mut)]
     async fn delete_gateway_response(
         &self,
         input: DeleteGatewayResponseRequest,
@@ -11221,7 +11260,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11232,6 +11271,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a delete integration.</p>
+    #[allow(unused_mut)]
     async fn delete_integration(
         &self,
         input: DeleteIntegrationRequest,
@@ -11252,7 +11292,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11263,6 +11303,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a delete integration response.</p>
+    #[allow(unused_mut)]
     async fn delete_integration_response(
         &self,
         input: DeleteIntegrationResponseRequest,
@@ -11278,7 +11319,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11289,6 +11330,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes an existing <a>Method</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_method(
         &self,
         input: DeleteMethodRequest,
@@ -11309,7 +11351,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11320,6 +11362,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_method_response(
         &self,
         input: DeleteMethodResponseRequest,
@@ -11335,7 +11378,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11346,6 +11389,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a model.</p>
+    #[allow(unused_mut)]
     async fn delete_model(
         &self,
         input: DeleteModelRequest,
@@ -11365,7 +11409,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11376,6 +11420,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn delete_request_validator(
         &self,
         input: DeleteRequestValidatorRequest,
@@ -11395,7 +11440,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11406,6 +11451,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a <a>Resource</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_resource(
         &self,
         input: DeleteResourceRequest,
@@ -11425,7 +11471,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11436,6 +11482,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes the specified API.</p>
+    #[allow(unused_mut)]
     async fn delete_rest_api(
         &self,
         input: DeleteRestApiRequest,
@@ -11451,7 +11498,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11462,6 +11509,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a <a>Stage</a> resource.</p>
+    #[allow(unused_mut)]
     async fn delete_stage(
         &self,
         input: DeleteStageRequest,
@@ -11481,7 +11529,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11492,6 +11540,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a usage plan of a given plan Id.</p>
+    #[allow(unused_mut)]
     async fn delete_usage_plan(
         &self,
         input: DeleteUsagePlanRequest,
@@ -11510,7 +11559,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11521,6 +11570,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
+    #[allow(unused_mut)]
     async fn delete_usage_plan_key(
         &self,
         input: DeleteUsagePlanKeyRequest,
@@ -11540,7 +11590,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11551,6 +11601,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
+    #[allow(unused_mut)]
     async fn delete_vpc_link(
         &self,
         input: DeleteVpcLinkRequest,
@@ -11566,7 +11617,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11577,6 +11628,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Flushes all authorizer cache entries on a stage.</p>
+    #[allow(unused_mut)]
     async fn flush_stage_authorizers_cache(
         &self,
         input: FlushStageAuthorizersCacheRequest,
@@ -11596,7 +11648,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11607,6 +11659,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Flushes a stage's cache.</p>
+    #[allow(unused_mut)]
     async fn flush_stage_cache(
         &self,
         input: FlushStageCacheRequest,
@@ -11626,7 +11679,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -11637,6 +11690,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Generates a <a>ClientCertificate</a> resource.</p>
+    #[allow(unused_mut)]
     async fn generate_client_certificate(
         &self,
         input: GenerateClientCertificateRequest,
@@ -11655,7 +11709,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ClientCertificate, _>()?;
 
@@ -11667,6 +11721,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about the current <a>Account</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_account(&self) -> Result<Account, RusotoError<GetAccountError>> {
         let request_uri = "/account";
 
@@ -11679,7 +11734,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Account, _>()?;
 
@@ -11691,6 +11746,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_api_key(
         &self,
         input: GetApiKeyRequest,
@@ -11712,7 +11768,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
 
             Ok(result)
@@ -11723,6 +11779,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_api_keys(
         &self,
         input: GetApiKeysRequest,
@@ -11756,7 +11813,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ApiKeys, _>()?;
 
@@ -11768,6 +11825,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn get_authorizer(
         &self,
         input: GetAuthorizerRequest,
@@ -11787,7 +11845,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
 
@@ -11799,6 +11857,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn get_authorizers(
         &self,
         input: GetAuthorizersRequest,
@@ -11826,7 +11885,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Authorizers, _>()?;
 
@@ -11838,6 +11897,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_base_path_mapping(
         &self,
         input: GetBasePathMappingRequest,
@@ -11857,7 +11917,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<BasePathMapping, _>()?;
 
@@ -11869,6 +11929,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
+    #[allow(unused_mut)]
     async fn get_base_path_mappings(
         &self,
         input: GetBasePathMappingsRequest,
@@ -11896,7 +11957,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BasePathMappings, _>()?;
 
@@ -11908,6 +11969,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_client_certificate(
         &self,
         input: GetClientCertificateRequest,
@@ -11926,7 +11988,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ClientCertificate, _>()?;
 
@@ -11938,6 +12000,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
+    #[allow(unused_mut)]
     async fn get_client_certificates(
         &self,
         input: GetClientCertificatesRequest,
@@ -11962,7 +12025,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ClientCertificates, _>()?;
 
@@ -11974,6 +12037,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_deployment(
         &self,
         input: GetDeploymentRequest,
@@ -12001,7 +12065,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -12013,6 +12077,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about a <a>Deployments</a> collection.</p>
+    #[allow(unused_mut)]
     async fn get_deployments(
         &self,
         input: GetDeploymentsRequest,
@@ -12040,7 +12105,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployments, _>()?;
 
@@ -12051,6 +12116,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_documentation_part(
         &self,
         input: GetDocumentationPartRequest,
@@ -12070,7 +12136,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationPart, _>()?;
 
@@ -12081,6 +12147,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_documentation_parts(
         &self,
         input: GetDocumentationPartsRequest,
@@ -12120,7 +12187,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationParts, _>()?;
 
@@ -12131,6 +12198,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_documentation_version(
         &self,
         input: GetDocumentationVersionRequest,
@@ -12150,7 +12218,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationVersion, _>()?;
 
@@ -12161,6 +12229,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_documentation_versions(
         &self,
         input: GetDocumentationVersionsRequest,
@@ -12188,7 +12257,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationVersions, _>()?;
 
@@ -12200,6 +12269,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
+    #[allow(unused_mut)]
     async fn get_domain_name(
         &self,
         input: GetDomainNameRequest,
@@ -12218,7 +12288,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
 
@@ -12230,6 +12300,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a collection of <a>DomainName</a> resources.</p>
+    #[allow(unused_mut)]
     async fn get_domain_names(
         &self,
         input: GetDomainNamesRequest,
@@ -12254,7 +12325,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<DomainNames, _>()?;
 
@@ -12266,6 +12337,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
+    #[allow(unused_mut)]
     async fn get_export(
         &self,
         input: GetExportRequest,
@@ -12280,9 +12352,7 @@ impl ApiGateway for ApiGatewayClient {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        if let Some(ref accepts) = input.accepts {
-            request.add_header("Accept", &accepts.to_string());
-        }
+        request.add_optional_header("Accept", input.accepts.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.parameters {
             for (key, val) in x.iter() {
@@ -12297,19 +12367,13 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = ExportResponse::default();
             result.body = Some(response.body);
 
-            if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                let value = content_disposition.to_owned();
-                result.content_disposition = Some(value)
-            };
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
+            result.content_disposition = response.headers.remove("Content-Disposition");
+            result.content_type = response.headers.remove("Content-Type");
 
             Ok(result)
         } else {
@@ -12319,6 +12383,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn get_gateway_response(
         &self,
         input: GetGatewayResponseRequest,
@@ -12338,7 +12403,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GatewayResponse, _>()?;
 
@@ -12350,6 +12415,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
+    #[allow(unused_mut)]
     async fn get_gateway_responses(
         &self,
         input: GetGatewayResponsesRequest,
@@ -12377,7 +12443,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GatewayResponses, _>()?;
 
@@ -12389,6 +12455,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Get the integration settings.</p>
+    #[allow(unused_mut)]
     async fn get_integration(
         &self,
         input: GetIntegrationRequest,
@@ -12409,7 +12476,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
 
@@ -12421,6 +12488,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a get integration response.</p>
+    #[allow(unused_mut)]
     async fn get_integration_response(
         &self,
         input: GetIntegrationResponseRequest,
@@ -12436,7 +12504,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<IntegrationResponse, _>()?;
 
@@ -12448,6 +12516,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Describe an existing <a>Method</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_method(
         &self,
         input: GetMethodRequest,
@@ -12468,7 +12537,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
 
             Ok(result)
@@ -12479,6 +12548,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Describes a <a>MethodResponse</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_method_response(
         &self,
         input: GetMethodResponseRequest,
@@ -12494,7 +12564,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<MethodResponse, _>()?;
 
@@ -12506,6 +12576,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_model(&self, input: GetModelRequest) -> Result<Model, RusotoError<GetModelError>> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
@@ -12528,7 +12599,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
 
             Ok(result)
@@ -12539,6 +12610,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
+    #[allow(unused_mut)]
     async fn get_model_template(
         &self,
         input: GetModelTemplateRequest,
@@ -12558,7 +12630,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Template, _>()?;
 
@@ -12570,6 +12642,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_models(
         &self,
         input: GetModelsRequest,
@@ -12597,7 +12670,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Models, _>()?;
 
             Ok(result)
@@ -12608,6 +12681,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn get_request_validator(
         &self,
         input: GetRequestValidatorRequest,
@@ -12627,7 +12701,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RequestValidator, _>()?;
 
@@ -12639,6 +12713,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn get_request_validators(
         &self,
         input: GetRequestValidatorsRequest,
@@ -12666,7 +12741,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RequestValidators, _>()?;
 
@@ -12678,6 +12753,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Lists information about a resource.</p>
+    #[allow(unused_mut)]
     async fn get_resource(
         &self,
         input: GetResourceRequest,
@@ -12705,7 +12781,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
 
@@ -12717,6 +12793,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
+    #[allow(unused_mut)]
     async fn get_resources(
         &self,
         input: GetResourcesRequest,
@@ -12749,7 +12826,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Resources, _>()?;
 
@@ -12761,6 +12838,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
+    #[allow(unused_mut)]
     async fn get_rest_api(
         &self,
         input: GetRestApiRequest,
@@ -12776,7 +12854,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
@@ -12788,6 +12866,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
+    #[allow(unused_mut)]
     async fn get_rest_apis(
         &self,
         input: GetRestApisRequest,
@@ -12812,7 +12891,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApis, _>()?;
 
@@ -12824,6 +12903,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
+    #[allow(unused_mut)]
     async fn get_sdk(&self, input: GetSdkRequest) -> Result<SdkResponse, RusotoError<GetSdkError>> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/sdks/{sdk_type}",
@@ -12849,19 +12929,13 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
 
             let mut result = SdkResponse::default();
             result.body = Some(response.body);
 
-            if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                let value = content_disposition.to_owned();
-                result.content_disposition = Some(value)
-            };
-            if let Some(content_type) = response.headers.get("Content-Type") {
-                let value = content_type.to_owned();
-                result.content_type = Some(value)
-            };
+            result.content_disposition = response.headers.remove("Content-Disposition");
+            result.content_type = response.headers.remove("Content-Type");
 
             Ok(result)
         } else {
@@ -12870,6 +12944,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_sdk_type(
         &self,
         input: GetSdkTypeRequest,
@@ -12885,7 +12960,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<SdkType, _>()?;
 
@@ -12896,6 +12971,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn get_sdk_types(
         &self,
         input: GetSdkTypesRequest,
@@ -12920,7 +12996,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<SdkTypes, _>()?;
 
@@ -12932,6 +13008,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
+    #[allow(unused_mut)]
     async fn get_stage(&self, input: GetStageRequest) -> Result<Stage, RusotoError<GetStageError>> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
@@ -12948,7 +13025,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
 
             Ok(result)
@@ -12959,6 +13036,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
+    #[allow(unused_mut)]
     async fn get_stages(
         &self,
         input: GetStagesRequest,
@@ -12983,7 +13061,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Stages, _>()?;
 
             Ok(result)
@@ -12994,6 +13072,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets the <a>Tags</a> collection for a given resource.</p>
+    #[allow(unused_mut)]
     async fn get_tags(&self, input: GetTagsRequest) -> Result<Tags, RusotoError<GetTagsError>> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
@@ -13015,7 +13094,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Tags, _>()?;
 
             Ok(result)
@@ -13026,6 +13105,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
+    #[allow(unused_mut)]
     async fn get_usage(&self, input: GetUsageRequest) -> Result<Usage, RusotoError<GetUsageError>> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/usage",
@@ -13055,7 +13135,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Usage, _>()?;
 
             Ok(result)
@@ -13066,6 +13146,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a usage plan of a given plan identifier.</p>
+    #[allow(unused_mut)]
     async fn get_usage_plan(
         &self,
         input: GetUsagePlanRequest,
@@ -13084,7 +13165,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
 
@@ -13096,6 +13177,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a usage plan key of a given key identifier.</p>
+    #[allow(unused_mut)]
     async fn get_usage_plan_key(
         &self,
         input: GetUsagePlanKeyRequest,
@@ -13115,7 +13197,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlanKey, _>()?;
 
@@ -13127,6 +13209,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
+    #[allow(unused_mut)]
     async fn get_usage_plan_keys(
         &self,
         input: GetUsagePlanKeysRequest,
@@ -13157,7 +13240,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlanKeys, _>()?;
 
@@ -13169,6 +13252,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets all the usage plans of the caller's account.</p>
+    #[allow(unused_mut)]
     async fn get_usage_plans(
         &self,
         input: GetUsagePlansRequest,
@@ -13196,7 +13280,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlans, _>()?;
 
@@ -13208,6 +13292,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
+    #[allow(unused_mut)]
     async fn get_vpc_link(
         &self,
         input: GetVpcLinkRequest,
@@ -13223,7 +13308,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
 
@@ -13235,6 +13320,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
+    #[allow(unused_mut)]
     async fn get_vpc_links(
         &self,
         input: GetVpcLinksRequest,
@@ -13259,7 +13345,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<VpcLinks, _>()?;
 
@@ -13271,6 +13357,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
+    #[allow(unused_mut)]
     async fn import_api_keys(
         &self,
         input: ImportApiKeysRequest,
@@ -13297,7 +13384,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<ApiKeyIds, _>()?;
 
@@ -13308,6 +13395,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn import_documentation_parts(
         &self,
         input: ImportDocumentationPartsRequest,
@@ -13338,7 +13426,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationPartIds, _>()?;
 
@@ -13350,6 +13438,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
+    #[allow(unused_mut)]
     async fn import_rest_api(
         &self,
         input: ImportRestApiRequest,
@@ -13380,7 +13469,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
@@ -13392,6 +13481,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn put_gateway_response(
         &self,
         input: PutGatewayResponseRequest,
@@ -13414,7 +13504,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GatewayResponse, _>()?;
 
@@ -13426,6 +13516,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Sets up a method's integration.</p>
+    #[allow(unused_mut)]
     async fn put_integration(
         &self,
         input: PutIntegrationRequest,
@@ -13449,7 +13540,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
 
@@ -13461,6 +13552,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents a put integration.</p>
+    #[allow(unused_mut)]
     async fn put_integration_response(
         &self,
         input: PutIntegrationResponseRequest,
@@ -13479,7 +13571,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<IntegrationResponse, _>()?;
 
@@ -13491,6 +13583,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Add a method to an existing <a>Resource</a> resource.</p>
+    #[allow(unused_mut)]
     async fn put_method(
         &self,
         input: PutMethodRequest,
@@ -13514,7 +13607,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
 
             Ok(result)
@@ -13525,6 +13618,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
+    #[allow(unused_mut)]
     async fn put_method_response(
         &self,
         input: PutMethodResponseRequest,
@@ -13543,7 +13637,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<MethodResponse, _>()?;
 
@@ -13555,6 +13649,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
+    #[allow(unused_mut)]
     async fn put_rest_api(
         &self,
         input: PutRestApiRequest,
@@ -13587,7 +13682,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
@@ -13599,6 +13694,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Adds or updates a tag on a given resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -13617,7 +13713,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13628,6 +13724,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html">Use Lambda Function as Authorizer</a> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html">Use Cognito User Pool as Authorizer</a> </div></p>
+    #[allow(unused_mut)]
     async fn test_invoke_authorizer(
         &self,
         input: TestInvokeAuthorizerRequest,
@@ -13650,7 +13747,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TestInvokeAuthorizerResponse, _>()?;
 
@@ -13662,6 +13759,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
+    #[allow(unused_mut)]
     async fn test_invoke_method(
         &self,
         input: TestInvokeMethodRequest,
@@ -13685,7 +13783,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<TestInvokeMethodResponse, _>()?;
 
@@ -13697,6 +13795,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Removes a tag from a given resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -13718,7 +13817,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13729,6 +13828,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about the current <a>Account</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_account(
         &self,
         input: UpdateAccountRequest,
@@ -13747,7 +13847,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Account, _>()?;
 
@@ -13759,6 +13859,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about an <a>ApiKey</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_api_key(
         &self,
         input: UpdateApiKeyRequest,
@@ -13777,7 +13878,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<ApiKey, _>()?;
 
             Ok(result)
@@ -13788,6 +13889,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="https://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
+    #[allow(unused_mut)]
     async fn update_authorizer(
         &self,
         input: UpdateAuthorizerRequest,
@@ -13810,7 +13912,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Authorizer, _>()?;
 
@@ -13822,6 +13924,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_base_path_mapping(
         &self,
         input: UpdateBasePathMappingRequest,
@@ -13844,7 +13947,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<BasePathMapping, _>()?;
 
@@ -13856,6 +13959,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_client_certificate(
         &self,
         input: UpdateClientCertificateRequest,
@@ -13877,7 +13981,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ClientCertificate, _>()?;
 
@@ -13889,6 +13993,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about a <a>Deployment</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_deployment(
         &self,
         input: UpdateDeploymentRequest,
@@ -13911,7 +14016,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Deployment, _>()?;
 
@@ -13922,6 +14027,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn update_documentation_part(
         &self,
         input: UpdateDocumentationPartRequest,
@@ -13944,7 +14050,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationPart, _>()?;
 
@@ -13955,6 +14061,7 @@ impl ApiGateway for ApiGatewayClient {
         }
     }
 
+    #[allow(unused_mut)]
     async fn update_documentation_version(
         &self,
         input: UpdateDocumentationVersionRequest,
@@ -13977,7 +14084,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DocumentationVersion, _>()?;
 
@@ -13989,6 +14096,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about the <a>DomainName</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_domain_name(
         &self,
         input: UpdateDomainNameRequest,
@@ -14010,7 +14118,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<DomainName, _>()?;
 
@@ -14022,6 +14130,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn update_gateway_response(
         &self,
         input: UpdateGatewayResponseRequest,
@@ -14044,7 +14153,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GatewayResponse, _>()?;
 
@@ -14056,6 +14165,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents an update integration.</p>
+    #[allow(unused_mut)]
     async fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
@@ -14079,7 +14189,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Integration, _>()?;
 
@@ -14091,6 +14201,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Represents an update integration response.</p>
+    #[allow(unused_mut)]
     async fn update_integration_response(
         &self,
         input: UpdateIntegrationResponseRequest,
@@ -14109,7 +14220,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<IntegrationResponse, _>()?;
 
@@ -14121,6 +14232,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates an existing <a>Method</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_method(
         &self,
         input: UpdateMethodRequest,
@@ -14144,7 +14256,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Method, _>()?;
 
             Ok(result)
@@ -14155,6 +14267,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_method_response(
         &self,
         input: UpdateMethodResponseRequest,
@@ -14173,7 +14286,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<MethodResponse, _>()?;
 
@@ -14185,6 +14298,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about a model.</p>
+    #[allow(unused_mut)]
     async fn update_model(
         &self,
         input: UpdateModelRequest,
@@ -14207,7 +14321,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Model, _>()?;
 
             Ok(result)
@@ -14218,6 +14332,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
+    #[allow(unused_mut)]
     async fn update_request_validator(
         &self,
         input: UpdateRequestValidatorRequest,
@@ -14240,7 +14355,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RequestValidator, _>()?;
 
@@ -14252,6 +14367,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about a <a>Resource</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_resource(
         &self,
         input: UpdateResourceRequest,
@@ -14274,7 +14390,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<Resource, _>()?;
 
@@ -14286,6 +14402,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about the specified API.</p>
+    #[allow(unused_mut)]
     async fn update_rest_api(
         &self,
         input: UpdateRestApiRequest,
@@ -14304,7 +14421,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<RestApi, _>()?;
 
@@ -14316,6 +14433,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Changes information about a <a>Stage</a> resource.</p>
+    #[allow(unused_mut)]
     async fn update_stage(
         &self,
         input: UpdateStageRequest,
@@ -14338,7 +14456,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Stage, _>()?;
 
             Ok(result)
@@ -14349,6 +14467,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
+    #[allow(unused_mut)]
     async fn update_usage(
         &self,
         input: UpdateUsageRequest,
@@ -14371,7 +14490,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response).deserialize::<Usage, _>()?;
 
             Ok(result)
@@ -14382,6 +14501,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates a usage plan of a given plan Id.</p>
+    #[allow(unused_mut)]
     async fn update_usage_plan(
         &self,
         input: UpdateUsagePlanRequest,
@@ -14403,7 +14523,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<UsagePlan, _>()?;
 
@@ -14415,6 +14535,7 @@ impl ApiGateway for ApiGatewayClient {
     }
 
     /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
+    #[allow(unused_mut)]
     async fn update_vpc_link(
         &self,
         input: UpdateVpcLinkRequest,
@@ -14433,7 +14554,7 @@ impl ApiGateway for ApiGatewayClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<VpcLink, _>()?;
 

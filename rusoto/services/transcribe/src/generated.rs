@@ -20,12 +20,38 @@ use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
 use rusoto_core::proto;
+use rusoto_core::request::HttpResponse;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
+
+impl TranscribeClient {
+    fn new_signed_request(&self, http_method: &str, request_uri: &str) -> SignedRequest {
+        let mut request = SignedRequest::new(http_method, "transcribe", &self.region, request_uri);
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request
+    }
+
+    async fn sign_and_dispatch<E>(
+        &self,
+        request: SignedRequest,
+        from_response: fn(BufferedHttpResponse) -> RusotoError<E>,
+    ) -> Result<HttpResponse, RusotoError<E>> {
+        let mut response = self.client.sign_and_dispatch(request).await?;
+        if !response.status.is_success() {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            return Err(from_response(response));
+        }
+
+        Ok(response)
+    }
+}
+
 use serde_json;
 /// <p>Settings for content redaction within a transcription job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ContentRedaction {
     /// <p>The output transcript file stored in either the default S3 bucket or in a bucket you specify.</p> <p>When you choose <code>redacted</code> Amazon Transcribe outputs only the redacted transcript.</p> <p>When you choose <code>redacted_and_unredacted</code> Amazon Transcribe outputs both the redacted and unredacted transcripts.</p>
     #[serde(rename = "RedactionOutput")]
@@ -35,7 +61,7 @@ pub struct ContentRedaction {
     pub redaction_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMedicalVocabularyRequest {
     /// <p>The language code used for the entries within your custom vocabulary. The language code of your custom vocabulary must match the language code of your transcription job. US English (en-US) is the only language code available for Amazon Transcribe Medical.</p>
@@ -49,7 +75,7 @@ pub struct CreateMedicalVocabularyRequest {
     pub vocabulary_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMedicalVocabularyResponse {
     /// <p>If the <code>VocabularyState</code> field is <code>FAILED</code>, this field contains information about why the job failed.</p>
@@ -74,7 +100,7 @@ pub struct CreateMedicalVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVocabularyFilterRequest {
     /// <p>The language code of the words in the vocabulary filter. All words in the filter must be in the same language. The vocabulary filter can only be used with transcription jobs in the specified language.</p>
@@ -93,7 +119,7 @@ pub struct CreateVocabularyFilterRequest {
     pub words: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVocabularyFilterResponse {
     /// <p>The language code of the words in the collection.</p>
@@ -110,7 +136,7 @@ pub struct CreateVocabularyFilterResponse {
     pub vocabulary_filter_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVocabularyRequest {
     /// <p>The language code of the vocabulary entries.</p>
@@ -129,7 +155,7 @@ pub struct CreateVocabularyRequest {
     pub vocabulary_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVocabularyResponse {
     /// <p>If the <code>VocabularyState</code> field is <code>FAILED</code>, this field contains information about why the job failed.</p>
@@ -154,7 +180,7 @@ pub struct CreateVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMedicalTranscriptionJobRequest {
     /// <p>The name you provide to the <code>DeleteMedicalTranscriptionJob</code> object to delete a transcription job.</p>
@@ -162,7 +188,7 @@ pub struct DeleteMedicalTranscriptionJobRequest {
     pub medical_transcription_job_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMedicalVocabularyRequest {
     /// <p>The name of the vocabulary you are choosing to delete.</p>
@@ -170,7 +196,7 @@ pub struct DeleteMedicalVocabularyRequest {
     pub vocabulary_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTranscriptionJobRequest {
     /// <p>The name of the transcription job to be deleted.</p>
@@ -178,7 +204,7 @@ pub struct DeleteTranscriptionJobRequest {
     pub transcription_job_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVocabularyFilterRequest {
     /// <p>The name of the vocabulary filter to remove.</p>
@@ -186,7 +212,7 @@ pub struct DeleteVocabularyFilterRequest {
     pub vocabulary_filter_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVocabularyRequest {
     /// <p>The name of the vocabulary to delete. </p>
@@ -194,7 +220,7 @@ pub struct DeleteVocabularyRequest {
     pub vocabulary_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMedicalTranscriptionJobRequest {
     /// <p>The name of the medical transcription job.</p>
@@ -202,7 +228,7 @@ pub struct GetMedicalTranscriptionJobRequest {
     pub medical_transcription_job_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMedicalTranscriptionJobResponse {
     /// <p>An object that contains the results of the medical transcription job.</p>
@@ -211,7 +237,7 @@ pub struct GetMedicalTranscriptionJobResponse {
     pub medical_transcription_job: Option<MedicalTranscriptionJob>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMedicalVocabularyRequest {
     /// <p>The name of the vocabulary you are trying to get information about. The value you enter for this request is case-sensitive. </p>
@@ -219,7 +245,7 @@ pub struct GetMedicalVocabularyRequest {
     pub vocabulary_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMedicalVocabularyResponse {
     /// <p>The Amazon S3 location where the vocabulary is stored. Use this URI to get the contents of the vocabulary. You can download your vocabulary from the URI for a limited time.</p>
@@ -248,7 +274,7 @@ pub struct GetMedicalVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTranscriptionJobRequest {
     /// <p>The name of the job.</p>
@@ -256,7 +282,7 @@ pub struct GetTranscriptionJobRequest {
     pub transcription_job_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTranscriptionJobResponse {
     /// <p>An object that contains the results of the transcription job.</p>
@@ -265,7 +291,7 @@ pub struct GetTranscriptionJobResponse {
     pub transcription_job: Option<TranscriptionJob>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVocabularyFilterRequest {
     /// <p>The name of the vocabulary filter for which to return information.</p>
@@ -273,7 +299,7 @@ pub struct GetVocabularyFilterRequest {
     pub vocabulary_filter_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVocabularyFilterResponse {
     /// <p>The URI of the list of words in the vocabulary filter. You can use this URI to get the list of words.</p>
@@ -294,7 +320,7 @@ pub struct GetVocabularyFilterResponse {
     pub vocabulary_filter_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVocabularyRequest {
     /// <p>The name of the vocabulary to return information about. The name is case-sensitive.</p>
@@ -302,7 +328,7 @@ pub struct GetVocabularyRequest {
     pub vocabulary_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVocabularyResponse {
     /// <p>The S3 location where the vocabulary is stored. Use this URI to get the contents of the vocabulary. The URI is available for a limited time.</p>
@@ -332,7 +358,7 @@ pub struct GetVocabularyResponse {
 }
 
 /// <p>Provides information about when a transcription job should be executed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JobExecutionSettings {
     /// <p>Indicates whether a job should be queued by Amazon Transcribe when the concurrent execution limit is exceeded. When the <code>AllowDeferredExecution</code> field is true, jobs are queued and executed when the number of executing jobs falls below the concurrent execution limit. If the field is false, Amazon Transcribe returns a <code>LimitExceededException</code> exception.</p> <p>If you specify the <code>AllowDeferredExecution</code> field, you must specify the <code>DataAccessRoleArn</code> field.</p>
     #[serde(rename = "AllowDeferredExecution")]
@@ -344,7 +370,7 @@ pub struct JobExecutionSettings {
     pub data_access_role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMedicalTranscriptionJobsRequest {
     /// <p>When specified, the jobs returned in the list are limited to jobs whose name contains the specified string.</p>
@@ -365,7 +391,7 @@ pub struct ListMedicalTranscriptionJobsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMedicalTranscriptionJobsResponse {
     /// <p>A list of objects containing summary information for a transcription job.</p>
@@ -382,7 +408,7 @@ pub struct ListMedicalTranscriptionJobsResponse {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMedicalVocabulariesRequest {
     /// <p>The maximum number of vocabularies to return in the response.</p>
@@ -403,7 +429,7 @@ pub struct ListMedicalVocabulariesRequest {
     pub state_equals: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMedicalVocabulariesResponse {
     /// <p>The <code>ListMedicalVocabularies</code> operation returns a page of vocabularies at a time. The maximum size of the page is set by the <code>MaxResults</code> parameter. If there are more jobs in the list than the page size, Amazon Transcribe Medical returns the <code>NextPage</code> token. Include the token in the next request to the <code>ListMedicalVocabularies</code> operation to return the next page of jobs.</p>
@@ -420,7 +446,7 @@ pub struct ListMedicalVocabulariesResponse {
     pub vocabularies: Option<Vec<VocabularyInfo>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTranscriptionJobsRequest {
     /// <p>When specified, the jobs returned in the list are limited to jobs whose name contains the specified string.</p>
@@ -441,7 +467,7 @@ pub struct ListTranscriptionJobsRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTranscriptionJobsResponse {
     /// <p>The <code>ListTranscriptionJobs</code> operation returns a page of jobs at a time. The maximum size of the page is set by the <code>MaxResults</code> parameter. If there are more jobs in the list than the page size, Amazon Transcribe returns the <code>NextPage</code> token. Include the token in the next request to the <code>ListTranscriptionJobs</code> operation to return in the next page of jobs.</p>
@@ -458,7 +484,7 @@ pub struct ListTranscriptionJobsResponse {
     pub transcription_job_summaries: Option<Vec<TranscriptionJobSummary>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVocabulariesRequest {
     /// <p>The maximum number of vocabularies to return in the response. If there are fewer results in the list, this response contains only the actual results.</p>
@@ -479,7 +505,7 @@ pub struct ListVocabulariesRequest {
     pub state_equals: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVocabulariesResponse {
     /// <p>The <code>ListVocabularies</code> operation returns a page of vocabularies at a time. The maximum size of the page is set by the <code>MaxResults</code> parameter. If there are more jobs in the list than the page size, Amazon Transcribe returns the <code>NextPage</code> token. Include the token in the next request to the <code>ListVocabularies</code> operation to return in the next page of jobs.</p>
@@ -496,7 +522,7 @@ pub struct ListVocabulariesResponse {
     pub vocabularies: Option<Vec<VocabularyInfo>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVocabularyFiltersRequest {
     /// <p>The maximum number of filters to return in the response. If there are fewer results in the list, this response contains only the actual results.</p>
@@ -513,7 +539,7 @@ pub struct ListVocabularyFiltersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVocabularyFiltersResponse {
     /// <p>The <code>ListVocabularyFilters</code> operation returns a page of collections at a time. The maximum size of the page is set by the <code>MaxResults</code> parameter. If there are more jobs in the list than the page size, Amazon Transcribe returns the <code>NextPage</code> token. Include the token in the next request to the <code>ListVocabularyFilters</code> operation to return in the next page of jobs.</p>
@@ -527,7 +553,7 @@ pub struct ListVocabularyFiltersResponse {
 }
 
 /// <p>Describes the input media file in a transcription request.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Media {
     /// <p>The S3 object location of the input media file. The URI must be in the same region as the API endpoint that you are calling. The general form is:</p> <p>For example:</p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p>
     #[serde(rename = "MediaFileUri")]
@@ -536,7 +562,7 @@ pub struct Media {
 }
 
 /// <p>Identifies the location of a medical transcript.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MedicalTranscript {
     /// <p>The S3 object location of the medical transcript.</p> <p>Use this URI to access the medical transcript. This URI points to the S3 bucket you created to store the medical transcript.</p>
@@ -546,7 +572,7 @@ pub struct MedicalTranscript {
 }
 
 /// <p>The data structure that containts the information for a medical transcription job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MedicalTranscriptionJob {
     /// <p>A timestamp that shows when the job was completed.</p>
@@ -607,7 +633,7 @@ pub struct MedicalTranscriptionJob {
 }
 
 /// <p>Provides summary information about a transcription job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MedicalTranscriptionJobSummary {
     /// <p>A timestamp that shows when the job was completed.</p>
@@ -653,7 +679,7 @@ pub struct MedicalTranscriptionJobSummary {
 }
 
 /// <p>Optional settings for the <a>StartMedicalTranscriptionJob</a> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MedicalTranscriptionSetting {
     /// <p>Instructs Amazon Transcribe Medical to process each audio channel separately and then merge the transcription output of each channel into a single transcription.</p> <p>Amazon Transcribe Medical also produces a transcription of each item detected on an audio channel, including the start time and end time of the item and alternative transcriptions of item. The alternative transcriptions also come with confidence scores provided by Amazon Transcribe Medical.</p> <p>You can't set both <code>ShowSpeakerLabels</code> and <code>ChannelIdentification</code> in the same request. If you set both, your request returns a <code>BadRequestException</code> </p>
     #[serde(rename = "ChannelIdentification")]
@@ -682,7 +708,7 @@ pub struct MedicalTranscriptionSetting {
 }
 
 /// <p>Provides optional settings for the <code>StartTranscriptionJob</code> operation.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Settings {
     /// <p>Instructs Amazon Transcribe to process each audio channel separately and then merge the transcription output of each channel into a single transcription. </p> <p>Amazon Transcribe also produces a transcription of each item detected on an audio channel, including the start time and end time of the item and alternative transcriptions of the item including the confidence that Amazon Transcribe has in the transcription.</p> <p>You can't set both <code>ShowSpeakerLabels</code> and <code>ChannelIdentification</code> in the same request. If you set both, your request returns a <code>BadRequestException</code>.</p>
     #[serde(rename = "ChannelIdentification")]
@@ -718,7 +744,7 @@ pub struct Settings {
     pub vocabulary_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMedicalTranscriptionJobRequest {
     /// <p>The language code for the language spoken in the input media file. US English (en-US) is the valid value for medical transcription jobs. Any other value you enter for language code results in a <code>BadRequestException</code> error.</p>
@@ -756,7 +782,7 @@ pub struct StartMedicalTranscriptionJobRequest {
     pub type_: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMedicalTranscriptionJobResponse {
     /// <p>A batch job submitted to transcribe medical speech to text.</p>
@@ -765,7 +791,7 @@ pub struct StartMedicalTranscriptionJobResponse {
     pub medical_transcription_job: Option<MedicalTranscriptionJob>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartTranscriptionJobRequest {
     /// <p>An object that contains the request parameters for content redaction.</p>
@@ -807,7 +833,7 @@ pub struct StartTranscriptionJobRequest {
     pub transcription_job_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTranscriptionJobResponse {
     /// <p>An object containing details of the asynchronous transcription job.</p>
@@ -817,7 +843,7 @@ pub struct StartTranscriptionJobResponse {
 }
 
 /// <p>Identifies the location of a transcription.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Transcript {
     /// <p>The S3 object location of the redacted transcript.</p> <p>Use this URI to access the redacated transcript. If you specified an S3 bucket in the <code>OutputBucketName</code> field when you created the job, this is the URI of that bucket. If you chose to store the transcript in Amazon Transcribe, this is a shareable URL that provides secure access to that location.</p>
@@ -831,7 +857,7 @@ pub struct Transcript {
 }
 
 /// <p>Describes an asynchronous transcription job that was created with the <code>StartTranscriptionJob</code> operation. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TranscriptionJob {
     /// <p>A timestamp that shows when the job was completed.</p>
@@ -893,7 +919,7 @@ pub struct TranscriptionJob {
 }
 
 /// <p>Provides a summary of information about a transcription job.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TranscriptionJobSummary {
     /// <p>A timestamp that shows when the job was completed.</p>
@@ -934,7 +960,7 @@ pub struct TranscriptionJobSummary {
     pub transcription_job_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateMedicalVocabularyRequest {
     /// <p>The language code of the entries in the updated vocabulary. US English (en-US) is the only valid language code in Amazon Transcribe Medical.</p>
@@ -949,7 +975,7 @@ pub struct UpdateMedicalVocabularyRequest {
     pub vocabulary_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMedicalVocabularyResponse {
     /// <p>The language code for the text file used to update the custom vocabulary. US English (en-US) is the only language supported in Amazon Transcribe Medical.</p>
@@ -970,7 +996,7 @@ pub struct UpdateMedicalVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVocabularyFilterRequest {
     /// <p>The Amazon S3 location of a text file used as input to create the vocabulary filter. Only use characters from the character set defined for custom vocabularies. For a list of character sets, see <a href="https://docs.aws.amazon.com/transcribe/latest/dg/how-vocabulary.html#charsets">Character Sets for Custom Vocabularies</a>.</p> <p>The specified file must be less than 50 KB of UTF-8 characters.</p> <p>If you provide the location of a list of words in the <code>VocabularyFilterFileUri</code> parameter, you can't use the <code>Words</code> parameter.</p>
@@ -986,7 +1012,7 @@ pub struct UpdateVocabularyFilterRequest {
     pub words: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVocabularyFilterResponse {
     /// <p>The language code of the words in the vocabulary filter.</p>
@@ -1003,7 +1029,7 @@ pub struct UpdateVocabularyFilterResponse {
     pub vocabulary_filter_name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVocabularyRequest {
     /// <p>The language code of the vocabulary entries.</p>
@@ -1022,7 +1048,7 @@ pub struct UpdateVocabularyRequest {
     pub vocabulary_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVocabularyResponse {
     /// <p>The language code of the vocabulary entries.</p>
@@ -1044,7 +1070,7 @@ pub struct UpdateVocabularyResponse {
 }
 
 /// <p>Provides information about a vocabulary filter.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VocabularyFilterInfo {
     /// <p>The language code of the words in the vocabulary filter.</p>
@@ -1062,7 +1088,7 @@ pub struct VocabularyFilterInfo {
 }
 
 /// <p>Provides information about a custom vocabulary. </p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VocabularyInfo {
     /// <p>The language code of the vocabulary entries.</p>
@@ -2419,27 +2445,18 @@ impl Transcribe for TranscribeClient {
         &self,
         input: CreateMedicalVocabularyRequest,
     ) -> Result<CreateMedicalVocabularyResponse, RusotoError<CreateMedicalVocabularyError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.CreateMedicalVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateMedicalVocabularyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateMedicalVocabularyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateMedicalVocabularyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateMedicalVocabularyResponse, _>()
     }
 
     /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>
@@ -2447,27 +2464,17 @@ impl Transcribe for TranscribeClient {
         &self,
         input: CreateVocabularyRequest,
     ) -> Result<CreateVocabularyResponse, RusotoError<CreateVocabularyError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.CreateVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateVocabularyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVocabularyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateVocabularyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateVocabularyResponse, _>()
     }
 
     /// <p>Creates a new vocabulary filter that you can use to filter words, such as profane words, from the output of a transcription job.</p>
@@ -2475,27 +2482,18 @@ impl Transcribe for TranscribeClient {
         &self,
         input: CreateVocabularyFilterRequest,
     ) -> Result<CreateVocabularyFilterResponse, RusotoError<CreateVocabularyFilterError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.CreateVocabularyFilter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateVocabularyFilterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(CreateVocabularyFilterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, CreateVocabularyFilterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateVocabularyFilterResponse, _>()
     }
 
     /// <p>Deletes a transcription job generated by Amazon Transcribe Medical and any related information.</p>
@@ -2503,26 +2501,16 @@ impl Transcribe for TranscribeClient {
         &self,
         input: DeleteMedicalTranscriptionJobRequest,
     ) -> Result<(), RusotoError<DeleteMedicalTranscriptionJobError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.DeleteMedicalTranscriptionJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMedicalTranscriptionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteMedicalTranscriptionJobError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a vocabulary from Amazon Transcribe Medical.</p>
@@ -2530,26 +2518,16 @@ impl Transcribe for TranscribeClient {
         &self,
         input: DeleteMedicalVocabularyRequest,
     ) -> Result<(), RusotoError<DeleteMedicalVocabularyError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.DeleteMedicalVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteMedicalVocabularyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteMedicalVocabularyError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a previously submitted transcription job along with any other generated results such as the transcription, models, and so on.</p>
@@ -2557,26 +2535,16 @@ impl Transcribe for TranscribeClient {
         &self,
         input: DeleteTranscriptionJobRequest,
     ) -> Result<(), RusotoError<DeleteTranscriptionJobError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.DeleteTranscriptionJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteTranscriptionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteTranscriptionJobError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes a vocabulary from Amazon Transcribe. </p>
@@ -2584,26 +2552,16 @@ impl Transcribe for TranscribeClient {
         &self,
         input: DeleteVocabularyRequest,
     ) -> Result<(), RusotoError<DeleteVocabularyError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.DeleteVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteVocabularyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteVocabularyError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Removes a vocabulary filter.</p>
@@ -2611,26 +2569,16 @@ impl Transcribe for TranscribeClient {
         &self,
         input: DeleteVocabularyFilterRequest,
     ) -> Result<(), RusotoError<DeleteVocabularyFilterError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.DeleteVocabularyFilter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            std::mem::drop(response);
-            Ok(())
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(DeleteVocabularyFilterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, DeleteVocabularyFilterError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Returns information about a transcription job from Amazon Transcribe Medical. To see the status of the job, check the <code>TranscriptionJobStatus</code> field. If the status is <code>COMPLETED</code>, the job is finished. You find the results of the completed job in the <code>TranscriptFileUri</code> field.</p>
@@ -2639,27 +2587,18 @@ impl Transcribe for TranscribeClient {
         input: GetMedicalTranscriptionJobRequest,
     ) -> Result<GetMedicalTranscriptionJobResponse, RusotoError<GetMedicalTranscriptionJobError>>
     {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.GetMedicalTranscriptionJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMedicalTranscriptionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMedicalTranscriptionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMedicalTranscriptionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetMedicalTranscriptionJobResponse, _>()
     }
 
     /// <p>Retrieve information about a medical vocabulary.</p>
@@ -2667,27 +2606,18 @@ impl Transcribe for TranscribeClient {
         &self,
         input: GetMedicalVocabularyRequest,
     ) -> Result<GetMedicalVocabularyResponse, RusotoError<GetMedicalVocabularyError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.GetMedicalVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetMedicalVocabularyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetMedicalVocabularyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetMedicalVocabularyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetMedicalVocabularyResponse, _>()
     }
 
     /// <p>Returns information about a transcription job. To see the status of the job, check the <code>TranscriptionJobStatus</code> field. If the status is <code>COMPLETED</code>, the job is finished and you can find the results at the location specified in the <code>TranscriptFileUri</code> field. If you enable content redaction, the redacted transcript appears in <code>RedactedTranscriptFileUri</code>.</p>
@@ -2695,27 +2625,17 @@ impl Transcribe for TranscribeClient {
         &self,
         input: GetTranscriptionJobRequest,
     ) -> Result<GetTranscriptionJobResponse, RusotoError<GetTranscriptionJobError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.GetTranscriptionJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetTranscriptionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetTranscriptionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetTranscriptionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetTranscriptionJobResponse, _>()
     }
 
     /// <p>Gets information about a vocabulary. </p>
@@ -2723,26 +2643,17 @@ impl Transcribe for TranscribeClient {
         &self,
         input: GetVocabularyRequest,
     ) -> Result<GetVocabularyResponse, RusotoError<GetVocabularyError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.GetVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response).deserialize::<GetVocabularyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetVocabularyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetVocabularyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetVocabularyResponse, _>()
     }
 
     /// <p>Returns information about a vocabulary filter.</p>
@@ -2750,27 +2661,17 @@ impl Transcribe for TranscribeClient {
         &self,
         input: GetVocabularyFilterRequest,
     ) -> Result<GetVocabularyFilterResponse, RusotoError<GetVocabularyFilterError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.GetVocabularyFilter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<GetVocabularyFilterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(GetVocabularyFilterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, GetVocabularyFilterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetVocabularyFilterResponse, _>()
     }
 
     /// <p>Lists medical transcription jobs with a specified status or substring that matches their names.</p>
@@ -2779,27 +2680,18 @@ impl Transcribe for TranscribeClient {
         input: ListMedicalTranscriptionJobsRequest,
     ) -> Result<ListMedicalTranscriptionJobsResponse, RusotoError<ListMedicalTranscriptionJobsError>>
     {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.ListMedicalTranscriptionJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMedicalTranscriptionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMedicalTranscriptionJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListMedicalTranscriptionJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListMedicalTranscriptionJobsResponse, _>()
     }
 
     /// <p>Returns a list of vocabularies that match the specified criteria. You get the entire list of vocabularies if you don't enter a value in any of the request parameters.</p>
@@ -2807,27 +2699,18 @@ impl Transcribe for TranscribeClient {
         &self,
         input: ListMedicalVocabulariesRequest,
     ) -> Result<ListMedicalVocabulariesResponse, RusotoError<ListMedicalVocabulariesError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.ListMedicalVocabularies");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListMedicalVocabulariesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListMedicalVocabulariesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListMedicalVocabulariesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListMedicalVocabulariesResponse, _>()
     }
 
     /// <p>Lists transcription jobs with the specified status.</p>
@@ -2835,27 +2718,18 @@ impl Transcribe for TranscribeClient {
         &self,
         input: ListTranscriptionJobsRequest,
     ) -> Result<ListTranscriptionJobsResponse, RusotoError<ListTranscriptionJobsError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.ListTranscriptionJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListTranscriptionJobsResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListTranscriptionJobsError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListTranscriptionJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListTranscriptionJobsResponse, _>()
     }
 
     /// <p>Returns a list of vocabularies that match the specified criteria. If no criteria are specified, returns the entire list of vocabularies.</p>
@@ -2863,27 +2737,17 @@ impl Transcribe for TranscribeClient {
         &self,
         input: ListVocabulariesRequest,
     ) -> Result<ListVocabulariesResponse, RusotoError<ListVocabulariesError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.ListVocabularies");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVocabulariesResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListVocabulariesError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListVocabulariesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListVocabulariesResponse, _>()
     }
 
     /// <p>Gets information about vocabulary filters.</p>
@@ -2891,27 +2755,18 @@ impl Transcribe for TranscribeClient {
         &self,
         input: ListVocabularyFiltersRequest,
     ) -> Result<ListVocabularyFiltersResponse, RusotoError<ListVocabularyFiltersError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.ListVocabularyFilters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<ListVocabularyFiltersResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(ListVocabularyFiltersError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, ListVocabularyFiltersError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListVocabularyFiltersResponse, _>()
     }
 
     /// <p>Start a batch job to transcribe medical speech to text.</p>
@@ -2920,27 +2775,18 @@ impl Transcribe for TranscribeClient {
         input: StartMedicalTranscriptionJobRequest,
     ) -> Result<StartMedicalTranscriptionJobResponse, RusotoError<StartMedicalTranscriptionJobError>>
     {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.StartMedicalTranscriptionJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartMedicalTranscriptionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartMedicalTranscriptionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartMedicalTranscriptionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartMedicalTranscriptionJobResponse, _>()
     }
 
     /// <p>Starts an asynchronous job to transcribe speech to text. </p>
@@ -2948,27 +2794,18 @@ impl Transcribe for TranscribeClient {
         &self,
         input: StartTranscriptionJobRequest,
     ) -> Result<StartTranscriptionJobResponse, RusotoError<StartTranscriptionJobError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.StartTranscriptionJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<StartTranscriptionJobResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(StartTranscriptionJobError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, StartTranscriptionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<StartTranscriptionJobResponse, _>()
     }
 
     /// <p>Updates an existing vocabulary with new values in a different text file. The <code>UpdateMedicalVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request.</p>
@@ -2976,27 +2813,18 @@ impl Transcribe for TranscribeClient {
         &self,
         input: UpdateMedicalVocabularyRequest,
     ) -> Result<UpdateMedicalVocabularyResponse, RusotoError<UpdateMedicalVocabularyError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.UpdateMedicalVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateMedicalVocabularyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateMedicalVocabularyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateMedicalVocabularyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateMedicalVocabularyResponse, _>()
     }
 
     /// <p>Updates an existing vocabulary with new values. The <code>UpdateVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request. </p>
@@ -3004,27 +2832,17 @@ impl Transcribe for TranscribeClient {
         &self,
         input: UpdateVocabularyRequest,
     ) -> Result<UpdateVocabularyResponse, RusotoError<UpdateVocabularyError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.UpdateVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateVocabularyResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVocabularyError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateVocabularyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateVocabularyResponse, _>()
     }
 
     /// <p>Updates a vocabulary filter with a new list of filtered words.</p>
@@ -3032,26 +2850,17 @@ impl Transcribe for TranscribeClient {
         &self,
         input: UpdateVocabularyFilterRequest,
     ) -> Result<UpdateVocabularyFilterResponse, RusotoError<UpdateVocabularyFilterError>> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        let mut request = self.new_signed_request("POST", "/");
         request.add_header("x-amz-target", "Transcribe.UpdateVocabularyFilter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
 
-        let mut response = self
-            .client
-            .sign_and_dispatch(request)
-            .await
-            .map_err(RusotoError::from)?;
-        if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateVocabularyFilterResponse, _>()
-        } else {
-            let try_response = response.buffer().await;
-            let response = try_response.map_err(RusotoError::HttpDispatch)?;
-            Err(UpdateVocabularyFilterError::from_response(response))
-        }
+        let response = self
+            .sign_and_dispatch(request, UpdateVocabularyFilterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateVocabularyFilterResponse, _>()
     }
 }

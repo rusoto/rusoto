@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteHumanLoopRequest {
     /// <p>The name of the human loop that you want to delete.</p>
@@ -33,11 +33,11 @@ pub struct DeleteHumanLoopRequest {
     pub human_loop_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHumanLoopResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeHumanLoopRequest {
     /// <p>The name of the human loop that you want information about.</p>
@@ -45,7 +45,7 @@ pub struct DescribeHumanLoopRequest {
     pub human_loop_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHumanLoopResponse {
     /// <p>The creation time when Amazon Augmented AI created the human loop.</p>
@@ -78,7 +78,7 @@ pub struct DescribeHumanLoopResponse {
 }
 
 /// <p>Attributes of the data specified by the customer. Use these to describe the data to be labeled.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HumanLoopDataAttributes {
     /// <p>Declares that your content is free of personally identifiable information or adult content.</p> <p>Amazon SageMaker can restrict the Amazon Mechanical Turk workers who can view your task based on this information.</p>
@@ -87,7 +87,7 @@ pub struct HumanLoopDataAttributes {
 }
 
 /// <p>An object containing the human loop input in JSON format.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct HumanLoopInput {
     /// <p>Serialized input from the human loop. The input must be a string representation of a file in JSON format.</p>
@@ -96,7 +96,7 @@ pub struct HumanLoopInput {
 }
 
 /// <p>Information about where the human output will be stored.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HumanLoopOutput {
     /// <p>The location of the Amazon S3 object where Amazon Augmented AI stores your human loop output.</p>
@@ -105,7 +105,7 @@ pub struct HumanLoopOutput {
 }
 
 /// <p>Summary information about the human loop.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HumanLoopSummary {
     /// <p>When Amazon Augmented AI created the human loop.</p>
@@ -130,7 +130,7 @@ pub struct HumanLoopSummary {
     pub human_loop_status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHumanLoopsRequest {
     /// <p>(Optional) The timestamp of the date when you want the human loops to begin in ISO 8601 format. For example, <code>2020-02-24</code>.</p>
@@ -158,7 +158,7 @@ pub struct ListHumanLoopsRequest {
     pub sort_order: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHumanLoopsResponse {
     /// <p>An array of objects that contain information about the human loops.</p>
@@ -170,7 +170,7 @@ pub struct ListHumanLoopsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartHumanLoopRequest {
     /// <p>Attributes of the specified data. Use <code>DataAttributes</code> to specify if your data is free of personally identifiable information and/or free of adult content.</p>
@@ -188,7 +188,7 @@ pub struct StartHumanLoopRequest {
     pub human_loop_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartHumanLoopResponse {
     /// <p>The Amazon Resource Name (ARN) of the human loop.</p>
@@ -197,7 +197,7 @@ pub struct StartHumanLoopResponse {
     pub human_loop_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopHumanLoopRequest {
     /// <p>The name of the human loop that you want to stop.</p>
@@ -205,7 +205,7 @@ pub struct StopHumanLoopRequest {
     pub human_loop_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopHumanLoopResponse {}
 
@@ -499,6 +499,7 @@ impl SagemakerA2iRuntimeClient {
 #[async_trait]
 impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     /// <p>Deletes the specified human loop for a flow definition.</p>
+    #[allow(unused_mut)]
     async fn delete_human_loop(
         &self,
         input: DeleteHumanLoopRequest,
@@ -519,7 +520,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteHumanLoopResponse, _>()?;
 
@@ -531,6 +532,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     }
 
     /// <p>Returns information about the specified human loop.</p>
+    #[allow(unused_mut)]
     async fn describe_human_loop(
         &self,
         input: DescribeHumanLoopRequest,
@@ -551,7 +553,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DescribeHumanLoopResponse, _>()?;
 
@@ -563,6 +565,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     }
 
     /// <p>Returns information about human loops, given the specified parameters. If a human loop was deleted, it will not be included.</p>
+    #[allow(unused_mut)]
     async fn list_human_loops(
         &self,
         input: ListHumanLoopsRequest,
@@ -599,7 +602,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListHumanLoopsResponse, _>()?;
 
@@ -611,6 +614,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     }
 
     /// <p>Starts a human loop, provided that at least one activation condition is met.</p>
+    #[allow(unused_mut)]
     async fn start_human_loop(
         &self,
         input: StartHumanLoopRequest,
@@ -630,7 +634,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StartHumanLoopResponse, _>()?;
 
@@ -642,6 +646,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
     }
 
     /// <p>Stops the specified human loop.</p>
+    #[allow(unused_mut)]
     async fn stop_human_loop(
         &self,
         input: StopHumanLoopRequest,
@@ -661,7 +666,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<StopHumanLoopResponse, _>()?;
 

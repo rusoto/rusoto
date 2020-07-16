@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
 use serde_json;
 /// <p>The Amazon Chime account details. An AWS account can have multiple Amazon Chime accounts.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Account {
     /// <p>The Amazon Chime account ID.</p>
@@ -61,7 +61,7 @@ pub struct Account {
 }
 
 /// <p>Settings related to the Amazon Chime account. This includes settings that start or stop remote control of shared screens, or start or stop the dial-out option in the Amazon Chime web application. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AccountSettings {
     /// <p>Setting that stops or starts remote control of shared screens during meetings.</p>
     #[serde(rename = "DisableRemoteControl")]
@@ -74,7 +74,7 @@ pub struct AccountSettings {
 }
 
 /// <p>The Alexa for Business metadata associated with an Amazon Chime user, used to integrate Alexa for Business with a device.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AlexaForBusinessMetadata {
     /// <p>The ARN of the room resource.</p>
     #[serde(rename = "AlexaForBusinessRoomArn")]
@@ -86,7 +86,7 @@ pub struct AlexaForBusinessMetadata {
     pub is_alexa_for_business_enabled: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePhoneNumberWithUserRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -100,17 +100,16 @@ pub struct AssociatePhoneNumberWithUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatePhoneNumberWithUserResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePhoneNumbersWithVoiceConnectorGroupRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub e164_phone_numbers: Option<Vec<String>>,
+    pub e164_phone_numbers: Vec<String>,
     /// <p>If true, associates the provided phone numbers with the provided Amazon Chime Voice Connector Group and removes any previously existing associations. If false, does not associate any phone numbers that have previously existing associations.</p>
     #[serde(rename = "ForceAssociate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -120,7 +119,7 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorGroupRequest {
     pub voice_connector_group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatePhoneNumbersWithVoiceConnectorGroupResponse {
     /// <p>If the action fails for one or more of the phone numbers in the request, a list of the phone numbers is returned, along with error codes and error messages.</p>
@@ -129,13 +128,12 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorGroupResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociatePhoneNumbersWithVoiceConnectorRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub e164_phone_numbers: Option<Vec<String>>,
+    pub e164_phone_numbers: Vec<String>,
     /// <p>If true, associates the provided phone numbers with the provided Amazon Chime Voice Connector and removes any previously existing associations. If false, does not associate any phone numbers that have previously existing associations.</p>
     #[serde(rename = "ForceAssociate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -145,7 +143,7 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatePhoneNumbersWithVoiceConnectorResponse {
     /// <p>If the action fails for one or more of the phone numbers in the request, a list of the phone numbers is returned, along with error codes and error messages.</p>
@@ -154,7 +152,7 @@ pub struct AssociatePhoneNumbersWithVoiceConnectorResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSigninDelegateGroupsWithAccountRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -165,12 +163,12 @@ pub struct AssociateSigninDelegateGroupsWithAccountRequest {
     pub signin_delegate_groups: Vec<SigninDelegateGroup>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateSigninDelegateGroupsWithAccountResponse {}
 
 /// <p>An Amazon Chime SDK meeting attendee. Includes a unique <code>AttendeeId</code> and <code>JoinToken</code>. The <code>JoinToken</code> allows a client to authenticate and join as the specified attendee. The <code>JoinToken</code> expires when the meeting ends or when <a>DeleteAttendee</a> is called. After that, the attendee is unable to join the meeting.</p> <p>We recommend securely transferring each <code>JoinToken</code> from your server application to the client so that no other client has access to the token except for the one authorized to represent the attendee.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Attendee {
     /// <p>The Amazon Chime SDK attendee ID.</p>
@@ -187,7 +185,7 @@ pub struct Attendee {
     pub join_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateAttendeeRequest {
     /// <p>The request containing the attendees to create.</p>
@@ -198,7 +196,7 @@ pub struct BatchCreateAttendeeRequest {
     pub meeting_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateAttendeeResponse {
     /// <p>The attendee information, including attendees IDs and join tokens.</p>
@@ -211,7 +209,7 @@ pub struct BatchCreateAttendeeResponse {
     pub errors: Option<Vec<ChimeCreateAttendeeError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchCreateRoomMembershipRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -225,7 +223,7 @@ pub struct BatchCreateRoomMembershipRequest {
     pub room_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchCreateRoomMembershipResponse {
     /// <p>If the action fails for one or more of the member IDs in the request, a list of the member IDs is returned, along with error codes and error messages.</p>
@@ -234,7 +232,7 @@ pub struct BatchCreateRoomMembershipResponse {
     pub errors: Option<Vec<MemberError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeletePhoneNumberRequest {
     /// <p>List of phone number IDs.</p>
@@ -242,7 +240,7 @@ pub struct BatchDeletePhoneNumberRequest {
     pub phone_number_ids: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeletePhoneNumberResponse {
     /// <p>If the action fails for one or more of the phone numbers in the request, a list of the phone numbers is returned, along with error codes and error messages.</p>
@@ -251,7 +249,7 @@ pub struct BatchDeletePhoneNumberResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchSuspendUserRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -262,7 +260,7 @@ pub struct BatchSuspendUserRequest {
     pub user_id_list: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchSuspendUserResponse {
     /// <p>If the <a>BatchSuspendUser</a> action fails for one or more of the user IDs in the request, a list of the user IDs is returned, along with error codes and error messages.</p>
@@ -271,7 +269,7 @@ pub struct BatchSuspendUserResponse {
     pub user_errors: Option<Vec<UserError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUnsuspendUserRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -282,7 +280,7 @@ pub struct BatchUnsuspendUserRequest {
     pub user_id_list: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUnsuspendUserResponse {
     /// <p>If the <a>BatchUnsuspendUser</a> action fails for one or more of the user IDs in the request, a list of the user IDs is returned, along with error codes and error messages.</p>
@@ -291,7 +289,7 @@ pub struct BatchUnsuspendUserResponse {
     pub user_errors: Option<Vec<UserError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdatePhoneNumberRequest {
     /// <p>The request containing the phone number IDs and product types or calling names to update.</p>
@@ -299,7 +297,7 @@ pub struct BatchUpdatePhoneNumberRequest {
     pub update_phone_number_request_items: Vec<UpdatePhoneNumberRequestItem>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdatePhoneNumberResponse {
     /// <p>If the action fails for one or more of the phone numbers in the request, a list of the phone numbers is returned, along with error codes and error messages.</p>
@@ -308,7 +306,7 @@ pub struct BatchUpdatePhoneNumberResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchUpdateUserRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -319,7 +317,7 @@ pub struct BatchUpdateUserRequest {
     pub update_user_request_items: Vec<UpdateUserRequestItem>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchUpdateUserResponse {
     /// <p>If the <a>BatchUpdateUser</a> action fails for one or more of the user IDs in the request, a list of the user IDs is returned, along with error codes and error messages.</p>
@@ -329,7 +327,7 @@ pub struct BatchUpdateUserResponse {
 }
 
 /// <p>A resource that allows Enterprise account administrators to configure an interface to receive events from Amazon Chime.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Bot {
     /// <p>The bot email address.</p>
@@ -371,7 +369,7 @@ pub struct Bot {
 }
 
 /// <p>The Amazon Chime Business Calling settings for the administrator's AWS account. Includes any Amazon S3 buckets designated for storing call detail records.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BusinessCallingSettings {
     /// <p>The Amazon S3 bucket designated for call detail record storage.</p>
     #[serde(rename = "CdrBucket")]
@@ -380,7 +378,7 @@ pub struct BusinessCallingSettings {
 }
 
 /// <p>The retention settings that determine how long to retain chat conversation messages for an Amazon Chime Enterprise account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConversationRetentionSettings {
     /// <p>The number of days for which to retain chat conversation messages.</p>
     #[serde(rename = "RetentionDays")]
@@ -388,7 +386,7 @@ pub struct ConversationRetentionSettings {
     pub retention_days: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAccountRequest {
     /// <p>The name of the Amazon Chime account.</p>
@@ -396,7 +394,7 @@ pub struct CreateAccountRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAccountResponse {
     /// <p>The Amazon Chime account details.</p>
@@ -406,7 +404,7 @@ pub struct CreateAccountResponse {
 }
 
 /// <p>The list of errors returned when errors are encountered during the BatchCreateAttendee and CreateAttendee actions. This includes external user IDs, error codes, and error messages.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChimeCreateAttendeeError {
     /// <p>The error code.</p>
@@ -423,7 +421,7 @@ pub struct ChimeCreateAttendeeError {
     pub external_user_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAttendeeRequest {
     /// <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
@@ -439,7 +437,7 @@ pub struct CreateAttendeeRequest {
 }
 
 /// <p>The Amazon Chime SDK attendee fields to create, used with the BatchCreateAttendee action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAttendeeRequestItem {
     /// <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
@@ -451,7 +449,7 @@ pub struct CreateAttendeeRequestItem {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAttendeeResponse {
     /// <p>The attendee information, including attendee ID and join token.</p>
@@ -460,7 +458,7 @@ pub struct CreateAttendeeResponse {
     pub attendee: Option<Attendee>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBotRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -475,7 +473,7 @@ pub struct CreateBotRequest {
     pub domain: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBotResponse {
     /// <p>The bot details.</p>
@@ -484,7 +482,7 @@ pub struct CreateBotResponse {
     pub bot: Option<Bot>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMeetingRequest {
     /// <p>The unique identifier for the client request. Use a different token for different meetings.</p>
@@ -494,7 +492,7 @@ pub struct CreateMeetingRequest {
     #[serde(rename = "ExternalMeetingId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_meeting_id: Option<String>,
-    /// <p>The Region in which to create the meeting. Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
+    /// <p>The Region in which to create the meeting. Default: <code>us-east-1</code>.</p> <p>Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -512,7 +510,7 @@ pub struct CreateMeetingRequest {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMeetingResponse {
     /// <p>The meeting information, including the meeting ID and <code>MediaPlacement</code>.</p>
@@ -521,7 +519,54 @@ pub struct CreateMeetingResponse {
     pub meeting: Option<Meeting>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateMeetingWithAttendeesRequest {
+    /// <p>The request containing the attendees to create.</p>
+    #[serde(rename = "Attendees")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attendees: Option<Vec<CreateAttendeeRequestItem>>,
+    /// <p>The unique identifier for the client request. Use a different token for different meetings.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The external meeting ID.</p>
+    #[serde(rename = "ExternalMeetingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_meeting_id: Option<String>,
+    /// <p>The Region in which to create the meeting. Default: <code>us-east-1</code>.</p> <p>Available values: <code>ap-northeast-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
+    #[serde(rename = "MediaRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_region: Option<String>,
+    /// <p>Reserved.</p>
+    #[serde(rename = "MeetingHostId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meeting_host_id: Option<String>,
+    #[serde(rename = "NotificationsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notifications_configuration: Option<MeetingNotificationConfiguration>,
+    /// <p>The tag key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateMeetingWithAttendeesResponse {
+    /// <p>The attendee information, including attendees IDs and join tokens.</p>
+    #[serde(rename = "Attendees")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attendees: Option<Vec<Attendee>>,
+    /// <p>If the action fails for one or more of the attendees in the request, a list of the attendees is returned, along with error codes and error messages.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<ChimeCreateAttendeeError>>,
+    #[serde(rename = "Meeting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meeting: Option<Meeting>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePhoneNumberOrderRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
@@ -532,7 +577,7 @@ pub struct CreatePhoneNumberOrderRequest {
     pub product_type: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePhoneNumberOrderResponse {
     /// <p>The phone number order details.</p>
@@ -541,7 +586,7 @@ pub struct CreatePhoneNumberOrderResponse {
     pub phone_number_order: Option<PhoneNumberOrder>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProxySessionRequest {
     /// <p>The proxy session capabilities.</p>
@@ -575,7 +620,7 @@ pub struct CreateProxySessionRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProxySessionResponse {
     /// <p>The proxy session details.</p>
@@ -584,7 +629,7 @@ pub struct CreateProxySessionResponse {
     pub proxy_session: Option<ProxySession>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoomMembershipRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -602,7 +647,7 @@ pub struct CreateRoomMembershipRequest {
     pub room_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRoomMembershipResponse {
     /// <p>The room membership details.</p>
@@ -611,7 +656,7 @@ pub struct CreateRoomMembershipResponse {
     pub room_membership: Option<RoomMembership>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateRoomRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -626,7 +671,7 @@ pub struct CreateRoomRequest {
     pub name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRoomResponse {
     /// <p>The room details.</p>
@@ -635,7 +680,7 @@ pub struct CreateRoomResponse {
     pub room: Option<Room>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -655,7 +700,7 @@ pub struct CreateUserRequest {
     pub username: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
     #[serde(rename = "User")]
@@ -663,7 +708,7 @@ pub struct CreateUserResponse {
     pub user: Option<User>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVoiceConnectorGroupRequest {
     /// <p>The name of the Amazon Chime Voice Connector group.</p>
@@ -675,7 +720,7 @@ pub struct CreateVoiceConnectorGroupRequest {
     pub voice_connector_items: Option<Vec<VoiceConnectorItem>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVoiceConnectorGroupResponse {
     /// <p>The Amazon Chime Voice Connector group details.</p>
@@ -684,7 +729,7 @@ pub struct CreateVoiceConnectorGroupResponse {
     pub voice_connector_group: Option<VoiceConnectorGroup>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVoiceConnectorRequest {
     /// <p>The AWS Region in which the Amazon Chime Voice Connector is created. Default value: <code>us-east-1</code>.</p>
@@ -699,7 +744,7 @@ pub struct CreateVoiceConnectorRequest {
     pub require_encryption: bool,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVoiceConnectorResponse {
     /// <p>The Amazon Chime Voice Connector details.</p>
@@ -709,7 +754,7 @@ pub struct CreateVoiceConnectorResponse {
 }
 
 /// <p>The SIP credentials used to authenticate requests to your Amazon Chime Voice Connector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Credential {
     /// <p>The RFC2617 compliant password associated with the SIP credentials, in US-ASCII format.</p>
@@ -722,7 +767,22 @@ pub struct Credential {
     pub username: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+/// <p>The Dialed Number Identification Service (DNIS) emergency calling configuration details associated with an Amazon Chime Voice Connector's emergency calling configuration.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DNISEmergencyCallingConfiguration {
+    /// <p>The country from which emergency calls are allowed, in ISO 3166-1 alpha-2 format.</p>
+    #[serde(rename = "CallingCountry")]
+    pub calling_country: String,
+    /// <p>The DNIS phone number to route emergency calls to, in E.164 format.</p>
+    #[serde(rename = "EmergencyPhoneNumber")]
+    pub emergency_phone_number: String,
+    /// <p>The DNIS phone number to route test emergency calls to, in E.164 format.</p>
+    #[serde(rename = "TestPhoneNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_phone_number: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAccountRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -730,11 +790,11 @@ pub struct DeleteAccountRequest {
     pub account_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAccountResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAttendeeRequest {
     /// <p>The Amazon Chime SDK attendee ID.</p>
@@ -745,7 +805,7 @@ pub struct DeleteAttendeeRequest {
     pub meeting_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventsConfigurationRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -756,7 +816,7 @@ pub struct DeleteEventsConfigurationRequest {
     pub bot_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMeetingRequest {
     /// <p>The Amazon Chime SDK meeting ID.</p>
@@ -764,7 +824,7 @@ pub struct DeleteMeetingRequest {
     pub meeting_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeletePhoneNumberRequest {
     /// <p>The phone number ID.</p>
@@ -772,7 +832,7 @@ pub struct DeletePhoneNumberRequest {
     pub phone_number_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteProxySessionRequest {
     /// <p>The proxy session ID.</p>
@@ -783,7 +843,7 @@ pub struct DeleteProxySessionRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomMembershipRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -797,7 +857,7 @@ pub struct DeleteRoomMembershipRequest {
     pub room_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteRoomRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -808,7 +868,15 @@ pub struct DeleteRoomRequest {
     pub room_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteVoiceConnectorEmergencyCallingConfigurationRequest {
+    /// <p>The Amazon Chime Voice Connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorGroupRequest {
     /// <p>The Amazon Chime Voice Connector group ID.</p>
@@ -816,7 +884,7 @@ pub struct DeleteVoiceConnectorGroupRequest {
     pub voice_connector_group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorOriginationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -824,7 +892,7 @@ pub struct DeleteVoiceConnectorOriginationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorProxyRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -832,7 +900,7 @@ pub struct DeleteVoiceConnectorProxyRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -840,7 +908,7 @@ pub struct DeleteVoiceConnectorRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorStreamingConfigurationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -848,19 +916,18 @@ pub struct DeleteVoiceConnectorStreamingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorTerminationCredentialsRequest {
     /// <p>The RFC2617 compliant username associated with the SIP credentials, in US-ASCII format.</p>
     #[serde(rename = "Usernames")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub usernames: Option<Vec<String>>,
+    pub usernames: Vec<String>,
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVoiceConnectorTerminationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -868,7 +935,7 @@ pub struct DeleteVoiceConnectorTerminationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePhoneNumberFromUserRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -879,23 +946,22 @@ pub struct DisassociatePhoneNumberFromUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociatePhoneNumberFromUserResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub e164_phone_numbers: Option<Vec<String>>,
+    pub e164_phone_numbers: Vec<String>,
     /// <p>The Amazon Chime Voice Connector group ID.</p>
     #[serde(rename = "VoiceConnectorGroupId")]
     pub voice_connector_group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupResponse {
     /// <p>If the action fails for one or more of the phone numbers in the request, a list of the phone numbers is returned, along with error codes and error messages.</p>
@@ -904,19 +970,18 @@ pub struct DisassociatePhoneNumbersFromVoiceConnectorGroupResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociatePhoneNumbersFromVoiceConnectorRequest {
     /// <p>List of phone numbers, in E.164 format.</p>
     #[serde(rename = "E164PhoneNumbers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub e164_phone_numbers: Option<Vec<String>>,
+    pub e164_phone_numbers: Vec<String>,
     /// <p>The Amazon Chime Voice Connector ID.</p>
     #[serde(rename = "VoiceConnectorId")]
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociatePhoneNumbersFromVoiceConnectorResponse {
     /// <p>If the action fails for one or more of the phone numbers in the request, a list of the phone numbers is returned, along with error codes and error messages.</p>
@@ -925,7 +990,7 @@ pub struct DisassociatePhoneNumbersFromVoiceConnectorResponse {
     pub phone_number_errors: Option<Vec<PhoneNumberError>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateSigninDelegateGroupsFromAccountRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -936,12 +1001,21 @@ pub struct DisassociateSigninDelegateGroupsFromAccountRequest {
     pub group_names: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateSigninDelegateGroupsFromAccountResponse {}
 
+/// <p>The emergency calling configuration details associated with an Amazon Chime Voice Connector.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EmergencyCallingConfiguration {
+    /// <p>The Dialed Number Identification Service (DNIS) emergency calling configuration details.</p>
+    #[serde(rename = "DNIS")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dnis: Option<Vec<DNISEmergencyCallingConfiguration>>,
+}
+
 /// <p>The configuration that allows a bot to receive outgoing events. Can be either an HTTPS endpoint or a Lambda function ARN.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventsConfiguration {
     /// <p>The bot ID.</p>
@@ -959,7 +1033,7 @@ pub struct EventsConfiguration {
 }
 
 /// <p>The country and area code for a proxy phone number in a proxy phone session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GeoMatchParams {
     /// <p>The area code.</p>
     #[serde(rename = "AreaCode")]
@@ -969,7 +1043,7 @@ pub struct GeoMatchParams {
     pub country: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -977,7 +1051,7 @@ pub struct GetAccountRequest {
     pub account_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountResponse {
     /// <p>The Amazon Chime account details.</p>
@@ -986,7 +1060,7 @@ pub struct GetAccountResponse {
     pub account: Option<Account>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAccountSettingsRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -994,7 +1068,7 @@ pub struct GetAccountSettingsRequest {
     pub account_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountSettingsResponse {
     /// <p>The Amazon Chime account settings.</p>
@@ -1003,7 +1077,7 @@ pub struct GetAccountSettingsResponse {
     pub account_settings: Option<AccountSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAttendeeRequest {
     /// <p>The Amazon Chime SDK attendee ID.</p>
@@ -1014,7 +1088,7 @@ pub struct GetAttendeeRequest {
     pub meeting_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAttendeeResponse {
     /// <p>The Amazon Chime SDK attendee information.</p>
@@ -1023,7 +1097,7 @@ pub struct GetAttendeeResponse {
     pub attendee: Option<Attendee>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBotRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1034,7 +1108,7 @@ pub struct GetBotRequest {
     pub bot_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotResponse {
     /// <p>The chat bot details.</p>
@@ -1043,7 +1117,7 @@ pub struct GetBotResponse {
     pub bot: Option<Bot>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEventsConfigurationRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1054,7 +1128,7 @@ pub struct GetEventsConfigurationRequest {
     pub bot_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEventsConfigurationResponse {
     /// <p>The events configuration details.</p>
@@ -1063,7 +1137,7 @@ pub struct GetEventsConfigurationResponse {
     pub events_configuration: Option<EventsConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGlobalSettingsResponse {
     /// <p>The Amazon Chime Business Calling settings.</p>
@@ -1076,7 +1150,7 @@ pub struct GetGlobalSettingsResponse {
     pub voice_connector: Option<VoiceConnectorSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMeetingRequest {
     /// <p>The Amazon Chime SDK meeting ID.</p>
@@ -1084,7 +1158,7 @@ pub struct GetMeetingRequest {
     pub meeting_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMeetingResponse {
     /// <p>The Amazon Chime SDK meeting information.</p>
@@ -1093,7 +1167,7 @@ pub struct GetMeetingResponse {
     pub meeting: Option<Meeting>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPhoneNumberOrderRequest {
     /// <p>The ID for the phone number order.</p>
@@ -1101,7 +1175,7 @@ pub struct GetPhoneNumberOrderRequest {
     pub phone_number_order_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPhoneNumberOrderResponse {
     /// <p>The phone number order details.</p>
@@ -1110,7 +1184,7 @@ pub struct GetPhoneNumberOrderResponse {
     pub phone_number_order: Option<PhoneNumberOrder>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPhoneNumberRequest {
     /// <p>The phone number ID.</p>
@@ -1118,7 +1192,7 @@ pub struct GetPhoneNumberRequest {
     pub phone_number_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPhoneNumberResponse {
     /// <p>The phone number details.</p>
@@ -1127,7 +1201,7 @@ pub struct GetPhoneNumberResponse {
     pub phone_number: Option<PhoneNumber>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPhoneNumberSettingsResponse {
     /// <p>The default outbound calling name for the account.</p>
@@ -1140,7 +1214,7 @@ pub struct GetPhoneNumberSettingsResponse {
     pub calling_name_updated_timestamp: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetProxySessionRequest {
     /// <p>The proxy session ID.</p>
@@ -1151,7 +1225,7 @@ pub struct GetProxySessionRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetProxySessionResponse {
     /// <p>The proxy session details.</p>
@@ -1160,7 +1234,7 @@ pub struct GetProxySessionResponse {
     pub proxy_session: Option<ProxySession>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRetentionSettingsRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1168,7 +1242,7 @@ pub struct GetRetentionSettingsRequest {
     pub account_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRetentionSettingsResponse {
     /// <p>The timestamp representing the time at which the specified items are permanently deleted, in ISO 8601 format.</p>
@@ -1181,7 +1255,7 @@ pub struct GetRetentionSettingsResponse {
     pub retention_settings: Option<RetentionSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRoomRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1192,7 +1266,7 @@ pub struct GetRoomRequest {
     pub room_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRoomResponse {
     /// <p>The room details.</p>
@@ -1201,7 +1275,7 @@ pub struct GetRoomResponse {
     pub room: Option<Room>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1212,7 +1286,7 @@ pub struct GetUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserResponse {
     /// <p>The user details.</p>
@@ -1221,7 +1295,7 @@ pub struct GetUserResponse {
     pub user: Option<User>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUserSettingsRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1232,7 +1306,7 @@ pub struct GetUserSettingsRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUserSettingsResponse {
     /// <p>The user settings.</p>
@@ -1241,7 +1315,24 @@ pub struct GetUserSettingsResponse {
     pub user_settings: Option<UserSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetVoiceConnectorEmergencyCallingConfigurationRequest {
+    /// <p>The Amazon Chime Voice Connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetVoiceConnectorEmergencyCallingConfigurationResponse {
+    /// <p>The emergency calling configuration details.</p>
+    #[serde(rename = "EmergencyCallingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub emergency_calling_configuration: Option<EmergencyCallingConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorGroupRequest {
     /// <p>The Amazon Chime Voice Connector group ID.</p>
@@ -1249,7 +1340,7 @@ pub struct GetVoiceConnectorGroupRequest {
     pub voice_connector_group_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorGroupResponse {
     /// <p>The Amazon Chime Voice Connector group details.</p>
@@ -1258,7 +1349,7 @@ pub struct GetVoiceConnectorGroupResponse {
     pub voice_connector_group: Option<VoiceConnectorGroup>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorLoggingConfigurationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -1266,7 +1357,7 @@ pub struct GetVoiceConnectorLoggingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorLoggingConfigurationResponse {
     /// <p>The logging configuration details.</p>
@@ -1275,7 +1366,7 @@ pub struct GetVoiceConnectorLoggingConfigurationResponse {
     pub logging_configuration: Option<LoggingConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorOriginationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -1283,7 +1374,7 @@ pub struct GetVoiceConnectorOriginationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorOriginationResponse {
     /// <p>The origination setting details.</p>
@@ -1292,7 +1383,7 @@ pub struct GetVoiceConnectorOriginationResponse {
     pub origination: Option<Origination>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorProxyRequest {
     /// <p>The Amazon Chime voice connector ID.</p>
@@ -1300,7 +1391,7 @@ pub struct GetVoiceConnectorProxyRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorProxyResponse {
     /// <p>The proxy configuration details.</p>
@@ -1309,7 +1400,7 @@ pub struct GetVoiceConnectorProxyResponse {
     pub proxy: Option<Proxy>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -1317,7 +1408,7 @@ pub struct GetVoiceConnectorRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorResponse {
     /// <p>The Amazon Chime Voice Connector details.</p>
@@ -1326,7 +1417,7 @@ pub struct GetVoiceConnectorResponse {
     pub voice_connector: Option<VoiceConnector>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorStreamingConfigurationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -1334,7 +1425,7 @@ pub struct GetVoiceConnectorStreamingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorStreamingConfigurationResponse {
     /// <p>The streaming configuration details.</p>
@@ -1343,7 +1434,7 @@ pub struct GetVoiceConnectorStreamingConfigurationResponse {
     pub streaming_configuration: Option<StreamingConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorTerminationHealthRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -1351,7 +1442,7 @@ pub struct GetVoiceConnectorTerminationHealthRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorTerminationHealthResponse {
     /// <p>The termination health details.</p>
@@ -1360,7 +1451,7 @@ pub struct GetVoiceConnectorTerminationHealthResponse {
     pub termination_health: Option<TerminationHealth>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetVoiceConnectorTerminationRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -1368,7 +1459,7 @@ pub struct GetVoiceConnectorTerminationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetVoiceConnectorTerminationResponse {
     /// <p>The termination setting details.</p>
@@ -1378,7 +1469,7 @@ pub struct GetVoiceConnectorTerminationResponse {
 }
 
 /// <p>Invitation object returned after emailing users to invite them to join the Amazon Chime <code>Team</code> account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Invite {
     /// <p>The email address to which the invite is sent.</p>
@@ -1399,7 +1490,7 @@ pub struct Invite {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InviteUsersRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1414,7 +1505,7 @@ pub struct InviteUsersRequest {
     pub user_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InviteUsersResponse {
     /// <p>The email invitation details.</p>
@@ -1423,7 +1514,7 @@ pub struct InviteUsersResponse {
     pub invites: Option<Vec<Invite>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAccountsRequest {
     /// <p>The maximum number of results to return in a single call. Defaults to 100.</p>
@@ -1444,7 +1535,7 @@ pub struct ListAccountsRequest {
     pub user_email: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountsResponse {
     /// <p>List of Amazon Chime accounts and account details.</p>
@@ -1457,7 +1548,7 @@ pub struct ListAccountsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttendeeTagsRequest {
     /// <p>The Amazon Chime SDK attendee ID.</p>
@@ -1468,7 +1559,7 @@ pub struct ListAttendeeTagsRequest {
     pub meeting_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttendeeTagsResponse {
     /// <p>A list of tag key-value pairs.</p>
@@ -1477,7 +1568,7 @@ pub struct ListAttendeeTagsResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAttendeesRequest {
     /// <p>The maximum number of results to return in a single call.</p>
@@ -1493,7 +1584,7 @@ pub struct ListAttendeesRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAttendeesResponse {
     /// <p>The Amazon Chime SDK attendee information.</p>
@@ -1506,7 +1597,7 @@ pub struct ListAttendeesResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBotsRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1522,7 +1613,7 @@ pub struct ListBotsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBotsResponse {
     /// <p>List of bots and bot details.</p>
@@ -1535,7 +1626,7 @@ pub struct ListBotsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMeetingTagsRequest {
     /// <p>The Amazon Chime SDK meeting ID.</p>
@@ -1543,7 +1634,7 @@ pub struct ListMeetingTagsRequest {
     pub meeting_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMeetingTagsResponse {
     /// <p>A list of tag key-value pairs.</p>
@@ -1552,7 +1643,7 @@ pub struct ListMeetingTagsResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListMeetingsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
@@ -1565,7 +1656,7 @@ pub struct ListMeetingsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMeetingsResponse {
     /// <p>The Amazon Chime SDK meeting information.</p>
@@ -1578,7 +1669,7 @@ pub struct ListMeetingsResponse {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumberOrdersRequest {
     /// <p>The maximum number of results to return in a single call.</p>
@@ -1591,7 +1682,7 @@ pub struct ListPhoneNumberOrdersRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPhoneNumberOrdersResponse {
     /// <p>The token to use to retrieve the next page of results.</p>
@@ -1604,7 +1695,7 @@ pub struct ListPhoneNumberOrdersResponse {
     pub phone_number_orders: Option<Vec<PhoneNumberOrder>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumbersRequest {
     /// <p>The filter to use to limit the number of results.</p>
@@ -1633,7 +1724,7 @@ pub struct ListPhoneNumbersRequest {
     pub status: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPhoneNumbersResponse {
     /// <p>The token to use to retrieve the next page of results.</p>
@@ -1646,7 +1737,7 @@ pub struct ListPhoneNumbersResponse {
     pub phone_numbers: Option<Vec<PhoneNumber>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListProxySessionsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
@@ -1666,7 +1757,7 @@ pub struct ListProxySessionsRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProxySessionsResponse {
     /// <p>The token to use to retrieve the next page of results.</p>
@@ -1679,7 +1770,7 @@ pub struct ListProxySessionsResponse {
     pub proxy_sessions: Option<Vec<ProxySession>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoomMembershipsRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1698,7 +1789,7 @@ pub struct ListRoomMembershipsRequest {
     pub room_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoomMembershipsResponse {
     /// <p>The token to use to retrieve the next page of results.</p>
@@ -1711,7 +1802,7 @@ pub struct ListRoomMembershipsResponse {
     pub room_memberships: Option<Vec<RoomMembership>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoomsRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1731,7 +1822,7 @@ pub struct ListRoomsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRoomsResponse {
     /// <p>The token to use to retrieve the next page of results.</p>
@@ -1744,7 +1835,7 @@ pub struct ListRoomsResponse {
     pub rooms: Option<Vec<Room>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The resource ARN.</p>
@@ -1752,7 +1843,7 @@ pub struct ListTagsForResourceRequest {
     pub resource_arn: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A list of tag-key value pairs.</p>
@@ -1761,7 +1852,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<Vec<Tag>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1785,7 +1876,7 @@ pub struct ListUsersRequest {
     pub user_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p>The token to use to retrieve the next page of results.</p>
@@ -1798,7 +1889,7 @@ pub struct ListUsersResponse {
     pub users: Option<Vec<User>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVoiceConnectorGroupsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
@@ -1811,7 +1902,7 @@ pub struct ListVoiceConnectorGroupsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVoiceConnectorGroupsResponse {
     /// <p>The token to use to retrieve the next page of results.</p>
@@ -1824,7 +1915,7 @@ pub struct ListVoiceConnectorGroupsResponse {
     pub voice_connector_groups: Option<Vec<VoiceConnectorGroup>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVoiceConnectorTerminationCredentialsRequest {
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -1832,7 +1923,7 @@ pub struct ListVoiceConnectorTerminationCredentialsRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVoiceConnectorTerminationCredentialsResponse {
     /// <p>A list of user names.</p>
@@ -1841,7 +1932,7 @@ pub struct ListVoiceConnectorTerminationCredentialsResponse {
     pub usernames: Option<Vec<String>>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListVoiceConnectorsRequest {
     /// <p>The maximum number of results to return in a single call.</p>
@@ -1854,7 +1945,7 @@ pub struct ListVoiceConnectorsRequest {
     pub next_token: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVoiceConnectorsResponse {
     /// <p>The token to use to retrieve the next page of results.</p>
@@ -1868,7 +1959,7 @@ pub struct ListVoiceConnectorsResponse {
 }
 
 /// <p>The logging configuration associated with an Amazon Chime Voice Connector. Specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LoggingConfiguration {
     /// <p>When true, enables SIP message logs for sending to Amazon CloudWatch Logs.</p>
     #[serde(rename = "EnableSIPLogs")]
@@ -1876,7 +1967,7 @@ pub struct LoggingConfiguration {
     pub enable_sip_logs: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LogoutUserRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -1887,12 +1978,12 @@ pub struct LogoutUserRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LogoutUserResponse {}
 
 /// <p>A set of endpoints used by clients to connect to the media service group for a Amazon Chime SDK meeting.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MediaPlacement {
     /// <p>The audio fallback URL.</p>
@@ -1926,7 +2017,7 @@ pub struct MediaPlacement {
 }
 
 /// <p>A meeting created using the Amazon Chime SDK.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Meeting {
     /// <p>The external meeting ID.</p>
@@ -1947,8 +2038,8 @@ pub struct Meeting {
     pub meeting_id: Option<String>,
 }
 
-/// <p>The configuration for resource targets to receive notifications when Amazon Chime SDK meeting and attendee events occur.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+/// <p>The configuration for resource targets to receive notifications when Amazon Chime SDK meeting and attendee events occur. The Amazon Chime SDK supports resource targets located in the US East (N. Virginia) AWS Region (<code>us-east-1</code>).</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MeetingNotificationConfiguration {
     /// <p>The SNS topic ARN.</p>
@@ -1962,7 +2053,7 @@ pub struct MeetingNotificationConfiguration {
 }
 
 /// <p>The member details, such as email address, name, member ID, and member type.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Member {
     /// <p>The Amazon Chime account ID.</p>
@@ -1988,7 +2079,7 @@ pub struct Member {
 }
 
 /// <p>The list of errors returned when a member action results in an error.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberError {
     /// <p>The error code.</p>
@@ -2006,7 +2097,7 @@ pub struct MemberError {
 }
 
 /// <p>Membership details, such as member ID and member role.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MembershipItem {
     /// <p>The member ID.</p>
@@ -2020,7 +2111,7 @@ pub struct MembershipItem {
 }
 
 /// <p>A phone number for which an order has been placed.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrderedPhoneNumber {
     /// <p>The phone number, in E.164 format.</p>
@@ -2034,7 +2125,7 @@ pub struct OrderedPhoneNumber {
 }
 
 /// <p>Origination settings enable your SIP hosts to receive inbound calls using your Amazon Chime Voice Connector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Origination {
     /// <p>When origination settings are disabled, inbound calls are not enabled for your Amazon Chime Voice Connector.</p>
     #[serde(rename = "Disabled")]
@@ -2047,7 +2138,7 @@ pub struct Origination {
 }
 
 /// <p>Origination routes define call distribution properties for your SIP hosts to receive inbound calls using your Amazon Chime Voice Connector. Limit: Ten origination routes for each Amazon Chime Voice Connector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OriginationRoute {
     /// <p>The FQDN or IP address to contact for origination traffic.</p>
     #[serde(rename = "Host")]
@@ -2072,7 +2163,7 @@ pub struct OriginationRoute {
 }
 
 /// <p>The phone number and proxy phone number for a participant in an Amazon Chime Voice Connector proxy session.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Participant {
     /// <p>The participant's phone number.</p>
@@ -2086,7 +2177,7 @@ pub struct Participant {
 }
 
 /// <p>A phone number used for Amazon Chime Business Calling or an Amazon Chime Voice Connector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PhoneNumber {
     /// <p>The phone number associations.</p>
@@ -2140,7 +2231,7 @@ pub struct PhoneNumber {
 }
 
 /// <p>The phone number associations, such as Amazon Chime account ID, Amazon Chime user ID, Amazon Chime Voice Connector ID, or Amazon Chime Voice Connector group ID.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PhoneNumberAssociation {
     /// <p>The timestamp of the phone number association, in ISO 8601 format.</p>
@@ -2158,7 +2249,7 @@ pub struct PhoneNumberAssociation {
 }
 
 /// <p>The phone number capabilities for Amazon Chime Business Calling phone numbers, such as enabled inbound and outbound calling and text messaging.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PhoneNumberCapabilities {
     /// <p>Allows or denies inbound calling for the specified phone number.</p>
@@ -2188,7 +2279,7 @@ pub struct PhoneNumberCapabilities {
 }
 
 /// <p>If the phone number action fails for one or more of the phone numbers in the request, a list of the phone numbers is returned, along with error codes and error messages.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PhoneNumberError {
     /// <p>The error code.</p>
@@ -2206,7 +2297,7 @@ pub struct PhoneNumberError {
 }
 
 /// <p>The details of a phone number order created for Amazon Chime.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PhoneNumberOrder {
     /// <p>The phone number order creation timestamp, in ISO 8601 format.</p>
@@ -2236,7 +2327,7 @@ pub struct PhoneNumberOrder {
 }
 
 /// <p>The proxy configuration for an Amazon Chime Voice Connector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Proxy {
     /// <p>The default number of minutes allowed for proxy sessions.</p>
@@ -2258,7 +2349,7 @@ pub struct Proxy {
 }
 
 /// <p>The proxy session for an Amazon Chime Voice Connector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProxySession {
     /// <p>The proxy session capabilities.</p>
@@ -2315,7 +2406,7 @@ pub struct ProxySession {
     pub voice_connector_id: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsConfigurationRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -2334,7 +2425,7 @@ pub struct PutEventsConfigurationRequest {
     pub outbound_events_https_endpoint: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutEventsConfigurationResponse {
     #[serde(rename = "EventsConfiguration")]
@@ -2342,7 +2433,7 @@ pub struct PutEventsConfigurationResponse {
     pub events_configuration: Option<EventsConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutRetentionSettingsRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -2353,7 +2444,7 @@ pub struct PutRetentionSettingsRequest {
     pub retention_settings: RetentionSettings,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRetentionSettingsResponse {
     /// <p>The timestamp representing the time at which the specified items are permanently deleted, in ISO 8601 format.</p>
@@ -2366,7 +2457,27 @@ pub struct PutRetentionSettingsResponse {
     pub retention_settings: Option<RetentionSettings>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutVoiceConnectorEmergencyCallingConfigurationRequest {
+    /// <p>The emergency calling configuration details.</p>
+    #[serde(rename = "EmergencyCallingConfiguration")]
+    pub emergency_calling_configuration: EmergencyCallingConfiguration,
+    /// <p>The Amazon Chime Voice Connector ID.</p>
+    #[serde(rename = "VoiceConnectorId")]
+    pub voice_connector_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutVoiceConnectorEmergencyCallingConfigurationResponse {
+    /// <p>The emergency calling configuration details.</p>
+    #[serde(rename = "EmergencyCallingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub emergency_calling_configuration: Option<EmergencyCallingConfiguration>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorLoggingConfigurationRequest {
     /// <p>The logging configuration details to add.</p>
@@ -2377,7 +2488,7 @@ pub struct PutVoiceConnectorLoggingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorLoggingConfigurationResponse {
     /// <p>The updated logging configuration details.</p>
@@ -2386,7 +2497,7 @@ pub struct PutVoiceConnectorLoggingConfigurationResponse {
     pub logging_configuration: Option<LoggingConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorOriginationRequest {
     /// <p>The origination setting details to add.</p>
@@ -2397,7 +2508,7 @@ pub struct PutVoiceConnectorOriginationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorOriginationResponse {
     /// <p>The updated origination setting details.</p>
@@ -2406,7 +2517,7 @@ pub struct PutVoiceConnectorOriginationResponse {
     pub origination: Option<Origination>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorProxyRequest {
     /// <p>The default number of minutes allowed for proxy sessions.</p>
@@ -2428,7 +2539,7 @@ pub struct PutVoiceConnectorProxyRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorProxyResponse {
     /// <p>The proxy configuration details.</p>
@@ -2437,7 +2548,7 @@ pub struct PutVoiceConnectorProxyResponse {
     pub proxy: Option<Proxy>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorStreamingConfigurationRequest {
     /// <p>The streaming configuration details to add.</p>
@@ -2448,7 +2559,7 @@ pub struct PutVoiceConnectorStreamingConfigurationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorStreamingConfigurationResponse {
     /// <p>The updated streaming configuration details.</p>
@@ -2457,7 +2568,7 @@ pub struct PutVoiceConnectorStreamingConfigurationResponse {
     pub streaming_configuration: Option<StreamingConfiguration>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorTerminationCredentialsRequest {
     /// <p>The termination SIP credentials.</p>
@@ -2469,7 +2580,7 @@ pub struct PutVoiceConnectorTerminationCredentialsRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutVoiceConnectorTerminationRequest {
     /// <p>The termination setting details to add.</p>
@@ -2480,7 +2591,7 @@ pub struct PutVoiceConnectorTerminationRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutVoiceConnectorTerminationResponse {
     /// <p>The updated termination setting details.</p>
@@ -2489,7 +2600,7 @@ pub struct PutVoiceConnectorTerminationResponse {
     pub termination: Option<Termination>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedactConversationMessageRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -2503,11 +2614,11 @@ pub struct RedactConversationMessageRequest {
     pub message_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RedactConversationMessageResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RedactRoomMessageRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -2521,11 +2632,11 @@ pub struct RedactRoomMessageRequest {
     pub room_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RedactRoomMessageResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RegenerateSecurityTokenRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -2536,7 +2647,7 @@ pub struct RegenerateSecurityTokenRequest {
     pub bot_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegenerateSecurityTokenResponse {
     #[serde(rename = "Bot")]
@@ -2544,7 +2655,7 @@ pub struct RegenerateSecurityTokenResponse {
     pub bot: Option<Bot>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetPersonalPINRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -2555,7 +2666,7 @@ pub struct ResetPersonalPINRequest {
     pub user_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetPersonalPINResponse {
     /// <p>The user details and new personal meeting PIN.</p>
@@ -2564,7 +2675,7 @@ pub struct ResetPersonalPINResponse {
     pub user: Option<User>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RestorePhoneNumberRequest {
     /// <p>The phone number.</p>
@@ -2572,7 +2683,7 @@ pub struct RestorePhoneNumberRequest {
     pub phone_number_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestorePhoneNumberResponse {
     /// <p>The phone number details.</p>
@@ -2582,7 +2693,7 @@ pub struct RestorePhoneNumberResponse {
 }
 
 /// <p>The retention settings for an Amazon Chime Enterprise account that determine how long to retain items such as chat room messages and chat conversation messages.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RetentionSettings {
     /// <p>The chat conversation retention settings.</p>
     #[serde(rename = "ConversationRetentionSettings")]
@@ -2595,7 +2706,7 @@ pub struct RetentionSettings {
 }
 
 /// <p>The Amazon Chime chat room details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Room {
     /// <p>The Amazon Chime account ID.</p>
@@ -2625,7 +2736,7 @@ pub struct Room {
 }
 
 /// <p>The room membership details.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RoomMembership {
     /// <p>The identifier of the user that invited the room member.</p>
@@ -2650,7 +2761,7 @@ pub struct RoomMembership {
 }
 
 /// <p>The retention settings that determine how long to retain chat room messages for an Amazon Chime Enterprise account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RoomRetentionSettings {
     /// <p>The number of days for which to retain chat room messages.</p>
     #[serde(rename = "RetentionDays")]
@@ -2658,7 +2769,7 @@ pub struct RoomRetentionSettings {
     pub retention_days: Option<i64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchAvailablePhoneNumbersRequest {
     /// <p>The area code used to filter results.</p>
@@ -2691,7 +2802,7 @@ pub struct SearchAvailablePhoneNumbersRequest {
     pub toll_free_prefix: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchAvailablePhoneNumbersResponse {
     /// <p>List of phone numbers, in E.164 format.</p>
@@ -2701,7 +2812,7 @@ pub struct SearchAvailablePhoneNumbersResponse {
 }
 
 /// <p>An Active Directory (AD) group whose members are granted permission to act as delegates.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SigninDelegateGroup {
     /// <p>The group name.</p>
     #[serde(rename = "GroupName")]
@@ -2710,7 +2821,7 @@ pub struct SigninDelegateGroup {
 }
 
 /// <p>The streaming configuration associated with an Amazon Chime Voice Connector. Specifies whether media streaming is enabled for sending to Amazon Kinesis, and shows the retention period for the Amazon Kinesis data, in hours.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StreamingConfiguration {
     /// <p>The retention period, in hours, for the Amazon Kinesis data.</p>
     #[serde(rename = "DataRetentionInHours")]
@@ -2726,7 +2837,7 @@ pub struct StreamingConfiguration {
 }
 
 /// <p>The targeted recipient for a streaming configuration notification.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StreamingNotificationTarget {
     /// <p>The streaming notification target.</p>
     #[serde(rename = "NotificationTarget")]
@@ -2734,7 +2845,7 @@ pub struct StreamingNotificationTarget {
 }
 
 /// <p>Describes a tag applied to a resource.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The key of the tag.</p>
     #[serde(rename = "Key")]
@@ -2744,7 +2855,7 @@ pub struct Tag {
     pub value: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagAttendeeRequest {
     /// <p>The Amazon Chime SDK attendee ID.</p>
@@ -2758,7 +2869,7 @@ pub struct TagAttendeeRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagMeetingRequest {
     /// <p>The Amazon Chime SDK meeting ID.</p>
@@ -2769,7 +2880,7 @@ pub struct TagMeetingRequest {
     pub tags: Vec<Tag>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
     /// <p>The resource ARN.</p>
@@ -2781,7 +2892,7 @@ pub struct TagResourceRequest {
 }
 
 /// <p>Settings that allow management of telephony permissions for an Amazon Chime user, such as inbound and outbound calling and text messaging.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TelephonySettings {
     /// <p>Allows or denies inbound calling.</p>
     #[serde(rename = "InboundCalling")]
@@ -2795,7 +2906,7 @@ pub struct TelephonySettings {
 }
 
 /// <p>Termination settings enable your SIP hosts to make outbound calls using your Amazon Chime Voice Connector.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Termination {
     /// <p>The countries to which calls are allowed, in ISO 3166-1 alpha-2 format. Required.</p>
     #[serde(rename = "CallingRegions")]
@@ -2820,7 +2931,7 @@ pub struct Termination {
 }
 
 /// <p>The termination health details, including the source IP address and timestamp of the last successful SIP <code>OPTIONS</code> message from your SIP infrastructure.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminationHealth {
     /// <p>The source IP address.</p>
@@ -2833,7 +2944,7 @@ pub struct TerminationHealth {
     pub timestamp: Option<f64>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagAttendeeRequest {
     /// <p>The Amazon Chime SDK attendee ID.</p>
@@ -2847,7 +2958,7 @@ pub struct UntagAttendeeRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagMeetingRequest {
     /// <p>The Amazon Chime SDK meeting ID.</p>
@@ -2858,7 +2969,7 @@ pub struct UntagMeetingRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
     /// <p>The resource ARN.</p>
@@ -2869,7 +2980,7 @@ pub struct UntagResourceRequest {
     pub tag_keys: Vec<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -2881,7 +2992,7 @@ pub struct UpdateAccountRequest {
     pub name: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountResponse {
     /// <p>The updated Amazon Chime account details.</p>
@@ -2890,7 +3001,7 @@ pub struct UpdateAccountResponse {
     pub account: Option<Account>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAccountSettingsRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -2901,11 +3012,11 @@ pub struct UpdateAccountSettingsRequest {
     pub account_settings: AccountSettings,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountSettingsResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateBotRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -2920,7 +3031,7 @@ pub struct UpdateBotRequest {
     pub disabled: Option<bool>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBotResponse {
     /// <p>The updated bot details.</p>
@@ -2929,7 +3040,7 @@ pub struct UpdateBotResponse {
     pub bot: Option<Bot>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGlobalSettingsRequest {
     /// <p>The Amazon Chime Business Calling settings.</p>
@@ -2940,7 +3051,7 @@ pub struct UpdateGlobalSettingsRequest {
     pub voice_connector: VoiceConnectorSettings,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePhoneNumberRequest {
     /// <p>The outbound calling name associated with the phone number.</p>
@@ -2957,7 +3068,7 @@ pub struct UpdatePhoneNumberRequest {
 }
 
 /// <p>The phone number ID, product type, or calling name fields to update, used with the <a>BatchUpdatePhoneNumber</a> and <a>UpdatePhoneNumber</a> actions.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePhoneNumberRequestItem {
     /// <p>The outbound calling name to update.</p>
@@ -2973,7 +3084,7 @@ pub struct UpdatePhoneNumberRequestItem {
     pub product_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePhoneNumberResponse {
     /// <p>The updated phone number details.</p>
@@ -2982,7 +3093,7 @@ pub struct UpdatePhoneNumberResponse {
     pub phone_number: Option<PhoneNumber>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdatePhoneNumberSettingsRequest {
     /// <p>The default outbound calling name for the account.</p>
@@ -2990,7 +3101,7 @@ pub struct UpdatePhoneNumberSettingsRequest {
     pub calling_name: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateProxySessionRequest {
     /// <p>The proxy session capabilities.</p>
@@ -3008,7 +3119,7 @@ pub struct UpdateProxySessionRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProxySessionResponse {
     /// <p>The proxy session details.</p>
@@ -3017,7 +3128,7 @@ pub struct UpdateProxySessionResponse {
     pub proxy_session: Option<ProxySession>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoomMembershipRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -3035,7 +3146,7 @@ pub struct UpdateRoomMembershipRequest {
     pub room_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRoomMembershipResponse {
     /// <p>The room membership details.</p>
@@ -3044,7 +3155,7 @@ pub struct UpdateRoomMembershipResponse {
     pub room_membership: Option<RoomMembership>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoomRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -3059,7 +3170,7 @@ pub struct UpdateRoomRequest {
     pub room_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRoomResponse {
     /// <p>The room details.</p>
@@ -3068,7 +3179,7 @@ pub struct UpdateRoomResponse {
     pub room: Option<Room>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -3092,7 +3203,7 @@ pub struct UpdateUserRequest {
 }
 
 /// <p>The user ID and user fields to update, used with the <a>BatchUpdateUser</a> action.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequestItem {
     /// <p>The Alexa for Business metadata.</p>
@@ -3112,7 +3223,7 @@ pub struct UpdateUserRequestItem {
     pub user_type: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {
     /// <p>The updated user details.</p>
@@ -3121,7 +3232,7 @@ pub struct UpdateUserResponse {
     pub user: Option<User>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserSettingsRequest {
     /// <p>The Amazon Chime account ID.</p>
@@ -3135,7 +3246,7 @@ pub struct UpdateUserSettingsRequest {
     pub user_settings: UserSettings,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVoiceConnectorGroupRequest {
     /// <p>The name of the Amazon Chime Voice Connector group.</p>
@@ -3149,7 +3260,7 @@ pub struct UpdateVoiceConnectorGroupRequest {
     pub voice_connector_items: Vec<VoiceConnectorItem>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVoiceConnectorGroupResponse {
     /// <p>The updated Amazon Chime Voice Connector group details.</p>
@@ -3158,7 +3269,7 @@ pub struct UpdateVoiceConnectorGroupResponse {
     pub voice_connector_group: Option<VoiceConnectorGroup>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVoiceConnectorRequest {
     /// <p>The name of the Amazon Chime Voice Connector.</p>
@@ -3172,7 +3283,7 @@ pub struct UpdateVoiceConnectorRequest {
     pub voice_connector_id: String,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateVoiceConnectorResponse {
     /// <p>The updated Amazon Chime Voice Connector details.</p>
@@ -3182,7 +3293,7 @@ pub struct UpdateVoiceConnectorResponse {
 }
 
 /// <p>The user on the Amazon Chime account.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct User {
     /// <p>The Amazon Chime account ID.</p>
@@ -3239,7 +3350,7 @@ pub struct User {
 }
 
 /// <p>The list of errors returned when errors are encountered during the <a>BatchSuspendUser</a>, <a>BatchUnsuspendUser</a>, or <a>BatchUpdateUser</a> actions. This includes user IDs, error codes, and error messages.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserError {
     /// <p>The error code.</p>
@@ -3257,7 +3368,7 @@ pub struct UserError {
 }
 
 /// <p>Settings associated with an Amazon Chime user, including inbound and outbound calling and text messaging.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UserSettings {
     /// <p>The telephony settings associated with the user.</p>
     #[serde(rename = "Telephony")]
@@ -3265,7 +3376,7 @@ pub struct UserSettings {
 }
 
 /// <p>The Amazon Chime Voice Connector configuration, including outbound host name and encryption settings.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VoiceConnector {
     /// <p>The AWS Region in which the Amazon Chime Voice Connector is created. Default: <code>us-east-1</code>.</p>
@@ -3299,7 +3410,7 @@ pub struct VoiceConnector {
 }
 
 /// <p>The Amazon Chime Voice Connector group configuration, including associated Amazon Chime Voice Connectors. You can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.</p>
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VoiceConnectorGroup {
     /// <p>The Amazon Chime Voice Connector group creation timestamp, in ISO 8601 format.</p>
@@ -3325,7 +3436,7 @@ pub struct VoiceConnectorGroup {
 }
 
 /// <p>For Amazon Chime Voice Connector groups, the Amazon Chime Voice Connectors to which to route inbound calls. Includes priority configuration settings. Limit: 3 <code>VoiceConnectorItems</code> per Amazon Chime Voice Connector group.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VoiceConnectorItem {
     /// <p>The priority associated with the Amazon Chime Voice Connector, with 1 being the highest priority. Higher priority Amazon Chime Voice Connectors are attempted first. </p>
     #[serde(rename = "Priority")]
@@ -3336,7 +3447,7 @@ pub struct VoiceConnectorItem {
 }
 
 /// <p>The Amazon Chime Voice Connector settings. Includes any Amazon S3 buckets designated for storing call detail records.</p>
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VoiceConnectorSettings {
     /// <p>The Amazon S3 bucket designated for call detail record storage.</p>
     #[serde(rename = "CdrBucket")]
@@ -4532,6 +4643,94 @@ impl fmt::Display for CreateMeetingError {
     }
 }
 impl Error for CreateMeetingError {}
+/// Errors returned by CreateMeetingWithAttendees
+#[derive(Debug, PartialEq)]
+pub enum CreateMeetingWithAttendeesError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl CreateMeetingWithAttendeesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateMeetingWithAttendeesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateMeetingWithAttendeesError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateMeetingWithAttendeesError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateMeetingWithAttendeesError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(CreateMeetingWithAttendeesError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        CreateMeetingWithAttendeesError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(CreateMeetingWithAttendeesError::ThrottledClient(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        CreateMeetingWithAttendeesError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateMeetingWithAttendeesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateMeetingWithAttendeesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreateMeetingWithAttendeesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreateMeetingWithAttendeesError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMeetingWithAttendeesError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            CreateMeetingWithAttendeesError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMeetingWithAttendeesError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            CreateMeetingWithAttendeesError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateMeetingWithAttendeesError {}
 /// Errors returned by CreatePhoneNumberOrder
 #[derive(Debug, PartialEq)]
 pub enum CreatePhoneNumberOrderError {
@@ -5714,6 +5913,110 @@ impl fmt::Display for DeleteVoiceConnectorError {
     }
 }
 impl Error for DeleteVoiceConnectorError {}
+/// Errors returned by DeleteVoiceConnectorEmergencyCallingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteVoiceConnectorEmergencyCallingConfigurationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl DeleteVoiceConnectorEmergencyCallingConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteVoiceConnectorEmergencyCallingConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        DeleteVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteVoiceConnectorEmergencyCallingConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteVoiceConnectorEmergencyCallingConfigurationError {}
 /// Errors returned by DeleteVoiceConnectorGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteVoiceConnectorGroupError {
@@ -7726,6 +8029,110 @@ impl fmt::Display for GetVoiceConnectorError {
     }
 }
 impl Error for GetVoiceConnectorError {}
+/// Errors returned by GetVoiceConnectorEmergencyCallingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetVoiceConnectorEmergencyCallingConfigurationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl GetVoiceConnectorEmergencyCallingConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetVoiceConnectorEmergencyCallingConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        GetVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetVoiceConnectorEmergencyCallingConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetVoiceConnectorEmergencyCallingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetVoiceConnectorEmergencyCallingConfigurationError {}
 /// Errors returned by GetVoiceConnectorGroup
 #[derive(Debug, PartialEq)]
 pub enum GetVoiceConnectorGroupError {
@@ -9696,6 +10103,110 @@ impl fmt::Display for PutRetentionSettingsError {
     }
 }
 impl Error for PutRetentionSettingsError {}
+/// Errors returned by PutVoiceConnectorEmergencyCallingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutVoiceConnectorEmergencyCallingConfigurationError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request. For example, when a user tries to create an account from an unsupported Region.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl PutVoiceConnectorEmergencyCallingConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutVoiceConnectorEmergencyCallingConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::Forbidden(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::NotFound(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        PutVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutVoiceConnectorEmergencyCallingConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutVoiceConnectorEmergencyCallingConfigurationError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::Forbidden(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutVoiceConnectorEmergencyCallingConfigurationError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for PutVoiceConnectorEmergencyCallingConfigurationError {}
 /// Errors returned by PutVoiceConnectorLoggingConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutVoiceConnectorLoggingConfigurationError {
@@ -12102,11 +12613,17 @@ pub trait Chime {
         input: CreateBotRequest,
     ) -> Result<CreateBotResponse, RusotoError<CreateBotError>>;
 
-    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn create_meeting(
         &self,
         input: CreateMeetingRequest,
     ) -> Result<CreateMeetingResponse, RusotoError<CreateMeetingError>>;
+
+    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region, with attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    async fn create_meeting_with_attendees(
+        &self,
+        input: CreateMeetingWithAttendeesRequest,
+    ) -> Result<CreateMeetingWithAttendeesResponse, RusotoError<CreateMeetingWithAttendeesError>>;
 
     /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p>
     async fn create_phone_number_order(
@@ -12204,13 +12721,19 @@ pub trait Chime {
         input: DeleteVoiceConnectorRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorError>>;
 
+    /// <p>Deletes the emergency calling configuration details from the specified Amazon Chime Voice Connector.</p>
+    async fn delete_voice_connector_emergency_calling_configuration(
+        &self,
+        input: DeleteVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorEmergencyCallingConfigurationError>>;
+
     /// <p>Deletes the specified Amazon Chime Voice Connector group. Any <code>VoiceConnectorItems</code> and phone numbers associated with the group must be removed before it can be deleted.</p>
     async fn delete_voice_connector_group(
         &self,
         input: DeleteVoiceConnectorGroupRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorGroupError>>;
 
-    /// <p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to deleting the origination settings.</p> </note></p>
     async fn delete_voice_connector_origination(
         &self,
         input: DeleteVoiceConnectorOriginationRequest,
@@ -12228,7 +12751,7 @@ pub trait Chime {
         input: DeleteVoiceConnectorStreamingConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteVoiceConnectorStreamingConfigurationError>>;
 
-    /// <p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to deleting the termination settings.</p> </note></p>
     async fn delete_voice_connector_termination(
         &self,
         input: DeleteVoiceConnectorTerminationRequest,
@@ -12369,6 +12892,15 @@ pub trait Chime {
         &self,
         input: GetVoiceConnectorRequest,
     ) -> Result<GetVoiceConnectorResponse, RusotoError<GetVoiceConnectorError>>;
+
+    /// <p>Gets the emergency calling configuration details for the specified Amazon Chime Voice Connector.</p>
+    async fn get_voice_connector_emergency_calling_configuration(
+        &self,
+        input: GetVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<
+        GetVoiceConnectorEmergencyCallingConfigurationResponse,
+        RusotoError<GetVoiceConnectorEmergencyCallingConfigurationError>,
+    >;
 
     /// <p>Retrieves details for the specified Amazon Chime Voice Connector group, such as timestamps, name, and associated <code>VoiceConnectorItems</code>.</p>
     async fn get_voice_connector_group(
@@ -12544,6 +13076,15 @@ pub trait Chime {
         input: PutRetentionSettingsRequest,
     ) -> Result<PutRetentionSettingsResponse, RusotoError<PutRetentionSettingsError>>;
 
+    /// <p>Puts emergency calling configuration details to the specified Amazon Chime Voice Connector, such as emergency phone numbers and calling countries. Origination and termination settings must be enabled for the Amazon Chime Voice Connector before emergency calling can be configured.</p>
+    async fn put_voice_connector_emergency_calling_configuration(
+        &self,
+        input: PutVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<
+        PutVoiceConnectorEmergencyCallingConfigurationResponse,
+        RusotoError<PutVoiceConnectorEmergencyCallingConfigurationError>,
+    >;
+
     /// <p>Adds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
     async fn put_voice_connector_logging_configuration(
         &self,
@@ -12553,7 +13094,7 @@ pub trait Chime {
         RusotoError<PutVoiceConnectorLoggingConfigurationError>,
     >;
 
-    /// <p>Adds origination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Adds origination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to turning off origination settings.</p> </note></p>
     async fn put_voice_connector_origination(
         &self,
         input: PutVoiceConnectorOriginationRequest,
@@ -12574,7 +13115,7 @@ pub trait Chime {
         RusotoError<PutVoiceConnectorStreamingConfigurationError>,
     >;
 
-    /// <p>Adds termination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Adds termination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to turning off termination settings.</p> </note></p>
     async fn put_voice_connector_termination(
         &self,
         input: PutVoiceConnectorTerminationRequest,
@@ -12777,6 +13318,7 @@ impl ChimeClient {
 #[async_trait]
 impl Chime for ChimeClient {
     /// <p>Associates a phone number with the specified Amazon Chime user.</p>
+    #[allow(unused_mut)]
     async fn associate_phone_number_with_user(
         &self,
         input: AssociatePhoneNumberWithUserRequest,
@@ -12804,7 +13346,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociatePhoneNumberWithUserResponse, _>()?;
 
@@ -12816,6 +13358,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Associates phone numbers with the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn associate_phone_numbers_with_voice_connector(
         &self,
         input: AssociatePhoneNumbersWithVoiceConnectorRequest,
@@ -12844,7 +13387,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociatePhoneNumbersWithVoiceConnectorResponse, _>()?;
 
@@ -12858,6 +13401,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Associates phone numbers with the specified Amazon Chime Voice Connector group.</p>
+    #[allow(unused_mut)]
     async fn associate_phone_numbers_with_voice_connector_group(
         &self,
         input: AssociatePhoneNumbersWithVoiceConnectorGroupRequest,
@@ -12886,7 +13430,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociatePhoneNumbersWithVoiceConnectorGroupResponse, _>(
             )?;
@@ -12899,6 +13443,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Associates the specified sign-in delegate groups with the specified Amazon Chime account.</p>
+    #[allow(unused_mut)]
     async fn associate_signin_delegate_groups_with_account(
         &self,
         input: AssociateSigninDelegateGroupsWithAccountRequest,
@@ -12924,7 +13469,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<AssociateSigninDelegateGroupsWithAccountResponse, _>()?;
 
@@ -12936,6 +13481,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates up to 100 new attendees for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
+    #[allow(unused_mut)]
     async fn batch_create_attendee(
         &self,
         input: BatchCreateAttendeeRequest,
@@ -12961,7 +13507,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchCreateAttendeeResponse, _>()?;
 
@@ -12973,6 +13519,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds up to 50 members to a chat room in an Amazon Chime Enterprise account. Members can be either users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
+    #[allow(unused_mut)]
     async fn batch_create_room_membership(
         &self,
         input: BatchCreateRoomMembershipRequest,
@@ -13000,7 +13547,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchCreateRoomMembershipResponse, _>()?;
 
@@ -13012,6 +13559,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Moves phone numbers into the <b>Deletion queue</b>. Phone numbers must be disassociated from any users or Amazon Chime Voice Connectors before they can be deleted.</p> <p>Phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently.</p>
+    #[allow(unused_mut)]
     async fn batch_delete_phone_number(
         &self,
         input: BatchDeletePhoneNumberRequest,
@@ -13034,7 +13582,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchDeletePhoneNumberResponse, _>()?;
 
@@ -13046,6 +13594,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are disassociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
+    #[allow(unused_mut)]
     async fn batch_suspend_user(
         &self,
         input: BatchSuspendUserRequest,
@@ -13071,7 +13620,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchSuspendUserResponse, _>()?;
 
@@ -13083,6 +13632,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Removes the suspension from up to 50 previously suspended users for the specified Amazon Chime <code>EnterpriseLWA</code> account. Only users on <code>EnterpriseLWA</code> accounts can be unsuspended using this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Previously suspended users who are unsuspended using this action are returned to <code>Registered</code> status. Users who are not previously suspended are ignored.</p>
+    #[allow(unused_mut)]
     async fn batch_unsuspend_user(
         &self,
         input: BatchUnsuspendUserRequest,
@@ -13108,7 +13658,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchUnsuspendUserResponse, _>()?;
 
@@ -13120,6 +13670,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates phone number product types or calling names. You can update one attribute at a time for each <code>UpdatePhoneNumberRequestItem</code>. For example, you can update either the product type or the calling name.</p> <p>For product types, choose from Amazon Chime Business Calling and Amazon Chime Voice Connector. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
+    #[allow(unused_mut)]
     async fn batch_update_phone_number(
         &self,
         input: BatchUpdatePhoneNumberRequest,
@@ -13142,7 +13693,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchUpdatePhoneNumberResponse, _>()?;
 
@@ -13154,6 +13705,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates user details within the <a>UpdateUserRequestItem</a> object for up to 20 users for the specified Amazon Chime account. Currently, only <code>LicenseType</code> updates are supported for this action.</p>
+    #[allow(unused_mut)]
     async fn batch_update_user(
         &self,
         input: BatchUpdateUserRequest,
@@ -13175,7 +13727,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<BatchUpdateUserResponse, _>()?;
 
@@ -13187,6 +13739,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates an Amazon Chime account under the administrator's AWS account. Only <code>Team</code> account types are currently supported for this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_account(
         &self,
         input: CreateAccountRequest,
@@ -13205,7 +13758,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateAccountResponse, _>()?;
 
@@ -13217,6 +13770,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a new attendee for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_attendee(
         &self,
         input: CreateAttendeeRequest,
@@ -13238,7 +13792,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateAttendeeResponse, _>()?;
 
@@ -13250,6 +13804,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a bot for an Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn create_bot(
         &self,
         input: CreateBotRequest,
@@ -13268,7 +13823,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateBotResponse, _>()?;
 
@@ -13279,7 +13834,8 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn create_meeting(
         &self,
         input: CreateMeetingRequest,
@@ -13298,7 +13854,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateMeetingResponse, _>()?;
 
@@ -13309,7 +13865,44 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region, with attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
+    async fn create_meeting_with_attendees(
+        &self,
+        input: CreateMeetingWithAttendeesRequest,
+    ) -> Result<CreateMeetingWithAttendeesResponse, RusotoError<CreateMeetingWithAttendeesError>>
+    {
+        let request_uri = "/meetings";
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        params.put("operation", "create-attendees");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateMeetingWithAttendeesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateMeetingWithAttendeesError::from_response(response))
+        }
+    }
+
     /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p>
+    #[allow(unused_mut)]
     async fn create_phone_number_order(
         &self,
         input: CreatePhoneNumberOrderRequest,
@@ -13328,7 +13921,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreatePhoneNumberOrderResponse, _>()?;
 
@@ -13340,6 +13933,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a proxy session on the specified Amazon Chime Voice Connector for the specified participant phone numbers.</p>
+    #[allow(unused_mut)]
     async fn create_proxy_session(
         &self,
         input: CreateProxySessionRequest,
@@ -13361,7 +13955,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateProxySessionResponse, _>()?;
 
@@ -13373,6 +13967,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a chat room for the specified Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn create_room(
         &self,
         input: CreateRoomRequest,
@@ -13394,7 +13989,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRoomResponse, _>()?;
 
@@ -13406,6 +14001,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds a member to a chat room in an Amazon Chime Enterprise account. A member can be either a user or a bot. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
+    #[allow(unused_mut)]
     async fn create_room_membership(
         &self,
         input: CreateRoomMembershipRequest,
@@ -13428,7 +14024,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateRoomMembershipResponse, _>()?;
 
@@ -13440,6 +14036,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates a user under the specified Amazon Chime account.</p>
+    #[allow(unused_mut)]
     async fn create_user(
         &self,
         input: CreateUserRequest,
@@ -13465,7 +14062,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateUserResponse, _>()?;
 
@@ -13477,6 +14074,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates an Amazon Chime Voice Connector under the administrator's AWS account. You can choose to create an Amazon Chime Voice Connector in a specific AWS Region.</p> <p>Enabling <a>CreateVoiceConnectorRequest$RequireEncryption</a> configures your Amazon Chime Voice Connector to use TLS transport for SIP signaling and Secure RTP (SRTP) for media. Inbound calls use TLS transport, and unencrypted outbound calls are blocked.</p>
+    #[allow(unused_mut)]
     async fn create_voice_connector(
         &self,
         input: CreateVoiceConnectorRequest,
@@ -13495,7 +14093,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateVoiceConnectorResponse, _>()?;
 
@@ -13507,6 +14105,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates an Amazon Chime Voice Connector group under the administrator's AWS account. You can associate Amazon Chime Voice Connectors with the Amazon Chime Voice Connector group by including <code>VoiceConnectorItems</code> in the request.</p> <p>You can include Amazon Chime Voice Connectors from different AWS Regions in your group. This creates a fault tolerant mechanism for fallback in case of availability events.</p>
+    #[allow(unused_mut)]
     async fn create_voice_connector_group(
         &self,
         input: CreateVoiceConnectorGroupRequest,
@@ -13526,7 +14125,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<CreateVoiceConnectorGroupResponse, _>()?;
 
@@ -13538,6 +14137,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified Amazon Chime account. You must suspend all users before deleting a <code>Team</code> account. You can use the <a>BatchSuspendUser</a> action to do so.</p> <p>For <code>EnterpriseLWA</code> and <code>EnterpriseAD</code> accounts, you must release the claimed domains for your Amazon Chime account before deletion. As soon as you release the domain, all users under that account are suspended.</p> <p>Deleted accounts appear in your <code>Disabled</code> accounts list for 90 days. To restore a deleted account from your <code>Disabled</code> accounts list, you must contact AWS Support.</p> <p>After 90 days, deleted accounts are permanently removed from your <code>Disabled</code> accounts list.</p>
+    #[allow(unused_mut)]
     async fn delete_account(
         &self,
         input: DeleteAccountRequest,
@@ -13553,7 +14153,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DeleteAccountResponse, _>()?;
 
@@ -13565,6 +14165,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes an attendee from the specified Amazon Chime SDK meeting and deletes their <code>JoinToken</code>. Attendees are automatically deleted when a Amazon Chime SDK meeting is deleted. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn delete_attendee(
         &self,
         input: DeleteAttendeeRequest,
@@ -13584,7 +14185,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13595,6 +14196,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the events configuration that allows a bot to receive outgoing events.</p>
+    #[allow(unused_mut)]
     async fn delete_events_configuration(
         &self,
         input: DeleteEventsConfigurationRequest,
@@ -13614,7 +14216,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13625,6 +14227,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified Amazon Chime SDK meeting. When a meeting is deleted, its attendees are also deleted and clients can no longer join it. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn delete_meeting(
         &self,
         input: DeleteMeetingRequest,
@@ -13640,7 +14243,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13651,6 +14254,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Moves the specified phone number into the <b>Deletion queue</b>. A phone number must be disassociated from any users or Amazon Chime Voice Connectors before it can be deleted.</p> <p>Deleted phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently.</p>
+    #[allow(unused_mut)]
     async fn delete_phone_number(
         &self,
         input: DeletePhoneNumberRequest,
@@ -13669,7 +14273,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13680,6 +14284,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified proxy session from the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn delete_proxy_session(
         &self,
         input: DeleteProxySessionRequest,
@@ -13699,7 +14304,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13710,6 +14315,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes a chat room in an Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn delete_room(
         &self,
         input: DeleteRoomRequest,
@@ -13729,7 +14335,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13740,6 +14346,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Removes a member from a chat room in an Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn delete_room_membership(
         &self,
         input: DeleteRoomMembershipRequest,
@@ -13760,7 +14367,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13771,6 +14378,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified Amazon Chime Voice Connector. Any phone numbers associated with the Amazon Chime Voice Connector must be disassociated from it before it can be deleted.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector(
         &self,
         input: DeleteVoiceConnectorRequest,
@@ -13789,7 +14397,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13799,7 +14407,38 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Deletes the emergency calling configuration details from the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
+    async fn delete_voice_connector_emergency_calling_configuration(
+        &self,
+        input: DeleteVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<(), RusotoError<DeleteVoiceConnectorEmergencyCallingConfigurationError>> {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/emergency-calling-configuration",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteVoiceConnectorEmergencyCallingConfigurationError::from_response(response))
+        }
+    }
+
     /// <p>Deletes the specified Amazon Chime Voice Connector group. Any <code>VoiceConnectorItems</code> and phone numbers associated with the group must be removed before it can be deleted.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_group(
         &self,
         input: DeleteVoiceConnectorGroupRequest,
@@ -13818,7 +14457,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13828,7 +14467,8 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Deletes the origination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to deleting the origination settings.</p> </note></p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_origination(
         &self,
         input: DeleteVoiceConnectorOriginationRequest,
@@ -13847,7 +14487,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13860,6 +14500,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the proxy configuration from the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_proxy(
         &self,
         input: DeleteVoiceConnectorProxyRequest,
@@ -13878,7 +14519,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13889,6 +14530,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the streaming configuration for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_streaming_configuration(
         &self,
         input: DeleteVoiceConnectorStreamingConfigurationRequest,
@@ -13907,7 +14549,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13917,7 +14559,8 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Deletes the termination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to deleting the termination settings.</p> </note></p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_termination(
         &self,
         input: DeleteVoiceConnectorTerminationRequest,
@@ -13936,7 +14579,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13949,6 +14592,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Deletes the specified SIP credentials used by your equipment to authenticate during call termination.</p>
+    #[allow(unused_mut)]
     async fn delete_voice_connector_termination_credentials(
         &self,
         input: DeleteVoiceConnectorTerminationCredentialsRequest,
@@ -13974,7 +14618,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -13985,6 +14629,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Disassociates the primary provisioned phone number from the specified Amazon Chime user.</p>
+    #[allow(unused_mut)]
     async fn disassociate_phone_number_from_user(
         &self,
         input: DisassociatePhoneNumberFromUserRequest,
@@ -14011,7 +14656,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociatePhoneNumberFromUserResponse, _>()?;
 
@@ -14025,6 +14670,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Disassociates the specified phone numbers from the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn disassociate_phone_numbers_from_voice_connector(
         &self,
         input: DisassociatePhoneNumbersFromVoiceConnectorRequest,
@@ -14053,7 +14699,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociatePhoneNumbersFromVoiceConnectorResponse, _>()?;
 
@@ -14065,6 +14711,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Disassociates the specified phone numbers from the specified Amazon Chime Voice Connector group.</p>
+    #[allow(unused_mut)]
     async fn disassociate_phone_numbers_from_voice_connector_group(
         &self,
         input: DisassociatePhoneNumbersFromVoiceConnectorGroupRequest,
@@ -14093,7 +14740,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociatePhoneNumbersFromVoiceConnectorGroupResponse, _>(
             )?;
@@ -14106,6 +14753,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Disassociates the specified sign-in delegate groups from the specified Amazon Chime account.</p>
+    #[allow(unused_mut)]
     async fn disassociate_signin_delegate_groups_from_account(
         &self,
         input: DisassociateSigninDelegateGroupsFromAccountRequest,
@@ -14131,7 +14779,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<DisassociateSigninDelegateGroupsFromAccountResponse, _>()?;
 
@@ -14143,6 +14791,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified Amazon Chime account, such as account type and supported licenses.</p>
+    #[allow(unused_mut)]
     async fn get_account(
         &self,
         input: GetAccountRequest,
@@ -14158,7 +14807,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAccountResponse, _>()?;
 
@@ -14170,6 +14819,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves account settings for the specified Amazon Chime account ID, such as remote control and dial out settings. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_account_settings(
         &self,
         input: GetAccountSettingsRequest,
@@ -14188,7 +14838,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAccountSettingsResponse, _>()?;
 
@@ -14200,6 +14850,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets the Amazon Chime SDK attendee details for a specified meeting ID and attendee ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_attendee(
         &self,
         input: GetAttendeeRequest,
@@ -14219,7 +14870,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetAttendeeResponse, _>()?;
 
@@ -14231,6 +14882,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified bot, such as bot email address, bot type, status, and display name.</p>
+    #[allow(unused_mut)]
     async fn get_bot(
         &self,
         input: GetBotRequest,
@@ -14250,7 +14902,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetBotResponse, _>()?;
 
@@ -14262,6 +14914,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets details for an events configuration that allows a bot to receive outgoing events, such as an HTTPS endpoint or Lambda function ARN. </p>
+    #[allow(unused_mut)]
     async fn get_events_configuration(
         &self,
         input: GetEventsConfigurationRequest,
@@ -14281,7 +14934,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetEventsConfigurationResponse, _>()?;
 
@@ -14293,6 +14946,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves global settings for the administrator's AWS account, such as Amazon Chime Business Calling and Amazon Chime Voice Connector settings.</p>
+    #[allow(unused_mut)]
     async fn get_global_settings(
         &self,
     ) -> Result<GetGlobalSettingsResponse, RusotoError<GetGlobalSettingsError>> {
@@ -14307,7 +14961,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetGlobalSettingsResponse, _>()?;
 
@@ -14319,6 +14973,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets the Amazon Chime SDK meeting details for the specified meeting ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_meeting(
         &self,
         input: GetMeetingRequest,
@@ -14334,7 +14989,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetMeetingResponse, _>()?;
 
@@ -14346,6 +15001,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified phone number ID, such as associations, capabilities, and product type.</p>
+    #[allow(unused_mut)]
     async fn get_phone_number(
         &self,
         input: GetPhoneNumberRequest,
@@ -14364,7 +15020,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPhoneNumberResponse, _>()?;
 
@@ -14376,6 +15032,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified phone number order, such as order creation timestamp, phone numbers in E.164 format, product type, and order status.</p>
+    #[allow(unused_mut)]
     async fn get_phone_number_order(
         &self,
         input: GetPhoneNumberOrderRequest,
@@ -14394,7 +15051,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPhoneNumberOrderResponse, _>()?;
 
@@ -14406,6 +15063,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves the phone number settings for the administrator's AWS account, such as the default outbound calling name.</p>
+    #[allow(unused_mut)]
     async fn get_phone_number_settings(
         &self,
     ) -> Result<GetPhoneNumberSettingsResponse, RusotoError<GetPhoneNumberSettingsError>> {
@@ -14420,7 +15078,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetPhoneNumberSettingsResponse, _>()?;
 
@@ -14432,6 +15090,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets the specified proxy session details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn get_proxy_session(
         &self,
         input: GetProxySessionRequest,
@@ -14451,7 +15110,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetProxySessionResponse, _>()?;
 
@@ -14463,6 +15122,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets the retention settings for the specified Amazon Chime Enterprise account. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn get_retention_settings(
         &self,
         input: GetRetentionSettingsRequest,
@@ -14481,7 +15141,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetRetentionSettingsResponse, _>()?;
 
@@ -14493,6 +15153,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves room details, such as the room name, for a room in an Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn get_room(
         &self,
         input: GetRoomRequest,
@@ -14512,7 +15173,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetRoomResponse, _>()?;
 
@@ -14524,6 +15185,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified user ID, such as primary email address, license type, and personal meeting PIN.</p> <p>To retrieve user details with an email address instead of a user ID, use the <a>ListUsers</a> action, and then filter by email address.</p>
+    #[allow(unused_mut)]
     async fn get_user(
         &self,
         input: GetUserRequest,
@@ -14543,7 +15205,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result =
                 proto::json::ResponsePayload::new(&response).deserialize::<GetUserResponse, _>()?;
 
@@ -14555,6 +15217,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves settings for the specified user ID, such as any associated phone number settings.</p>
+    #[allow(unused_mut)]
     async fn get_user_settings(
         &self,
         input: GetUserSettingsRequest,
@@ -14574,7 +15237,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetUserSettingsResponse, _>()?;
 
@@ -14586,6 +15249,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves details for the specified Amazon Chime Voice Connector, such as timestamps, name, outbound host, and encryption requirements.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector(
         &self,
         input: GetVoiceConnectorRequest,
@@ -14604,7 +15268,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorResponse, _>()?;
 
@@ -14615,7 +15279,43 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Gets the emergency calling configuration details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
+    async fn get_voice_connector_emergency_calling_configuration(
+        &self,
+        input: GetVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<
+        GetVoiceConnectorEmergencyCallingConfigurationResponse,
+        RusotoError<GetVoiceConnectorEmergencyCallingConfigurationError>,
+    > {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/emergency-calling-configuration",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetVoiceConnectorEmergencyCallingConfigurationResponse, _>(
+            )?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetVoiceConnectorEmergencyCallingConfigurationError::from_response(response))
+        }
+    }
+
     /// <p>Retrieves details for the specified Amazon Chime Voice Connector group, such as timestamps, name, and associated <code>VoiceConnectorItems</code>.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_group(
         &self,
         input: GetVoiceConnectorGroupRequest,
@@ -14634,7 +15334,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorGroupResponse, _>()?;
 
@@ -14646,6 +15346,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_logging_configuration(
         &self,
         input: GetVoiceConnectorLoggingConfigurationRequest,
@@ -14667,7 +15368,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorLoggingConfigurationResponse, _>()?;
 
@@ -14681,6 +15382,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves origination setting details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_origination(
         &self,
         input: GetVoiceConnectorOriginationRequest,
@@ -14700,7 +15402,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorOriginationResponse, _>()?;
 
@@ -14712,6 +15414,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Gets the proxy configuration details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_proxy(
         &self,
         input: GetVoiceConnectorProxyRequest,
@@ -14730,7 +15433,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorProxyResponse, _>()?;
 
@@ -14742,6 +15445,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves the streaming configuration details for the specified Amazon Chime Voice Connector. Shows whether media streaming is enabled for sending to Amazon Kinesis. It also shows the retention period, in hours, for the Amazon Kinesis data.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_streaming_configuration(
         &self,
         input: GetVoiceConnectorStreamingConfigurationRequest,
@@ -14763,7 +15467,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorStreamingConfigurationResponse, _>()?;
 
@@ -14777,6 +15481,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves termination setting details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_termination(
         &self,
         input: GetVoiceConnectorTerminationRequest,
@@ -14796,7 +15501,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorTerminationResponse, _>()?;
 
@@ -14808,6 +15513,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Retrieves information about the last time a SIP <code>OPTIONS</code> ping was received from your SIP infrastructure for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn get_voice_connector_termination_health(
         &self,
         input: GetVoiceConnectorTerminationHealthRequest,
@@ -14829,7 +15535,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<GetVoiceConnectorTerminationHealthResponse, _>()?;
 
@@ -14843,6 +15549,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Sends email to a maximum of 50 users, inviting them to the specified Amazon Chime <code>Team</code> account. Only <code>Team</code> account types are currently supported for this action. </p>
+    #[allow(unused_mut)]
     async fn invite_users(
         &self,
         input: InviteUsersRequest,
@@ -14868,7 +15575,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<InviteUsersResponse, _>()?;
 
@@ -14880,6 +15587,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the Amazon Chime accounts under the administrator's AWS account. You can filter accounts by account name prefix. To find out which Amazon Chime account a user belongs to, you can filter by the user's email address, which returns one account result.</p>
+    #[allow(unused_mut)]
     async fn list_accounts(
         &self,
         input: ListAccountsRequest,
@@ -14910,7 +15618,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAccountsResponse, _>()?;
 
@@ -14922,6 +15630,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the tags applied to an Amazon Chime SDK attendee resource.</p>
+    #[allow(unused_mut)]
     async fn list_attendee_tags(
         &self,
         input: ListAttendeeTagsRequest,
@@ -14941,7 +15650,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAttendeeTagsResponse, _>()?;
 
@@ -14953,6 +15662,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the attendees for the specified Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn list_attendees(
         &self,
         input: ListAttendeesRequest,
@@ -14980,7 +15690,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListAttendeesResponse, _>()?;
 
@@ -14992,6 +15702,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the bots associated with the administrator's Amazon Chime Enterprise account ID.</p>
+    #[allow(unused_mut)]
     async fn list_bots(
         &self,
         input: ListBotsRequest,
@@ -15016,7 +15727,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListBotsResponse, _>()?;
 
@@ -15028,6 +15739,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
+    #[allow(unused_mut)]
     async fn list_meeting_tags(
         &self,
         input: ListMeetingTagsRequest,
@@ -15043,7 +15755,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMeetingTagsResponse, _>()?;
 
@@ -15055,6 +15767,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists up to 100 active Amazon Chime SDK meetings. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn list_meetings(
         &self,
         input: ListMeetingsRequest,
@@ -15079,7 +15792,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListMeetingsResponse, _>()?;
 
@@ -15091,6 +15804,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the phone number orders for the administrator's Amazon Chime account.</p>
+    #[allow(unused_mut)]
     async fn list_phone_number_orders(
         &self,
         input: ListPhoneNumberOrdersRequest,
@@ -15115,7 +15829,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPhoneNumberOrdersResponse, _>()?;
 
@@ -15127,6 +15841,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the phone numbers for the specified Amazon Chime account, Amazon Chime user, Amazon Chime Voice Connector, or Amazon Chime Voice Connector group.</p>
+    #[allow(unused_mut)]
     async fn list_phone_numbers(
         &self,
         input: ListPhoneNumbersRequest,
@@ -15163,7 +15878,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListPhoneNumbersResponse, _>()?;
 
@@ -15175,6 +15890,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the proxy sessions for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn list_proxy_sessions(
         &self,
         input: ListProxySessionsRequest,
@@ -15205,7 +15921,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListProxySessionsResponse, _>()?;
 
@@ -15217,6 +15933,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the membership details for the specified room in an Amazon Chime Enterprise account, such as the members' IDs, email addresses, and names.</p>
+    #[allow(unused_mut)]
     async fn list_room_memberships(
         &self,
         input: ListRoomMembershipsRequest,
@@ -15245,7 +15962,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRoomMembershipsResponse, _>()?;
 
@@ -15257,6 +15974,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the room details for the specified Amazon Chime Enterprise account. Optionally, filter the results by a member ID (user ID or bot ID) to see a list of rooms that the member belongs to.</p>
+    #[allow(unused_mut)]
     async fn list_rooms(
         &self,
         input: ListRoomsRequest,
@@ -15287,7 +16005,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListRoomsResponse, _>()?;
 
@@ -15299,6 +16017,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
+    #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -15318,7 +16037,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListTagsForResourceResponse, _>()?;
 
@@ -15330,6 +16049,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the users that belong to the specified Amazon Chime account. You can specify an email address to list only the user that the email address belongs to.</p>
+    #[allow(unused_mut)]
     async fn list_users(
         &self,
         input: ListUsersRequest,
@@ -15363,7 +16083,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListUsersResponse, _>()?;
 
@@ -15375,6 +16095,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the Amazon Chime Voice Connector groups for the administrator's AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_voice_connector_groups(
         &self,
         input: ListVoiceConnectorGroupsRequest,
@@ -15399,7 +16120,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListVoiceConnectorGroupsResponse, _>()?;
 
@@ -15411,6 +16132,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the SIP credentials for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn list_voice_connector_termination_credentials(
         &self,
         input: ListVoiceConnectorTerminationCredentialsRequest,
@@ -15432,7 +16154,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListVoiceConnectorTerminationCredentialsResponse, _>()?;
 
@@ -15444,6 +16166,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Lists the Amazon Chime Voice Connectors for the administrator's AWS account.</p>
+    #[allow(unused_mut)]
     async fn list_voice_connectors(
         &self,
         input: ListVoiceConnectorsRequest,
@@ -15468,7 +16191,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ListVoiceConnectorsResponse, _>()?;
 
@@ -15480,6 +16203,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Logs out the specified user from all of the devices they are currently logged into.</p>
+    #[allow(unused_mut)]
     async fn logout_user(
         &self,
         input: LogoutUserRequest,
@@ -15503,7 +16227,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<LogoutUserResponse, _>()?;
 
@@ -15515,6 +16239,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Creates an events configuration that allows a bot to receive outgoing events sent by Amazon Chime. Choose either an HTTPS endpoint or a Lambda function ARN. For more information, see <a>Bot</a>.</p>
+    #[allow(unused_mut)]
     async fn put_events_configuration(
         &self,
         input: PutEventsConfigurationRequest,
@@ -15537,7 +16262,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutEventsConfigurationResponse, _>()?;
 
@@ -15549,6 +16274,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Puts retention settings for the specified Amazon Chime Enterprise account. We recommend using AWS CloudTrail to monitor usage of this API for your account. For more information, see <a href="https://docs.aws.amazon.com/chime/latest/ag/cloudtrail.html">Logging Amazon Chime API Calls with AWS CloudTrail</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>To turn off existing retention settings, remove the number of days from the corresponding <b>RetentionDays</b> field in the <b>RetentionSettings</b> object. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn put_retention_settings(
         &self,
         input: PutRetentionSettingsRequest,
@@ -15570,7 +16296,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutRetentionSettingsResponse, _>()?;
 
@@ -15581,7 +16307,46 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Puts emergency calling configuration details to the specified Amazon Chime Voice Connector, such as emergency phone numbers and calling countries. Origination and termination settings must be enabled for the Amazon Chime Voice Connector before emergency calling can be configured.</p>
+    #[allow(unused_mut)]
+    async fn put_voice_connector_emergency_calling_configuration(
+        &self,
+        input: PutVoiceConnectorEmergencyCallingConfigurationRequest,
+    ) -> Result<
+        PutVoiceConnectorEmergencyCallingConfigurationResponse,
+        RusotoError<PutVoiceConnectorEmergencyCallingConfigurationError>,
+    > {
+        let request_uri = format!(
+            "/voice-connectors/{voice_connector_id}/emergency-calling-configuration",
+            voice_connector_id = input.voice_connector_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutVoiceConnectorEmergencyCallingConfigurationResponse, _>(
+            )?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutVoiceConnectorEmergencyCallingConfigurationError::from_response(response))
+        }
+    }
+
     /// <p>Adds a logging configuration for the specified Amazon Chime Voice Connector. The logging configuration specifies whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_logging_configuration(
         &self,
         input: PutVoiceConnectorLoggingConfigurationRequest,
@@ -15606,7 +16371,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutVoiceConnectorLoggingConfigurationResponse, _>()?;
 
@@ -15619,7 +16384,8 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Adds origination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Adds origination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to turning off origination settings.</p> </note></p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_origination(
         &self,
         input: PutVoiceConnectorOriginationRequest,
@@ -15642,7 +16408,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutVoiceConnectorOriginationResponse, _>()?;
 
@@ -15654,6 +16420,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Puts the specified proxy configuration to the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_proxy(
         &self,
         input: PutVoiceConnectorProxyRequest,
@@ -15675,7 +16442,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutVoiceConnectorProxyResponse, _>()?;
 
@@ -15687,6 +16454,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds a streaming configuration for the specified Amazon Chime Voice Connector. The streaming configuration specifies whether media streaming is enabled for sending to Amazon Kinesis. It also sets the retention period, in hours, for the Amazon Kinesis data.</p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_streaming_configuration(
         &self,
         input: PutVoiceConnectorStreamingConfigurationRequest,
@@ -15711,7 +16479,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutVoiceConnectorStreamingConfigurationResponse, _>()?;
 
@@ -15724,7 +16492,8 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Adds termination settings for the specified Amazon Chime Voice Connector.</p>
+    /// <p><p>Adds termination settings for the specified Amazon Chime Voice Connector.</p> <note> <p>If emergency calling is configured for the Amazon Chime Voice Connector, it must be deleted prior to turning off termination settings.</p> </note></p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_termination(
         &self,
         input: PutVoiceConnectorTerminationRequest,
@@ -15747,7 +16516,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<PutVoiceConnectorTerminationResponse, _>()?;
 
@@ -15759,6 +16528,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Adds termination SIP credentials for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn put_voice_connector_termination_credentials(
         &self,
         input: PutVoiceConnectorTerminationCredentialsRequest,
@@ -15784,7 +16554,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -15797,6 +16567,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Redacts the specified message from the specified Amazon Chime conversation.</p>
+    #[allow(unused_mut)]
     async fn redact_conversation_message(
         &self,
         input: RedactConversationMessageRequest,
@@ -15822,7 +16593,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RedactConversationMessageResponse, _>()?;
 
@@ -15834,6 +16605,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Redacts the specified message from the specified Amazon Chime chat room.</p>
+    #[allow(unused_mut)]
     async fn redact_room_message(
         &self,
         input: RedactRoomMessageRequest,
@@ -15858,7 +16630,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RedactRoomMessageResponse, _>()?;
 
@@ -15870,6 +16642,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Regenerates the security token for a bot.</p>
+    #[allow(unused_mut)]
     async fn regenerate_security_token(
         &self,
         input: RegenerateSecurityTokenRequest,
@@ -15893,7 +16666,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RegenerateSecurityTokenResponse, _>()?;
 
@@ -15905,6 +16678,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Resets the personal meeting PIN for the specified user on an Amazon Chime account. Returns the <a>User</a> object with the updated personal meeting PIN.</p>
+    #[allow(unused_mut)]
     async fn reset_personal_pin(
         &self,
         input: ResetPersonalPINRequest,
@@ -15928,7 +16702,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<ResetPersonalPINResponse, _>()?;
 
@@ -15940,6 +16714,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Moves a phone number from the <b>Deletion queue</b> back into the phone number <b>Inventory</b>.</p>
+    #[allow(unused_mut)]
     async fn restore_phone_number(
         &self,
         input: RestorePhoneNumberRequest,
@@ -15962,7 +16737,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<RestorePhoneNumberResponse, _>()?;
 
@@ -15974,6 +16749,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Searches phone numbers that can be ordered.</p>
+    #[allow(unused_mut)]
     async fn search_available_phone_numbers(
         &self,
         input: SearchAvailablePhoneNumbersRequest,
@@ -16015,7 +16791,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.is_success() {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<SearchAvailablePhoneNumbersResponse, _>()?;
 
@@ -16027,6 +16803,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Applies the specified tags to the specified Amazon Chime SDK attendee.</p>
+    #[allow(unused_mut)]
     async fn tag_attendee(
         &self,
         input: TagAttendeeRequest,
@@ -16053,7 +16830,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16064,6 +16841,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Applies the specified tags to the specified Amazon Chime SDK meeting.</p>
+    #[allow(unused_mut)]
     async fn tag_meeting(
         &self,
         input: TagMeetingRequest,
@@ -16086,7 +16864,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16097,6 +16875,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Applies the specified tags to the specified Amazon Chime SDK meeting resource.</p>
+    #[allow(unused_mut)]
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -16119,7 +16898,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16130,6 +16909,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Untags the specified tags from the specified Amazon Chime SDK attendee.</p>
+    #[allow(unused_mut)]
     async fn untag_attendee(
         &self,
         input: UntagAttendeeRequest,
@@ -16156,7 +16936,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16167,6 +16947,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Untags the specified tags from the specified Amazon Chime SDK meeting.</p>
+    #[allow(unused_mut)]
     async fn untag_meeting(
         &self,
         input: UntagMeetingRequest,
@@ -16189,7 +16970,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16200,6 +16981,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Untags the specified tags from the specified Amazon Chime SDK meeting resource.</p>
+    #[allow(unused_mut)]
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -16222,7 +17004,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16233,6 +17015,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates account details for the specified Amazon Chime account. Currently, only account name updates are supported for this action.</p>
+    #[allow(unused_mut)]
     async fn update_account(
         &self,
         input: UpdateAccountRequest,
@@ -16251,7 +17034,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateAccountResponse, _>()?;
 
@@ -16263,6 +17046,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates the settings for the specified Amazon Chime account. You can update settings for remote control of shared screens, or for the dial-out option. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    #[allow(unused_mut)]
     async fn update_account_settings(
         &self,
         input: UpdateAccountSettingsRequest,
@@ -16284,7 +17068,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateAccountSettingsResponse, _>()?;
 
@@ -16296,6 +17080,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates the status of the specified bot, such as starting or stopping the bot from running in your Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn update_bot(
         &self,
         input: UpdateBotRequest,
@@ -16318,7 +17103,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateBotResponse, _>()?;
 
@@ -16330,6 +17115,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates global settings for the administrator's AWS account, such as Amazon Chime Business Calling and Amazon Chime Voice Connector settings.</p>
+    #[allow(unused_mut)]
     async fn update_global_settings(
         &self,
         input: UpdateGlobalSettingsRequest,
@@ -16348,7 +17134,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16359,6 +17145,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates phone number details, such as product type or calling name, for the specified phone number ID. You can update one phone number detail at a time. For example, you can update either the product type or the calling name in one action.</p> <p>For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
+    #[allow(unused_mut)]
     async fn update_phone_number(
         &self,
         input: UpdatePhoneNumberRequest,
@@ -16380,7 +17167,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdatePhoneNumberResponse, _>()?;
 
@@ -16392,6 +17179,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates the phone number settings for the administrator's AWS account, such as the default outbound calling name. You can update the default outbound calling name once every seven days. Outbound calling names can take up to 72 hours to update.</p>
+    #[allow(unused_mut)]
     async fn update_phone_number_settings(
         &self,
         input: UpdatePhoneNumberSettingsRequest,
@@ -16410,7 +17198,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16421,6 +17209,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates the specified proxy session details, such as voice or SMS capabilities.</p>
+    #[allow(unused_mut)]
     async fn update_proxy_session(
         &self,
         input: UpdateProxySessionRequest,
@@ -16443,7 +17232,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateProxySessionResponse, _>()?;
 
@@ -16455,6 +17244,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates room details, such as the room name, for a room in an Amazon Chime Enterprise account.</p>
+    #[allow(unused_mut)]
     async fn update_room(
         &self,
         input: UpdateRoomRequest,
@@ -16477,7 +17267,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRoomResponse, _>()?;
 
@@ -16489,6 +17279,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates room membership details, such as the member role, for a room in an Amazon Chime Enterprise account. The member role designates whether the member is a chat room administrator or a general chat room member. The member role can be updated only for user IDs.</p>
+    #[allow(unused_mut)]
     async fn update_room_membership(
         &self,
         input: UpdateRoomMembershipRequest,
@@ -16512,7 +17303,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateRoomMembershipResponse, _>()?;
 
@@ -16524,6 +17315,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates user details for a specified user ID. Currently, only <code>LicenseType</code> updates are supported for this action.</p>
+    #[allow(unused_mut)]
     async fn update_user(
         &self,
         input: UpdateUserRequest,
@@ -16546,7 +17338,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateUserResponse, _>()?;
 
@@ -16558,6 +17350,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates the settings for the specified user, such as phone number settings.</p>
+    #[allow(unused_mut)]
     async fn update_user_settings(
         &self,
         input: UpdateUserSettingsRequest,
@@ -16580,7 +17373,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 204 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = ::std::mem::drop(response);
 
             Ok(result)
@@ -16591,6 +17384,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates details for the specified Amazon Chime Voice Connector.</p>
+    #[allow(unused_mut)]
     async fn update_voice_connector(
         &self,
         input: UpdateVoiceConnectorRequest,
@@ -16612,7 +17406,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateVoiceConnectorResponse, _>()?;
 
@@ -16624,6 +17418,7 @@ impl Chime for ChimeClient {
     }
 
     /// <p>Updates details for the specified Amazon Chime Voice Connector group, such as the name and Amazon Chime Voice Connector priority ranking.</p>
+    #[allow(unused_mut)]
     async fn update_voice_connector_group(
         &self,
         input: UpdateVoiceConnectorGroupRequest,
@@ -16646,7 +17441,7 @@ impl Chime for ChimeClient {
             .await
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 202 {
-            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             let result = proto::json::ResponsePayload::new(&response)
                 .deserialize::<UpdateVoiceConnectorGroupResponse, _>()?;
 
