@@ -36,7 +36,7 @@ Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 
 ### Publishing PR checklist
 
-```
+```text
 Release checklist:
 
 - [ ] run integration tests on this branch

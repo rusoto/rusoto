@@ -69,13 +69,18 @@ This will affect the performance as well as the size of you AWS bill.
 
 - https://docs.rs/rusoto_credential
 - https://crates.io/crates/rusoto_credential
-```
+
+```rust,no_run
+use rusoto_core::Region;
+use rusoto_sts::{StsClient, StsAssumeRoleSessionCredentialsProvider};
+let sts = StsClient::new(Region::EuWest1);
+
 let provider = StsAssumeRoleSessionCredentialsProvider::new(
-        sts,
-        "arn:aws:iam::something:role/something".to_owned(),
-        "default".to_owned(),
-        None, None, None, None
-    );
+    sts,
+    "arn:aws:iam::something:role/something".to_owned(),
+    "default".to_owned(),
+    None, None, None, None
+);
 
 let auto_refreshing_provider = rusoto_credential::AutoRefreshingProvider::new(provider);
 ```

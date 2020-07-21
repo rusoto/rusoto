@@ -2,20 +2,19 @@
 name = "skeptical"
 version = "0.44.0"
 authors = ["Matthew Mayer <matthewkmayer@gmail.com>"]
-build = "build.rs"
 edition = "2018"
+publish = false
 
 [dependencies]
 rusoto_core = { path = "../rusoto/core" }
+rusoto_credential = { path = "../rusoto/credential" }
 rusoto_dynamodb = { path = "../rusoto/services/dynamodb" }
-rusoto_s3 = { path = "../rusoto/services/s3" }
 rusoto_ec2 = { path = "../rusoto/services/ec2" }
 rusoto_sts = { path = "../rusoto/services/sts" }
+
+doc-comment = "0.3"
 env_logger = "0.5"
 tokio = "0.2"
 
 [build-dependencies]
-skeptic = "0.13"
-
-[dev-dependencies]
-skeptic = "0.13" 
+glob = "0.3"
