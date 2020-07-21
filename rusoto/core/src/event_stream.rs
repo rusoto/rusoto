@@ -340,7 +340,10 @@ impl<T: DeserializeEvent + Unpin> futures::Stream for EventStream<T> {
                 projection.buf.extend(byte_chunk);
 
                 let parsed_event = match Self::pop_event(&mut projection.buf) {
-                    Ok(None) => return Poll::Pending,
+                    Ok(None) => {
+                        cx.waker().wake_by_ref();
+                        return Poll::Pending;
+                    }
                     Ok(Some(item)) => Ok(item),
                     Err(err) => {
                         projection.drop_response_body();
