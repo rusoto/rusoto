@@ -23,7 +23,7 @@ To use `rusoto_codeguru_reviewer` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_codeguru_reviewer = "0.44.0"
+rusoto_codeguru_reviewer = "0.45.0"
 ```
 
 ## Crate Features

@@ -23,7 +23,7 @@ To use `rusoto_mediapackage_vod` in your application, add it as a dependency in 
 
 ```toml
 [dependencies]
-rusoto_mediapackage_vod = "0.44.0"
+rusoto_mediapackage_vod = "0.45.0"
 ```
 
 ## Crate Features

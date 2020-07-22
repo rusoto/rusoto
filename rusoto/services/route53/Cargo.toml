@@ -7,7 +7,7 @@ license = "MIT"
 name = "rusoto_route53"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.44.0"
+version = "0.45.0"
 homepage = "https://www.rusoto.org/"
 edition = "2018"
 exclude = ["test_resources/*"]
@@ -25,7 +25,7 @@ xml-rs = "0.8"
 version = "0.3"
 
 [dependencies.rusoto_core]
-version = "0.44.0"
+version = "0.45.0"
 path = "../../core"
 default-features = false
 
@@ -41,7 +41,7 @@ optional = true
 tokio = "0.2"
 
 [dev-dependencies.rusoto_mock]
-version = "0.44.0"
+version = "0.45.0"
 path = "../../../mock"
 default-features = false
 

@@ -23,7 +23,7 @@ To use `rusoto_polly` in your application, add it as a dependency in your `Cargo
 
 ```toml
 [dependencies]
-rusoto_polly = "0.44.0"
+rusoto_polly = "0.45.0"
 ```
 
 ## Crate Features

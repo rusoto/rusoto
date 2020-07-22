@@ -23,7 +23,7 @@ To use `rusoto_devicefarm` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_devicefarm = "0.44.0"
+rusoto_devicefarm = "0.45.0"
 ```
 
 ## Crate Features

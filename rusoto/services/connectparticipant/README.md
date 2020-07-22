@@ -23,7 +23,7 @@ To use `rusoto_connectparticipant` in your application, add it as a dependency i
 
 ```toml
 [dependencies]
-rusoto_connectparticipant = "0.44.0"
+rusoto_connectparticipant = "0.45.0"
 ```
 
 ## Crate Features

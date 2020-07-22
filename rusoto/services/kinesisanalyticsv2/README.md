@@ -23,7 +23,7 @@ To use `rusoto_kinesisanalyticsv2` in your application, add it as a dependency i
 
 ```toml
 [dependencies]
-rusoto_kinesisanalyticsv2 = "0.44.0"
+rusoto_kinesisanalyticsv2 = "0.45.0"
 ```
 
 ## Crate Features

@@ -23,7 +23,7 @@ To use `rusoto_backup` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_backup = "0.44.0"
+rusoto_backup = "0.45.0"
 ```
 
 ## Crate Features

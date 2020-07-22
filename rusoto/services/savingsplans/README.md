@@ -23,7 +23,7 @@ To use `rusoto_savingsplans` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_savingsplans = "0.44.0"
+rusoto_savingsplans = "0.45.0"
 ```
 
 ## Crate Features

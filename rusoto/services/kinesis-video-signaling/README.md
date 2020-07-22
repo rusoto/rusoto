@@ -23,7 +23,7 @@ To use `rusoto_kinesis_video_signaling` in your application, add it as a depende
 
 ```toml
 [dependencies]
-rusoto_kinesis_video_signaling = "0.44.0"
+rusoto_kinesis_video_signaling = "0.45.0"
 ```
 
 ## Crate Features

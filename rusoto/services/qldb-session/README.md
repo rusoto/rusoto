@@ -23,7 +23,7 @@ To use `rusoto_qldb_session` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_qldb_session = "0.44.0"
+rusoto_qldb_session = "0.45.0"
 ```
 
 ## Crate Features

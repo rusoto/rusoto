@@ -23,7 +23,7 @@ To use `rusoto_pinpoint_sms_voice` in your application, add it as a dependency i
 
 ```toml
 [dependencies]
-rusoto_pinpoint_sms_voice = "0.44.0"
+rusoto_pinpoint_sms_voice = "0.45.0"
 ```
 
 ## Crate Features

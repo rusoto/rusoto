@@ -23,7 +23,7 @@ To use `rusoto_s3` in your application, add it as a dependency in your `Cargo.to
 
 ```toml
 [dependencies]
-rusoto_s3 = "0.44.0"
+rusoto_s3 = "0.45.0"
 ```
 
 ## Crate Features
