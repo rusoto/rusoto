@@ -23,7 +23,7 @@ To use `rusoto_pinpoint_email` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_pinpoint_email = "0.44.0"
+rusoto_pinpoint_email = "0.45.0"
 ```
 
 ## Crate Features

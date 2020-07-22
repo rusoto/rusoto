@@ -23,7 +23,7 @@ To use `rusoto_apigatewayv2` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_apigatewayv2 = "0.44.0"
+rusoto_apigatewayv2 = "0.45.0"
 ```
 
 ## Crate Features

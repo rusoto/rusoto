@@ -23,7 +23,7 @@ To use `rusoto_sagemaker_runtime` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_sagemaker_runtime = "0.44.0"
+rusoto_sagemaker_runtime = "0.45.0"
 ```
 
 ## Crate Features

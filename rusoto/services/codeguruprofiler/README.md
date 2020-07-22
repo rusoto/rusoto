@@ -23,7 +23,7 @@ To use `rusoto_codeguruprofiler` in your application, add it as a dependency in 
 
 ```toml
 [dependencies]
-rusoto_codeguruprofiler = "0.44.0"
+rusoto_codeguruprofiler = "0.45.0"
 ```
 
 ## Crate Features

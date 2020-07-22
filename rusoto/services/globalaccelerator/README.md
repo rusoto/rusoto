@@ -23,7 +23,7 @@ To use `rusoto_globalaccelerator` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_globalaccelerator = "0.44.0"
+rusoto_globalaccelerator = "0.45.0"
 ```
 
 ## Crate Features

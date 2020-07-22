@@ -23,7 +23,7 @@ To use `rusoto_iotevents` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_iotevents = "0.44.0"
+rusoto_iotevents = "0.45.0"
 ```
 
 ## Crate Features

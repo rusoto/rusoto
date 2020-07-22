@@ -23,7 +23,7 @@ To use `rusoto_kafka` in your application, add it as a dependency in your `Cargo
 
 ```toml
 [dependencies]
-rusoto_kafka = "0.44.0"
+rusoto_kafka = "0.45.0"
 ```
 
 ## Crate Features

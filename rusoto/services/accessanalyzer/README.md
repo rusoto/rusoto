@@ -23,7 +23,7 @@ To use `rusoto_accessanalyzer` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_accessanalyzer = "0.44.0"
+rusoto_accessanalyzer = "0.45.0"
 ```
 
 ## Crate Features

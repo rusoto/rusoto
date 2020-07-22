@@ -23,7 +23,7 @@ To use `rusoto_ebs` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_ebs = "0.44.0"
+rusoto_ebs = "0.45.0"
 ```
 
 ## Crate Features

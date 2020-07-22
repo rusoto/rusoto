@@ -23,7 +23,7 @@ To use `rusoto_securityhub` in your application, add it as a dependency in your 
 
 ```toml
 [dependencies]
-rusoto_securityhub = "0.44.0"
+rusoto_securityhub = "0.45.0"
 ```
 
 ## Crate Features

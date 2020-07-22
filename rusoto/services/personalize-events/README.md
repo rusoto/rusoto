@@ -23,7 +23,7 @@ To use `rusoto_personalize_events` in your application, add it as a dependency i
 
 ```toml
 [dependencies]
-rusoto_personalize_events = "0.44.0"
+rusoto_personalize_events = "0.45.0"
 ```
 
 ## Crate Features

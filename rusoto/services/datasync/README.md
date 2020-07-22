@@ -23,7 +23,7 @@ To use `rusoto_datasync` in your application, add it as a dependency in your `Ca
 
 ```toml
 [dependencies]
-rusoto_datasync = "0.44.0"
+rusoto_datasync = "0.45.0"
 ```
 
 ## Crate Features

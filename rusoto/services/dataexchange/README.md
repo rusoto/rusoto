@@ -23,7 +23,7 @@ To use `rusoto_dataexchange` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_dataexchange = "0.44.0"
+rusoto_dataexchange = "0.45.0"
 ```
 
 ## Crate Features

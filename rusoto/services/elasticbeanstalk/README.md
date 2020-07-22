@@ -23,7 +23,7 @@ To use `rusoto_elasticbeanstalk` in your application, add it as a dependency in 
 
 ```toml
 [dependencies]
-rusoto_elasticbeanstalk = "0.44.0"
+rusoto_elasticbeanstalk = "0.45.0"
 ```
 
 ## Crate Features
