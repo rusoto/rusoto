@@ -228,8 +228,8 @@ async fn test_puts_gets_deletes() {
     }
 
     // file used for testing puts/gets
-    let filename = format!("test_file_{}", OffsetDateTime::now().second());
-    let filename2 = format!("test_file_2_{}", OffsetDateTime::now().second());
+    let filename = format!("test_file_{}", OffsetDateTime::now_utc().second());
+    let filename2 = format!("test_file_2_{}", OffsetDateTime::now_utc().second());
 
     // test failure responses on empty bucket
     test_get_object_no_such_object(&test_client.s3, &test_client.bucket_name, &filename).await;
@@ -306,7 +306,7 @@ async fn test_puts_gets_deletes_utf8() {
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
-    let utf8_filename = format!("test[über]file@{}", OffsetDateTime::now().second());
+    let utf8_filename = format!("test[über]file@{}", OffsetDateTime::now_utc().second());
     // UTF8 filenames
     test_put_object_with_filename(
         &test_client.s3,
@@ -330,7 +330,7 @@ async fn test_puts_gets_deletes_binary() {
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
-    let binary_filename = format!("test_file_b{}", OffsetDateTime::now().second());
+    let binary_filename = format!("test_file_b{}", OffsetDateTime::now_utc().second());
 
     // Binary objects:
     test_put_object_with_filename(
@@ -355,7 +355,7 @@ async fn test_puts_gets_deletes_metadata() {
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
-    let metadata_filename = format!("test_metadata_file_{}", OffsetDateTime::now().second());
+    let metadata_filename = format!("test_metadata_file_{}", OffsetDateTime::now_utc().second());
     let mut metadata = HashMap::<String, String>::new();
     metadata.insert(
         "rusoto-metadata-some".to_string(),
@@ -401,7 +401,7 @@ async fn test_puts_gets_deletes_presigned_url() {
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
-    let filename = format!("test_file_{}_for_presigned", OffsetDateTime::now().second());
+    let filename = format!("test_file_{}_for_presigned", OffsetDateTime::now_utc().second());
     // PUT an object for presigned url
     test_put_object_with_filename(
         &test_client.s3,
@@ -442,7 +442,7 @@ async fn test_puts_gets_deletes_presigned_url() {
         &filename,
     ).await;
 
-    let utf8_filename = format!("test[über]file@{}_for_presigned", OffsetDateTime::now().second());
+    let utf8_filename = format!("test[über]file@{}_for_presigned", OffsetDateTime::now_utc().second());
     // UTF8 filenames for presigned url
     test_put_object_with_filename(
         &test_client.s3,
@@ -487,7 +487,7 @@ async fn test_multipart_stream_uploads() {
     let test_client = TestS3Client::new(bucket_name.clone());
     test_client.create_test_bucket(bucket_name.clone()).await;
 
-    let multipart_filename = format!("test_multipart_file_{}", OffsetDateTime::now().second());
+    let multipart_filename = format!("test_multipart_file_{}", OffsetDateTime::now_utc().second());
     let credentials = DefaultCredentialsProvider::new()
         .unwrap()
         .credentials()
@@ -504,7 +504,7 @@ async fn test_multipart_stream_uploads() {
     ).await;
 
     // PUT an object via stream
-    let streaming_filename = format!("streaming_test_file_{}", OffsetDateTime::now().second());
+    let streaming_filename = format!("streaming_test_file_{}", OffsetDateTime::now_utc().second());
     test_put_object_stream_with_filename(
         &test_client.s3,
         &test_client.bucket_name,

@@ -14,7 +14,7 @@ use time::OffsetDateTime;
 async fn should_get_service_graph() {
     let client = XRayClient::new(Region::UsEast1);
 
-    let time = (OffsetDateTime::now().timestamp() - 30) as f64; // 30 seconds in the past
+    let time = (OffsetDateTime::now_utc().timestamp() - 30) as f64; // 30 seconds in the past
     println!("{:?}", time);
 
     let request = GetServiceGraphRequest {
