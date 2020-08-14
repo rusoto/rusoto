@@ -17823,7 +17823,8 @@ impl S3 for S3Client {
         &self,
         input: AbortMultipartUploadRequest,
     ) -> Result<AbortMultipartUploadOutput, RusotoError<AbortMultipartUploadError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -17848,7 +17849,8 @@ impl S3 for S3Client {
         &self,
         input: CompleteMultipartUploadRequest,
     ) -> Result<CompleteMultipartUploadOutput, RusotoError<CompleteMultipartUploadError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
@@ -17894,7 +17896,8 @@ impl S3 for S3Client {
         &self,
         input: CopyObjectRequest,
     ) -> Result<CopyObjectOutput, RusotoError<CopyObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -18030,7 +18033,7 @@ impl S3 for S3Client {
         &self,
         input: CreateBucketRequest,
     ) -> Result<CreateBucketOutput, RusotoError<CreateBucketError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -18076,7 +18079,8 @@ impl S3 for S3Client {
         &self,
         input: CreateMultipartUploadRequest,
     ) -> Result<CreateMultipartUploadOutput, RusotoError<CreateMultipartUploadError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
@@ -18180,7 +18184,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketRequest,
     ) -> Result<(), RusotoError<DeleteBucketError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18198,7 +18202,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketAnalyticsConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteBucketAnalyticsConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18224,7 +18228,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketCorsRequest,
     ) -> Result<(), RusotoError<DeleteBucketCorsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18246,7 +18250,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketEncryptionRequest,
     ) -> Result<(), RusotoError<DeleteBucketEncryptionError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18268,7 +18272,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketInventoryConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteBucketInventoryConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18294,7 +18298,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketLifecycleRequest,
     ) -> Result<(), RusotoError<DeleteBucketLifecycleError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18316,7 +18320,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketMetricsConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteBucketMetricsConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18342,7 +18346,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketPolicyRequest,
     ) -> Result<(), RusotoError<DeleteBucketPolicyError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18364,7 +18368,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketReplicationRequest,
     ) -> Result<(), RusotoError<DeleteBucketReplicationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18386,7 +18390,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketTaggingRequest,
     ) -> Result<(), RusotoError<DeleteBucketTaggingError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18408,7 +18412,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketWebsiteRequest,
     ) -> Result<(), RusotoError<DeleteBucketWebsiteError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18430,7 +18434,8 @@ impl S3 for S3Client {
         &self,
         input: DeleteObjectRequest,
     ) -> Result<DeleteObjectOutput, RusotoError<DeleteObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18467,7 +18472,8 @@ impl S3 for S3Client {
         &self,
         input: DeleteObjectTaggingRequest,
     ) -> Result<DeleteObjectTaggingOutput, RusotoError<DeleteObjectTaggingError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18494,7 +18500,7 @@ impl S3 for S3Client {
         &self,
         input: DeleteObjectsRequest,
     ) -> Result<DeleteObjectsOutput, RusotoError<DeleteObjectsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
@@ -18532,7 +18538,7 @@ impl S3 for S3Client {
         &self,
         input: DeletePublicAccessBlockRequest,
     ) -> Result<(), RusotoError<DeletePublicAccessBlockError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -18557,7 +18563,7 @@ impl S3 for S3Client {
         GetBucketAccelerateConfigurationOutput,
         RusotoError<GetBucketAccelerateConfigurationError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18588,7 +18594,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketAclRequest,
     ) -> Result<GetBucketAclOutput, RusotoError<GetBucketAclError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18619,7 +18625,7 @@ impl S3 for S3Client {
         GetBucketAnalyticsConfigurationOutput,
         RusotoError<GetBucketAnalyticsConfigurationError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18648,7 +18654,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketCorsRequest,
     ) -> Result<GetBucketCorsOutput, RusotoError<GetBucketCorsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18676,7 +18682,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketEncryptionRequest,
     ) -> Result<GetBucketEncryptionOutput, RusotoError<GetBucketEncryptionError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18707,7 +18713,7 @@ impl S3 for S3Client {
         GetBucketInventoryConfigurationOutput,
         RusotoError<GetBucketInventoryConfigurationError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18736,7 +18742,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketLifecycleRequest,
     ) -> Result<GetBucketLifecycleOutput, RusotoError<GetBucketLifecycleError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18767,7 +18773,7 @@ impl S3 for S3Client {
         GetBucketLifecycleConfigurationOutput,
         RusotoError<GetBucketLifecycleConfigurationError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18795,7 +18801,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketLocationRequest,
     ) -> Result<GetBucketLocationOutput, RusotoError<GetBucketLocationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18823,7 +18829,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketLoggingRequest,
     ) -> Result<GetBucketLoggingOutput, RusotoError<GetBucketLoggingError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18852,7 +18858,7 @@ impl S3 for S3Client {
         input: GetBucketMetricsConfigurationRequest,
     ) -> Result<GetBucketMetricsConfigurationOutput, RusotoError<GetBucketMetricsConfigurationError>>
     {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18881,7 +18887,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketNotificationConfigurationRequest,
     ) -> Result<NotificationConfigurationDeprecated, RusotoError<GetBucketNotificationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18910,7 +18916,7 @@ impl S3 for S3Client {
         input: GetBucketNotificationConfigurationRequest,
     ) -> Result<NotificationConfiguration, RusotoError<GetBucketNotificationConfigurationError>>
     {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18941,7 +18947,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketPolicyRequest,
     ) -> Result<GetBucketPolicyOutput, RusotoError<GetBucketPolicyError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18967,7 +18973,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketPolicyStatusRequest,
     ) -> Result<GetBucketPolicyStatusOutput, RusotoError<GetBucketPolicyStatusError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -18995,7 +19001,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketReplicationRequest,
     ) -> Result<GetBucketReplicationOutput, RusotoError<GetBucketReplicationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19023,7 +19029,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketRequestPaymentRequest,
     ) -> Result<GetBucketRequestPaymentOutput, RusotoError<GetBucketRequestPaymentError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19051,7 +19057,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketTaggingRequest,
     ) -> Result<GetBucketTaggingOutput, RusotoError<GetBucketTaggingError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19079,7 +19085,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketVersioningRequest,
     ) -> Result<GetBucketVersioningOutput, RusotoError<GetBucketVersioningError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19107,7 +19113,7 @@ impl S3 for S3Client {
         &self,
         input: GetBucketWebsiteRequest,
     ) -> Result<GetBucketWebsiteOutput, RusotoError<GetBucketWebsiteError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19135,7 +19141,8 @@ impl S3 for S3Client {
         &self,
         input: GetObjectRequest,
     ) -> Result<GetObjectOutput, RusotoError<GetObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19263,7 +19270,8 @@ impl S3 for S3Client {
         &self,
         input: GetObjectAclRequest,
     ) -> Result<GetObjectAclOutput, RusotoError<GetObjectAclError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19295,7 +19303,8 @@ impl S3 for S3Client {
         &self,
         input: GetObjectLegalHoldRequest,
     ) -> Result<GetObjectLegalHoldOutput, RusotoError<GetObjectLegalHoldError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19328,7 +19337,7 @@ impl S3 for S3Client {
         input: GetObjectLockConfigurationRequest,
     ) -> Result<GetObjectLockConfigurationOutput, RusotoError<GetObjectLockConfigurationError>>
     {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19356,7 +19365,8 @@ impl S3 for S3Client {
         &self,
         input: GetObjectRetentionRequest,
     ) -> Result<GetObjectRetentionOutput, RusotoError<GetObjectRetentionError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19388,7 +19398,8 @@ impl S3 for S3Client {
         &self,
         input: GetObjectTaggingRequest,
     ) -> Result<GetObjectTaggingOutput, RusotoError<GetObjectTaggingError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19419,7 +19430,8 @@ impl S3 for S3Client {
         &self,
         input: GetObjectTorrentRequest,
     ) -> Result<GetObjectTorrentOutput, RusotoError<GetObjectTorrentError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19444,7 +19456,7 @@ impl S3 for S3Client {
         &self,
         input: GetPublicAccessBlockRequest,
     ) -> Result<GetPublicAccessBlockOutput, RusotoError<GetPublicAccessBlockError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19472,7 +19484,7 @@ impl S3 for S3Client {
         &self,
         input: HeadBucketRequest,
     ) -> Result<(), RusotoError<HeadBucketError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
@@ -19490,7 +19502,8 @@ impl S3 for S3Client {
         &self,
         input: HeadObjectRequest,
     ) -> Result<HeadObjectOutput, RusotoError<HeadObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
@@ -19598,7 +19611,7 @@ impl S3 for S3Client {
         ListBucketAnalyticsConfigurationsOutput,
         RusotoError<ListBucketAnalyticsConfigurationsError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19635,7 +19648,7 @@ impl S3 for S3Client {
         ListBucketInventoryConfigurationsOutput,
         RusotoError<ListBucketInventoryConfigurationsError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19672,7 +19685,7 @@ impl S3 for S3Client {
         ListBucketMetricsConfigurationsOutput,
         RusotoError<ListBucketMetricsConfigurationsError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19724,7 +19737,7 @@ impl S3 for S3Client {
         &self,
         input: ListMultipartUploadsRequest,
     ) -> Result<ListMultipartUploadsOutput, RusotoError<ListMultipartUploadsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19770,7 +19783,7 @@ impl S3 for S3Client {
         &self,
         input: ListObjectVersionsRequest,
     ) -> Result<ListObjectVersionsOutput, RusotoError<ListObjectVersionsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19816,7 +19829,7 @@ impl S3 for S3Client {
         &self,
         input: ListObjectsRequest,
     ) -> Result<ListObjectsOutput, RusotoError<ListObjectsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19859,7 +19872,7 @@ impl S3 for S3Client {
         &self,
         input: ListObjectsV2Request,
     ) -> Result<ListObjectsV2Output, RusotoError<ListObjectsV2Error>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19909,7 +19922,8 @@ impl S3 for S3Client {
         &self,
         input: ListPartsRequest,
     ) -> Result<ListPartsOutput, RusotoError<ListPartsError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -19946,7 +19960,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketAccelerateConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketAccelerateConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -19978,7 +19992,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketAclRequest,
     ) -> Result<(), RusotoError<PutBucketAclError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20021,7 +20035,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketAnalyticsConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketAnalyticsConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20051,7 +20065,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketCorsRequest,
     ) -> Result<(), RusotoError<PutBucketCorsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20081,7 +20095,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketEncryptionRequest,
     ) -> Result<(), RusotoError<PutBucketEncryptionError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20111,7 +20125,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketInventoryConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketInventoryConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20141,7 +20155,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketLifecycleRequest,
     ) -> Result<(), RusotoError<PutBucketLifecycleError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20175,7 +20189,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketLifecycleConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketLifecycleConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20209,7 +20223,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketLoggingRequest,
     ) -> Result<(), RusotoError<PutBucketLoggingError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20239,7 +20253,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketMetricsConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketMetricsConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20269,7 +20283,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketNotificationRequest,
     ) -> Result<(), RusotoError<PutBucketNotificationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20299,7 +20313,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketNotificationConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketNotificationConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20331,7 +20345,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketPolicyRequest,
     ) -> Result<(), RusotoError<PutBucketPolicyError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20359,7 +20373,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketReplicationRequest,
     ) -> Result<(), RusotoError<PutBucketReplicationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20390,7 +20404,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketRequestPaymentRequest,
     ) -> Result<(), RusotoError<PutBucketRequestPaymentError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20420,7 +20434,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketTaggingRequest,
     ) -> Result<(), RusotoError<PutBucketTaggingError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20446,7 +20460,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketVersioningRequest,
     ) -> Result<(), RusotoError<PutBucketVersioningError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20477,7 +20491,7 @@ impl S3 for S3Client {
         &self,
         input: PutBucketWebsiteRequest,
     ) -> Result<(), RusotoError<PutBucketWebsiteError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20507,7 +20521,8 @@ impl S3 for S3Client {
         &self,
         input: PutObjectRequest,
     ) -> Result<PutObjectOutput, RusotoError<PutObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20611,7 +20626,8 @@ impl S3 for S3Client {
         &self,
         input: PutObjectAclRequest,
     ) -> Result<PutObjectAclOutput, RusotoError<PutObjectAclError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20660,7 +20676,8 @@ impl S3 for S3Client {
         &self,
         input: PutObjectLegalHoldRequest,
     ) -> Result<PutObjectLegalHoldOutput, RusotoError<PutObjectLegalHoldError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20701,7 +20718,7 @@ impl S3 for S3Client {
         input: PutObjectLockConfigurationRequest,
     ) -> Result<PutObjectLockConfigurationOutput, RusotoError<PutObjectLockConfigurationError>>
     {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20739,7 +20756,8 @@ impl S3 for S3Client {
         &self,
         input: PutObjectRetentionRequest,
     ) -> Result<PutObjectRetentionOutput, RusotoError<PutObjectRetentionError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20783,7 +20801,8 @@ impl S3 for S3Client {
         &self,
         input: PutObjectTaggingRequest,
     ) -> Result<PutObjectTaggingOutput, RusotoError<PutObjectTaggingError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20814,7 +20833,7 @@ impl S3 for S3Client {
         &self,
         input: PutPublicAccessBlockRequest,
     ) -> Result<(), RusotoError<PutPublicAccessBlockError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let request_uri = format!("/{bucket}", bucket = input.bucket).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20844,7 +20863,8 @@ impl S3 for S3Client {
         &self,
         input: RestoreObjectRequest,
     ) -> Result<RestoreObjectOutput, RusotoError<RestoreObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
@@ -20884,7 +20904,8 @@ impl S3 for S3Client {
         &self,
         input: SelectObjectContentRequest,
     ) -> Result<SelectObjectContentOutput, RusotoError<SelectObjectContentError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
@@ -20926,7 +20947,8 @@ impl S3 for S3Client {
         &self,
         input: UploadPartRequest,
     ) -> Result<UploadPartOutput, RusotoError<UploadPartError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -20980,7 +21002,8 @@ impl S3 for S3Client {
         &self,
         input: UploadPartCopyRequest,
     ) -> Result<UploadPartCopyOutput, RusotoError<UploadPartCopyError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let request_uri =
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).replace("//", "/");
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 

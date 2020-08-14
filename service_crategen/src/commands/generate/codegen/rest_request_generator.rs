@@ -118,12 +118,17 @@ pub fn generate_uri_formatter(
         let input_shape = &service.get_shape(operation.input_shape()).unwrap();
         let uri_strings = generate_shape_member_uri_strings(input_shape);
 
+
+
         if !uri_strings.is_empty() {
             // massage for Route53.
             // See https://github.com/rusoto/rusoto/issues/997 .
             let replace_em = match service.name().to_ascii_lowercase().as_ref() {
                 "route 53" => {
                     ".replace(\"/hostedzone/hostedzone/\", \"/hostedzone/\").replace(\"/hostedzone//hostedzone/\", \"/hostedzone/\").replace(\"/change/change/\", \"/change/\")"
+                }
+                "amazon s3" => {
+                    ".replace(\"//\", \"/\")"
                 }
                 _ => ""
             };
