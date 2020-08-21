@@ -1,3 +1,10 @@
+//! AWS Post Policy
+//!
+//! Follows [POST Policy
+//! format](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html)
+//! using AWS Signature 4 algorithm.
+//!
+
 use crate::{region::Region, signature::SignedRequest};
 use chrono::Datelike;
 use chrono::{DateTime, Utc};
@@ -5,9 +12,6 @@ use serde::ser::{SerializeSeq, Serializer};
 use serde::Serialize;
 use std::collections::HashMap;
 use time::Date;
-
-// Policy explanation:
-// http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-HTTPPOSTConstructPolicy.html
 
 #[derive(Default)]
 pub struct PostPolicy<'a> {
@@ -55,14 +59,36 @@ impl<'a> Serialize for Condition<'a> {
     }
 }
 
+///
+/// ```
+///     // Create a POST policy to limit uploads to up to 1MiB
+///     # use rusoto_signature::PostPolicy;
+///     # use rusoto_signature::Region;
+///     # use chrono::{TimeZone, Utc};
+///
+///     let expiration_date = Utc.ymd(2020, 1, 1).and_hms(1, 2, 3);
+///
+///     let res = PostPolicy::default()
+///         .set_bucket_name("some-bucket-name")
+///         .set_region(&Region::EuCentral1)
+///         .set_access_key_id("aws-access-key")
+///         .set_secret_access_key("aws-secret-key")
+///         .set_key("object-key")
+///         .set_expiration(&expiration_date)
+///         .set_content_length_range(0, 1024 * 1024)
+///         .build_form_data();
+///
+///     let (upload_url, form_data) = res.unwrap();
+/// ```
+///
 impl<'a> PostPolicy<'a> {
-    /// Set expiration time
+    /// Set expiration time policy condition
     pub fn set_expiration(mut self, t: &'a DateTime<Utc>) -> Self {
         self.expiration = Some(t);
         self
     }
 
-    /// Set key policy condition
+    /// Set key policy condition and update the form data
     pub fn set_key(mut self, key: &'a str) -> Self {
         if key.is_empty() {
             return self;
@@ -74,7 +100,7 @@ impl<'a> PostPolicy<'a> {
         self
     }
 
-    /// Set key startswith policy condition
+    /// Set key starts-with policy condition and update the form data
     #[allow(dead_code)]
     pub fn set_key_startswith(mut self, key: &'a str) -> Self {
         if key.is_empty() {
@@ -88,7 +114,7 @@ impl<'a> PostPolicy<'a> {
         self
     }
 
-    /// Set bucket name
+    /// Set bucket name policy condition and update the form data
     pub fn set_bucket_name(mut self, bucket_name: &'a str) -> Self {
         self.form_data
             .insert("bucket".to_string(), bucket_name.to_string());
@@ -123,7 +149,7 @@ impl<'a> PostPolicy<'a> {
         self
     }
 
-    /// Set content-type policy condition
+    /// Set content-type policy condition and update the form data
     #[allow(dead_code)]
     pub fn set_content_type(mut self, content_type: &'a str) -> Self {
         self.form_data
@@ -132,15 +158,26 @@ impl<'a> PostPolicy<'a> {
         self
     }
 
-    /// Set content length range policy condition
+    /// Set content length range policy condition and update the form data
     pub fn set_content_length_range(mut self, min_length: u64, max_length: u64) -> Self {
         self.content_length_range = Some((min_length, max_length));
-        // We should append the policy here, but ownership it's tricky,
+        // We should append the policy here, but ownership is tricky,
         // so we'll do it inside build_form_data()
         self
     }
 
     /// Append policy condition
+    ///
+    /// ```
+    /// # use rusoto_signature::PostPolicy;
+    ///
+    /// PostPolicy::default()
+    ///     .append_policy("eq", "$acl", "public-read");
+    /// ```
+    ///
+    /// Depending on the kind of condition you may have to add
+    /// the field to the form data produced by [build_form_data](#method.build_form_data)
+    ///
     pub fn append_policy(mut self, match_type: &'a str, target: &'a str, value: &'a str) -> Self {
         self.conditions.push(Condition((match_type, target, value)));
         self
