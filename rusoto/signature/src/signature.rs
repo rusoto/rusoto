@@ -213,6 +213,21 @@ impl SignedRequest {
         }
     }
 
+    /// Modify the region used for signing if needed, such as for AWS Organizations
+    pub fn region_for_service(&self) -> String {
+        match self.service.as_str() {
+            "organizations" => {
+                // Matches https://docs.aws.amazon.com/general/latest/gr/ao.html
+                match self.region {
+                    Region::CnNorth1 | Region::CnNorthwest1 => Region::CnNorthwest1.name().to_string(),
+                    Region::UsGovEast1 | Region::UsGovWest1 => Region::UsGovWest1.name().to_string(),
+                    _ => Region::UsEast1.name().to_string(),
+                }
+            }
+            _ => self.region.name().to_string(),
+        }
+    }
+
     /// Converts hostname to String if it exists, else it invokes build_hostname()
     pub fn hostname(&self) -> String {
         // hostname may be already set by an endpoint prefix
@@ -470,7 +485,7 @@ impl SignedRequest {
         let scope = format!(
             "{}/{}/{}/aws4_request",
             date.format("%Y%m%d"),
-            self.region.name(),
+            &self.region_for_service(),
             &self.service
         );
         let string_to_sign = string_to_sign(date, &hashed_canonical_request, &scope);
@@ -480,7 +495,7 @@ impl SignedRequest {
             &string_to_sign,
             creds.aws_secret_access_key(),
             date.date(),
-            &self.region.name(),
+            &self.region_for_service(),
             &self.service,
         );
 
@@ -773,8 +788,16 @@ fn extract_hostname(endpoint: &str) -> &str {
 /// Takes a `Region` enum and a service and formas a vaild DNS name.
 /// E.g. `Region::ApNortheast1` and `s3` produces `s3.ap-northeast-1.amazonaws.com.cn`
 fn build_hostname(service: &str, region: &Region) -> String {
+    // Any of these that modify the region will need to have their signature adjusted as well: sign for destination region
     //iam & cloudfront have only 1 endpoint, other services have region-based endpoints
     match service {
+        "organizations" => match *region {
+            // organizations is routed specially: see https://docs.aws.amazon.com/organizations/latest/APIReference/Welcome.html and https://docs.aws.amazon.com/general/latest/gr/ao.html
+            Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
+            Region::CnNorth1 | Region::CnNorthwest1 => "organizations.cn-northwest-1.amazonaws.com.cn".to_owned(),
+            Region::UsGovEast1 | Region::UsGovWest1 => "organizations.us-gov-west-1.amazonaws.com".to_owned(),
+            _ => "organizations.us-east-1.amazonaws.com".to_owned(),
+        },
         "iam" => match *region {
             Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
             Region::CnNorth1 | Region::CnNorthwest1 => {

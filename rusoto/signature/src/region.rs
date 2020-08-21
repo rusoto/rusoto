@@ -107,7 +107,7 @@ pub enum Region {
     /// Region that covers China
     CnNorth1,
 
-    /// Region that covers North-Western  part of China
+    /// Region that covers North-Western part of China
     CnNorthwest1,
 
     /// Region that covers southern part Africa
