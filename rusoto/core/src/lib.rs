@@ -36,7 +36,6 @@ pub mod request;
 #[doc(hidden)]
 pub mod signature;
 
-#[doc(hidden)]
 pub use crate::client::Client;
 #[doc(hidden)]
 pub mod encoding;
