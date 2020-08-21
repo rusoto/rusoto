@@ -11,6 +11,7 @@
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
 #![cfg_attr(not(feature = "unstable"), allow(clippy::type_complexity))]
 pub extern crate rusoto_credential as credential;
+pub mod policy;
 pub mod region;
 pub mod signature;
 pub mod stream;
