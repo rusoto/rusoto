@@ -29,7 +29,7 @@ use rusoto_iam::{
 use rusoto_core::{Region, RusotoError};
 use rusoto_credential::ProvideAwsCredentials;
 
-use time::Time;
+use time::OffsetDateTime;
 use std::collections::HashMap;
 use std::time::Duration;
 use tokio::time::delay_for;
@@ -64,7 +64,7 @@ async fn should_work_with_credential_provider() {
     let region = Region::UsEast1;
     let client_cognito = CognitoIdentityClient::new(region.clone());
     let client_iam = IamClient::new(region.clone());
-    let tag = Time::now().nanosecond();
+    let tag = OffsetDateTime::now_utc().nanosecond();
     let identity_pool_name = format!("cognito-provider-identity-tst-{}", tag);
     let role_name = format!("cognito-provider-auth-role-tst-{}", tag);
     let policy_name = format!("cognito-provider-auth-policy-tst-{}", tag);
