@@ -15,6 +15,7 @@ pub mod policy;
 pub mod region;
 pub mod signature;
 pub mod stream;
+pub use policy::PostPolicy;
 pub use region::Region;
 pub use signature::{SignedRequest, SignedRequestPayload};
 pub use stream::ByteStream;
