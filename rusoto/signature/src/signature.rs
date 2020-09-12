@@ -579,21 +579,21 @@ impl TryInto<Request<Body>> for SignedRequest {
 }
 
 /// Convert payload from Char array to useable <payload, len> format.
-fn digest_payload(payload: &[u8]) -> (String, usize) {
+pub(crate) fn digest_payload(payload: &[u8]) -> (String, usize) {
     let digest = to_hexdigest(payload);
     let len = payload.len();
     (digest, len)
 }
 
 #[inline]
-fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
+pub(crate) fn hmac(secret: &[u8], message: &[u8]) -> Hmac<Sha256> {
     let mut hmac = Hmac::<Sha256>::new_varkey(secret).expect("failed to create hmac");
     hmac.update(message);
     hmac
 }
 
 /// Takes a message and signs it using AWS secret, time, region keys and service keys.
-fn sign_string(
+pub(crate) fn sign_string(
     string_to_sign: &str,
     secret: &str,
     date: Date,
@@ -746,7 +746,7 @@ pub fn encode_uri_path(uri: &str) -> String {
 }
 
 #[inline]
-fn encode_uri_strict(uri: &str) -> String {
+pub(crate) fn encode_uri_strict(uri: &str) -> String {
     utf8_percent_encode(uri, &STRICT_ENCODE_SET).collect::<String>()
 }
 
@@ -761,7 +761,7 @@ pub fn decode_uri(uri: &str) -> String {
     }
 }
 
-fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
+pub(crate) fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
     let h = Sha256::digest(t.as_ref());
     hex::encode(h)
 }
@@ -794,8 +794,12 @@ fn build_hostname(service: &str, region: &Region) -> String {
         "organizations" => match *region {
             // organizations is routed specially: see https://docs.aws.amazon.com/organizations/latest/APIReference/Welcome.html and https://docs.aws.amazon.com/general/latest/gr/ao.html
             Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
-            Region::CnNorth1 | Region::CnNorthwest1 => "organizations.cn-northwest-1.amazonaws.com.cn".to_owned(),
-            Region::UsGovEast1 | Region::UsGovWest1 => "organizations.us-gov-west-1.amazonaws.com".to_owned(),
+            Region::CnNorth1 | Region::CnNorthwest1 => {
+                "organizations.cn-northwest-1.amazonaws.com.cn".to_owned()
+            }
+            Region::UsGovEast1 | Region::UsGovWest1 => {
+                "organizations.us-gov-west-1.amazonaws.com".to_owned()
+            }
             _ => "organizations.us-east-1.amazonaws.com".to_owned(),
         },
         "iam" => match *region {

@@ -17,3 +17,4 @@ pub mod stream;
 pub use region::Region;
 pub use signature::{SignedRequest, SignedRequestPayload};
 pub use stream::ByteStream;
+pub mod signer;
