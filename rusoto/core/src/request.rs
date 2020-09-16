@@ -510,6 +510,6 @@ mod tests {
     fn from_io_error_preserves_error_message() {
         let io_error = ::std::io::Error::new(::std::io::ErrorKind::Other, "my error message");
         let error = HttpDispatchError::from(io_error);
-        assert_eq!(error.to_string(), "my error message2")
+        assert_eq!(error.to_string(), "my error message")
     }
 }
