@@ -83,7 +83,7 @@ jobs:
           ~/.cargo/git
           target
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-    - name: Cargo check credential integration tests
+    - name: Credential integration tests
       shell: bash
       run: RUST_VERSION=${{ matrix.rust }} make credential_integration_test
 
@@ -158,8 +158,8 @@ jobs:
     - name: Skeptic Test
       run: make skeptical
 
-  ceph_replacement:
-    name: Ceph replacement # name this better :)
+  s3_and_crategen:
+    name: Test S3 like services and check generated files
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -176,5 +176,5 @@ jobs:
           ~/.cargo/git
           target
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-    - name: Cemaphore replacement
+    - name: Test S3 like services and check generated files
       run: ./.semaphoreci/run.sh
