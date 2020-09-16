@@ -13,7 +13,7 @@ async fn it_fetches_basic_role() {
 
     let creds = provider.credentials().await.expect("credentials");
 
-    assert_eq!(creds.aws_access_key_id(), "Access_key_id_value");
+    assert_eq!(creds.aws_access_key_id(), "Access_key_id_value2");
     assert_eq!(creds.aws_secret_access_key(), "Secret_access_key_value");
     assert_eq!(creds.token().as_ref(), Some(&"AAAAA".to_string()));
     let dt = match creds.expires_at().as_ref() {
