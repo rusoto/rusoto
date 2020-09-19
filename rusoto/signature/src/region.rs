@@ -165,6 +165,10 @@ impl Region {
             Region::Custom { ref name, .. } => name,
         }
     }
+
+    pub fn extract_hostname(&self) -> String {
+        todo!()
+    }
 }
 
 /// An error produced when attempting to convert a `str` into a `Region` fails.

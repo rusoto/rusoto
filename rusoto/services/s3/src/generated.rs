@@ -17777,11 +17777,15 @@ pub trait S3 {
         input: UploadPartCopyRequest,
     ) -> Result<UploadPartCopyOutput, RusotoError<UploadPartCopyError>>;
 }
+
+use crate::util::S3Config;
+
 /// A client for the Amazon S3 API.
 #[derive(Clone)]
 pub struct S3Client {
     client: Client,
     region: region::Region,
+    config: S3Config,
 }
 
 impl S3Client {
@@ -17792,6 +17796,7 @@ impl S3Client {
         S3Client {
             client: Client::shared(),
             region,
+            config: S3Config::default(),
         }
     }
 
@@ -17807,11 +17812,35 @@ impl S3Client {
         S3Client {
             client: Client::new_with(credentials_provider, request_dispatcher),
             region,
+            config: S3Config::default(),
         }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> S3Client {
-        S3Client { client, region }
+        S3Client {
+            client,
+            region,
+            config: S3Config::default(),
+        }
+    }
+
+    pub fn set_config(&mut self, config: S3Config) {
+        self.config = config;
+    }
+
+    pub fn config(&self) -> &S3Config {
+        &self.config
+    }
+
+    pub fn config_mut(&mut self) -> &mut S3Config {
+        &mut self.config
+    }
+
+    fn build_s3_hostname<T>(&self, bucket: &str) -> Result<(bool, String), RusotoError<T>> {
+        self.config
+            .addressing_style
+            .build_s3_hostname(&self.region, bucket)
+            .map_err(|e| RusotoError::InvalidDnsName(e))
     }
 }
 
@@ -19135,9 +19164,17 @@ impl S3 for S3Client {
         &self,
         input: GetObjectRequest,
     ) -> Result<GetObjectOutput, RusotoError<GetObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri = if is_virtual {
+            format!("/{key}", key = input.key)
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key)
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+
+        request.set_hostname(Some(hostname));
 
         request.add_optional_header("If-Match", input.if_match.as_ref());
         request.add_optional_header("If-Modified-Since", input.if_modified_since.as_ref());

@@ -6,6 +6,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::region::Region;
 use rusoto_core::signature;
 use rusoto_core::signature::SignedRequest;
+use rusoto_core::InvalidDnsNameError;
 use std::time::Duration;
 /// URL encodes an S3 object key. This is necessary for `copy_object` and `upload_part_copy`,
 /// which require the `copy_source` field to be URL encoded.
@@ -142,7 +143,7 @@ impl PreSignedRequest for PutObjectRequest {
             content_length, "Content-Length";
             content_md5, "Content-MD5";
             content_type, "Content-Type";
-            // AWS document has Expect parameter but PutObjectRequest does'nt have it.
+            // AWS document has Expect parameter but PutObjectRequest doesn't have it.
             //expect, "Expect";
             expires, "Expires";
             storage_class, "x-amz-storage-class";
@@ -150,14 +151,14 @@ impl PreSignedRequest for PutObjectRequest {
             website_redirect_location, "x-amz-website-redirect-location";
             acl, "x-amz-acl";
             grant_read, "x-amz-grant-read";
-            // AWS document has x-amz-grant-write parameter but PutObjectRequest does'nt have it.
+            // AWS document has x-amz-grant-write parameter but PutObjectRequest doesn't have it.
             //grant_write, "x-amz-grant-write";
             grant_read_acp, "x-amz-grant-read-acp";
             grant_write_acp, "x-amz-grant-write-acp";
             grant_full_control, "x-amz-grant-full-control";
             server_side_encryption, "x-amz-server-side-encryption";
             ssekms_key_id, "x-amz-server-side-encryption-aws-kms-key-id";
-            // AWS document has x-amz-server-side-encryption-context parameter but PutObjectRequest does'nt have it.
+            // AWS document has x-amz-server-side-encryption-context parameter but PutObjectRequest doesn't have it.
             //kms_context, "x-amz-server-side-encryption-context";
             sse_customer_algorithm, "x-amz-server-side-encryption-customer-algorithm";
             sse_customer_key, "x-amz-server-side-encryption-customer-key";
@@ -227,5 +228,56 @@ impl PreSignedRequest for UploadPartRequest {
         );
 
         request.generate_presigned_url(credentials, &option.expires_in, false)
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct S3Config {
+    pub addressing_style: AddressingStyle,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub enum AddressingStyle {
+    Auto,
+    Virtual,
+    Path,
+}
+
+impl Default for AddressingStyle {
+    fn default() -> Self {
+        Self::Auto
+    }
+}
+
+impl AddressingStyle {
+    pub(crate) fn build_s3_hostname(
+        &self,
+        region: &Region,
+        bucket: &str,
+    ) -> Result<(bool, String), InvalidDnsNameError> {
+        match self {
+            AddressingStyle::Auto => Self::build_virtual_style_hostname(region, bucket)
+                .or_else(|_| Ok(Self::build_path_style_hostname(region))),
+            AddressingStyle::Virtual => Self::build_virtual_style_hostname(region, bucket),
+            AddressingStyle::Path => Ok(Self::build_path_style_hostname(region)),
+        }
+    }
+
+    fn build_path_style_hostname(region: &Region) -> (bool, String) {
+        let hostname = match *region {
+            Region::Custom { .. } => region.extract_hostname().to_string(),
+            Region::CnNorth1 | Region::CnNorthwest1 => {
+                format!("s3.{}.amazonaws.com.cn", region.name())
+            }
+            _ => format!("s3.{}.amazonaws.com", region.name()),
+        };
+        (false, hostname)
+    }
+
+    fn build_virtual_style_hostname(
+        _region: &Region,
+        _bucket: &str,
+    ) -> Result<(bool, String), InvalidDnsNameError> {
+        todo!()
     }
 }
