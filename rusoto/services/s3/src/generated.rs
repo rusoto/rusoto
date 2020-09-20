@@ -17836,7 +17836,7 @@ impl S3Client {
         &mut self.config
     }
 
-    fn build_s3_hostname<T>(&self, bucket: &str) -> Result<(bool, String), RusotoError<T>> {
+    pub fn build_s3_hostname<T>(&self, bucket: &str) -> Result<(bool, String), RusotoError<T>> {
         self.config
             .addressing_style
             .build_s3_hostname(&self.region, bucket)

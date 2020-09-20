@@ -201,8 +201,7 @@ where
 
     writeln!(
         writer,
-        "
-        {client_struct_and_impl}
+        "{client_struct_and_impl}
 
         #[async_trait]
         impl {trait_name} for {type_name} {{
@@ -219,7 +218,8 @@ where
 // See ...
 fn generate_s3_client_struct_and_impl(service_name: &str, client_type_name: &str) -> String {
     format!(
-        "use crate::util::S3Config;
+        "
+        use crate::util::S3Config;
 
         /// A client for the {service_name} API.
         #[derive(Clone)]
@@ -273,7 +273,7 @@ fn generate_s3_client_struct_and_impl(service_name: &str, client_type_name: &str
                 &mut self.config
             }}
         
-            fn build_s3_hostname<T>(&self, bucket: &str) -> Result<(bool, String), RusotoError<T>> {{
+            pub fn build_s3_hostname<T>(&self, bucket: &str) -> Result<(bool, String), RusotoError<T>> {{
                 self.config
                     .addressing_style
                     .build_s3_hostname(&self.region, bucket)
