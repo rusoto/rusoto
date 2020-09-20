@@ -691,8 +691,10 @@ async fn test_multipart_upload(
     {
         let options = PreSignedRequestOption {
             expires_in: Duration::from_secs(60 * 30),
+            ..Default::default()
         };
-        let presigned_multipart_put = part_req2.get_presigned_url(region, credentials, &options);
+        let presigned_multipart_put = part_req2.get_presigned_url(region, credentials, &options)
+            .expect("Creating presigned url failed");
         println!("presigned multipart put: {:#?}", presigned_multipart_put);
         let client = reqwest::Client::new();
         let res = client
@@ -1182,7 +1184,8 @@ async fn test_get_object_with_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
+    let presigned_url = req.get_presigned_url(region, credentials, &Default::default())
+        .expect("Creating presigned url failed");
     println!("get object presigned url: {:#?}", presigned_url);
     let res = reqwest::get(&presigned_url).await.expect("Couldn't get object via presigned url");
     assert_eq!(res.status(), http::StatusCode::OK);
@@ -1205,8 +1208,10 @@ async fn test_get_object_with_expired_presigned_url(
     };
     let opt = PreSignedRequestOption {
         expires_in: ::std::time::Duration::from_secs(1),
+        ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials, &opt);
+    let presigned_url = req.get_presigned_url(region, credentials, &opt)
+        .expect("Creating presigned url failed");
     ::std::thread::sleep(::std::time::Duration::from_secs(2));
     println!("get object presigned url: {:#?}", presigned_url);
     let res = reqwest::get(&presigned_url).await.expect("Presigned url failure");
@@ -1224,7 +1229,8 @@ async fn test_put_object_with_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
+    let presigned_url = req.get_presigned_url(region, credentials, &Default::default())
+        .expect("Creating presigned url failed");
     println!("put object presigned url: {:#?}", presigned_url);
     let mut map = HashMap::new();
     map.insert("test", "data");
@@ -1249,7 +1255,8 @@ async fn test_delete_object_with_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
+    let presigned_url = req.get_presigned_url(region, credentials, &Default::default())
+        .expect("Creating presigned url failed");
     println!("delete object presigned url: {:#?}", presigned_url);
     let client = reqwest::Client::new();
     let res = client

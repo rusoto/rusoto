@@ -984,3 +984,5 @@ disable_minio_unsupported = []
 default = ["native-tls"]
 native-tls = ["rusoto_core/native-tls"]
 rustls = ["rusoto_core/rustls"]
+
+[workspace]
