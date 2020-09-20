@@ -8,6 +8,7 @@ use rusoto_core::signature;
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::InvalidDnsNameError;
 use std::time::Duration;
+
 /// URL encodes an S3 object key. This is necessary for `copy_object` and `upload_part_copy`,
 /// which require the `copy_source` field to be URL encoded.
 ///
@@ -63,12 +64,14 @@ macro_rules! add_params {
 
 pub struct PreSignedRequestOption {
     pub expires_in: Duration,
+    pub addressing_style: AddressingStyle,
 }
 
 impl Default for PreSignedRequestOption {
     fn default() -> Self {
         Self {
             expires_in: Duration::from_secs(3600),
+            addressing_style: AddressingStyle::default(),
         }
     }
 }
@@ -80,7 +83,7 @@ pub trait PreSignedRequest {
         region: &Region,
         credentials: &AwsCredentials,
         option: &PreSignedRequestOption,
-    ) -> String;
+    ) -> Result<String, InvalidDnsNameError>;
 }
 
 impl PreSignedRequest for GetObjectRequest {
@@ -90,8 +93,9 @@ impl PreSignedRequest for GetObjectRequest {
         region: &Region,
         credentials: &AwsCredentials,
         option: &PreSignedRequestOption,
-    ) -> String {
-        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
+    ) -> Result<String, InvalidDnsNameError> {
+        let (request_uri, hostname) =
+            build_request_uri_and_hostname(region, &self.bucket, &self.key, option)?;
         let mut request = SignedRequest::new("GET", "s3", &region, &request_uri);
         let mut params = Params::new();
 
@@ -120,7 +124,8 @@ impl PreSignedRequest for GetObjectRequest {
         );
 
         request.set_params(params);
-        request.generate_presigned_url(credentials, &option.expires_in, false)
+        request.set_hostname(Some(hostname));
+        Ok(request.generate_presigned_url(credentials, &option.expires_in, false))
     }
 }
 
@@ -131,8 +136,9 @@ impl PreSignedRequest for PutObjectRequest {
         region: &Region,
         credentials: &AwsCredentials,
         option: &PreSignedRequestOption,
-    ) -> String {
-        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
+    ) -> Result<String, InvalidDnsNameError> {
+        let (request_uri, hostname) =
+            build_request_uri_and_hostname(region, &self.bucket, &self.key, option)?;
         let mut request = SignedRequest::new("PUT", "s3", &region, &request_uri);
 
         add_headers!(
@@ -172,7 +178,8 @@ impl PreSignedRequest for PutObjectRequest {
             }
         }
 
-        request.generate_presigned_url(credentials, &option.expires_in, false)
+        request.set_hostname(Some(hostname));
+        Ok(request.generate_presigned_url(credentials, &option.expires_in, false))
     }
 }
 
@@ -183,8 +190,9 @@ impl PreSignedRequest for DeleteObjectRequest {
         region: &Region,
         credentials: &AwsCredentials,
         option: &PreSignedRequestOption,
-    ) -> String {
-        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
+    ) -> Result<String, InvalidDnsNameError> {
+        let (request_uri, hostname) =
+            build_request_uri_and_hostname(region, &self.bucket, &self.key, option)?;
         let mut request = SignedRequest::new("DELETE", "s3", &region, &request_uri);
         let mut params = Params::new();
 
@@ -199,7 +207,8 @@ impl PreSignedRequest for DeleteObjectRequest {
         );
 
         request.set_params(params);
-        request.generate_presigned_url(credentials, &option.expires_in, false)
+        request.set_hostname(Some(hostname));
+        Ok(request.generate_presigned_url(credentials, &option.expires_in, false))
     }
 }
 
@@ -210,8 +219,9 @@ impl PreSignedRequest for UploadPartRequest {
         region: &Region,
         credentials: &AwsCredentials,
         option: &PreSignedRequestOption,
-    ) -> String {
-        let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
+    ) -> Result<String, InvalidDnsNameError> {
+        let (request_uri, hostname) =
+            build_request_uri_and_hostname(region, &self.bucket, &self.key, option)?;
         let mut request = SignedRequest::new("PUT", "s3", &region, &request_uri);
 
         request.add_param("partNumber", &self.part_number.to_string());
@@ -227,8 +237,27 @@ impl PreSignedRequest for UploadPartRequest {
             request_payer, "x-amz-request-payer";
         );
 
-        request.generate_presigned_url(credentials, &option.expires_in, false)
+        request.set_hostname(Some(hostname));
+
+        Ok(request.generate_presigned_url(credentials, &option.expires_in, false))
     }
+}
+
+fn build_request_uri_and_hostname(
+    region: &Region,
+    bucket: &str,
+    key: &str,
+    option: &PreSignedRequestOption,
+) -> Result<(String, String), InvalidDnsNameError> {
+    let (is_virtual, hostname) = option.addressing_style.build_s3_hostname(region, bucket)?;
+
+    let request_uri = if is_virtual {
+        format!("/{key}", key = key)
+    } else {
+        format!("/{bucket}/{key}", bucket = bucket, key = key)
+    };
+
+    Ok((request_uri, hostname))
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -271,9 +300,7 @@ impl AddressingStyle {
 fn build_path_style_hostname(region: &Region) -> String {
     match *region {
         Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_string(),
-        Region::CnNorth1 | Region::CnNorthwest1 => {
-            format!("s3.{}.amazonaws.com.cn", region.name())
-        }
+        Region::CnNorth1 | Region::CnNorthwest1 => format!("s3.{}.amazonaws.com.cn", region.name()),
         _ => format!("s3.{}.amazonaws.com", region.name()),
     }
 }

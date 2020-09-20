@@ -380,7 +380,7 @@ async fn should_parse_sample_list_buckets_response() {
 }
 
 #[tokio::test]
-async fn hould_parse_headers() {
+async fn should_parse_headers() {
     let mock = MockRequestDispatcher::with_status(200)
         .with_body("")
         .with_header("x-amz-expiration", "foo")
