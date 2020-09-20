@@ -19,6 +19,8 @@ targets = []
 [dependencies]
 async-trait = "0.1"
 bytes = "0.5"
+lazy_static = "1.4"
+regex = "1.0"
 xml-rs = "0.8"
 
 [dependencies.futures]

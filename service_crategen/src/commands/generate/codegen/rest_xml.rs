@@ -33,12 +33,15 @@ impl GenerateProtocol for RestXmlGenerator {
     }
 
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
+        use {
+            rest_request_generator as rest_gen, rest_response_parser as rest_par,
+            xml_payload_parser as xml_par,
+        };
+
         for (operation_name, operation) in service.operations().iter() {
-            let (request_uri, _) =
-                rest_request_generator::parse_query_string(&operation.http.request_uri);
-            let parse_non_payload =
-                rest_response_parser::generate_response_headers_parser(service, operation)
-                    .unwrap_or_else(|| "".to_owned());
+            let (request_uri, _) = rest_gen::parse_query_string(&operation.http.request_uri);
+            let parse_non_payload = rest_par::generate_response_headers_parser(service, operation)
+                .unwrap_or_else(|| "".to_owned());
             writeln!(writer,
                      "{documentation}
                     #[allow(unused_variables, warnings)]
@@ -50,6 +53,7 @@ impl GenerateProtocol for RestXmlGenerator {
                         {set_headers}
                         {set_parameters}
                         {build_payload}
+                        {set_hostname}
 
                         let mut response = self.sign_and_dispatch(request, {error_type}::from_response).await?;
 
@@ -63,18 +67,16 @@ impl GenerateProtocol for RestXmlGenerator {
                      error_type = error_type_name(service, operation_name),
                      build_payload = generate_payload_serialization(service, operation)
                          .unwrap_or_else(|| "".to_string()),
-                     modify_uri = rest_request_generator::generate_uri_formatter(&request_uri,
-                                                                                 service,
-                                                                                 operation)
+                     modify_uri = rest_gen::generate_uri_formatter(&request_uri, service, operation)
                          .unwrap_or_else(|| "".to_string()),
-                     set_headers = rest_request_generator::generate_headers(service, operation)
+                     set_headers = rest_gen::generate_headers(service, operation)
                          .unwrap_or_else(|| "".to_string()),
                      set_parameters =
-                         rest_request_generator::generate_params_loading_string(service,
-                                                                                operation)
+                         rest_gen::generate_params_loading_string(service, operation)
                              .unwrap_or_else(|| "".to_string()),
+                     set_hostname = rest_gen::generate_hostname_setter(service, operation),
                      parse_response_body =
-                         xml_payload_parser::generate_response_parser(service, operation, true, &parse_non_payload))?;
+                         xml_par::generate_response_parser(service, operation, true, &parse_non_payload))?;
         }
         Ok(())
     }
@@ -147,7 +149,7 @@ impl GenerateProtocol for RestXmlGenerator {
 
         // S3 has special cases where the payload is not meant to be xml serialized and passed
         // as a string literal (Policy as an example). Making an exception based on service and shape.
-        if service.service_type_name().eq("S3") && name.eq("Policy") {
+        if service.service_type_name() == "S3" && name == "Policy" {
             return None;
         }
 
@@ -252,7 +254,7 @@ fn generate_payload_member_serialization(service: &Service, shape: &Shape) -> St
     }
     // s3 is a special case where the policy member should not be xml serialized but rather passed
     // as a string literal
-    else if service.service_type_name().eq("S3") && payload_field.eq("Policy") {
+    else if service.service_type_name() == "S3" && payload_field == "Policy" {
         format!(
             "request.set_payload(Some(input.{payload_field}.into_bytes()));",
             payload_field = payload_field.to_snake_case()

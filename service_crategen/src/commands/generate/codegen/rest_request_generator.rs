@@ -115,31 +115,90 @@ pub fn generate_uri_formatter(
     operation: &Operation,
 ) -> Option<String> {
     if operation.input.is_some() {
+        let request_uri = generate_snake_case_uri(request_uri);
         let input_shape = &service.get_shape(operation.input_shape()).unwrap();
         let uri_strings = generate_shape_member_uri_strings(input_shape);
 
         if !uri_strings.is_empty() {
+            let service_name = service.name().to_ascii_lowercase();
+
             // massage for Route53.
             // See https://github.com/rusoto/rusoto/issues/997 .
-            let replace_em = match service.name().to_ascii_lowercase().as_ref() {
+            let replace_em = match service_name.as_ref() {
                 "route 53" => {
-                    ".replace(\"/hostedzone/hostedzone/\", \"/hostedzone/\").replace(\"/hostedzone//hostedzone/\", \"/hostedzone/\").replace(\"/change/change/\", \"/change/\")"
+                    r#".replace("/hostedzone/hostedzone/", "/hostedzone/").replace("/hostedzone//hostedzone/", "/hostedzone/").replace("/change/change/", "/change/")"#
                 }
-                _ => ""
+                _ => "",
             };
+
+            let uri_formatter =
+                generate_uri_format_expression(&request_uri, &uri_strings, replace_em);
+
+            if service_name != "amazon s3"
+                || operation.name.eq_ignore_ascii_case("GetBucketLocation")
+            {
+                // Return a let statement with uri_formatter (the format! macro above)
+                // to create a request URI.
+                return Some(format!("let request_uri = {};", uri_formatter));
+            }
+
+            // Service name is "s3" and operation is not "GetBucketLocation".
+            // Create and return a more complex statement to handle different S3
+            // addressing styles based on a run-time client configuration.
+            // See https://github.com/rusoto/rusoto/issues/?????? .
+
+            // Create an additional uri_formatter, which generates a request URI
+            // without "bucket" portion.
+            let request_uri = request_uri.replace("{bucket}", "").replace("//", "/");
+            let uri_strings = uri_strings
+                .into_iter()
+                .filter(|s| !s.starts_with("bucket"))
+                .collect::<Vec<_>>();
+            let short_uri_formatter =
+                generate_uri_format_expression(&request_uri, &uri_strings, "");
+
             return Some(format!(
-                "let request_uri = format!(\"{request_uri}\", {uri_strings}){replace_if_needed};",
-                request_uri = generate_snake_case_uri(request_uri),
-                uri_strings = uri_strings.join(", "),
-                replace_if_needed = replace_em
+                r#"let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+                let request_uri: std::borrow::Cow<'_, str> = if is_virtual {{
+                    {short_uri_formatter}.into()
+                }} else {{
+                    {uri_formatter}.into()
+                }};"#,
+                short_uri_formatter = short_uri_formatter,
+                uri_formatter = uri_formatter,
             ));
         }
     }
 
-    Some(format!(
-        "let request_uri = \"{request_uri}\";",
+    // Return a let statement with a fixed request URI.
+    return Some(format!(
+        r#"let request_uri = "{request_uri}";"#,
         request_uri = request_uri
-    ))
+    ));
+}
+
+fn generate_uri_format_expression(
+    request_uri: &str,
+    uri_strings: &[String],
+    replace_if_needed: &str,
+) -> String {
+    if uri_strings.is_empty() {
+        if replace_if_needed.is_empty() {
+            // Return a &str literal.
+            format!(r#""{request_uri}""#, request_uri = request_uri)
+        } else {
+            unreachable!()
+        }
+    } else {
+        // Return a format! macro.
+        format!(
+            r#"format!("{request_uri}", {uri_strings}){replace_if_needed}"#,
+            request_uri = request_uri,
+            uri_strings = uri_strings.join(", "),
+            replace_if_needed = replace_if_needed
+        )
+    }
 }
 
 fn generate_shape_member_uri_strings(shape: &Shape) -> Vec<String> {
@@ -306,6 +365,17 @@ fn generate_param_load_string(
             param_name = param_name,
             field_name = field_name,
         ),
+    }
+}
+
+pub fn generate_hostname_setter(service: &Service<'_>, operation: &Operation) -> &'static str {
+    if service.service_type_name() == "S3"
+        && !operation.name.eq_ignore_ascii_case("ListBuckets")
+        && !operation.name.eq_ignore_ascii_case("GetBucketLocation")
+    {
+        "request.set_hostname(Some(hostname));"
+    } else {
+        ""
     }
 }
 

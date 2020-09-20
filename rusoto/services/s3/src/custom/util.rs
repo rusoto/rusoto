@@ -245,7 +245,8 @@ pub enum AddressingStyle {
 
 impl Default for AddressingStyle {
     fn default() -> Self {
-        Self::Auto
+        // Self::Auto
+        Self::Path
     }
 }
 
@@ -255,29 +256,75 @@ impl AddressingStyle {
         region: &Region,
         bucket: &str,
     ) -> Result<(bool, String), InvalidDnsNameError> {
+        let base_hostname = build_path_style_hostname(region);
         match self {
-            AddressingStyle::Auto => Self::build_virtual_style_hostname(region, bucket)
-                .or_else(|_| Ok(Self::build_path_style_hostname(region))),
-            AddressingStyle::Virtual => Self::build_virtual_style_hostname(region, bucket),
-            AddressingStyle::Path => Ok(Self::build_path_style_hostname(region)),
+            AddressingStyle::Auto => build_virtual_style_hostname(&base_hostname, bucket)
+                .map(|hostname| (true, hostname))
+                .or_else(|_| Ok((false, base_hostname))),
+            AddressingStyle::Virtual => build_virtual_style_hostname(&base_hostname, bucket)
+                .map(|hostname| (true, hostname)),
+            AddressingStyle::Path => Ok((false, base_hostname)),
         }
     }
+}
 
-    fn build_path_style_hostname(region: &Region) -> (bool, String) {
-        let hostname = match *region {
-            Region::Custom { .. } => region.extract_hostname().to_string(),
-            Region::CnNorth1 | Region::CnNorthwest1 => {
-                format!("s3.{}.amazonaws.com.cn", region.name())
-            }
-            _ => format!("s3.{}.amazonaws.com", region.name()),
-        };
-        (false, hostname)
+fn build_path_style_hostname(region: &Region) -> String {
+    match *region {
+        Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_string(),
+        Region::CnNorth1 | Region::CnNorthwest1 => {
+            format!("s3.{}.amazonaws.com.cn", region.name())
+        }
+        _ => format!("s3.{}.amazonaws.com", region.name()),
+    }
+}
+
+fn build_virtual_style_hostname(
+    base_hostname: &str,
+    bucket: &str,
+) -> Result<String, InvalidDnsNameError> {
+    if is_valid_dns_name(bucket) {
+        Ok(format!("{}.{}", bucket, base_hostname))
+    } else {
+        Err(InvalidDnsNameError::new(format!(
+            "Invalid DNS name. bucket: {}",
+            bucket
+        )))
+    }
+}
+
+/// Check to see if the `bucket_name` complies with the restricted DNS naming
+/// conventions necessary to allow access via virtual-hosting style.
+///
+/// Even though "." characters are perfectly valid in this DNS naming scheme,
+/// we are going to punt on any name containing a "." character because these
+/// will cause SSL cert validation problems if we try to use virtual-hosting
+/// style addressing.
+fn is_valid_dns_name(bucket_name: &str) -> bool {
+    use lazy_static::lazy_static;
+    use regex::Regex;
+
+    if bucket_name.contains('.') {
+        return false;
+    }
+    let n = bucket_name.len();
+    if n < 3 || n > 63 {
+        // Wrong length
+        return false;
     }
 
-    fn build_virtual_style_hostname(
-        _region: &Region,
-        _bucket: &str,
-    ) -> Result<(bool, String), InvalidDnsNameError> {
-        todo!()
+    lazy_static! {
+        static ref LABEL_RE: Regex = Regex::new(r"[a-z0-9][a-z0-9\-]*[a-z0-9]").unwrap();
     }
+    LABEL_RE.is_match(bucket_name)
+}
+
+fn extract_hostname(endpoint: &str) -> &str {
+    let unschemed = endpoint
+        .find("://")
+        .map(|p| &endpoint[p + 3..])
+        .unwrap_or(endpoint);
+    unschemed
+        .find('/')
+        .map(|p| &unschemed[..p])
+        .unwrap_or(unschemed)
 }
