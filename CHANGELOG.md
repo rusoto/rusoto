@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update to `pin-project` 1.0
 - Update to `base64` 0.13
 - Update to `hmac` 0.10
+- Disable `chrono`'s `oldtime` feature
 
 
 ## [0.45.0] - 2020-07-22
