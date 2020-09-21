@@ -19,7 +19,7 @@ targets = []
 [dependencies]
 async-trait = "0.1"
 bytes = "0.5"
-chrono = "0.4.0"
+chrono = { version = "0.4.0", default-features = false }
 serde_urlencoded = "0.6"
 tempfile = "^3.1.0"
 xml-rs = "0.8"
