@@ -1047,10 +1047,6 @@
     "version": "0.45.0",
     "coreVersion": "0.45.0",
     "protocolVersion": "2006-03-01",
-    "customDependencies": {
-      "lazy_static": "1.4",
-      "regex": "1.0"
-    },
     "baseTypeName": "S3"
   },
   "sagemaker": {

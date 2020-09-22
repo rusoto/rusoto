@@ -327,22 +327,28 @@ fn build_virtual_style_hostname(
 /// will cause SSL cert validation problems if we try to use virtual-hosting
 /// style addressing.
 fn is_valid_dns_name(bucket_name: &str) -> bool {
-    use lazy_static::lazy_static;
-    use regex::Regex;
+    let bucket_name = bucket_name.chars().collect::<Vec<_>>();
 
-    if bucket_name.contains('.') {
-        return false;
-    }
     let n = bucket_name.len();
     if n < 3 || n > 63 {
         // Wrong length
         return false;
     }
 
-    lazy_static! {
-        static ref LABEL_RE: Regex = Regex::new(r"[a-z0-9][a-z0-9\-]*[a-z0-9]").unwrap();
-    }
-    LABEL_RE.is_match(bucket_name)
+    // Check if the bucket name matches a regex pattern `^[a-z0-9][a-z0-9\-]*[a-z0-9]$`.
+    // NOTE: We are trying to avoid to use regex crate.
+    // See https://github.com/rusoto/rusoto/pull/1817
+
+    // Because of the condition above, it is guaranteed that n >= 3.
+    let first = bucket_name[0];
+    let middle = &bucket_name[1..=(n - 2)];
+    let last = bucket_name[n - 1];
+
+    (first.is_ascii_lowercase() || first.is_digit(10))
+        && middle
+            .iter()
+            .all(|c| c.is_ascii_lowercase() || c.is_digit(10) || c == &'-')
+        && (last.is_ascii_lowercase() || last.is_digit(10))
 }
 
 fn extract_hostname(endpoint: &str) -> &str {
@@ -354,4 +360,44 @@ fn extract_hostname(endpoint: &str) -> &str {
         .find('/')
         .map(|p| &unschemed[..p])
         .unwrap_or(unschemed)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::is_valid_dns_name;
+
+    #[test]
+    fn test_is_valid_dns_name() {
+        // valid names
+        assert!(is_valid_dns_name("123"));
+        //                                  1         2         3         4         5         6
+        assert!(is_valid_dns_name(
+            "123456789012345678901234567890123456789012345678901234567890123"
+        ));
+
+        assert!(is_valid_dns_name("000"));
+        assert!(is_valid_dns_name("999"));
+        assert!(is_valid_dns_name("0-0"));
+        assert!(is_valid_dns_name("aaa"));
+        assert!(is_valid_dns_name("zzz"));
+
+        // invalid names
+        assert!(!is_valid_dns_name("12"));
+        assert!(!is_valid_dns_name(
+            "1234567890123456789012345678901234567890123456789012345678901234"
+        ));
+
+        assert!(!is_valid_dns_name("Aaa"));
+        assert!(!is_valid_dns_name("aAa"));
+        assert!(!is_valid_dns_name("aaA"));
+        assert!(!is_valid_dns_name(".aa"));
+        assert!(!is_valid_dns_name("a.a"));
+        assert!(!is_valid_dns_name("aa."));
+        assert!(!is_valid_dns_name("_aa"));
+        assert!(!is_valid_dns_name("a_a"));
+        assert!(!is_valid_dns_name("aa_"));
+        assert!(!is_valid_dns_name("\\u{2764}aa"));
+        assert!(!is_valid_dns_name("a\\u{2764}a"));
+        assert!(!is_valid_dns_name("aa\\u{2764}"));
+    }
 }
