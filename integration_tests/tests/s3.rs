@@ -61,28 +61,23 @@ impl TestS3Client {
                 endpoint: endpoint.to_owned(),
             };
             println!(
-                "picked up non-standard endpoint {:?} from S3_ENDPOINT env. variable",
-                region
+                "picked up non-standard endpoint {:?} from S3_ENDPOINT environment variable.",
+                region,
             );
             region
         } else {
             Region::UsEast1
         };
 
-        // Select an S3 addressing style. `Auto` is the default and it will try to use
-        // virtual-hosted-style whenever possible. `Path` will always use path-style. 
-        let mut addr_style = AddressingStyle::Auto;
-        if let Ok(style) = env::var("S3_ADDRESSING_STYLE") {
-            if style.eq_ignore_ascii_case("path") {
-                addr_style = AddressingStyle::Path;
-            }
-        }
-
         // We will need to set proxy host in order to test virtual-hosted-style buckets
         // without a DNS server.
         let mut s3 = match env::var("S3_PROXY") {
             Ok(proxy_uri) => {
                 let proxy_uri = proxy_uri.parse().expect("Failed to parse the proxy URI");
+                println!(
+                    "picked up non-standard HTTP proxy {:?} from S3_PROXY environment variable.",
+                    proxy_uri,
+                );
                 let proxy = Proxy::new(Intercept::All, proxy_uri);
                 let proxy_connector = ProxyConnector::from_proxy(HttpConnector::new(), proxy)
                     .expect("Failed to create a proxy connector");
@@ -92,6 +87,14 @@ impl TestS3Client {
             Err(_) => S3Client::new(region.to_owned())
         };
 
+        // Set the AddressingStyle based on an environment variable S3_ADDRESSING_STYLE.
+        let addr_style = create_addressing_style();
+        if addr_style != AddressingStyle::default() {
+            println!(
+                "picked up non-standard S3 addressing style `{:?}` from S3_ADDRESSING_STYLE environment variable.",
+                addr_style,
+            );
+        }
         s3.config_mut().addressing_style = addr_style;
 
         TestS3Client {
@@ -199,6 +202,33 @@ fn create_reqwest_client() -> reqwest::Client {
                 .build().expect("Failed to build a reqwest::Client"),
         Err(_) =>
             Client::new()
+    }
+}
+
+/// Create an S3 addressing style. Default variant is `Auto` is the default and it will
+/// use virtual-hosted-style whenever possible and fall back to path-style when necessary. 
+/// If and environment variable `S3_ADDRESSING_STYLE` has a value `path`, then `Path`
+/// variant is created, which will always use path-style. 
+fn create_addressing_style() -> AddressingStyle {
+    if let Ok(style) = env::var("S3_ADDRESSING_STYLE") {
+        if style.eq_ignore_ascii_case("path") {
+            return AddressingStyle::Path;
+        }
+    }
+    AddressingStyle::Auto
+}
+
+fn create_presigned_req_option(expires_in: Option<Duration>) -> PreSignedRequestOption {
+    if let Some(expires_in) = expires_in {
+        PreSignedRequestOption {
+            expires_in,
+            addressing_style: create_addressing_style(),
+        }
+    } else {
+        PreSignedRequestOption {
+            addressing_style: create_addressing_style(),
+            ..Default::default()
+        }
     }
 }
 
@@ -733,10 +763,7 @@ async fn test_multipart_upload(
     }
     // upload the second part via a pre-signed url
     {
-        let options = PreSignedRequestOption {
-            expires_in: Duration::from_secs(60 * 30),
-            ..Default::default()
-        };
+        let options = create_presigned_req_option(Some(Duration::from_secs(60 * 30)));
         let presigned_multipart_put = part_req2.get_presigned_url(region, credentials, &options)
             .expect("Creating presigned url failed");
         println!("presigned multipart put: {:#?}", presigned_multipart_put);
@@ -1228,7 +1255,7 @@ async fn test_get_object_with_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials, &Default::default())
+    let presigned_url = req.get_presigned_url(region, credentials, &create_presigned_req_option(None))
         .expect("Creating presigned url failed");
     println!("get object presigned url: {:#?}", presigned_url);
     let client = create_reqwest_client();
@@ -1251,10 +1278,7 @@ async fn test_get_object_with_expired_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let opt = PreSignedRequestOption {
-        expires_in: ::std::time::Duration::from_secs(1),
-        ..Default::default()
-    };
+    let opt = create_presigned_req_option(Some(Duration::from_secs(1)));
     let presigned_url = req.get_presigned_url(region, credentials, &opt)
         .expect("Creating presigned url failed");
     ::std::thread::sleep(::std::time::Duration::from_secs(2));
@@ -1275,7 +1299,7 @@ async fn test_put_object_with_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials, &Default::default())
+    let presigned_url = req.get_presigned_url(region, credentials, &create_presigned_req_option(None))
         .expect("Creating presigned url failed");
     println!("put object presigned url: {:#?}", presigned_url);
     let mut map = HashMap::new();
@@ -1301,7 +1325,7 @@ async fn test_delete_object_with_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials, &Default::default())
+    let presigned_url = req.get_presigned_url(region, credentials, &create_presigned_req_option(None))
         .expect("Creating presigned url failed");
     println!("delete object presigned url: {:#?}", presigned_url);
     let client = create_reqwest_client();
