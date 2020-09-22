@@ -24,6 +24,7 @@ use rusoto_s3::{
     DeleteBucketRequest, DeleteObjectRequest, GetObjectError, GetObjectRequest, HeadObjectRequest,
     ListObjectsRequest, ListObjectsV2Request, PutBucketCorsRequest, PutObjectRequest, S3Client,
     StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3,
+    util::AddressingStyle,
 };
 
 fn generate_unique_name() -> String {
@@ -63,9 +64,19 @@ impl TestS3Client {
             Region::UsEast1
         };
 
+        let mut addr_style = AddressingStyle::Auto;
+        if let Ok(style) = env::var("S3_ADDRESSING_STYLE") {
+            if style.eq_ignore_ascii_case("path") {
+                addr_style = AddressingStyle::Path;
+            }
+        }
+
+        let mut s3 = S3Client::new(region.to_owned());
+        s3.config_mut().addressing_style = addr_style;
+
         TestS3Client {
-            region: region.to_owned(),
-            s3: S3Client::new(region),
+            region,
+            s3,
             bucket_name: bucket_name.to_owned(),
             bucket_deleted: false,
         }

@@ -1,6 +1,6 @@
 extern crate rusoto_mock;
 
-use crate::generated::*;
+use crate::{custom::util::AddressingStyle, generated::*};
 
 use self::rusoto_mock::*;
 use bytes::BytesMut;
@@ -18,6 +18,7 @@ async fn test_multipart_upload_copy_response() {
             </CopyPartResult>"#,
     );
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let upload_part_copy_req = UploadPartCopyRequest {
         key: "multipartfilename".to_string(),
         bucket: "fakebucket".to_owned(),
@@ -54,6 +55,7 @@ async fn test_list_object_versions_with_multiple_versions() {
         "#,
     );
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let result = client
         .list_object_versions(ListObjectVersionsRequest {
             bucket: "test_bucket".to_string(),
@@ -74,6 +76,7 @@ async fn initiate_multipart_upload_happy_path() {
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let result = client
         .create_multipart_upload(CreateMultipartUploadRequest {
             bucket: "example-bucket".to_owned(),
@@ -104,6 +107,7 @@ async fn complete_multipart_upload_happy_path() {
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let result = client
         .complete_multipart_upload(CompleteMultipartUploadRequest {
             bucket: "example-bucket".to_owned(),
@@ -130,6 +134,7 @@ async fn list_multipart_upload_happy_path() {
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let result = client
         .list_multipart_uploads(ListMultipartUploadsRequest {
             bucket: "example-bucket".to_owned(),
@@ -214,7 +219,8 @@ async fn list_multipart_upload_parts_happy_path() {
         </ListPartsResult>"#)
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!(request.method, "GET");
-            assert_eq!(request.path, "/rusoto1440826511/testfile.zip");
+            assert_eq!(request.hostname(), "rusoto1440826511.s3.us-east-1.amazonaws.com");
+            assert_eq!(request.path, "/testfile.zip");
             assert!(request.payload.is_none());
         });
 
@@ -223,6 +229,7 @@ async fn list_multipart_upload_parts_happy_path() {
     req.key = "testfile.zip".to_owned();
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let result = client.list_parts(req).await.unwrap();
     assert_eq!(result.bucket, sstr("rusoto1440826511"));
     assert_eq!(result.upload_id,
@@ -285,6 +292,7 @@ async fn list_multipart_uploads_no_uploads() {
     req.bucket = "test-bucket".to_owned();
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let result = client.list_multipart_uploads(req).await.unwrap();
 
     assert_eq!(result.bucket, sstr("rusoto1440826568"));
@@ -325,6 +333,7 @@ fn bench_parse_list_buckets_response(b: &mut Bencher) {
         });
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
 
     b.iter(|| rt.block_on(client.list_buckets()).unwrap());
 }
@@ -362,6 +371,7 @@ async fn should_parse_sample_list_buckets_response() {
         });
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let result = client.list_buckets().await.unwrap();
 
     let owner = result.owner.unwrap();
@@ -387,6 +397,7 @@ async fn should_parse_headers() {
         .with_header("x-amz-restore", "bar");
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let request = HeadObjectRequest::default();
     let result = client.head_object(request).await.unwrap();
 
@@ -422,7 +433,8 @@ async fn should_serialize_complicated_request() {
         .with_body("")
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!(request.method, "GET");
-            assert_eq!(request.path, "/bucket/key");
+            assert_eq!(request.hostname(), "bucket.s3.us-east-1.amazonaws.com");
+            assert_eq!(request.path, "/key");
             assert_eq!(
                 *request.params.get("response-content-type").unwrap(),
                 sstr("response_content_type")
@@ -436,6 +448,7 @@ async fn should_serialize_complicated_request() {
         });
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let _ = client.get_object(request).await.unwrap();
 }
 
@@ -448,6 +461,7 @@ async fn should_parse_location_constraint() {
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let result = client
         .get_bucket_location(GetBucketLocationRequest {
             bucket: "example-bucket".to_owned(),
@@ -510,6 +524,7 @@ async fn test_parse_no_such_bucket_error() {
     };
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
     let result = client.list_objects_v2(request).await;
     assert!(result.is_err());
     let err = result.err().unwrap();
@@ -535,6 +550,7 @@ async fn test_multiple_mock() {
     ]);
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
+    assert_eq!(client.config().addressing_style, AddressingStyle::Auto);
 
     let mut request = HeadObjectRequest::default();
     let mut result = client.head_object(request).await.unwrap();

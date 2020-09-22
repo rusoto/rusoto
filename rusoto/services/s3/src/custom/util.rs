@@ -274,8 +274,7 @@ pub enum AddressingStyle {
 
 impl Default for AddressingStyle {
     fn default() -> Self {
-        // Self::Auto
-        Self::Path
+        Self::Auto
     }
 }
 

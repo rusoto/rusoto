@@ -4,6 +4,7 @@ set -Eeu
 export AWS_ACCESS_KEY_ID=ANTN35UAENTS5UIAEATD
 export AWS_SECRET_ACCESS_KEY=TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur
 export S3_ENDPOINT='http://localhost:9000'
+export S3_ADDRESSING_STYLE=path
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
 cd "$GIT_ROOT/integration_tests"
