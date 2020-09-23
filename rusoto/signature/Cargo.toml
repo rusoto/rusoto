@@ -22,7 +22,7 @@ rustc_version = "0.2"
 [dependencies]
 bytes = "0.5"
 futures = "0.3"
-hmac = "0.8"
+hmac = "0.10"
 http = "0.2"
 hyper = "0.13.1"
 log = "0.4.1"

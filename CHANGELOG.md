@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Swap the unmaintained `dirs` crate for its replacement `dirs-next`
 - Update to `pin-project` 1.0
 - Update to `base64` 0.13
+- Update to `hmac` 0.10
 
 
 ## [0.45.0] - 2020-07-22
