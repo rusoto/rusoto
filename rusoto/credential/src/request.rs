@@ -4,7 +4,7 @@ use std::time::Duration;
 
 use futures::StreamExt;
 use hyper::client::HttpConnector;
-use hyper::{Body, Client as HyperClient, Request, StatusCode, Uri};
+use hyper::{Body, Client as HyperClient, Request, Uri};
 use tokio::time;
 
 /// Http client for use in a credentials provider.
@@ -38,7 +38,6 @@ impl HttpClient {
                 let mut resp = try_resp.map_err(|err| {
                     IoError::new(ErrorKind::Other, format!("Response failed: {}", err))
                 })?;
-
                 let body = resp.body_mut();
                 let mut text = vec![];
                 while let Some(chunk) = body.next().await {
@@ -47,20 +46,8 @@ impl HttpClient {
                     })?;
                     text.extend(chunk.to_vec());
                 }
-                let text = String::from_utf8(text)
-                    .map_err(|_| IoError::new(ErrorKind::InvalidData, "Non UTF-8 Data returned"))?;
-
-                match resp.status() {
-                    StatusCode::OK => Ok(text),
-                    _ => Err(IoError::new(
-                        ErrorKind::Other,
-                        format!(
-                            "Request failed with HTTP status {}: {}",
-                            resp.status(),
-                            text
-                        ),
-                    )),
-                }
+                String::from_utf8(text)
+                    .map_err(|_| IoError::new(ErrorKind::InvalidData, "Non UTF-8 Data returned"))
             }
         }
     }
