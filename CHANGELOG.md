@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Display `rusoto_core::Client` in docs
 - Swap the unmaintained `dirs` crate for its replacement `dirs-next`
-- Update to `pin-project` 1.0
+- Swap `pin-project` for the lighter weight `pin-project-lite`
 - Update to `base64` 0.13
 - Update to `hmac` 0.10
 - Update to `hyper-rustls` 0.21.
