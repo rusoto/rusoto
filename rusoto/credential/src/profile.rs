@@ -480,7 +480,7 @@ mod tests {
     #[test]
     fn parse_config_file_multiple_profiles() {
         let result =
-            super::parse_config_file(Path::new("tests/sample-data/multiple_profile_credentials"));
+            super::parse_config_file(Path::new("tests/sample-data/multiple_profile_config"));
         assert!(result.is_some());
 
         let profiles = result.unwrap();
@@ -777,7 +777,7 @@ mod tests {
     #[test]
     fn region_from_profile() {
         let provider = ProfileProvider::with_configuration(
-            "tests/sample-data/multiple_profile_credentials",
+            "tests/sample-data/multiple_profile_config",
             "foo",
         );
         let maybe_region = provider.region_from_profile().unwrap();
@@ -791,7 +791,7 @@ mod tests {
     #[test]
     fn region_from_profile_missing_profile() {
         let provider = ProfileProvider::with_configuration(
-            "tests/sample-data/multiple_profile_credentials",
+            "tests/sample-data/multiple_profile_config",
             "foobar",
         );
         let maybe_region = provider.region_from_profile().unwrap();
