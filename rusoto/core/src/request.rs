@@ -266,6 +266,9 @@ where
         config
             .read_buf_size
             .map(|sz| builder.http1_read_buf_exact_size(sz));
+        config
+            .pool_idle_timeout
+            .map(|t| builder.pool_idle_timeout(t));
         let inner = builder.build(connector);
 
         HttpClient {
@@ -287,6 +290,7 @@ where
 /// Configuration options for the HTTP Client
 pub struct HttpConfig {
     read_buf_size: Option<usize>,
+    pool_idle_timeout: Option<Duration>,
 }
 
 impl HttpConfig {
@@ -294,6 +298,7 @@ impl HttpConfig {
     pub fn new() -> HttpConfig {
         HttpConfig {
             read_buf_size: None,
+            pool_idle_timeout: None,
         }
     }
     /// Sets the size of the read buffer for inbound data
@@ -301,6 +306,17 @@ impl HttpConfig {
     /// by requiring fewer copies out of the socket buffer.
     pub fn read_buf_size(&mut self, sz: usize) {
         self.read_buf_size = Some(sz);
+    }
+
+    /// Set an timeout for idle sockets being kept-alive.
+    /// Some AWS services, [like S3](https://aws.amazon.com/premiumsupport/knowledge-center/s3-socket-connection-timeout-error/)
+    /// require this value to match the one configured at the server's level
+    /// in order to avoid connection closed errors.
+    pub fn pool_idle_timeout<D>(&mut self, timeout: D)
+    where
+        D: Into<Option<Duration>>,
+    {
+        self.pool_idle_timeout = timeout.into();
     }
 }
 
