@@ -165,7 +165,14 @@ fn xml_body_parser(
     parse_non_payload: &str,
 ) -> String {
     if let Some(_eventstream_field) = eventstream_field_name(service, shape) {
-        return "unimplemented!()".to_string();
+        let output_field = shape.payload.clone().unwrap_or("".to_string());
+        return format!(
+            "Ok({output_shape} {{
+                {output_field}: Some(EventStream::new(response)),
+            }})",
+            output_shape = output_shape,
+            output_field = output_field.to_lowercase()
+        );
     }
 
     let xml_deserialize = if needs_xml_deserializer(shape) {

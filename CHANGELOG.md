@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 (Please put changes here)
 
+- Implement S3 select event-streams deserialization
 - Display `rusoto_core::Client` in docs
 
 ## [0.45.0] - 2020-07-22

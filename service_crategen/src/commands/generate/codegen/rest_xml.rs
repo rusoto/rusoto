@@ -186,6 +186,93 @@ impl GenerateProtocol for RestXmlGenerator {
     fn timestamp_type(&self) -> &'static str {
         "String"
     }
+
+    fn generate_event_enum_deserialize_impl(
+        &self,
+        service: &Service<'_>,
+        name: &str,
+        shape: &Shape,
+    ) -> String {
+        let match_arms = shape
+            .members
+            .as_ref()
+            .unwrap()
+            .iter()
+            .filter_map(|(event_member_name, event_member)| {
+                if event_member.deprecated == Some(true) {
+                    return None;
+                }
+
+                let event_member_shape = service.shape_for_member(event_member).unwrap();
+                let rs_type = get_rust_type(
+                    service,
+                    &event_member.shape,
+                    event_member_shape,
+                    event_member.streaming(),
+                    self.timestamp_type(),
+                );
+
+                let event_inner_struct = match event_member_shape.members {
+                    Some(ref event_inner_members) => {
+                        if let Some((event_inner_name, event_inner_member)) = event_inner_members.iter().next() {
+                            let event_inner_member_shape = service.shape_for_member(event_inner_member).unwrap();
+                            match event_inner_member_shape.shape_type {
+                                ShapeType::Blob => format!(
+                                    "{event_inner_name_lower}: Some(data.to_owned().into())",
+                                    event_inner_name_lower = event_inner_name.to_lowercase()
+                                ),
+                                _ => format!(
+                                    "{event_inner_name_lower}: Some({event_member_name}Deserializer::deserialize(\"{event_inner_name}\", &mut stack)?),",
+                                    event_inner_name_lower = event_inner_name.to_lowercase(),
+                                    event_inner_name = event_inner_name,
+                                    event_member_name = event_member_name
+                                )
+                            }
+                        } else {
+                            "".to_string()
+                        }
+                    }
+                    None => "".to_string(),
+                };
+
+                Some(format!(
+                    "\"{event_member_name}\" => {{
+                        let reader = EventReader::new(data.as_ref());
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        find_start_element(&mut stack);
+                        {name}::{event_member_name}({rs_type} {{
+                            {event_inner_struct}
+                        }})
+                    }},",
+                    name = name,
+                    rs_type = rs_type,
+                    event_member_name = event_member_name,
+                    event_inner_struct = event_inner_struct,
+                ))
+            })
+            .chain(std::iter::once(format!(
+                "_ => Err(RusotoError::ParseError({err_fmt}))?",
+                err_fmt = "format!(\"Invalid event type: {}\", event_type)",
+            )))
+            .collect::<Vec<String>>()
+            .join("\n");
+
+        format!(
+            "impl DeserializeEvent for {name} {{
+                fn deserialize_event(
+                    event_type: &str,
+                    data: &[u8],
+                ) -> Result<Self, RusotoError<()>> {{
+                    let deserialized = match event_type {{
+                        {match_arms}
+                    }};
+                    Ok(deserialized)
+                }}
+            }}",
+            name = name,
+            match_arms = match_arms,
+        )
+    }
 }
 
 fn generate_documentation(operation: &Operation, service: &Service<'_>) -> String {
