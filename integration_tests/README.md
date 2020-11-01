@@ -29,3 +29,4 @@ Dependencies:
 
 **Ceph**: Execute `../.semaphoreci/test_10_ceph.sh` while you're in this directory.
 **Minio**: Execute `../.semaphoreci/test_20_minio.sh` while you're in this directory
+
