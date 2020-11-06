@@ -46,6 +46,10 @@ pub struct Api {
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
+    /// <p>Specifies whether an API is managed by API Gateway. You can't update or delete a managed API by using API Gateway. A managed API can be deleted only through the tooling or service that created it.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
     /// <p>The API ID.</p>
     #[serde(rename = "ApiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -66,6 +70,10 @@ pub struct Api {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint.</p>
+    #[serde(rename = "DisableExecuteApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_execute_api_endpoint: Option<bool>,
     /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -121,7 +129,7 @@ pub struct ApiMapping {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Authorizer {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, don't specify this parameter. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -129,20 +137,28 @@ pub struct Authorizer {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
+    /// <p>Specifies the format of the payload sent to an HTTP API Lambda authorizer. Required for HTTP API Lambda authorizers. Supported values are 1.0 and 2.0. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p>
+    #[serde(rename = "AuthorizerPayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_payload_format_version: Option<String>,
+    /// <p>The time to live (TTL) for cached authorizer results, in seconds. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway caches authorizer responses. The maximum value is 3600, or 1 hour. Supported only for HTTP API Lambda authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
+    /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
     /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
+    /// <p>Specifies whether a Lambda authorizer returns a response in a simple format. If enabled, the Lambda authorizer can return a boolean value instead of an IAM policy. Supported only for HTTP APIs. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a></p>
+    #[serde(rename = "EnableSimpleResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_simple_responses: Option<bool>,
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. The identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name for WebSocket APIs. For HTTP APIs, use selection expressions prefixed with $, for example, $request.header.Auth, $request.querystring.Name. These parameters are used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function. For HTTP APIs, identity sources are also used as the cache key when caching is enabled. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example $request.header.Authorization.</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
@@ -248,6 +264,10 @@ pub struct CreateApiRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint.</p>
+    #[serde(rename = "DisableExecuteApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_execute_api_endpoint: Option<bool>,
     /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -287,6 +307,10 @@ pub struct CreateApiResponse {
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
+    /// <p>Specifies whether an API is managed by API Gateway. You can't update or delete a managed API by using API Gateway. A managed API can be deleted only through the tooling or service that created it.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
     /// <p>The API ID.</p>
     #[serde(rename = "ApiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -307,6 +331,10 @@ pub struct CreateApiResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint.</p>
+    #[serde(rename = "DisableExecuteApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_execute_api_endpoint: Option<bool>,
     /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -348,15 +376,19 @@ pub struct CreateAuthorizerRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, don't specify this parameter. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
-    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
+    /// <p>Specifies the format of the payload sent to an HTTP API Lambda authorizer. Required for HTTP API Lambda authorizers. Supported values are 1.0 and 2.0. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p>
+    #[serde(rename = "AuthorizerPayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_payload_format_version: Option<String>,
+    /// <p>The time to live (TTL) for cached authorizer results, in seconds. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway caches authorizer responses. The maximum value is 3600, or 1 hour. Supported only for HTTP API Lambda authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
+    /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     pub authorizer_type: String,
     /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
@@ -364,7 +396,11 @@ pub struct CreateAuthorizerRequest {
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT )from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
+    /// <p>Specifies whether a Lambda authorizer returns a response in a simple format. By default, a Lambda authorizer must return an IAM policy. If enabled, the Lambda authorizer can return a boolean value instead of an IAM policy. Supported only for HTTP APIs. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a></p>
+    #[serde(rename = "EnableSimpleResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_simple_responses: Option<bool>,
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. The identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name for WebSocket APIs. For HTTP APIs, use selection expressions prefixed with $, for example, $request.header.Auth, $request.querystring.Name. These parameters are used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function. For HTTP APIs, identity sources are also used as the cache key when caching is enabled. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example $request.header.Authorization.</p>
     #[serde(rename = "IdentitySource")]
     pub identity_source: Vec<String>,
     /// <p>This parameter is not used.</p>
@@ -383,7 +419,7 @@ pub struct CreateAuthorizerRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAuthorizerResponse {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, don't specify this parameter. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -391,20 +427,28 @@ pub struct CreateAuthorizerResponse {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
+    /// <p>Specifies the format of the payload sent to an HTTP API Lambda authorizer. Required for HTTP API Lambda authorizers. Supported values are 1.0 and 2.0. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p>
+    #[serde(rename = "AuthorizerPayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_payload_format_version: Option<String>,
+    /// <p>The time to live (TTL) for cached authorizer results, in seconds. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway caches authorizer responses. The maximum value is 3600, or 1 hour. Supported only for HTTP API Lambda authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
+    /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
     /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
+    /// <p>Specifies whether a Lambda authorizer returns a response in a simple format. If enabled, the Lambda authorizer can return a boolean value instead of an IAM policy. Supported only for HTTP APIs. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a></p>
+    #[serde(rename = "EnableSimpleResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_simple_responses: Option<bool>,
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. The identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name for WebSocket APIs. For HTTP APIs, use selection expressions prefixed with $, for example, $request.header.Auth, $request.querystring.Name. These parameters are used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function. For HTTP APIs, identity sources are also used as the cache key when caching is enabled. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example $request.header.Authorization.</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
@@ -479,6 +523,10 @@ pub struct CreateDomainNameRequest {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The mutual TLS authentication configuration for a custom domain name.</p>
+    #[serde(rename = "MutualTlsAuthentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mutual_tls_authentication: Option<MutualTlsAuthenticationInput>,
     /// <p>The collection of tags associated with a domain name.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -500,6 +548,10 @@ pub struct CreateDomainNameResponse {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The mutual TLS authentication configuration for a custom domain name.</p>
+    #[serde(rename = "MutualTlsAuthentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mutual_tls_authentication: Option<MutualTlsAuthentication>,
     /// <p>The collection of tags associated with a domain name.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -537,7 +589,11 @@ pub struct CreateIntegrationRequest {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration. For HTTP API private integrations, use an HTTP_PROXY integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>Supported only for HTTP API AWS_PROXY integrations. Specifies the AWS service action to invoke. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services-reference.html">Integration subtype reference</a>.</p>
+    #[serde(rename = "IntegrationSubtype")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_subtype: Option<String>,
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration. For HTTP API private integrations, use an HTTP_PROXY integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     pub integration_type: String,
     /// <p>For a Lambda integration, specify the URI of a Lambda function.</p> <p>For an HTTP integration, specify a fully-qualified URL.</p> <p>For an HTTP API private integration, specify the ARN of an Application Load Balancer listener, Network Load Balancer listener, or AWS Cloud Map service. If you specify the ARN of an AWS Cloud Map service, API Gateway uses DiscoverInstances to identify resources. You can use query parameters to target specific resources. To learn more, see <a href="https://docs.aws.amazon.com/cloud-map/latest/api/API_DiscoverInstances.html">DiscoverInstances</a>. For private integrations, all resources must be owned by the same AWS account.</p>
@@ -552,12 +608,8 @@ pub struct CreateIntegrationRequest {
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
-    /// , where
-    /// <replaceable>{location}</replaceable>
-    /// is querystring, path, or header; and
-    /// <replaceable>{name}</replaceable>
-    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
+    /// <p>For WebSocket APIs, a key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
+    /// , where  <replaceable>{location}</replaceable>  is querystring, path, or header; and <replaceable>{name}</replaceable> must be a valid and unique method request parameter name.</p> <p>For HTTP APIs, request parameters are a key-value map specifying parameters that are passed to AWS_PROXY integrations with a specified integrationSubtype. You can provide static values, or map request data, stage variables, or context variables that are evaluated at runtime. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services.html">Working with AWS service integrations for HTTP APIs</a>.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -678,7 +730,11 @@ pub struct CreateIntegrationResult {
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>Supported only for HTTP API AWS_PROXY integrations. Specifies the AWS service action to invoke. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services-reference.html">Integration subtype reference</a>.</p>
+    #[serde(rename = "IntegrationSubtype")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_subtype: Option<String>,
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
@@ -694,12 +750,8 @@ pub struct CreateIntegrationResult {
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
-    /// , where
-    /// <replaceable>{location}</replaceable>
-    /// is querystring, path, or header; and
-    /// <replaceable>{name}</replaceable>
-    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
+    /// <p>For WebSocket APIs, a key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
+    /// , where  <replaceable>{location}</replaceable>  is querystring, path, or header; and <replaceable>{name}</replaceable> must be a valid and unique method request parameter name.</p> <p>For HTTP APIs, request parameters are a key-value map specifying parameters that are passed to AWS_PROXY integrations with a specified integrationSubtype. You can provide static values, or map request data, stage variables, or context variables that are evaluated at runtime. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services.html">Working with AWS service integrations for HTTP APIs</a>.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -784,7 +836,7 @@ pub struct CreateRouteRequest {
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
@@ -888,7 +940,7 @@ pub struct CreateRouteResult {
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
@@ -1325,6 +1377,10 @@ pub struct DomainName {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The mutual TLS authentication configuration for a custom domain name.</p>
+    #[serde(rename = "MutualTlsAuthentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mutual_tls_authentication: Option<MutualTlsAuthentication>,
     /// <p>The collection of tags associated with a domain name.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1479,6 +1535,10 @@ pub struct GetApiResponse {
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
+    /// <p>Specifies whether an API is managed by API Gateway. You can't update or delete a managed API by using API Gateway. A managed API can be deleted only through the tooling or service that created it.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
     /// <p>The API ID.</p>
     #[serde(rename = "ApiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1499,6 +1559,10 @@ pub struct GetApiResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint.</p>
+    #[serde(rename = "DisableExecuteApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_execute_api_endpoint: Option<bool>,
     /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1573,7 +1637,7 @@ pub struct GetAuthorizerRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAuthorizerResponse {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, don't specify this parameter. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -1581,20 +1645,28 @@ pub struct GetAuthorizerResponse {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
+    /// <p>Specifies the format of the payload sent to an HTTP API Lambda authorizer. Required for HTTP API Lambda authorizers. Supported values are 1.0 and 2.0. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p>
+    #[serde(rename = "AuthorizerPayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_payload_format_version: Option<String>,
+    /// <p>The time to live (TTL) for cached authorizer results, in seconds. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway caches authorizer responses. The maximum value is 3600, or 1 hour. Supported only for HTTP API Lambda authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
+    /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
     /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
+    /// <p>Specifies whether a Lambda authorizer returns a response in a simple format. If enabled, the Lambda authorizer can return a boolean value instead of an IAM policy. Supported only for HTTP APIs. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a></p>
+    #[serde(rename = "EnableSimpleResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_simple_responses: Option<bool>,
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. The identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name for WebSocket APIs. For HTTP APIs, use selection expressions prefixed with $, for example, $request.header.Auth, $request.querystring.Name. These parameters are used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function. For HTTP APIs, identity sources are also used as the cache key when caching is enabled. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example $request.header.Authorization.</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
@@ -1733,6 +1805,10 @@ pub struct GetDomainNameResponse {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The mutual TLS authentication configuration for a custom domain name.</p>
+    #[serde(rename = "MutualTlsAuthentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mutual_tls_authentication: Option<MutualTlsAuthentication>,
     /// <p>The collection of tags associated with a domain name.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1890,7 +1966,11 @@ pub struct GetIntegrationResult {
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>Supported only for HTTP API AWS_PROXY integrations. Specifies the AWS service action to invoke. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services-reference.html">Integration subtype reference</a>.</p>
+    #[serde(rename = "IntegrationSubtype")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_subtype: Option<String>,
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
@@ -1906,12 +1986,8 @@ pub struct GetIntegrationResult {
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
-    /// , where
-    /// <replaceable>{location}</replaceable>
-    /// is querystring, path, or header; and
-    /// <replaceable>{name}</replaceable>
-    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
+    /// <p>For WebSocket APIs, a key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
+    /// , where  <replaceable>{location}</replaceable>  is querystring, path, or header; and <replaceable>{name}</replaceable> must be a valid and unique method request parameter name.</p> <p>For HTTP APIs, request parameters are a key-value map specifying parameters that are passed to AWS_PROXY integrations with a specified integrationSubtype. You can provide static values, or map request data, stage variables, or context variables that are evaluated at runtime. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services.html">Working with AWS service integrations for HTTP APIs</a>.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -2144,7 +2220,7 @@ pub struct GetRouteResult {
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
@@ -2431,6 +2507,10 @@ pub struct ImportApiResponse {
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
+    /// <p>Specifies whether an API is managed by API Gateway. You can't update or delete a managed API by using API Gateway. A managed API can be deleted only through the tooling or service that created it.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
     /// <p>The API ID.</p>
     #[serde(rename = "ApiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2451,6 +2531,10 @@ pub struct ImportApiResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint.</p>
+    #[serde(rename = "DisableExecuteApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_execute_api_endpoint: Option<bool>,
     /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2525,7 +2609,11 @@ pub struct Integration {
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>Supported only for HTTP API AWS_PROXY integrations. Specifies the AWS service action to invoke. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services-reference.html">Integration subtype reference</a>.</p>
+    #[serde(rename = "IntegrationSubtype")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_subtype: Option<String>,
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
@@ -2541,12 +2629,8 @@ pub struct Integration {
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
-    /// , where
-    /// <replaceable>{location}</replaceable>
-    /// is querystring, path, or header; and
-    /// <replaceable>{name}</replaceable>
-    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
+    /// <p>For WebSocket APIs, a key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
+    /// , where  <replaceable>{location}</replaceable>  is querystring, path, or header; and <replaceable>{name}</replaceable> must be a valid and unique method request parameter name.</p> <p>For HTTP APIs, request parameters are a key-value map specifying parameters that are passed to AWS_PROXY integrations with a specified integrationSubtype. You can provide static values, or map request data, stage variables, or context variables that are evaluated at runtime. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services.html">Working with AWS service integrations for HTTP APIs</a>.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -2636,6 +2720,36 @@ pub struct Model {
     pub schema: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MutualTlsAuthentication {
+    /// <p>An Amazon S3 URL that specifies the truststore for mutual TLS authentication, for example, s3://<replaceable>bucket-name</replaceable>/<replaceable>key-name</replaceable>. The truststore can contain certificates from public or private certificate authorities. To update the truststore, upload a new version to S3, and then update your custom domain name to use the new version. To update the truststore, you must have permissions to access the S3 object.</p>
+    #[serde(rename = "TruststoreUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub truststore_uri: Option<String>,
+    /// <p>The version of the S3 object that contains your truststore. To specify a version, you must have versioning enabled for the S3 bucket.</p>
+    #[serde(rename = "TruststoreVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub truststore_version: Option<String>,
+    /// <p>A list of warnings that API Gateway returns while processing your truststore. Invalid certificates produce warnings. Mutual TLS is still enabled, but some clients might not be able to access your API. To resolve warnings, upload a new truststore to S3, and then update you domain name to use the new version.</p>
+    #[serde(rename = "TruststoreWarnings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub truststore_warnings: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct MutualTlsAuthenticationInput {
+    /// <p>An Amazon S3 URL that specifies the truststore for mutual TLS authentication, for example, s3://<replaceable>bucket-name</replaceable>/<replaceable>key-name</replaceable>. The truststore can contain certificates from public or private certificate authorities. To update the truststore, upload a new version to S3, and then update your custom domain name to use the new version. To update the truststore, you must have permissions to access the S3 object.</p>
+    #[serde(rename = "TruststoreUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub truststore_uri: Option<String>,
+    /// <p>The version of the S3 object that contains your truststore. To specify a version, you must have versioning enabled for the S3 bucket.</p>
+    #[serde(rename = "TruststoreVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub truststore_version: Option<String>,
+}
+
 /// <p>Validation constraints imposed on parameters of a request (path, query string, headers).</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ParameterConstraints {
@@ -2672,6 +2786,10 @@ pub struct ReimportApiResponse {
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
+    /// <p>Specifies whether an API is managed by API Gateway. You can't update or delete a managed API by using API Gateway. A managed API can be deleted only through the tooling or service that created it.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
     /// <p>The API ID.</p>
     #[serde(rename = "ApiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2692,6 +2810,10 @@ pub struct ReimportApiResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint.</p>
+    #[serde(rename = "DisableExecuteApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_execute_api_endpoint: Option<bool>,
     /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2726,6 +2848,17 @@ pub struct ReimportApiResponse {
     pub warnings: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ResetAuthorizersCacheRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
+    /// <p>The stage name. Stage names can contain only alphanumeric characters, hyphens, and underscores, or be $default. Maximum length is 128 characters.</p>
+    #[serde(rename = "StageName")]
+    pub stage_name: String,
+}
+
 /// <p>Represents a route.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2742,7 +2875,7 @@ pub struct Route {
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
@@ -3009,6 +3142,10 @@ pub struct UpdateApiRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint.</p>
+    #[serde(rename = "DisableExecuteApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_execute_api_endpoint: Option<bool>,
     /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3042,6 +3179,10 @@ pub struct UpdateApiResponse {
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
+    /// <p>Specifies whether an API is managed by API Gateway. You can't update or delete a managed API by using API Gateway. A managed API can be deleted only through the tooling or service that created it.</p>
+    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_gateway_managed: Option<bool>,
     /// <p>The API ID.</p>
     #[serde(rename = "ApiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3062,6 +3203,10 @@ pub struct UpdateApiResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint.</p>
+    #[serde(rename = "DisableExecuteApiEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_execute_api_endpoint: Option<bool>,
     /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
     #[serde(rename = "DisableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3103,18 +3248,22 @@ pub struct UpdateAuthorizerRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, don't specify this parameter.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
     /// <p>The authorizer identifier.</p>
     #[serde(rename = "AuthorizerId")]
     pub authorizer_id: String,
-    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
+    /// <p>Specifies the format of the payload sent to an HTTP API Lambda authorizer. Required for HTTP API Lambda authorizers. Supported values are 1.0 and 2.0. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p>
+    #[serde(rename = "AuthorizerPayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_payload_format_version: Option<String>,
+    /// <p>The time to live (TTL) for cached authorizer results, in seconds. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway caches authorizer responses. The maximum value is 3600, or 1 hour. Supported only for HTTP API Lambda authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
+    /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
@@ -3123,7 +3272,11 @@ pub struct UpdateAuthorizerRequest {
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
+    /// <p>Specifies whether a Lambda authorizer returns a response in a simple format. By default, a Lambda authorizer must return an IAM policy. If enabled, the Lambda authorizer can return a boolean value instead of an IAM policy. Supported only for HTTP APIs. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a></p>
+    #[serde(rename = "EnableSimpleResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_simple_responses: Option<bool>,
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. The identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name for WebSocket APIs. For HTTP APIs, use selection expressions prefixed with $, for example, $request.header.Auth, $request.querystring.Name. These parameters are used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function. For HTTP APIs, identity sources are also used as the cache key when caching is enabled. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example $request.header.Authorization.</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
@@ -3144,7 +3297,7 @@ pub struct UpdateAuthorizerRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuthorizerResponse {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null. Supported only for REQUEST authorizers.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, don't specify this parameter. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -3152,20 +3305,28 @@ pub struct UpdateAuthorizerResponse {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>Authorizer caching is not currently supported. Don't specify this value for authorizers.</p>
+    /// <p>Specifies the format of the payload sent to an HTTP API Lambda authorizer. Required for HTTP API Lambda authorizers. Supported values are 1.0 and 2.0. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p>
+    #[serde(rename = "AuthorizerPayloadFormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_payload_format_version: Option<String>,
+    /// <p>The time to live (TTL) for cached authorizer results, in seconds. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway caches authorizer responses. The maximum value is 3600, or 1 hour. Supported only for HTTP API Lambda authorizers.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. For WebSocket APIs, specify REQUEST for a Lambda function using incoming request parameters. For HTTP APIs, specify JWT to use JSON Web Tokens.</p>
+    /// <p>The authorizer type. Specify REQUEST for a Lambda function using incoming request parameters. Specify JWT to use JSON Web Tokens (supported only for HTTP APIs).</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:<replaceable>{account_id}</replaceable>:function:<replaceable>{lambda_function_name}</replaceable>/invocations. In general, the URI has this form: arn:aws:apigateway:<replaceable>{region}</replaceable>:lambda:path/<replaceable>{service_api}</replaceable>
     /// , where <replaceable></replaceable>{region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations. Supported only for REQUEST authorizers.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. Currently, the identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name. These parameters will be used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example "$request.header.Authorization".</p>
+    /// <p>Specifies whether a Lambda authorizer returns a response in a simple format. If enabled, the Lambda authorizer can return a boolean value instead of an IAM policy. Supported only for HTTP APIs. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a></p>
+    #[serde(rename = "EnableSimpleResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_simple_responses: Option<bool>,
+    /// <p>The identity source for which authorization is requested.</p> <p>For a REQUEST authorizer, this is optional. The value is a set of one or more mapping expressions of the specified request parameters. The identity source can be headers, query string parameters, stage variables, and context parameters. For example, if an Auth header and a Name query string parameter are defined as identity sources, this value is route.request.header.Auth, route.request.querystring.Name for WebSocket APIs. For HTTP APIs, use selection expressions prefixed with $, for example, $request.header.Auth, $request.querystring.Name. These parameters are used to perform runtime validation for Lambda-based authorizers by verifying all of the identity-related request parameters are present in the request, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function. Otherwise, it returns a 401 Unauthorized response without calling the Lambda function. For HTTP APIs, identity sources are also used as the cache key when caching is enabled. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html">Working with AWS Lambda authorizers for HTTP APIs</a>.</p> <p>For JWT, a single entry that specifies where to extract the JSON Web Token (JWT) from inbound requests. Currently only header-based and query parameter-based selections are supported, for example $request.header.Authorization.</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
@@ -3239,6 +3400,10 @@ pub struct UpdateDomainNameRequest {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The mutual TLS authentication configuration for a custom domain name.</p>
+    #[serde(rename = "MutualTlsAuthentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mutual_tls_authentication: Option<MutualTlsAuthenticationInput>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3256,6 +3421,10 @@ pub struct UpdateDomainNameResponse {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The mutual TLS authentication configuration for a custom domain name.</p>
+    #[serde(rename = "MutualTlsAuthentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mutual_tls_authentication: Option<MutualTlsAuthentication>,
     /// <p>The collection of tags associated with a domain name.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3296,7 +3465,11 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration. For HTTP API private integrations, use an HTTP_PROXY integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>Supported only for HTTP API AWS_PROXY integrations. Specifies the AWS service action to invoke. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services-reference.html">Integration subtype reference</a>.</p>
+    #[serde(rename = "IntegrationSubtype")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_subtype: Option<String>,
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration. For HTTP API private integrations, use an HTTP_PROXY integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
@@ -3312,12 +3485,8 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
-    /// , where
-    /// <replaceable>{location}</replaceable>
-    /// is querystring, path, or header; and
-    /// <replaceable>{name}</replaceable>
-    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
+    /// <p>For WebSocket APIs, a key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
+    /// , where  <replaceable>{location}</replaceable>  is querystring, path, or header; and <replaceable>{name}</replaceable> must be a valid and unique method request parameter name.</p> <p>For HTTP APIs, request parameters are a key-value map specifying parameters that are passed to AWS_PROXY integrations with a specified integrationSubtype. You can provide static values, or map request data, stage variables, or context variables that are evaluated at runtime. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services.html">Working with AWS service integrations for HTTP APIs</a>.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -3449,7 +3618,11 @@ pub struct UpdateIntegrationResult {
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
+    /// <p>Supported only for HTTP API AWS_PROXY integrations. Specifies the AWS service action to invoke. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services-reference.html">Integration subtype reference</a>.</p>
+    #[serde(rename = "IntegrationSubtype")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_subtype: Option<String>,
+    /// <p>The integration type of an integration. One of the following:</p> <p>AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration. Supported only for WebSocket APIs.</p> <p>AWS_PROXY: for integrating the route or method request with a Lambda function or other AWS service action. This integration is also referred to as a Lambda proxy integration.</p> <p>HTTP: for integrating the route or method request with an HTTP endpoint. This integration is also referred to as the HTTP custom integration. Supported only for WebSocket APIs.</p> <p>HTTP_PROXY: for integrating the route or method request with an HTTP endpoint, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p> <p>MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend. Supported only for WebSocket APIs.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
@@ -3465,12 +3638,8 @@ pub struct UpdateIntegrationResult {
     #[serde(rename = "PayloadFormatVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub payload_format_version: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
-    /// , where
-    /// <replaceable>{location}</replaceable>
-    /// is querystring, path, or header; and
-    /// <replaceable>{name}</replaceable>
-    /// must be a valid and unique method request parameter name. Supported only for WebSocket APIs.</p>
+    /// <p>For WebSocket APIs, a key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.<replaceable>{location}</replaceable>.<replaceable>{name}</replaceable>
+    /// , where  <replaceable>{location}</replaceable>  is querystring, path, or header; and <replaceable>{name}</replaceable> must be a valid and unique method request parameter name.</p> <p>For HTTP APIs, request parameters are a key-value map specifying parameters that are passed to AWS_PROXY integrations with a specified integrationSubtype. You can provide static values, or map request data, stage variables, or context variables that are evaluated at runtime. To learn more, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services.html">Working with AWS service integrations for HTTP APIs</a>.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -3560,7 +3729,7 @@ pub struct UpdateRouteRequest {
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
@@ -3672,7 +3841,7 @@ pub struct UpdateRouteResult {
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, or JWT for using JSON Web Tokens.</p>
+    /// <p>The authorization type for the route. For WebSocket APIs, valid values are NONE for open access, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer For HTTP APIs, valid values are NONE for open access, JWT for using JSON Web Tokens, AWS_IAM for using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
@@ -6238,6 +6407,44 @@ impl fmt::Display for ReimportApiError {
     }
 }
 impl Error for ReimportApiError {}
+/// Errors returned by ResetAuthorizersCache
+#[derive(Debug, PartialEq)]
+pub enum ResetAuthorizersCacheError {
+    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl ResetAuthorizersCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetAuthorizersCacheError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(ResetAuthorizersCacheError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ResetAuthorizersCacheError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ResetAuthorizersCacheError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ResetAuthorizersCacheError::NotFound(ref cause) => write!(f, "{}", cause),
+            ResetAuthorizersCacheError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ResetAuthorizersCacheError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -7248,6 +7455,12 @@ pub trait ApiGatewayV2 {
         &self,
         input: ReimportApiRequest,
     ) -> Result<ReimportApiResponse, RusotoError<ReimportApiError>>;
+
+    /// <p>Resets all authorizer cache entries on a stage. Supported only for HTTP APIs.</p>
+    async fn reset_authorizers_cache(
+        &self,
+        input: ResetAuthorizersCacheRequest,
+    ) -> Result<(), RusotoError<ResetAuthorizersCacheError>>;
 
     /// <p>Creates a new Tag resource to represent a tag.</p>
     async fn tag_resource(
@@ -9252,6 +9465,37 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ReimportApiError::from_response(response))
+        }
+    }
+
+    /// <p>Resets all authorizer cache entries on a stage. Supported only for HTTP APIs.</p>
+    #[allow(unused_mut)]
+    async fn reset_authorizers_cache(
+        &self,
+        input: ResetAuthorizersCacheRequest,
+    ) -> Result<(), RusotoError<ResetAuthorizersCacheError>> {
+        let request_uri = format!(
+            "/v2/apis/{api_id}/stages/{stage_name}/cache/authorizers",
+            api_id = input.api_id,
+            stage_name = input.stage_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ResetAuthorizersCacheError::from_response(response))
         }
     }
 

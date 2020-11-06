@@ -61,7 +61,7 @@ pub struct AcceptPortfolioShareInput {
     /// <p>The portfolio identifier.</p>
     #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
-    /// <p>The type of shared portfolios to accept. The default is to accept imported portfolios.</p> <ul> <li> <p> <code>AWS_ORGANIZATIONS</code> - Accept portfolios shared by the master account of your organization.</p> </li> <li> <p> <code>IMPORTED</code> - Accept imported portfolios.</p> </li> <li> <p> <code>AWS_SERVICECATALOG</code> - Not supported. (Throws ResourceNotFoundException.)</p> </li> </ul> <p>For example, <code>aws servicecatalog accept-portfolio-share --portfolio-id "port-2qwzkwxt3y5fk" --portfolio-share-type AWS_ORGANIZATIONS</code> </p>
+    /// <p>The type of shared portfolios to accept. The default is to accept imported portfolios.</p> <ul> <li> <p> <code>AWS_ORGANIZATIONS</code> - Accept portfolios shared by the management account of your organization.</p> </li> <li> <p> <code>IMPORTED</code> - Accept imported portfolios.</p> </li> <li> <p> <code>AWS_SERVICECATALOG</code> - Not supported. (Throws ResourceNotFoundException.)</p> </li> </ul> <p>For example, <code>aws servicecatalog accept-portfolio-share --portfolio-id "port-2qwzkwxt3y5fk" --portfolio-share-type AWS_ORGANIZATIONS</code> </p>
     #[serde(rename = "PortfolioShareType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_share_type: Option<String>,
@@ -424,7 +424,7 @@ pub struct CreatePortfolioShareInput {
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    /// <p>The organization node to whom you are going to share. If <code>OrganizationNode</code> is passed in, <code>PortfolioShare</code> will be created for the node and its children (when applies), and a <code>PortfolioShareToken</code> will be returned in the output in order for the administrator to monitor the status of the <code>PortfolioShare</code> creation process.</p>
+    /// <p>The organization node to whom you are going to share. If <code>OrganizationNode</code> is passed in, <code>PortfolioShare</code> will be created for the node an ListOrganizationPortfolioAccessd its children (when applies), and a <code>PortfolioShareToken</code> will be returned in the output in order for the administrator to monitor the status of the <code>PortfolioShare</code> creation process.</p>
     #[serde(rename = "OrganizationNode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_node: Option<OrganizationNode>,
@@ -436,7 +436,7 @@ pub struct CreatePortfolioShareInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePortfolioShareOutput {
-    /// <p>The portfolio share unique identifier. This will only be returned if portfolio is shared to an organization node.</p>
+    /// <p>The portfolio shares a unique identifier that only returns if the portfolio is shared to an organization node.</p>
     #[serde(rename = "PortfolioShareToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_share_token: Option<String>,
@@ -1037,6 +1037,7 @@ pub struct DescribeProductViewOutput {
     pub provisioning_artifacts: Option<Vec<ProvisioningArtifact>>,
 }
 
+/// <p>DescribeProvisionedProductAPI input structure. AcceptLanguage - [Optional] The language code for localization. Id - [Optional] The provisioned product identifier. Name - [Optional] Another provisioned product identifier. Customers must provide either Id or Name.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeProvisionedProductInput {
@@ -1044,9 +1045,14 @@ pub struct DescribeProvisionedProductInput {
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The provisioned product identifier.</p>
+    /// <p>The provisioned product identifier. You must provide the name or ID, but not both.</p> <p>If you do not provide a name or ID, or you provide both name and ID, an <code>InvalidParametersException</code> will occur.</p>
     #[serde(rename = "Id")]
-    pub id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the provisioned product. You must provide the name or ID, but not both.</p> <p>If you do not provide a name or ID, or you provide both name and ID, an <code>InvalidParametersException</code> will occur.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1152,16 +1158,30 @@ pub struct DescribeProvisioningParametersInput {
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use <a>ListLaunchPaths</a>.</p>
+    /// <p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use <a>ListLaunchPaths</a>. You must provide the name or ID, but not both.</p>
     #[serde(rename = "PathId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
-    /// <p>The product identifier.</p>
+    /// <p>The name of the path. You must provide the name or ID, but not both.</p>
+    #[serde(rename = "PathName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path_name: Option<String>,
+    /// <p>The product identifier. You must provide the product name or ID, but not both.</p>
     #[serde(rename = "ProductId")]
-    pub product_id: String,
-    /// <p>The identifier of the provisioning artifact.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<String>,
+    /// <p>The name of the product. You must provide the name or ID, but not both.</p>
+    #[serde(rename = "ProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_name: Option<String>,
+    /// <p>The identifier of the provisioning artifact. You must provide the name or ID, but not both.</p>
     #[serde(rename = "ProvisioningArtifactId")]
-    pub provisioning_artifact_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_id: Option<String>,
+    /// <p>The name of the provisioning artifact. You must provide the name or ID, but not both.</p>
+    #[serde(rename = "ProvisioningArtifactName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_name: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1171,6 +1191,10 @@ pub struct DescribeProvisioningParametersOutput {
     #[serde(rename = "ConstraintSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_summaries: Option<Vec<ConstraintSummary>>,
+    /// <p>The output of the provisioning artifact.</p>
+    #[serde(rename = "ProvisioningArtifactOutputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_outputs: Option<Vec<ProvisioningArtifactOutput>>,
     /// <p>Information about the parameters used to provision the product.</p>
     #[serde(rename = "ProvisioningArtifactParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1506,6 +1530,48 @@ pub struct GetAWSOrganizationsAccessStatusOutput {
     pub access_status: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetProvisionedProductOutputsInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The list of keys that the API should return with their values. If none are provided, the API will return all outputs of the provisioned product.</p>
+    #[serde(rename = "OutputKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_keys: Option<Vec<String>>,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The identifier of the provisioned product that you want the outputs from.</p>
+    #[serde(rename = "ProvisionedProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_product_id: Option<String>,
+    /// <p>The name of the provisioned product that you want the outputs from.</p>
+    #[serde(rename = "ProvisionedProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_product_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetProvisionedProductOutputsOutput {
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>Information about the product created as the result of a request. For example, the output for a CloudFormation-backed product that creates an S3 bucket would include the S3 bucket URL. </p>
+    #[serde(rename = "Outputs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outputs: Option<Vec<RecordOutput>>,
+}
+
 /// <p>A launch path object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1557,7 +1623,7 @@ pub struct ListAcceptedPortfolioSharesInput {
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    /// <p><p>The type of shared portfolios to list. The default is to list imported portfolios.</p> <ul> <li> <p> <code>AWS<em>ORGANIZATIONS</code> - List portfolios shared by the master account of your organization</p> </li> <li> <p> <code>AWS</em>SERVICECATALOG</code> - List default portfolios</p> </li> <li> <p> <code>IMPORTED</code> - List imported portfolios</p> </li> </ul></p>
+    /// <p><p>The type of shared portfolios to list. The default is to list imported portfolios.</p> <ul> <li> <p> <code>AWS<em>ORGANIZATIONS</code> - List portfolios shared by the management account of your organization</p> </li> <li> <p> <code>AWS</em>SERVICECATALOG</code> - List default portfolios</p> </li> <li> <p> <code>IMPORTED</code> - List imported portfolios</p> </li> </ul></p>
     #[serde(rename = "PortfolioShareType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_share_type: Option<String>,
@@ -2340,22 +2406,36 @@ pub struct ProvisionProductInput {
     #[serde(rename = "NotificationArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_arns: Option<Vec<String>>,
-    /// <p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use <a>ListLaunchPaths</a>.</p>
+    /// <p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use <a>ListLaunchPaths</a>. You must provide the name or ID, but not both.</p>
     #[serde(rename = "PathId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
-    /// <p>The product identifier.</p>
+    /// <p>The name of the path. You must provide the name or ID, but not both.</p>
+    #[serde(rename = "PathName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path_name: Option<String>,
+    /// <p>The product identifier. You must provide the name or ID, but not both.</p>
     #[serde(rename = "ProductId")]
-    pub product_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<String>,
+    /// <p>The name of the product. You must provide the name or ID, but not both.</p>
+    #[serde(rename = "ProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_name: Option<String>,
     /// <p>An idempotency token that uniquely identifies the provisioning request.</p>
     #[serde(rename = "ProvisionToken")]
     pub provision_token: String,
     /// <p>A user-friendly name for the provisioned product. This value must be unique for the AWS account and cannot be updated after the product is provisioned.</p>
     #[serde(rename = "ProvisionedProductName")]
     pub provisioned_product_name: String,
-    /// <p>The identifier of the provisioning artifact.</p>
+    /// <p>The identifier of the provisioning artifact. You must provide the name or ID, but not both.</p>
     #[serde(rename = "ProvisioningArtifactId")]
-    pub provisioning_artifact_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_id: Option<String>,
+    /// <p>The name of the provisioning artifact. You must provide the name or ID, but not both.</p>
+    #[serde(rename = "ProvisioningArtifactName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_name: Option<String>,
     /// <p>Parameters specified by the administrator that are required for provisioning the product.</p>
     #[serde(rename = "ProvisioningParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2399,10 +2479,18 @@ pub struct ProvisionedProductAttribute {
     #[serde(rename = "IdempotencyToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_token: Option<String>,
+    /// <p><p>The record identifier of the last request performed on this provisioned product of the following types:</p> <ul> <li> <p> ProvisionedProduct </p> </li> <li> <p> UpdateProvisionedProduct </p> </li> <li> <p> ExecuteProvisionedProductPlan </p> </li> <li> <p> TerminateProvisionedProduct </p> </li> </ul></p>
+    #[serde(rename = "LastProvisioningRecordId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_provisioning_record_id: Option<String>,
     /// <p>The record identifier of the last request performed on this provisioned product.</p>
     #[serde(rename = "LastRecordId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_record_id: Option<String>,
+    /// <p><p>The record identifier of the last successful request performed on this provisioned product of the following types:</p> <ul> <li> <p> ProvisionedProduct </p> </li> <li> <p> UpdateProvisionedProduct </p> </li> <li> <p> ExecuteProvisionedProductPlan </p> </li> <li> <p> TerminateProvisionedProduct </p> </li> </ul></p>
+    #[serde(rename = "LastSuccessfulProvisioningRecordId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_successful_provisioning_record_id: Option<String>,
     /// <p>The user-friendly name of the provisioned product.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2415,10 +2503,18 @@ pub struct ProvisionedProductAttribute {
     #[serde(rename = "ProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_id: Option<String>,
+    /// <p>The name of the product.</p>
+    #[serde(rename = "ProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_name: Option<String>,
     /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_id: Option<String>,
+    /// <p>The name of the provisioning artifact.</p>
+    #[serde(rename = "ProvisioningArtifactName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_name: Option<String>,
     /// <p><p>The current status of the provisioned product.</p> <ul> <li> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent operation succeeded and completed.</p> </li> <li> <p> <code>UNDER<em>CHANGE</code> - Transitive state. Operations performed might not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> </li> <li> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version.</p> </li> <li> <p> <code>ERROR</code> - An unexpected error occurred. The provisioned product exists but the stack is not running. For example, CloudFormation received a parameter value that was not valid and could not launch the stack.</p> </li> <li> <p> <code>PLAN</em>IN_PROGRESS</code> - Transitive state. The plan operations were performed to provision a new product, but resources have not yet been created. After reviewing the list of resources to be created, execute the plan. Wait for an <code>AVAILABLE</code> status before performing operations.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2465,10 +2561,22 @@ pub struct ProvisionedProductDetail {
     #[serde(rename = "IdempotencyToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_token: Option<String>,
+    /// <p><p>The record identifier of the last request performed on this provisioned product of the following types:</p> <ul> <li> <p> ProvisionedProduct </p> </li> <li> <p> UpdateProvisionedProduct </p> </li> <li> <p> ExecuteProvisionedProductPlan </p> </li> <li> <p> TerminateProvisionedProduct </p> </li> </ul></p>
+    #[serde(rename = "LastProvisioningRecordId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_provisioning_record_id: Option<String>,
     /// <p>The record identifier of the last request performed on this provisioned product.</p>
     #[serde(rename = "LastRecordId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_record_id: Option<String>,
+    /// <p><p>The record identifier of the last successful request performed on this provisioned product of the following types:</p> <ul> <li> <p> ProvisionedProduct </p> </li> <li> <p> UpdateProvisionedProduct </p> </li> <li> <p> ExecuteProvisionedProductPlan </p> </li> <li> <p> TerminateProvisionedProduct </p> </li> </ul></p>
+    #[serde(rename = "LastSuccessfulProvisioningRecordId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_successful_provisioning_record_id: Option<String>,
+    /// <p>The ARN of the launch role associated with the provisioned product.</p>
+    #[serde(rename = "LaunchRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_role_arn: Option<String>,
     /// <p>The user-friendly name of the provisioned product.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2651,6 +2759,20 @@ pub struct ProvisioningArtifactDetail {
     pub type_: Option<String>,
 }
 
+/// <p>Provisioning artifact output.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ProvisioningArtifactOutput {
+    /// <p>Description of the provisioning artifact output key.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The provisioning artifact output key.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+}
+
 /// <p>Information about a parameter used to provision a product.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2812,6 +2934,10 @@ pub struct RecordDetail {
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
+    /// <p>The ARN of the launch role associated with the provisioned product.</p>
+    #[serde(rename = "LaunchRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_role_arn: Option<String>,
     /// <p>The path identifier.</p>
     #[serde(rename = "PathId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2918,7 +3044,7 @@ pub struct RejectPortfolioShareInput {
     /// <p>The portfolio identifier.</p>
     #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
-    /// <p>The type of shared portfolios to reject. The default is to reject imported portfolios.</p> <ul> <li> <p> <code>AWS_ORGANIZATIONS</code> - Reject portfolios shared by the master account of your organization.</p> </li> <li> <p> <code>IMPORTED</code> - Reject imported portfolios.</p> </li> <li> <p> <code>AWS_SERVICECATALOG</code> - Not supported. (Throws ResourceNotFoundException.)</p> </li> </ul> <p>For example, <code>aws servicecatalog reject-portfolio-share --portfolio-id "port-2qwzkwxt3y5fk" --portfolio-share-type AWS_ORGANIZATIONS</code> </p>
+    /// <p>The type of shared portfolios to reject. The default is to reject imported portfolios.</p> <ul> <li> <p> <code>AWS_ORGANIZATIONS</code> - Reject portfolios shared by the management account of your organization.</p> </li> <li> <p> <code>IMPORTED</code> - Reject imported portfolios.</p> </li> <li> <p> <code>AWS_SERVICECATALOG</code> - Not supported. (Throws ResourceNotFoundException.)</p> </li> </ul> <p>For example, <code>aws servicecatalog reject-portfolio-share --portfolio-id "port-2qwzkwxt3y5fk" --portfolio-share-type AWS_ORGANIZATIONS</code> </p>
     #[serde(rename = "PortfolioShareType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_share_type: Option<String>,
@@ -3166,7 +3292,7 @@ pub struct SearchProvisionedProductsInput {
     #[serde(rename = "AccessLevelFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_level_filter: Option<AccessLevelFilter>,
-    /// <p>The search filters.</p> <p>When the key is <code>SearchQuery</code>, the searchable fields are <code>arn</code>, <code>createdTime</code>, <code>id</code>, <code>lastRecordId</code>, <code>idempotencyToken</code>, <code>name</code>, <code>physicalId</code>, <code>productId</code>, <code>provisioningArtifact</code>, <code>type</code>, <code>status</code>, <code>tags</code>, <code>userArn</code>, and <code>userArnSession</code>.</p> <p>Example: <code>"SearchQuery":["status:AVAILABLE"]</code> </p>
+    /// <p>The search filters.</p> <p>When the key is <code>SearchQuery</code>, the searchable fields are <code>arn</code>, <code>createdTime</code>, <code>id</code>, <code>lastRecordId</code>, <code>idempotencyToken</code>, <code>name</code>, <code>physicalId</code>, <code>productId</code>, <code>provisioningArtifact</code>, <code>type</code>, <code>status</code>, <code>tags</code>, <code>userArn</code>, <code>userArnSession</code>, <code>lastProvisioningRecordId</code>, <code>lastSuccessfulProvisioningRecordId</code>, <code>productName</code>, and <code>provisioningArtifactName</code>.</p> <p>Example: <code>"SearchQuery":["status:AVAILABLE"]</code> </p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<::std::collections::HashMap<String, Vec<String>>>,
@@ -3536,15 +3662,23 @@ pub struct UpdateProvisionedProductInput {
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The new path identifier. This value is optional if the product has a default path, and required if the product has more than one path.</p>
+    /// <p>The path identifier. This value is optional if the product has a default path, and required if the product has more than one path. You must provide the name or ID, but not both.</p>
     #[serde(rename = "PathId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
-    /// <p>The identifier of the product.</p>
+    /// <p>The name of the path. You must provide the name or ID, but not both.</p>
+    #[serde(rename = "PathName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path_name: Option<String>,
+    /// <p>The identifier of the product. You must provide the name or ID, but not both.</p>
     #[serde(rename = "ProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_id: Option<String>,
-    /// <p>The identifier of the provisioned product. You cannot specify both <code>ProvisionedProductName</code> and <code>ProvisionedProductId</code>.</p>
+    /// <p>The name of the product. You must provide the name or ID, but not both.</p>
+    #[serde(rename = "ProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_name: Option<String>,
+    /// <p>The identifier of the provisioned product. You must provide the name or ID, but not both.</p>
     #[serde(rename = "ProvisionedProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_id: Option<String>,
@@ -3556,6 +3690,10 @@ pub struct UpdateProvisionedProductInput {
     #[serde(rename = "ProvisioningArtifactId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_id: Option<String>,
+    /// <p>The name of the provisioning artifact. You must provide the name or ID, but not both.</p>
+    #[serde(rename = "ProvisioningArtifactName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_name: Option<String>,
     /// <p>The new parameters.</p>
     #[serde(rename = "ProvisioningParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3595,7 +3733,7 @@ pub struct UpdateProvisionedProductPropertiesInput {
     /// <p>The identifier of the provisioned product.</p>
     #[serde(rename = "ProvisionedProductId")]
     pub provisioned_product_id: String,
-    /// <p>A map that contains the provisioned product properties to be updated.</p> <p>The <code>OWNER</code> key accepts user ARNs and role ARNs. The owner is the user that is allowed to see, update, terminate, and execute service actions in the provisioned product.</p> <p>The administrator can change the owner of a provisioned product to another IAM user within the same account. Both end user owners and administrators can see ownership history of the provisioned product using the <code>ListRecordHistory</code> API. The new owner can describe all past records for the provisioned product using the <code>DescribeRecord</code> API. The previous owner can no longer use <code>DescribeRecord</code>, but can still see the product's history from when he was an owner using <code>ListRecordHistory</code>.</p> <p>If a provisioned product ownership is assigned to an end user, they can see and perform any action through the API or Service Catalog console such as update, terminate, and execute service actions. If an end user provisions a product and the owner is updated to someone else, they will no longer be able to see or perform any actions through API or the Service Catalog console on that provisioned product.</p>
+    /// <p>A map that contains the provisioned product properties to be updated.</p> <p>The <code>LAUNCH_ROLE</code> key accepts user ARNs and role ARNs. This key allows an administrator to call <code>UpdateProvisionedProductProperties</code> to update the launch role that is associated with a provisioned product. This role is used when an end-user calls a provisioning operation such as <code>UpdateProvisionedProduct</code>, <code>TerminateProvisionedProduct</code>, or <code>ExecuteProvisionedProductServiceAction</code>. Only an ARN role or <code>null</code> is valid. A user ARN is invalid. For example, if an admin user passes <code>null</code> as the value for the key <code>LAUNCH_ROLE</code>, the admin removes the launch role that is associated with the provisioned product. As a result, the end user operations use the credentials of the end user.</p> <p>The <code>OWNER</code> key accepts user ARNs and role ARNs. The owner is the user that has permission to see, update, terminate, and execute service actions in the provisioned product.</p> <p>The administrator can change the owner of a provisioned product to another IAM user within the same account. Both end user owners and administrators can see ownership history of the provisioned product using the <code>ListRecordHistory</code> API. The new owner can describe all past records for the provisioned product using the <code>DescribeRecord</code> API. The previous owner can no longer use <code>DescribeRecord</code>, but can still see the product's history from when he was an owner using <code>ListRecordHistory</code>.</p> <p>If a provisioned product ownership is assigned to an end user, they can see and perform any action through the API or Service Catalog console such as update, terminate, and execute service actions. If an end user provisions a product and the owner is updated to someone else, they will no longer be able to see or perform any actions through API or the Service Catalog console on that provisioned product.</p>
     #[serde(rename = "ProvisionedProductProperties")]
     pub provisioned_product_properties: ::std::collections::HashMap<String, String>,
 }
@@ -5275,6 +5413,8 @@ impl Error for DescribeProductViewError {}
 /// Errors returned by DescribeProvisionedProduct
 #[derive(Debug, PartialEq)]
 pub enum DescribeProvisionedProductError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
 }
@@ -5285,6 +5425,11 @@ impl DescribeProvisionedProductError {
     ) -> RusotoError<DescribeProvisionedProductError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidParametersException" => {
+                    return RusotoError::Service(
+                        DescribeProvisionedProductError::InvalidParameters(err.msg),
+                    )
+                }
                 "ResourceNotFoundException" => {
                     return RusotoError::Service(DescribeProvisionedProductError::ResourceNotFound(
                         err.msg,
@@ -5301,6 +5446,7 @@ impl fmt::Display for DescribeProvisionedProductError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DescribeProvisionedProductError::InvalidParameters(ref cause) => write!(f, "{}", cause),
             DescribeProvisionedProductError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -6076,6 +6222,52 @@ impl fmt::Display for GetAWSOrganizationsAccessStatusError {
     }
 }
 impl Error for GetAWSOrganizationsAccessStatusError {}
+/// Errors returned by GetProvisionedProductOutputs
+#[derive(Debug, PartialEq)]
+pub enum GetProvisionedProductOutputsError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl GetProvisionedProductOutputsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetProvisionedProductOutputsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParametersException" => {
+                    return RusotoError::Service(
+                        GetProvisionedProductOutputsError::InvalidParameters(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetProvisionedProductOutputsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetProvisionedProductOutputsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetProvisionedProductOutputsError::InvalidParameters(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetProvisionedProductOutputsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetProvisionedProductOutputsError {}
 /// Errors returned by ListAcceptedPortfolioShares
 #[derive(Debug, PartialEq)]
 pub enum ListAcceptedPortfolioSharesError {
@@ -7502,7 +7694,7 @@ pub trait ServiceCatalog {
         input: CreatePortfolioInput,
     ) -> Result<CreatePortfolioOutput, RusotoError<CreatePortfolioError>>;
 
-    /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an organization or by a delegated administrator. You can share portfolios to an organization, an organizational unit, or a specific account.</p> <p>Note that if a delegated admin is de-registered, they can no longer create portfolio shares.</p> <p> <code>AWSOrganizationsAccess</code> must be enabled in order to create a portfolio share to an organization node.</p>
+    /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the management account of an organization or by a delegated administrator. You can share portfolios to an organization, an organizational unit, or a specific account.</p> <p>Note that if a delegated admin is de-registered, they can no longer create portfolio shares.</p> <p> <code>AWSOrganizationsAccess</code> must be enabled in order to create a portfolio share to an organization node.</p> <p>You can't share a shared resource. This includes portfolios that contain a shared product.</p>
     async fn create_portfolio_share(
         &self,
         input: CreatePortfolioShareInput,
@@ -7550,7 +7742,7 @@ pub trait ServiceCatalog {
         input: DeletePortfolioInput,
     ) -> Result<DeletePortfolioOutput, RusotoError<DeletePortfolioError>>;
 
-    /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an organization or by a delegated administrator.</p> <p>Note that if a delegated admin is de-registered, portfolio shares created from that account are removed.</p>
+    /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the management account of an organization or by a delegated administrator.</p> <p>Note that if a delegated admin is de-registered, portfolio shares created from that account are removed.</p>
     async fn delete_portfolio_share(
         &self,
         input: DeletePortfolioShareInput,
@@ -7604,7 +7796,7 @@ pub trait ServiceCatalog {
         input: DescribePortfolioInput,
     ) -> Result<DescribePortfolioOutput, RusotoError<DescribePortfolioError>>;
 
-    /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization or by a delegated admin.</p>
+    /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the management account in the organization or by a delegated admin.</p>
     async fn describe_portfolio_share_status(
         &self,
         input: DescribePortfolioShareStatusInput,
@@ -7685,7 +7877,7 @@ pub trait ServiceCatalog {
         input: DescribeTagOptionInput,
     ) -> Result<DescribeTagOptionOutput, RusotoError<DescribeTagOptionError>>;
 
-    /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p> <p>This API can't be invoked if there are active delegated administrators in the organization.</p> <p>Note that a delegated administrator is not authorized to invoke <code>DisableAWSOrganizationsAccess</code>.</p>
+    /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the management account in the organization.</p> <p>This API can't be invoked if there are active delegated administrators in the organization.</p> <p>Note that a delegated administrator is not authorized to invoke <code>DisableAWSOrganizationsAccess</code>.</p>
     async fn disable_aws_organizations_access(
         &self,
     ) -> Result<DisableAWSOrganizationsAccessOutput, RusotoError<DisableAWSOrganizationsAccessError>>;
@@ -7735,7 +7927,7 @@ pub trait ServiceCatalog {
         RusotoError<DisassociateTagOptionFromResourceError>,
     >;
 
-    /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p> <p>Note that a delegated administrator is not authorized to invoke <code>EnableAWSOrganizationsAccess</code>.</p>
+    /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the management account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p> <p>Note that a delegated administrator is not authorized to invoke <code>EnableAWSOrganizationsAccess</code>.</p>
     async fn enable_aws_organizations_access(
         &self,
     ) -> Result<EnableAWSOrganizationsAccessOutput, RusotoError<EnableAWSOrganizationsAccessError>>;
@@ -7755,13 +7947,19 @@ pub trait ServiceCatalog {
         RusotoError<ExecuteProvisionedProductServiceActionError>,
     >;
 
-    /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization or by a delegated admin.</p>
+    /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the management account in the organization or by a delegated admin.</p>
     async fn get_aws_organizations_access_status(
         &self,
     ) -> Result<
         GetAWSOrganizationsAccessStatusOutput,
         RusotoError<GetAWSOrganizationsAccessStatusError>,
     >;
+
+    /// <p>This API takes either a <code>ProvisonedProductId</code> or a <code>ProvisionedProductName</code>, along with a list of one or more output keys, and responds with the key/value pairs of those outputs.</p>
+    async fn get_provisioned_product_outputs(
+        &self,
+        input: GetProvisionedProductOutputsInput,
+    ) -> Result<GetProvisionedProductOutputsOutput, RusotoError<GetProvisionedProductOutputsError>>;
 
     /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
     async fn list_accepted_portfolio_shares(
@@ -7787,7 +7985,7 @@ pub trait ServiceCatalog {
         input: ListLaunchPathsInput,
     ) -> Result<ListLaunchPathsOutput, RusotoError<ListLaunchPathsError>>;
 
-    /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization or by a delegated admin.</p> <p>If a delegated admin is de-registered, they can no longer perform this operation.</p>
+    /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the management account in the organization or by a delegated admin.</p> <p>If a delegated admin is de-registered, they can no longer perform this operation.</p>
     async fn list_organization_portfolio_access(
         &self,
         input: ListOrganizationPortfolioAccessInput,
@@ -8277,7 +8475,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreatePortfolioOutput, _>()
     }
 
-    /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an organization or by a delegated administrator. You can share portfolios to an organization, an organizational unit, or a specific account.</p> <p>Note that if a delegated admin is de-registered, they can no longer create portfolio shares.</p> <p> <code>AWSOrganizationsAccess</code> must be enabled in order to create a portfolio share to an organization node.</p>
+    /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the management account of an organization or by a delegated administrator. You can share portfolios to an organization, an organizational unit, or a specific account.</p> <p>Note that if a delegated admin is de-registered, they can no longer create portfolio shares.</p> <p> <code>AWSOrganizationsAccess</code> must be enabled in order to create a portfolio share to an organization node.</p> <p>You can't share a shared resource. This includes portfolios that contain a shared product.</p>
     async fn create_portfolio_share(
         &self,
         input: CreatePortfolioShareInput,
@@ -8446,7 +8644,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeletePortfolioOutput, _>()
     }
 
-    /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an organization or by a delegated administrator.</p> <p>Note that if a delegated admin is de-registered, portfolio shares created from that account are removed.</p>
+    /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the management account of an organization or by a delegated administrator.</p> <p>Note that if a delegated admin is de-registered, portfolio shares created from that account are removed.</p>
     async fn delete_portfolio_share(
         &self,
         input: DeletePortfolioShareInput,
@@ -8637,7 +8835,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribePortfolioOutput, _>()
     }
 
-    /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization or by a delegated admin.</p>
+    /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the management account in the organization or by a delegated admin.</p>
     async fn describe_portfolio_share_status(
         &self,
         input: DescribePortfolioShareStatusInput,
@@ -8908,7 +9106,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeTagOptionOutput, _>()
     }
 
-    /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p> <p>This API can't be invoked if there are active delegated administrators in the organization.</p> <p>Note that a delegated administrator is not authorized to invoke <code>DisableAWSOrganizationsAccess</code>.</p>
+    /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the management account in the organization.</p> <p>This API can't be invoked if there are active delegated administrators in the organization.</p> <p>Note that a delegated administrator is not authorized to invoke <code>DisableAWSOrganizationsAccess</code>.</p>
     async fn disable_aws_organizations_access(
         &self,
     ) -> Result<DisableAWSOrganizationsAccessOutput, RusotoError<DisableAWSOrganizationsAccessError>>
@@ -9066,7 +9264,7 @@ impl ServiceCatalog for ServiceCatalogClient {
             .deserialize::<DisassociateTagOptionFromResourceOutput, _>()
     }
 
-    /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p> <p>Note that a delegated administrator is not authorized to invoke <code>EnableAWSOrganizationsAccess</code>.</p>
+    /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the management account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p> <p>Note that a delegated administrator is not authorized to invoke <code>EnableAWSOrganizationsAccess</code>.</p>
     async fn enable_aws_organizations_access(
         &self,
     ) -> Result<EnableAWSOrganizationsAccessOutput, RusotoError<EnableAWSOrganizationsAccessError>>
@@ -9138,7 +9336,7 @@ impl ServiceCatalog for ServiceCatalogClient {
             .deserialize::<ExecuteProvisionedProductServiceActionOutput, _>()
     }
 
-    /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization or by a delegated admin.</p>
+    /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the management account in the organization or by a delegated admin.</p>
     async fn get_aws_organizations_access_status(
         &self,
     ) -> Result<
@@ -9159,6 +9357,29 @@ impl ServiceCatalog for ServiceCatalogClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<GetAWSOrganizationsAccessStatusOutput, _>()
+    }
+
+    /// <p>This API takes either a <code>ProvisonedProductId</code> or a <code>ProvisionedProductName</code>, along with a list of one or more output keys, and responds with the key/value pairs of those outputs.</p>
+    async fn get_provisioned_product_outputs(
+        &self,
+        input: GetProvisionedProductOutputsInput,
+    ) -> Result<GetProvisionedProductOutputsOutput, RusotoError<GetProvisionedProductOutputsError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.GetProvisionedProductOutputs",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetProvisionedProductOutputsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetProvisionedProductOutputsOutput, _>()
     }
 
     /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
@@ -9250,7 +9471,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListLaunchPathsOutput, _>()
     }
 
-    /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization or by a delegated admin.</p> <p>If a delegated admin is de-registered, they can no longer perform this operation.</p>
+    /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the management account in the organization or by a delegated admin.</p> <p>If a delegated admin is de-registered, they can no longer perform this operation.</p>
     async fn list_organization_portfolio_access(
         &self,
         input: ListOrganizationPortfolioAccessInput,

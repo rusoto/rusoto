@@ -304,7 +304,7 @@ pub struct PolicyDetails {
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
-    /// <p>The schedule of policy-defined actions.</p>
+    /// <p>The schedules of policy-defined actions. A policy can have up to four schedules - one mandatory schedule and up to three optional schedules.</p>
     #[serde(rename = "Schedules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedules: Option<Vec<Schedule>>,

@@ -2292,6 +2292,23 @@ pub struct GetSubscriptionDefinitionVersionResponse {
     pub version: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetThingRuntimeConfigurationRequest {
+    /// <p>The thing name.</p>
+    #[serde(rename = "ThingName")]
+    pub thing_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetThingRuntimeConfigurationResponse {
+    /// <p>Runtime configuration for a thing.</p>
+    #[serde(rename = "RuntimeConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub runtime_configuration: Option<RuntimeConfiguration>,
+}
+
 /// <p>Information about a certificate authority for a group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3105,6 +3122,16 @@ pub struct ResourceDownloadOwnerSetting {
     pub group_permission: String,
 }
 
+/// <p>Runtime configuration for a thing.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RuntimeConfiguration {
+    /// <p>Configuration for telemetry service.</p>
+    #[serde(rename = "TelemetryConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub telemetry_configuration: Option<TelemetryConfiguration>,
+}
+
 /// <p>Attributes that define an Amazon S3 machine learning resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3MachineLearningModelResourceData {
@@ -3230,6 +3257,28 @@ pub struct TagResourceRequest {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Configuration settings for running telemetry.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TelemetryConfiguration {
+    /// <p>Synchronization status of the device reported configuration with the desired configuration.</p>
+    #[serde(rename = "ConfigurationSyncStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_sync_status: Option<String>,
+    /// <p>Configure telemetry to be on or off.</p>
+    #[serde(rename = "Telemetry")]
+    pub telemetry: String,
+}
+
+/// <p>Configuration settings for running telemetry.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TelemetryConfigurationUpdate {
+    /// <p>Configure telemetry to be on or off.</p>
+    #[serde(rename = "Telemetry")]
+    pub telemetry: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3425,6 +3474,22 @@ pub struct UpdateSubscriptionDefinitionRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubscriptionDefinitionResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateThingRuntimeConfigurationRequest {
+    /// <p>Configuration for telemetry service.</p>
+    #[serde(rename = "TelemetryConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub telemetry_configuration: Option<TelemetryConfigurationUpdate>,
+    /// <p>The thing name.</p>
+    #[serde(rename = "ThingName")]
+    pub thing_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateThingRuntimeConfigurationResponse {}
 
 /// <p>Information about a version.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -5244,6 +5309,50 @@ impl fmt::Display for GetSubscriptionDefinitionVersionError {
     }
 }
 impl Error for GetSubscriptionDefinitionVersionError {}
+/// Errors returned by GetThingRuntimeConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetThingRuntimeConfigurationError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// <p>General error information.</p>
+    InternalServerError(String),
+}
+
+impl GetThingRuntimeConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetThingRuntimeConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetThingRuntimeConfigurationError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        GetThingRuntimeConfigurationError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetThingRuntimeConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetThingRuntimeConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            GetThingRuntimeConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetThingRuntimeConfigurationError {}
 /// Errors returned by ListBulkDeploymentDetailedReports
 #[derive(Debug, PartialEq)]
 pub enum ListBulkDeploymentDetailedReportsError {
@@ -6340,6 +6449,50 @@ impl fmt::Display for UpdateSubscriptionDefinitionError {
     }
 }
 impl Error for UpdateSubscriptionDefinitionError {}
+/// Errors returned by UpdateThingRuntimeConfiguration
+#[derive(Debug, PartialEq)]
+pub enum UpdateThingRuntimeConfigurationError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// <p>General error information.</p>
+    InternalServerError(String),
+}
+
+impl UpdateThingRuntimeConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateThingRuntimeConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateThingRuntimeConfigurationError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        UpdateThingRuntimeConfigurationError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateThingRuntimeConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateThingRuntimeConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateThingRuntimeConfigurationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateThingRuntimeConfigurationError {}
 /// Trait representing the capabilities of the AWS Greengrass API. AWS Greengrass clients implement this trait.
 #[async_trait]
 pub trait GreenGrass {
@@ -6701,6 +6854,12 @@ pub trait GreenGrass {
         RusotoError<GetSubscriptionDefinitionVersionError>,
     >;
 
+    /// <p>Get the runtime configuration of a thing.</p>
+    async fn get_thing_runtime_configuration(
+        &self,
+        input: GetThingRuntimeConfigurationRequest,
+    ) -> Result<GetThingRuntimeConfigurationResponse, RusotoError<GetThingRuntimeConfigurationError>>;
+
     /// <p>Gets a paginated list of the deployments that have been started in a bulk deployment operation, and their current deployment status.</p>
     async fn list_bulk_deployment_detailed_reports(
         &self,
@@ -6937,6 +7096,15 @@ pub trait GreenGrass {
         &self,
         input: UpdateSubscriptionDefinitionRequest,
     ) -> Result<UpdateSubscriptionDefinitionResponse, RusotoError<UpdateSubscriptionDefinitionError>>;
+
+    /// <p>Updates the runtime configuration of a thing.</p>
+    async fn update_thing_runtime_configuration(
+        &self,
+        input: UpdateThingRuntimeConfigurationRequest,
+    ) -> Result<
+        UpdateThingRuntimeConfigurationResponse,
+        RusotoError<UpdateThingRuntimeConfigurationError>,
+    >;
 }
 /// A client for the AWS Greengrass API.
 #[derive(Clone)]
@@ -8764,6 +8932,38 @@ impl GreenGrass for GreenGrassClient {
         }
     }
 
+    /// <p>Get the runtime configuration of a thing.</p>
+    #[allow(unused_mut)]
+    async fn get_thing_runtime_configuration(
+        &self,
+        input: GetThingRuntimeConfigurationRequest,
+    ) -> Result<GetThingRuntimeConfigurationResponse, RusotoError<GetThingRuntimeConfigurationError>>
+    {
+        let request_uri = format!(
+            "/greengrass/things/{thing_name}/runtimeconfig",
+            thing_name = input.thing_name
+        );
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<GetThingRuntimeConfigurationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(GetThingRuntimeConfigurationError::from_response(response))
+        }
+    }
+
     /// <p>Gets a paginated list of the deployments that have been started in a bulk deployment operation, and their current deployment status.</p>
     #[allow(unused_mut)]
     async fn list_bulk_deployment_detailed_reports(
@@ -10088,6 +10288,45 @@ impl GreenGrass for GreenGrassClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateSubscriptionDefinitionError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the runtime configuration of a thing.</p>
+    #[allow(unused_mut)]
+    async fn update_thing_runtime_configuration(
+        &self,
+        input: UpdateThingRuntimeConfigurationRequest,
+    ) -> Result<
+        UpdateThingRuntimeConfigurationResponse,
+        RusotoError<UpdateThingRuntimeConfigurationError>,
+    > {
+        let request_uri = format!(
+            "/greengrass/things/{thing_name}/runtimeconfig",
+            thing_name = input.thing_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateThingRuntimeConfigurationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateThingRuntimeConfigurationError::from_response(
+                response,
+            ))
         }
     }
 }

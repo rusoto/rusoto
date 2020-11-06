@@ -225,7 +225,7 @@ pub struct CreateAliasRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEventSourceMappingRequest {
-    /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p> </li> </ul></p>
+    /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p> </li> <li> <p> <b>Amazon Managed Streaming for Apache Kafka</b> - Default 100. Max 10,000.</p> </li> </ul></p>
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
@@ -237,11 +237,11 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "DestinationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_config: Option<DestinationConfig>,
-    /// <p>Disables the event source mapping to pause polling and invocation.</p>
+    /// <p>If true, the event source mapping is active. Set to false to pause polling and invocation.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p><p>The Amazon Resource Name (ARN) of the event source.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - The ARN of the data stream or a stream consumer.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - The ARN of the stream.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - The ARN of the queue.</p> </li> </ul></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the event source.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - The ARN of the data stream or a stream consumer.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - The ARN of the stream.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - The ARN of the queue.</p> </li> <li> <p> <b>Amazon Managed Streaming for Apache Kafka</b> - The ARN of the cluster.</p> </li> </ul></p>
     #[serde(rename = "EventSourceArn")]
     pub event_source_arn: String,
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Version or Alias ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction:PROD</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it's limited to 64 characters in length.</p>
@@ -251,11 +251,11 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum age of a record that Lambda sends to a function for processing.</p>
+    /// <p>(Streams) Discard records older than the specified age. The default value is infinite (-1).</p>
     #[serde(rename = "MaximumRecordAgeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_record_age_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum number of times to retry when the function returns an error.</p>
+    /// <p>(Streams) Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records will be retried until the record expires.</p>
     #[serde(rename = "MaximumRetryAttempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_retry_attempts: Option<i64>,
@@ -263,7 +263,15 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "ParallelizationFactor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallelization_factor: Option<i64>,
-    /// <p>The position in a stream from which to start reading. Required for Amazon Kinesis and Amazon DynamoDB Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
+    /// <p> (MQ) The name of the Amazon MQ broker destination queue to consume. </p>
+    #[serde(rename = "Queues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queues: Option<Vec<String>>,
+    /// <p> (MQ) The Secrets Manager secret that stores your broker credentials. To store your secret, use the following format: <code> { "username": "your username", "password": "your password" }</code> </p> <p>To reference the secret, use the following format: <code>[ { "Type": "BASIC_AUTH", "URI": "secretARN" } ]</code> </p> <p>The value of <code>Type</code> is always <code>BASIC_AUTH</code>. To encrypt the secret, you can use customer or service managed keys. When using a customer managed KMS key, the Lambda execution role requires <code>kms:Decrypt</code> permissions.</p>
+    #[serde(rename = "SourceAccessConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_access_configurations: Option<Vec<SourceAccessConfiguration>>,
+    /// <p>The position in a stream from which to start reading. Required for Amazon Kinesis, Amazon DynamoDB, and Amazon MSK Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
     #[serde(rename = "StartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_position: Option<String>,
@@ -271,6 +279,10 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "StartingPositionTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_position_timestamp: Option<f64>,
+    /// <p> (MSK) The name of the Kafka topic. </p>
+    #[serde(rename = "Topics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topics: Option<Vec<String>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -482,7 +494,7 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
-    /// <p>(Streams) If the function returns an error, split the batch in two and retry.</p>
+    /// <p>(Streams) If the function returns an error, split the batch in two and retry. The default value is false.</p>
     #[serde(rename = "BisectBatchOnFunctionError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bisect_batch_on_function_error: Option<bool>,
@@ -506,22 +518,30 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "LastProcessingResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_processing_result: Option<String>,
-    /// <p>(Streams) The maximum amount of time to gather records before invoking the function, in seconds.</p>
+    /// <p>(Streams) The maximum amount of time to gather records before invoking the function, in seconds. The default value is zero.</p>
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum age of a record that Lambda sends to a function for processing.</p>
+    /// <p>(Streams) Discard records older than the specified age. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p>
     #[serde(rename = "MaximumRecordAgeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_record_age_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum number of times to retry when the function returns an error.</p>
+    /// <p>(Streams) Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p>
     #[serde(rename = "MaximumRetryAttempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_retry_attempts: Option<i64>,
-    /// <p>(Streams) The number of batches to process from each shard concurrently.</p>
+    /// <p>(Streams) The number of batches to process from each shard concurrently. The default value is 1.</p>
     #[serde(rename = "ParallelizationFactor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallelization_factor: Option<i64>,
+    /// <p> (MQ) The name of the Amazon MQ broker destination queue to consume. </p>
+    #[serde(rename = "Queues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queues: Option<Vec<String>>,
+    /// <p> (MQ) The Secrets Manager secret that stores your broker credentials. To store your secret, use the following format: <code> { "username": "your username", "password": "your password" }</code> </p> <p>To reference the secret, use the following format: <code>[ { "Type": "BASIC_AUTH", "URI": "secretARN" } ]</code> </p> <p>The value of <code>Type</code> is always <code>BASIC_AUTH</code>. To encrypt the secret, you can use customer or service managed keys. When using a customer managed KMS key, the Lambda execution role requires <code>kms:Decrypt</code> permissions.</p>
+    #[serde(rename = "SourceAccessConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_access_configurations: Option<Vec<SourceAccessConfiguration>>,
     /// <p>The state of the event source mapping. It can be one of the following: <code>Creating</code>, <code>Enabling</code>, <code>Enabled</code>, <code>Disabling</code>, <code>Disabled</code>, <code>Updating</code>, or <code>Deleting</code>.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -530,6 +550,10 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "StateTransitionReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_transition_reason: Option<String>,
+    /// <p> (MSK) The name of the Kafka topic to consume. </p>
+    #[serde(rename = "Topics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub topics: Option<Vec<String>>,
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1198,7 +1222,7 @@ pub struct ListAliasesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventSourceMappingsRequest {
-    /// <p><p>The Amazon Resource Name (ARN) of the event source.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - The ARN of the data stream or a stream consumer.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - The ARN of the stream.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - The ARN of the queue.</p> </li> </ul></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the event source.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - The ARN of the data stream or a stream consumer.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - The ARN of the stream.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - The ARN of the queue.</p> </li> <li> <p> <b>Amazon Managed Streaming for Apache Kafka</b> - The ARN of the cluster.</p> </li> </ul></p>
     #[serde(rename = "EventSourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_source_arn: Option<String>,
@@ -1678,6 +1702,19 @@ pub struct RemovePermissionRequest {
     pub statement_id: String,
 }
 
+/// <p> (MQ) The Secrets Manager secret that stores your broker credentials. To store your secret, use the following format: <code> { "username": "your username", "password": "your password" }</code> </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SourceAccessConfiguration {
+    /// <p>To reference the secret, use the following format: <code>[ { "Type": "BASIC_AUTH", "URI": "secretARN" } ]</code> </p> <p>The value of <code>Type</code> is always <code>BASIC_AUTH</code>. To encrypt the secret, you can use customer or service managed keys. When using a customer managed KMS key, the Lambda execution role requires <code>kms:Decrypt</code> permissions.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>To reference the secret, use the following format: <code>[ { "Type": "BASIC_AUTH", "URI": "secretARN" } ]</code> </p> <p>The value of <code>Type</code> is always <code>BASIC_AUTH</code>. To encrypt the secret, you can use customer or service managed keys. When using a customer managed KMS key, the Lambda execution role requires <code>kms:Decrypt</code> permissions.</p>
+    #[serde(rename = "URI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uri: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
@@ -1750,7 +1787,7 @@ pub struct UpdateAliasRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEventSourceMappingRequest {
-    /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p> </li> </ul></p>
+    /// <p><p>The maximum number of items to retrieve in a single batch.</p> <ul> <li> <p> <b>Amazon Kinesis</b> - Default 100. Max 10,000.</p> </li> <li> <p> <b>Amazon DynamoDB Streams</b> - Default 100. Max 1,000.</p> </li> <li> <p> <b>Amazon Simple Queue Service</b> - Default 10. Max 10.</p> </li> <li> <p> <b>Amazon Managed Streaming for Apache Kafka</b> - Default 100. Max 10,000.</p> </li> </ul></p>
     #[serde(rename = "BatchSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_size: Option<i64>,
@@ -1762,7 +1799,7 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "DestinationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_config: Option<DestinationConfig>,
-    /// <p>Disables the event source mapping to pause polling and invocation.</p>
+    /// <p>If true, the event source mapping is active. Set to false to pause polling and invocation.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
@@ -1774,11 +1811,11 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "MaximumBatchingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_batching_window_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum age of a record that Lambda sends to a function for processing.</p>
+    /// <p>(Streams) Discard records older than the specified age. The default value is infinite (-1).</p>
     #[serde(rename = "MaximumRecordAgeInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_record_age_in_seconds: Option<i64>,
-    /// <p>(Streams) The maximum number of times to retry when the function returns an error.</p>
+    /// <p>(Streams) Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records will be retried until the record expires.</p>
     #[serde(rename = "MaximumRetryAttempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_retry_attempts: Option<i64>,
@@ -1786,6 +1823,10 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "ParallelizationFactor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parallelization_factor: Option<i64>,
+    /// <p> (MQ) The Secrets Manager secret that stores your broker credentials. To store your secret, use the following format: <code> { "username": "your username", "password": "your password" }</code> </p> <p>To reference the secret, use the following format: <code>[ { "Type": "BASIC_AUTH", "URI": "secretARN" } ]</code> </p> <p>The value of <code>Type</code> is always <code>BASIC_AUTH</code>. To encrypt the secret, you can use customer or service managed keys. When using a customer managed KMS key, the Lambda execution role requires <code>kms:Decrypt</code> permissions.</p>
+    #[serde(rename = "SourceAccessConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_access_configurations: Option<Vec<SourceAccessConfiguration>>,
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     pub uuid: String,
@@ -4947,7 +4988,7 @@ pub trait Lambda {
         input: CreateAliasRequest,
     ) -> Result<AliasConfiguration, RusotoError<CreateAliasError>>;
 
-    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
+    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html">Using AWS Lambda with Amazon MSK</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     async fn create_event_source_mapping(
         &self,
         input: CreateEventSourceMappingRequest,
@@ -5210,7 +5251,7 @@ pub trait Lambda {
         input: UpdateAliasRequest,
     ) -> Result<AliasConfiguration, RusotoError<UpdateAliasError>>;
 
-    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
+    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     async fn update_event_source_mapping(
         &self,
         input: UpdateEventSourceMappingRequest,
@@ -5390,7 +5431,7 @@ impl Lambda for LambdaClient {
         }
     }
 
-    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
+    /// <p><p>Creates a mapping between an event source and an AWS Lambda function. Lambda reads items from the event source and triggers the function.</p> <p>For details about each event source type, see the following topics.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html">Using AWS Lambda with Amazon DynamoDB</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html">Using AWS Lambda with Amazon Kinesis</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html">Using AWS Lambda with Amazon SQS</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html">Using AWS Lambda with Amazon MSK</a> </p> </li> </ul> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn create_event_source_mapping(
         &self,
@@ -6907,7 +6948,7 @@ impl Lambda for LambdaClient {
         }
     }
 
-    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age.</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
+    /// <p><p>Updates an event source mapping. You can change the function that AWS Lambda invokes, or pause invocation and resume later from the same location.</p> <p>The following error handling options are only available for stream sources (DynamoDB and Kinesis):</p> <ul> <li> <p> <code>BisectBatchOnFunctionError</code> - If the function returns an error, split the batch in two and retry.</p> </li> <li> <p> <code>DestinationConfig</code> - Send discarded records to an Amazon SQS queue or Amazon SNS topic.</p> </li> <li> <p> <code>MaximumRecordAgeInSeconds</code> - Discard records older than the specified age. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires</p> </li> <li> <p> <code>MaximumRetryAttempts</code> - Discard records after the specified number of retries. The default value is infinite (-1). When set to infinite (-1), failed records are retried until the record expires.</p> </li> <li> <p> <code>ParallelizationFactor</code> - Process multiple batches from each shard concurrently.</p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn update_event_source_mapping(
         &self,

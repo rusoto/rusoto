@@ -25,6 +25,16 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>Details about an antenna demod decode <code>Config</code> used in a contact.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AntennaDemodDecodeDetails {
+    /// <p>Name of an antenna demod decode output node used in a contact.</p>
+    #[serde(rename = "outputNode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_node: Option<String>,
+}
+
 /// <p>Information about how AWS Ground Station should configure an antenna for downlink during a contact.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AntennaDownlinkConfig {
@@ -56,6 +66,10 @@ pub struct AntennaUplinkConfig {
     /// <p>EIRP of the target.</p>
     #[serde(rename = "targetEirp")]
     pub target_eirp: Eirp,
+    /// <p>Whether or not uplink transmit is disabled.</p>
+    #[serde(rename = "transmitDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transmit_disabled: Option<bool>,
 }
 
 /// <p><p/></p>
@@ -65,6 +79,19 @@ pub struct CancelContactRequest {
     /// <p>UUID of a contact.</p>
     #[serde(rename = "contactId")]
     pub contact_id: String,
+}
+
+/// <p>Details for certain <code>Config</code> object types in a contact.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConfigDetails {
+    /// <p>Details for antenna demod decode <code>Config</code> in a contact.</p>
+    #[serde(rename = "antennaDemodDecodeDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub antenna_demod_decode_details: Option<AntennaDemodDecodeDetails>,
+    #[serde(rename = "endpointDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_details: Option<EndpointDetails>,
 }
 
 /// <p><p/></p>
@@ -263,6 +290,22 @@ pub struct CreateMissionProfileRequest {
     pub tracking_config_arn: String,
 }
 
+/// <p>Information about a dataflow edge used in a contact.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DataflowDetail {
+    #[serde(rename = "destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<Destination>,
+    /// <p>Error message for a dataflow.</p>
+    #[serde(rename = "errorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    #[serde(rename = "source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<Source>,
+}
+
 /// <p>Information about a dataflow endpoint.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataflowEndpoint {
@@ -270,6 +313,10 @@ pub struct DataflowEndpoint {
     #[serde(rename = "address")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<SocketAddress>,
+    /// <p>Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.</p>
+    #[serde(rename = "mtu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mtu: Option<i64>,
     /// <p>Name of a dataflow endpoint.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -383,6 +430,10 @@ pub struct DescribeContactResponse {
     #[serde(rename = "contactStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_status: Option<String>,
+    /// <p>List describing source and destination details for each dataflow edge.</p>
+    #[serde(rename = "dataflowList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataflow_list: Option<Vec<DataflowDetail>>,
     /// <p>End time of a contact.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -429,13 +480,35 @@ pub struct DescribeContactResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Dataflow details for the destination side.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Destination {
+    /// <p>Additional details for a <code>Config</code>, if type is dataflow endpoint or antenna demod decode.</p>
+    #[serde(rename = "configDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_details: Option<ConfigDetails>,
+    /// <p>UUID of a <code>Config</code>.</p>
+    #[serde(rename = "configId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_id: Option<String>,
+    /// <p>Type of a <code>Config</code>.</p>
+    #[serde(rename = "configType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_type: Option<String>,
+    /// <p>Region of a dataflow destination.</p>
+    #[serde(rename = "dataflowDestinationRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataflow_destination_region: Option<String>,
+}
+
 /// <p>Object that represents EIRP.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Eirp {
     /// <p>Units of an EIRP.</p>
     #[serde(rename = "units")]
     pub units: String,
-    /// <p>Value of an EIRP.</p>
+    /// <p>Value of an EIRP. Valid values are between 20.0 to 50.0 dBW.</p>
     #[serde(rename = "value")]
     pub value: f64,
 }
@@ -471,18 +544,18 @@ pub struct Frequency {
     /// <p>Frequency units.</p>
     #[serde(rename = "units")]
     pub units: String,
-    /// <p>Frequency value.</p>
+    /// <p>Frequency value. Valid values are between 2200 to 2300 MHz and 7750 to 8400 MHz for downlink and 2025 to 2120 MHz for uplink.</p>
     #[serde(rename = "value")]
     pub value: f64,
 }
 
-/// <p>Object that describes the frequency bandwidth.</p>
+/// <p>Object that describes the frequency bandwidth. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FrequencyBandwidth {
     /// <p>Frequency bandwidth units.</p>
     #[serde(rename = "units")]
     pub units: String,
-    /// <p>Frequency bandwidth value.</p>
+    /// <p><p>Frequency bandwidth value. AWS Ground Station currently has the following bandwidth limitations:</p> <ul> <li> <p>For <code>AntennaDownlinkDemodDecodeconfig</code>, valid values are between 125 kHz to 650 MHz.</p> </li> <li> <p>For <code>AntennaDownlinkconfig</code>, valid values are between 10 kHz to 54 MHz.</p> </li> <li> <p>For <code>AntennaUplinkConfig</code>, valid values are between 10 kHz to 54 MHz.</p> </li> </ul></p>
     #[serde(rename = "value")]
     pub value: f64,
 }
@@ -1014,16 +1087,38 @@ pub struct SocketAddress {
     pub port: i64,
 }
 
+/// <p>Dataflow details for the source side.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Source {
+    /// <p>Additional details for a <code>Config</code>, if type is dataflow endpoint or antenna demod decode.</p>
+    #[serde(rename = "configDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_details: Option<ConfigDetails>,
+    /// <p>UUID of a <code>Config</code>.</p>
+    #[serde(rename = "configId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_id: Option<String>,
+    /// <p>Type of a <code>Config</code>.</p>
+    #[serde(rename = "configType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config_type: Option<String>,
+    /// <p>Region of a dataflow source.</p>
+    #[serde(rename = "dataflowSourceRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataflow_source_region: Option<String>,
+}
+
 /// <p>Object that describes a spectral <code>Config</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SpectrumConfig {
-    /// <p>Bandwidth of a spectral <code>Config</code>.</p>
+    /// <p><p>Bandwidth of a spectral <code>Config</code>. AWS Ground Station currently has the following bandwidth limitations:</p> <ul> <li> <p>For <code>AntennaDownlinkDemodDecodeconfig</code>, valid values are between 125 kHz to 650 MHz.</p> </li> <li> <p>For <code>AntennaDownlinkconfig</code> valid values are between 10 kHz to 54 MHz.</p> </li> <li> <p>For <code>AntennaUplinkConfig</code>, valid values are between 10 kHz to 54 MHz.</p> </li> </ul></p>
     #[serde(rename = "bandwidth")]
     pub bandwidth: FrequencyBandwidth,
-    /// <p>Center frequency of a spectral <code>Config</code>.</p>
+    /// <p>Center frequency of a spectral <code>Config</code>. Valid values are between 2200 to 2300 MHz and 7750 to 8400 MHz for downlink and 2025 to 2120 MHz for uplink.</p>
     #[serde(rename = "centerFrequency")]
     pub center_frequency: Frequency,
-    /// <p>Polarization of a spectral <code>Config</code>.</p>
+    /// <p>Polarization of a spectral <code>Config</code>. Capturing both <code>"RIGHT_HAND"</code> and <code>"LEFT_HAND"</code> polarization requires two separate configs.</p>
     #[serde(rename = "polarization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub polarization: Option<String>,
@@ -1136,10 +1231,10 @@ pub struct UplinkEchoConfig {
 /// <p>Information about the uplink spectral <code>Config</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UplinkSpectrumConfig {
-    /// <p>Center frequency of an uplink spectral <code>Config</code>.</p>
+    /// <p>Center frequency of an uplink spectral <code>Config</code>. Valid values are between 2025 to 2120 MHz.</p>
     #[serde(rename = "centerFrequency")]
     pub center_frequency: Frequency,
-    /// <p>Polarization of an uplink spectral <code>Config</code>.</p>
+    /// <p>Polarization of an uplink spectral <code>Config</code>. Capturing both <code>"RIGHT_HAND"</code> and <code>"LEFT_HAND"</code> polarization requires two separate configs.</p>
     #[serde(rename = "polarization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub polarization: Option<String>,

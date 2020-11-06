@@ -136,7 +136,7 @@ pub struct ByoipCidr {
     #[serde(rename = "Cidr")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cidr: Option<String>,
-    /// <p>A history of status changes for an IP address range that that you bring to AWS Global Accelerator through bring your own IP address (BYOIP).</p>
+    /// <p>A history of status changes for an IP address range that you bring to AWS Global Accelerator through bring your own IP address (BYOIP).</p>
     #[serde(rename = "Events")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<ByoipCidrEvent>>,
@@ -186,7 +186,7 @@ pub struct CreateAcceleratorRequest {
     #[serde(rename = "IpAddressType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address_type: Option<String>,
-    /// <p>Optionally, if you've added your own IP address pool to Global Accelerator, you can choose IP addresses from your own pool to use for the accelerator's static IP addresses. You can specify one or two addresses, separated by a comma. Do not include the /32 suffix.</p> <p>If you specify only one IP address from your IP address range, Global Accelerator assigns a second static IP address for the accelerator from the AWS IP address pool.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    /// <p>Optionally, if you've added your own IP address pool to Global Accelerator (BYOIP), you can choose IP addresses from your own pool to use for the accelerator's static IP addresses when you create an accelerator. You can specify one or two addresses, separated by a comma. Do not include the /32 suffix.</p> <p>Only one IP address from each of your IP address ranges can be used for each accelerator. If you specify only one IP address from your IP address range, Global Accelerator assigns a second static IP address for the accelerator from the AWS IP address pool.</p> <p> Note that you can't update IP addresses for an existing accelerator. To change them, you must create a new accelerator with the new addresses.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/using-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
     #[serde(rename = "IpAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_addresses: Option<Vec<String>>,
@@ -215,7 +215,7 @@ pub struct CreateEndpointGroupRequest {
     #[serde(rename = "EndpointConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_configurations: Option<Vec<EndpointConfiguration>>,
-    /// <p>The name of the AWS Region where the endpoint group is located. A listener can have only one endpoint group in a specific Region.</p>
+    /// <p>The AWS Region where the endpoint group is located. A listener can have only one endpoint group in a specific Region.</p>
     #[serde(rename = "EndpointGroupRegion")]
     pub endpoint_group_region: String,
     /// <p>The time—10 seconds or 30 seconds—between each health check for an endpoint. The default value is 30.</p>
@@ -240,6 +240,10 @@ pub struct CreateEndpointGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     #[serde(rename = "ListenerArn")]
     pub listener_arn: String,
+    /// <p>Override specific listener ports used to route traffic to endpoints that are part of this endpoint group. For example, you can create a port override in which the listener receives user traffic on ports 80 and 443, but your accelerator routes that traffic to ports 1080 and 1443, respectively, on the endpoints.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups-port-override.html"> Port overrides</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    #[serde(rename = "PortOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port_overrides: Option<Vec<PortOverride>>,
     /// <p>The number of consecutive health checks required to set the state of a healthy endpoint to unhealthy, or to set an unhealthy endpoint to healthy. The default value is 3.</p>
     #[serde(rename = "ThresholdCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -265,7 +269,7 @@ pub struct CreateListenerRequest {
     /// <p>The Amazon Resource Name (ARN) of your accelerator.</p>
     #[serde(rename = "AcceleratorArn")]
     pub accelerator_arn: String,
-    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Clienty affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
+    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Client affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
     #[serde(rename = "ClientAffinity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_affinity: Option<String>,
@@ -398,7 +402,7 @@ pub struct DescribeListenerResponse {
     pub listener: Option<Listener>,
 }
 
-/// <p>A complex type for endpoints.</p>
+/// <p>A complex type for endpoints. A resource must be valid and active when you add it as an endpoint.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EndpointConfiguration {
@@ -406,7 +410,7 @@ pub struct EndpointConfiguration {
     #[serde(rename = "ClientIPPreservationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_ip_preservation_enabled: Option<bool>,
-    /// <p>An ID for the endpoint. If the endpoint is a Network Load Balancer or Application Load Balancer, this is the Amazon Resource Name (ARN) of the resource. If the endpoint is an Elastic IP address, this is the Elastic IP address allocation ID. For EC2 instances, this is the EC2 instance ID. </p> <p>An Application Load Balancer can be either internal or internet-facing.</p>
+    /// <p>An ID for the endpoint. If the endpoint is a Network Load Balancer or Application Load Balancer, this is the Amazon Resource Name (ARN) of the resource. If the endpoint is an Elastic IP address, this is the Elastic IP address allocation ID. For Amazon EC2 instances, this is the EC2 instance ID. A resource must be valid and active when you add it as an endpoint.</p> <p>An Application Load Balancer can be either internal or internet-facing.</p>
     #[serde(rename = "EndpointId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_id: Option<String>,
@@ -454,7 +458,7 @@ pub struct EndpointGroup {
     #[serde(rename = "EndpointGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_group_arn: Option<String>,
-    /// <p>The AWS Region that this endpoint group belongs.</p>
+    /// <p>The AWS Region where the endpoint group is located.</p>
     #[serde(rename = "EndpointGroupRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_group_region: Option<String>,
@@ -474,6 +478,10 @@ pub struct EndpointGroup {
     #[serde(rename = "HealthCheckProtocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_protocol: Option<String>,
+    /// <p>Allows you to override the destination ports used to route traffic to an endpoint. Using a port override lets you to map a list of external destination ports (that your users send traffic to) to a list of internal destination ports that you want an application endpoint to receive traffic on. </p>
+    #[serde(rename = "PortOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port_overrides: Option<Vec<PortOverride>>,
     /// <p>The number of consecutive health checks required to set the state of a healthy endpoint to unhealthy, or to set an unhealthy endpoint to healthy. The default value is 3.</p>
     #[serde(rename = "ThresholdCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -629,7 +637,7 @@ pub struct ListTagsForResourceResponse {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Listener {
-    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Clienty affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
+    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Client affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
     #[serde(rename = "ClientAffinity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_affinity: Option<String>,
@@ -645,6 +653,19 @@ pub struct Listener {
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
+}
+
+/// <p>Override specific listener ports used to route traffic to endpoints that are part of an endpoint group. For example, you can create a port override in which the listener receives user traffic on ports 80 and 443, but your accelerator routes that traffic to ports 1080 and 1443, respectively, on the endpoints.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups-port-override.html"> Port overrides</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct PortOverride {
+    /// <p>The endpoint port that you want a listener port to be mapped to. This is the port on the endpoint, such as the Application Load Balancer or Amazon EC2 instance.</p>
+    #[serde(rename = "EndpointPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_port: Option<i64>,
+    /// <p>The listener port that you want to map to a specific endpoint port. This is the port that user traffic arrives to the Global Accelerator on.</p>
+    #[serde(rename = "ListenerPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener_port: Option<i64>,
 }
 
 /// <p>A complex type for a range of ports for a listener.</p>
@@ -782,7 +803,7 @@ pub struct UpdateAcceleratorResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEndpointGroupRequest {
-    /// <p>The list of endpoint objects.</p>
+    /// <p>The list of endpoint objects. A resource must be valid and active when you add it as an endpoint.</p>
     #[serde(rename = "EndpointConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_configurations: Option<Vec<EndpointConfiguration>>,
@@ -805,6 +826,10 @@ pub struct UpdateEndpointGroupRequest {
     #[serde(rename = "HealthCheckProtocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_protocol: Option<String>,
+    /// <p>Override specific listener ports used to route traffic to endpoints that are part of this endpoint group. For example, you can create a port override in which the listener receives user traffic on ports 80 and 443, but your accelerator routes that traffic to ports 1080 and 1443, respectively, on the endpoints.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups-port-override.html"> Port overrides</a> in the <i>AWS Global Accelerator Developer Guide</i>.</p>
+    #[serde(rename = "PortOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port_overrides: Option<Vec<PortOverride>>,
     /// <p>The number of consecutive health checks required to set the state of a healthy endpoint to unhealthy, or to set an unhealthy endpoint to healthy. The default value is 3.</p>
     #[serde(rename = "ThresholdCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -827,7 +852,7 @@ pub struct UpdateEndpointGroupResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateListenerRequest {
-    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Clienty affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
+    /// <p>Client affinity lets you direct all requests from a user to the same endpoint, if you have stateful applications, regardless of the port and protocol of the client request. Client affinity gives you control over whether to always route each client to the same specific endpoint.</p> <p>AWS Global Accelerator uses a consistent-flow hashing algorithm to choose the optimal endpoint for a connection. If client affinity is <code>NONE</code>, Global Accelerator uses the "five-tuple" (5-tuple) properties—source IP address, source port, destination IP address, destination port, and protocol—to select the hash value, and then chooses the best endpoint. However, with this setting, if someone uses different ports to connect to Global Accelerator, their connections might not be always routed to the same endpoint because the hash value changes. </p> <p>If you want a given client to always be routed to the same endpoint, set client affinity to <code>SOURCE_IP</code> instead. When you use the <code>SOURCE_IP</code> setting, Global Accelerator uses the "two-tuple" (2-tuple) properties— source (client) IP address and destination IP address—to select the hash value.</p> <p>The default value is <code>NONE</code>.</p>
     #[serde(rename = "ClientAffinity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_affinity: Option<String>,
@@ -2183,13 +2208,13 @@ pub trait GlobalAccelerator {
         input: AdvertiseByoipCidrRequest,
     ) -> Result<AdvertiseByoipCidrResponse, RusotoError<AdvertiseByoipCidrError>>;
 
-    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <p>If you bring your own IP address ranges to AWS Global Accelerator (BYOIP), you can assign IP addresses from your own pool to your accelerator as the static IP address entry points. Only one IP address from each of your IP address ranges can be used for each accelerator.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>Global Accelerator is a global service that supports endpoints in multiple AWS Regions but you must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn create_accelerator(
         &self,
         input: CreateAcceleratorRequest,
     ) -> Result<CreateAcceleratorResponse, RusotoError<CreateAcceleratorError>>;
 
-    /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. To see an AWS CLI example of creating an endpoint group, scroll down to <b>Example</b>.</p>
+    /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. A resource must be valid and active when you add it as an endpoint.</p> <p>To see an AWS CLI example of creating an endpoint group, scroll down to <b>Example</b>.</p>
     async fn create_endpoint_group(
         &self,
         input: CreateEndpointGroupRequest,
@@ -2300,7 +2325,7 @@ pub trait GlobalAccelerator {
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
-    /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>Global Accelerator is a global service that supports endpoints in multiple AWS Regions but you must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn update_accelerator(
         &self,
         input: UpdateAcceleratorRequest,
@@ -2312,7 +2337,7 @@ pub trait GlobalAccelerator {
         input: UpdateAcceleratorAttributesRequest,
     ) -> Result<UpdateAcceleratorAttributesResponse, RusotoError<UpdateAcceleratorAttributesError>>;
 
-    /// <p>Update an endpoint group. To see an AWS CLI example of updating an endpoint group, scroll down to <b>Example</b>.</p>
+    /// <p>Update an endpoint group. A resource must be valid and active when you add it as an endpoint.</p> <p>To see an AWS CLI example of updating an endpoint group, scroll down to <b>Example</b>. </p>
     async fn update_endpoint_group(
         &self,
         input: UpdateEndpointGroupRequest,
@@ -2391,7 +2416,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<AdvertiseByoipCidrResponse, _>()
     }
 
-    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <p>If you bring your own IP address ranges to AWS Global Accelerator (BYOIP), you can assign IP addresses from your own pool to your accelerator as the static IP address entry points. Only one IP address from each of your IP address ranges can be used for each accelerator.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p><p>Create an accelerator. An accelerator includes one or more listeners that process inbound connections and direct traffic to one or more endpoint groups, each of which includes endpoints, such as Network Load Balancers. To see an AWS CLI example of creating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>Global Accelerator is a global service that supports endpoints in multiple AWS Regions but you must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn create_accelerator(
         &self,
         input: CreateAcceleratorRequest,
@@ -2412,7 +2437,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateAcceleratorResponse, _>()
     }
 
-    /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. To see an AWS CLI example of creating an endpoint group, scroll down to <b>Example</b>.</p>
+    /// <p>Create an endpoint group for the specified listener. An endpoint group is a collection of endpoints in one AWS Region. A resource must be valid and active when you add it as an endpoint.</p> <p>To see an AWS CLI example of creating an endpoint group, scroll down to <b>Example</b>.</p>
     async fn create_endpoint_group(
         &self,
         input: CreateEndpointGroupRequest,
@@ -2775,7 +2800,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
-    /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>You must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
+    /// <p><p>Update an accelerator. To see an AWS CLI example of updating an accelerator, scroll down to <b>Example</b>.</p> <important> <p>Global Accelerator is a global service that supports endpoints in multiple AWS Regions but you must specify the US West (Oregon) Region to create or update accelerators.</p> </important></p>
     async fn update_accelerator(
         &self,
         input: UpdateAcceleratorRequest,
@@ -2819,7 +2844,7 @@ impl GlobalAccelerator for GlobalAcceleratorClient {
             .deserialize::<UpdateAcceleratorAttributesResponse, _>()
     }
 
-    /// <p>Update an endpoint group. To see an AWS CLI example of updating an endpoint group, scroll down to <b>Example</b>.</p>
+    /// <p>Update an endpoint group. A resource must be valid and active when you add it as an endpoint.</p> <p>To see an AWS CLI example of updating an endpoint group, scroll down to <b>Example</b>. </p>
     async fn update_endpoint_group(
         &self,
         input: UpdateEndpointGroupRequest,

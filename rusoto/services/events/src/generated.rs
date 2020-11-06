@@ -58,6 +58,44 @@ pub struct ActivateEventSourceRequest {
     pub name: String,
 }
 
+/// <p>An <code>Archive</code> object that contains details about an archive.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Archive {
+    /// <p>The name of the archive.</p>
+    #[serde(rename = "ArchiveName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_name: Option<String>,
+    /// <p>The time stamp for the time that the archive was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The number of events in the archive.</p>
+    #[serde(rename = "EventCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_count: Option<i64>,
+    /// <p>The ARN of the event bus associated with the archive. Only events from this event bus are sent to the archive.</p>
+    #[serde(rename = "EventSourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
+    /// <p>The number of days to retain events in the archive before they are deleted.</p>
+    #[serde(rename = "RetentionDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_days: Option<i64>,
+    /// <p>The size of the archive, in bytes.</p>
+    #[serde(rename = "SizeBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size_bytes: Option<i64>,
+    /// <p>The current state of the archive.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>A description for the reason that the archive is in the current state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
+}
+
 /// <p>This structure specifies the VPC subnets and security groups for the task, and whether a public IP address is to be used. This structure is relevant only for ECS tasks that use the <code>awsvpc</code> network mode.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsVpcConfiguration {
@@ -111,6 +149,31 @@ pub struct BatchRetryStrategy {
     pub attempts: Option<i64>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CancelReplayRequest {
+    /// <p>The name of the replay to cancel.</p>
+    #[serde(rename = "ReplayName")]
+    pub replay_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CancelReplayResponse {
+    /// <p>The ARN of the replay to cancel.</p>
+    #[serde(rename = "ReplayArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replay_arn: Option<String>,
+    /// <p>The current state of the replay.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The reason that the replay is in the current state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
+}
+
 /// <p>A JSON string which you can use to limit the event bus permissions you are granting to only accounts that fulfill the condition. Currently, the only supported condition is membership in a certain AWS organization. The string must contain <code>Type</code>, <code>Key</code>, and <code>Value</code> fields. The <code>Value</code> field specifies the ID of the AWS organization. Following is an example value for <code>Condition</code>:</p> <p> <code>'{"Type" : "StringEquals", "Key": "aws:PrincipalOrgID", "Value": "o-1234567890"}'</code> </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -124,6 +187,50 @@ pub struct Condition {
     /// <p>Specifies the value for the key. Currently, this must be the ID of the organization.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateArchiveRequest {
+    /// <p>The name for the archive to create.</p>
+    #[serde(rename = "ArchiveName")]
+    pub archive_name: String,
+    /// <p>A description for the archive.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>An event pattern to use to filter events sent to the archive.</p>
+    #[serde(rename = "EventPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_pattern: Option<String>,
+    /// <p>The ARN of the event source associated with the archive.</p>
+    #[serde(rename = "EventSourceArn")]
+    pub event_source_arn: String,
+    /// <p>The number of days to retain events for. Default value is 0. If set to 0, events are retained indefinitely</p>
+    #[serde(rename = "RetentionDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_days: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateArchiveResponse {
+    /// <p>The ARN of the archive that was created.</p>
+    #[serde(rename = "ArchiveArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_arn: Option<String>,
+    /// <p>The time at which the archive was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The state of the archive that was created.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The reason that the archive is in the state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -179,6 +286,27 @@ pub struct DeactivateEventSourceRequest {
     pub name: String,
 }
 
+/// <p>A <code>DeadLetterConfig</code> object that contains information about a dead-letter queue configuration.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DeadLetterConfig {
+    /// <p>The ARN of the SQS queue specified as the target for the dead-letter queue.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteArchiveRequest {
+    /// <p>The name of the archive to delete.</p>
+    #[serde(rename = "ArchiveName")]
+    pub archive_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteArchiveResponse {}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteEventBusRequest {
@@ -212,6 +340,63 @@ pub struct DeleteRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "Name")]
     pub name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeArchiveRequest {
+    /// <p>The name of the archive to retrieve.</p>
+    #[serde(rename = "ArchiveName")]
+    pub archive_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeArchiveResponse {
+    /// <p>The ARN of the archive.</p>
+    #[serde(rename = "ArchiveArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_arn: Option<String>,
+    /// <p>The name of the archive.</p>
+    #[serde(rename = "ArchiveName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_name: Option<String>,
+    /// <p>The time at which the archive was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description of the archive.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The number of events in the archive.</p>
+    #[serde(rename = "EventCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_count: Option<i64>,
+    /// <p>The event pattern used to filter events sent to the archive.</p>
+    #[serde(rename = "EventPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_pattern: Option<String>,
+    /// <p>The ARN of the event source associated with the archive.</p>
+    #[serde(rename = "EventSourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
+    /// <p>The number of days to retain events for in the archive.</p>
+    #[serde(rename = "RetentionDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_days: Option<i64>,
+    /// <p>The size of the archive in bytes.</p>
+    #[serde(rename = "SizeBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size_bytes: Option<i64>,
+    /// <p>The state of the archive.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The reason that the archive is in the state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -296,6 +481,67 @@ pub struct DescribePartnerEventSourceResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeReplayRequest {
+    /// <p>The name of the replay to retrieve.</p>
+    #[serde(rename = "ReplayName")]
+    pub replay_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeReplayResponse {
+    /// <p>The description of the replay.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A <code>ReplayDestination</code> object that contains details about the replay.</p>
+    #[serde(rename = "Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<ReplayDestination>,
+    /// <p>The time stamp for the last event that was replayed from the archive.</p>
+    #[serde(rename = "EventEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_end_time: Option<f64>,
+    /// <p>The time that the event was last replayed.</p>
+    #[serde(rename = "EventLastReplayedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_last_replayed_time: Option<f64>,
+    /// <p>The ARN of the archive events were replayed from.</p>
+    #[serde(rename = "EventSourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
+    /// <p>The time stamp of the first event that was last replayed from the archive.</p>
+    #[serde(rename = "EventStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_start_time: Option<f64>,
+    /// <p>The ARN of the replay.</p>
+    #[serde(rename = "ReplayArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replay_arn: Option<String>,
+    /// <p>A time stamp for the time that the replay stopped.</p>
+    #[serde(rename = "ReplayEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replay_end_time: Option<f64>,
+    /// <p>The name of the replay.</p>
+    #[serde(rename = "ReplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replay_name: Option<String>,
+    /// <p>A time stamp for the time that the replay started.</p>
+    #[serde(rename = "ReplayStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replay_start_time: Option<f64>,
+    /// <p>The current state of the replay.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The reason that the replay is in the current state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -490,6 +736,44 @@ pub struct KinesisParameters {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListArchivesRequest {
+    /// <p>The ARN of the event source associated with the archive.</p>
+    #[serde(rename = "EventSourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>A name prefix to filter the archives returned. Only archives with name that match the prefix are returned.</p>
+    #[serde(rename = "NamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_prefix: Option<String>,
+    /// <p>The token returned by a previous call to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The state of the archive.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListArchivesResponse {
+    /// <p>An array of <code>Archive</code> objects that include details about an archive.</p>
+    #[serde(rename = "Archives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archives: Option<Vec<Archive>>,
+    /// <p>The token returned by a previous call to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListEventBusesRequest {
     /// <p>Specifying this limits the number of results returned by this operation. The operation also returns a NextToken which you can use in a subsequent operation to retrieve the next set of results.</p>
     #[serde(rename = "Limit")]
@@ -604,6 +888,44 @@ pub struct ListPartnerEventSourcesResponse {
     #[serde(rename = "PartnerEventSources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partner_event_sources: Option<Vec<PartnerEventSource>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListReplaysRequest {
+    /// <p>The ARN of the event source associated with the replay.</p>
+    #[serde(rename = "EventSourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
+    /// <p>The maximum number of replays to retrieve.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>A name prefix to filter the archives returned. Only archives with name that match the prefix are returned.</p>
+    #[serde(rename = "NamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_prefix: Option<String>,
+    /// <p>The token returned by a previous call to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The state of the replay.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListReplaysResponse {
+    /// <p>The token returned by a previous call to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An array of <code>Replay</code> objects that contain information about the replay.</p>
+    #[serde(rename = "Replays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replays: Option<Vec<Replay>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1015,6 +1337,33 @@ pub struct PutTargetsResultEntry {
     pub target_id: Option<String>,
 }
 
+/// <p>These are custom parameters to be used when the target is a Redshift cluster to invoke the Redshift Data API ExecuteStatement based on EventBridge events.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct RedshiftDataParameters {
+    /// <p>The name of the database. Required when authenticating using temporary credentials.</p>
+    #[serde(rename = "Database")]
+    pub database: String,
+    /// <p>The database user name. Required when authenticating using temporary credentials.</p>
+    #[serde(rename = "DbUser")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_user: Option<String>,
+    /// <p>The name or ARN of the secret that enables access to the database. Required when authenticating using AWS Secrets Manager.</p>
+    #[serde(rename = "SecretManagerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secret_manager_arn: Option<String>,
+    /// <p>The SQL statement text to run.</p>
+    #[serde(rename = "Sql")]
+    pub sql: String,
+    /// <p>The name of the SQL statement. You can name the SQL statement when you create it to identify the query.</p>
+    #[serde(rename = "StatementName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statement_name: Option<String>,
+    /// <p>Indicates whether to send an event back to EventBridge after the SQL statement runs.</p>
+    #[serde(rename = "WithEvent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub with_event: Option<bool>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemovePermissionRequest {
@@ -1075,6 +1424,73 @@ pub struct RemoveTargetsResultEntry {
     #[serde(rename = "TargetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_id: Option<String>,
+}
+
+/// <p>A <code>Replay</code> object that contains details about a replay.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Replay {
+    /// <p>A time stamp for the time to start replaying events. Any event with a creation time prior to the <code>EventEndTime</code> specified is replayed.</p>
+    #[serde(rename = "EventEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_end_time: Option<f64>,
+    /// <p>A time stamp for the time that the last event was replayed.</p>
+    #[serde(rename = "EventLastReplayedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_last_replayed_time: Option<f64>,
+    /// <p>The ARN of the archive to replay event from.</p>
+    #[serde(rename = "EventSourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_source_arn: Option<String>,
+    /// <p>A time stamp for the time to start replaying events. This is determined by the time in the event as described in <a href="https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_PutEventsRequestEntry.html#eventbridge-Type-PutEventsRequestEntry-Time">Time</a>.</p>
+    #[serde(rename = "EventStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_start_time: Option<f64>,
+    /// <p>A time stamp for the time that the replay completed.</p>
+    #[serde(rename = "ReplayEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replay_end_time: Option<f64>,
+    /// <p>The name of the replay.</p>
+    #[serde(rename = "ReplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replay_name: Option<String>,
+    /// <p>A time stamp for the time that the replay started.</p>
+    #[serde(rename = "ReplayStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replay_start_time: Option<f64>,
+    /// <p>The current state of the replay.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>A description of why the replay is in the current state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
+}
+
+/// <p>A <code>ReplayDestination</code> object that contains details about a replay.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ReplayDestination {
+    /// <p>The ARN of the event bus to replay event to. You can replay events only to the event bus specified to create the archive.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+    /// <p>A list of ARNs for rules to replay events to.</p>
+    #[serde(rename = "FilterArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_arns: Option<Vec<String>>,
+}
+
+/// <p>A <code>RetryPolicy</code> object that includes information about the retry policy settings.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct RetryPolicy {
+    /// <p>The maximum amount of time, in seconds, to continue to make retry attempts.</p>
+    #[serde(rename = "MaximumEventAgeInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_event_age_in_seconds: Option<i64>,
+    /// <p>The maximum number of retry attempts to make before the request fails. Retry attempts continue until either the maximum number of attempts is made or until the duration of the <code>MaximumEventAgeInSeconds</code> is met.</p>
+    #[serde(rename = "MaximumRetryAttempts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_retry_attempts: Option<i64>,
 }
 
 /// <p>Contains information about a rule in Amazon EventBridge.</p>
@@ -1147,6 +1563,51 @@ pub struct SqsParameters {
     pub message_group_id: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartReplayRequest {
+    /// <p>A description for the replay to start.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A <code>ReplayDestination</code> object that includes details about the destination for the replay.</p>
+    #[serde(rename = "Destination")]
+    pub destination: ReplayDestination,
+    /// <p>A time stamp for the time to stop replaying events. Only events that occurred between the <code>EventStartTime</code> and <code>EventEndTime</code> are replayed.</p>
+    #[serde(rename = "EventEndTime")]
+    pub event_end_time: f64,
+    /// <p>The ARN of the archive to replay events from.</p>
+    #[serde(rename = "EventSourceArn")]
+    pub event_source_arn: String,
+    /// <p>A time stamp for the time to start replaying events. Only events that occurred between the <code>EventStartTime</code> and <code>EventEndTime</code> are replayed.</p>
+    #[serde(rename = "EventStartTime")]
+    pub event_start_time: f64,
+    /// <p>The name of the replay to start.</p>
+    #[serde(rename = "ReplayName")]
+    pub replay_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartReplayResponse {
+    /// <p>The ARN of the replay.</p>
+    #[serde(rename = "ReplayArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replay_arn: Option<String>,
+    /// <p>The time at which the replay started.</p>
+    #[serde(rename = "ReplayStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replay_start_time: Option<f64>,
+    /// <p>The state of the replay.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The reason that the replay is in the state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
+}
+
 /// <p>A key-value pair associated with an AWS resource. In EventBridge, rules and event buses support tagging.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
@@ -1183,6 +1644,10 @@ pub struct Target {
     #[serde(rename = "BatchParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_parameters: Option<BatchParameters>,
+    /// <p>The <code>DeadLetterConfig</code> that defines the target queue to send dead-letter queue events to.</p>
+    #[serde(rename = "DeadLetterConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dead_letter_config: Option<DeadLetterConfig>,
     /// <p>Contains the Amazon ECS task definition and task count to be used, if the event target is an Amazon ECS task. For more information about Amazon ECS tasks, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html">Task Definitions </a> in the <i>Amazon EC2 Container Service Developer Guide</i>.</p>
     #[serde(rename = "EcsParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1210,6 +1675,14 @@ pub struct Target {
     #[serde(rename = "KinesisParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_parameters: Option<KinesisParameters>,
+    /// <p>Contains the Redshift Data API parameters to use when the target is a Redshift cluster.</p> <p>If you specify a Redshift Cluster as a Target, you can use this to specify parameters to invoke the Redshift Data API ExecuteStatement based on EventBridge events.</p>
+    #[serde(rename = "RedshiftDataParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redshift_data_parameters: Option<RedshiftDataParameters>,
+    /// <p>The <code>RetryPolicy</code> object that contains the retry policy configuration to use for the dead-letter queue.</p>
+    #[serde(rename = "RetryPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_policy: Option<RetryPolicy>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role to be used for this target when the rule is triggered. If one rule triggers multiple targets, you can use a different IAM role for each target.</p>
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1259,10 +1732,51 @@ pub struct UntagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateArchiveRequest {
+    /// <p>The name of the archive to update.</p>
+    #[serde(rename = "ArchiveName")]
+    pub archive_name: String,
+    /// <p>The description for the archive.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The event pattern to use to filter events sent to the archive.</p>
+    #[serde(rename = "EventPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_pattern: Option<String>,
+    /// <p>The number of days to retain events in the archive.</p>
+    #[serde(rename = "RetentionDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_days: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateArchiveResponse {
+    /// <p>The ARN of the archive.</p>
+    #[serde(rename = "ArchiveArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_arn: Option<String>,
+    /// <p>The time at which the archive was updated.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The state of the archive.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The reason that the archive is in the current state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
+}
+
 /// Errors returned by ActivateEventSource
 #[derive(Debug, PartialEq)]
 pub enum ActivateEventSourceError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -1319,16 +1833,126 @@ impl fmt::Display for ActivateEventSourceError {
     }
 }
 impl Error for ActivateEventSourceError {}
+/// Errors returned by CancelReplay
+#[derive(Debug, PartialEq)]
+pub enum CancelReplayError {
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
+    ConcurrentModification(String),
+    /// <p>An error occurred because a replay can be canceled only when the state is Running or Starting.</p>
+    IllegalStatus(String),
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl CancelReplayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelReplayError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(CancelReplayError::ConcurrentModification(err.msg))
+                }
+                "IllegalStatusException" => {
+                    return RusotoError::Service(CancelReplayError::IllegalStatus(err.msg))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(CancelReplayError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CancelReplayError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CancelReplayError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CancelReplayError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CancelReplayError::IllegalStatus(ref cause) => write!(f, "{}", cause),
+            CancelReplayError::Internal(ref cause) => write!(f, "{}", cause),
+            CancelReplayError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CancelReplayError {}
+/// Errors returned by CreateArchive
+#[derive(Debug, PartialEq)]
+pub enum CreateArchiveError {
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
+    ConcurrentModification(String),
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>The event pattern is not valid.</p>
+    InvalidEventPattern(String),
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
+    LimitExceeded(String),
+    /// <p>The resource you are trying to create already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl CreateArchiveError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateArchiveError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(CreateArchiveError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(CreateArchiveError::Internal(err.msg))
+                }
+                "InvalidEventPatternException" => {
+                    return RusotoError::Service(CreateArchiveError::InvalidEventPattern(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateArchiveError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateArchiveError::ResourceAlreadyExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateArchiveError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateArchiveError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateArchiveError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            CreateArchiveError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateArchiveError::InvalidEventPattern(ref cause) => write!(f, "{}", cause),
+            CreateArchiveError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateArchiveError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateArchiveError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateArchiveError {}
 /// Errors returned by CreateEventBus
 #[derive(Debug, PartialEq)]
 pub enum CreateEventBusError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
     /// <p>The specified state is not a valid state for an event source.</p>
     InvalidState(String),
-    /// <p>You tried to create more rules or add more targets to a rule than is allowed.</p>
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
     LimitExceeded(String),
     /// <p>The operation you are attempting is not available in this region.</p>
     OperationDisabled(String),
@@ -1392,11 +2016,11 @@ impl Error for CreateEventBusError {}
 /// Errors returned by CreatePartnerEventSource
 #[derive(Debug, PartialEq)]
 pub enum CreatePartnerEventSourceError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
-    /// <p>You tried to create more rules or add more targets to a rule than is allowed.</p>
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
     LimitExceeded(String),
     /// <p>The operation you are attempting is not available in this region.</p>
     OperationDisabled(String),
@@ -1458,7 +2082,7 @@ impl Error for CreatePartnerEventSourceError {}
 /// Errors returned by DeactivateEventSource
 #[derive(Debug, PartialEq)]
 pub enum DeactivateEventSourceError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -1515,10 +2139,54 @@ impl fmt::Display for DeactivateEventSourceError {
     }
 }
 impl Error for DeactivateEventSourceError {}
+/// Errors returned by DeleteArchive
+#[derive(Debug, PartialEq)]
+pub enum DeleteArchiveError {
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
+    ConcurrentModification(String),
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteArchiveError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteArchiveError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteArchiveError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(DeleteArchiveError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteArchiveError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteArchiveError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteArchiveError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteArchiveError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteArchiveError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteArchiveError {}
 /// Errors returned by DeleteEventBus
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventBusError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -1556,7 +2224,7 @@ impl Error for DeleteEventBusError {}
 /// Errors returned by DeletePartnerEventSource
 #[derive(Debug, PartialEq)]
 pub enum DeletePartnerEventSourceError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -1604,7 +2272,7 @@ impl Error for DeletePartnerEventSourceError {}
 /// Errors returned by DeleteRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteRuleError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -1649,6 +2317,50 @@ impl fmt::Display for DeleteRuleError {
     }
 }
 impl Error for DeleteRuleError {}
+/// Errors returned by DescribeArchive
+#[derive(Debug, PartialEq)]
+pub enum DescribeArchiveError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>The resource you are trying to create already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeArchiveError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeArchiveError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(DescribeArchiveError::Internal(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(DescribeArchiveError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeArchiveError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeArchiveError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeArchiveError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeArchiveError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            DescribeArchiveError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeArchiveError {}
 /// Errors returned by DescribeEventBus
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventBusError {
@@ -1779,6 +2491,42 @@ impl fmt::Display for DescribePartnerEventSourceError {
     }
 }
 impl Error for DescribePartnerEventSourceError {}
+/// Errors returned by DescribeReplay
+#[derive(Debug, PartialEq)]
+pub enum DescribeReplayError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeReplayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReplayError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(DescribeReplayError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeReplayError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeReplayError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeReplayError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeReplayError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeReplayError {}
 /// Errors returned by DescribeRule
 #[derive(Debug, PartialEq)]
 pub enum DescribeRuleError {
@@ -1818,7 +2566,7 @@ impl Error for DescribeRuleError {}
 /// Errors returned by DisableRule
 #[derive(Debug, PartialEq)]
 pub enum DisableRuleError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -1866,7 +2614,7 @@ impl Error for DisableRuleError {}
 /// Errors returned by EnableRule
 #[derive(Debug, PartialEq)]
 pub enum EnableRuleError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -1911,6 +2659,42 @@ impl fmt::Display for EnableRuleError {
     }
 }
 impl Error for EnableRuleError {}
+/// Errors returned by ListArchives
+#[derive(Debug, PartialEq)]
+pub enum ListArchivesError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl ListArchivesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListArchivesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(ListArchivesError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListArchivesError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListArchivesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListArchivesError::Internal(ref cause) => write!(f, "{}", cause),
+            ListArchivesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListArchivesError {}
 /// Errors returned by ListEventBuses
 #[derive(Debug, PartialEq)]
 pub enum ListEventBusesError {
@@ -2069,6 +2853,36 @@ impl fmt::Display for ListPartnerEventSourcesError {
     }
 }
 impl Error for ListPartnerEventSourcesError {}
+/// Errors returned by ListReplays
+#[derive(Debug, PartialEq)]
+pub enum ListReplaysError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+}
+
+impl ListReplaysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReplaysError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(ListReplaysError::Internal(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListReplaysError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListReplaysError::Internal(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListReplaysError {}
 /// Errors returned by ListRuleNamesByTarget
 #[derive(Debug, PartialEq)]
 pub enum ListRuleNamesByTargetError {
@@ -2286,7 +3100,7 @@ impl Error for PutPartnerEventsError {}
 /// Errors returned by PutPermission
 #[derive(Debug, PartialEq)]
 pub enum PutPermissionError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -2336,13 +3150,13 @@ impl Error for PutPermissionError {}
 /// Errors returned by PutRule
 #[derive(Debug, PartialEq)]
 pub enum PutRuleError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
     /// <p>The event pattern is not valid.</p>
     InvalidEventPattern(String),
-    /// <p>You tried to create more rules or add more targets to a rule than is allowed.</p>
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
     LimitExceeded(String),
     /// <p>This rule was created by an AWS service on behalf of your account. It is managed by that service. If you see this error in response to <code>DeleteRule</code> or <code>RemoveTargets</code>, you can use the <code>Force</code> parameter in those calls to delete the rule or remove targets from the rule. You cannot modify these managed rules by using <code>DisableRule</code>, <code>EnableRule</code>, <code>PutTargets</code>, <code>PutRule</code>, <code>TagResource</code>, or <code>UntagResource</code>. </p>
     ManagedRule(String),
@@ -2396,11 +3210,11 @@ impl Error for PutRuleError {}
 /// Errors returned by PutTargets
 #[derive(Debug, PartialEq)]
 pub enum PutTargetsError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
-    /// <p>You tried to create more rules or add more targets to a rule than is allowed.</p>
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
     LimitExceeded(String),
     /// <p>This rule was created by an AWS service on behalf of your account. It is managed by that service. If you see this error in response to <code>DeleteRule</code> or <code>RemoveTargets</code>, you can use the <code>Force</code> parameter in those calls to delete the rule or remove targets from the rule. You cannot modify these managed rules by using <code>DisableRule</code>, <code>EnableRule</code>, <code>PutTargets</code>, <code>PutRule</code>, <code>TagResource</code>, or <code>UntagResource</code>. </p>
     ManagedRule(String),
@@ -2450,7 +3264,7 @@ impl Error for PutTargetsError {}
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
 pub enum RemovePermissionError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -2494,7 +3308,7 @@ impl Error for RemovePermissionError {}
 /// Errors returned by RemoveTargets
 #[derive(Debug, PartialEq)]
 pub enum RemoveTargetsError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -2541,10 +3355,64 @@ impl fmt::Display for RemoveTargetsError {
     }
 }
 impl Error for RemoveTargetsError {}
+/// Errors returned by StartReplay
+#[derive(Debug, PartialEq)]
+pub enum StartReplayError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>The event pattern is not valid.</p>
+    InvalidEventPattern(String),
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
+    LimitExceeded(String),
+    /// <p>The resource you are trying to create already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl StartReplayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartReplayError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(StartReplayError::Internal(err.msg))
+                }
+                "InvalidEventPatternException" => {
+                    return RusotoError::Service(StartReplayError::InvalidEventPattern(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartReplayError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(StartReplayError::ResourceAlreadyExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StartReplayError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartReplayError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartReplayError::Internal(ref cause) => write!(f, "{}", cause),
+            StartReplayError::InvalidEventPattern(ref cause) => write!(f, "{}", cause),
+            StartReplayError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StartReplayError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            StartReplayError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartReplayError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -2630,7 +3498,7 @@ impl Error for TestEventPatternError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    /// <p>There is concurrent modification on a rule or target.</p>
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
@@ -2677,6 +3545,62 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateArchive
+#[derive(Debug, PartialEq)]
+pub enum UpdateArchiveError {
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
+    ConcurrentModification(String),
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>The event pattern is not valid.</p>
+    InvalidEventPattern(String),
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
+    LimitExceeded(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateArchiveError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateArchiveError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateArchiveError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(UpdateArchiveError::Internal(err.msg))
+                }
+                "InvalidEventPatternException" => {
+                    return RusotoError::Service(UpdateArchiveError::InvalidEventPattern(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateArchiveError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateArchiveError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateArchiveError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateArchiveError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateArchiveError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateArchiveError::InvalidEventPattern(ref cause) => write!(f, "{}", cause),
+            UpdateArchiveError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateArchiveError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateArchiveError {}
 /// Trait representing the capabilities of the Amazon EventBridge API. Amazon EventBridge clients implement this trait.
 #[async_trait]
 pub trait EventBridge {
@@ -2685,6 +3609,18 @@ pub trait EventBridge {
         &self,
         input: ActivateEventSourceRequest,
     ) -> Result<(), RusotoError<ActivateEventSourceError>>;
+
+    /// <p>Cancels the specified replay.</p>
+    async fn cancel_replay(
+        &self,
+        input: CancelReplayRequest,
+    ) -> Result<CancelReplayResponse, RusotoError<CancelReplayError>>;
+
+    /// <p>Creates an archive of events with the specified settings. When you create an archive, incoming events might not immediately start being sent to the archive. Allow a short period of time for changes to take effect.</p>
+    async fn create_archive(
+        &self,
+        input: CreateArchiveRequest,
+    ) -> Result<CreateArchiveResponse, RusotoError<CreateArchiveError>>;
 
     /// <p>Creates a new event bus within your account. This can be a custom event bus which you can use to receive events from your custom applications and services, or it can be a partner event bus which can be matched to a partner event source.</p>
     async fn create_event_bus(
@@ -2704,6 +3640,12 @@ pub trait EventBridge {
         input: DeactivateEventSourceRequest,
     ) -> Result<(), RusotoError<DeactivateEventSourceError>>;
 
+    /// <p>Deletes the specified archive.</p>
+    async fn delete_archive(
+        &self,
+        input: DeleteArchiveRequest,
+    ) -> Result<DeleteArchiveResponse, RusotoError<DeleteArchiveError>>;
+
     /// <p>Deletes the specified custom event bus or partner event bus. All rules associated with this event bus need to be deleted. You can't delete your account's default event bus.</p>
     async fn delete_event_bus(
         &self,
@@ -2721,6 +3663,12 @@ pub trait EventBridge {
         &self,
         input: DeleteRuleRequest,
     ) -> Result<(), RusotoError<DeleteRuleError>>;
+
+    /// <p>Retrieves details about an archive.</p>
+    async fn describe_archive(
+        &self,
+        input: DescribeArchiveRequest,
+    ) -> Result<DescribeArchiveResponse, RusotoError<DescribeArchiveError>>;
 
     /// <p>Displays details about an event bus in your account. This can include the external AWS accounts that are permitted to write events to your default event bus, and the associated policy. For custom event buses and partner event buses, it displays the name, ARN, policy, state, and creation time.</p> <p> To enable your account to receive events from other accounts on its default event bus, use <a>PutPermission</a>.</p> <p>For more information about partner event buses, see <a>CreateEventBus</a>.</p>
     async fn describe_event_bus(
@@ -2740,6 +3688,12 @@ pub trait EventBridge {
         input: DescribePartnerEventSourceRequest,
     ) -> Result<DescribePartnerEventSourceResponse, RusotoError<DescribePartnerEventSourceError>>;
 
+    /// <p>Retrieves details about a replay. Use <code>DescribeReplay</code> to determine the progress of a running replay. A replay processes events to replay based on the time in the event, and replays them using 1 minute intervals. If you use <code>StartReplay</code> and specify an <code>EventStartTime</code> and an <code>EventEndTime</code> that covers a 20 minute time range, the events are replayed from the first minute of that 20 minute range first. Then the events from the second minute are replayed. You can use <code>DescribeReplay</code> to determine the progress of a replay. The value returned for <code>EventLastReplayedTime</code> indicates the time within the specified time range associated with the last event replayed.</p>
+    async fn describe_replay(
+        &self,
+        input: DescribeReplayRequest,
+    ) -> Result<DescribeReplayResponse, RusotoError<DescribeReplayError>>;
+
     /// <p>Describes the specified rule.</p> <p>DescribeRule does not list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
     async fn describe_rule(
         &self,
@@ -2757,6 +3711,12 @@ pub trait EventBridge {
         &self,
         input: EnableRuleRequest,
     ) -> Result<(), RusotoError<EnableRuleError>>;
+
+    /// <p>Lists your archives. You can either list all the archives or you can provide a prefix to match to the archive names. Filter parameters are exclusive.</p>
+    async fn list_archives(
+        &self,
+        input: ListArchivesRequest,
+    ) -> Result<ListArchivesResponse, RusotoError<ListArchivesError>>;
 
     /// <p>Lists all the event buses in your account, including the default event bus, custom event buses, and partner event buses.</p>
     async fn list_event_buses(
@@ -2784,6 +3744,12 @@ pub trait EventBridge {
         &self,
         input: ListPartnerEventSourcesRequest,
     ) -> Result<ListPartnerEventSourcesResponse, RusotoError<ListPartnerEventSourcesError>>;
+
+    /// <p>Lists your replays. You can either list all the replays or you can provide a prefix to match to the replay names. Filter parameters are exclusive.</p>
+    async fn list_replays(
+        &self,
+        input: ListReplaysRequest,
+    ) -> Result<ListReplaysResponse, RusotoError<ListReplaysError>>;
 
     /// <p>Lists the rules for the specified target. You can see which of the rules in Amazon EventBridge can invoke a specific target in your account.</p>
     async fn list_rule_names_by_target(
@@ -2833,7 +3799,7 @@ pub trait EventBridge {
         input: PutRuleRequest,
     ) -> Result<PutRuleResponse, RusotoError<PutRuleError>>;
 
-    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> <li> <p>Amazon API Gateway REST APIs</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, AWS Step Functions state machines and API Gateway REST APIs, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge (CloudWatch Events) Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
+    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> <li> <p>Amazon API Gateway REST APIs</p> </li> <li> <p>Redshift Clusters to invoke Data API ExecuteStatement on</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, AWS Step Functions state machines and API Gateway REST APIs, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge (CloudWatch Events) Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
     async fn put_targets(
         &self,
         input: PutTargetsRequest,
@@ -2850,6 +3816,12 @@ pub trait EventBridge {
         &self,
         input: RemoveTargetsRequest,
     ) -> Result<RemoveTargetsResponse, RusotoError<RemoveTargetsError>>;
+
+    /// <p>Starts the specified replay. Events are not necessarily replayed in the exact same order that they were added to the archive. A replay processes events to replay based on the time in the event, and replays them using 1 minute intervals. If you specify an <code>EventStartTime</code> and an <code>EventEndTime</code> that covers a 20 minute time range, the events are replayed from the first minute of that 20 minute range first. Then the events from the second minute are replayed. You can use <code>DescribeReplay</code> to determine the progress of a replay. The value returned for <code>EventLastReplayedTime</code> indicates the time within the specified time range associated with the last event replayed.</p>
+    async fn start_replay(
+        &self,
+        input: StartReplayRequest,
+    ) -> Result<StartReplayResponse, RusotoError<StartReplayError>>;
 
     /// <p>Assigns one or more tags (key-value pairs) to the specified EventBridge resource. Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values. In EventBridge, rules and event buses can be tagged.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with a resource that already has tags. If you specify a new tag key, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
     async fn tag_resource(
@@ -2868,6 +3840,12 @@ pub trait EventBridge {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+
+    /// <p>Updates the specified archive.</p>
+    async fn update_archive(
+        &self,
+        input: UpdateArchiveRequest,
+    ) -> Result<UpdateArchiveResponse, RusotoError<UpdateArchiveError>>;
 }
 /// A client for the Amazon EventBridge API.
 #[derive(Clone)]
@@ -2926,6 +3904,42 @@ impl EventBridge for EventBridgeClient {
         Ok(())
     }
 
+    /// <p>Cancels the specified replay.</p>
+    async fn cancel_replay(
+        &self,
+        input: CancelReplayRequest,
+    ) -> Result<CancelReplayResponse, RusotoError<CancelReplayError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.CancelReplay");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CancelReplayError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CancelReplayResponse, _>()
+    }
+
+    /// <p>Creates an archive of events with the specified settings. When you create an archive, incoming events might not immediately start being sent to the archive. Allow a short period of time for changes to take effect.</p>
+    async fn create_archive(
+        &self,
+        input: CreateArchiveRequest,
+    ) -> Result<CreateArchiveResponse, RusotoError<CreateArchiveError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.CreateArchive");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateArchiveError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateArchiveResponse, _>()
+    }
+
     /// <p>Creates a new event bus within your account. This can be a custom event bus which you can use to receive events from your custom applications and services, or it can be a partner event bus which can be matched to a partner event source.</p>
     async fn create_event_bus(
         &self,
@@ -2980,6 +3994,24 @@ impl EventBridge for EventBridgeClient {
         Ok(())
     }
 
+    /// <p>Deletes the specified archive.</p>
+    async fn delete_archive(
+        &self,
+        input: DeleteArchiveRequest,
+    ) -> Result<DeleteArchiveResponse, RusotoError<DeleteArchiveError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.DeleteArchive");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteArchiveError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteArchiveResponse, _>()
+    }
+
     /// <p>Deletes the specified custom event bus or partner event bus. All rules associated with this event bus need to be deleted. You can't delete your account's default event bus.</p>
     async fn delete_event_bus(
         &self,
@@ -3029,6 +4061,24 @@ impl EventBridge for EventBridgeClient {
             .await?;
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Retrieves details about an archive.</p>
+    async fn describe_archive(
+        &self,
+        input: DescribeArchiveRequest,
+    ) -> Result<DescribeArchiveResponse, RusotoError<DescribeArchiveError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.DescribeArchive");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeArchiveError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeArchiveResponse, _>()
     }
 
     /// <p>Displays details about an event bus in your account. This can include the external AWS accounts that are permitted to write events to your default event bus, and the associated policy. For custom event buses and partner event buses, it displays the name, ARN, policy, state, and creation time.</p> <p> To enable your account to receive events from other accounts on its default event bus, use <a>PutPermission</a>.</p> <p>For more information about partner event buses, see <a>CreateEventBus</a>.</p>
@@ -3087,6 +4137,24 @@ impl EventBridge for EventBridgeClient {
             .deserialize::<DescribePartnerEventSourceResponse, _>()
     }
 
+    /// <p>Retrieves details about a replay. Use <code>DescribeReplay</code> to determine the progress of a running replay. A replay processes events to replay based on the time in the event, and replays them using 1 minute intervals. If you use <code>StartReplay</code> and specify an <code>EventStartTime</code> and an <code>EventEndTime</code> that covers a 20 minute time range, the events are replayed from the first minute of that 20 minute range first. Then the events from the second minute are replayed. You can use <code>DescribeReplay</code> to determine the progress of a replay. The value returned for <code>EventLastReplayedTime</code> indicates the time within the specified time range associated with the last event replayed.</p>
+    async fn describe_replay(
+        &self,
+        input: DescribeReplayRequest,
+    ) -> Result<DescribeReplayResponse, RusotoError<DescribeReplayError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.DescribeReplay");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeReplayError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeReplayResponse, _>()
+    }
+
     /// <p>Describes the specified rule.</p> <p>DescribeRule does not list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
     async fn describe_rule(
         &self,
@@ -3137,6 +4205,24 @@ impl EventBridge for EventBridgeClient {
             .await?;
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Lists your archives. You can either list all the archives or you can provide a prefix to match to the archive names. Filter parameters are exclusive.</p>
+    async fn list_archives(
+        &self,
+        input: ListArchivesRequest,
+    ) -> Result<ListArchivesResponse, RusotoError<ListArchivesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.ListArchives");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListArchivesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListArchivesResponse, _>()
     }
 
     /// <p>Lists all the event buses in your account, including the default event bus, custom event buses, and partner event buses.</p>
@@ -3214,6 +4300,24 @@ impl EventBridge for EventBridgeClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<ListPartnerEventSourcesResponse, _>()
+    }
+
+    /// <p>Lists your replays. You can either list all the replays or you can provide a prefix to match to the replay names. Filter parameters are exclusive.</p>
+    async fn list_replays(
+        &self,
+        input: ListReplaysRequest,
+    ) -> Result<ListReplaysResponse, RusotoError<ListReplaysError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.ListReplays");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListReplaysError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListReplaysResponse, _>()
     }
 
     /// <p>Lists the rules for the specified target. You can see which of the rules in Amazon EventBridge can invoke a specific target in your account.</p>
@@ -3360,7 +4464,7 @@ impl EventBridge for EventBridgeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<PutRuleResponse, _>()
     }
 
-    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> <li> <p>Amazon API Gateway REST APIs</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, AWS Step Functions state machines and API Gateway REST APIs, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge (CloudWatch Events) Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
+    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> <li> <p>Amazon API Gateway REST APIs</p> </li> <li> <p>Redshift Clusters to invoke Data API ExecuteStatement on</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, AWS Step Functions state machines and API Gateway REST APIs, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge (CloudWatch Events) Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
     async fn put_targets(
         &self,
         input: PutTargetsRequest,
@@ -3411,6 +4515,24 @@ impl EventBridge for EventBridgeClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<RemoveTargetsResponse, _>()
+    }
+
+    /// <p>Starts the specified replay. Events are not necessarily replayed in the exact same order that they were added to the archive. A replay processes events to replay based on the time in the event, and replays them using 1 minute intervals. If you specify an <code>EventStartTime</code> and an <code>EventEndTime</code> that covers a 20 minute time range, the events are replayed from the first minute of that 20 minute range first. Then the events from the second minute are replayed. You can use <code>DescribeReplay</code> to determine the progress of a replay. The value returned for <code>EventLastReplayedTime</code> indicates the time within the specified time range associated with the last event replayed.</p>
+    async fn start_replay(
+        &self,
+        input: StartReplayRequest,
+    ) -> Result<StartReplayResponse, RusotoError<StartReplayError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.StartReplay");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StartReplayError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<StartReplayResponse, _>()
     }
 
     /// <p>Assigns one or more tags (key-value pairs) to the specified EventBridge resource. Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values. In EventBridge, rules and event buses can be tagged.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with a resource that already has tags. If you specify a new tag key, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource.</p>
@@ -3465,5 +4587,23 @@ impl EventBridge for EventBridgeClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+    }
+
+    /// <p>Updates the specified archive.</p>
+    async fn update_archive(
+        &self,
+        input: UpdateArchiveRequest,
+    ) -> Result<UpdateArchiveResponse, RusotoError<UpdateArchiveError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.UpdateArchive");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateArchiveError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateArchiveResponse, _>()
     }
 }

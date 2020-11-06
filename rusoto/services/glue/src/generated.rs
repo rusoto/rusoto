@@ -405,30 +405,83 @@ pub struct BatchStopJobRunSuccessfulSubmission {
     pub job_run_id: Option<String>,
 }
 
-/// <p>Defines a binary column statistics data.</p>
+/// <p>Contains information about a batch update partition error.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchUpdatePartitionFailureEntry {
+    /// <p>The details about the batch update partition error.</p>
+    #[serde(rename = "ErrorDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_detail: Option<ErrorDetail>,
+    /// <p>A list of values defining the partitions.</p>
+    #[serde(rename = "PartitionValueList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partition_value_list: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchUpdatePartitionRequest {
+    /// <p>The ID of the catalog in which the partition is to be updated. Currently, this should be the AWS account ID.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>The name of the metadata database in which the partition is to be updated.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>A list of up to 100 <code>BatchUpdatePartitionRequestEntry</code> objects to update.</p>
+    #[serde(rename = "Entries")]
+    pub entries: Vec<BatchUpdatePartitionRequestEntry>,
+    /// <p>The name of the metadata table in which the partition is to be updated.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+/// <p>A structure that contains the values and structure used to update a partition.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchUpdatePartitionRequestEntry {
+    /// <p>The structure used to update a partition.</p>
+    #[serde(rename = "PartitionInput")]
+    pub partition_input: PartitionInput,
+    /// <p>A list of values defining the partitions.</p>
+    #[serde(rename = "PartitionValueList")]
+    pub partition_value_list: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchUpdatePartitionResponse {
+    /// <p>The errors encountered when trying to update the requested partitions. A list of <code>BatchUpdatePartitionFailureEntry</code> objects.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<BatchUpdatePartitionFailureEntry>>,
+}
+
+/// <p>Defines column statistics supported for bit sequence data values.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BinaryColumnStatisticsData {
-    /// <p>Average length of the column.</p>
+    /// <p>The average bit sequence length in the column.</p>
     #[serde(rename = "AverageLength")]
     pub average_length: f64,
-    /// <p>Maximum length of the column.</p>
+    /// <p>The size of the longest bit sequence in the column.</p>
     #[serde(rename = "MaximumLength")]
     pub maximum_length: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
 
-/// <p>Defines a boolean column statistics.</p>
+/// <p>Defines column statistics supported for Boolean data columns.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BooleanColumnStatisticsData {
-    /// <p>Number of false value.</p>
+    /// <p>The number of false values in the column.</p>
     #[serde(rename = "NumberOfFalses")]
     pub number_of_falses: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
-    /// <p>Number of true value.</p>
+    /// <p>The number of true values in the column.</p>
     #[serde(rename = "NumberOfTrues")]
     pub number_of_trues: i64,
 }
@@ -605,82 +658,82 @@ pub struct Column {
     pub type_: Option<String>,
 }
 
-/// <p>Defines a column containing error.</p>
+/// <p>Encapsulates a column name that failed and the reason for failure.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ColumnError {
-    /// <p>The name of the column.</p>
+    /// <p>The name of the column that failed.</p>
     #[serde(rename = "ColumnName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub column_name: Option<String>,
-    /// <p>The error message occurred during operation.</p>
+    /// <p>An error message with the reason for the failure of an operation.</p>
     #[serde(rename = "Error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<ErrorDetail>,
 }
 
-/// <p>Defines a column statistics.</p>
+/// <p>Represents the generated column-level statistics for a table or partition.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnStatistics {
-    /// <p>The analyzed time of the column statistics.</p>
+    /// <p>The timestamp of when column statistics were generated.</p>
     #[serde(rename = "AnalyzedTime")]
     pub analyzed_time: f64,
-    /// <p>The name of the column.</p>
+    /// <p>Name of column which statistics belong to.</p>
     #[serde(rename = "ColumnName")]
     pub column_name: String,
-    /// <p>The type of the column.</p>
+    /// <p>The data type of the column.</p>
     #[serde(rename = "ColumnType")]
     pub column_type: String,
-    /// <p>The statistics of the column.</p>
+    /// <p>A <code>ColumnStatisticData</code> object that contains the statistics data values.</p>
     #[serde(rename = "StatisticsData")]
     pub statistics_data: ColumnStatisticsData,
 }
 
-/// <p>Defines a column statistics data.</p>
+/// <p>Contains the individual types of column statistics data. Only one data object should be set and indicated by the <code>Type</code> attribute.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ColumnStatisticsData {
-    /// <p>Binary Column Statistics Data.</p>
+    /// <p>Binary column statistics data.</p>
     #[serde(rename = "BinaryColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub binary_column_statistics_data: Option<BinaryColumnStatisticsData>,
-    /// <p>Boolean Column Statistics Data.</p>
+    /// <p>Boolean column statistics data.</p>
     #[serde(rename = "BooleanColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub boolean_column_statistics_data: Option<BooleanColumnStatisticsData>,
-    /// <p>Date Column Statistics Data.</p>
+    /// <p>Date column statistics data.</p>
     #[serde(rename = "DateColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub date_column_statistics_data: Option<DateColumnStatisticsData>,
-    /// <p>Decimal Column Statistics Data.</p>
+    /// <p>Decimal column statistics data.</p>
     #[serde(rename = "DecimalColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub decimal_column_statistics_data: Option<DecimalColumnStatisticsData>,
-    /// <p>Double Column Statistics Data.</p>
+    /// <p>Double column statistics data.</p>
     #[serde(rename = "DoubleColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub double_column_statistics_data: Option<DoubleColumnStatisticsData>,
-    /// <p>Long Column Statistics Data.</p>
+    /// <p>Long column statistics data.</p>
     #[serde(rename = "LongColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub long_column_statistics_data: Option<LongColumnStatisticsData>,
-    /// <p>String Column Statistics Data.</p>
+    /// <p>String column statistics data.</p>
     #[serde(rename = "StringColumnStatisticsData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub string_column_statistics_data: Option<StringColumnStatisticsData>,
-    /// <p>The name of the column.</p>
+    /// <p>The type of column statistics data.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
 
-/// <p>Defines a column containing error.</p>
+/// <p>Encapsulates a <code>ColumnStatistics</code> object that failed and the reason for failure.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ColumnStatisticsError {
-    /// <p>The ColumnStatistics of the column.</p>
+    /// <p>The <code>ColumnStatistics</code> of the column.</p>
     #[serde(rename = "ColumnStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub column_statistics: Option<ColumnStatistics>,
-    /// <p>The error message occurred during operation.</p>
+    /// <p>An error message with the reason for the failure of an operation.</p>
     #[serde(rename = "Error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<ErrorDetail>,
@@ -737,7 +790,7 @@ pub struct ConfusionMatrix {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
-    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon Simple Storage Service (Amazon S3) path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use.)</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for connecting to a JDBC data source.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching is enforced for the JDBC connection on the client. The default is false.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT</code> - An Amazon S3 location specifying the customer&#39;s root certificate. AWS Glue uses this root certificate to validate the customer’s certificate when connecting to the customer database. AWS Glue only handles X.509 certificates. The certificate provided must be DER-encoded and supplied in Base64 encoding PEM format.</p> </li> <li> <p> <code>SKIP<em>CUSTOM</em>JDBC<em>CERT</em>VALIDATION</code> - By default, this is <code>false</code>. AWS Glue validates the Signature algorithm and Subject Public Key Algorithm for the customer certificate. The only permitted algorithms for the Signature algorithm are SHA256withRSA, SHA384withRSA or SHA512withRSA. For the Subject Public Key Algorithm, the key length must be at least 2048. You can set the value of this property to <code>true</code> to skip AWS Glue’s validation of the customer certificate.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT<em>STRING</code> - A custom JDBC certificate string which is used for domain match or distinguished name match to prevent a man-in-the-middle attack. In Oracle database, this is used as the <code>SSL</em>SERVER<em>CERT</em>DN</code>; in Microsoft SQL Server, this is used as the <code>hostNameInCertificate</code>.</p> </li> <li> <p> <code>CONNECTION<em>URL</code> - The URL for connecting to a general (non-JDBC) data source.</p> </li> <li> <p> <code>KAFKA</em>BOOTSTRAP_SERVERS</code> - A comma-separated list of host and port pairs that are the addresses of the Apache Kafka brokers in a Kafka cluster to which a Kafka client will connect to and bootstrap itself.</p> </li> </ul></p>
+    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon Simple Storage Service (Amazon S3) path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use.)</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for connecting to a JDBC data source.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching is enforced for the JDBC connection on the client. The default is false.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT</code> - An Amazon S3 location specifying the customer&#39;s root certificate. AWS Glue uses this root certificate to validate the customer’s certificate when connecting to the customer database. AWS Glue only handles X.509 certificates. The certificate provided must be DER-encoded and supplied in Base64 encoding PEM format.</p> </li> <li> <p> <code>SKIP<em>CUSTOM</em>JDBC<em>CERT</em>VALIDATION</code> - By default, this is <code>false</code>. AWS Glue validates the Signature algorithm and Subject Public Key Algorithm for the customer certificate. The only permitted algorithms for the Signature algorithm are SHA256withRSA, SHA384withRSA or SHA512withRSA. For the Subject Public Key Algorithm, the key length must be at least 2048. You can set the value of this property to <code>true</code> to skip AWS Glue’s validation of the customer certificate.</p> </li> <li> <p> <code>CUSTOM<em>JDBC</em>CERT<em>STRING</code> - A custom JDBC certificate string which is used for domain match or distinguished name match to prevent a man-in-the-middle attack. In Oracle database, this is used as the <code>SSL</em>SERVER<em>CERT</em>DN</code>; in Microsoft SQL Server, this is used as the <code>hostNameInCertificate</code>.</p> </li> <li> <p> <code>CONNECTION<em>URL</code> - The URL for connecting to a general (non-JDBC) data source.</p> </li> <li> <p> <code>KAFKA</em>BOOTSTRAP<em>SERVERS</code> - A comma-separated list of host and port pairs that are the addresses of the Apache Kafka brokers in a Kafka cluster to which a Kafka client will connect to and bootstrap itself.</p> </li> <li> <p> <code>KAFKA</em>SSL<em>ENABLED</code> - Whether to enable or disable SSL on an Apache Kafka connection. Default value is &quot;true&quot;.</p> </li> <li> <p> <code>KAFKA</em>CUSTOM<em>CERT</code> - The Amazon S3 URL for the private CA cert file (.pem format). The default is an empty string.</p> </li> <li> <p> <code>KAFKA</em>SKIP<em>CUSTOM</em>CERT_VALIDATION</code> - Whether to skip the validation of the CA cert file or not. AWS Glue validates for three algorithms: SHA256withRSA, SHA384withRSA and SHA512withRSA. Default value is &quot;false&quot;.</p> </li> </ul></p>
     #[serde(rename = "ConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
@@ -782,7 +835,7 @@ pub struct ConnectionInput {
     /// <p>These key-value pairs define parameters for the connection.</p>
     #[serde(rename = "ConnectionProperties")]
     pub connection_properties: ::std::collections::HashMap<String, String>,
-    /// <p>The type of the connection. Currently, these types are supported:</p> <ul> <li> <p> <code>JDBC</code> - Designates a connection to a database through Java Database Connectivity (JDBC).</p> </li> <li> <p> <code>KAFKA</code> - Designates a connection to an Apache Kafka streaming platform.</p> </li> <li> <p> <code>MONGODB</code> - Designates a connection to a MongoDB document database.</p> </li> </ul> <p>SFTP is not supported.</p>
+    /// <p>The type of the connection. Currently, these types are supported:</p> <ul> <li> <p> <code>JDBC</code> - Designates a connection to a database through Java Database Connectivity (JDBC).</p> </li> <li> <p> <code>KAFKA</code> - Designates a connection to an Apache Kafka streaming platform.</p> </li> <li> <p> <code>MONGODB</code> - Designates a connection to a MongoDB document database.</p> </li> <li> <p> <code>NETWORK</code> - Designates a network connection to a data source within an Amazon Virtual Private Cloud environment (Amazon VPC).</p> </li> </ul> <p>SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
     pub connection_type: String,
     /// <p>The description of the connection.</p>
@@ -897,6 +950,10 @@ pub struct Crawler {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>A policy that specifies whether to crawl the entire dataset again, or to crawl only folders that were added since the last crawler run.</p>
+    #[serde(rename = "RecrawlPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recrawl_policy: Option<RecrawlPolicy>,
     /// <p>The Amazon Resource Name (ARN) of an IAM role that's used to access customer resources, such as Amazon Simple Storage Service (Amazon S3) data.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -990,6 +1047,10 @@ pub struct CrawlerTargets {
     #[serde(rename = "JdbcTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jdbc_targets: Option<Vec<JdbcTarget>>,
+    /// <p>Specifies Amazon DocumentDB or MongoDB targets.</p>
+    #[serde(rename = "MongoDBTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mongo_db_targets: Option<Vec<MongoDBTarget>>,
     /// <p>Specifies Amazon Simple Storage Service (Amazon S3) targets.</p>
     #[serde(rename = "S3Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1063,6 +1124,10 @@ pub struct CreateCrawlerRequest {
     /// <p>Name of the new crawler.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>A policy that specifies whether to crawl the entire dataset again, or to crawl only folders that were added since the last crawler run.</p>
+    #[serde(rename = "RecrawlPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recrawl_policy: Option<RecrawlPolicy>,
     /// <p>The IAM role or Amazon Resource Name (ARN) of an IAM role used by the new crawler to access customer resources.</p>
     #[serde(rename = "Role")]
     pub role: String,
@@ -1333,7 +1398,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;) or Apache Spark streaming ETL job (<code>JobCommand.Name</code>=&quot;gluestreaming&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -1441,6 +1506,10 @@ pub struct CreateMLTransformRequest {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+    /// <p>The encryption-at-rest settings of the transform that apply to accessing user data. Machine learning transforms can access user data encrypted in Amazon S3 using KMS.</p>
+    #[serde(rename = "TransformEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_encryption: Option<TransformEncryption>,
     /// <p><p>The type of predefined worker that is allocated when this task runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul> <p> <code>MaxCapacity</code> is a mutually exclusive option with <code>NumberOfWorkers</code> and <code>WorkerType</code>.</p> <ul> <li> <p>If either <code>NumberOfWorkers</code> or <code>WorkerType</code> is set, then <code>MaxCapacity</code> cannot be set.</p> </li> <li> <p>If <code>MaxCapacity</code> is set then neither <code>NumberOfWorkers</code> or <code>WorkerType</code> can be set.</p> </li> <li> <p>If <code>WorkerType</code> is set, then <code>NumberOfWorkers</code> is required (and vice versa).</p> </li> <li> <p> <code>MaxCapacity</code> and <code>NumberOfWorkers</code> must both be at least 1.</p> </li> </ul></p>
     #[serde(rename = "WorkerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1542,6 +1611,10 @@ pub struct CreateTableRequest {
     /// <p>The catalog database in which to create the new table. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
+    /// <p>A list of partition indexes, <code>PartitionIndex</code> structures, to create in the table.</p>
+    #[serde(rename = "PartitionIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partition_indexes: Option<Vec<PartitionIndex>>,
     /// <p>The <code>TableInput</code> object that defines the metadata table to create in the catalog.</p>
     #[serde(rename = "TableInput")]
     pub table_input: TableInput,
@@ -1628,6 +1701,10 @@ pub struct CreateWorkflowRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>You can use this parameter to prevent unwanted multiple updates to data, to control costs, or in some cases, to prevent exceeding the maximum number of concurrent runs of any of the component jobs. If you leave this parameter blank, there is no limit to the number of concurrent workflow runs.</p>
+    #[serde(rename = "MaxConcurrentRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrent_runs: Option<i64>,
     /// <p>The name to be assigned to the workflow. It should be unique within your account.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -1808,40 +1885,40 @@ pub struct DatabaseInput {
     pub target_database: Option<DatabaseIdentifier>,
 }
 
-/// <p>Defines a date column statistics data.</p>
+/// <p>Defines column statistics supported for timestamp data columns.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DateColumnStatisticsData {
-    /// <p>Maximum value of the column.</p>
+    /// <p>The highest value in the column.</p>
     #[serde(rename = "MaximumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_value: Option<f64>,
-    /// <p>Minimum value of the column.</p>
+    /// <p>The lowest value in the column.</p>
     #[serde(rename = "MinimumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_value: Option<f64>,
-    /// <p>Number of distinct values.</p>
+    /// <p>The number of distinct values in a column.</p>
     #[serde(rename = "NumberOfDistinctValues")]
     pub number_of_distinct_values: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
 
-/// <p>Defines a decimal column statistics data.</p>
+/// <p>Defines column statistics supported for fixed-point number data columns.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DecimalColumnStatisticsData {
-    /// <p>Maximum value of the column.</p>
+    /// <p>The highest value in the column.</p>
     #[serde(rename = "MaximumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_value: Option<DecimalNumber>,
-    /// <p>Minimum value of the column.</p>
+    /// <p>The lowest value in the column.</p>
     #[serde(rename = "MinimumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_value: Option<DecimalNumber>,
-    /// <p>Number of distinct values.</p>
+    /// <p>The number of distinct values in a column.</p>
     #[serde(rename = "NumberOfDistinctValues")]
     pub number_of_distinct_values: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
@@ -2276,21 +2353,21 @@ pub struct DevEndpointCustomLibraries {
     pub extra_python_libs_s3_path: Option<String>,
 }
 
-/// <p>Defines a double column statistics data.</p>
+/// <p>Defines column statistics supported for floating-point number data columns.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DoubleColumnStatisticsData {
-    /// <p>Maximum value of the column.</p>
+    /// <p>The highest value in the column.</p>
     #[serde(rename = "MaximumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_value: Option<f64>,
-    /// <p>Minimum value of the column.</p>
+    /// <p>The lowest value in the column.</p>
     #[serde(rename = "MinimumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_value: Option<f64>,
-    /// <p>Number of distinct values.</p>
+    /// <p>The number of distinct values in a column.</p>
     #[serde(rename = "NumberOfDistinctValues")]
     pub number_of_distinct_values: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
@@ -2312,7 +2389,7 @@ pub struct DynamoDBTarget {
     pub scan_rate: Option<f64>,
 }
 
-/// <p>An edge represents a directed connection between two AWS Glue components which are part of the workflow the edge belongs to.</p>
+/// <p>An edge represents a directed connection between two AWS Glue components that are part of the workflow the edge belongs to.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Edge {
@@ -3164,6 +3241,10 @@ pub struct GetMLTransformResponse {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+    /// <p>The encryption-at-rest settings of the transform that apply to accessing user data. Machine learning transforms can access user data encrypted in Amazon S3 using KMS.</p>
+    #[serde(rename = "TransformEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_encryption: Option<TransformEncryption>,
     /// <p>The unique identifier of the transform, generated at the time that the transform was created.</p>
     #[serde(rename = "TransformId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3229,6 +3310,38 @@ pub struct GetMappingResponse {
     /// <p>A list of mappings to the specified targets.</p>
     #[serde(rename = "Mapping")]
     pub mapping: Vec<MappingEntry>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetPartitionIndexesRequest {
+    /// <p>The catalog ID where the table resides.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>Specifies the name of a database from which you want to retrieve partition indexes.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>A continuation token, included if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Specifies the name of a table for which you want to retrieve the partition indexes.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetPartitionIndexesResponse {
+    /// <p>A continuation token, present if the current list segment is not the last.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of index descriptors.</p>
+    #[serde(rename = "PartitionIndexDescriptorList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partition_index_descriptor_list: Option<Vec<PartitionIndexDescriptor>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3305,6 +3418,10 @@ pub struct GetPartitionsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetPlanRequest {
+    /// <p><p>A map to hold additional optional key-value parameters.</p> <p>Currently, these key-value pairs are supported:</p> <ul> <li> <p> <code>inferSchema</code>  —  Specifies whether to set <code>inferSchema</code> to true or false for the default script generated by an AWS Glue job. For example, to set <code>inferSchema</code> to true, pass the following key value pair:</p> <p> <code>--additional-plan-options-map &#39;{&quot;inferSchema&quot;:&quot;true&quot;}&#39;</code> </p> </li> </ul></p>
+    #[serde(rename = "AdditionalPlanOptionsMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_plan_options_map: Option<::std::collections::HashMap<String, String>>,
     /// <p>The programming language of the code to perform the mapping.</p>
     #[serde(rename = "Language")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3941,7 +4058,7 @@ pub struct Job {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job, an Apache Spark ETL job, or an Apache Spark streaming ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;) or Apache Spark streaming ETL job (<code>JobCommand.Name</code>=&quot;gluestreaming&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -4033,7 +4150,7 @@ pub struct JobBookmarksEncryption {
 /// <p>Specifies code executed when a job is run.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct JobCommand {
-    /// <p>The name of the job command. For an Apache Spark ETL job, this must be <code>glueetl</code>. For a Python shell job, it must be <code>pythonshell</code>.</p>
+    /// <p>The name of the job command. For an Apache Spark ETL job, this must be <code>glueetl</code>. For a Python shell job, it must be <code>pythonshell</code>. For an Apache Spark streaming ETL job, this must be <code>gluestreaming</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -4179,7 +4296,7 @@ pub struct JobUpdate {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a Python shell job or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a Python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;) or Apache Spark streaming ETL job (<code>JobCommand.Name</code>=&quot;gluestreaming&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -4239,6 +4356,18 @@ pub struct JsonClassifier {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
+}
+
+/// <p>A partition key pair consisting of a name and a type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct KeySchemaElement {
+    /// <p>The name of a partition key.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The type of a partition key.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
 }
 
 /// <p>Specifies configuration properties for a labeling set generation task run.</p>
@@ -4486,21 +4615,21 @@ pub struct Location {
     pub s3: Option<Vec<CodeGenNodeArg>>,
 }
 
-/// <p>Defines a long column statistics data.</p>
+/// <p>Defines column statistics supported for integer data columns.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LongColumnStatisticsData {
-    /// <p>Maximum value of the column.</p>
+    /// <p>The highest value in the column.</p>
     #[serde(rename = "MaximumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maximum_value: Option<i64>,
-    /// <p>Minimum value of the column.</p>
+    /// <p>The lowest value in the column.</p>
     #[serde(rename = "MinimumValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_value: Option<i64>,
-    /// <p>Number of distinct values.</p>
+    /// <p>The number of distinct values in a column.</p>
     #[serde(rename = "NumberOfDistinctValues")]
     pub number_of_distinct_values: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
@@ -4573,6 +4702,10 @@ pub struct MLTransform {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+    /// <p>The encryption-at-rest settings of the transform that apply to accessing user data. Machine learning transforms can access user data encrypted in Amazon S3 using KMS.</p>
+    #[serde(rename = "TransformEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transform_encryption: Option<TransformEncryption>,
     /// <p>The unique transform ID that is generated for the machine learning transform. The ID is guaranteed to be unique and does not change.</p>
     #[serde(rename = "TransformId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4581,6 +4714,18 @@ pub struct MLTransform {
     #[serde(rename = "WorkerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub worker_type: Option<String>,
+}
+
+/// <p>The encryption-at-rest settings of the transform that apply to accessing user data.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MLUserDataEncryption {
+    /// <p>The ID for the customer-provided KMS key.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p><p>The encryption mode applied to user data. Valid values are:</p> <ul> <li> <p>DISABLED: encryption is disabled</p> </li> <li> <p>SSEKMS: use of server-side encryption with AWS Key Management Service (SSE-KMS) for user data stored in Amazon S3.</p> </li> </ul></p>
+    #[serde(rename = "MlUserDataEncryptionMode")]
+    pub ml_user_data_encryption_mode: String,
 }
 
 /// <p>Defines a mapping.</p>
@@ -4612,7 +4757,24 @@ pub struct MappingEntry {
     pub target_type: Option<String>,
 }
 
-/// <p>A node represents an AWS Glue component like Trigger, Job etc. which is part of a workflow.</p>
+/// <p>Specifies an Amazon DocumentDB or MongoDB data store to crawl.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MongoDBTarget {
+    /// <p>The name of the connection to use to connect to the Amazon DocumentDB or MongoDB target.</p>
+    #[serde(rename = "ConnectionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_name: Option<String>,
+    /// <p>The path of the Amazon DocumentDB or MongoDB target (database/collection).</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>Indicates whether to scan all the records, or to sample rows from the table. Scanning all the records can take a long time when the table is not a high throughput table.</p> <p>A value of <code>true</code> means to scan all records, while a value of <code>false</code> means to sample the records. If no value is specified, the value defaults to <code>true</code>.</p>
+    #[serde(rename = "ScanAll")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_all: Option<bool>,
+}
+
+/// <p>A node represents an AWS Glue component such as a trigger, or job, etc., that is part of a workflow.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Node {
@@ -4716,6 +4878,33 @@ pub struct PartitionError {
     #[serde(rename = "PartitionValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_values: Option<Vec<String>>,
+}
+
+/// <p>A structure for a partition index.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PartitionIndex {
+    /// <p>The name of the partition index.</p>
+    #[serde(rename = "IndexName")]
+    pub index_name: String,
+    /// <p>The keys for the partition index.</p>
+    #[serde(rename = "Keys")]
+    pub keys: Vec<String>,
+}
+
+/// <p>A descriptor for a partition index in a table.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PartitionIndexDescriptor {
+    /// <p>The name of the partition index.</p>
+    #[serde(rename = "IndexName")]
+    pub index_name: String,
+    /// <p>The status of the partition index. </p>
+    #[serde(rename = "IndexStatus")]
+    pub index_status: String,
+    /// <p>A list of one or more keys, as <code>KeySchemaElement</code> structures, for the partition index.</p>
+    #[serde(rename = "Keys")]
+    pub keys: Vec<KeySchemaElement>,
 }
 
 /// <p>The structure used to create and update a partition.</p>
@@ -4894,6 +5083,15 @@ pub struct PutWorkflowRunPropertiesRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutWorkflowRunPropertiesResponse {}
 
+/// <p>When crawling an Amazon S3 data source after the first crawl is complete, specifies whether to crawl the entire dataset again or to crawl only folders that were added since the last crawler run. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/incremental-crawls.html">Incremental Crawls in AWS Glue</a> in the developer guide.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct RecrawlPolicy {
+    /// <p>Specifies whether to crawl the entire dataset again or to crawl only folders that were added since the last crawler run.</p> <p>A value of <code>CRAWL_EVERYTHING</code> specifies crawling the entire dataset again.</p> <p>A value of <code>CRAWL_NEW_FOLDERS_ONLY</code> specifies crawling only folders that were added since the last crawler run.</p>
+    #[serde(rename = "RecrawlBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recrawl_behavior: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetJobBookmarkRequest {
@@ -4928,6 +5126,33 @@ pub struct ResourceUri {
     pub uri: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ResumeWorkflowRunRequest {
+    /// <p>The name of the workflow to resume.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A list of the node IDs for the nodes you want to restart. The nodes that are to be restarted must have a run attempt in the original run.</p>
+    #[serde(rename = "NodeIds")]
+    pub node_ids: Vec<String>,
+    /// <p>The ID of the workflow run to resume.</p>
+    #[serde(rename = "RunId")]
+    pub run_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResumeWorkflowRunResponse {
+    /// <p>A list of the node IDs for the nodes that were actually restarted.</p>
+    #[serde(rename = "NodeIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_ids: Option<Vec<String>>,
+    /// <p>The new ID assigned to the resumed workflow run. Each resume of a workflow run will have a new run ID.</p>
+    #[serde(rename = "RunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_id: Option<String>,
+}
+
 /// <p>Specifies how Amazon Simple Storage Service (Amazon S3) data should be encrypted.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Encryption {
@@ -4944,6 +5169,10 @@ pub struct S3Encryption {
 /// <p>Specifies a data store in Amazon Simple Storage Service (Amazon S3).</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Target {
+    /// <p>The name of a connection which allows a job or crawler to access data in Amazon S3 within an Amazon Virtual Private Cloud environment (Amazon VPC).</p>
+    #[serde(rename = "ConnectionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_name: Option<String>,
     /// <p>A list of glob patterns used to exclude from the crawl. For more information, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html">Catalog Tables with a Crawler</a>.</p>
     #[serde(rename = "Exclusions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4997,11 +5226,11 @@ pub struct SchemaColumn {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchTablesRequest {
-    /// <p>A unique identifier, consisting of <code> <i>account_id</i>/datalake</code>.</p>
+    /// <p>A unique identifier, consisting of <code> <i>account_id</i> </code>.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>A list of key-value pairs, and a comparator used to filter the search results. Returns all entities matching the predicate.</p>
+    /// <p>A list of key-value pairs, and a comparator used to filter the search results. Returns all entities matching the predicate.</p> <p>The <code>Comparator</code> member of the <code>PropertyPredicate</code> struct is used only for time fields, and can be omitted for other field types. Also, when comparing string values, such as when <code>Key=Name</code>, a fuzzy match algorithm is used. The <code>Key</code> field (for example, the value of the <code>Name</code> field) is split on certain punctuation characters, for example, -, :, #, etc. into tokens. Then each token is exact-match compared with the <code>Value</code> member of <code>PropertyPredicate</code>. For example, if <code>Key=Name</code> and <code>Value=link</code>, tables named <code>customer-link</code> and <code>xx-link-yy</code> are returned, but <code>xxlinkyy</code> is not returned.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<PropertyPredicate>>,
@@ -5415,19 +5644,19 @@ pub struct StorageDescriptor {
     pub stored_as_sub_directories: Option<bool>,
 }
 
-/// <p>Defines a string column statistics data.</p>
+/// <p>Defines column statistics supported for character sequence data values.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct StringColumnStatisticsData {
-    /// <p>Average value of the column.</p>
+    /// <p>The average string length in the column.</p>
     #[serde(rename = "AverageLength")]
     pub average_length: f64,
-    /// <p>Maximum value of the column.</p>
+    /// <p>The size of the longest string in the column.</p>
     #[serde(rename = "MaximumLength")]
     pub maximum_length: i64,
-    /// <p>Number of distinct values.</p>
+    /// <p>The number of distinct values in a column.</p>
     #[serde(rename = "NumberOfDistinctValues")]
     pub number_of_distinct_values: i64,
-    /// <p>Number of nulls.</p>
+    /// <p>The number of null values in the column.</p>
     #[serde(rename = "NumberOfNulls")]
     pub number_of_nulls: i64,
 }
@@ -5754,6 +5983,19 @@ pub struct TaskRunSortCriteria {
     pub sort_direction: String,
 }
 
+/// <p>The encryption-at-rest settings of the transform that apply to accessing user data. Machine learning transforms can access user data encrypted in Amazon S3 using KMS.</p> <p>Additionally, imported labels and trained transforms can now be encrypted using a customer provided KMS key.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TransformEncryption {
+    /// <p>An <code>MLUserDataEncryption</code> object containing the encryption mode and customer-provided KMS key ID.</p>
+    #[serde(rename = "MlUserDataEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ml_user_data_encryption: Option<MLUserDataEncryption>,
+    /// <p>The name of the security configuration.</p>
+    #[serde(rename = "TaskRunSecurityConfigurationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_run_security_configuration_name: Option<String>,
+}
+
 /// <p>The criteria used to filter the machine learning transforms.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -5803,7 +6045,7 @@ pub struct TransformParameters {
     #[serde(rename = "FindMatchesParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub find_matches_parameters: Option<FindMatchesParameters>,
-    /// <p>The type of machine learning transform.</p> <p>For information about the types of machine learning transforms, see <a href="http://docs.aws.amazon.com/glue/latest/dg/add-job-machine-learning-transform.html">Creating Machine Learning Transforms</a>.</p>
+    /// <p>The type of machine learning transform.</p> <p>For information about the types of machine learning transforms, see <a href="https://docs.aws.amazon.com/glue/latest/dg/add-job-machine-learning-transform.html">Creating Machine Learning Transforms</a>.</p>
     #[serde(rename = "TransformType")]
     pub transform_type: String,
 }
@@ -6040,6 +6282,10 @@ pub struct UpdateCrawlerRequest {
     /// <p>Name of the new crawler.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>A policy that specifies whether to crawl the entire dataset again, or to crawl only folders that were added since the last crawler run.</p>
+    #[serde(rename = "RecrawlPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recrawl_policy: Option<RecrawlPolicy>,
     /// <p>The IAM role or Amazon Resource Name (ARN) of an IAM role that is used by the new crawler to access customer resources.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6295,10 +6541,10 @@ pub struct UpdatePartitionRequest {
     /// <p>The name of the catalog database in which the table in question resides.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    /// <p>The new partition object to update the partition to.</p>
+    /// <p>The new partition object to update the partition to.</p> <p>The <code>Values</code> property can't be changed. If you want to change the partition key values for a partition, delete and recreate the partition.</p>
     #[serde(rename = "PartitionInput")]
     pub partition_input: PartitionInput,
-    /// <p>A list of the values defining the partition.</p>
+    /// <p>List of partition key values that define the partition to update.</p>
     #[serde(rename = "PartitionValueList")]
     pub partition_value_list: Vec<String>,
     /// <p>The name of the table in which the partition to be updated is located.</p>
@@ -6386,6 +6632,10 @@ pub struct UpdateWorkflowRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>You can use this parameter to prevent unwanted multiple updates to data, to control costs, or in some cases, to prevent exceeding the maximum number of concurrent runs of any of the component jobs. If you leave this parameter blank, there is no limit to the number of concurrent workflow runs.</p>
+    #[serde(rename = "MaxConcurrentRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrent_runs: Option<i64>,
     /// <p>Name of the workflow to be updated.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -6509,6 +6759,10 @@ pub struct Workflow {
     #[serde(rename = "LastRun")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_run: Option<WorkflowRun>,
+    /// <p>You can use this parameter to prevent unwanted multiple updates to data, to control costs, or in some cases, to prevent exceeding the maximum number of concurrent runs of any of the component jobs. If you leave this parameter blank, there is no limit to the number of concurrent workflow runs.</p>
+    #[serde(rename = "MaxConcurrentRuns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrent_runs: Option<i64>,
     /// <p>The name of the workflow representing the flow.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6537,14 +6791,22 @@ pub struct WorkflowRun {
     #[serde(rename = "CompletedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_on: Option<f64>,
+    /// <p>This error message describes any error that may have occurred in starting the workflow run. Currently the only error message is "Concurrent runs exceeded for workflow: <code>foo</code>."</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
     /// <p>The graph representing all the AWS Glue components that belong to the workflow as nodes and directed connections between them as edges.</p>
     #[serde(rename = "Graph")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub graph: Option<WorkflowGraph>,
-    /// <p>Name of the workflow which was executed.</p>
+    /// <p>Name of the workflow that was executed.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The ID of the previous workflow run.</p>
+    #[serde(rename = "PreviousRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub previous_run_id: Option<String>,
     /// <p>The date and time when the workflow run was started.</p>
     #[serde(rename = "StartedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6571,7 +6833,7 @@ pub struct WorkflowRun {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkflowRunStatistics {
-    /// <p>Total number of Actions which have failed.</p>
+    /// <p>Total number of Actions that have failed.</p>
     #[serde(rename = "FailedActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_actions: Option<i64>,
@@ -6579,15 +6841,15 @@ pub struct WorkflowRunStatistics {
     #[serde(rename = "RunningActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub running_actions: Option<i64>,
-    /// <p>Total number of Actions which have stopped.</p>
+    /// <p>Total number of Actions that have stopped.</p>
     #[serde(rename = "StoppedActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped_actions: Option<i64>,
-    /// <p>Total number of Actions which have succeeded.</p>
+    /// <p>Total number of Actions that have succeeded.</p>
     #[serde(rename = "SucceededActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub succeeded_actions: Option<i64>,
-    /// <p>Total number of Actions which timed out.</p>
+    /// <p>Total number of Actions that timed out.</p>
     #[serde(rename = "TimeoutActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_actions: Option<i64>,
@@ -7207,6 +7469,64 @@ impl fmt::Display for GlueBatchStopJobRunError {
     }
 }
 impl Error for GlueBatchStopJobRunError {}
+/// Errors returned by BatchUpdatePartition
+#[derive(Debug, PartialEq)]
+pub enum BatchUpdatePartitionError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl BatchUpdatePartitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchUpdatePartitionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(BatchUpdatePartitionError::EntityNotFound(err.msg))
+                }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(BatchUpdatePartitionError::GlueEncryption(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(BatchUpdatePartitionError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(BatchUpdatePartitionError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(BatchUpdatePartitionError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchUpdatePartitionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchUpdatePartitionError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePartitionError::GlueEncryption(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePartitionError::InternalService(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePartitionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            BatchUpdatePartitionError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchUpdatePartitionError {}
 /// Errors returned by CancelMLTaskRun
 #[derive(Debug, PartialEq)]
 pub enum CancelMLTaskRunError {
@@ -10297,6 +10617,62 @@ impl fmt::Display for GetPartitionError {
     }
 }
 impl Error for GetPartitionError {}
+/// Errors returned by GetPartitionIndexes
+#[derive(Debug, PartialEq)]
+pub enum GetPartitionIndexesError {
+    /// <p>The <code>CreatePartitions</code> API was called on a table that has indexes enabled. </p>
+    Conflict(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetPartitionIndexesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPartitionIndexesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(GetPartitionIndexesError::Conflict(err.msg))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetPartitionIndexesError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetPartitionIndexesError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetPartitionIndexesError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetPartitionIndexesError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetPartitionIndexesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetPartitionIndexesError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetPartitionIndexesError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            GetPartitionIndexesError::InternalService(ref cause) => write!(f, "{}", cause),
+            GetPartitionIndexesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetPartitionIndexesError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetPartitionIndexesError {}
 /// Errors returned by GetPartitions
 #[derive(Debug, PartialEq)]
 pub enum GetPartitionsError {
@@ -11835,6 +12211,70 @@ impl fmt::Display for ResetJobBookmarkError {
     }
 }
 impl Error for ResetJobBookmarkError {}
+/// Errors returned by ResumeWorkflowRun
+#[derive(Debug, PartialEq)]
+pub enum ResumeWorkflowRunError {
+    /// <p>Too many jobs are being run concurrently.</p>
+    ConcurrentRunsExceeded(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>The workflow is in an invalid state to perform a requested operation.</p>
+    IllegalWorkflowState(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl ResumeWorkflowRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResumeWorkflowRunError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentRunsExceededException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::ConcurrentRunsExceeded(
+                        err.msg,
+                    ))
+                }
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::EntityNotFound(err.msg))
+                }
+                "IllegalWorkflowStateException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::IllegalWorkflowState(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(ResumeWorkflowRunError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ResumeWorkflowRunError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ResumeWorkflowRunError::ConcurrentRunsExceeded(ref cause) => write!(f, "{}", cause),
+            ResumeWorkflowRunError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            ResumeWorkflowRunError::IllegalWorkflowState(ref cause) => write!(f, "{}", cause),
+            ResumeWorkflowRunError::InternalService(ref cause) => write!(f, "{}", cause),
+            ResumeWorkflowRunError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ResumeWorkflowRunError::OperationTimeout(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ResumeWorkflowRunError {}
 /// Errors returned by SearchTables
 #[derive(Debug, PartialEq)]
 pub enum SearchTablesError {
@@ -13692,6 +14132,12 @@ pub trait Glue {
         input: BatchStopJobRunRequest,
     ) -> Result<BatchStopJobRunResponse, RusotoError<GlueBatchStopJobRunError>>;
 
+    /// <p>Updates one or more partitions in a batch operation.</p>
+    async fn batch_update_partition(
+        &self,
+        input: BatchUpdatePartitionRequest,
+    ) -> Result<BatchUpdatePartitionResponse, RusotoError<BatchUpdatePartitionError>>;
+
     /// <p>Cancels (stops) a task run. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can cancel a machine learning task run at any time by calling <code>CancelMLTaskRun</code> with a task run's parent transform's <code>TransformID</code> and the task run's <code>TaskRunId</code>. </p>
     async fn cancel_ml_task_run(
         &self,
@@ -13788,7 +14234,7 @@ pub trait Glue {
         input: DeleteClassifierRequest,
     ) -> Result<DeleteClassifierResponse, RusotoError<DeleteClassifierError>>;
 
-    /// <p>Delete the partition column statistics of a column.</p>
+    /// <p>Delete the partition column statistics of a column.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>DeletePartition</code>.</p>
     async fn delete_column_statistics_for_partition(
         &self,
         input: DeleteColumnStatisticsForPartitionRequest,
@@ -13797,7 +14243,7 @@ pub trait Glue {
         RusotoError<DeleteColumnStatisticsForPartitionError>,
     >;
 
-    /// <p>Retrieves table statistics of columns.</p>
+    /// <p>Retrieves table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>DeleteTable</code>.</p>
     async fn delete_column_statistics_for_table(
         &self,
         input: DeleteColumnStatisticsForTableRequest,
@@ -13908,7 +14354,7 @@ pub trait Glue {
         input: GetClassifiersRequest,
     ) -> Result<GetClassifiersResponse, RusotoError<GetClassifiersError>>;
 
-    /// <p>Retrieves partition statistics of columns.</p>
+    /// <p>Retrieves partition statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>GetPartition</code>.</p>
     async fn get_column_statistics_for_partition(
         &self,
         input: GetColumnStatisticsForPartitionRequest,
@@ -13917,7 +14363,7 @@ pub trait Glue {
         RusotoError<GetColumnStatisticsForPartitionError>,
     >;
 
-    /// <p>Retrieves table statistics of columns.</p>
+    /// <p>Retrieves table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>GetTable</code>.</p>
     async fn get_column_statistics_for_table(
         &self,
         input: GetColumnStatisticsForTableRequest,
@@ -14058,6 +14504,12 @@ pub trait Glue {
         input: GetPartitionRequest,
     ) -> Result<GetPartitionResponse, RusotoError<GetPartitionError>>;
 
+    /// <p>Retrieves the partition indexes associated with a table.</p>
+    async fn get_partition_indexes(
+        &self,
+        input: GetPartitionIndexesRequest,
+    ) -> Result<GetPartitionIndexesResponse, RusotoError<GetPartitionIndexesError>>;
+
     /// <p>Retrieves information about the partitions in a table.</p>
     async fn get_partitions(
         &self,
@@ -14070,7 +14522,7 @@ pub trait Glue {
         input: GetPlanRequest,
     ) -> Result<GetPlanResponse, RusotoError<GetPlanError>>;
 
-    /// <p>Retrieves the security configurations for the resource policies set on individual resources, and also the account-level policy.</p>
+    /// <p>Retrieves the security configurations for the resource policies set on individual resources, and also the account-level policy.</p> <p>This operation also returns the Data Catalog resource policy. However, if you enabled metadata encryption in Data Catalog settings, and you do not have permission on the AWS KMS key, the operation can't return the Data Catalog resource policy.</p>
     async fn get_resource_policies(
         &self,
         input: GetResourcePoliciesRequest,
@@ -14241,6 +14693,12 @@ pub trait Glue {
         input: ResetJobBookmarkRequest,
     ) -> Result<ResetJobBookmarkResponse, RusotoError<ResetJobBookmarkError>>;
 
+    /// <p>Restarts selected nodes of a previous partially completed workflow run and resumes the workflow run. The selected nodes and all nodes that are downstream from the selected nodes are run.</p>
+    async fn resume_workflow_run(
+        &self,
+        input: ResumeWorkflowRunRequest,
+    ) -> Result<ResumeWorkflowRunResponse, RusotoError<ResumeWorkflowRunError>>;
+
     /// <p>Searches a set of tables based on properties in the table metadata as well as on the parent database. You can search against text or filter conditions. </p> <p>You can only get tables that you have access to based on the security policies defined in Lake Formation. You need at least a read-only access to the table for it to be returned. If you do not have access to all the columns in the table, these columns will not be searched against when returning the list of tables back to you. If you have access to the columns but not the data in the columns, those columns and the associated metadata for those columns will be included in the search. </p>
     async fn search_tables(
         &self,
@@ -14346,7 +14804,7 @@ pub trait Glue {
         input: UpdateClassifierRequest,
     ) -> Result<UpdateClassifierResponse, RusotoError<UpdateClassifierError>>;
 
-    /// <p>Creates or updates partition statistics of columns.</p>
+    /// <p>Creates or updates partition statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>UpdatePartition</code>.</p>
     async fn update_column_statistics_for_partition(
         &self,
         input: UpdateColumnStatisticsForPartitionRequest,
@@ -14355,7 +14813,7 @@ pub trait Glue {
         RusotoError<UpdateColumnStatisticsForPartitionError>,
     >;
 
-    /// <p>Creates or updates table statistics of columns.</p>
+    /// <p>Creates or updates table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>UpdateTable</code>.</p>
     async fn update_column_statistics_for_table(
         &self,
         input: UpdateColumnStatisticsForTableRequest,
@@ -14697,6 +15155,25 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<BatchStopJobRunResponse, _>()
     }
 
+    /// <p>Updates one or more partitions in a batch operation.</p>
+    async fn batch_update_partition(
+        &self,
+        input: BatchUpdatePartitionRequest,
+    ) -> Result<BatchUpdatePartitionResponse, RusotoError<BatchUpdatePartitionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.BatchUpdatePartition");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, BatchUpdatePartitionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchUpdatePartitionResponse, _>()
+    }
+
     /// <p>Cancels (stops) a task run. Machine learning task runs are asynchronous tasks that AWS Glue runs on your behalf as part of various machine learning workflows. You can cancel a machine learning task run at any time by calling <code>CancelMLTaskRun</code> with a task run's parent transform's <code>TransformID</code> and the task run's <code>TaskRunId</code>. </p>
     async fn cancel_ml_task_run(
         &self,
@@ -14989,7 +15466,7 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteClassifierResponse, _>()
     }
 
-    /// <p>Delete the partition column statistics of a column.</p>
+    /// <p>Delete the partition column statistics of a column.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>DeletePartition</code>.</p>
     async fn delete_column_statistics_for_partition(
         &self,
         input: DeleteColumnStatisticsForPartitionRequest,
@@ -15014,7 +15491,7 @@ impl Glue for GlueClient {
             .deserialize::<DeleteColumnStatisticsForPartitionResponse, _>()
     }
 
-    /// <p>Retrieves table statistics of columns.</p>
+    /// <p>Retrieves table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>DeleteTable</code>.</p>
     async fn delete_column_statistics_for_table(
         &self,
         input: DeleteColumnStatisticsForTableRequest,
@@ -15348,7 +15825,7 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetClassifiersResponse, _>()
     }
 
-    /// <p>Retrieves partition statistics of columns.</p>
+    /// <p>Retrieves partition statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>GetPartition</code>.</p>
     async fn get_column_statistics_for_partition(
         &self,
         input: GetColumnStatisticsForPartitionRequest,
@@ -15370,7 +15847,7 @@ impl Glue for GlueClient {
             .deserialize::<GetColumnStatisticsForPartitionResponse, _>()
     }
 
-    /// <p>Retrieves table statistics of columns.</p>
+    /// <p>Retrieves table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>GetTable</code>.</p>
     async fn get_column_statistics_for_table(
         &self,
         input: GetColumnStatisticsForTableRequest,
@@ -15793,6 +16270,24 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionResponse, _>()
     }
 
+    /// <p>Retrieves the partition indexes associated with a table.</p>
+    async fn get_partition_indexes(
+        &self,
+        input: GetPartitionIndexesRequest,
+    ) -> Result<GetPartitionIndexesResponse, RusotoError<GetPartitionIndexesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.GetPartitionIndexes");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetPartitionIndexesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPartitionIndexesResponse, _>()
+    }
+
     /// <p>Retrieves information about the partitions in a table.</p>
     async fn get_partitions(
         &self,
@@ -15829,7 +16324,7 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetPlanResponse, _>()
     }
 
-    /// <p>Retrieves the security configurations for the resource policies set on individual resources, and also the account-level policy.</p>
+    /// <p>Retrieves the security configurations for the resource policies set on individual resources, and also the account-level policy.</p> <p>This operation also returns the Data Catalog resource policy. However, if you enabled metadata encryption in Data Catalog settings, and you do not have permission on the AWS KMS key, the operation can't return the Data Catalog resource policy.</p>
     async fn get_resource_policies(
         &self,
         input: GetResourcePoliciesRequest,
@@ -16347,6 +16842,24 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ResetJobBookmarkResponse, _>()
     }
 
+    /// <p>Restarts selected nodes of a previous partially completed workflow run and resumes the workflow run. The selected nodes and all nodes that are downstream from the selected nodes are run.</p>
+    async fn resume_workflow_run(
+        &self,
+        input: ResumeWorkflowRunRequest,
+    ) -> Result<ResumeWorkflowRunResponse, RusotoError<ResumeWorkflowRunError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSGlue.ResumeWorkflowRun");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ResumeWorkflowRunError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ResumeWorkflowRunResponse, _>()
+    }
+
     /// <p>Searches a set of tables based on properties in the table metadata as well as on the parent database. You can search against text or filter conditions. </p> <p>You can only get tables that you have access to based on the security policies defined in Lake Formation. You need at least a read-only access to the table for it to be returned. If you do not have access to all the columns in the table, these columns will not be searched against when returning the list of tables back to you. If you have access to the columns but not the data in the columns, those columns and the associated metadata for those columns will be included in the search. </p>
     async fn search_tables(
         &self,
@@ -16667,7 +17180,7 @@ impl Glue for GlueClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateClassifierResponse, _>()
     }
 
-    /// <p>Creates or updates partition statistics of columns.</p>
+    /// <p>Creates or updates partition statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>UpdatePartition</code>.</p>
     async fn update_column_statistics_for_partition(
         &self,
         input: UpdateColumnStatisticsForPartitionRequest,
@@ -16692,7 +17205,7 @@ impl Glue for GlueClient {
             .deserialize::<UpdateColumnStatisticsForPartitionResponse, _>()
     }
 
-    /// <p>Creates or updates table statistics of columns.</p>
+    /// <p>Creates or updates table statistics of columns.</p> <p>The Identity and Access Management (IAM) permission required for this operation is <code>UpdateTable</code>.</p>
     async fn update_column_statistics_for_table(
         &self,
         input: UpdateColumnStatisticsForTableRequest,

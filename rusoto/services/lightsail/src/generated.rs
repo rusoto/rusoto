@@ -190,6 +190,26 @@ pub struct AllocateStaticIpResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AttachCertificateToDistributionRequest {
+    /// <p><p>The name of the certificate to attach to a distribution.</p> <p>Only certificates with a status of <code>ISSUED</code> can be attached to a distribution.</p> <p>Use the <code>GetCertificates</code> action to get a list of certificate names that you can specify.</p> <note> <p>This is the name of the certificate resource type and is used only to reference the certificate in other API actions. It can be different than the domain name of the certificate. For example, your certificate name might be <code>WordPress-Blog-Certificate</code> and the domain name of the certificate might be <code>example.com</code>.</p> </note></p>
+    #[serde(rename = "certificateName")]
+    pub certificate_name: String,
+    /// <p>The name of the distribution that the certificate will be attached to.</p> <p>Use the <code>GetDistributions</code> action to get a list of distribution names that you can specify.</p>
+    #[serde(rename = "distributionName")]
+    pub distribution_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AttachCertificateToDistributionResult {
+    /// <p>An object that describes the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation: Option<Operation>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AttachDiskRequest {
     /// <p>The unique Lightsail disk name (e.g., <code>my-disk</code>).</p>
     #[serde(rename = "diskName")]
@@ -435,6 +455,181 @@ pub struct Bundle {
     pub transfer_per_month_in_gb: Option<i64>,
 }
 
+/// <p>Describes the default cache behavior of an Amazon Lightsail content delivery network (CDN) distribution.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CacheBehavior {
+    /// <p><p>The cache behavior of the distribution.</p> <p>The following cache behaviors can be specified:</p> <ul> <li> <p> <b> <code>cache</code> </b> - This option is best for static sites. When specified, your distribution caches and serves your entire website as static content. This behavior is ideal for websites with static content that doesn&#39;t change depending on who views it, or for websites that don&#39;t use cookies, headers, or query strings to personalize content.</p> </li> <li> <p> <b> <code>dont-cache</code> </b> - This option is best for sites that serve a mix of static and dynamic content. When specified, your distribution caches and serve only the content that is specified in the distribution&#39;s <code>CacheBehaviorPerPath</code> parameter. This behavior is ideal for websites or web applications that use cookies, headers, and query strings to personalize content for individual users.</p> </li> </ul></p>
+    #[serde(rename = "behavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behavior: Option<String>,
+}
+
+/// <p>Describes the per-path cache behavior of an Amazon Lightsail content delivery network (CDN) distribution.</p> <p>A per-path cache behavior is used to override, or add an exception to, the default cache behavior of a distribution. For example, if the <code>cacheBehavior</code> is set to <code>cache</code>, then a per-path cache behavior can be used to specify a directory, file, or file type that your distribution will cache. Alternately, if the distribution's <code>cacheBehavior</code> is <code>dont-cache</code>, then a per-path cache behavior can be used to specify a directory, file, or file type that your distribution will not cache.</p> <p>if the cacheBehavior's behavior is set to 'cache', then</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CacheBehaviorPerPath {
+    /// <p><p>The cache behavior for the specified path.</p> <p>You can specify one of the following per-path cache behaviors:</p> <ul> <li> <p> <b> <code>cache</code> </b> - This behavior caches the specified path. </p> </li> <li> <p> <b> <code>dont-cache</code> </b> - This behavior doesn&#39;t cache the specified path. </p> </li> </ul></p>
+    #[serde(rename = "behavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behavior: Option<String>,
+    /// <p><p>The path to a directory or file to cached, or not cache. Use an asterisk symbol to specify wildcard directories (<code>path/to/assets/<em></code>), and file types (<code></em>.html, *jpg, <em>js</code>). Directories and file paths are case-sensitive.</p> <p>Examples:</p> <ul> <li> <p>Specify the following to cache all files in the document root of an Apache web server running on a Lightsail instance.</p> <p> <code>var/www/html/</code> </p> </li> <li> <p>Specify the following file to cache only the index page in the document root of an Apache web server.</p> <p> <code>var/www/html/index.html</code> </p> </li> <li> <p>Specify the following to cache only the .html files in the document root of an Apache web server.</p> <p> <code>var/www/html/</em>.html</code> </p> </li> <li> <p>Specify the following to cache only the .jpg, .png, and .gif files in the images sub-directory of the document root of an Apache web server.</p> <p> <code>var/www/html/images/<em>.jpg</code> </p> <p> <code>var/www/html/images/</em>.png</code> </p> <p> <code>var/www/html/images/*.gif</code> </p> <p>Specify the following to cache all files in the images sub-directory of the document root of an Apache web server.</p> <p> <code>var/www/html/images/</code> </p> </li> </ul></p>
+    #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+}
+
+/// <p>Describes the cache settings of an Amazon Lightsail content delivery network (CDN) distribution.</p> <p>These settings apply only to your distribution's <code>cacheBehaviors</code> (including the <code>defaultCacheBehavior</code>) that have a <code>behavior</code> of <code>cache</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CacheSettings {
+    /// <p>The HTTP methods that are processed and forwarded to the distribution's origin.</p> <p>You can specify the following options:</p> <ul> <li> <p> <code>GET,HEAD</code> - The distribution forwards the <code>GET</code> and <code>HEAD</code> methods.</p> </li> <li> <p> <code>GET,HEAD,OPTIONS</code> - The distribution forwards the <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> methods.</p> </li> <li> <p> <code>GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE</code> - The distribution forwards the <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>PUT</code>, <code>PATCH</code>, <code>POST</code>, and <code>DELETE</code> methods.</p> </li> </ul> <p>If you specify the third option, you might need to restrict access to your distribution's origin so users can't perform operations that you don't want them to. For example, you might not want users to have permission to delete objects from your origin.</p>
+    #[serde(rename = "allowedHTTPMethods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allowed_http_methods: Option<String>,
+    /// <p><p>The HTTP method responses that are cached by your distribution.</p> <p>You can specify the following options:</p> <ul> <li> <p> <code>GET,HEAD</code> - The distribution caches responses to the <code>GET</code> and <code>HEAD</code> methods.</p> </li> <li> <p> <code>GET,HEAD,OPTIONS</code> - The distribution caches responses to the <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> methods.</p> </li> </ul></p>
+    #[serde(rename = "cachedHTTPMethods")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cached_http_methods: Option<String>,
+    /// <p><p>The default amount of time that objects stay in the distribution&#39;s cache before the distribution forwards another request to the origin to determine whether the content has been updated.</p> <note> <p>The value specified applies only when the origin does not add HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects.</p> </note></p>
+    #[serde(rename = "defaultTTL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_ttl: Option<i64>,
+    /// <p>An object that describes the cookies that are forwarded to the origin. Your content is cached based on the cookies that are forwarded.</p>
+    #[serde(rename = "forwardedCookies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forwarded_cookies: Option<CookieObject>,
+    /// <p>An object that describes the headers that are forwarded to the origin. Your content is cached based on the headers that are forwarded.</p>
+    #[serde(rename = "forwardedHeaders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forwarded_headers: Option<HeaderObject>,
+    /// <p>An object that describes the query strings that are forwarded to the origin. Your content is cached based on the query strings that are forwarded.</p>
+    #[serde(rename = "forwardedQueryStrings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forwarded_query_strings: Option<QueryStringObject>,
+    /// <p>The maximum amount of time that objects stay in the distribution's cache before the distribution forwards another request to the origin to determine whether the object has been updated.</p> <p>The value specified applies only when the origin adds HTTP headers such as <code>Cache-Control max-age</code>, <code>Cache-Control s-maxage</code>, and <code>Expires</code> to objects.</p>
+    #[serde(rename = "maximumTTL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_ttl: Option<i64>,
+    /// <p>The minimum amount of time that objects stay in the distribution's cache before the distribution forwards another request to the origin to determine whether the object has been updated.</p> <p>A value of <code>0</code> must be specified for <code>minimumTTL</code> if the distribution is configured to forward all headers to the origin.</p>
+    #[serde(rename = "minimumTTL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_ttl: Option<i64>,
+}
+
+/// <p><p>Describes the full details of an Amazon Lightsail SSL/TLS certificate.</p> <note> <p>To get a summary of a certificate, use the <code>GetCertificates</code> action and ommit <code>includeCertificateDetails</code> from your request. The response will include only the certificate Amazon Resource Name (ARN), certificate name, domain name, and tags.</p> </note></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Certificate {
+    /// <p>The Amazon Resource Name (ARN) of the certificate.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The timestamp when the certificate was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The domain name of the certificate.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>An array of objects that describe the domain validation records of the certificate.</p>
+    #[serde(rename = "domainValidationRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_validation_records: Option<Vec<DomainValidationRecord>>,
+    /// <p>The renewal eligibility of the certificate.</p>
+    #[serde(rename = "eligibleToRenew")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub eligible_to_renew: Option<String>,
+    /// <p>The number of Lightsail resources that the certificate is attached to.</p>
+    #[serde(rename = "inUseResourceCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub in_use_resource_count: Option<i64>,
+    /// <p>The timestamp when the certificate was issued.</p>
+    #[serde(rename = "issuedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issued_at: Option<f64>,
+    /// <p>The certificate authority that issued the certificate.</p>
+    #[serde(rename = "issuerCA")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issuer_ca: Option<String>,
+    /// <p>The algorithm used to generate the key pair (the public and private key) of the certificate.</p>
+    #[serde(rename = "keyAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_algorithm: Option<String>,
+    /// <p>The name of the certificate (e.g., <code>my-certificate</code>).</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The timestamp when the certificate expires.</p>
+    #[serde(rename = "notAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_after: Option<f64>,
+    /// <p>The timestamp when the certificate is first valid.</p>
+    #[serde(rename = "notBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_before: Option<f64>,
+    /// <p>An object that describes the status of the certificate renewal managed by Lightsail.</p>
+    #[serde(rename = "renewalSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renewal_summary: Option<RenewalSummary>,
+    /// <p><p>The validation failure reason, if any, of the certificate.</p> <p>The following failure reasons are possible:</p> <ul> <li> <p> <b> <code>NO<em>AVAILABLE</em>CONTACTS</code> </b> - This failure applies to email validation, which is not available for Lightsail certificates.</p> </li> <li> <p> <b> <code>ADDITIONAL<em>VERIFICATION</em>REQUIRED</code> </b> - Lightsail requires additional information to process this certificate request. This can happen as a fraud-protection measure, such as when the domain ranks within the Alexa top 1000 websites. To provide the required information, use the <a href="https://console.aws.amazon.com/support/home">AWS Support Center</a> to contact AWS Support.</p> <note> <p>You cannot request a certificate for Amazon-owned domain names such as those ending in amazonaws.com, cloudfront.net, or elasticbeanstalk.com.</p> </note> </li> <li> <p> <b> <code>DOMAIN<em>NOT</em>ALLOWED</code> </b> - One or more of the domain names in the certificate request was reported as an unsafe domain by <a href="https://www.virustotal.com/gui/home/url">VirusTotal</a>. To correct the problem, search for your domain name on the <a href="https://www.virustotal.com/gui/home/url">VirusTotal</a> website. If your domain is reported as suspicious, see <a href="https://www.google.com/webmasters/hacked/?hl=en">Google Help for Hacked Websites</a> to learn what you can do.</p> <p>If you believe that the result is a false positive, notify the organization that is reporting the domain. VirusTotal is an aggregate of several antivirus and URL scanners and cannot remove your domain from a block list itself. After you correct the problem and the VirusTotal registry has been updated, request a new certificate.</p> <p>If you see this error and your domain is not included in the VirusTotal list, visit the <a href="https://console.aws.amazon.com/support/home">AWS Support Center</a> and create a case.</p> </li> <li> <p> <b> <code>INVALID<em>PUBLIC</em>DOMAIN</code> </b> - One or more of the domain names in the certificate request is not valid. Typically, this is because a domain name in the request is not a valid top-level domain. Try to request a certificate again, correcting any spelling errors or typos that were in the failed request, and ensure that all domain names in the request are for valid top-level domains. For example, you cannot request a certificate for <code>example.invalidpublicdomain</code> because <code>invalidpublicdomain</code> is not a valid top-level domain.</p> </li> <li> <p> <b> <code>OTHER</code> </b> - Typically, this failure occurs when there is a typographical error in one or more of the domain names in the certificate request. Try to request a certificate again, correcting any spelling errors or typos that were in the failed request. </p> </li> </ul></p>
+    #[serde(rename = "requestFailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_failure_reason: Option<String>,
+    /// <p>The reason the certificate was revoked. This value is present only when the certificate status is <code>REVOKED</code>.</p>
+    #[serde(rename = "revocationReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revocation_reason: Option<String>,
+    /// <p>The timestamp when the certificate was revoked. This value is present only when the certificate status is <code>REVOKED</code>.</p>
+    #[serde(rename = "revokedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revoked_at: Option<f64>,
+    /// <p>The serial number of the certificate.</p>
+    #[serde(rename = "serialNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub serial_number: Option<String>,
+    /// <p>The validation status of the certificate.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>An array of strings that specify the alternate domains (e.g., <code>example2.com</code>) and subdomains (e.g., <code>blog.example.com</code>) of the certificate.</p>
+    #[serde(rename = "subjectAlternativeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_alternative_names: Option<Vec<String>>,
+    /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail certificate. This code enables our support team to look up your Lightsail information more easily.</p>
+    #[serde(rename = "supportCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Describes an Amazon Lightsail SSL/TLS certificate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CertificateSummary {
+    /// <p>The Amazon Resource Name (ARN) of the certificate.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_arn: Option<String>,
+    /// <p>An object that describes a certificate in detail.</p>
+    #[serde(rename = "certificateDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_detail: Option<Certificate>,
+    /// <p>The name of the certificate.</p>
+    #[serde(rename = "certificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_name: Option<String>,
+    /// <p>The domain name of the certificate.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CloseInstancePublicPortsRequest {
@@ -552,6 +747,19 @@ pub struct ContactMethod {
     pub support_code: Option<String>,
 }
 
+/// <p>Describes whether an Amazon Lightsail content delivery network (CDN) distribution forwards cookies to the origin and, if so, which ones.</p> <p>For the cookies that you specify, your distribution caches separate versions of the specified content based on the cookie values in viewer requests.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CookieObject {
+    /// <p>The specific cookies to forward to your distribution's origin.</p>
+    #[serde(rename = "cookiesAllowList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cookies_allow_list: Option<Vec<String>>,
+    /// <p>Specifies which cookies to forward to the distribution's origin for a cache behavior: <code>all</code>, <code>none</code>, or <code>allow-list</code> to forward only the cookies specified in the <code>cookiesAllowList</code> parameter.</p>
+    #[serde(rename = "option")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub option: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopySnapshotRequest {
@@ -582,6 +790,38 @@ pub struct CopySnapshotRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopySnapshotResult {
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateCertificateRequest {
+    /// <p>The name for the certificate.</p>
+    #[serde(rename = "certificateName")]
+    pub certificate_name: String,
+    /// <p>The domain name (e.g., <code>example.com</code>) for the certificate.</p>
+    #[serde(rename = "domainName")]
+    pub domain_name: String,
+    /// <p>An array of strings that specify the alternate domains (e.g., <code>example2.com</code>) and subdomains (e.g., <code>blog.example.com</code>) for the certificate.</p> <p>You can specify a maximum of nine alternate domains (in addition to the primary domain name).</p> <p>Wildcard domain entries (e.g., <code>*.example.com</code>) are not supported.</p>
+    #[serde(rename = "subjectAlternativeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_alternative_names: Option<Vec<String>>,
+    /// <p>The tag keys and optional values to add to the certificate during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateCertificateResult {
+    /// <p>An object that describes the certificate created.</p>
+    #[serde(rename = "certificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate: Option<CertificateSummary>,
     /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -653,7 +893,7 @@ pub struct CreateDiskFromSnapshotRequest {
     #[serde(rename = "sourceDiskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_disk_name: Option<String>,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -688,7 +928,7 @@ pub struct CreateDiskRequest {
     /// <p>The size of the disk in GB (e.g., <code>32</code>).</p>
     #[serde(rename = "sizeInGb")]
     pub size_in_gb: i64,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -717,7 +957,7 @@ pub struct CreateDiskSnapshotRequest {
     #[serde(rename = "instanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_name: Option<String>,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -730,6 +970,48 @@ pub struct CreateDiskSnapshotResult {
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateDistributionRequest {
+    /// <p>The bundle ID to use for the distribution.</p> <p>A distribution bundle describes the specifications of your distribution, such as the monthly cost and monthly network transfer quota.</p> <p>Use the <code>GetDistributionBundles</code> action to get a list of distribution bundle IDs that you can specify.</p>
+    #[serde(rename = "bundleId")]
+    pub bundle_id: String,
+    /// <p>An object that describes the cache behavior settings for the distribution.</p>
+    #[serde(rename = "cacheBehaviorSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_behavior_settings: Option<CacheSettings>,
+    /// <p>An array of objects that describe the per-path cache behavior for the distribution.</p>
+    #[serde(rename = "cacheBehaviors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_behaviors: Option<Vec<CacheBehaviorPerPath>>,
+    /// <p>An object that describes the default cache behavior for the distribution.</p>
+    #[serde(rename = "defaultCacheBehavior")]
+    pub default_cache_behavior: CacheBehavior,
+    /// <p>The name for the distribution.</p>
+    #[serde(rename = "distributionName")]
+    pub distribution_name: String,
+    /// <p>An object that describes the origin resource for the distribution, such as a Lightsail instance or load balancer.</p> <p>The distribution pulls, caches, and serves content from the origin.</p>
+    #[serde(rename = "origin")]
+    pub origin: InputOrigin,
+    /// <p>The tag keys and optional values to add to the distribution during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateDistributionResult {
+    /// <p>An object that describes the distribution created.</p>
+    #[serde(rename = "distribution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution: Option<LightsailDistribution>,
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation: Option<Operation>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -758,7 +1040,7 @@ pub struct CreateDomainRequest {
     /// <p><p>The domain name to manage (e.g., <code>example.com</code>).</p> <note> <p>You cannot register a new domain name using Lightsail. You must register a domain name using Amazon Route 53 or another domain name registrar. If you have already registered your domain, you can enter its name in this parameter to manage the DNS records for that domain.</p> </note></p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -782,7 +1064,7 @@ pub struct CreateInstanceSnapshotRequest {
     /// <p>The name for your new snapshot.</p>
     #[serde(rename = "instanceSnapshotName")]
     pub instance_snapshot_name: String,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -833,7 +1115,7 @@ pub struct CreateInstancesFromSnapshotRequest {
     #[serde(rename = "sourceInstanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_instance_name: Option<String>,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -879,7 +1161,7 @@ pub struct CreateInstancesRequest {
     #[serde(rename = "keyPairName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair_name: Option<String>,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -904,7 +1186,7 @@ pub struct CreateKeyPairRequest {
     /// <p>The name for your new key pair.</p>
     #[serde(rename = "keyPairName")]
     pub key_pair_name: String,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -956,7 +1238,7 @@ pub struct CreateLoadBalancerRequest {
     /// <p>The name of your load balancer.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -987,7 +1269,7 @@ pub struct CreateLoadBalancerTlsCertificateRequest {
     /// <p>The load balancer name where you want to create the SSL/TLS certificate.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1032,7 +1314,7 @@ pub struct CreateRelationalDatabaseFromSnapshotRequest {
     #[serde(rename = "sourceRelationalDatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_relational_database_name: Option<String>,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1089,7 +1371,7 @@ pub struct CreateRelationalDatabaseRequest {
     /// <p><p>The name to use for your new database.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 2 to 255 alphanumeric characters, or hyphens.</p> </li> <li> <p>The first and last character must be a letter or number.</p> </li> </ul></p>
     #[serde(rename = "relationalDatabaseName")]
     pub relational_database_name: String,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1113,7 +1395,7 @@ pub struct CreateRelationalDatabaseSnapshotRequest {
     /// <p><p>The name for your new database snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 2 to 255 alphanumeric characters, or hyphens.</p> </li> <li> <p>The first and last character must be a letter or number.</p> </li> </ul></p>
     #[serde(rename = "relationalDatabaseSnapshotName")]
     pub relational_database_snapshot_name: String,
-    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>Use the <code>TagResource</code> action to tag a resource after it's created.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1159,6 +1441,23 @@ pub struct DeleteAutoSnapshotRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAutoSnapshotResult {
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteCertificateRequest {
+    /// <p>The name of the certificate to delete.</p> <p>Use the <code>GetCertificates</code> action to get a list of certificate names that you can specify.</p>
+    #[serde(rename = "certificateName")]
+    pub certificate_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteCertificateResult {
     /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1218,6 +1517,24 @@ pub struct DeleteDiskSnapshotResult {
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteDistributionRequest {
+    /// <p>The name of the distribution to delete.</p> <p>Use the <code>GetDistributions</code> action to get a list of distribution names that you can specify.</p>
+    #[serde(rename = "distributionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteDistributionResult {
+    /// <p>An object that describes the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation: Option<Operation>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1424,6 +1741,23 @@ pub struct DestinationInfo {
     #[serde(rename = "service")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DetachCertificateFromDistributionRequest {
+    /// <p>The name of the distribution from which to detach the certificate.</p> <p>Use the <code>GetDistributions</code> action to get a list of distribution names that you can specify.</p>
+    #[serde(rename = "distributionName")]
+    pub distribution_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DetachCertificateFromDistributionResult {
+    /// <p>An object that describes the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation: Option<Operation>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1678,6 +2012,32 @@ pub struct DiskSnapshotInfo {
     pub size_in_gb: Option<i64>,
 }
 
+/// <p>Describes the specifications of a distribution bundle.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DistributionBundle {
+    /// <p>The ID of the bundle.</p>
+    #[serde(rename = "bundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bundle_id: Option<String>,
+    /// <p>Indicates whether the bundle is active, and can be specified for a new distribution.</p>
+    #[serde(rename = "isActive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_active: Option<bool>,
+    /// <p>The name of the distribution bundle.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The monthly price, in US dollars, of the bundle.</p>
+    #[serde(rename = "price")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub price: Option<f32>,
+    /// <p>The monthly network transfer quota of the bundle.</p>
+    #[serde(rename = "transferPerMonthInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transfer_per_month_in_gb: Option<i64>,
+}
+
 /// <p>Describes a domain where you are storing recordsets in Lightsail.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1739,6 +2099,20 @@ pub struct DomainEntry {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>Describes the domain validation records of an Amazon Lightsail SSL/TLS certificate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DomainValidationRecord {
+    /// <p>The domain name of the certificate validation record. For example, <code>example.com</code> or <code>www.example.com</code>.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>An object that describes the DNS records to add to your domain's DNS to validate it for the certificate.</p>
+    #[serde(rename = "resourceRecord")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_record: Option<ResourceRecord>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2002,6 +2376,32 @@ pub struct GetBundlesResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCertificatesRequest {
+    /// <p>The name for the certificate for which to return information.</p> <p>When omitted, the response includes all of your certificates in the AWS region where the request is made.</p>
+    #[serde(rename = "certificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_name: Option<String>,
+    /// <p>The status of the certificates for which to return information.</p> <p>For example, specify <code>ISSUED</code> to return only certificates with an <code>ISSUED</code> status.</p> <p>When omitted, the response includes all of your certificates in the AWS region where the request is made, regardless of their current status.</p>
+    #[serde(rename = "certificateStatuses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_statuses: Option<Vec<String>>,
+    /// <p>Indicates whether to include detailed information about the certificates in the response.</p> <p>When omitted, the response includes only the certificate names, Amazon Resource Names (ARNs), domain names, and tags.</p>
+    #[serde(rename = "includeCertificateDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_certificate_details: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetCertificatesResult {
+    /// <p>An object that describes certificates.</p>
+    #[serde(rename = "certificates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificates: Option<Vec<CertificateSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCloudFormationStackRecordsRequest {
     /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetClouFormationStackRecords</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
     #[serde(rename = "pageToken")]
@@ -2113,6 +2513,106 @@ pub struct GetDisksResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disks: Option<Vec<Disk>>,
     /// <p>The token to advance to the next page of resutls from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetDisks</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetDistributionBundlesRequest {}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetDistributionBundlesResult {
+    /// <p>An object that describes a distribution bundle.</p>
+    #[serde(rename = "bundles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bundles: Option<Vec<DistributionBundle>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetDistributionLatestCacheResetRequest {
+    /// <p>The name of the distribution for which to return the timestamp of the last cache reset.</p> <p>Use the <code>GetDistributions</code> action to get a list of distribution names that you can specify.</p> <p>When omitted, the response includes the latest cache reset timestamp of all your distributions.</p>
+    #[serde(rename = "distributionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetDistributionLatestCacheResetResult {
+    /// <p>The timestamp of the last cache reset (e.g., <code>1479734909.17</code>) in Unix time format.</p>
+    #[serde(rename = "createTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<f64>,
+    /// <p>The status of the last cache reset.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetDistributionMetricDataRequest {
+    /// <p>The name of the distribution for which to get metric data.</p> <p>Use the <code>GetDistributions</code> action to get a list of distribution names that you can specify.</p>
+    #[serde(rename = "distributionName")]
+    pub distribution_name: String,
+    /// <p>The end of the time interval for which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 9 PM UTC, specify <code>1538427600</code> as the end time.</p> </li> </ul> <p>You can convert a human-friendly time to Unix time format using a converter like <a href="https://www.epochconverter.com/">Epoch converter</a>.</p>
+    #[serde(rename = "endTime")]
+    pub end_time: f64,
+    /// <p><p>The metric for which you want to return information.</p> <p>Valid distribution metric names are listed below, along with the most useful <code>statistics</code> to include in your request, and the published <code>unit</code> value.</p> <ul> <li> <p> <b> <code>Requests</code> </b> - The total number of viewer requests received by your Lightsail distribution, for all HTTP methods, and for both HTTP and HTTPS requests.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>None</code>.</p> </li> <li> <p> <b> <code>BytesDownloaded</code> </b> - The number of bytes downloaded by viewers for GET, HEAD, and OPTIONS requests.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>None</code>.</p> </li> <li> <p> <b> <code>BytesUploaded </code> </b> - The number of bytes uploaded to your origin by your Lightsail distribution, using POST and PUT requests.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> <p> <code>Unit</code>: The published unit is <code>None</code>.</p> </li> <li> <p> <b> <code>TotalErrorRate</code> </b> - The percentage of all viewer requests for which the response&#39;s HTTP status code was 4xx or 5xx.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> <li> <p> <b> <code>4xxErrorRate</code> </b> - The percentage of all viewer requests for which the response&#39;s HTTP status cod was 4xx. In these cases, the client or client viewer may have made an error. For example, a status code of 404 (Not Found) means that the client requested an object that could not be found.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> <li> <p> <b> <code>5xxErrorRate</code> </b> - The percentage of all viewer requests for which the response&#39;s HTTP status code was 5xx. In these cases, the origin server did not satisfy the requests. For example, a status code of 503 (Service Unavailable) means that the origin server is currently unavailable.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> <p> <code>Unit</code>: The published unit is <code>Percent</code>.</p> </li> </ul></p>
+    #[serde(rename = "metricName")]
+    pub metric_name: String,
+    /// <p>The granularity, in seconds, for the metric data points that will be returned.</p>
+    #[serde(rename = "period")]
+    pub period: i64,
+    /// <p>The start of the time interval for which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Coordinated Universal Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a start time of October 1, 2018, at 8 PM UTC, specify <code>1538424000</code> as the start time.</p> </li> </ul> <p>You can convert a human-friendly time to Unix time format using a converter like <a href="https://www.epochconverter.com/">Epoch converter</a>.</p>
+    #[serde(rename = "startTime")]
+    pub start_time: f64,
+    /// <p><p>The statistic for the metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Minimum</code> - The lowest value observed during the specified period. Use this value to determine low volumes of activity for your application.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> <li> <p> <code>Sum</code> - All values submitted for the matching metric added together. You can use this statistic to determine the total volume of a metric.</p> </li> <li> <p> <code>Average</code> - The value of Sum / SampleCount during the specified period. By comparing this statistic with the Minimum and Maximum values, you can determine the full scope of a metric and how close the average use is to the Minimum and Maximum values. This comparison helps you to know when to increase or decrease your resources.</p> </li> <li> <p> <code>SampleCount</code> - The count, or number, of data points used for the statistical calculation.</p> </li> </ul></p>
+    #[serde(rename = "statistics")]
+    pub statistics: Vec<String>,
+    /// <p>The unit for the metric data request.</p> <p>Valid units depend on the metric data being requested. For the valid units with each available metric, see the <code>metricName</code> parameter.</p>
+    #[serde(rename = "unit")]
+    pub unit: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetDistributionMetricDataResult {
+    /// <p>An array of objects that describe the metric data returned.</p>
+    #[serde(rename = "metricData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_data: Option<Vec<MetricDatapoint>>,
+    /// <p>The name of the metric returned.</p>
+    #[serde(rename = "metricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetDistributionsRequest {
+    /// <p>The name of the distribution for which to return information.</p> <p>Use the <code>GetDistributions</code> action to get a list of distribution names that you can specify.</p> <p>When omitted, the response includes all of your distributions in the AWS Region where the request is made.</p>
+    #[serde(rename = "distributionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_name: Option<String>,
+    /// <p>The token to advance to the next page of results from your request.</p> <p>To get a page token, perform an initial <code>GetDistributions</code> request. If your results are paginated, the response will return a next page token that you can specify as the page token in a subsequent request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetDistributionsResult {
+    /// <p>An array of objects that describe your distributions.</p>
+    #[serde(rename = "distributions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distributions: Option<Vec<LightsailDistribution>>,
+    /// <p>The token to advance to the next page of results from your request.</p> <p>A next page token is not returned if there are no more results to display.</p> <p>To get the next page of results, perform another <code>GetDistributions</code> request and specify the next page token using the <code>pageToken</code> parameter.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -2911,6 +3411,19 @@ pub struct GetStaticIpsResult {
     pub static_ips: Option<Vec<StaticIp>>,
 }
 
+/// <p>Describes the request headers that a Lightsail distribution bases caching on.</p> <p>For the headers that you specify, your distribution caches separate versions of the specified content based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>product</code> header that has a value of either <code>acme</code> or <code>apex</code>, and you configure your distribution to cache your content based on values in the <code>product</code> header. Your distribution forwards the <code>product</code> header to the origin and caches the response from the origin once for each header value. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HeaderObject {
+    /// <p>The specific headers to forward to your distribution's origin.</p>
+    #[serde(rename = "headersAllowList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub headers_allow_list: Option<Vec<String>>,
+    /// <p><p>The headers that you want your distribution to forward to your origin and base caching on.</p> <p>You can configure your distribution to do one of the following:</p> <ul> <li> <p> <b> <code>all</code> </b> - Forward all headers to your origin.</p> </li> <li> <p> <b> <code>none</code> </b> - Forward only the default headers.</p> </li> <li> <p> <b> <code>allow-list</code> </b> - Forward only the headers you specify using the <code>headersAllowList</code> parameter.</p> </li> </ul></p>
+    #[serde(rename = "option")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub option: Option<String>,
+}
+
 /// <p>Describes the public SSH host keys or the RDP certificate.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2965,6 +3478,24 @@ pub struct ImportKeyPairResult {
     pub operation: Option<Operation>,
 }
 
+/// <p>Describes the origin resource of an Amazon Lightsail content delivery network (CDN) distribution.</p> <p>An origin can be a Lightsail instance or load balancer. A distribution pulls content from an origin, caches it, and serves it to viewers via a worldwide network of edge servers.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct InputOrigin {
+    /// <p>The name of the origin resource.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The protocol that your Amazon Lightsail distribution uses when establishing a connection with your origin to pull content.</p>
+    #[serde(rename = "protocolPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol_policy: Option<String>,
+    /// <p>The AWS Region name of the origin resource.</p>
+    #[serde(rename = "regionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_name: Option<String>,
+}
+
 /// <p>Describes an instance (a virtual private server).</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2989,7 +3520,7 @@ pub struct Instance {
     #[serde(rename = "bundleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
-    /// <p>The timestamp when the instance was created (e.g., <code>1479734909.17</code>).</p>
+    /// <p>The timestamp when the instance was created (e.g., <code>1479734909.17</code>) in Unix time format.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
@@ -3394,6 +3925,88 @@ pub struct KeyPair {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// <p>Describes an Amazon Lightsail content delivery network (CDN) distribution.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LightsailDistribution {
+    /// <p>Indicates whether the bundle that is currently applied to your distribution, specified using the <code>distributionName</code> parameter, can be changed to another bundle.</p> <p>Use the <code>UpdateDistributionBundle</code> action to change your distribution's bundle.</p>
+    #[serde(rename = "ableToUpdateBundle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub able_to_update_bundle: Option<bool>,
+    /// <p>The alternate domain names of the distribution.</p>
+    #[serde(rename = "alternativeDomainNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alternative_domain_names: Option<Vec<String>>,
+    /// <p>The Amazon Resource Name (ARN) of the distribution.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID of the bundle currently applied to the distribution.</p>
+    #[serde(rename = "bundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bundle_id: Option<String>,
+    /// <p>An object that describes the cache behavior settings of the distribution.</p>
+    #[serde(rename = "cacheBehaviorSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_behavior_settings: Option<CacheSettings>,
+    /// <p>An array of objects that describe the per-path cache behavior of the distribution.</p>
+    #[serde(rename = "cacheBehaviors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_behaviors: Option<Vec<CacheBehaviorPerPath>>,
+    /// <p>The name of the SSL/TLS certificate attached to the distribution, if any.</p>
+    #[serde(rename = "certificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_name: Option<String>,
+    /// <p>The timestamp when the distribution was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>An object that describes the default cache behavior of the distribution.</p>
+    #[serde(rename = "defaultCacheBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_cache_behavior: Option<CacheBehavior>,
+    /// <p>The domain name of the distribution.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>Indicates whether the distribution is enabled.</p>
+    #[serde(rename = "isEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_enabled: Option<bool>,
+    /// <p><p>An object that describes the location of the distribution, such as the AWS Region and Availability Zone.</p> <note> <p>Lightsail distributions are global resources that can reference an origin in any AWS Region, and distribute its content globally. However, all distributions are located in the <code>us-east-1</code> Region.</p> </note></p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<ResourceLocation>,
+    /// <p>The name of the distribution.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>An object that describes the origin resource of the distribution, such as a Lightsail instance or load balancer.</p> <p>The distribution pulls, caches, and serves content from the origin.</p>
+    #[serde(rename = "origin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin: Option<Origin>,
+    /// <p>The public DNS of the origin.</p>
+    #[serde(rename = "originPublicDNS")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin_public_dns: Option<String>,
+    /// <p>The Lightsail resource type (e.g., <code>Distribution</code>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The status of the distribution.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail distribution. This code enables our support team to look up your Lightsail information more easily.</p>
+    #[serde(rename = "supportCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p>Describes the Lightsail load balancer.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3484,7 +4097,7 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "domainValidationRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_validation_records: Option<Vec<LoadBalancerTlsCertificateDomainValidationRecord>>,
-    /// <p>The reason for the SSL/TLS certificate validation failure.</p>
+    /// <p><p>The validation failure reason, if any, of the certificate.</p> <p>The following failure reasons are possible:</p> <ul> <li> <p> <b> <code>NO<em>AVAILABLE</em>CONTACTS</code> </b> - This failure applies to email validation, which is not available for Lightsail certificates.</p> </li> <li> <p> <b> <code>ADDITIONAL<em>VERIFICATION</em>REQUIRED</code> </b> - Lightsail requires additional information to process this certificate request. This can happen as a fraud-protection measure, such as when the domain ranks within the Alexa top 1000 websites. To provide the required information, use the <a href="https://console.aws.amazon.com/support/home">AWS Support Center</a> to contact AWS Support.</p> <note> <p>You cannot request a certificate for Amazon-owned domain names such as those ending in amazonaws.com, cloudfront.net, or elasticbeanstalk.com.</p> </note> </li> <li> <p> <b> <code>DOMAIN<em>NOT</em>ALLOWED</code> </b> - One or more of the domain names in the certificate request was reported as an unsafe domain by <a href="https://www.virustotal.com/gui/home/url">VirusTotal</a>. To correct the problem, search for your domain name on the <a href="https://www.virustotal.com/gui/home/url">VirusTotal</a> website. If your domain is reported as suspicious, see <a href="https://www.google.com/webmasters/hacked/?hl=en">Google Help for Hacked Websites</a> to learn what you can do.</p> <p>If you believe that the result is a false positive, notify the organization that is reporting the domain. VirusTotal is an aggregate of several antivirus and URL scanners and cannot remove your domain from a block list itself. After you correct the problem and the VirusTotal registry has been updated, request a new certificate.</p> <p>If you see this error and your domain is not included in the VirusTotal list, visit the <a href="https://console.aws.amazon.com/support/home">AWS Support Center</a> and create a case.</p> </li> <li> <p> <b> <code>INVALID<em>PUBLIC</em>DOMAIN</code> </b> - One or more of the domain names in the certificate request is not valid. Typically, this is because a domain name in the request is not a valid top-level domain. Try to request a certificate again, correcting any spelling errors or typos that were in the failed request, and ensure that all domain names in the request are for valid top-level domains. For example, you cannot request a certificate for <code>example.invalidpublicdomain</code> because <code>invalidpublicdomain</code> is not a valid top-level domain.</p> </li> <li> <p> <b> <code>OTHER</code> </b> - Typically, this failure occurs when there is a typographical error in one or more of the domain names in the certificate request. Try to request a certificate again, correcting any spelling errors or typos that were in the failed request. </p> </li> </ul></p>
     #[serde(rename = "failureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
@@ -3500,7 +4113,7 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "issuer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub issuer: Option<String>,
-    /// <p>The algorithm that was used to generate the key pair (the public and private key).</p>
+    /// <p>The algorithm used to generate the key pair (the public and private key).</p>
     #[serde(rename = "keyAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_algorithm: Option<String>,
@@ -3524,7 +4137,7 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "notBefore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub not_before: Option<f64>,
-    /// <p>An object containing information about the status of Lightsail's managed renewal for the certificate.</p>
+    /// <p>An object that describes the status of the certificate renewal managed by Lightsail.</p>
     #[serde(rename = "renewalSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub renewal_summary: Option<LoadBalancerTlsCertificateRenewalSummary>,
@@ -3532,11 +4145,11 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
-    /// <p>The reason the certificate was revoked. Valid values are below.</p>
+    /// <p>The reason the certificate was revoked. This value is present only when the certificate status is <code>REVOKED</code>.</p>
     #[serde(rename = "revocationReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revocation_reason: Option<String>,
-    /// <p>The timestamp when the SSL/TLS certificate was revoked.</p>
+    /// <p>The timestamp when the certificate was revoked. This value is present only when the certificate status is <code>REVOKED</code>.</p>
     #[serde(rename = "revokedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revoked_at: Option<f64>,
@@ -3556,7 +4169,7 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "subject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subject: Option<String>,
-    /// <p>One or more domains or subdomains included in the certificate. This list contains the domain names that are bound to the public key that is contained in the certificate. The subject alternative names include the canonical domain name (CNAME) of the certificate and additional domain names that can be used to connect to the website, such as <code>example.com</code>, <code>www.example.com</code>, or <code>m.example.com</code>.</p>
+    /// <p>An array of strings that specify the alternate domains (e.g., <code>example2.com</code>) and subdomains (e.g., <code>blog.example.com</code>) for the certificate.</p>
     #[serde(rename = "subjectAlternativeNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subject_alternative_names: Option<Vec<String>>,
@@ -3610,7 +4223,7 @@ pub struct LoadBalancerTlsCertificateDomainValidationRecord {
     pub value: Option<String>,
 }
 
-/// <p>Contains information about the status of Lightsail's managed renewal for the certificate.</p>
+/// <p><p>Contains information about the status of Lightsail&#39;s managed renewal for the certificate.</p> <p>The renewal status of the certificate.</p> <p>The following renewal status are possible:</p> <ul> <li> <p> <b> <code>PendingAutoRenewal</code> </b> - Lightsail is attempting to automatically validate the domain names in the certificate. No further action is required. </p> </li> <li> <p> <b> <code>PendingValidation</code> </b> - Lightsail couldn&#39;t automatically validate one or more domain names in the certificate. You must take action to validate these domain names or the certificate won&#39;t be renewed. If you used DNS validation, check to make sure your certificate&#39;s domain validation records exist in your domain&#39;s DNS, and that your certificate remains in use.</p> </li> <li> <p> <b> <code>Success</code> </b> - All domain names in the certificate are validated, and Lightsail renewed the certificate. No further action is required. </p> </li> <li> <p> <b> <code>Failed</code> </b> - One or more domain names were not validated before the certificate expired, and Lightsail did not renew the certificate. You can request a new certificate using the <code>CreateCertificate</code> action.</p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LoadBalancerTlsCertificateRenewalSummary {
@@ -3618,7 +4231,7 @@ pub struct LoadBalancerTlsCertificateRenewalSummary {
     #[serde(rename = "domainValidationOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_validation_options: Option<Vec<LoadBalancerTlsCertificateDomainValidationOption>>,
-    /// <p>The status of Lightsail's managed renewal of the certificate. Valid values are listed below.</p>
+    /// <p><p>The renewal status of the certificate.</p> <p>The following renewal status are possible:</p> <ul> <li> <p> <b> <code>PendingAutoRenewal</code> </b> - Lightsail is attempting to automatically validate the domain names of the certificate. No further action is required. </p> </li> <li> <p> <b> <code>PendingValidation</code> </b> - Lightsail couldn&#39;t automatically validate one or more domain names of the certificate. You must take action to validate these domain names or the certificate won&#39;t be renewed. Check to make sure your certificate&#39;s domain validation records exist in your domain&#39;s DNS, and that your certificate remains in use.</p> </li> <li> <p> <b> <code>Success</code> </b> - All domain names in the certificate are validated, and Lightsail renewed the certificate. No further action is required. </p> </li> <li> <p> <b> <code>Failed</code> </b> - One or more domain names were not validated before the certificate expired, and Lightsail did not renew the certificate. You can request a new certificate using the <code>CreateCertificate</code> action.</p> </li> </ul></p>
     #[serde(rename = "renewalStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub renewal_status: Option<String>,
@@ -3788,6 +4401,28 @@ pub struct Operation {
     pub status_changed_at: Option<f64>,
 }
 
+/// <p>Describes the origin resource of an Amazon Lightsail content delivery network (CDN) distribution.</p> <p>An origin can be a Lightsail instance or load balancer. A distribution pulls content from an origin, caches it, and serves it to viewers via a worldwide network of edge servers.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Origin {
+    /// <p>The name of the origin resource.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The protocol that your Amazon Lightsail distribution uses when establishing a connection with your origin to pull content.</p>
+    #[serde(rename = "protocolPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol_policy: Option<String>,
+    /// <p>The AWS Region name of the origin resource.</p>
+    #[serde(rename = "regionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_name: Option<String>,
+    /// <p>The resource type of the origin resource (e.g., <i>Instance</i>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
 /// <p>The password data for the Windows Server-based instance, including the ciphertext and the key pair name.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3947,6 +4582,19 @@ pub struct PutInstancePublicPortsResult {
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
+}
+
+/// <p>Describes the query string parameters that an Amazon Lightsail content delivery network (CDN) distribution to bases caching on.</p> <p>For the query strings that you specify, your distribution caches separate versions of the specified content based on the query string values in viewer requests.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct QueryStringObject {
+    /// <p>Indicates whether the distribution forwards and caches based on query strings.</p>
+    #[serde(rename = "option")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub option: Option<bool>,
+    /// <p>The specific query strings that the distribution forwards to the origin.</p> <p>Your distribution will cache content based on the specified query strings.</p> <p>If the <code>option</code> parameter is true, then your distribution forwards all query strings, regardless of what you specify using the <code>queryStringsAllowList</code> parameter.</p>
+    #[serde(rename = "queryStringsAllowList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_strings_allow_list: Option<Vec<String>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -4369,6 +5017,54 @@ pub struct ReleaseStaticIpResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+/// <p>Describes the status of a SSL/TLS certificate renewal managed by Amazon Lightsail.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RenewalSummary {
+    /// <p>An array of objects that describe the domain validation records of the certificate.</p>
+    #[serde(rename = "domainValidationRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_validation_records: Option<Vec<DomainValidationRecord>>,
+    /// <p><p>The renewal status of the certificate.</p> <p>The following renewal status are possible:</p> <ul> <li> <p> <b> <code>PendingAutoRenewal</code> </b> - Lightsail is attempting to automatically validate the domain names of the certificate. No further action is required. </p> </li> <li> <p> <b> <code>PendingValidation</code> </b> - Lightsail couldn&#39;t automatically validate one or more domain names of the certificate. You must take action to validate these domain names or the certificate won&#39;t be renewed. Check to make sure your certificate&#39;s domain validation records exist in your domain&#39;s DNS, and that your certificate remains in use.</p> </li> <li> <p> <b> <code>Success</code> </b> - All domain names in the certificate are validated, and Lightsail renewed the certificate. No further action is required. </p> </li> <li> <p> <b> <code>Failed</code> </b> - One or more domain names were not validated before the certificate expired, and Lightsail did not renew the certificate. You can request a new certificate using the <code>CreateCertificate</code> action.</p> </li> </ul></p>
+    #[serde(rename = "renewalStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renewal_status: Option<String>,
+    /// <p>The reason for the renewal status of the certificate.</p>
+    #[serde(rename = "renewalStatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renewal_status_reason: Option<String>,
+    /// <p>The timestamp when the certificate was last updated.</p>
+    #[serde(rename = "updatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ResetDistributionCacheRequest {
+    /// <p>The name of the distribution for which to reset cache.</p> <p>Use the <code>GetDistributions</code> action to get a list of distribution names that you can specify.</p>
+    #[serde(rename = "distributionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResetDistributionCacheResult {
+    /// <p>The timestamp of the reset cache request (e.g., <code>1479734909.17</code>) in Unix time format.</p>
+    #[serde(rename = "createTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<f64>,
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation: Option<Operation>,
+    /// <p>The status of the reset cache request.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
 /// <p>Describes the resource location.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -4381,6 +5077,24 @@ pub struct ResourceLocation {
     #[serde(rename = "regionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region_name: Option<String>,
+}
+
+/// <p>Describes the domain name system (DNS) records to add to your domain's DNS to validate it for an Amazon Lightsail certificate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResourceRecord {
+    /// <p>The name of the record.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The DNS record type.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The value for the DNS record.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -4614,6 +5328,64 @@ pub struct UntagResourceResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateDistributionBundleRequest {
+    /// <p>The bundle ID of the new bundle to apply to your distribution.</p> <p>Use the <code>GetDistributionBundles</code> action to get a list of distribution bundle IDs that you can specify.</p>
+    #[serde(rename = "bundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bundle_id: Option<String>,
+    /// <p>The name of the distribution for which to update the bundle.</p> <p>Use the <code>GetDistributions</code> action to get a list of distribution names that you can specify.</p>
+    #[serde(rename = "distributionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateDistributionBundleResult {
+    #[serde(rename = "operation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation: Option<Operation>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateDistributionRequest {
+    /// <p><p>An object that describes the cache behavior settings for the distribution.</p> <note> <p>The <code>cacheBehaviorSettings</code> specified in your <code>UpdateDistributionRequest</code> will replace your distribution&#39;s existing settings.</p> </note></p>
+    #[serde(rename = "cacheBehaviorSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_behavior_settings: Option<CacheSettings>,
+    /// <p>An array of objects that describe the per-path cache behavior for the distribution.</p>
+    #[serde(rename = "cacheBehaviors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_behaviors: Option<Vec<CacheBehaviorPerPath>>,
+    /// <p>An object that describes the default cache behavior for the distribution.</p>
+    #[serde(rename = "defaultCacheBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_cache_behavior: Option<CacheBehavior>,
+    /// <p>The name of the distribution to update.</p> <p>Use the <code>GetDistributions</code> action to get a list of distribution names that you can specify.</p>
+    #[serde(rename = "distributionName")]
+    pub distribution_name: String,
+    /// <p>Indicates whether to enable the distribution.</p>
+    #[serde(rename = "isEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_enabled: Option<bool>,
+    /// <p>An object that describes the origin resource for the distribution, such as a Lightsail instance or load balancer.</p> <p>The distribution pulls, caches, and serves content from the origin.</p>
+    #[serde(rename = "origin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin: Option<InputOrigin>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateDistributionResult {
+    /// <p>An array of objects that describe the result of the action, such as the status of the request, the timestamp of the request, and the resources affected by the request.</p>
+    #[serde(rename = "operation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation: Option<Operation>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDomainEntryRequest {
     /// <p>An array of key-value pairs containing information about the domain entry.</p>
     #[serde(rename = "domainEntry")]
@@ -4796,6 +5568,84 @@ impl fmt::Display for AllocateStaticIpError {
     }
 }
 impl Error for AllocateStaticIpError {}
+/// Errors returned by AttachCertificateToDistribution
+#[derive(Debug, PartialEq)]
+pub enum AttachCertificateToDistributionError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl AttachCertificateToDistributionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AttachCertificateToDistributionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        AttachCertificateToDistributionError::AccessDenied(err.msg),
+                    )
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        AttachCertificateToDistributionError::InvalidInput(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(AttachCertificateToDistributionError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(
+                        AttachCertificateToDistributionError::OperationFailure(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(AttachCertificateToDistributionError::Service(
+                        err.msg,
+                    ))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(
+                        AttachCertificateToDistributionError::Unauthenticated(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AttachCertificateToDistributionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AttachCertificateToDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AttachCertificateToDistributionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            AttachCertificateToDistributionError::NotFound(ref cause) => write!(f, "{}", cause),
+            AttachCertificateToDistributionError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AttachCertificateToDistributionError::Service(ref cause) => write!(f, "{}", cause),
+            AttachCertificateToDistributionError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AttachCertificateToDistributionError {}
 /// Errors returned by AttachDisk
 #[derive(Debug, PartialEq)]
 pub enum AttachDiskError {
@@ -5254,6 +6104,60 @@ impl fmt::Display for CopySnapshotError {
     }
 }
 impl Error for CopySnapshotError {}
+/// Errors returned by CreateCertificate
+#[derive(Debug, PartialEq)]
+pub enum CreateCertificateError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl CreateCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCertificateError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateCertificateError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateCertificateError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateCertificateError::NotFound(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(CreateCertificateError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(CreateCertificateError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateCertificateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateCertificateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateCertificateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateCertificateError::Service(ref cause) => write!(f, "{}", cause),
+            CreateCertificateError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateCertificateError {}
 /// Errors returned by CreateCloudFormationStack
 #[derive(Debug, PartialEq)]
 pub enum CreateCloudFormationStackError {
@@ -5602,6 +6506,66 @@ impl fmt::Display for CreateDiskSnapshotError {
     }
 }
 impl Error for CreateDiskSnapshotError {}
+/// Errors returned by CreateDistribution
+#[derive(Debug, PartialEq)]
+pub enum CreateDistributionError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl CreateDistributionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDistributionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateDistributionError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateDistributionError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateDistributionError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(CreateDistributionError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(CreateDistributionError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(CreateDistributionError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateDistributionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateDistributionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDistributionError::NotFound(ref cause) => write!(f, "{}", cause),
+            CreateDistributionError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            CreateDistributionError::Service(ref cause) => write!(f, "{}", cause),
+            CreateDistributionError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateDistributionError {}
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
@@ -6572,6 +7536,60 @@ impl fmt::Display for DeleteAutoSnapshotError {
     }
 }
 impl Error for DeleteAutoSnapshotError {}
+/// Errors returned by DeleteCertificate
+#[derive(Debug, PartialEq)]
+pub enum DeleteCertificateError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl DeleteCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCertificateError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteCertificateError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteCertificateError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteCertificateError::NotFound(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteCertificateError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(DeleteCertificateError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteCertificateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteCertificateError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteCertificateError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteCertificateError {}
 /// Errors returned by DeleteContactMethod
 #[derive(Debug, PartialEq)]
 pub enum DeleteContactMethodError {
@@ -6768,6 +7786,66 @@ impl fmt::Display for DeleteDiskSnapshotError {
     }
 }
 impl Error for DeleteDiskSnapshotError {}
+/// Errors returned by DeleteDistribution
+#[derive(Debug, PartialEq)]
+pub enum DeleteDistributionError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl DeleteDistributionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDistributionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteDistributionError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteDistributionError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteDistributionError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(DeleteDistributionError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteDistributionError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(DeleteDistributionError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteDistributionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::NotFound(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::Service(ref cause) => write!(f, "{}", cause),
+            DeleteDistributionError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteDistributionError {}
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
@@ -7512,6 +8590,88 @@ impl fmt::Display for DeleteRelationalDatabaseSnapshotError {
     }
 }
 impl Error for DeleteRelationalDatabaseSnapshotError {}
+/// Errors returned by DetachCertificateFromDistribution
+#[derive(Debug, PartialEq)]
+pub enum DetachCertificateFromDistributionError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl DetachCertificateFromDistributionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DetachCertificateFromDistributionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DetachCertificateFromDistributionError::AccessDenied(err.msg),
+                    )
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        DetachCertificateFromDistributionError::InvalidInput(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DetachCertificateFromDistributionError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(
+                        DetachCertificateFromDistributionError::OperationFailure(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DetachCertificateFromDistributionError::Service(
+                        err.msg,
+                    ))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(
+                        DetachCertificateFromDistributionError::Unauthenticated(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DetachCertificateFromDistributionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DetachCertificateFromDistributionError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetachCertificateFromDistributionError::InvalidInput(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetachCertificateFromDistributionError::NotFound(ref cause) => write!(f, "{}", cause),
+            DetachCertificateFromDistributionError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DetachCertificateFromDistributionError::Service(ref cause) => write!(f, "{}", cause),
+            DetachCertificateFromDistributionError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DetachCertificateFromDistributionError {}
 /// Errors returned by DetachDisk
 #[derive(Debug, PartialEq)]
 pub enum DetachDiskError {
@@ -8318,6 +9478,60 @@ impl fmt::Display for GetBundlesError {
     }
 }
 impl Error for GetBundlesError {}
+/// Errors returned by GetCertificates
+#[derive(Debug, PartialEq)]
+pub enum GetCertificatesError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl GetCertificatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCertificatesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetCertificatesError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetCertificatesError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetCertificatesError::NotFound(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetCertificatesError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetCertificatesError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetCertificatesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCertificatesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetCertificatesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetCertificatesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetCertificatesError::Service(ref cause) => write!(f, "{}", cause),
+            GetCertificatesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetCertificatesError {}
 /// Errors returned by GetCloudFormationStackRecords
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFormationStackRecordsError {
@@ -8730,6 +9944,276 @@ impl fmt::Display for GetDisksError {
     }
 }
 impl Error for GetDisksError {}
+/// Errors returned by GetDistributionBundles
+#[derive(Debug, PartialEq)]
+pub enum GetDistributionBundlesError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl GetDistributionBundlesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDistributionBundlesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetDistributionBundlesError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetDistributionBundlesError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetDistributionBundlesError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(GetDistributionBundlesError::OperationFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetDistributionBundlesError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetDistributionBundlesError::Unauthenticated(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetDistributionBundlesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetDistributionBundlesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDistributionBundlesError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDistributionBundlesError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDistributionBundlesError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDistributionBundlesError::Service(ref cause) => write!(f, "{}", cause),
+            GetDistributionBundlesError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetDistributionBundlesError {}
+/// Errors returned by GetDistributionLatestCacheReset
+#[derive(Debug, PartialEq)]
+pub enum GetDistributionLatestCacheResetError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl GetDistributionLatestCacheResetError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetDistributionLatestCacheResetError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        GetDistributionLatestCacheResetError::AccessDenied(err.msg),
+                    )
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        GetDistributionLatestCacheResetError::InvalidInput(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetDistributionLatestCacheResetError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(
+                        GetDistributionLatestCacheResetError::OperationFailure(err.msg),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetDistributionLatestCacheResetError::Service(
+                        err.msg,
+                    ))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(
+                        GetDistributionLatestCacheResetError::Unauthenticated(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetDistributionLatestCacheResetError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetDistributionLatestCacheResetError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDistributionLatestCacheResetError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDistributionLatestCacheResetError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDistributionLatestCacheResetError::OperationFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetDistributionLatestCacheResetError::Service(ref cause) => write!(f, "{}", cause),
+            GetDistributionLatestCacheResetError::Unauthenticated(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetDistributionLatestCacheResetError {}
+/// Errors returned by GetDistributionMetricData
+#[derive(Debug, PartialEq)]
+pub enum GetDistributionMetricDataError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl GetDistributionMetricDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDistributionMetricDataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetDistributionMetricDataError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetDistributionMetricDataError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetDistributionMetricDataError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(GetDistributionMetricDataError::OperationFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetDistributionMetricDataError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetDistributionMetricDataError::Unauthenticated(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetDistributionMetricDataError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetDistributionMetricDataError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDistributionMetricDataError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDistributionMetricDataError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDistributionMetricDataError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDistributionMetricDataError::Service(ref cause) => write!(f, "{}", cause),
+            GetDistributionMetricDataError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetDistributionMetricDataError {}
+/// Errors returned by GetDistributions
+#[derive(Debug, PartialEq)]
+pub enum GetDistributionsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl GetDistributionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDistributionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetDistributionsError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetDistributionsError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetDistributionsError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(GetDistributionsError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetDistributionsError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(GetDistributionsError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetDistributionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetDistributionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetDistributionsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            GetDistributionsError::NotFound(ref cause) => write!(f, "{}", cause),
+            GetDistributionsError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            GetDistributionsError::Service(ref cause) => write!(f, "{}", cause),
+            GetDistributionsError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetDistributionsError {}
 /// Errors returned by GetDomain
 #[derive(Debug, PartialEq)]
 pub enum GetDomainError {
@@ -11998,6 +13482,70 @@ impl fmt::Display for ReleaseStaticIpError {
     }
 }
 impl Error for ReleaseStaticIpError {}
+/// Errors returned by ResetDistributionCache
+#[derive(Debug, PartialEq)]
+pub enum ResetDistributionCacheError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl ResetDistributionCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetDistributionCacheError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ResetDistributionCacheError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ResetDistributionCacheError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ResetDistributionCacheError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(ResetDistributionCacheError::OperationFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(ResetDistributionCacheError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(ResetDistributionCacheError::Unauthenticated(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ResetDistributionCacheError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ResetDistributionCacheError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ResetDistributionCacheError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ResetDistributionCacheError::NotFound(ref cause) => write!(f, "{}", cause),
+            ResetDistributionCacheError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            ResetDistributionCacheError::Service(ref cause) => write!(f, "{}", cause),
+            ResetDistributionCacheError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ResetDistributionCacheError {}
 /// Errors returned by SendContactMethodVerification
 #[derive(Debug, PartialEq)]
 pub enum SendContactMethodVerificationError {
@@ -12622,6 +14170,134 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateDistribution
+#[derive(Debug, PartialEq)]
+pub enum UpdateDistributionError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl UpdateDistributionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDistributionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateDistributionError::AccessDenied(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UpdateDistributionError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateDistributionError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(UpdateDistributionError::OperationFailure(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(UpdateDistributionError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(UpdateDistributionError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateDistributionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateDistributionError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateDistributionError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDistributionError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDistributionError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDistributionError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateDistributionError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateDistributionError {}
+/// Errors returned by UpdateDistributionBundle
+#[derive(Debug, PartialEq)]
+pub enum UpdateDistributionBundleError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl UpdateDistributionBundleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDistributionBundleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateDistributionBundleError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UpdateDistributionBundleError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateDistributionBundleError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(UpdateDistributionBundleError::OperationFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(UpdateDistributionBundleError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(UpdateDistributionBundleError::Unauthenticated(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateDistributionBundleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateDistributionBundleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateDistributionBundleError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            UpdateDistributionBundleError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateDistributionBundleError::OperationFailure(ref cause) => write!(f, "{}", cause),
+            UpdateDistributionBundleError::Service(ref cause) => write!(f, "{}", cause),
+            UpdateDistributionBundleError::Unauthenticated(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateDistributionBundleError {}
 /// Errors returned by UpdateDomainEntry
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainEntryError {
@@ -12951,6 +14627,15 @@ pub trait Lightsail {
         input: AllocateStaticIpRequest,
     ) -> Result<AllocateStaticIpResult, RusotoError<AllocateStaticIpError>>;
 
+    /// <p><p>Attaches an SSL/TLS certificate to your Amazon Lightsail content delivery network (CDN) distribution.</p> <p>After the certificate is attached, your distribution accepts HTTPS traffic for all of the domains that are associated with the certificate.</p> <p>Use the <code>CreateCertificate</code> action to create a certificate that you can attach to your distribution.</p> <important> <p>Only certificates created in the <code>us-east-1</code> AWS Region can be attached to Lightsail distributions. Lightsail distributions are global resources that can reference an origin in any AWS Region, and distribute its content globally. However, all distributions are located in the <code>us-east-1</code> Region.</p> </important></p>
+    async fn attach_certificate_to_distribution(
+        &self,
+        input: AttachCertificateToDistributionRequest,
+    ) -> Result<
+        AttachCertificateToDistributionResult,
+        RusotoError<AttachCertificateToDistributionError>,
+    >;
+
     /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn attach_disk(
         &self,
@@ -12990,6 +14675,12 @@ pub trait Lightsail {
         input: CopySnapshotRequest,
     ) -> Result<CopySnapshotResult, RusotoError<CopySnapshotError>>;
 
+    /// <p><p>Creates an SSL/TLS certificate for a Amazon Lightsail content delivery network (CDN) distribution.</p> <p>After the certificate is created, use the <code>AttachCertificateToDistribution</code> action to attach the certificate to your distribution.</p> <important> <p>Only certificates created in the <code>us-east-1</code> AWS Region can be attached to Lightsail distributions. Lightsail distributions are global resources that can reference an origin in any AWS Region, and distribute its content globally. However, all distributions are located in the <code>us-east-1</code> Region.</p> </important></p>
+    async fn create_certificate(
+        &self,
+        input: CreateCertificateRequest,
+    ) -> Result<CreateCertificateResult, RusotoError<CreateCertificateError>>;
+
     /// <p><p>Creates an AWS CloudFormation stack, which creates a new Amazon EC2 instance from an exported Amazon Lightsail snapshot. This operation results in a CloudFormation stack record that can be used to track the AWS CloudFormation stack created. Use the <code>get cloud formation stack records</code> operation to get a list of the CloudFormation stacks created.</p> <important> <p>Wait until after your new Amazon EC2 instance is created before running the <code>create cloud formation stack</code> operation again with the same export snapshot record.</p> </important></p>
     async fn create_cloud_formation_stack(
         &self,
@@ -13019,6 +14710,12 @@ pub trait Lightsail {
         &self,
         input: CreateDiskSnapshotRequest,
     ) -> Result<CreateDiskSnapshotResult, RusotoError<CreateDiskSnapshotError>>;
+
+    /// <p>Creates an Amazon Lightsail content delivery network (CDN) distribution.</p> <p>A distribution is a globally distributed network of caching servers that improve the performance of your website or web application hosted on a Lightsail instance. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-content-delivery-networks">Content delivery networks in Amazon Lightsail</a>.</p>
+    async fn create_distribution(
+        &self,
+        input: CreateDistributionRequest,
+    ) -> Result<CreateDistributionResult, RusotoError<CreateDistributionError>>;
 
     /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p> <p>The <code>create domain</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn create_domain(
@@ -13107,6 +14804,12 @@ pub trait Lightsail {
         input: DeleteAutoSnapshotRequest,
     ) -> Result<DeleteAutoSnapshotResult, RusotoError<DeleteAutoSnapshotError>>;
 
+    /// <p>Deletes an SSL/TLS certificate for your Amazon Lightsail content delivery network (CDN) distribution.</p> <p>Certificates that are currently attached to a distribution cannot be deleted. Use the <code>DetachCertificateFromDistribution</code> action to detach a certificate from a distribution.</p>
+    async fn delete_certificate(
+        &self,
+        input: DeleteCertificateRequest,
+    ) -> Result<DeleteCertificateResult, RusotoError<DeleteCertificateError>>;
+
     /// <p>Deletes a contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
     async fn delete_contact_method(
         &self,
@@ -13124,6 +14827,12 @@ pub trait Lightsail {
         &self,
         input: DeleteDiskSnapshotRequest,
     ) -> Result<DeleteDiskSnapshotResult, RusotoError<DeleteDiskSnapshotError>>;
+
+    /// <p>Deletes your Amazon Lightsail content delivery network (CDN) distribution.</p>
+    async fn delete_distribution(
+        &self,
+        input: DeleteDistributionRequest,
+    ) -> Result<DeleteDistributionResult, RusotoError<DeleteDistributionError>>;
 
     /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn delete_domain(
@@ -13189,6 +14898,15 @@ pub trait Lightsail {
     ) -> Result<
         DeleteRelationalDatabaseSnapshotResult,
         RusotoError<DeleteRelationalDatabaseSnapshotError>,
+    >;
+
+    /// <p>Detaches an SSL/TLS certificate from your Amazon Lightsail content delivery network (CDN) distribution.</p> <p>After the certificate is detached, your distribution stops accepting traffic for all of the domains that are associated with the certificate.</p>
+    async fn detach_certificate_from_distribution(
+        &self,
+        input: DetachCertificateFromDistributionRequest,
+    ) -> Result<
+        DetachCertificateFromDistributionResult,
+        RusotoError<DetachCertificateFromDistributionError>,
     >;
 
     /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -13265,6 +14983,12 @@ pub trait Lightsail {
         input: GetBundlesRequest,
     ) -> Result<GetBundlesResult, RusotoError<GetBundlesError>>;
 
+    /// <p><p>Returns information about one or more Amazon Lightsail SSL/TLS certificates.</p> <note> <p>To get a summary of a certificate, ommit <code>includeCertificateDetails</code> from your request. The response will include only the certificate Amazon Resource Name (ARN), certificate name, domain name, and tags.</p> </note></p>
+    async fn get_certificates(
+        &self,
+        input: GetCertificatesRequest,
+    ) -> Result<GetCertificatesResult, RusotoError<GetCertificatesError>>;
+
     /// <p>Returns the CloudFormation stack record created as a result of the <code>create cloud formation stack</code> operation.</p> <p>An AWS CloudFormation stack is used to create a new Amazon EC2 instance from an exported Lightsail snapshot.</p>
     async fn get_cloud_formation_stack_records(
         &self,
@@ -13300,6 +15024,32 @@ pub trait Lightsail {
         &self,
         input: GetDisksRequest,
     ) -> Result<GetDisksResult, RusotoError<GetDisksError>>;
+
+    /// <p>Returns the list bundles that can be applied to you Amazon Lightsail content delivery network (CDN) distributions.</p> <p>A distribution bundle specifies the monthly network transfer quota and monthly cost of your dsitribution.</p>
+    async fn get_distribution_bundles(
+        &self,
+    ) -> Result<GetDistributionBundlesResult, RusotoError<GetDistributionBundlesError>>;
+
+    /// <p>Returns the timestamp and status of the last cache reset of a specific Amazon Lightsail content delivery network (CDN) distribution.</p>
+    async fn get_distribution_latest_cache_reset(
+        &self,
+        input: GetDistributionLatestCacheResetRequest,
+    ) -> Result<
+        GetDistributionLatestCacheResetResult,
+        RusotoError<GetDistributionLatestCacheResetError>,
+    >;
+
+    /// <p>Returns the data points of a specific metric for an Amazon Lightsail content delivery network (CDN) distribution.</p> <p>Metrics report the utilization of your resources, and the error counts generated by them. Monitor and collect metric data regularly to maintain the reliability, availability, and performance of your resources.</p>
+    async fn get_distribution_metric_data(
+        &self,
+        input: GetDistributionMetricDataRequest,
+    ) -> Result<GetDistributionMetricDataResult, RusotoError<GetDistributionMetricDataError>>;
+
+    /// <p>Returns information about one or more of your Amazon Lightsail content delivery network (CDN) distributions.</p>
+    async fn get_distributions(
+        &self,
+        input: GetDistributionsRequest,
+    ) -> Result<GetDistributionsResult, RusotoError<GetDistributionsError>>;
 
     /// <p>Returns information about a specific domain recordset.</p>
     async fn get_domain(
@@ -13583,6 +15333,12 @@ pub trait Lightsail {
         input: ReleaseStaticIpRequest,
     ) -> Result<ReleaseStaticIpResult, RusotoError<ReleaseStaticIpError>>;
 
+    /// <p>Deletes currently cached content from your Amazon Lightsail content delivery network (CDN) distribution.</p> <p>After resetting the cache, the next time a content request is made, your distribution pulls, serves, and caches it from the origin.</p>
+    async fn reset_distribution_cache(
+        &self,
+        input: ResetDistributionCacheRequest,
+    ) -> Result<ResetDistributionCacheResult, RusotoError<ResetDistributionCacheError>>;
+
     /// <p><p>Sends a verification request to an email contact method to ensure it&#39;s owned by the requester. SMS contact methods don&#39;t need to be verified.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p> <p>A verification request is sent to the contact method when you initially create it. Use this action to send another verification request if a previous verification request was deleted, or has expired.</p> <important> <p>Notifications are not sent to an email contact method until after it is verified, and confirmed as valid.</p> </important></p>
     async fn send_contact_method_verification(
         &self,
@@ -13633,6 +15389,18 @@ pub trait Lightsail {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResult, RusotoError<UntagResourceError>>;
+
+    /// <p>Updates an existing Amazon Lightsail content delivery network (CDN) distribution.</p> <p>Use this action to update the configuration of your existing distribution</p>
+    async fn update_distribution(
+        &self,
+        input: UpdateDistributionRequest,
+    ) -> Result<UpdateDistributionResult, RusotoError<UpdateDistributionError>>;
+
+    /// <p>Updates the bundle of your Amazon Lightsail content delivery network (CDN) distribution.</p> <p>A distribution bundle specifies the monthly network transfer quota and monthly cost of your dsitribution.</p> <p>Update your distribution's bundle if your distribution is going over its monthly network transfer quota and is incurring an overage fee.</p> <p>You can update your distribution's bundle only one time within your monthly AWS billing cycle. To determine if you can update your distribution's bundle, use the <code>GetDistributions</code> action. The <code>ableToUpdateBundle</code> parameter in the result will indicate whether you can currently update your distribution's bundle.</p>
+    async fn update_distribution_bundle(
+        &self,
+        input: UpdateDistributionBundleRequest,
+    ) -> Result<UpdateDistributionBundleResult, RusotoError<UpdateDistributionBundleError>>;
 
     /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     async fn update_domain_entry(
@@ -13717,6 +15485,31 @@ impl Lightsail for LightsailClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<AllocateStaticIpResult, _>()
+    }
+
+    /// <p><p>Attaches an SSL/TLS certificate to your Amazon Lightsail content delivery network (CDN) distribution.</p> <p>After the certificate is attached, your distribution accepts HTTPS traffic for all of the domains that are associated with the certificate.</p> <p>Use the <code>CreateCertificate</code> action to create a certificate that you can attach to your distribution.</p> <important> <p>Only certificates created in the <code>us-east-1</code> AWS Region can be attached to Lightsail distributions. Lightsail distributions are global resources that can reference an origin in any AWS Region, and distribute its content globally. However, all distributions are located in the <code>us-east-1</code> Region.</p> </important></p>
+    async fn attach_certificate_to_distribution(
+        &self,
+        input: AttachCertificateToDistributionRequest,
+    ) -> Result<
+        AttachCertificateToDistributionResult,
+        RusotoError<AttachCertificateToDistributionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.AttachCertificateToDistribution",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AttachCertificateToDistributionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AttachCertificateToDistributionResult, _>()
     }
 
     /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -13846,6 +15639,24 @@ impl Lightsail for LightsailClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CopySnapshotResult, _>()
     }
 
+    /// <p><p>Creates an SSL/TLS certificate for a Amazon Lightsail content delivery network (CDN) distribution.</p> <p>After the certificate is created, use the <code>AttachCertificateToDistribution</code> action to attach the certificate to your distribution.</p> <important> <p>Only certificates created in the <code>us-east-1</code> AWS Region can be attached to Lightsail distributions. Lightsail distributions are global resources that can reference an origin in any AWS Region, and distribute its content globally. However, all distributions are located in the <code>us-east-1</code> Region.</p> </important></p>
+    async fn create_certificate(
+        &self,
+        input: CreateCertificateRequest,
+    ) -> Result<CreateCertificateResult, RusotoError<CreateCertificateError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Lightsail_20161128.CreateCertificate");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateCertificateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateCertificateResult, _>()
+    }
+
     /// <p><p>Creates an AWS CloudFormation stack, which creates a new Amazon EC2 instance from an exported Amazon Lightsail snapshot. This operation results in a CloudFormation stack record that can be used to track the AWS CloudFormation stack created. Use the <code>get cloud formation stack records</code> operation to get a list of the CloudFormation stacks created.</p> <important> <p>Wait until after your new Amazon EC2 instance is created before running the <code>create cloud formation stack</code> operation again with the same export snapshot record.</p> </important></p>
     async fn create_cloud_formation_stack(
         &self,
@@ -13939,6 +15750,24 @@ impl Lightsail for LightsailClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDiskSnapshotResult, _>()
+    }
+
+    /// <p>Creates an Amazon Lightsail content delivery network (CDN) distribution.</p> <p>A distribution is a globally distributed network of caching servers that improve the performance of your website or web application hosted on a Lightsail instance. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-content-delivery-networks">Content delivery networks in Amazon Lightsail</a>.</p>
+    async fn create_distribution(
+        &self,
+        input: CreateDistributionRequest,
+    ) -> Result<CreateDistributionResult, RusotoError<CreateDistributionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Lightsail_20161128.CreateDistribution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateDistributionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateDistributionResult, _>()
     }
 
     /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p> <p>The <code>create domain</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14215,6 +16044,24 @@ impl Lightsail for LightsailClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteAutoSnapshotResult, _>()
     }
 
+    /// <p>Deletes an SSL/TLS certificate for your Amazon Lightsail content delivery network (CDN) distribution.</p> <p>Certificates that are currently attached to a distribution cannot be deleted. Use the <code>DetachCertificateFromDistribution</code> action to detach a certificate from a distribution.</p>
+    async fn delete_certificate(
+        &self,
+        input: DeleteCertificateRequest,
+    ) -> Result<DeleteCertificateResult, RusotoError<DeleteCertificateError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Lightsail_20161128.DeleteCertificate");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteCertificateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteCertificateResult, _>()
+    }
+
     /// <p>Deletes a contact method.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p>
     async fn delete_contact_method(
         &self,
@@ -14267,6 +16114,24 @@ impl Lightsail for LightsailClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDiskSnapshotResult, _>()
+    }
+
+    /// <p>Deletes your Amazon Lightsail content delivery network (CDN) distribution.</p>
+    async fn delete_distribution(
+        &self,
+        input: DeleteDistributionRequest,
+    ) -> Result<DeleteDistributionResult, RusotoError<DeleteDistributionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Lightsail_20161128.DeleteDistribution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteDistributionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDistributionResult, _>()
     }
 
     /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14472,6 +16337,34 @@ impl Lightsail for LightsailClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DeleteRelationalDatabaseSnapshotResult, _>()
+    }
+
+    /// <p>Detaches an SSL/TLS certificate from your Amazon Lightsail content delivery network (CDN) distribution.</p> <p>After the certificate is detached, your distribution stops accepting traffic for all of the domains that are associated with the certificate.</p>
+    async fn detach_certificate_from_distribution(
+        &self,
+        input: DetachCertificateFromDistributionRequest,
+    ) -> Result<
+        DetachCertificateFromDistributionResult,
+        RusotoError<DetachCertificateFromDistributionError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.DetachCertificateFromDistribution",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DetachCertificateFromDistributionError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DetachCertificateFromDistributionResult, _>()
     }
 
     /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>disk name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
@@ -14696,6 +16589,24 @@ impl Lightsail for LightsailClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetBundlesResult, _>()
     }
 
+    /// <p><p>Returns information about one or more Amazon Lightsail SSL/TLS certificates.</p> <note> <p>To get a summary of a certificate, ommit <code>includeCertificateDetails</code> from your request. The response will include only the certificate Amazon Resource Name (ARN), certificate name, domain name, and tags.</p> </note></p>
+    async fn get_certificates(
+        &self,
+        input: GetCertificatesRequest,
+    ) -> Result<GetCertificatesResult, RusotoError<GetCertificatesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Lightsail_20161128.GetCertificates");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetCertificatesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCertificatesResult, _>()
+    }
+
     /// <p>Returns the CloudFormation stack record created as a result of the <code>create cloud formation stack</code> operation.</p> <p>An AWS CloudFormation stack is used to create a new Amazon EC2 instance from an exported Lightsail snapshot.</p>
     async fn get_cloud_formation_stack_records(
         &self,
@@ -14807,6 +16718,88 @@ impl Lightsail for LightsailClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetDisksResult, _>()
+    }
+
+    /// <p>Returns the list bundles that can be applied to you Amazon Lightsail content delivery network (CDN) distributions.</p> <p>A distribution bundle specifies the monthly network transfer quota and monthly cost of your dsitribution.</p>
+    async fn get_distribution_bundles(
+        &self,
+    ) -> Result<GetDistributionBundlesResult, RusotoError<GetDistributionBundlesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Lightsail_20161128.GetDistributionBundles");
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(request, GetDistributionBundlesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDistributionBundlesResult, _>()
+    }
+
+    /// <p>Returns the timestamp and status of the last cache reset of a specific Amazon Lightsail content delivery network (CDN) distribution.</p>
+    async fn get_distribution_latest_cache_reset(
+        &self,
+        input: GetDistributionLatestCacheResetRequest,
+    ) -> Result<
+        GetDistributionLatestCacheResetResult,
+        RusotoError<GetDistributionLatestCacheResetError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetDistributionLatestCacheReset",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetDistributionLatestCacheResetError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDistributionLatestCacheResetResult, _>()
+    }
+
+    /// <p>Returns the data points of a specific metric for an Amazon Lightsail content delivery network (CDN) distribution.</p> <p>Metrics report the utilization of your resources, and the error counts generated by them. Monitor and collect metric data regularly to maintain the reliability, availability, and performance of your resources.</p>
+    async fn get_distribution_metric_data(
+        &self,
+        input: GetDistributionMetricDataRequest,
+    ) -> Result<GetDistributionMetricDataResult, RusotoError<GetDistributionMetricDataError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetDistributionMetricData",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetDistributionMetricDataError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDistributionMetricDataResult, _>()
+    }
+
+    /// <p>Returns information about one or more of your Amazon Lightsail content delivery network (CDN) distributions.</p>
+    async fn get_distributions(
+        &self,
+        input: GetDistributionsRequest,
+    ) -> Result<GetDistributionsResult, RusotoError<GetDistributionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Lightsail_20161128.GetDistributions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetDistributionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetDistributionsResult, _>()
     }
 
     /// <p>Returns information about a specific domain recordset.</p>
@@ -15690,6 +17683,25 @@ impl Lightsail for LightsailClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ReleaseStaticIpResult, _>()
     }
 
+    /// <p>Deletes currently cached content from your Amazon Lightsail content delivery network (CDN) distribution.</p> <p>After resetting the cache, the next time a content request is made, your distribution pulls, serves, and caches it from the origin.</p>
+    async fn reset_distribution_cache(
+        &self,
+        input: ResetDistributionCacheRequest,
+    ) -> Result<ResetDistributionCacheResult, RusotoError<ResetDistributionCacheError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Lightsail_20161128.ResetDistributionCache");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ResetDistributionCacheError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ResetDistributionCacheResult, _>()
+    }
+
     /// <p><p>Sends a verification request to an email contact method to ensure it&#39;s owned by the requester. SMS contact methods don&#39;t need to be verified.</p> <p>A contact method is used to send you notifications about your Amazon Lightsail resources. You can add one email address and one mobile phone number contact method in each AWS Region. However, SMS text messaging is not supported in some AWS Regions, and SMS text messages cannot be sent to some countries/regions. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-notifications">Notifications in Amazon Lightsail</a>.</p> <p>A verification request is sent to the contact method when you initially create it. Use this action to send another verification request if a previous verification request was deleted, or has expired.</p> <important> <p>Notifications are not sent to an email contact method until after it is verified, and confirmed as valid.</p> </important></p>
     async fn send_contact_method_verification(
         &self,
@@ -15853,6 +17865,46 @@ impl Lightsail for LightsailClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResult, _>()
+    }
+
+    /// <p>Updates an existing Amazon Lightsail content delivery network (CDN) distribution.</p> <p>Use this action to update the configuration of your existing distribution</p>
+    async fn update_distribution(
+        &self,
+        input: UpdateDistributionRequest,
+    ) -> Result<UpdateDistributionResult, RusotoError<UpdateDistributionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Lightsail_20161128.UpdateDistribution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateDistributionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateDistributionResult, _>()
+    }
+
+    /// <p>Updates the bundle of your Amazon Lightsail content delivery network (CDN) distribution.</p> <p>A distribution bundle specifies the monthly network transfer quota and monthly cost of your dsitribution.</p> <p>Update your distribution's bundle if your distribution is going over its monthly network transfer quota and is incurring an overage fee.</p> <p>You can update your distribution's bundle only one time within your monthly AWS billing cycle. To determine if you can update your distribution's bundle, use the <code>GetDistributions</code> action. The <code>ableToUpdateBundle</code> parameter in the result will indicate whether you can currently update your distribution's bundle.</p>
+    async fn update_distribution_bundle(
+        &self,
+        input: UpdateDistributionBundleRequest,
+    ) -> Result<UpdateDistributionBundleResult, RusotoError<UpdateDistributionBundleError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.UpdateDistributionBundle",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateDistributionBundleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateDistributionBundleResult, _>()
     }
 
     /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by <code>domain name</code>. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>

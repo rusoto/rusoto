@@ -583,7 +583,7 @@ pub struct MemberConfiguration {
     /// <p>Configuration properties of the blockchain framework relevant to the member.</p>
     #[serde(rename = "FrameworkConfiguration")]
     pub framework_configuration: MemberFrameworkConfiguration,
-    /// <p><p/></p>
+    /// <p>Configuration properties for logging events associated with a member of a Managed Blockchain network.</p>
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_publishing_configuration: Option<MemberLogPublishingConfiguration>,
@@ -833,7 +833,7 @@ pub struct Node {
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p><p/></p>
+    /// <p>Configuration properties for logging events associated with a peer node owned by a member in a Managed Blockchain network.</p>
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_publishing_configuration: Option<NodeLogPublishingConfiguration>,
@@ -845,6 +845,10 @@ pub struct Node {
     #[serde(rename = "NetworkId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_id: Option<String>,
+    /// <p>The state database that the node uses. Values are <code>LevelDB</code> or <code>CouchDB</code>.</p>
+    #[serde(rename = "StateDB")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_db: Option<String>,
     /// <p>The status of the node.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -861,10 +865,14 @@ pub struct NodeConfiguration {
     /// <p>The Amazon Managed Blockchain instance type for the node.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
-    /// <p><p/></p>
+    /// <p>Configuration properties for logging events associated with a peer node owned by a member in a Managed Blockchain network. </p>
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_publishing_configuration: Option<NodeLogPublishingConfiguration>,
+    /// <p>The state database that the node uses. Values are <code>LevelDB</code> or <code>CouchDB</code>. When using an Amazon Managed Blockchain network with Hyperledger Fabric version 1.4 or later, the default is <code>CouchDB</code>.</p>
+    #[serde(rename = "StateDB")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_db: Option<String>,
 }
 
 /// <p>Attributes of Hyperledger Fabric for a peer node on a Managed Blockchain network that uses Hyperledger Fabric.</p>
@@ -2354,7 +2362,7 @@ pub trait ManagedBlockchain {
         input: GetProposalInput,
     ) -> Result<GetProposalOutput, RusotoError<GetProposalError>>;
 
-    /// <p>Returns a listing of all invitations made on the specified network.</p>
+    /// <p>Returns a listing of all invitations for the current AWS account.</p>
     async fn list_invitations(
         &self,
         input: ListInvitationsInput,
@@ -2788,7 +2796,7 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
-    /// <p>Returns a listing of all invitations made on the specified network.</p>
+    /// <p>Returns a listing of all invitations for the current AWS account.</p>
     #[allow(unused_mut)]
     async fn list_invitations(
         &self,

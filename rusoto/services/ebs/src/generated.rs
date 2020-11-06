@@ -220,7 +220,7 @@ pub struct PutSnapshotBlockRequest {
         default
     )]
     pub block_data: bytes::Bytes,
-    /// <p>The block index of the block in which to write the data. A block index is the offset position of a block within a snapshot, and it is used to identify the block. To identify the logical offset of the data in the logical volume, multiply the block index with the block size (Block index * 512 bytes).</p>
+    /// <p>The block index of the block in which to write the data. A block index is a logical index in units of <code>512</code> KiB blocks. To identify the block index, divide the logical offset of the data in the logical volume by the block size (logical offset of data/<code>524288</code>). The logical offset of the data must be <code>512</code> KiB aligned.</p>
     #[serde(rename = "BlockIndex")]
     pub block_index: i64,
     /// <p>A Base64-encoded SHA256 checksum of the data. Only SHA256 checksums are supported.</p>
@@ -711,19 +711,19 @@ pub trait Ebs {
         input: GetSnapshotBlockRequest,
     ) -> Result<GetSnapshotBlockResponse, RusotoError<GetSnapshotBlockError>>;
 
-    /// <p>Returns the block indexes and block tokens for blocks that are different between two Amazon Elastic Block Store snapshots of the same volume/snapshot lineage.</p>
+    /// <p>Returns information about the blocks that are different between two Amazon Elastic Block Store snapshots of the same volume/snapshot lineage.</p>
     async fn list_changed_blocks(
         &self,
         input: ListChangedBlocksRequest,
     ) -> Result<ListChangedBlocksResponse, RusotoError<ListChangedBlocksError>>;
 
-    /// <p>Returns the block indexes and block tokens for blocks in an Amazon Elastic Block Store snapshot.</p>
+    /// <p>Returns information about the blocks in an Amazon Elastic Block Store snapshot.</p>
     async fn list_snapshot_blocks(
         &self,
         input: ListSnapshotBlocksRequest,
     ) -> Result<ListSnapshotBlocksResponse, RusotoError<ListSnapshotBlocksError>>;
 
-    /// <p>Writes a block of data to a block in the snapshot. If the specified block contains data, the existing data is overwritten. The target snapshot must be in the <code>pending</code> state.</p> <p>Data written to a snapshot must be aligned with 512-byte sectors.</p>
+    /// <p>Writes a block of data to a snapshot. If the specified block contains data, the existing data is overwritten. The target snapshot must be in the <code>pending</code> state.</p> <p>Data written to a snapshot must be aligned with 512-byte sectors.</p>
     async fn put_snapshot_block(
         &self,
         input: PutSnapshotBlockRequest,
@@ -864,7 +864,7 @@ impl Ebs for EbsClient {
         }
     }
 
-    /// <p>Returns the block indexes and block tokens for blocks that are different between two Amazon Elastic Block Store snapshots of the same volume/snapshot lineage.</p>
+    /// <p>Returns information about the blocks that are different between two Amazon Elastic Block Store snapshots of the same volume/snapshot lineage.</p>
     #[allow(unused_mut)]
     async fn list_changed_blocks(
         &self,
@@ -910,7 +910,7 @@ impl Ebs for EbsClient {
         }
     }
 
-    /// <p>Returns the block indexes and block tokens for blocks in an Amazon Elastic Block Store snapshot.</p>
+    /// <p>Returns information about the blocks in an Amazon Elastic Block Store snapshot.</p>
     #[allow(unused_mut)]
     async fn list_snapshot_blocks(
         &self,
@@ -953,7 +953,7 @@ impl Ebs for EbsClient {
         }
     }
 
-    /// <p>Writes a block of data to a block in the snapshot. If the specified block contains data, the existing data is overwritten. The target snapshot must be in the <code>pending</code> state.</p> <p>Data written to a snapshot must be aligned with 512-byte sectors.</p>
+    /// <p>Writes a block of data to a snapshot. If the specified block contains data, the existing data is overwritten. The target snapshot must be in the <code>pending</code> state.</p> <p>Data written to a snapshot must be aligned with 512-byte sectors.</p>
     #[allow(unused_mut)]
     async fn put_snapshot_block(
         &self,

@@ -37,6 +37,8 @@ async fn test_post_text_resposnse_serialization() {
     slots.insert("PickUpCity".to_owned(), Some("Boston".to_owned()));
 
     let expected = PostTextResponse {
+        alternative_intents: None,
+        bot_version: None,
         dialog_state: Some("ElicitSlot".to_owned()),
         intent_name: Some("BookCar".to_owned()),
         message: Some("In what city do you need to rent a car?".to_owned()),
@@ -47,6 +49,7 @@ async fn test_post_text_resposnse_serialization() {
         session_attributes: Some(HashMap::new()),
         sentiment_response: None,
         session_id: None,
+        nlu_intent_confidence: None,
     };
 
     let result: PostTextResponse = lex_client.post_text(post_text_req).await.unwrap();

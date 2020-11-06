@@ -127,7 +127,7 @@ pub struct AutoScalingGroupRecommendationOption {
     #[serde(rename = "performanceRisk")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub performance_risk: Option<f64>,
-    /// <p>An array of objects that describe the projected utilization metrics of the Auto Scaling group recommendation option.</p>
+    /// <p><p>An array of objects that describe the projected utilization metrics of the Auto Scaling group recommendation option.</p> <note> <p>The <code>Cpu</code> and <code>Memory</code> metrics are the only projected utilization metrics returned. Additionally, the <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
     #[serde(rename = "projectedUtilizationMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub projected_utilization_metrics: Option<Vec<UtilizationMetric>>,
@@ -178,7 +178,7 @@ pub struct ExportAutoScalingGroupRecommendationsRequest {
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
-    /// <p>The recommendations data to include in the export file.</p>
+    /// <p>The recommendations data to include in the export file. For more information about the fields that can be exported, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html#exported-files">Exported files</a> in the <i>Compute Optimizer User Guide</i>.</p>
     #[serde(rename = "fieldsToExport")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fields_to_export: Option<Vec<String>>,
@@ -229,7 +229,7 @@ pub struct ExportEC2InstanceRecommendationsRequest {
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
-    /// <p>The recommendations data to include in the export file.</p>
+    /// <p>The recommendations data to include in the export file. For more information about the fields that can be exported, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html#exported-files">Exported files</a> in the <i>Compute Optimizer User Guide</i>.</p>
     #[serde(rename = "fieldsToExport")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fields_to_export: Option<Vec<String>>,
@@ -517,7 +517,7 @@ pub struct InstanceRecommendationOption {
     #[serde(rename = "performanceRisk")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub performance_risk: Option<f64>,
-    /// <p>An array of objects that describe the projected utilization metrics of the instance recommendation option.</p>
+    /// <p><p>An array of objects that describe the projected utilization metrics of the instance recommendation option.</p> <note> <p>The <code>Cpu</code> and <code>Memory</code> metrics are the only projected utilization metrics returned. Additionally, the <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
     #[serde(rename = "projectedUtilizationMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub projected_utilization_metrics: Option<Vec<UtilizationMetric>>,
@@ -541,11 +541,11 @@ pub struct JobFilter {
     pub values: Option<Vec<String>>,
 }
 
-/// <p>Describes a projected utilization metric of a recommendation option, such as an Amazon EC2 instance.</p>
+/// <p><p>Describes a projected utilization metric of a recommendation option, such as an Amazon EC2 instance.</p> <note> <p>The <code>Cpu</code> and <code>Memory</code> metrics are the only projected utilization metrics returned when you run the <code>GetEC2RecommendationProjectedMetrics</code> action. Additionally, the <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectedMetric {
-    /// <p><p>The name of the projected utilization metric.</p> <note> <p>Memory metrics are only returned for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
+    /// <p>The name of the projected utilization metric.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -625,7 +625,7 @@ pub struct RecommendationSummary {
     pub summaries: Option<Vec<Summary>>,
 }
 
-/// <p>Describes a projected utilization metric of a recommendation option.</p>
+/// <p><p>Describes a projected utilization metric of a recommendation option.</p> <note> <p>The <code>Cpu</code> and <code>Memory</code> metrics are the only projected utilization metrics returned when you run the <code>GetEC2RecommendationProjectedMetrics</code> action. Additionally, the <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecommendedOptionProjectedMetric {
@@ -718,7 +718,7 @@ pub struct UpdateEnrollmentStatusResponse {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UtilizationMetric {
-    /// <p><p>The name of the utilization metric.</p> <note> <p>Memory metrics are only returned for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
+    /// <p><p>The name of the utilization metric.</p> <note> <p>The <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -1618,7 +1618,7 @@ pub trait ComputeOptimizer {
         RusotoError<ExportEC2InstanceRecommendationsError>,
     >;
 
-    /// <p>Returns Auto Scaling group recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Auto Scaling groups that are configured to run instances of the M, C, R, T, and X instance families. The service does not generate recommendations for Auto Scaling groups that have a scaling policy attached to them, or that do not have the same values for desired, minimum, and maximum capacity. In order for Compute Optimizer to analyze your Auto Scaling groups, they must be of a fixed size. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
+    /// <p>Returns Auto Scaling group recommendations.</p> <p>AWS Compute Optimizer generates recommendations for Amazon EC2 Auto Scaling groups that meet a specific set of requirements. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html">Supported resources and requirements</a> in the <i>AWS Compute Optimizer User Guide</i>.</p>
     async fn get_auto_scaling_group_recommendations(
         &self,
         input: GetAutoScalingGroupRecommendationsRequest,
@@ -1627,7 +1627,7 @@ pub trait ComputeOptimizer {
         RusotoError<GetAutoScalingGroupRecommendationsError>,
     >;
 
-    /// <p>Returns Amazon EC2 instance recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Amazon Elastic Compute Cloud (Amazon EC2) and Amazon EC2 Auto Scaling. It generates recommendations for M, C, R, T, and X instance families. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
+    /// <p>Returns Amazon EC2 instance recommendations.</p> <p>AWS Compute Optimizer generates recommendations for Amazon Elastic Compute Cloud (Amazon EC2) instances that meet a specific set of requirements. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html">Supported resources and requirements</a> in the <i>AWS Compute Optimizer User Guide</i>.</p>
     async fn get_ec2_instance_recommendations(
         &self,
         input: GetEC2InstanceRecommendationsRequest,
@@ -1636,7 +1636,7 @@ pub trait ComputeOptimizer {
         RusotoError<GetEC2InstanceRecommendationsError>,
     >;
 
-    /// <p>Returns the projected utilization metrics of Amazon EC2 instance recommendations.</p>
+    /// <p><p>Returns the projected utilization metrics of Amazon EC2 instance recommendations.</p> <note> <p>The <code>Cpu</code> and <code>Memory</code> metrics are the only projected utilization metrics returned when you run this action. Additionally, the <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
     async fn get_ec2_recommendation_projected_metrics(
         &self,
         input: GetEC2RecommendationProjectedMetricsRequest,
@@ -1786,7 +1786,7 @@ impl ComputeOptimizer for ComputeOptimizerClient {
             .deserialize::<ExportEC2InstanceRecommendationsResponse, _>()
     }
 
-    /// <p>Returns Auto Scaling group recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Auto Scaling groups that are configured to run instances of the M, C, R, T, and X instance families. The service does not generate recommendations for Auto Scaling groups that have a scaling policy attached to them, or that do not have the same values for desired, minimum, and maximum capacity. In order for Compute Optimizer to analyze your Auto Scaling groups, they must be of a fixed size. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
+    /// <p>Returns Auto Scaling group recommendations.</p> <p>AWS Compute Optimizer generates recommendations for Amazon EC2 Auto Scaling groups that meet a specific set of requirements. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html">Supported resources and requirements</a> in the <i>AWS Compute Optimizer User Guide</i>.</p>
     async fn get_auto_scaling_group_recommendations(
         &self,
         input: GetAutoScalingGroupRecommendationsRequest,
@@ -1814,7 +1814,7 @@ impl ComputeOptimizer for ComputeOptimizerClient {
             .deserialize::<GetAutoScalingGroupRecommendationsResponse, _>()
     }
 
-    /// <p>Returns Amazon EC2 instance recommendations.</p> <p>AWS Compute Optimizer currently generates recommendations for Amazon Elastic Compute Cloud (Amazon EC2) and Amazon EC2 Auto Scaling. It generates recommendations for M, C, R, T, and X instance families. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is.html">AWS Compute Optimizer User Guide</a>.</p>
+    /// <p>Returns Amazon EC2 instance recommendations.</p> <p>AWS Compute Optimizer generates recommendations for Amazon Elastic Compute Cloud (Amazon EC2) instances that meet a specific set of requirements. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html">Supported resources and requirements</a> in the <i>AWS Compute Optimizer User Guide</i>.</p>
     async fn get_ec2_instance_recommendations(
         &self,
         input: GetEC2InstanceRecommendationsRequest,
@@ -1839,7 +1839,7 @@ impl ComputeOptimizer for ComputeOptimizerClient {
             .deserialize::<GetEC2InstanceRecommendationsResponse, _>()
     }
 
-    /// <p>Returns the projected utilization metrics of Amazon EC2 instance recommendations.</p>
+    /// <p><p>Returns the projected utilization metrics of Amazon EC2 instance recommendations.</p> <note> <p>The <code>Cpu</code> and <code>Memory</code> metrics are the only projected utilization metrics returned when you run this action. Additionally, the <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
     async fn get_ec2_recommendation_projected_metrics(
         &self,
         input: GetEC2RecommendationProjectedMetricsRequest,

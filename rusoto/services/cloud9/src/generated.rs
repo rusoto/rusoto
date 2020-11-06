@@ -61,6 +61,10 @@ pub struct CreateEnvironmentEC2Request {
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
+    /// <p>The connection type used for connecting to an Amazon EC2 environment.</p>
+    #[serde(rename = "connectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_type: Option<String>,
     /// <p>The description of the environment to create.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -228,6 +232,10 @@ pub struct Environment {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The connection type used for connecting to an Amazon EC2 environment.</p>
+    #[serde(rename = "connectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_type: Option<String>,
     /// <p>The description for the environment.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1080,6 +1088,8 @@ impl Error for ListTagsForResourceError {}
 pub enum TagResourceError {
     /// <p>The target request is invalid.</p>
     BadRequest(String),
+    /// <p>A concurrent access issue occurred.</p>
+    ConcurrentAccess(String),
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
     /// <p>The target resource cannot be found.</p>
@@ -1092,6 +1102,9 @@ impl TagResourceError {
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(TagResourceError::BadRequest(err.msg))
+                }
+                "ConcurrentAccessException" => {
+                    return RusotoError::Service(TagResourceError::ConcurrentAccess(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(TagResourceError::InternalServerError(err.msg))
@@ -1111,6 +1124,7 @@ impl fmt::Display for TagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             TagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
             TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
             TagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }
@@ -1122,6 +1136,8 @@ impl Error for TagResourceError {}
 pub enum UntagResourceError {
     /// <p>The target request is invalid.</p>
     BadRequest(String),
+    /// <p>A concurrent access issue occurred.</p>
+    ConcurrentAccess(String),
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
     /// <p>The target resource cannot be found.</p>
@@ -1134,6 +1150,9 @@ impl UntagResourceError {
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
+                }
+                "ConcurrentAccessException" => {
+                    return RusotoError::Service(UntagResourceError::ConcurrentAccess(err.msg))
                 }
                 "InternalServerErrorException" => {
                     return RusotoError::Service(UntagResourceError::InternalServerError(err.msg))
@@ -1153,6 +1172,7 @@ impl fmt::Display for UntagResourceError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             UntagResourceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ConcurrentAccess(ref cause) => write!(f, "{}", cause),
             UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
             UntagResourceError::NotFound(ref cause) => write!(f, "{}", cause),
         }

@@ -25,6 +25,20 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateRoutingProfileQueuesRequest {
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The queues to associate with this routing profile.</p>
+    #[serde(rename = "QueueConfigs")]
+    pub queue_configs: Vec<RoutingProfileQueueConfig>,
+    /// <p>The identifier of the routing profile.</p>
+    #[serde(rename = "RoutingProfileId")]
+    pub routing_profile_id: String,
+}
+
 /// <p>A chat message.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -37,7 +51,41 @@ pub struct ChatMessage {
     pub content_type: String,
 }
 
-/// <p>Contains summary information about a contact flow.</p>
+/// <p>Contains information about a contact flow.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ContactFlow {
+    /// <p>The Amazon Resource Name (ARN) of the contact flow.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The content of the contact flow.</p>
+    #[serde(rename = "Content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// <p>The description of the contact flow.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the contact flow.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the contact flow.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The type of the contact flow. For descriptions of the available types, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/create-contact-flow.html#contact-flow-types">Choose a Contact Flow Type</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Contains summary information about a contact flow.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ContactFlowSummary {
@@ -57,6 +105,85 @@ pub struct ContactFlowSummary {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateContactFlowRequest {
+    /// <p>The content of the contact flow. </p>
+    #[serde(rename = "Content")]
+    pub content: String,
+    /// <p>The description of the contact flow. </p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The name of the contact flow.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The type of the contact flow. For descriptions of the available types, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/create-contact-flow.html#contact-flow-types">Choose a Contact Flow Type</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateContactFlowResponse {
+    /// <p>The Amazon Resource Name (ARN) of the contact flow.</p>
+    #[serde(rename = "ContactFlowArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_flow_arn: Option<String>,
+    /// <p>The identifier of the contact flow.</p>
+    #[serde(rename = "ContactFlowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_flow_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateRoutingProfileRequest {
+    /// <p>The default outbound queue for the routing profile.</p>
+    #[serde(rename = "DefaultOutboundQueueId")]
+    pub default_outbound_queue_id: String,
+    /// <p>Description of the routing profile. Must not be more than 250 characters.</p>
+    #[serde(rename = "Description")]
+    pub description: String,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.</p>
+    #[serde(rename = "MediaConcurrencies")]
+    pub media_concurrencies: Vec<MediaConcurrency>,
+    /// <p>The name of the routing profile. Must not be more than 127 characters.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The inbound queues associated with the routing profile. If no queue is added, the agent can only make outbound calls.</p>
+    #[serde(rename = "QueueConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queue_configs: Option<Vec<RoutingProfileQueueConfig>>,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateRoutingProfileResponse {
+    /// <p>The Amazon Resource Name (ARN) of the routing profile.</p>
+    #[serde(rename = "RoutingProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub routing_profile_arn: Option<String>,
+    /// <p>The identifier of the routing profile.</p>
+    #[serde(rename = "RoutingProfileId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub routing_profile_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -188,6 +315,46 @@ pub struct DeleteUserRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeContactFlowRequest {
+    /// <p>The identifier of the contact flow.</p>
+    #[serde(rename = "ContactFlowId")]
+    pub contact_flow_id: String,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeContactFlowResponse {
+    /// <p>Information about the contact flow.</p>
+    #[serde(rename = "ContactFlow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_flow: Option<ContactFlow>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeRoutingProfileRequest {
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The identifier of the routing profile.</p>
+    #[serde(rename = "RoutingProfileId")]
+    pub routing_profile_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeRoutingProfileResponse {
+    /// <p>The routing profile.</p>
+    #[serde(rename = "RoutingProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub routing_profile: Option<RoutingProfile>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserHierarchyGroupRequest {
     /// <p>The identifier of the hierarchy group.</p>
     #[serde(rename = "HierarchyGroupId")]
@@ -257,6 +424,20 @@ pub struct Dimensions {
     pub queue: Option<QueueReference>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateRoutingProfileQueuesRequest {
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The queues to disassociate from this routing profile.</p>
+    #[serde(rename = "QueueReferences")]
+    pub queue_references: Vec<RoutingProfileQueueReference>,
+    /// <p>The identifier of the routing profile.</p>
+    #[serde(rename = "RoutingProfileId")]
+    pub routing_profile_id: String,
+}
+
 /// <p>Contains the filter to apply when retrieving metrics.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -297,10 +478,10 @@ pub struct GetCurrentMetricDataRequest {
     /// <p><p>The metrics to retrieve. Specify the name and unit for each metric. The following metrics are available. For a description of all the metrics, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html">Real-time Metrics Definitions</a> in the <i>Amazon Connect Administrator Guide</i>.</p> <dl> <dt>AGENTS<em>AFTER</em>CONTACT<em>WORK</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#aftercallwork-real-time">ACW</a> </p> </dd> <dt>AGENTS</em>AVAILABLE</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#available-real-time">Available</a> </p> </dd> <dt>AGENTS<em>ERROR</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#error-real-time">Error</a> </p> </dd> <dt>AGENTS</em>NON<em>PRODUCTIVE</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#non-productive-time-real-time">NPT (Non-Productive Time)</a> </p> </dd> <dt>AGENTS</em>ON<em>CALL</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#on-call-real-time">On contact</a> </p> </dd> <dt>AGENTS</em>ON<em>CONTACT</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#on-call-real-time">On contact</a> </p> </dd> <dt>AGENTS</em>ONLINE</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#online-real-time">Online</a> </p> </dd> <dt>AGENTS<em>STAFFED</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#staffed-real-time">Staffed</a> </p> </dd> <dt>CONTACTS</em>IN<em>QUEUE</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#in-queue-real-time">In queue</a> </p> </dd> <dt>CONTACTS</em>SCHEDULED</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#scheduled-real-time">Scheduled</a> </p> </dd> <dt>OLDEST<em>CONTACT</em>AGE</dt> <dd> <p>Unit: SECONDS</p> <p>When you use groupings, Unit says SECONDS but the Value is returned in MILLISECONDS. For example, if you get a response like this:</p> <p> <code>{ &quot;Metric&quot;: { &quot;Name&quot;: &quot;OLDEST<em>CONTACT</em>AGE&quot;, &quot;Unit&quot;: &quot;SECONDS&quot; }, &quot;Value&quot;: 24113.0 </code>}</p> <p>The actual OLDEST<em>CONTACT</em>AGE is 24 seconds.</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#oldest-real-time">Oldest</a> </p> </dd> <dt>SLOTS<em>ACTIVE</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#active-real-time">Active</a> </p> </dd> <dt>SLOTS</em>AVAILABLE</dt> <dd> <p>Unit: COUNT</p> <p>Name in real-time metrics report: <a href="https://docs.aws.amazon.com/connect/latest/adminguide/real-time-metrics-definitions.html#availability-real-time">Availability</a> </p> </dd> </dl></p>
     #[serde(rename = "CurrentMetrics")]
     pub current_metrics: Vec<CurrentMetric>,
-    /// <p>The queues, up to 100, or channels, to use to filter the metrics returned. Metric data is retrieved only for the resources associated with the queues or channels included in the filter. You can include both queue IDs and queue ARNs in the same request. The only supported channel is <code>VOICE</code>.</p>
+    /// <p>The queues, up to 100, or channels, to use to filter the metrics returned. Metric data is retrieved only for the resources associated with the queues or channels included in the filter. You can include both queue IDs and queue ARNs in the same request. Both <code>VOICE</code> and <code>CHAT</code> channels are supported.</p>
     #[serde(rename = "Filters")]
     pub filters: Filters,
-    /// <p>The grouping applied to the metrics returned. For example, when grouped by <code>QUEUE</code>, the metrics returned apply to each queue rather than aggregated for all queues. If you group by <code>CHANNEL</code>, you should include a Channels filter. The only supported channel is <code>VOICE</code>.</p> <p>If no <code>Grouping</code> is included in the request, a summary of metrics is returned.</p>
+    /// <p>The grouping applied to the metrics returned. For example, when grouped by <code>QUEUE</code>, the metrics returned apply to each queue rather than aggregated for all queues. If you group by <code>CHANNEL</code>, you should include a Channels filter. Both <code>VOICE</code> and <code>CHAT</code> channels are supported.</p> <p>If no <code>Grouping</code> is included in the request, a summary of metrics is returned.</p>
     #[serde(rename = "Groupings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub groupings: Option<Vec<String>>,
@@ -357,7 +538,7 @@ pub struct GetMetricDataRequest {
     /// <p>The timestamp, in UNIX Epoch time format, at which to end the reporting interval for the retrieval of historical metrics data. The time must be specified using an interval of 5 minutes, such as 11:00, 11:05, 11:10, and must be later than the start time timestamp.</p> <p>The time range between the start and end time must be less than 24 hours.</p>
     #[serde(rename = "EndTime")]
     pub end_time: f64,
-    /// <p>The queues, up to 100, or channels, to use to filter the metrics returned. Metric data is retrieved only for the resources associated with the queues or channels included in the filter. You can include both queue IDs and queue ARNs in the same request. The only supported channel is <code>VOICE</code>.</p>
+    /// <p>The queues, up to 100, or channels, to use to filter the metrics returned. Metric data is retrieved only for the resources associated with the queues or channels included in the filter. You can include both queue IDs and queue ARNs in the same request. Both <code>VOICE</code> and <code>CHAT</code> channels are supported.</p>
     #[serde(rename = "Filters")]
     pub filters: Filters,
     /// <p>The grouping applied to the metrics returned. For example, when results are grouped by queue, the metrics returned are grouped by queue. The values returned apply to the metrics for each queue rather than aggregated for all queues.</p> <p>The only supported grouping is <code>QUEUE</code>.</p> <p>If no grouping is specified, a summary of metrics for all queues is returned.</p>
@@ -678,6 +859,35 @@ pub struct ListPhoneNumbersResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListPromptsRequest {
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The maximum number of results to return per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListPromptsResponse {
+    /// <p>If there are additional results, this is the token for the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about the prompts.</p>
+    #[serde(rename = "PromptSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prompt_summary_list: Option<Vec<PromptSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQueuesRequest {
     /// <p>The identifier of the Amazon Connect instance.</p>
     #[serde(rename = "InstanceId")]
@@ -707,6 +917,38 @@ pub struct ListQueuesResponse {
     #[serde(rename = "QueueSummaryList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queue_summary_list: Option<Vec<QueueSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListRoutingProfileQueuesRequest {
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The maximimum number of results to return per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The identifier of the routing profile.</p>
+    #[serde(rename = "RoutingProfileId")]
+    pub routing_profile_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListRoutingProfileQueuesResponse {
+    /// <p>If there are additional results, this is the token for the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about the routing profiles.</p>
+    #[serde(rename = "RoutingProfileQueueConfigSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub routing_profile_queue_config_summary_list: Option<Vec<RoutingProfileQueueConfigSummary>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -842,6 +1084,17 @@ pub struct ListUsersResponse {
     pub user_summary_list: Option<Vec<UserSummary>>,
 }
 
+/// <p>Contains information about which channels are supported, and how many contacts an agent can have on a channel simultaneously.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MediaConcurrency {
+    /// <p>The channels that agents can handle in the Contact Control Panel (CCP).</p>
+    #[serde(rename = "Channel")]
+    pub channel: String,
+    /// <p>The number of contacts an agent can have on a channel simultaneously.</p>
+    #[serde(rename = "Concurrency")]
+    pub concurrency: i64,
+}
+
 /// <p>The customer's details.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -875,6 +1128,31 @@ pub struct PhoneNumberSummary {
     #[serde(rename = "PhoneNumberType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number_type: Option<String>,
+}
+
+/// <p>Information about a problem detail.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct ProblemDetail {
+    /// <p>The problem detail's message.</p>
+    pub message: Option<String>,
+}
+
+/// <p>Contains information about the prompt.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PromptSummary {
+    /// <p>The Amazon Resource Name (ARN) of the prompt.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The identifier of the prompt.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the prompt.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 /// <p>Contains information about a queue resource for which metrics are returned.</p>
@@ -911,6 +1189,113 @@ pub struct QueueSummary {
     #[serde(rename = "QueueType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queue_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ResumeContactRecordingRequest {
+    /// <p>The identifier of the contact.</p>
+    #[serde(rename = "ContactId")]
+    pub contact_id: String,
+    /// <p>The identifier of the contact. This is the identifier of the contact associated with the first interaction with the contact center.</p>
+    #[serde(rename = "InitialContactId")]
+    pub initial_contact_id: String,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResumeContactRecordingResponse {}
+
+/// <p>Contains information about a routing profile.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RoutingProfile {
+    /// <p>The identifier of the default outbound queue for this routing profile.</p>
+    #[serde(rename = "DefaultOutboundQueueId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_outbound_queue_id: Option<String>,
+    /// <p>The description of the routing profile.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_id: Option<String>,
+    /// <p>The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.</p>
+    #[serde(rename = "MediaConcurrencies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_concurrencies: Option<Vec<MediaConcurrency>>,
+    /// <p>The name of the routing profile.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the routing profile.</p>
+    #[serde(rename = "RoutingProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub routing_profile_arn: Option<String>,
+    /// <p>The identifier of the routing profile.</p>
+    #[serde(rename = "RoutingProfileId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub routing_profile_id: Option<String>,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Contains information about the queue and channel for which priority and delay can be set.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RoutingProfileQueueConfig {
+    /// <p>The delay, in seconds, a contact should be in the queue before they are routed to an available agent. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-routing-profiles-priority.html">Queues: priority and delay</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    #[serde(rename = "Delay")]
+    pub delay: i64,
+    /// <p>The order in which contacts are to be handled for the queue. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-routing-profiles-priority.html">Queues: priority and delay</a>.</p>
+    #[serde(rename = "Priority")]
+    pub priority: i64,
+    /// <p>Contains information about a queue resource.</p>
+    #[serde(rename = "QueueReference")]
+    pub queue_reference: RoutingProfileQueueReference,
+}
+
+/// <p>Contains summary information about a routing profile queue.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RoutingProfileQueueConfigSummary {
+    /// <p>The channels this queue supports.</p>
+    #[serde(rename = "Channel")]
+    pub channel: String,
+    /// <p>The delay, in seconds, that a contact should be in the queue before they are routed to an available agent. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-routing-profiles-priority.html">Queues: priority and delay</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    #[serde(rename = "Delay")]
+    pub delay: i64,
+    /// <p>The order in which contacts are to be handled for the queue. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-routing-profiles-priority.html">Queues: priority and delay</a>.</p>
+    #[serde(rename = "Priority")]
+    pub priority: i64,
+    /// <p>The Amazon Resource Name (ARN) of the queue.</p>
+    #[serde(rename = "QueueArn")]
+    pub queue_arn: String,
+    /// <p>The identifier of the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
+    /// <p>The name of the queue.</p>
+    #[serde(rename = "QueueName")]
+    pub queue_name: String,
+}
+
+/// <p>Contains the channel and queue identifier for a routing profile.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RoutingProfileQueueReference {
+    /// <p>The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.</p>
+    #[serde(rename = "Channel")]
+    pub channel: String,
+    /// <p>The identifier of the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
 }
 
 /// <p>Contains summary information about a routing profile.</p>
@@ -960,7 +1345,7 @@ pub struct StartChatContactRequest {
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The identifier of the contact flow for the outbound call. To see the ContactFlowId in the Amazon Connect console user interface, on the navigation menu go to <b>Routing</b>, <b>Contact Flows</b>. Choose the contact flow. On the contact flow page, under the name of the contact flow, choose <b>Show additional flow information</b>. The ContactFlowId is the last part of the ARN, shown here in bold: </p> <p>arn:aws:connect:us-west-2:xxxxxxxxxxxx:instance/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/contact-flow/<b>846ec553-a005-41c0-8341-xxxxxxxxxxxx</b> </p>
+    /// <p>The identifier of the contact flow for initiating the chat. To see the ContactFlowId in the Amazon Connect console user interface, on the navigation menu go to <b>Routing</b>, <b>Contact Flows</b>. Choose the contact flow. On the contact flow page, under the name of the contact flow, choose <b>Show additional flow information</b>. The ContactFlowId is the last part of the ARN, shown here in bold: </p> <p>arn:aws:connect:us-west-2:xxxxxxxxxxxx:instance/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/contact-flow/<b>846ec553-a005-41c0-8341-xxxxxxxxxxxx</b> </p>
     #[serde(rename = "ContactFlowId")]
     pub contact_flow_id: String,
     /// <p>The initial message to be sent to the newly created chat.</p>
@@ -991,6 +1376,27 @@ pub struct StartChatContactResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub participant_token: Option<String>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartContactRecordingRequest {
+    /// <p>The identifier of the contact.</p>
+    #[serde(rename = "ContactId")]
+    pub contact_id: String,
+    /// <p>The identifier of the contact. This is the identifier of the contact associated with the first interaction with the contact center.</p>
+    #[serde(rename = "InitialContactId")]
+    pub initial_contact_id: String,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>Who is being recorded.</p>
+    #[serde(rename = "VoiceRecordingConfiguration")]
+    pub voice_recording_configuration: VoiceRecordingConfiguration,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartContactRecordingResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1033,6 +1439,24 @@ pub struct StartOutboundVoiceContactResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopContactRecordingRequest {
+    /// <p>The identifier of the contact.</p>
+    #[serde(rename = "ContactId")]
+    pub contact_id: String,
+    /// <p>The identifier of the contact. This is the identifier of the contact associated with the first interaction with the contact center.</p>
+    #[serde(rename = "InitialContactId")]
+    pub initial_contact_id: String,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StopContactRecordingResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopContactRequest {
     /// <p>The ID of the contact.</p>
     #[serde(rename = "ContactId")]
@@ -1045,6 +1469,24 @@ pub struct StopContactRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopContactResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SuspendContactRecordingRequest {
+    /// <p>The identifier of the contact.</p>
+    #[serde(rename = "ContactId")]
+    pub contact_id: String,
+    /// <p>The identifier of the contact. This is the identifier of the contact associated with the first interaction with the contact center.</p>
+    #[serde(rename = "InitialContactId")]
+    pub initial_contact_id: String,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SuspendContactRecordingResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1098,6 +1540,100 @@ pub struct UpdateContactAttributesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateContactAttributesResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateContactFlowContentRequest {
+    /// <p>The identifier of the contact flow.</p>
+    #[serde(rename = "ContactFlowId")]
+    pub contact_flow_id: String,
+    /// <p>The JSON string that represents contact flow’s content. For an example, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language-example.html">Example contact flow in Amazon Connect Flow language</a> in the <i>Amazon Connect Administrator Guide</i>. </p>
+    #[serde(rename = "Content")]
+    pub content: String,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateContactFlowNameRequest {
+    /// <p>The identifier of the contact flow.</p>
+    #[serde(rename = "ContactFlowId")]
+    pub contact_flow_id: String,
+    /// <p>The description of the contact flow.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The name of the contact flow.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateRoutingProfileConcurrencyRequest {
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The channels agents can handle in the Contact Control Panel (CCP).</p>
+    #[serde(rename = "MediaConcurrencies")]
+    pub media_concurrencies: Vec<MediaConcurrency>,
+    /// <p>The identifier of the routing profile.</p>
+    #[serde(rename = "RoutingProfileId")]
+    pub routing_profile_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateRoutingProfileDefaultOutboundQueueRequest {
+    /// <p>The identifier for the default outbound queue.</p>
+    #[serde(rename = "DefaultOutboundQueueId")]
+    pub default_outbound_queue_id: String,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The identifier of the routing profile.</p>
+    #[serde(rename = "RoutingProfileId")]
+    pub routing_profile_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateRoutingProfileNameRequest {
+    /// <p>The description of the routing profile. Must not be more than 250 characters.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The name of the routing profile. Must not be more than 127 characters.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The identifier of the routing profile.</p>
+    #[serde(rename = "RoutingProfileId")]
+    pub routing_profile_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateRoutingProfileQueuesRequest {
+    /// <p>The identifier of the Amazon Connect instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The queues to be updated for this routing profile.</p>
+    #[serde(rename = "QueueConfigs")]
+    pub queue_configs: Vec<RoutingProfileQueueConfig>,
+    /// <p>The identifier of the routing profile.</p>
+    #[serde(rename = "RoutingProfileId")]
+    pub routing_profile_id: String,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1271,6 +1807,236 @@ pub struct UserSummary {
     pub username: Option<String>,
 }
 
+/// <p>Contains information about the recording configuration settings.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct VoiceRecordingConfiguration {
+    /// <p>Identifies which track is being recorded.</p>
+    #[serde(rename = "VoiceRecordingTrack")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub voice_recording_track: Option<String>,
+}
+
+/// Errors returned by AssociateRoutingProfileQueues
+#[derive(Debug, PartialEq)]
+pub enum AssociateRoutingProfileQueuesError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl AssociateRoutingProfileQueuesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateRoutingProfileQueuesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        AssociateRoutingProfileQueuesError::InternalService(err.msg),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        AssociateRoutingProfileQueuesError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        AssociateRoutingProfileQueuesError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        AssociateRoutingProfileQueuesError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(AssociateRoutingProfileQueuesError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateRoutingProfileQueuesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateRoutingProfileQueuesError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateRoutingProfileQueuesError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateRoutingProfileQueuesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AssociateRoutingProfileQueuesError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateRoutingProfileQueuesError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociateRoutingProfileQueuesError {}
+/// Errors returned by CreateContactFlow
+#[derive(Debug, PartialEq)]
+pub enum CreateContactFlowError {
+    /// <p>A resource with the specified name already exists.</p>
+    DuplicateResource(String),
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>The contact flow is not valid.</p>
+    InvalidContactFlow(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The allowed limit for the resource has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl CreateContactFlowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContactFlowError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DuplicateResourceException" => {
+                    return RusotoError::Service(CreateContactFlowError::DuplicateResource(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(CreateContactFlowError::InternalService(err.msg))
+                }
+                "InvalidContactFlowException" => {
+                    return RusotoError::Service(CreateContactFlowError::InvalidContactFlow(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateContactFlowError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateContactFlowError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateContactFlowError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateContactFlowError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateContactFlowError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateContactFlowError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateContactFlowError::DuplicateResource(ref cause) => write!(f, "{}", cause),
+            CreateContactFlowError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateContactFlowError::InvalidContactFlow(ref cause) => write!(f, "{}", cause),
+            CreateContactFlowError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateContactFlowError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateContactFlowError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateContactFlowError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateContactFlowError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateContactFlowError {}
+/// Errors returned by CreateRoutingProfile
+#[derive(Debug, PartialEq)]
+pub enum CreateRoutingProfileError {
+    /// <p>A resource with the specified name already exists.</p>
+    DuplicateResource(String),
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The allowed limit for the resource has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl CreateRoutingProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRoutingProfileError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DuplicateResourceException" => {
+                    return RusotoError::Service(CreateRoutingProfileError::DuplicateResource(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(CreateRoutingProfileError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateRoutingProfileError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateRoutingProfileError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateRoutingProfileError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateRoutingProfileError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateRoutingProfileError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateRoutingProfileError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateRoutingProfileError::DuplicateResource(ref cause) => write!(f, "{}", cause),
+            CreateRoutingProfileError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateRoutingProfileError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateRoutingProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateRoutingProfileError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateRoutingProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateRoutingProfileError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateRoutingProfileError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -1391,6 +2157,134 @@ impl fmt::Display for DeleteUserError {
     }
 }
 impl Error for DeleteUserError {}
+/// Errors returned by DescribeContactFlow
+#[derive(Debug, PartialEq)]
+pub enum DescribeContactFlowError {
+    /// <p>The contact flow has not been published.</p>
+    ContactFlowNotPublished(String),
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl DescribeContactFlowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContactFlowError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ContactFlowNotPublishedException" => {
+                    return RusotoError::Service(DescribeContactFlowError::ContactFlowNotPublished(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(DescribeContactFlowError::InternalService(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeContactFlowError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeContactFlowError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeContactFlowError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeContactFlowError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeContactFlowError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeContactFlowError::ContactFlowNotPublished(ref cause) => write!(f, "{}", cause),
+            DescribeContactFlowError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeContactFlowError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeContactFlowError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeContactFlowError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeContactFlowError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeContactFlowError {}
+/// Errors returned by DescribeRoutingProfile
+#[derive(Debug, PartialEq)]
+pub enum DescribeRoutingProfileError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl DescribeRoutingProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRoutingProfileError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(DescribeRoutingProfileError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeRoutingProfileError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeRoutingProfileError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeRoutingProfileError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeRoutingProfileError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeRoutingProfileError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeRoutingProfileError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeRoutingProfileError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeRoutingProfileError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeRoutingProfileError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeRoutingProfileError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeRoutingProfileError {}
 /// Errors returned by DescribeUser
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserError {
@@ -1585,6 +2479,80 @@ impl fmt::Display for DescribeUserHierarchyStructureError {
     }
 }
 impl Error for DescribeUserHierarchyStructureError {}
+/// Errors returned by DisassociateRoutingProfileQueues
+#[derive(Debug, PartialEq)]
+pub enum DisassociateRoutingProfileQueuesError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl DisassociateRoutingProfileQueuesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateRoutingProfileQueuesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        DisassociateRoutingProfileQueuesError::InternalService(err.msg),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        DisassociateRoutingProfileQueuesError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DisassociateRoutingProfileQueuesError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateRoutingProfileQueuesError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DisassociateRoutingProfileQueuesError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateRoutingProfileQueuesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateRoutingProfileQueuesError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateRoutingProfileQueuesError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateRoutingProfileQueuesError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateRoutingProfileQueuesError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateRoutingProfileQueuesError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateRoutingProfileQueuesError {}
 /// Errors returned by GetContactAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetContactAttributesError {
@@ -1977,6 +2945,60 @@ impl fmt::Display for ListPhoneNumbersError {
     }
 }
 impl Error for ListPhoneNumbersError {}
+/// Errors returned by ListPrompts
+#[derive(Debug, PartialEq)]
+pub enum ListPromptsError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl ListPromptsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPromptsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListPromptsError::InternalService(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListPromptsError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListPromptsError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListPromptsError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListPromptsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListPromptsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListPromptsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListPromptsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListPromptsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListPromptsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListPromptsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListPromptsError {}
 /// Errors returned by ListQueues
 #[derive(Debug, PartialEq)]
 pub enum ListQueuesError {
@@ -2031,6 +3053,68 @@ impl fmt::Display for ListQueuesError {
     }
 }
 impl Error for ListQueuesError {}
+/// Errors returned by ListRoutingProfileQueues
+#[derive(Debug, PartialEq)]
+pub enum ListRoutingProfileQueuesError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl ListRoutingProfileQueuesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRoutingProfileQueuesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListRoutingProfileQueuesError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListRoutingProfileQueuesError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListRoutingProfileQueuesError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListRoutingProfileQueuesError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListRoutingProfileQueuesError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListRoutingProfileQueuesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListRoutingProfileQueuesError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListRoutingProfileQueuesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListRoutingProfileQueuesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListRoutingProfileQueuesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListRoutingProfileQueuesError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListRoutingProfileQueuesError {}
 /// Errors returned by ListRoutingProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListRoutingProfilesError {
@@ -2323,6 +3407,54 @@ impl fmt::Display for ListUsersError {
     }
 }
 impl Error for ListUsersError {}
+/// Errors returned by ResumeContactRecording
+#[derive(Debug, PartialEq)]
+pub enum ResumeContactRecordingError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ResumeContactRecordingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResumeContactRecordingError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(ResumeContactRecordingError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ResumeContactRecordingError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ResumeContactRecordingError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ResumeContactRecordingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ResumeContactRecordingError::InternalService(ref cause) => write!(f, "{}", cause),
+            ResumeContactRecordingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ResumeContactRecordingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ResumeContactRecordingError {}
 /// Errors returned by StartChatContact
 #[derive(Debug, PartialEq)]
 pub enum StartChatContactError {
@@ -2377,6 +3509,62 @@ impl fmt::Display for StartChatContactError {
     }
 }
 impl Error for StartChatContactError {}
+/// Errors returned by StartContactRecording
+#[derive(Debug, PartialEq)]
+pub enum StartContactRecordingError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl StartContactRecordingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartContactRecordingError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(StartContactRecordingError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StartContactRecordingError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StartContactRecordingError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StartContactRecordingError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StartContactRecordingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartContactRecordingError::InternalService(ref cause) => write!(f, "{}", cause),
+            StartContactRecordingError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            StartContactRecordingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StartContactRecordingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartContactRecordingError {}
 /// Errors returned by StartOutboundVoiceContact
 #[derive(Debug, PartialEq)]
 pub enum StartOutboundVoiceContactError {
@@ -2515,6 +3703,100 @@ impl fmt::Display for StopContactError {
     }
 }
 impl Error for StopContactError {}
+/// Errors returned by StopContactRecording
+#[derive(Debug, PartialEq)]
+pub enum StopContactRecordingError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl StopContactRecordingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopContactRecordingError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(StopContactRecordingError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StopContactRecordingError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StopContactRecordingError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopContactRecordingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopContactRecordingError::InternalService(ref cause) => write!(f, "{}", cause),
+            StopContactRecordingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            StopContactRecordingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopContactRecordingError {}
+/// Errors returned by SuspendContactRecording
+#[derive(Debug, PartialEq)]
+pub enum SuspendContactRecordingError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl SuspendContactRecordingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SuspendContactRecordingError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(SuspendContactRecordingError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(SuspendContactRecordingError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(SuspendContactRecordingError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SuspendContactRecordingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SuspendContactRecordingError::InternalService(ref cause) => write!(f, "{}", cause),
+            SuspendContactRecordingError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            SuspendContactRecordingError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for SuspendContactRecordingError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2679,6 +3961,432 @@ impl fmt::Display for UpdateContactAttributesError {
     }
 }
 impl Error for UpdateContactAttributesError {}
+/// Errors returned by UpdateContactFlowContent
+#[derive(Debug, PartialEq)]
+pub enum UpdateContactFlowContentError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>The contact flow is not valid.</p>
+    InvalidContactFlow(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateContactFlowContentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContactFlowContentError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateContactFlowContentError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidContactFlowException" => {
+                    return RusotoError::Service(UpdateContactFlowContentError::InvalidContactFlow(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateContactFlowContentError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateContactFlowContentError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateContactFlowContentError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateContactFlowContentError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateContactFlowContentError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateContactFlowContentError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateContactFlowContentError::InvalidContactFlow(ref cause) => write!(f, "{}", cause),
+            UpdateContactFlowContentError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateContactFlowContentError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateContactFlowContentError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateContactFlowContentError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateContactFlowContentError {}
+/// Errors returned by UpdateContactFlowName
+#[derive(Debug, PartialEq)]
+pub enum UpdateContactFlowNameError {
+    /// <p>A resource with the specified name already exists.</p>
+    DuplicateResource(String),
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateContactFlowNameError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContactFlowNameError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DuplicateResourceException" => {
+                    return RusotoError::Service(UpdateContactFlowNameError::DuplicateResource(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateContactFlowNameError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateContactFlowNameError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateContactFlowNameError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateContactFlowNameError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateContactFlowNameError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateContactFlowNameError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateContactFlowNameError::DuplicateResource(ref cause) => write!(f, "{}", cause),
+            UpdateContactFlowNameError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateContactFlowNameError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateContactFlowNameError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateContactFlowNameError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateContactFlowNameError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateContactFlowNameError {}
+/// Errors returned by UpdateRoutingProfileConcurrency
+#[derive(Debug, PartialEq)]
+pub enum UpdateRoutingProfileConcurrencyError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateRoutingProfileConcurrencyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateRoutingProfileConcurrencyError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        UpdateRoutingProfileConcurrencyError::InternalService(err.msg),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        UpdateRoutingProfileConcurrencyError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        UpdateRoutingProfileConcurrencyError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateRoutingProfileConcurrencyError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateRoutingProfileConcurrencyError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateRoutingProfileConcurrencyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateRoutingProfileConcurrencyError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRoutingProfileConcurrencyError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRoutingProfileConcurrencyError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRoutingProfileConcurrencyError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRoutingProfileConcurrencyError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateRoutingProfileConcurrencyError {}
+/// Errors returned by UpdateRoutingProfileDefaultOutboundQueue
+#[derive(Debug, PartialEq)]
+pub enum UpdateRoutingProfileDefaultOutboundQueueError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateRoutingProfileDefaultOutboundQueueError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateRoutingProfileDefaultOutboundQueueError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        UpdateRoutingProfileDefaultOutboundQueueError::InternalService(err.msg),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        UpdateRoutingProfileDefaultOutboundQueueError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        UpdateRoutingProfileDefaultOutboundQueueError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateRoutingProfileDefaultOutboundQueueError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        UpdateRoutingProfileDefaultOutboundQueueError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateRoutingProfileDefaultOutboundQueueError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateRoutingProfileDefaultOutboundQueueError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRoutingProfileDefaultOutboundQueueError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRoutingProfileDefaultOutboundQueueError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRoutingProfileDefaultOutboundQueueError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateRoutingProfileDefaultOutboundQueueError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateRoutingProfileDefaultOutboundQueueError {}
+/// Errors returned by UpdateRoutingProfileName
+#[derive(Debug, PartialEq)]
+pub enum UpdateRoutingProfileNameError {
+    /// <p>A resource with the specified name already exists.</p>
+    DuplicateResource(String),
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateRoutingProfileNameError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRoutingProfileNameError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DuplicateResourceException" => {
+                    return RusotoError::Service(UpdateRoutingProfileNameError::DuplicateResource(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateRoutingProfileNameError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateRoutingProfileNameError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateRoutingProfileNameError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateRoutingProfileNameError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateRoutingProfileNameError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateRoutingProfileNameError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateRoutingProfileNameError::DuplicateResource(ref cause) => write!(f, "{}", cause),
+            UpdateRoutingProfileNameError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateRoutingProfileNameError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateRoutingProfileNameError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateRoutingProfileNameError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRoutingProfileNameError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateRoutingProfileNameError {}
+/// Errors returned by UpdateRoutingProfileQueues
+#[derive(Debug, PartialEq)]
+pub enum UpdateRoutingProfileQueuesError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateRoutingProfileQueuesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateRoutingProfileQueuesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateRoutingProfileQueuesError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateRoutingProfileQueuesError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateRoutingProfileQueuesError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateRoutingProfileQueuesError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateRoutingProfileQueuesError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateRoutingProfileQueuesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateRoutingProfileQueuesError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateRoutingProfileQueuesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateRoutingProfileQueuesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateRoutingProfileQueuesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateRoutingProfileQueuesError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateRoutingProfileQueuesError {}
 /// Errors returned by UpdateUserHierarchy
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserHierarchyError {
@@ -2992,6 +4700,24 @@ impl Error for UpdateUserSecurityProfilesError {}
 /// Trait representing the capabilities of the Amazon Connect API. Amazon Connect clients implement this trait.
 #[async_trait]
 pub trait Connect {
+    /// <p>Associates a set of queues with a routing profile.</p>
+    async fn associate_routing_profile_queues(
+        &self,
+        input: AssociateRoutingProfileQueuesRequest,
+    ) -> Result<(), RusotoError<AssociateRoutingProfileQueuesError>>;
+
+    /// <p>Creates a contact flow for the specified Amazon Connect instance.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p>
+    async fn create_contact_flow(
+        &self,
+        input: CreateContactFlowRequest,
+    ) -> Result<CreateContactFlowResponse, RusotoError<CreateContactFlowError>>;
+
+    /// <p>Creates a new routing profile.</p>
+    async fn create_routing_profile(
+        &self,
+        input: CreateRoutingProfileRequest,
+    ) -> Result<CreateRoutingProfileResponse, RusotoError<CreateRoutingProfileError>>;
+
     /// <p>Creates a user account for the specified Amazon Connect instance.</p> <p>For information about how to create user accounts using the Amazon Connect console, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/user-management.html">Add Users</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn create_user(
         &self,
@@ -3003,6 +4729,18 @@ pub trait Connect {
         &self,
         input: DeleteUserRequest,
     ) -> Result<(), RusotoError<DeleteUserError>>;
+
+    /// <p>Describes the specified contact flow.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p>
+    async fn describe_contact_flow(
+        &self,
+        input: DescribeContactFlowRequest,
+    ) -> Result<DescribeContactFlowResponse, RusotoError<DescribeContactFlowError>>;
+
+    /// <p>Describes the specified routing profile.</p>
+    async fn describe_routing_profile(
+        &self,
+        input: DescribeRoutingProfileRequest,
+    ) -> Result<DescribeRoutingProfileResponse, RusotoError<DescribeRoutingProfileError>>;
 
     /// <p>Describes the specified user account. You can find the instance ID in the console (it’s the final part of the ARN). The console does not display the user IDs. Instead, list the users and note the IDs provided in the output.</p>
     async fn describe_user(
@@ -3024,6 +4762,12 @@ pub trait Connect {
         DescribeUserHierarchyStructureResponse,
         RusotoError<DescribeUserHierarchyStructureError>,
     >;
+
+    /// <p>Disassociates a set of queues from a routing profile.</p>
+    async fn disassociate_routing_profile_queues(
+        &self,
+        input: DisassociateRoutingProfileQueuesRequest,
+    ) -> Result<(), RusotoError<DisassociateRoutingProfileQueuesError>>;
 
     /// <p>Retrieves the contact attributes for the specified contact.</p>
     async fn get_contact_attributes(
@@ -3049,7 +4793,7 @@ pub trait Connect {
         input: GetMetricDataRequest,
     ) -> Result<GetMetricDataResponse, RusotoError<GetMetricDataError>>;
 
-    /// <p>Provides information about the contact flows for the specified Amazon Connect instance.</p> <p>For more information about contact flows, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-contact-flows.html">Contact Flows</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    /// <p>Provides information about the contact flows for the specified Amazon Connect instance.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p> <p>For more information about contact flows, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-contact-flows.html">Contact Flows</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_contact_flows(
         &self,
         input: ListContactFlowsRequest,
@@ -3067,11 +4811,23 @@ pub trait Connect {
         input: ListPhoneNumbersRequest,
     ) -> Result<ListPhoneNumbersResponse, RusotoError<ListPhoneNumbersError>>;
 
+    /// <p>Provides information about the prompts for the specified Amazon Connect instance.</p>
+    async fn list_prompts(
+        &self,
+        input: ListPromptsRequest,
+    ) -> Result<ListPromptsResponse, RusotoError<ListPromptsError>>;
+
     /// <p>Provides information about the queues for the specified Amazon Connect instance.</p> <p>For more information about queues, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-queues-standard-and-agent.html">Queues: Standard and Agent</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_queues(
         &self,
         input: ListQueuesRequest,
     ) -> Result<ListQueuesResponse, RusotoError<ListQueuesError>>;
+
+    /// <p>List the queues associated with a routing profile.</p>
+    async fn list_routing_profile_queues(
+        &self,
+        input: ListRoutingProfileQueuesRequest,
+    ) -> Result<ListRoutingProfileQueuesResponse, RusotoError<ListRoutingProfileQueuesError>>;
 
     /// <p>Provides summary information about the routing profiles for the specified Amazon Connect instance.</p> <p>For more information about routing profiles, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-routing.html">Routing Profiles</a> and <a href="https://docs.aws.amazon.com/connect/latest/adminguide/routing-profiles.html">Create a Routing Profile</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_routing_profiles(
@@ -3103,11 +4859,23 @@ pub trait Connect {
         input: ListUsersRequest,
     ) -> Result<ListUsersResponse, RusotoError<ListUsersError>>;
 
+    /// <p>When a contact is being recorded, and the recording has been suspended using SuspendContactRecording, this API resumes recording the call.</p> <p>Only voice recordings are supported at this time.</p>
+    async fn resume_contact_recording(
+        &self,
+        input: ResumeContactRecordingRequest,
+    ) -> Result<ResumeContactRecordingResponse, RusotoError<ResumeContactRecordingError>>;
+
     /// <p>Initiates a contact flow to start a new chat for the customer. Response of this API provides a token required to obtain credentials from the <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> API in the Amazon Connect Participant Service.</p> <p>When a new chat contact is successfully created, clients need to subscribe to the participant’s connection for the created chat within 5 minutes. This is achieved by invoking <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> with WEBSOCKET and CONNECTION_CREDENTIALS. </p> <p>A 429 error occurs in two situations:</p> <ul> <li> <p>API rate limit is exceeded. API TPS throttling returns a <code>TooManyRequests</code> exception from the API Gateway.</p> </li> <li> <p>The <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">quota for concurrent active chats</a> is exceeded. Active chat throttling returns a <code>LimitExceededException</code>.</p> </li> </ul> <p>For more information about how chat works, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/chat.html">Chat</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn start_chat_contact(
         &self,
         input: StartChatContactRequest,
     ) -> Result<StartChatContactResponse, RusotoError<StartChatContactError>>;
+
+    /// <p>This API starts recording the contact when the agent joins the call. StartContactRecording is a one-time action. For example, if you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend and resume it, such as when collecting sensitive information (for example, a credit card number), use SuspendContactRecording and ResumeContactRecording.</p> <p>You can use this API to override the recording behavior configured in the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/set-recording-behavior.html">Set recording behavior</a> block.</p> <p>Only voice recordings are supported at this time.</p>
+    async fn start_contact_recording(
+        &self,
+        input: StartContactRecordingRequest,
+    ) -> Result<StartContactRecordingResponse, RusotoError<StartContactRecordingError>>;
 
     /// <p><p>This API places an outbound call to a contact, and then initiates the contact flow. It performs the actions in the contact flow that&#39;s specified (in <code>ContactFlowId</code>).</p> <p>Agents are not involved in initiating the outbound API (that is, dialing the contact). If the contact flow places an outbound call to a contact, and then puts the contact in queue, that&#39;s when the call is routed to the agent, like any other inbound case.</p> <p>There is a 60 second dialing timeout for this operation. If the call is not connected after 60 seconds, it fails.</p> <note> <p>UK numbers with a 447 prefix are not allowed by default. Before you can dial these UK mobile numbers, you must submit a service quota increase request. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">Amazon Connect Service Quotas</a> in the <i>Amazon Connect Administrator Guide</i>. </p> </note></p>
     async fn start_outbound_voice_contact(
@@ -3121,7 +4889,19 @@ pub trait Connect {
         input: StopContactRequest,
     ) -> Result<StopContactResponse, RusotoError<StopContactError>>;
 
-    /// <p>Adds the specified tags to the specified resource.</p> <p>The supported resource type is users.</p> <p>For sample policies that use tags, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security_iam_id-based-policy-examples.html">Amazon Connect Identity-Based Policy Examples</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    /// <p>When a contact is being recorded, this API stops recording the call. StopContactRecording is a one-time action. If you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend it for sensitive information (for example, to collect a credit card number), and then restart it, use SuspendContactRecording and ResumeContactRecording.</p> <p>Only voice recordings are supported at this time.</p>
+    async fn stop_contact_recording(
+        &self,
+        input: StopContactRecordingRequest,
+    ) -> Result<StopContactRecordingResponse, RusotoError<StopContactRecordingError>>;
+
+    /// <p>When a contact is being recorded, this API suspends recording the call. For example, you might suspend the call recording while collecting sensitive information, such as a credit card number. Then use ResumeContactRecording to restart recording. </p> <p>The period of time that the recording is suspended is filled with silence in the final recording. </p> <p>Only voice recordings are supported at this time.</p>
+    async fn suspend_contact_recording(
+        &self,
+        input: SuspendContactRecordingRequest,
+    ) -> Result<SuspendContactRecordingResponse, RusotoError<SuspendContactRecordingError>>;
+
+    /// <p>Adds the specified tags to the specified resource.</p> <p>The supported resource types are users, routing profiles, and contact flows.</p> <p>For sample policies that use tags, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security_iam_id-based-policy-examples.html">Amazon Connect Identity-Based Policy Examples</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3133,11 +4913,47 @@ pub trait Connect {
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>>;
 
-    /// <p>Creates or updates the contact attributes associated with the specified contact.</p> <p>You can add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p> <b>Important:</b> You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
+    /// <p>Creates or updates the contact attributes associated with the specified contact.</p> <p>You can add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p>This operation is also available in the Amazon Connect Flow language. See <a href="https://docs.aws.amazon.com/connect/latest/adminguide/contact-actions-updatecontactattributes.html">UpdateContactAttributes</a>.</p> <p> <b>Important:</b> You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
     async fn update_contact_attributes(
         &self,
         input: UpdateContactAttributesRequest,
     ) -> Result<UpdateContactAttributesResponse, RusotoError<UpdateContactAttributesError>>;
+
+    /// <p>Updates the specified contact flow.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p>
+    async fn update_contact_flow_content(
+        &self,
+        input: UpdateContactFlowContentRequest,
+    ) -> Result<(), RusotoError<UpdateContactFlowContentError>>;
+
+    /// <p>The name of the contact flow.</p>
+    async fn update_contact_flow_name(
+        &self,
+        input: UpdateContactFlowNameRequest,
+    ) -> Result<(), RusotoError<UpdateContactFlowNameError>>;
+
+    /// <p>Updates the channels that agents can handle in the Contact Control Panel (CCP) for a routing profile.</p>
+    async fn update_routing_profile_concurrency(
+        &self,
+        input: UpdateRoutingProfileConcurrencyRequest,
+    ) -> Result<(), RusotoError<UpdateRoutingProfileConcurrencyError>>;
+
+    /// <p>Updates the default outbound queue of a routing profile.</p>
+    async fn update_routing_profile_default_outbound_queue(
+        &self,
+        input: UpdateRoutingProfileDefaultOutboundQueueRequest,
+    ) -> Result<(), RusotoError<UpdateRoutingProfileDefaultOutboundQueueError>>;
+
+    /// <p>Updates the name and description of a routing profile. The request accepts the following data in JSON format. At least <code>Name</code> or <code>Description</code> must be provided.</p>
+    async fn update_routing_profile_name(
+        &self,
+        input: UpdateRoutingProfileNameRequest,
+    ) -> Result<(), RusotoError<UpdateRoutingProfileNameError>>;
+
+    /// <p>Updates the properties associated with a set of queues for a routing profile.</p>
+    async fn update_routing_profile_queues(
+        &self,
+        input: UpdateRoutingProfileQueuesRequest,
+    ) -> Result<(), RusotoError<UpdateRoutingProfileQueuesError>>;
 
     /// <p>Assigns the specified hierarchy group to the specified user.</p>
     async fn update_user_hierarchy(
@@ -3209,6 +5025,108 @@ impl ConnectClient {
 
 #[async_trait]
 impl Connect for ConnectClient {
+    /// <p>Associates a set of queues with a routing profile.</p>
+    #[allow(unused_mut)]
+    async fn associate_routing_profile_queues(
+        &self,
+        input: AssociateRoutingProfileQueuesRequest,
+    ) -> Result<(), RusotoError<AssociateRoutingProfileQueuesError>> {
+        let request_uri = format!(
+            "/routing-profiles/{instance_id}/{routing_profile_id}/associate-queues",
+            instance_id = input.instance_id,
+            routing_profile_id = input.routing_profile_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateRoutingProfileQueuesError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a contact flow for the specified Amazon Connect instance.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p>
+    #[allow(unused_mut)]
+    async fn create_contact_flow(
+        &self,
+        input: CreateContactFlowRequest,
+    ) -> Result<CreateContactFlowResponse, RusotoError<CreateContactFlowError>> {
+        let request_uri = format!(
+            "/contact-flows/{instance_id}",
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateContactFlowResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateContactFlowError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a new routing profile.</p>
+    #[allow(unused_mut)]
+    async fn create_routing_profile(
+        &self,
+        input: CreateRoutingProfileRequest,
+    ) -> Result<CreateRoutingProfileResponse, RusotoError<CreateRoutingProfileError>> {
+        let request_uri = format!(
+            "/routing-profiles/{instance_id}",
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateRoutingProfileResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateRoutingProfileError::from_response(response))
+        }
+    }
+
     /// <p>Creates a user account for the specified Amazon Connect instance.</p> <p>For information about how to create user accounts using the Amazon Connect console, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/user-management.html">Add Users</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[allow(unused_mut)]
     async fn create_user(
@@ -3268,6 +5186,70 @@ impl Connect for ConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteUserError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the specified contact flow.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p>
+    #[allow(unused_mut)]
+    async fn describe_contact_flow(
+        &self,
+        input: DescribeContactFlowRequest,
+    ) -> Result<DescribeContactFlowResponse, RusotoError<DescribeContactFlowError>> {
+        let request_uri = format!(
+            "/contact-flows/{instance_id}/{contact_flow_id}",
+            contact_flow_id = input.contact_flow_id,
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeContactFlowResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeContactFlowError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the specified routing profile.</p>
+    #[allow(unused_mut)]
+    async fn describe_routing_profile(
+        &self,
+        input: DescribeRoutingProfileRequest,
+    ) -> Result<DescribeRoutingProfileResponse, RusotoError<DescribeRoutingProfileError>> {
+        let request_uri = format!(
+            "/routing-profiles/{instance_id}/{routing_profile_id}",
+            instance_id = input.instance_id,
+            routing_profile_id = input.routing_profile_id
+        );
+
+        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeRoutingProfileResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeRoutingProfileError::from_response(response))
         }
     }
 
@@ -3367,6 +5349,42 @@ impl Connect for ConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeUserHierarchyStructureError::from_response(response))
+        }
+    }
+
+    /// <p>Disassociates a set of queues from a routing profile.</p>
+    #[allow(unused_mut)]
+    async fn disassociate_routing_profile_queues(
+        &self,
+        input: DisassociateRoutingProfileQueuesRequest,
+    ) -> Result<(), RusotoError<DisassociateRoutingProfileQueuesError>> {
+        let request_uri = format!(
+            "/routing-profiles/{instance_id}/{routing_profile_id}/disassociate-queues",
+            instance_id = input.instance_id,
+            routing_profile_id = input.routing_profile_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateRoutingProfileQueuesError::from_response(
+                response,
+            ))
         }
     }
 
@@ -3501,7 +5519,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>Provides information about the contact flows for the specified Amazon Connect instance.</p> <p>For more information about contact flows, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-contact-flows.html">Contact Flows</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    /// <p>Provides information about the contact flows for the specified Amazon Connect instance.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p> <p>For more information about contact flows, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-contact-flows.html">Contact Flows</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[allow(unused_mut)]
     async fn list_contact_flows(
         &self,
@@ -3636,6 +5654,46 @@ impl Connect for ConnectClient {
         }
     }
 
+    /// <p>Provides information about the prompts for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
+    async fn list_prompts(
+        &self,
+        input: ListPromptsRequest,
+    ) -> Result<ListPromptsResponse, RusotoError<ListPromptsError>> {
+        let request_uri = format!(
+            "/prompts-summary/{instance_id}",
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListPromptsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListPromptsError::from_response(response))
+        }
+    }
+
     /// <p>Provides information about the queues for the specified Amazon Connect instance.</p> <p>For more information about queues, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-queues-standard-and-agent.html">Queues: Standard and Agent</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[allow(unused_mut)]
     async fn list_queues(
@@ -3678,6 +5736,47 @@ impl Connect for ConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListQueuesError::from_response(response))
+        }
+    }
+
+    /// <p>List the queues associated with a routing profile.</p>
+    #[allow(unused_mut)]
+    async fn list_routing_profile_queues(
+        &self,
+        input: ListRoutingProfileQueuesRequest,
+    ) -> Result<ListRoutingProfileQueuesResponse, RusotoError<ListRoutingProfileQueuesError>> {
+        let request_uri = format!(
+            "/routing-profiles/{instance_id}/{routing_profile_id}/queues",
+            instance_id = input.instance_id,
+            routing_profile_id = input.routing_profile_id
+        );
+
+        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListRoutingProfileQueuesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListRoutingProfileQueuesError::from_response(response))
         }
     }
 
@@ -3869,6 +5968,37 @@ impl Connect for ConnectClient {
         }
     }
 
+    /// <p>When a contact is being recorded, and the recording has been suspended using SuspendContactRecording, this API resumes recording the call.</p> <p>Only voice recordings are supported at this time.</p>
+    #[allow(unused_mut)]
+    async fn resume_contact_recording(
+        &self,
+        input: ResumeContactRecordingRequest,
+    ) -> Result<ResumeContactRecordingResponse, RusotoError<ResumeContactRecordingError>> {
+        let request_uri = "/contact/resume-recording";
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ResumeContactRecordingResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ResumeContactRecordingError::from_response(response))
+        }
+    }
+
     /// <p>Initiates a contact flow to start a new chat for the customer. Response of this API provides a token required to obtain credentials from the <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> API in the Amazon Connect Participant Service.</p> <p>When a new chat contact is successfully created, clients need to subscribe to the participant’s connection for the created chat within 5 minutes. This is achieved by invoking <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> with WEBSOCKET and CONNECTION_CREDENTIALS. </p> <p>A 429 error occurs in two situations:</p> <ul> <li> <p>API rate limit is exceeded. API TPS throttling returns a <code>TooManyRequests</code> exception from the API Gateway.</p> </li> <li> <p>The <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">quota for concurrent active chats</a> is exceeded. Active chat throttling returns a <code>LimitExceededException</code>.</p> </li> </ul> <p>For more information about how chat works, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/chat.html">Chat</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[allow(unused_mut)]
     async fn start_chat_contact(
@@ -3897,6 +6027,37 @@ impl Connect for ConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(StartChatContactError::from_response(response))
+        }
+    }
+
+    /// <p>This API starts recording the contact when the agent joins the call. StartContactRecording is a one-time action. For example, if you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend and resume it, such as when collecting sensitive information (for example, a credit card number), use SuspendContactRecording and ResumeContactRecording.</p> <p>You can use this API to override the recording behavior configured in the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/set-recording-behavior.html">Set recording behavior</a> block.</p> <p>Only voice recordings are supported at this time.</p>
+    #[allow(unused_mut)]
+    async fn start_contact_recording(
+        &self,
+        input: StartContactRecordingRequest,
+    ) -> Result<StartContactRecordingResponse, RusotoError<StartContactRecordingError>> {
+        let request_uri = "/contact/start-recording";
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StartContactRecordingResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StartContactRecordingError::from_response(response))
         }
     }
 
@@ -3963,7 +6124,69 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>Adds the specified tags to the specified resource.</p> <p>The supported resource type is users.</p> <p>For sample policies that use tags, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security_iam_id-based-policy-examples.html">Amazon Connect Identity-Based Policy Examples</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    /// <p>When a contact is being recorded, this API stops recording the call. StopContactRecording is a one-time action. If you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend it for sensitive information (for example, to collect a credit card number), and then restart it, use SuspendContactRecording and ResumeContactRecording.</p> <p>Only voice recordings are supported at this time.</p>
+    #[allow(unused_mut)]
+    async fn stop_contact_recording(
+        &self,
+        input: StopContactRecordingRequest,
+    ) -> Result<StopContactRecordingResponse, RusotoError<StopContactRecordingError>> {
+        let request_uri = "/contact/stop-recording";
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<StopContactRecordingResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(StopContactRecordingError::from_response(response))
+        }
+    }
+
+    /// <p>When a contact is being recorded, this API suspends recording the call. For example, you might suspend the call recording while collecting sensitive information, such as a credit card number. Then use ResumeContactRecording to restart recording. </p> <p>The period of time that the recording is suspended is filled with silence in the final recording. </p> <p>Only voice recordings are supported at this time.</p>
+    #[allow(unused_mut)]
+    async fn suspend_contact_recording(
+        &self,
+        input: SuspendContactRecordingRequest,
+    ) -> Result<SuspendContactRecordingResponse, RusotoError<SuspendContactRecordingError>> {
+        let request_uri = "/contact/suspend-recording";
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SuspendContactRecordingResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SuspendContactRecordingError::from_response(response))
+        }
+    }
+
+    /// <p>Adds the specified tags to the specified resource.</p> <p>The supported resource types are users, routing profiles, and contact flows.</p> <p>For sample policies that use tags, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security_iam_id-based-policy-examples.html">Amazon Connect Identity-Based Policy Examples</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[allow(unused_mut)]
     async fn tag_resource(
         &self,
@@ -4026,7 +6249,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>Creates or updates the contact attributes associated with the specified contact.</p> <p>You can add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p> <b>Important:</b> You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
+    /// <p>Creates or updates the contact attributes associated with the specified contact.</p> <p>You can add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p>This operation is also available in the Amazon Connect Flow language. See <a href="https://docs.aws.amazon.com/connect/latest/adminguide/contact-actions-updatecontactattributes.html">UpdateContactAttributes</a>.</p> <p> <b>Important:</b> You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
     #[allow(unused_mut)]
     async fn update_contact_attributes(
         &self,
@@ -4054,6 +6277,212 @@ impl Connect for ConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateContactAttributesError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the specified contact flow.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p>
+    #[allow(unused_mut)]
+    async fn update_contact_flow_content(
+        &self,
+        input: UpdateContactFlowContentRequest,
+    ) -> Result<(), RusotoError<UpdateContactFlowContentError>> {
+        let request_uri = format!(
+            "/contact-flows/{instance_id}/{contact_flow_id}/content",
+            contact_flow_id = input.contact_flow_id,
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateContactFlowContentError::from_response(response))
+        }
+    }
+
+    /// <p>The name of the contact flow.</p>
+    #[allow(unused_mut)]
+    async fn update_contact_flow_name(
+        &self,
+        input: UpdateContactFlowNameRequest,
+    ) -> Result<(), RusotoError<UpdateContactFlowNameError>> {
+        let request_uri = format!(
+            "/contact-flows/{instance_id}/{contact_flow_id}/name",
+            contact_flow_id = input.contact_flow_id,
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateContactFlowNameError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the channels that agents can handle in the Contact Control Panel (CCP) for a routing profile.</p>
+    #[allow(unused_mut)]
+    async fn update_routing_profile_concurrency(
+        &self,
+        input: UpdateRoutingProfileConcurrencyRequest,
+    ) -> Result<(), RusotoError<UpdateRoutingProfileConcurrencyError>> {
+        let request_uri = format!(
+            "/routing-profiles/{instance_id}/{routing_profile_id}/concurrency",
+            instance_id = input.instance_id,
+            routing_profile_id = input.routing_profile_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRoutingProfileConcurrencyError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>Updates the default outbound queue of a routing profile.</p>
+    #[allow(unused_mut)]
+    async fn update_routing_profile_default_outbound_queue(
+        &self,
+        input: UpdateRoutingProfileDefaultOutboundQueueRequest,
+    ) -> Result<(), RusotoError<UpdateRoutingProfileDefaultOutboundQueueError>> {
+        let request_uri = format!(
+            "/routing-profiles/{instance_id}/{routing_profile_id}/default-outbound-queue",
+            instance_id = input.instance_id,
+            routing_profile_id = input.routing_profile_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRoutingProfileDefaultOutboundQueueError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the name and description of a routing profile. The request accepts the following data in JSON format. At least <code>Name</code> or <code>Description</code> must be provided.</p>
+    #[allow(unused_mut)]
+    async fn update_routing_profile_name(
+        &self,
+        input: UpdateRoutingProfileNameRequest,
+    ) -> Result<(), RusotoError<UpdateRoutingProfileNameError>> {
+        let request_uri = format!(
+            "/routing-profiles/{instance_id}/{routing_profile_id}/name",
+            instance_id = input.instance_id,
+            routing_profile_id = input.routing_profile_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRoutingProfileNameError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the properties associated with a set of queues for a routing profile.</p>
+    #[allow(unused_mut)]
+    async fn update_routing_profile_queues(
+        &self,
+        input: UpdateRoutingProfileQueuesRequest,
+    ) -> Result<(), RusotoError<UpdateRoutingProfileQueuesError>> {
+        let request_uri = format!(
+            "/routing-profiles/{instance_id}/{routing_profile_id}/queues",
+            instance_id = input.instance_id,
+            routing_profile_id = input.routing_profile_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateRoutingProfileQueuesError::from_response(response))
         }
     }
 

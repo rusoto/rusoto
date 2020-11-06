@@ -50,22 +50,22 @@ impl SnowballClient {
 }
 
 use serde_json;
-/// <p>The address that you want the Snowball or Snowballs associated with a specific job to be shipped to. Addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. Although no individual elements of the <code>Address</code> are required, if the address is invalid or unsupported, then an exception is thrown.</p>
+/// <p>The address that you want the Snow device(s) associated with a specific job to be shipped to. Addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. Although no individual elements of the <code>Address</code> are required, if the address is invalid or unsupported, then an exception is thrown.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Address {
     /// <p>The unique ID for an address.</p>
     #[serde(rename = "AddressId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_id: Option<String>,
-    /// <p>The city in an address that a Snowball is to be delivered to.</p>
+    /// <p>The city in an address that a Snow device is to be delivered to.</p>
     #[serde(rename = "City")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub city: Option<String>,
-    /// <p>The name of the company to receive a Snowball at an address.</p>
+    /// <p>The name of the company to receive a Snow device at an address.</p>
     #[serde(rename = "Company")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub company: Option<String>,
-    /// <p>The country in an address that a Snowball is to be delivered to.</p>
+    /// <p>The country in an address that a Snow device is to be delivered to.</p>
     #[serde(rename = "Country")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub country: Option<String>,
@@ -77,15 +77,15 @@ pub struct Address {
     #[serde(rename = "Landmark")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub landmark: Option<String>,
-    /// <p>The name of a person to receive a Snowball at an address.</p>
+    /// <p>The name of a person to receive a Snow device at an address.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The phone number associated with an address that a Snowball is to be delivered to.</p>
+    /// <p>The phone number associated with an address that a Snow device is to be delivered to.</p>
     #[serde(rename = "PhoneNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<String>,
-    /// <p>The postal code in an address that a Snowball is to be delivered to.</p>
+    /// <p>The postal code in an address that a Snow device is to be delivered to.</p>
     #[serde(rename = "PostalCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub postal_code: Option<String>,
@@ -93,19 +93,19 @@ pub struct Address {
     #[serde(rename = "PrefectureOrDistrict")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prefecture_or_district: Option<String>,
-    /// <p>The state or province in an address that a Snowball is to be delivered to.</p>
+    /// <p>The state or province in an address that a Snow device is to be delivered to.</p>
     #[serde(rename = "StateOrProvince")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_or_province: Option<String>,
-    /// <p>The first line in a street address that a Snowball is to be delivered to.</p>
+    /// <p>The first line in a street address that a Snow device is to be delivered to.</p>
     #[serde(rename = "Street1")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub street_1: Option<String>,
-    /// <p>The second line in a street address that a Snowball is to be delivered to.</p>
+    /// <p>The second line in a street address that a Snow device is to be delivered to.</p>
     #[serde(rename = "Street2")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub street_2: Option<String>,
-    /// <p>The third line in a street address that a Snowball is to be delivered to.</p>
+    /// <p>The third line in a street address that a Snow device is to be delivered to.</p>
     #[serde(rename = "Street3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub street_3: Option<String>,
@@ -205,11 +205,11 @@ pub struct ClusterMetadata {
     #[serde(rename = "RoleARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
+    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow devices are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
-    /// <p><p>The type of AWS Snowball device to use for this cluster. </p> <note> <p>For cluster jobs, AWS Snowball currently supports only the <code>EDGE</code> device type.</p> </note></p>
+    /// <p><p>The type of AWS Snow device to use for this cluster. </p> <note> <p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code> device type.</p> </note></p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
@@ -219,11 +219,11 @@ pub struct ClusterMetadata {
     pub tax_documents: Option<TaxDocuments>,
 }
 
-/// <p>A JSON-formatted object that describes a compatible Amazon Machine Image (AMI), including the ID and name for a Snowball Edge AMI. This AMI is compatible with the device's physical hardware requirements, and it should be able to be run in an SBE1 instance on the device.</p>
+/// <p>A JSON-formatted object that describes a compatible Amazon Machine Image (AMI), including the ID and name for a Snow device AMI. This AMI is compatible with the device's physical hardware requirements, and it should be able to be run in an SBE1 instance on the device.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CompatibleImage {
-    /// <p>The unique identifier for an individual Snowball Edge AMI.</p>
+    /// <p>The unique identifier for an individual Snow device AMI.</p>
     #[serde(rename = "AmiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_id: Option<String>,
@@ -236,7 +236,7 @@ pub struct CompatibleImage {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAddressRequest {
-    /// <p>The address that you want the Snowball shipped to.</p>
+    /// <p>The address that you want the Snow device shipped to.</p>
     #[serde(rename = "Address")]
     pub address: Address,
 }
@@ -244,7 +244,7 @@ pub struct CreateAddressRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAddressResult {
-    /// <p>The automatically generated ID for a specific address. You'll use this ID when you create a job to specify which address you want the Snowball for that job shipped to.</p>
+    /// <p>The automatically generated ID for a specific address. You'll use this ID when you create a job to specify which address you want the Snow device for that job shipped to.</p>
     #[serde(rename = "AddressId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_id: Option<String>,
@@ -281,10 +281,10 @@ pub struct CreateClusterRequest {
     /// <p>The <code>RoleARN</code> that you want to associate with this cluster. <code>RoleArn</code> values are created by using the <a href="https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html">CreateRole</a> API action in AWS Identity and Access Management (IAM).</p>
     #[serde(rename = "RoleARN")]
     pub role_arn: String,
-    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows: </p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowball Edges shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowball Edges are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
+    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows: </p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow device are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow device are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     pub shipping_option: String,
-    /// <p><p>The type of AWS Snowball device to use for this cluster. </p> <note> <p>For cluster jobs, AWS Snowball currently supports only the <code>EDGE</code> device type.</p> </note></p>
+    /// <p><p>The type of AWS Snow Family device to use for this cluster. </p> <note> <p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code> device type.</p> </note></p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
@@ -306,7 +306,7 @@ pub struct CreateClusterResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateJobRequest {
-    /// <p>The ID for the address that you want the Snowball shipped to.</p>
+    /// <p>The ID for the address that you want the Snow device shipped to.</p>
     #[serde(rename = "AddressId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_id: Option<String>,
@@ -346,15 +346,15 @@ pub struct CreateJobRequest {
     #[serde(rename = "RoleARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p><p>The shipping speed for this job. This speed doesn&#39;t dictate how soon you&#39;ll get the Snowball, rather it represents how quickly the Snowball moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
+    /// <p><p>The shipping speed for this job. This speed doesn&#39;t dictate how soon you&#39;ll get the Snow device, rather it represents how quickly the Snow device moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow devices are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
-    /// <p>If your job is being created in one of the US regions, you have the option of specifying what size Snowball you'd like for this job. In all other regions, Snowballs come with 80 TB in storage capacity.</p>
+    /// <p>If your job is being created in one of the US regions, you have the option of specifying what size Snow device you'd like for this job. In all other regions, Snowballs come with 80 TB in storage capacity.</p>
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_capacity_preference: Option<String>,
-    /// <p>The type of AWS Snowball device to use for this job. </p> <note> <p>For cluster jobs, AWS Snowball currently supports only the <code>EDGE</code> device type.</p> </note> <p>The type of AWS Snowball device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
+    /// <p>The type of AWS Snow Family device to use for this job. </p> <note> <p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code> device type.</p> </note> <p>The type of AWS Snow device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
@@ -373,23 +373,44 @@ pub struct CreateJobResult {
     pub job_id: Option<String>,
 }
 
-/// <p>Defines the real-time status of a Snowball's data transfer while the device is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateReturnShippingLabelRequest {
+    /// <p>The ID for a job that you want to create the return shipping label for. For example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+    /// <p>The shipping speed for a particular job. This speed doesn't dictate how soon the device is returned to AWS. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p>
+    #[serde(rename = "ShippingOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shipping_option: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateReturnShippingLabelResult {
+    /// <p>The status information of the task on a Snow device that is being returned to AWS.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Defines the real-time status of a Snow device's data transfer while the device is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataTransfer {
-    /// <p>The number of bytes transferred between a Snowball and Amazon S3.</p>
+    /// <p>The number of bytes transferred between a Snow device and Amazon S3.</p>
     #[serde(rename = "BytesTransferred")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bytes_transferred: Option<i64>,
-    /// <p>The number of objects transferred between a Snowball and Amazon S3.</p>
+    /// <p>The number of objects transferred between a Snow device and Amazon S3.</p>
     #[serde(rename = "ObjectsTransferred")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub objects_transferred: Option<i64>,
-    /// <p>The total bytes of data for a transfer between a Snowball and Amazon S3. This value is set to 0 (zero) until all the keys that will be transferred have been listed.</p>
+    /// <p>The total bytes of data for a transfer between a Snow device and Amazon S3. This value is set to 0 (zero) until all the keys that will be transferred have been listed.</p>
     #[serde(rename = "TotalBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_bytes: Option<i64>,
-    /// <p>The total number of objects for a transfer between a Snowball and Amazon S3. This value is set to 0 (zero) until all the keys that will be transferred have been listed.</p>
+    /// <p>The total number of objects for a transfer between a Snow device and Amazon S3. This value is set to 0 (zero) until all the keys that will be transferred have been listed.</p>
     #[serde(rename = "TotalObjects")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_objects: Option<i64>,
@@ -406,7 +427,7 @@ pub struct DescribeAddressRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAddressResult {
-    /// <p>The address that you want the Snowball or Snowballs associated with a specific job to be shipped to.</p>
+    /// <p>The address that you want the Snow device(s) associated with a specific job to be shipped to.</p>
     #[serde(rename = "Address")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<Address>,
@@ -428,7 +449,7 @@ pub struct DescribeAddressesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAddressesResult {
-    /// <p>The Snowball shipping addresses that were created for this account.</p>
+    /// <p>The Snow device shipping addresses that were created for this account.</p>
     #[serde(rename = "Addresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub addresses: Option<Vec<Address>>,
@@ -476,6 +497,28 @@ pub struct DescribeJobResult {
     pub sub_job_metadata: Option<Vec<JobMetadata>>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeReturnShippingLabelRequest {
+    /// <p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeReturnShippingLabelResult {
+    /// <p>The expiration date of the current return shipping label.</p>
+    #[serde(rename = "ExpirationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_date: Option<f64>,
+    /// <p>The status information of the task on a Snow device that is being returned to AWS.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
 /// <p>The container for <code>SnowconeDeviceConfiguration</code>. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DeviceConfiguration {
@@ -485,13 +528,13 @@ pub struct DeviceConfiguration {
     pub snowcone_device_configuration: Option<SnowconeDeviceConfiguration>,
 }
 
-/// <p>A JSON-formatted object that contains the IDs for an Amazon Machine Image (AMI), including the Amazon EC2 AMI ID and the Snowball Edge AMI ID. Each AMI has these two IDs to simplify identifying the AMI in both the AWS Cloud and on the device.</p>
+/// <p>A JSON-formatted object that contains the IDs for an Amazon Machine Image (AMI), including the Amazon EC2 AMI ID and the Snow device AMI ID. Each AMI has these two IDs to simplify identifying the AMI in both the AWS Cloud and on the device.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Ec2AmiResource {
     /// <p>The ID of the AMI in Amazon EC2.</p>
     #[serde(rename = "AmiId")]
     pub ami_id: String,
-    /// <p>The ID of the AMI on the Snowball Edge device.</p>
+    /// <p>The ID of the AMI on the Snow device.</p>
     #[serde(rename = "SnowballAmiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_ami_id: Option<String>,
@@ -547,11 +590,11 @@ pub struct GetSnowballUsageRequest {}
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSnowballUsageResult {
-    /// <p>The service limit for number of Snowballs this account can have at once. The default service limit is 1 (one).</p>
+    /// <p>The service limit for number of Snow devices this account can have at once. The default service limit is 1 (one).</p>
     #[serde(rename = "SnowballLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_limit: Option<i64>,
-    /// <p>The number of Snowballs that this account is currently using.</p>
+    /// <p>The number of Snow devices that this account is currently using.</p>
     #[serde(rename = "SnowballsInUse")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowballs_in_use: Option<i64>,
@@ -595,7 +638,7 @@ pub struct JobListEntry {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A value that indicates that this job is a master job. A master job represents a successful request to create an export job. Master jobs aren't associated with any Snowballs. Instead, each master job will have at least one job part, and each job part is associated with a Snowball. It might take some time before the job parts associated with a particular master job are listed, because they are created after the master job is created.</p>
+    /// <p>A value that indicates that this job is a main job. A main job represents a successful request to create an export job. Main jobs aren't associated with any Snowballs. Instead, each main job will have at least one job part, and each job part is associated with a Snowball. It might take some time before the job parts associated with a particular main job are listed, because they are created after the main job is created.</p>
     #[serde(rename = "IsMaster")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_master: Option<bool>,
@@ -617,7 +660,7 @@ pub struct JobListEntry {
     pub snowball_type: Option<String>,
 }
 
-/// <p>Contains job logs. Whenever Snowball is used to import data into or export data out of Amazon S3, you'll have the option of downloading a PDF job report. Job logs are returned as a part of the response syntax of the <code>DescribeJob</code> action in the <code>JobMetadata</code> data type. The job logs can be accessed for up to 60 minutes after this request has been made. To access any of the job logs after 60 minutes have passed, you'll have to make another call to the <code>DescribeJob</code> action.</p> <p>For import jobs, the PDF job report becomes available at the end of the import process. For export jobs, your job report typically becomes available while the Snowball for your job part is being delivered to you.</p> <p>The job report provides you insight into the state of your Amazon S3 data transfer. The report includes details about your job or job part for your records.</p> <p>For deeper visibility into the status of your transferred objects, you can look at the two associated logs: a success log and a failure log. The logs are saved in comma-separated value (CSV) format, and the name of each log includes the ID of the job or job part that the log describes.</p>
+/// <p>Contains job logs. Whenever a Snow device is used to import data into or export data out of Amazon S3, you'll have the option of downloading a PDF job report. Job logs are returned as a part of the response syntax of the <code>DescribeJob</code> action in the <code>JobMetadata</code> data type. The job logs can be accessed for up to 60 minutes after this request has been made. To access any of the job logs after 60 minutes have passed, you'll have to make another call to the <code>DescribeJob</code> action.</p> <p>For import jobs, the PDF job report becomes available at the end of the import process. For export jobs, your job report typically becomes available while the Snow device for your job part is being delivered to you.</p> <p>The job report provides you insight into the state of your Amazon S3 data transfer. The report includes details about your job or job part for your records.</p> <p>For deeper visibility into the status of your transferred objects, you can look at the two associated logs: a success log and a failure log. The logs are saved in comma-separated value (CSV) format, and the name of each log includes the ID of the job or job part that the log describes.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobLogs {
@@ -639,7 +682,7 @@ pub struct JobLogs {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobMetadata {
-    /// <p>The ID for the address that you want the Snowball shipped to.</p>
+    /// <p>The ID for the address that you want the Snow device shipped to.</p>
     #[serde(rename = "AddressId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_id: Option<String>,
@@ -651,7 +694,7 @@ pub struct JobMetadata {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>A value that defines the real-time status of a Snowball's data transfer while the device is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>
+    /// <p>A value that defines the real-time status of a Snow device's data transfer while the device is at AWS. This data is only available while a job has a <code>JobState</code> value of <code>InProgress</code>, for both import and export jobs.</p>
     #[serde(rename = "DataTransferProgress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_transfer_progress: Option<DataTransfer>,
@@ -670,7 +713,7 @@ pub struct JobMetadata {
     #[serde(rename = "JobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p>Links to Amazon S3 presigned URLs for the job report and logs. For import jobs, the PDF job report becomes available at the end of the import process. For export jobs, your job report typically becomes available while the Snowball for your job part is being delivered to you.</p>
+    /// <p>Links to Amazon S3 presigned URLs for the job report and logs. For import jobs, the PDF job report becomes available at the end of the import process. For export jobs, your job report typically becomes available while the Snow device for your job part is being delivered to you.</p>
     #[serde(rename = "JobLogInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_log_info: Option<JobLogs>,
@@ -702,7 +745,7 @@ pub struct JobMetadata {
     #[serde(rename = "ShippingDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_details: Option<ShippingDetails>,
-    /// <p>The Snowball capacity preference for this job, specified at job creation. In US regions, you can choose between 50 TB and 80 TB Snowballs. All other regions use 80 TB capacity Snowballs.</p>
+    /// <p>The Snow device capacity preference for this job, specified at job creation. In US regions, you can choose between 50 TB and 80 TB Snowballs. All other regions use 80 TB capacity Snowballs.</p>
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_capacity_preference: Option<String>,
@@ -830,7 +873,7 @@ pub struct ListCompatibleImagesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCompatibleImagesResult {
-    /// <p>A JSON-formatted object that describes a compatible AMI, including the ID and name for a Snowball Edge AMI.</p>
+    /// <p>A JSON-formatted object that describes a compatible AMI, including the ID and name for a Snow device AMI.</p>
     #[serde(rename = "CompatibleImages")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compatible_images: Option<Vec<CompatibleImage>>,
@@ -904,7 +947,7 @@ pub struct Shipment {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The tracking number for this job. Using this tracking number with your region's carrier's website, you can track a Snowball as the carrier transports it.</p> <p>For India, the carrier is Amazon Logistics. For all other regions, UPS is the carrier.</p>
+    /// <p>The tracking number for this job. Using this tracking number with your region's carrier's website, you can track a Snow device as the carrier transports it.</p> <p>For India, the carrier is Amazon Logistics. For all other regions, UPS is the carrier.</p>
     #[serde(rename = "TrackingNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tracking_number: Option<String>,
@@ -914,15 +957,15 @@ pub struct Shipment {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ShippingDetails {
-    /// <p>The <code>Status</code> and <code>TrackingNumber</code> values for a Snowball being returned to AWS for a particular job.</p>
+    /// <p>The <code>Status</code> and <code>TrackingNumber</code> values for a Snow device being returned to AWS for a particular job.</p>
     #[serde(rename = "InboundShipment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inbound_shipment: Option<Shipment>,
-    /// <p>The <code>Status</code> and <code>TrackingNumber</code> values for a Snowball being delivered to the address that you specified for a particular job.</p>
+    /// <p>The <code>Status</code> and <code>TrackingNumber</code> values for a Snow device being delivered to the address that you specified for a particular job.</p>
     #[serde(rename = "OutboundShipment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outbound_shipment: Option<Shipment>,
-    /// <p><p>The shipping speed for a particular job. This speed doesn&#39;t dictate how soon you&#39;ll get the Snowball from the job&#39;s creation date. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snowballs shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snowballs are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
+    /// <p><p>The shipping speed for a particular job. This speed doesn&#39;t dictate how soon you&#39;ll get the Snow device from the job&#39;s creation date. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow device are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
@@ -1028,6 +1071,21 @@ pub struct UpdateJobRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateJobShipmentStateRequest {
+    /// <p>The job ID of the job whose shipment date you want to update, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+    /// <p>The state of a device when it is being shipped. </p> <p>Set to <code>RECEIVED</code> when the device arrives at your location.</p> <p>Set to <code>RETURNED</code> when you have returned the device to AWS.</p>
+    #[serde(rename = "ShipmentState")]
+    pub shipment_state: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateJobShipmentStateResult {}
 
 /// <p>Configures the wireless connection on an AWS Snowcone device.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -1262,6 +1320,72 @@ impl fmt::Display for CreateJobError {
     }
 }
 impl Error for CreateJobError {}
+/// Errors returned by CreateReturnShippingLabel
+#[derive(Debug, PartialEq)]
+pub enum CreateReturnShippingLabelError {
+    /// <p>You get this exception when you call <code>CreateReturnShippingLabel</code> more than once when other requests are not completed.</p>
+    Conflict(String),
+    /// <p>Job or cluster creation failed. One or more inputs were invalid. Confirm that the <a>CreateClusterRequest$SnowballType</a> value supports your <a>CreateJobRequest$JobType</a>, and try again.</p>
+    InvalidInputCombination(String),
+    /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
+    InvalidJobState(String),
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    InvalidResource(String),
+    /// <p>You get this exception if you call <code>CreateReturnShippingLabel</code> and a valid return shipping label already exists. In this case, use <code>DescribeReturnShippingLabel</code> to get the url.</p>
+    ReturnShippingLabelAlreadyExists(String),
+}
+
+impl CreateReturnShippingLabelError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReturnShippingLabelError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(CreateReturnShippingLabelError::Conflict(err.msg))
+                }
+                "InvalidInputCombinationException" => {
+                    return RusotoError::Service(
+                        CreateReturnShippingLabelError::InvalidInputCombination(err.msg),
+                    )
+                }
+                "InvalidJobStateException" => {
+                    return RusotoError::Service(CreateReturnShippingLabelError::InvalidJobState(
+                        err.msg,
+                    ))
+                }
+                "InvalidResourceException" => {
+                    return RusotoError::Service(CreateReturnShippingLabelError::InvalidResource(
+                        err.msg,
+                    ))
+                }
+                "ReturnShippingLabelAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateReturnShippingLabelError::ReturnShippingLabelAlreadyExists(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateReturnShippingLabelError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateReturnShippingLabelError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateReturnShippingLabelError::InvalidInputCombination(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateReturnShippingLabelError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            CreateReturnShippingLabelError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            CreateReturnShippingLabelError::ReturnShippingLabelAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateReturnShippingLabelError {}
 /// Errors returned by DescribeAddress
 #[derive(Debug, PartialEq)]
 pub enum DescribeAddressError {
@@ -1388,6 +1512,56 @@ impl fmt::Display for DescribeJobError {
     }
 }
 impl Error for DescribeJobError {}
+/// Errors returned by DescribeReturnShippingLabel
+#[derive(Debug, PartialEq)]
+pub enum DescribeReturnShippingLabelError {
+    /// <p>You get this exception when you call <code>CreateReturnShippingLabel</code> more than once when other requests are not completed.</p>
+    Conflict(String),
+    /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
+    InvalidJobState(String),
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    InvalidResource(String),
+}
+
+impl DescribeReturnShippingLabelError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeReturnShippingLabelError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DescribeReturnShippingLabelError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "InvalidJobStateException" => {
+                    return RusotoError::Service(DescribeReturnShippingLabelError::InvalidJobState(
+                        err.msg,
+                    ))
+                }
+                "InvalidResourceException" => {
+                    return RusotoError::Service(DescribeReturnShippingLabelError::InvalidResource(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeReturnShippingLabelError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeReturnShippingLabelError::Conflict(ref cause) => write!(f, "{}", cause),
+            DescribeReturnShippingLabelError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            DescribeReturnShippingLabelError::InvalidResource(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeReturnShippingLabelError {}
 /// Errors returned by GetJobManifest
 #[derive(Debug, PartialEq)]
 pub enum GetJobManifestError {
@@ -1770,6 +1944,46 @@ impl fmt::Display for UpdateJobError {
     }
 }
 impl Error for UpdateJobError {}
+/// Errors returned by UpdateJobShipmentState
+#[derive(Debug, PartialEq)]
+pub enum UpdateJobShipmentStateError {
+    /// <p>The action can't be performed because the job's current state doesn't allow that action to be performed.</p>
+    InvalidJobState(String),
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    InvalidResource(String),
+}
+
+impl UpdateJobShipmentStateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobShipmentStateError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidJobStateException" => {
+                    return RusotoError::Service(UpdateJobShipmentStateError::InvalidJobState(
+                        err.msg,
+                    ))
+                }
+                "InvalidResourceException" => {
+                    return RusotoError::Service(UpdateJobShipmentStateError::InvalidResource(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateJobShipmentStateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateJobShipmentStateError::InvalidJobState(ref cause) => write!(f, "{}", cause),
+            UpdateJobShipmentStateError::InvalidResource(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateJobShipmentStateError {}
 /// Trait representing the capabilities of the Amazon Snowball API. Amazon Snowball clients implement this trait.
 #[async_trait]
 pub trait Snowball {
@@ -1785,7 +1999,7 @@ pub trait Snowball {
         input: CancelJobRequest,
     ) -> Result<CancelJobResult, RusotoError<CancelJobError>>;
 
-    /// <p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>
+    /// <p>Creates an address for a Snow device to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>
     async fn create_address(
         &self,
         input: CreateAddressRequest,
@@ -1797,11 +2011,17 @@ pub trait Snowball {
         input: CreateClusterRequest,
     ) -> Result<CreateClusterResult, RusotoError<CreateClusterError>>;
 
-    /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
+    /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for a Snow device. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
     async fn create_job(
         &self,
         input: CreateJobRequest,
     ) -> Result<CreateJobResult, RusotoError<CreateJobError>>;
+
+    /// <p>Creates a shipping label that will be used to return the Snow device to AWS.</p>
+    async fn create_return_shipping_label(
+        &self,
+        input: CreateReturnShippingLabelRequest,
+    ) -> Result<CreateReturnShippingLabelResult, RusotoError<CreateReturnShippingLabelError>>;
 
     /// <p>Takes an <code>AddressId</code> and returns specific details about that address in the form of an <code>Address</code> object.</p>
     async fn describe_address(
@@ -1827,19 +2047,25 @@ pub trait Snowball {
         input: DescribeJobRequest,
     ) -> Result<DescribeJobResult, RusotoError<DescribeJobError>>;
 
-    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
+    /// <p>Information on the shipping label of a Snow device that is being returned to AWS.</p>
+    async fn describe_return_shipping_label(
+        &self,
+        input: DescribeReturnShippingLabelRequest,
+    ) -> Result<DescribeReturnShippingLabelResult, RusotoError<DescribeReturnShippingLabelError>>;
+
+    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
     async fn get_job_manifest(
         &self,
         input: GetJobManifestRequest,
     ) -> Result<GetJobManifestResult, RusotoError<GetJobManifestError>>;
 
-    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p>
+    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p>
     async fn get_job_unlock_code(
         &self,
         input: GetJobUnlockCodeRequest,
     ) -> Result<GetJobUnlockCodeResult, RusotoError<GetJobUnlockCodeError>>;
 
-    /// <p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>
+    /// <p>Returns information about the Snow Family service limit for your account, and also the number of Snow devices your account has in use.</p> <p>The default service limit for the number of Snow devices that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>
     async fn get_snowball_usage(
         &self,
     ) -> Result<GetSnowballUsageResult, RusotoError<GetSnowballUsageError>>;
@@ -1862,7 +2088,7 @@ pub trait Snowball {
         input: ListClustersRequest,
     ) -> Result<ListClustersResult, RusotoError<ListClustersError>>;
 
-    /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on a Snowball Edge device. Currently, supported AMIs are based on the CentOS 7 (x86_64) - with Updates HVM, Ubuntu Server 14.04 LTS (HVM), and Ubuntu 16.04 LTS - Xenial (HVM) images, available on the AWS Marketplace.</p>
+    /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on a Snow device. Currently, supported AMIs are based on the CentOS 7 (x86_64) - with Updates HVM, Ubuntu Server 14.04 LTS (HVM), and Ubuntu 16.04 LTS - Xenial (HVM) images, available on the AWS Marketplace.</p>
     async fn list_compatible_images(
         &self,
         input: ListCompatibleImagesRequest,
@@ -1885,6 +2111,12 @@ pub trait Snowball {
         &self,
         input: UpdateJobRequest,
     ) -> Result<UpdateJobResult, RusotoError<UpdateJobError>>;
+
+    /// <p>Updates the state when a the shipment states changes to a different state.</p>
+    async fn update_job_shipment_state(
+        &self,
+        input: UpdateJobShipmentStateRequest,
+    ) -> Result<UpdateJobShipmentStateResult, RusotoError<UpdateJobShipmentStateError>>;
 }
 /// A client for the Amazon Snowball API.
 #[derive(Clone)]
@@ -1968,7 +2200,7 @@ impl Snowball for SnowballClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CancelJobResult, _>()
     }
 
-    /// <p>Creates an address for a Snowball to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>
+    /// <p>Creates an address for a Snow device to be shipped to. In most regions, addresses are validated at the time of creation. The address you provide must be located within the serviceable area of your region. If the address is invalid or unsupported, then an exception is thrown.</p>
     async fn create_address(
         &self,
         input: CreateAddressRequest,
@@ -2010,7 +2242,7 @@ impl Snowball for SnowballClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateClusterResult, _>()
     }
 
-    /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
+    /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for a Snow device. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
     async fn create_job(
         &self,
         input: CreateJobRequest,
@@ -2029,6 +2261,28 @@ impl Snowball for SnowballClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateJobResult, _>()
+    }
+
+    /// <p>Creates a shipping label that will be used to return the Snow device to AWS.</p>
+    async fn create_return_shipping_label(
+        &self,
+        input: CreateReturnShippingLabelRequest,
+    ) -> Result<CreateReturnShippingLabelResult, RusotoError<CreateReturnShippingLabelError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSIESnowballJobManagementService.CreateReturnShippingLabel",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateReturnShippingLabelError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateReturnShippingLabelResult, _>()
     }
 
     /// <p>Takes an <code>AddressId</code> and returns specific details about that address in the form of an <code>Address</code> object.</p>
@@ -2115,7 +2369,30 @@ impl Snowball for SnowballClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeJobResult, _>()
     }
 
-    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
+    /// <p>Information on the shipping label of a Snow device that is being returned to AWS.</p>
+    async fn describe_return_shipping_label(
+        &self,
+        input: DescribeReturnShippingLabelRequest,
+    ) -> Result<DescribeReturnShippingLabelResult, RusotoError<DescribeReturnShippingLabelError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSIESnowballJobManagementService.DescribeReturnShippingLabel",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeReturnShippingLabelError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeReturnShippingLabelResult, _>()
+    }
+
+    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
     async fn get_job_manifest(
         &self,
         input: GetJobManifestRequest,
@@ -2136,7 +2413,7 @@ impl Snowball for SnowballClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetJobManifestResult, _>()
     }
 
-    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snowball through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snowball associated with that job.</p>
+    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p>
     async fn get_job_unlock_code(
         &self,
         input: GetJobUnlockCodeRequest,
@@ -2157,7 +2434,7 @@ impl Snowball for SnowballClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetJobUnlockCodeResult, _>()
     }
 
-    /// <p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>
+    /// <p>Returns information about the Snow Family service limit for your account, and also the number of Snow devices your account has in use.</p> <p>The default service limit for the number of Snow devices that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>
     async fn get_snowball_usage(
         &self,
     ) -> Result<GetSnowballUsageResult, RusotoError<GetSnowballUsageError>> {
@@ -2239,7 +2516,7 @@ impl Snowball for SnowballClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListClustersResult, _>()
     }
 
-    /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on a Snowball Edge device. Currently, supported AMIs are based on the CentOS 7 (x86_64) - with Updates HVM, Ubuntu Server 14.04 LTS (HVM), and Ubuntu 16.04 LTS - Xenial (HVM) images, available on the AWS Marketplace.</p>
+    /// <p>This action returns a list of the different Amazon EC2 Amazon Machine Images (AMIs) that are owned by your AWS account that would be supported for use on a Snow device. Currently, supported AMIs are based on the CentOS 7 (x86_64) - with Updates HVM, Ubuntu Server 14.04 LTS (HVM), and Ubuntu 16.04 LTS - Xenial (HVM) images, available on the AWS Marketplace.</p>
     async fn list_compatible_images(
         &self,
         input: ListCompatibleImagesRequest,
@@ -2318,5 +2595,27 @@ impl Snowball for SnowballClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateJobResult, _>()
+    }
+
+    /// <p>Updates the state when a the shipment states changes to a different state.</p>
+    async fn update_job_shipment_state(
+        &self,
+        input: UpdateJobShipmentStateRequest,
+    ) -> Result<UpdateJobShipmentStateResult, RusotoError<UpdateJobShipmentStateError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSIESnowballJobManagementService.UpdateJobShipmentState",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateJobShipmentStateError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateJobShipmentStateResult, _>()
     }
 }

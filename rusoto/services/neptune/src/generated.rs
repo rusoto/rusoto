@@ -65,6 +65,8 @@ impl NeptuneClient {
 pub struct AddRoleToDBClusterMessage {
     /// <p>The name of the DB cluster to associate the IAM role with.</p>
     pub db_cluster_identifier: String,
+    /// <p>The name of the feature for the Neptune DB cluster that the IAM role is to be associated with. For the list of supported feature names, see <a>DBEngineVersion</a>.</p>
+    pub feature_name: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role to associate with the Neptune DB cluster, for example <code>arn:aws:iam::123456789012:role/NeptuneAccessRole</code>.</p>
     pub role_arn: String,
 }
@@ -82,6 +84,9 @@ impl AddRoleToDBClusterMessageSerializer {
             &format!("{}{}", prefix, "DBClusterIdentifier"),
             &obj.db_cluster_identifier,
         );
+        if let Some(ref field_value) = obj.feature_name {
+            params.put(&format!("{}{}", prefix, "FeatureName"), &field_value);
+        }
         params.put(&format!("{}{}", prefix, "RoleArn"), &obj.role_arn);
     }
 }
@@ -664,6 +669,158 @@ impl CopyDBParameterGroupResultDeserializer {
 }
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateDBClusterEndpointMessage {
+    /// <p>The identifier to use for the new endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: String,
+    /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: String,
+    /// <p>The type of the endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>ANY</code>.</p>
+    pub endpoint_type: String,
+    /// <p>List of DB instance identifiers that aren't part of the custom endpoint group. All other eligible instances are reachable through the custom endpoint. Only relevant if the list of static members is empty.</p>
+    pub excluded_members: Option<Vec<String>>,
+    /// <p>List of DB instance identifiers that are part of the custom endpoint group.</p>
+    pub static_members: Option<Vec<String>>,
+    /// <p>The tags to be assigned to the Amazon Neptune resource.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// Serialize `CreateDBClusterEndpointMessage` contents to a `SignedRequest`.
+struct CreateDBClusterEndpointMessageSerializer;
+impl CreateDBClusterEndpointMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateDBClusterEndpointMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterEndpointIdentifier"),
+            &obj.db_cluster_endpoint_identifier,
+        );
+        params.put(
+            &format!("{}{}", prefix, "DBClusterIdentifier"),
+            &obj.db_cluster_identifier,
+        );
+        params.put(&format!("{}{}", prefix, "EndpointType"), &obj.endpoint_type);
+        if let Some(ref field_value) = obj.excluded_members {
+            StringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ExcludedMembers"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.static_members {
+            StringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "StaticMembers"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+    }
+}
+
+/// <p>This data type represents the information you need to connect to an Amazon Neptune DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon Neptune DB instance endpoints, see <code>Endpoint</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateDBClusterEndpointOutput {
+    /// <p>The type associated with a custom endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>ANY</code>.</p>
+    pub custom_endpoint_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the endpoint.</p>
+    pub db_cluster_endpoint_arn: Option<String>,
+    /// <p>The identifier associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: Option<String>,
+    /// <p>A unique system-generated identifier for an endpoint. It remains the same for the whole life of the endpoint.</p>
+    pub db_cluster_endpoint_resource_identifier: Option<String>,
+    /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p>The DNS address of the endpoint.</p>
+    pub endpoint: Option<String>,
+    /// <p>The type of the endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>CUSTOM</code>.</p>
+    pub endpoint_type: Option<String>,
+    /// <p>List of DB instance identifiers that aren't part of the custom endpoint group. All other eligible instances are reachable through the custom endpoint. Only relevant if the list of static members is empty.</p>
+    pub excluded_members: Option<Vec<String>>,
+    /// <p>List of DB instance identifiers that are part of the custom endpoint group.</p>
+    pub static_members: Option<Vec<String>>,
+    /// <p>The current status of the endpoint. One of: <code>creating</code>, <code>available</code>, <code>deleting</code>, <code>inactive</code>, <code>modifying</code>. The <code>inactive</code> state applies to an endpoint that cannot be used for a certain kind of cluster, such as a <code>writer</code> endpoint for a read-only secondary cluster in a global database.</p>
+    pub status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct CreateDBClusterEndpointOutputDeserializer;
+impl CreateDBClusterEndpointOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateDBClusterEndpointOutput, XmlParseError> {
+        deserialize_elements::<_, CreateDBClusterEndpointOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CustomEndpointType" => {
+                        obj.custom_endpoint_type = Some(StringDeserializer::deserialize(
+                            "CustomEndpointType",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointArn" => {
+                        obj.db_cluster_endpoint_arn = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointArn",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointIdentifier" => {
+                        obj.db_cluster_endpoint_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointResourceIdentifier" => {
+                        obj.db_cluster_endpoint_resource_identifier =
+                            Some(StringDeserializer::deserialize(
+                                "DBClusterEndpointResourceIdentifier",
+                                stack,
+                            )?);
+                    }
+                    "DBClusterIdentifier" => {
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "Endpoint" => {
+                        obj.endpoint = Some(StringDeserializer::deserialize("Endpoint", stack)?);
+                    }
+                    "EndpointType" => {
+                        obj.endpoint_type =
+                            Some(StringDeserializer::deserialize("EndpointType", stack)?);
+                    }
+                    "ExcludedMembers" => {
+                        obj.excluded_members.get_or_insert(vec![]).extend(
+                            StringListDeserializer::deserialize("ExcludedMembers", stack)?,
+                        );
+                    }
+                    "StaticMembers" => {
+                        obj.static_members
+                            .get_or_insert(vec![])
+                            .extend(StringListDeserializer::deserialize("StaticMembers", stack)?);
+                    }
+                    "Status" => {
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBClusterMessage {
     /// <p>A list of EC2 Availability Zones that instances in the DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -683,11 +840,11 @@ pub struct CreateDBClusterMessage {
     pub deletion_protection: Option<bool>,
     /// <p>The list of log types that need to be enabled for exporting to CloudWatch Logs.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
-    /// <p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>
+    /// <p>Not supported by Neptune.</p>
     pub enable_iam_database_authentication: Option<bool>,
     /// <p>The name of the database engine to be used for this DB cluster.</p> <p>Valid Values: <code>neptune</code> </p>
     pub engine: String,
-    /// <p>The version number of the database engine to use. Currently, setting this parameter has no effect.</p> <p>Example: <code>1.0.1</code> </p>
+    /// <p>The version number of the database engine to use for the new DB cluster.</p> <p>Example: <code>1.0.2.1</code> </p>
     pub engine_version: Option<String>,
     /// <p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a DB cluster with the same AWS account that owns the KMS encryption key used to encrypt the new DB cluster, then you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>If an encryption key is not specified in <code>KmsKeyId</code>:</p> <ul> <li> <p>If <code>ReplicationSourceIdentifier</code> identifies an encrypted source, then Amazon Neptune will use the encryption key used to encrypt the source. Otherwise, Amazon Neptune will use your default encryption key.</p> </li> <li> <p>If the <code>StorageEncrypted</code> parameter is true and <code>ReplicationSourceIdentifier</code> is not specified, then Amazon Neptune will use your default encryption key.</p> </li> </ul> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p> <p>If you create a Read Replica of an encrypted DB cluster in another AWS Region, you must set <code>KmsKeyId</code> to a KMS key ID that is valid in the destination AWS Region. This key is used to encrypt the Read Replica in that AWS Region.</p>
     pub kms_key_id: Option<String>,
@@ -1800,6 +1957,160 @@ impl DBClusterDeserializer {
         })
     }
 }
+/// <p>This data type represents the information you need to connect to an Amazon Neptune DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon Neptune DB instance endpoints, see <code>Endpoint</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DBClusterEndpoint {
+    /// <p>The type associated with a custom endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>ANY</code>.</p>
+    pub custom_endpoint_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the endpoint.</p>
+    pub db_cluster_endpoint_arn: Option<String>,
+    /// <p>The identifier associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: Option<String>,
+    /// <p>A unique system-generated identifier for an endpoint. It remains the same for the whole life of the endpoint.</p>
+    pub db_cluster_endpoint_resource_identifier: Option<String>,
+    /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p>The DNS address of the endpoint.</p>
+    pub endpoint: Option<String>,
+    /// <p>The type of the endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>CUSTOM</code>.</p>
+    pub endpoint_type: Option<String>,
+    /// <p>List of DB instance identifiers that aren't part of the custom endpoint group. All other eligible instances are reachable through the custom endpoint. Only relevant if the list of static members is empty.</p>
+    pub excluded_members: Option<Vec<String>>,
+    /// <p>List of DB instance identifiers that are part of the custom endpoint group.</p>
+    pub static_members: Option<Vec<String>>,
+    /// <p>The current status of the endpoint. One of: <code>creating</code>, <code>available</code>, <code>deleting</code>, <code>inactive</code>, <code>modifying</code>. The <code>inactive</code> state applies to an endpoint that cannot be used for a certain kind of cluster, such as a <code>writer</code> endpoint for a read-only secondary cluster in a global database.</p>
+    pub status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct DBClusterEndpointDeserializer;
+impl DBClusterEndpointDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DBClusterEndpoint, XmlParseError> {
+        deserialize_elements::<_, DBClusterEndpoint, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CustomEndpointType" => {
+                    obj.custom_endpoint_type = Some(StringDeserializer::deserialize(
+                        "CustomEndpointType",
+                        stack,
+                    )?);
+                }
+                "DBClusterEndpointArn" => {
+                    obj.db_cluster_endpoint_arn = Some(StringDeserializer::deserialize(
+                        "DBClusterEndpointArn",
+                        stack,
+                    )?);
+                }
+                "DBClusterEndpointIdentifier" => {
+                    obj.db_cluster_endpoint_identifier = Some(StringDeserializer::deserialize(
+                        "DBClusterEndpointIdentifier",
+                        stack,
+                    )?);
+                }
+                "DBClusterEndpointResourceIdentifier" => {
+                    obj.db_cluster_endpoint_resource_identifier =
+                        Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointResourceIdentifier",
+                            stack,
+                        )?);
+                }
+                "DBClusterIdentifier" => {
+                    obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
+                        "DBClusterIdentifier",
+                        stack,
+                    )?);
+                }
+                "Endpoint" => {
+                    obj.endpoint = Some(StringDeserializer::deserialize("Endpoint", stack)?);
+                }
+                "EndpointType" => {
+                    obj.endpoint_type =
+                        Some(StringDeserializer::deserialize("EndpointType", stack)?);
+                }
+                "ExcludedMembers" => {
+                    obj.excluded_members.get_or_insert(vec![]).extend(
+                        StringListDeserializer::deserialize("ExcludedMembers", stack)?,
+                    );
+                }
+                "StaticMembers" => {
+                    obj.static_members
+                        .get_or_insert(vec![])
+                        .extend(StringListDeserializer::deserialize("StaticMembers", stack)?);
+                }
+                "Status" => {
+                    obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct DBClusterEndpointListDeserializer;
+impl DBClusterEndpointListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DBClusterEndpoint>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "DBClusterEndpointList" {
+                obj.push(DBClusterEndpointDeserializer::deserialize(
+                    "DBClusterEndpointList",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DBClusterEndpointMessage {
+    /// <p>Contains the details of the endpoints associated with the cluster and matching any filter conditions.</p>
+    pub db_cluster_endpoints: Option<Vec<DBClusterEndpoint>>,
+    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterEndpoints</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+}
+
+#[allow(dead_code)]
+struct DBClusterEndpointMessageDeserializer;
+impl DBClusterEndpointMessageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DBClusterEndpointMessage, XmlParseError> {
+        deserialize_elements::<_, DBClusterEndpointMessage, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DBClusterEndpoints" => {
+                        obj.db_cluster_endpoints.get_or_insert(vec![]).extend(
+                            DBClusterEndpointListDeserializer::deserialize(
+                                "DBClusterEndpoints",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[allow(dead_code)]
 struct DBClusterListDeserializer;
 impl DBClusterListDeserializer {
@@ -2173,6 +2484,8 @@ impl DBClusterParameterGroupsMessageDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterRole {
+    /// <p>The name of the feature associated with the AWS Identity and Access Management (IAM) role. For the list of supported feature names, see <a>DBEngineVersion</a>. </p>
+    pub feature_name: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role that is associated with the DB cluster.</p>
     pub role_arn: Option<String>,
     /// <p><p>Describes the state of association between the IAM role and the DB cluster. The Status property returns one of the following values:</p> <ul> <li> <p> <code>ACTIVE</code> - the IAM role ARN is associated with the DB cluster and can be used to access other AWS services on your behalf.</p> </li> <li> <p> <code>PENDING</code> - the IAM role ARN is being associated with the DB cluster.</p> </li> <li> <p> <code>INVALID</code> - the IAM role ARN is associated with the DB cluster, but the DB cluster is unable to assume the IAM role in order to access other AWS services on your behalf.</p> </li> </ul></p>
@@ -2189,6 +2502,9 @@ impl DBClusterRoleDeserializer {
     ) -> Result<DBClusterRole, XmlParseError> {
         deserialize_elements::<_, DBClusterRole, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "FeatureName" => {
+                    obj.feature_name = Some(StringDeserializer::deserialize("FeatureName", stack)?);
+                }
                 "RoleArn" => {
                     obj.role_arn = Some(StringDeserializer::deserialize("RoleArn", stack)?);
                 }
@@ -3658,6 +3974,126 @@ impl DBSubnetGroupsDeserializer {
 }
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteDBClusterEndpointMessage {
+    /// <p>The identifier associated with the custom endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: String,
+}
+
+/// Serialize `DeleteDBClusterEndpointMessage` contents to a `SignedRequest`.
+struct DeleteDBClusterEndpointMessageSerializer;
+impl DeleteDBClusterEndpointMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteDBClusterEndpointMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterEndpointIdentifier"),
+            &obj.db_cluster_endpoint_identifier,
+        );
+    }
+}
+
+/// <p>This data type represents the information you need to connect to an Amazon Neptune DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon RDS DB instance endpoints, see <code>Endpoint</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DeleteDBClusterEndpointOutput {
+    /// <p>The type associated with a custom endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>ANY</code>.</p>
+    pub custom_endpoint_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the endpoint.</p>
+    pub db_cluster_endpoint_arn: Option<String>,
+    /// <p>The identifier associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: Option<String>,
+    /// <p>A unique system-generated identifier for an endpoint. It remains the same for the whole life of the endpoint.</p>
+    pub db_cluster_endpoint_resource_identifier: Option<String>,
+    /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p>The DNS address of the endpoint.</p>
+    pub endpoint: Option<String>,
+    /// <p>The type of the endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>CUSTOM</code>.</p>
+    pub endpoint_type: Option<String>,
+    /// <p>List of DB instance identifiers that aren't part of the custom endpoint group. All other eligible instances are reachable through the custom endpoint. Only relevant if the list of static members is empty.</p>
+    pub excluded_members: Option<Vec<String>>,
+    /// <p>List of DB instance identifiers that are part of the custom endpoint group.</p>
+    pub static_members: Option<Vec<String>>,
+    /// <p>The current status of the endpoint. One of: <code>creating</code>, <code>available</code>, <code>deleting</code>, <code>inactive</code>, <code>modifying</code>. The <code>inactive</code> state applies to an endpoint that cannot be used for a certain kind of cluster, such as a <code>writer</code> endpoint for a read-only secondary cluster in a global database.</p>
+    pub status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct DeleteDBClusterEndpointOutputDeserializer;
+impl DeleteDBClusterEndpointOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteDBClusterEndpointOutput, XmlParseError> {
+        deserialize_elements::<_, DeleteDBClusterEndpointOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CustomEndpointType" => {
+                        obj.custom_endpoint_type = Some(StringDeserializer::deserialize(
+                            "CustomEndpointType",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointArn" => {
+                        obj.db_cluster_endpoint_arn = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointArn",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointIdentifier" => {
+                        obj.db_cluster_endpoint_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointResourceIdentifier" => {
+                        obj.db_cluster_endpoint_resource_identifier =
+                            Some(StringDeserializer::deserialize(
+                                "DBClusterEndpointResourceIdentifier",
+                                stack,
+                            )?);
+                    }
+                    "DBClusterIdentifier" => {
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "Endpoint" => {
+                        obj.endpoint = Some(StringDeserializer::deserialize("Endpoint", stack)?);
+                    }
+                    "EndpointType" => {
+                        obj.endpoint_type =
+                            Some(StringDeserializer::deserialize("EndpointType", stack)?);
+                    }
+                    "ExcludedMembers" => {
+                        obj.excluded_members.get_or_insert(vec![]).extend(
+                            StringListDeserializer::deserialize("ExcludedMembers", stack)?,
+                        );
+                    }
+                    "StaticMembers" => {
+                        obj.static_members
+                            .get_or_insert(vec![])
+                            .extend(StringListDeserializer::deserialize("StaticMembers", stack)?);
+                    }
+                    "Status" => {
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDBClusterMessage {
     /// <p><p>The DB cluster identifier for the DB cluster to be deleted. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match an existing DBClusterIdentifier.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
@@ -3958,6 +4394,58 @@ impl DeleteEventSubscriptionResultDeserializer {
         )
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeDBClusterEndpointsMessage {
+    /// <p>The identifier of the endpoint to describe. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: Option<String>,
+    /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p>A set of name-value pairs that define which endpoints to include in the output. The filters are specified as name-value pairs, in the format <code>Name=<i>endpoint_type</i>,Values=<i>endpoint_type1</i>,<i>endpoint_type2</i>,...</code>. <code>Name</code> can be one of: <code>db-cluster-endpoint-type</code>, <code>db-cluster-endpoint-custom-type</code>, <code>db-cluster-endpoint-id</code>, <code>db-cluster-endpoint-status</code>. <code>Values</code> for the <code> db-cluster-endpoint-type</code> filter can be one or more of: <code>reader</code>, <code>writer</code>, <code>custom</code>. <code>Values</code> for the <code>db-cluster-endpoint-custom-type</code> filter can be one or more of: <code>reader</code>, <code>any</code>. <code>Values</code> for the <code>db-cluster-endpoint-status</code> filter can be one or more of: <code>available</code>, <code>creating</code>, <code>deleting</code>, <code>inactive</code>, <code>modifying</code>. </p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterEndpoints</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so you can retrieve the remaining results. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    pub max_records: Option<i64>,
+}
+
+/// Serialize `DescribeDBClusterEndpointsMessage` contents to a `SignedRequest`.
+struct DescribeDBClusterEndpointsMessageSerializer;
+impl DescribeDBClusterEndpointsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeDBClusterEndpointsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.db_cluster_endpoint_identifier {
+            params.put(
+                &format!("{}{}", prefix, "DBClusterEndpointIdentifier"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.db_cluster_identifier {
+            params.put(
+                &format!("{}{}", prefix, "DBClusterIdentifier"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDBClusterParameterGroupsMessage {
@@ -5056,7 +5544,7 @@ impl DoubleRangeListDeserializer {
         })
     }
 }
-/// <p>Specifies a connection endpoint.</p>
+/// <p>Specifies a connection endpoint.</p> <p>For the data structure that represents Amazon Neptune DB cluster endpoints, see <code>DBClusterEndpoint</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Endpoint {
@@ -5706,6 +6194,149 @@ impl LogTypeListSerializer {
 
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyDBClusterEndpointMessage {
+    /// <p>The identifier of the endpoint to modify. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: String,
+    /// <p>The type of the endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>ANY</code>.</p>
+    pub endpoint_type: Option<String>,
+    /// <p>List of DB instance identifiers that aren't part of the custom endpoint group. All other eligible instances are reachable through the custom endpoint. Only relevant if the list of static members is empty.</p>
+    pub excluded_members: Option<Vec<String>>,
+    /// <p>List of DB instance identifiers that are part of the custom endpoint group.</p>
+    pub static_members: Option<Vec<String>>,
+}
+
+/// Serialize `ModifyDBClusterEndpointMessage` contents to a `SignedRequest`.
+struct ModifyDBClusterEndpointMessageSerializer;
+impl ModifyDBClusterEndpointMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyDBClusterEndpointMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DBClusterEndpointIdentifier"),
+            &obj.db_cluster_endpoint_identifier,
+        );
+        if let Some(ref field_value) = obj.endpoint_type {
+            params.put(&format!("{}{}", prefix, "EndpointType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.excluded_members {
+            StringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ExcludedMembers"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.static_members {
+            StringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "StaticMembers"),
+                field_value,
+            );
+        }
+    }
+}
+
+/// <p>This data type represents the information you need to connect to an Amazon Aurora DB cluster. This data type is used as a response element in the following actions:</p> <ul> <li> <p> <code>CreateDBClusterEndpoint</code> </p> </li> <li> <p> <code>DescribeDBClusterEndpoints</code> </p> </li> <li> <p> <code>ModifyDBClusterEndpoint</code> </p> </li> <li> <p> <code>DeleteDBClusterEndpoint</code> </p> </li> </ul> <p>For the data structure that represents Amazon RDS DB instance endpoints, see <code>Endpoint</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ModifyDBClusterEndpointOutput {
+    /// <p>The type associated with a custom endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>ANY</code>.</p>
+    pub custom_endpoint_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the endpoint.</p>
+    pub db_cluster_endpoint_arn: Option<String>,
+    /// <p>The identifier associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_endpoint_identifier: Option<String>,
+    /// <p>A unique system-generated identifier for an endpoint. It remains the same for the whole life of the endpoint.</p>
+    pub db_cluster_endpoint_resource_identifier: Option<String>,
+    /// <p>The DB cluster identifier of the DB cluster associated with the endpoint. This parameter is stored as a lowercase string.</p>
+    pub db_cluster_identifier: Option<String>,
+    /// <p>The DNS address of the endpoint.</p>
+    pub endpoint: Option<String>,
+    /// <p>The type of the endpoint. One of: <code>READER</code>, <code>WRITER</code>, <code>CUSTOM</code>.</p>
+    pub endpoint_type: Option<String>,
+    /// <p>List of DB instance identifiers that aren't part of the custom endpoint group. All other eligible instances are reachable through the custom endpoint. Only relevant if the list of static members is empty.</p>
+    pub excluded_members: Option<Vec<String>>,
+    /// <p>List of DB instance identifiers that are part of the custom endpoint group.</p>
+    pub static_members: Option<Vec<String>>,
+    /// <p>The current status of the endpoint. One of: <code>creating</code>, <code>available</code>, <code>deleting</code>, <code>inactive</code>, <code>modifying</code>. The <code>inactive</code> state applies to an endpoint that cannot be used for a certain kind of cluster, such as a <code>writer</code> endpoint for a read-only secondary cluster in a global database.</p>
+    pub status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct ModifyDBClusterEndpointOutputDeserializer;
+impl ModifyDBClusterEndpointOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyDBClusterEndpointOutput, XmlParseError> {
+        deserialize_elements::<_, ModifyDBClusterEndpointOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CustomEndpointType" => {
+                        obj.custom_endpoint_type = Some(StringDeserializer::deserialize(
+                            "CustomEndpointType",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointArn" => {
+                        obj.db_cluster_endpoint_arn = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointArn",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointIdentifier" => {
+                        obj.db_cluster_endpoint_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterEndpointIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "DBClusterEndpointResourceIdentifier" => {
+                        obj.db_cluster_endpoint_resource_identifier =
+                            Some(StringDeserializer::deserialize(
+                                "DBClusterEndpointResourceIdentifier",
+                                stack,
+                            )?);
+                    }
+                    "DBClusterIdentifier" => {
+                        obj.db_cluster_identifier = Some(StringDeserializer::deserialize(
+                            "DBClusterIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "Endpoint" => {
+                        obj.endpoint = Some(StringDeserializer::deserialize("Endpoint", stack)?);
+                    }
+                    "EndpointType" => {
+                        obj.endpoint_type =
+                            Some(StringDeserializer::deserialize("EndpointType", stack)?);
+                    }
+                    "ExcludedMembers" => {
+                        obj.excluded_members.get_or_insert(vec![]).extend(
+                            StringListDeserializer::deserialize("ExcludedMembers", stack)?,
+                        );
+                    }
+                    "StaticMembers" => {
+                        obj.static_members
+                            .get_or_insert(vec![])
+                            .extend(StringListDeserializer::deserialize("StaticMembers", stack)?);
+                    }
+                    "Status" => {
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterMessage {
     /// <p>A value that specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB cluster. If this parameter is set to <code>false</code>, changes to the DB cluster are applied during the next maintenance window.</p> <p>The <code>ApplyImmediately</code> parameter only affects the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values. If you set the <code>ApplyImmediately</code> parameter value to false, then changes to the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values are applied during the next maintenance window. All other changes are applied immediately, regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
@@ -5721,7 +6352,7 @@ pub struct ModifyDBClusterMessage {
     pub deletion_protection: Option<bool>,
     /// <p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>
     pub enable_iam_database_authentication: Option<bool>,
-    /// <p>The version number of the database engine. Currently, setting this parameter has no effect. To upgrade your database engine to the most recent release, use the <a>ApplyPendingMaintenanceAction</a> API.</p> <p>For a list of valid engine versions, see <a>CreateDBInstance</a>, or call <a>DescribeDBEngineVersions</a>.</p>
+    /// <p>The version number of the database engine to which you want to upgrade. Changing this parameter results in an outage. The change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to true.</p> <p>For a list of valid engine versions, see <a href="https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases.html">Engine Releases for Amazon Neptune</a>, or call <a href="https://docs.aws.amazon.com/neptune/latest/userguide/api-other-apis.html#DescribeDBEngineVersions">DescribeDBEngineVersions</a>.</p>
     pub engine_version: Option<String>,
     /// <p>The new password for the master database user. This password can contain any printable ASCII character except "/", """, or "@".</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
     pub master_user_password: Option<String>,
@@ -7383,6 +8014,8 @@ impl RebootDBInstanceResultDeserializer {
 pub struct RemoveRoleFromDBClusterMessage {
     /// <p>The name of the DB cluster to disassociate the IAM role from.</p>
     pub db_cluster_identifier: String,
+    /// <p>The name of the feature for the DB cluster that the IAM role is to be disassociated from. For the list of supported feature names, see <a>DBEngineVersion</a>.</p>
+    pub feature_name: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role to disassociate from the DB cluster, for example <code>arn:aws:iam::123456789012:role/NeptuneAccessRole</code>.</p>
     pub role_arn: String,
 }
@@ -7400,6 +8033,9 @@ impl RemoveRoleFromDBClusterMessageSerializer {
             &format!("{}{}", prefix, "DBClusterIdentifier"),
             &obj.db_cluster_identifier,
         );
+        if let Some(ref field_value) = obj.feature_name {
+            params.put(&format!("{}{}", prefix, "FeatureName"), &field_value);
+        }
         params.put(&format!("{}{}", prefix, "RoleArn"), &obj.role_arn);
     }
 }
@@ -8038,6 +8674,36 @@ impl StringDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+#[allow(dead_code)]
+struct StringListDeserializer;
+impl StringListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(StringDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `StringList` contents to a `SignedRequest`.
+struct StringListSerializer;
+impl StringListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 /// <p>Specifies a subnet.</p> <p> This data type is used as a response element in the <a>DescribeDBSubnetGroups</a> action.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -9214,6 +9880,114 @@ impl fmt::Display for CreateDBClusterError {
     }
 }
 impl Error for CreateDBClusterError {}
+/// Errors returned by CreateDBClusterEndpoint
+#[derive(Debug, PartialEq)]
+pub enum CreateDBClusterEndpointError {
+    /// <p>The specified custom endpoint cannot be created because it already exists.</p>
+    DBClusterEndpointAlreadyExistsFault(String),
+    /// <p>The cluster already has the maximum number of custom endpoints.</p>
+    DBClusterEndpointQuotaExceededFault(String),
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
+    DBClusterNotFoundFault(String),
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
+    DBInstanceNotFoundFault(String),
+    /// <p>The DB cluster is not in a valid state.</p>
+    InvalidDBClusterStateFault(String),
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
+    InvalidDBInstanceStateFault(String),
+}
+
+impl CreateDBClusterEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDBClusterEndpointError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterEndpointAlreadyExistsFault" => {
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::DBClusterEndpointAlreadyExistsFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "DBClusterEndpointQuotaExceededFault" => {
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::DBClusterEndpointQuotaExceededFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::DBClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "DBInstanceNotFound" => {
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::DBInstanceNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::InvalidDBClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            CreateDBClusterEndpointError::InvalidDBInstanceStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateDBClusterEndpointError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateDBClusterEndpointError::DBClusterEndpointAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterEndpointError::DBClusterEndpointQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterEndpointError::DBClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterEndpointError::DBInstanceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterEndpointError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterEndpointError::InvalidDBInstanceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateDBClusterEndpointError {}
 /// Errors returned by CreateDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateDBClusterParameterGroupError {
@@ -9932,6 +10706,78 @@ impl fmt::Display for DeleteDBClusterError {
     }
 }
 impl Error for DeleteDBClusterError {}
+/// Errors returned by DeleteDBClusterEndpoint
+#[derive(Debug, PartialEq)]
+pub enum DeleteDBClusterEndpointError {
+    /// <p>The specified custom endpoint doesn't exist.</p>
+    DBClusterEndpointNotFoundFault(String),
+    /// <p>The requested operation cannot be performed on the endpoint while the endpoint is in this state.</p>
+    InvalidDBClusterEndpointStateFault(String),
+    /// <p>The DB cluster is not in a valid state.</p>
+    InvalidDBClusterStateFault(String),
+}
+
+impl DeleteDBClusterEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDBClusterEndpointError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterEndpointNotFoundFault" => {
+                        return RusotoError::Service(
+                            DeleteDBClusterEndpointError::DBClusterEndpointNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBClusterEndpointStateFault" => {
+                        return RusotoError::Service(
+                            DeleteDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            DeleteDBClusterEndpointError::InvalidDBClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteDBClusterEndpointError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteDBClusterEndpointError::DBClusterEndpointNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBClusterEndpointError::InvalidDBClusterEndpointStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteDBClusterEndpointError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteDBClusterEndpointError {}
 /// Errors returned by DeleteDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterParameterGroupError {
@@ -10328,6 +11174,56 @@ impl fmt::Display for DeleteEventSubscriptionError {
     }
 }
 impl Error for DeleteEventSubscriptionError {}
+/// Errors returned by DescribeDBClusterEndpoints
+#[derive(Debug, PartialEq)]
+pub enum DescribeDBClusterEndpointsError {
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
+    DBClusterNotFoundFault(String),
+}
+
+impl DescribeDBClusterEndpointsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDBClusterEndpointsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            DescribeDBClusterEndpointsError::DBClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeDBClusterEndpointsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeDBClusterEndpointsError::DBClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeDBClusterEndpointsError {}
 /// Errors returned by DescribeDBClusterParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterParameterGroupsError {
@@ -11392,6 +12288,102 @@ impl fmt::Display for ModifyDBClusterError {
     }
 }
 impl Error for ModifyDBClusterError {}
+/// Errors returned by ModifyDBClusterEndpoint
+#[derive(Debug, PartialEq)]
+pub enum ModifyDBClusterEndpointError {
+    /// <p>The specified custom endpoint doesn't exist.</p>
+    DBClusterEndpointNotFoundFault(String),
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
+    DBInstanceNotFoundFault(String),
+    /// <p>The requested operation cannot be performed on the endpoint while the endpoint is in this state.</p>
+    InvalidDBClusterEndpointStateFault(String),
+    /// <p>The DB cluster is not in a valid state.</p>
+    InvalidDBClusterStateFault(String),
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
+    InvalidDBInstanceStateFault(String),
+}
+
+impl ModifyDBClusterEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyDBClusterEndpointError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterEndpointNotFoundFault" => {
+                        return RusotoError::Service(
+                            ModifyDBClusterEndpointError::DBClusterEndpointNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "DBInstanceNotFound" => {
+                        return RusotoError::Service(
+                            ModifyDBClusterEndpointError::DBInstanceNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBClusterEndpointStateFault" => {
+                        return RusotoError::Service(
+                            ModifyDBClusterEndpointError::InvalidDBClusterEndpointStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            ModifyDBClusterEndpointError::InvalidDBClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBInstanceState" => {
+                        return RusotoError::Service(
+                            ModifyDBClusterEndpointError::InvalidDBInstanceStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyDBClusterEndpointError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyDBClusterEndpointError::DBClusterEndpointNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBClusterEndpointError::DBInstanceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBClusterEndpointError::InvalidDBClusterEndpointStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBClusterEndpointError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyDBClusterEndpointError::InvalidDBInstanceStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ModifyDBClusterEndpointError {}
 /// Errors returned by ModifyDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBClusterParameterGroupError {
@@ -13056,6 +14048,12 @@ pub trait Neptune {
         input: CreateDBClusterMessage,
     ) -> Result<CreateDBClusterResult, RusotoError<CreateDBClusterError>>;
 
+    /// <p>Creates a new custom endpoint and associates it with an Amazon Neptune DB cluster.</p>
+    async fn create_db_cluster_endpoint(
+        &self,
+        input: CreateDBClusterEndpointMessage,
+    ) -> Result<CreateDBClusterEndpointOutput, RusotoError<CreateDBClusterEndpointError>>;
+
     /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <a>ModifyDBClusterParameterGroup</a>. Once you&#39;ve created a DB cluster parameter group, you need to associate it with your DB cluster using <a>ModifyDBCluster</a>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect.</p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon Neptune console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
     async fn create_db_cluster_parameter_group(
         &self,
@@ -13098,6 +14096,12 @@ pub trait Neptune {
         input: DeleteDBClusterMessage,
     ) -> Result<DeleteDBClusterResult, RusotoError<DeleteDBClusterError>>;
 
+    /// <p>Deletes a custom endpoint and removes it from an Amazon Neptune DB cluster.</p>
+    async fn delete_db_cluster_endpoint(
+        &self,
+        input: DeleteDBClusterEndpointMessage,
+    ) -> Result<DeleteDBClusterEndpointOutput, RusotoError<DeleteDBClusterEndpointError>>;
+
     /// <p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can't be associated with any DB clusters.</p>
     async fn delete_db_cluster_parameter_group(
         &self,
@@ -13133,6 +14137,12 @@ pub trait Neptune {
         &self,
         input: DeleteEventSubscriptionMessage,
     ) -> Result<DeleteEventSubscriptionResult, RusotoError<DeleteEventSubscriptionError>>;
+
+    /// <p><p>Returns information about endpoints for an Amazon Neptune DB cluster.</p> <note> <p>This operation can also return information for Amazon RDS clusters and Amazon DocDB clusters.</p> </note></p>
+    async fn describe_db_cluster_endpoints(
+        &self,
+        input: DescribeDBClusterEndpointsMessage,
+    ) -> Result<DBClusterEndpointMessage, RusotoError<DescribeDBClusterEndpointsError>>;
 
     /// <p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group.</p>
     async fn describe_db_cluster_parameter_groups(
@@ -13274,6 +14284,12 @@ pub trait Neptune {
         &self,
         input: ModifyDBClusterMessage,
     ) -> Result<ModifyDBClusterResult, RusotoError<ModifyDBClusterError>>;
+
+    /// <p>Modifies the properties of an endpoint in an Amazon Neptune DB cluster.</p>
+    async fn modify_db_cluster_endpoint(
+        &self,
+        input: ModifyDBClusterEndpointMessage,
+    ) -> Result<ModifyDBClusterEndpointOutput, RusotoError<ModifyDBClusterEndpointError>>;
 
     /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request.</p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
     async fn modify_db_cluster_parameter_group(
@@ -13667,6 +14683,39 @@ impl Neptune for NeptuneClient {
         Ok(result)
     }
 
+    /// <p>Creates a new custom endpoint and associates it with an Amazon Neptune DB cluster.</p>
+    async fn create_db_cluster_endpoint(
+        &self,
+        input: CreateDBClusterEndpointMessage,
+    ) -> Result<CreateDBClusterEndpointOutput, RusotoError<CreateDBClusterEndpointError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("CreateDBClusterEndpoint");
+        let mut params = params;
+        CreateDBClusterEndpointMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, CreateDBClusterEndpointError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateDBClusterEndpointOutputDeserializer::deserialize(
+                "CreateDBClusterEndpointResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <a>ModifyDBClusterParameterGroup</a>. Once you&#39;ve created a DB cluster parameter group, you need to associate it with your DB cluster using <a>ModifyDBCluster</a>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect.</p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon Neptune console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
     async fn create_db_cluster_parameter_group(
         &self,
@@ -13895,6 +14944,39 @@ impl Neptune for NeptuneClient {
         Ok(result)
     }
 
+    /// <p>Deletes a custom endpoint and removes it from an Amazon Neptune DB cluster.</p>
+    async fn delete_db_cluster_endpoint(
+        &self,
+        input: DeleteDBClusterEndpointMessage,
+    ) -> Result<DeleteDBClusterEndpointOutput, RusotoError<DeleteDBClusterEndpointError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("DeleteDBClusterEndpoint");
+        let mut params = params;
+        DeleteDBClusterEndpointMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DeleteDBClusterEndpointError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeleteDBClusterEndpointOutputDeserializer::deserialize(
+                "DeleteDBClusterEndpointResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Deletes a specified DB cluster parameter group. The DB cluster parameter group to be deleted can't be associated with any DB clusters.</p>
     async fn delete_db_cluster_parameter_group(
         &self,
@@ -14040,6 +15122,39 @@ impl Neptune for NeptuneClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result = DeleteEventSubscriptionResultDeserializer::deserialize(
                 "DeleteEventSubscriptionResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Returns information about endpoints for an Amazon Neptune DB cluster.</p> <note> <p>This operation can also return information for Amazon RDS clusters and Amazon DocDB clusters.</p> </note></p>
+    async fn describe_db_cluster_endpoints(
+        &self,
+        input: DescribeDBClusterEndpointsMessage,
+    ) -> Result<DBClusterEndpointMessage, RusotoError<DescribeDBClusterEndpointsError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("DescribeDBClusterEndpoints");
+        let mut params = params;
+        DescribeDBClusterEndpointsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DescribeDBClusterEndpointsError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DBClusterEndpointMessageDeserializer::deserialize(
+                "DescribeDBClusterEndpointsResult",
                 stack,
             )?;
             skip_tree(stack);
@@ -14757,6 +15872,39 @@ impl Neptune for NeptuneClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result =
                 ModifyDBClusterResultDeserializer::deserialize("ModifyDBClusterResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Modifies the properties of an endpoint in an Amazon Neptune DB cluster.</p>
+    async fn modify_db_cluster_endpoint(
+        &self,
+        input: ModifyDBClusterEndpointMessage,
+    ) -> Result<ModifyDBClusterEndpointOutput, RusotoError<ModifyDBClusterEndpointError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("ModifyDBClusterEndpoint");
+        let mut params = params;
+        ModifyDBClusterEndpointMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, ModifyDBClusterEndpointError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyDBClusterEndpointOutputDeserializer::deserialize(
+                "ModifyDBClusterEndpointResult",
+                stack,
+            )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
             Ok(result)

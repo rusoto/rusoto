@@ -25,6 +25,15 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>The configuration for Ad Marker Passthrough. Ad marker passthrough can be used to pass ad markers from the origin to the customized manifest.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AdMarkerPassthrough {
+    /// <p>For HLS, when set to true, MediaTailor passes through EXT-X-CUE-IN, EXT-X-CUE-OUT, and EXT-X-SPLICEPOINT-SCTE35 ad markers from the origin manifest to the MediaTailor personalized manifest.</p><p>No logic is applied to these ad markers. For example, if EXT-X-CUE-OUT has a value of 60, but no ads are filled for that ad break, MediaTailor will not set the value to 0.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
 /// <p>The configuration for Avail Suppression. Ad suppression can be used to turn off ad personalization in a long manifest, or if a viewer joins mid-break.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AvailSuppression {
@@ -147,6 +156,10 @@ pub struct GetPlaybackConfigurationResponse {
     #[serde(rename = "LivePreRollConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub live_pre_roll_configuration: Option<LivePreRollConfiguration>,
+    /// <p>The configuration for manifest processing rules. Manifest processing rules enable customization of the personalized manifests created by MediaTailor.</p>
+    #[serde(rename = "ManifestProcessingRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_processing_rules: Option<ManifestProcessingRules>,
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -256,6 +269,14 @@ pub struct LivePreRollConfiguration {
     pub max_duration_seconds: Option<i64>,
 }
 
+/// <p>The configuration for manifest processing rules. Manifest processing rules enable customization of the personalized manifests created by MediaTailor.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ManifestProcessingRules {
+    #[serde(rename = "AdMarkerPassthrough")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_marker_passthrough: Option<AdMarkerPassthrough>,
+}
+
 /// <p>The AWSMediaTailor configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -284,6 +305,10 @@ pub struct PlaybackConfiguration {
     #[serde(rename = "HlsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_configuration: Option<HlsConfiguration>,
+    /// <p>The configuration for manifest processing rules. Manifest processing rules enable customization of the personalized manifests created by MediaTailor.</p>
+    #[serde(rename = "ManifestProcessingRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_processing_rules: Option<ManifestProcessingRules>,
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -349,6 +374,10 @@ pub struct PutPlaybackConfigurationRequest {
     #[serde(rename = "LivePreRollConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub live_pre_roll_configuration: Option<LivePreRollConfiguration>,
+    /// <p>The configuration for manifest processing rules. Manifest processing rules enable customization of the personalized manifests created by MediaTailor.</p>
+    #[serde(rename = "ManifestProcessingRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_processing_rules: Option<ManifestProcessingRules>,
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -406,6 +435,10 @@ pub struct PutPlaybackConfigurationResponse {
     #[serde(rename = "LivePreRollConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub live_pre_roll_configuration: Option<LivePreRollConfiguration>,
+    /// <p>The configuration for manifest processing rules. Manifest processing rules enable customization of the personalized manifests created by MediaTailor.</p>
+    #[serde(rename = "ManifestProcessingRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_processing_rules: Option<ManifestProcessingRules>,
     /// <p>The identifier for the playback configuration.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]

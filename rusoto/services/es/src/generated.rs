@@ -106,6 +106,10 @@ pub struct AdvancedSecurityOptions {
     #[serde(rename = "InternalUserDatabaseEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_user_database_enabled: Option<bool>,
+    /// <p>Describes the SAML application configured for a domain.</p>
+    #[serde(rename = "SAMLOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub saml_options: Option<SAMLOptionsOutput>,
 }
 
 /// <p>Specifies the advanced security configuration: whether advanced security is enabled, whether the internal database option is enabled, master username and password (if internal database is enabled), and master user ARN (if IAM is enabled).</p>
@@ -124,6 +128,10 @@ pub struct AdvancedSecurityOptionsInput {
     #[serde(rename = "MasterUserOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub master_user_options: Option<MasterUserOptions>,
+    /// <p>Specifies the SAML application configuration for the domain.</p>
+    #[serde(rename = "SAMLOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub saml_options: Option<SAMLOptionsInput>,
 }
 
 /// <p> Specifies the status of advanced security options for the specified Elasticsearch domain.</p>
@@ -719,6 +727,18 @@ pub struct DissociatePackageResponse {
 /// <p>Options to configure endpoint for the Elasticsearch domain.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DomainEndpointOptions {
+    /// <p>Specify the fully qualified domain for your custom endpoint.</p>
+    #[serde(rename = "CustomEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_endpoint: Option<String>,
+    /// <p>Specify ACM certificate ARN for your custom endpoint.</p>
+    #[serde(rename = "CustomEndpointCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_endpoint_certificate_arn: Option<String>,
+    /// <p>Specify if custom endpoint should be enabled for the Elasticsearch domain.</p>
+    #[serde(rename = "CustomEndpointEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_endpoint_enabled: Option<bool>,
     /// <p>Specify if only HTTPS endpoint should be enabled for the Elasticsearch domain.</p>
     #[serde(rename = "EnforceHTTPS")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1745,6 +1765,77 @@ pub struct ReservedElasticsearchInstanceOffering {
     #[serde(rename = "UsagePrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub usage_price: Option<f64>,
+}
+
+/// <p>Specifies the SAML Identity Provider's information.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SAMLIdp {
+    /// <p>The unique Entity ID of the application in SAML Identity Provider.</p>
+    #[serde(rename = "EntityId")]
+    pub entity_id: String,
+    /// <p>The Metadata of the SAML application in xml format.</p>
+    #[serde(rename = "MetadataContent")]
+    pub metadata_content: String,
+}
+
+/// <p>Specifies the SAML application configuration for the domain.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SAMLOptionsInput {
+    /// <p>True if SAML is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>Specifies the SAML Identity Provider's information.</p>
+    #[serde(rename = "Idp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idp: Option<SAMLIdp>,
+    /// <p>The backend role to which the SAML master user is mapped to.</p>
+    #[serde(rename = "MasterBackendRole")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_backend_role: Option<String>,
+    /// <p>The SAML master username, which is stored in the Amazon Elasticsearch Service domain's internal database.</p>
+    #[serde(rename = "MasterUserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_name: Option<String>,
+    /// <p>The key to use for matching the SAML Roles attribute.</p>
+    #[serde(rename = "RolesKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub roles_key: Option<String>,
+    /// <p>The duration, in minutes, after which a user session becomes inactive. Acceptable values are between 1 and 1440, and the default value is 60.</p>
+    #[serde(rename = "SessionTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_timeout_minutes: Option<i64>,
+    /// <p>The key to use for matching the SAML Subject attribute.</p>
+    #[serde(rename = "SubjectKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_key: Option<String>,
+}
+
+/// <p>Describes the SAML application configured for the domain.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SAMLOptionsOutput {
+    /// <p>True if SAML is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>Describes the SAML Identity Provider's information.</p>
+    #[serde(rename = "Idp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idp: Option<SAMLIdp>,
+    /// <p>The key used for matching the SAML Roles attribute.</p>
+    #[serde(rename = "RolesKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub roles_key: Option<String>,
+    /// <p>The duration, in minutes, after which a user session becomes inactive.</p>
+    #[serde(rename = "SessionTimeoutMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_timeout_minutes: Option<i64>,
+    /// <p>The key used for matching the SAML Subject attribute.</p>
+    #[serde(rename = "SubjectKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_key: Option<String>,
 }
 
 /// <p>The current options of an Elasticsearch domain service software options.</p>

@@ -4183,7 +4183,7 @@ impl ListHostedZonesByNameResponseDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHostedZonesByVPCRequest {
-    /// <p>(Optional) The maximum number of hosted zones that you want Amazon Route 53 to return. If the specified VPC is associated with more than <code>MaxItems</code> hosted zones, the response includes a <code>NextToken</code> element. <code>NextToken</code> contains the hosted zone ID of the first hosted zone that Route 53 will return if you submit another request.</p>
+    /// <p>(Optional) The maximum number of hosted zones that you want Amazon Route 53 to return. If the specified VPC is associated with more than <code>MaxItems</code> hosted zones, the response includes a <code>NextToken</code> element. <code>NextToken</code> contains an encrypted token that identifies the first hosted zone that Route 53 will return if you submit another request.</p>
     pub max_items: Option<String>,
     /// <p>If the previous response included a <code>NextToken</code> element, the specified VPC is associated with more hosted zones. To get more hosted zones, submit another <code>ListHostedZonesByVPC</code> request. </p> <p>For the value of <code>NextToken</code>, specify the value of <code>NextToken</code> from the previous response.</p> <p>If the previous response didn't include a <code>NextToken</code> element, there are no more hosted zones to get.</p>
     pub next_token: Option<String>,
@@ -11160,7 +11160,7 @@ impl Error for UpdateTrafficPolicyInstanceError {}
 /// Trait representing the capabilities of the Route 53 API. Route 53 clients implement this trait.
 #[async_trait]
 pub trait Route53 {
-    /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <note> <p>To perform the association, the VPC and the private hosted zone must already exist. Also, you can&#39;t convert a public hosted zone into a private hosted zone.</p> </note> <p>If you want to associate a VPC that was created by one AWS account with a private hosted zone that was created by a different account, do one of the following:</p> <ul> <li> <p>Use the AWS account that created the private hosted zone to submit a <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateVPCAssociationAuthorization.html">CreateVPCAssociationAuthorization</a> request. Then use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> </li> <li> <p>If a subnet in the VPC was shared with another account, you can use the account that the subnet was shared with to submit an <code>AssociateVPCWithHostedZone</code> request. For more information about sharing subnets, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html">Working with Shared VPCs</a>.</p> </li> </ul></p>
+    /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can&#39;t convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note></p>
     async fn associate_vpc_with_hosted_zone(
         &self,
         input: AssociateVPCWithHostedZoneRequest,
@@ -11254,7 +11254,7 @@ pub trait Route53 {
         input: DeleteReusableDelegationSetRequest,
     ) -> Result<DeleteReusableDelegationSetResponse, RusotoError<DeleteReusableDelegationSetError>>;
 
-    /// <p>Deletes a traffic policy.</p>
+    /// <p><p>Deletes a traffic policy.</p> <p>When you delete a traffic policy, Route 53 sets a flag on the policy to indicate that it has been deleted. However, Route 53 never fully deletes the traffic policy. Note the following:</p> <ul> <li> <p>Deleted traffic policies aren&#39;t listed if you run <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListTrafficPolicies.html">ListTrafficPolicies</a>.</p> </li> <li> <p> There&#39;s no way to get a list of deleted policies.</p> </li> <li> <p>If you retain the ID of the policy, you can get information about the policy, including the traffic policy document, by running <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetTrafficPolicy.html">GetTrafficPolicy</a>.</p> </li> </ul></p>
     async fn delete_traffic_policy(
         &self,
         input: DeleteTrafficPolicyRequest,
@@ -11374,7 +11374,7 @@ pub trait Route53 {
         RusotoError<GetReusableDelegationSetLimitError>,
     >;
 
-    /// <p>Gets information about a specific traffic policy version.</p>
+    /// <p>Gets information about a specific traffic policy version.</p> <p>For information about how of deleting a traffic policy affects the response from <code>GetTrafficPolicy</code>, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteTrafficPolicy.html">DeleteTrafficPolicy</a>. </p>
     async fn get_traffic_policy(
         &self,
         input: GetTrafficPolicyRequest,
@@ -11455,7 +11455,7 @@ pub trait Route53 {
         input: ListTagsForResourcesRequest,
     ) -> Result<ListTagsForResourcesResponse, RusotoError<ListTagsForResourcesError>>;
 
-    /// <p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order that they were created in. </p>
+    /// <p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order that they were created in. </p> <p>For information about how of deleting a traffic policy affects the response from <code>ListTrafficPolicies</code>, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteTrafficPolicy.html">DeleteTrafficPolicy</a>. </p>
     async fn list_traffic_policies(
         &self,
         input: ListTrafficPoliciesRequest,
@@ -11570,7 +11570,7 @@ impl Route53Client {
 
 #[async_trait]
 impl Route53 for Route53Client {
-    /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <note> <p>To perform the association, the VPC and the private hosted zone must already exist. Also, you can&#39;t convert a public hosted zone into a private hosted zone.</p> </note> <p>If you want to associate a VPC that was created by one AWS account with a private hosted zone that was created by a different account, do one of the following:</p> <ul> <li> <p>Use the AWS account that created the private hosted zone to submit a <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_CreateVPCAssociationAuthorization.html">CreateVPCAssociationAuthorization</a> request. Then use the account that created the VPC to submit an <code>AssociateVPCWithHostedZone</code> request.</p> </li> <li> <p>If a subnet in the VPC was shared with another account, you can use the account that the subnet was shared with to submit an <code>AssociateVPCWithHostedZone</code> request. For more information about sharing subnets, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-sharing.html">Working with Shared VPCs</a>.</p> </li> </ul></p>
+    /// <p><p>Associates an Amazon VPC with a private hosted zone. </p> <important> <p>To perform the association, the VPC and the private hosted zone must already exist. You can&#39;t convert a public hosted zone into a private hosted zone.</p> </important> <note> <p>If you want to associate a VPC that was created by using one AWS account with a private hosted zone that was created by using a different account, the AWS account that created the private hosted zone must first submit a <code>CreateVPCAssociationAuthorization</code> request. Then the account that created the VPC must submit an <code>AssociateVPCWithHostedZone</code> request.</p> </note></p>
     #[allow(unused_variables, warnings)]
     async fn associate_vpc_with_hosted_zone(
         &self,
@@ -12078,7 +12078,7 @@ impl Route53 for Route53Client {
         Ok(result)
     }
 
-    /// <p>Deletes a traffic policy.</p>
+    /// <p><p>Deletes a traffic policy.</p> <p>When you delete a traffic policy, Route 53 sets a flag on the policy to indicate that it has been deleted. However, Route 53 never fully deletes the traffic policy. Note the following:</p> <ul> <li> <p>Deleted traffic policies aren&#39;t listed if you run <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_ListTrafficPolicies.html">ListTrafficPolicies</a>.</p> </li> <li> <p> There&#39;s no way to get a list of deleted policies.</p> </li> <li> <p>If you retain the ID of the policy, you can get information about the policy, including the traffic policy document, by running <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_GetTrafficPolicy.html">GetTrafficPolicy</a>.</p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     async fn delete_traffic_policy(
         &self,
@@ -12599,7 +12599,7 @@ impl Route53 for Route53Client {
         Ok(result)
     }
 
-    /// <p>Gets information about a specific traffic policy version.</p>
+    /// <p>Gets information about a specific traffic policy version.</p> <p>For information about how of deleting a traffic policy affects the response from <code>GetTrafficPolicy</code>, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteTrafficPolicy.html">DeleteTrafficPolicy</a>. </p>
     #[allow(unused_variables, warnings)]
     async fn get_traffic_policy(
         &self,
@@ -13048,7 +13048,7 @@ impl Route53 for Route53Client {
         Ok(result)
     }
 
-    /// <p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order that they were created in. </p>
+    /// <p>Gets information about the latest version for every traffic policy that is associated with the current AWS account. Policies are listed in the order that they were created in. </p> <p>For information about how of deleting a traffic policy affects the response from <code>ListTrafficPolicies</code>, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_DeleteTrafficPolicy.html">DeleteTrafficPolicy</a>. </p>
     #[allow(unused_variables, warnings)]
     async fn list_traffic_policies(
         &self,

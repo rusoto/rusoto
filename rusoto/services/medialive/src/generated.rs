@@ -101,12 +101,38 @@ pub struct Ac3Settings {
     pub metadata_control: Option<String>,
 }
 
+/// <p>Placeholder documentation for AcceptInputDeviceTransferRequest</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AcceptInputDeviceTransferRequest {
+    /// <p>The unique ID of the input device to accept. For example, hd-123456789abcdef.</p>
+    #[serde(rename = "InputDeviceId")]
+    pub input_device_id: String,
+}
+
+/// <p>Placeholder documentation for AcceptInputDeviceTransferResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AcceptInputDeviceTransferResponse {}
+
+/// <p>Ancillary Source Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AncillarySourceSettings {
+    /// <p>Specifies the number (1 to 4) of the captions channel you want to extract from the ancillary captions. If you plan to convert the ancillary captions to another format, complete this field. If you plan to choose Embedded as the captions destination in the output (to pass through all the channels in the ancillary captions), leave this field blank because MediaLive ignores the field.</p>
+    #[serde(rename = "SourceAncillaryChannelNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_ancillary_channel_number: Option<i64>,
+}
+
 /// <p>Archive Container Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArchiveContainerSettings {
     #[serde(rename = "M2tsSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_2ts_settings: Option<M2tsSettings>,
+    #[serde(rename = "RawSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub raw_settings: Option<RawSettings>,
 }
 
 /// <p>Archive Group Settings</p>
@@ -174,6 +200,9 @@ pub struct AudioCodecSettings {
     #[serde(rename = "PassThroughSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pass_through_settings: Option<PassThroughSettings>,
+    #[serde(rename = "WavSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub wav_settings: Option<WavSettings>,
 }
 
 /// <p>Audio Description</p>
@@ -201,7 +230,7 @@ pub struct AudioDescription {
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<AudioCodecSettings>,
-    /// <p>Indicates the language of the audio output track. Only used if languageControlMode is useConfigured, or there is no ISO 639 language code specified in the input.</p>
+    /// <p>RFC 5646 language code representing the language of the audio output track. Only used if languageControlMode is useConfigured, or there is no ISO 639 language code specified in the input.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
@@ -331,7 +360,7 @@ pub struct AudioTrack {
 /// <p>Audio Track Selection</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioTrackSelection {
-    /// <p>Selects one or more unique audio tracks from within an mp4 source.</p>
+    /// <p>Selects one or more unique audio tracks from within a source.</p>
     #[serde(rename = "Tracks")]
     pub tracks: Vec<AudioTrack>,
 }
@@ -339,6 +368,14 @@ pub struct AudioTrackSelection {
 /// <p>The settings for Automatic Input Failover.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AutomaticInputFailoverSettings {
+    /// <p>This clear time defines the requirement a recovered input must meet to be considered healthy. The input must have no failover conditions for this length of time. Enter a time in milliseconds. This value is particularly important if the input<em>preference for the failover pair is set to PRIMARY</em>INPUT_PREFERRED, because after this time, MediaLive will switch back to the primary input.</p>
+    #[serde(rename = "ErrorClearTimeMsec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_clear_time_msec: Option<i64>,
+    /// <p>A list of failover conditions. If any of these conditions occur, MediaLive will perform a failover to the other input.</p>
+    #[serde(rename = "FailoverConditions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failover_conditions: Option<Vec<FailoverCondition>>,
     /// <p>Input preference when deciding which input to make active when a previously failed input has recovered.</p>
     #[serde(rename = "InputPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -381,6 +418,64 @@ pub struct AvailSettings {
     pub scte_35_time_signal_apos: Option<Scte35TimeSignalApos>,
 }
 
+/// <p>A request to delete resources</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchDeleteRequest {
+    /// <p>List of channel IDs</p>
+    #[serde(rename = "ChannelIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_ids: Option<Vec<String>>,
+    /// <p>List of input IDs</p>
+    #[serde(rename = "InputIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_ids: Option<Vec<String>>,
+    /// <p>List of input security group IDs</p>
+    #[serde(rename = "InputSecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_security_group_ids: Option<Vec<String>>,
+    /// <p>List of multiplex IDs</p>
+    #[serde(rename = "MultiplexIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_ids: Option<Vec<String>>,
+}
+
+/// <p>Placeholder documentation for BatchDeleteResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchDeleteResponse {
+    /// <p>List of failed operations</p>
+    #[serde(rename = "Failed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed: Option<Vec<BatchFailedResultModel>>,
+    /// <p>List of successful operations</p>
+    #[serde(rename = "Successful")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub successful: Option<Vec<BatchSuccessfulResultModel>>,
+}
+
+/// <p>Details from a failed operation</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchFailedResultModel {
+    /// <p>ARN of the resource</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Error code for the failed operation</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>ID of the resource</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Error message for the failed operation</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
 /// <p>A list of schedule actions to create (in a request) or that have been created (in a response).</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -415,6 +510,80 @@ pub struct BatchScheduleActionDeleteResult {
     /// <p>List of actions that have been deleted from the schedule.</p>
     #[serde(rename = "ScheduleActions")]
     pub schedule_actions: Vec<ScheduleAction>,
+}
+
+/// <p>A request to start resources</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchStartRequest {
+    /// <p>List of channel IDs</p>
+    #[serde(rename = "ChannelIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_ids: Option<Vec<String>>,
+    /// <p>List of multiplex IDs</p>
+    #[serde(rename = "MultiplexIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_ids: Option<Vec<String>>,
+}
+
+/// <p>Placeholder documentation for BatchStartResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchStartResponse {
+    /// <p>List of failed operations</p>
+    #[serde(rename = "Failed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed: Option<Vec<BatchFailedResultModel>>,
+    /// <p>List of successful operations</p>
+    #[serde(rename = "Successful")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub successful: Option<Vec<BatchSuccessfulResultModel>>,
+}
+
+/// <p>A request to stop resources</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchStopRequest {
+    /// <p>List of channel IDs</p>
+    #[serde(rename = "ChannelIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_ids: Option<Vec<String>>,
+    /// <p>List of multiplex IDs</p>
+    #[serde(rename = "MultiplexIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multiplex_ids: Option<Vec<String>>,
+}
+
+/// <p>Placeholder documentation for BatchStopResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchStopResponse {
+    /// <p>List of failed operations</p>
+    #[serde(rename = "Failed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed: Option<Vec<BatchFailedResultModel>>,
+    /// <p>List of successful operations</p>
+    #[serde(rename = "Successful")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub successful: Option<Vec<BatchSuccessfulResultModel>>,
+}
+
+/// <p>Details from a successful operation</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchSuccessfulResultModel {
+    /// <p>ARN of the resource</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>ID of the resource</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Current state of the resource</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
 }
 
 /// <p>List of actions to create and list of actions to delete.</p>
@@ -546,6 +715,20 @@ pub struct BurnInDestinationSettings {
     pub y_position: Option<i64>,
 }
 
+/// <p>Placeholder documentation for CancelInputDeviceTransferRequest</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CancelInputDeviceTransferRequest {
+    /// <p>The unique ID of the input device to cancel. For example, hd-123456789abcdef.</p>
+    #[serde(rename = "InputDeviceId")]
+    pub input_device_id: String,
+}
+
+/// <p>Placeholder documentation for CancelInputDeviceTransferResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CancelInputDeviceTransferResponse {}
+
 /// <p>Caption Description</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionDescription {
@@ -581,6 +764,9 @@ pub struct CaptionDestinationSettings {
     #[serde(rename = "DvbSubDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dvb_sub_destination_settings: Option<DvbSubDestinationSettings>,
+    #[serde(rename = "EbuTtDDestinationSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ebu_tt_d_destination_settings: Option<EbuTtDDestinationSettings>,
     #[serde(rename = "EmbeddedDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embedded_destination_settings: Option<EmbeddedDestinationSettings>,
@@ -643,6 +829,9 @@ pub struct CaptionSelector {
 /// <p>Caption Selector Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionSelectorSettings {
+    #[serde(rename = "AncillarySourceSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ancillary_source_settings: Option<AncillarySourceSettings>,
     #[serde(rename = "AribSourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arib_source_settings: Option<AribSourceSettings>,
@@ -663,6 +852,15 @@ pub struct CaptionSelectorSettings {
     pub teletext_source_settings: Option<TeletextSourceSettings>,
 }
 
+/// <p>Placeholder documentation for CdiInputSpecification</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CdiInputSpecification {
+    /// <p>Maximum CDI input resolution</p>
+    #[serde(rename = "Resolution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolution: Option<String>,
+}
+
 /// <p>Placeholder documentation for Channel</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -671,6 +869,10 @@ pub struct Channel {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>Specification of CDI inputs for this channel</p>
+    #[serde(rename = "CdiInputSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdi_input_specification: Option<CdiInputSpecification>,
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -696,6 +898,7 @@ pub struct Channel {
     #[serde(rename = "InputAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_attachments: Option<Vec<InputAttachment>>,
+    /// <p>Specification of network and file inputs for this channel</p>
     #[serde(rename = "InputSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_specification: Option<InputSpecification>,
@@ -746,6 +949,10 @@ pub struct ChannelSummary {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>Specification of CDI inputs for this channel</p>
+    #[serde(rename = "CdiInputSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdi_input_specification: Option<CdiInputSpecification>,
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -768,6 +975,7 @@ pub struct ChannelSummary {
     #[serde(rename = "InputAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_attachments: Option<Vec<InputAttachment>>,
+    /// <p>Specification of network and file inputs for this channel</p>
     #[serde(rename = "InputSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_specification: Option<InputSpecification>,
@@ -804,6 +1012,10 @@ pub struct ColorSpacePassthroughSettings {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateChannelRequest {
+    /// <p>Specification of CDI inputs for this channel</p>
+    #[serde(rename = "CdiInputSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdi_input_specification: Option<CdiInputSpecification>,
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -818,7 +1030,7 @@ pub struct CreateChannelRequest {
     #[serde(rename = "InputAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_attachments: Option<Vec<InputAttachment>>,
-    /// <p>Specification of input for this channel (max. bitrate, resolution, codec, etc.)</p>
+    /// <p>Specification of network and file inputs for this channel</p>
     #[serde(rename = "InputSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_specification: Option<InputSpecification>,
@@ -1029,6 +1241,10 @@ pub struct DeleteChannelResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>Specification of CDI inputs for this channel</p>
+    #[serde(rename = "CdiInputSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdi_input_specification: Option<CdiInputSpecification>,
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1054,6 +1270,7 @@ pub struct DeleteChannelResponse {
     #[serde(rename = "InputAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_attachments: Option<Vec<InputAttachment>>,
+    /// <p>Specification of network and file inputs for this channel</p>
     #[serde(rename = "InputSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_specification: Option<InputSpecification>,
@@ -1142,6 +1359,10 @@ pub struct DeleteMultiplexProgramResponse {
     #[serde(rename = "PacketIdentifiersMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub packet_identifiers_map: Option<MultiplexProgramPacketIdentifiersMap>,
+    /// <p>Contains information about the current sources for the specified program in the specified multiplex. Keep in mind that each multiplex pipeline connects to both pipelines in a given source channel (the channel identified by the program). But only one of those channel pipelines is ever active at one time.</p>
+    #[serde(rename = "PipelineDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_details: Option<Vec<MultiplexProgramPipelineDetail>>,
     /// <p>The name of the multiplex program.</p>
     #[serde(rename = "ProgramName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1332,6 +1553,10 @@ pub struct DescribeChannelResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>Specification of CDI inputs for this channel</p>
+    #[serde(rename = "CdiInputSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdi_input_specification: Option<CdiInputSpecification>,
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1357,6 +1582,7 @@ pub struct DescribeChannelResponse {
     #[serde(rename = "InputAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_attachments: Option<Vec<InputAttachment>>,
+    /// <p>Specification of network and file inputs for this channel</p>
     #[serde(rename = "InputSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_specification: Option<InputSpecification>,
@@ -1442,6 +1668,33 @@ pub struct DescribeInputDeviceResponse {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>Placeholder documentation for DescribeInputDeviceThumbnailRequest</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeInputDeviceThumbnailRequest {
+    /// <p>The HTTP Accept header. Indicates the requested type for the thumbnail.</p>
+    #[serde(rename = "Accept")]
+    pub accept: String,
+    /// <p>The unique ID of this input device. For example, hd-123456789abcdef.</p>
+    #[serde(rename = "InputDeviceId")]
+    pub input_device_id: String,
+}
+
+/// <p>Placeholder documentation for DescribeInputDeviceThumbnailResponse</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct DescribeInputDeviceThumbnailResponse {
+    /// <p>The binary data for the thumbnail that the Link device has most recently sent to MediaLive.</p>
+    pub body: Option<bytes::Bytes>,
+    /// <p>The length of the content.</p>
+    pub content_length: Option<i64>,
+    /// <p>Specifies the media type of the thumbnail.</p>
+    pub content_type: Option<String>,
+    /// <p>The unique, cacheable version of this thumbnail.</p>
+    pub e_tag: Option<String>,
+    /// <p>The date and time the thumbnail was last updated at the device.</p>
+    pub last_modified: Option<f64>,
 }
 
 /// <p>Placeholder documentation for DescribeInputRequest</p>
@@ -1586,6 +1839,10 @@ pub struct DescribeMultiplexProgramResponse {
     #[serde(rename = "PacketIdentifiersMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub packet_identifiers_map: Option<MultiplexProgramPacketIdentifiersMap>,
+    /// <p>Contains information about the current sources for the specified program in the specified multiplex. Keep in mind that each multiplex pipeline connects to both pipelines in a given source channel (the channel identified by the program). But only one of those channel pipelines is ever active at one time.</p>
+    #[serde(rename = "PipelineDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_details: Option<Vec<MultiplexProgramPipelineDetail>>,
     /// <p>The name of the multiplex program.</p>
     #[serde(rename = "ProgramName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2034,6 +2291,40 @@ pub struct Eac3Settings {
     pub surround_mode: Option<String>,
 }
 
+/// <p>Ebu Tt DDestination Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EbuTtDDestinationSettings {
+    /// <p>Specifies how to handle the gap between the lines (in multi-line captions).</p>
+    ///
+    /// <ul>
+    /// <li>enabled: Fill with the captions background color (as specified in the input captions).</li>
+    /// <li>disabled: Leave the gap unfilled.</li>
+    /// </ul>
+    #[serde(rename = "FillLineGap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fill_line_gap: Option<String>,
+    /// <p>Specifies the font family to include in the font data attached to the EBU-TT captions. Valid only if styleControl is set to include. If you leave this field empty, the font family is set to &quot;monospaced&quot;. (If styleControl is set to exclude, the font family is always set to &quot;monospaced&quot;.)</p>
+    ///
+    /// <p>You specify only the font family. All other style information (color, bold, position and so on) is copied from the input captions. The size is always set to 100% to allow the downstream player to choose the size.</p>
+    ///
+    /// <ul>
+    /// <li>Enter a list of font families, as a comma-separated list of font names, in order of preference. The name can be a font family (such as “Arial”), or a generic font family (such as “serif”), or “default” (to let the downstream player choose the font).</li>
+    /// <li>Leave blank to set the family to “monospace”.</li>
+    /// </ul>
+    #[serde(rename = "FontFamily")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub font_family: Option<String>,
+    /// <p>Specifies the style information (font color, font position, and so on) to include in the font data that is attached to the EBU-TT captions.</p>
+    ///
+    /// <ul>
+    /// <li>include: Take the style information (font color, font position, and so on) from the source captions and include that information in the font data attached to the EBU-TT captions. This option is valid only if the source captions are Embedded or Teletext.</li>
+    /// <li>exclude: In the font data attached to the EBU-TT captions, set the font family to &quot;monospaced&quot;. Do not include any other style information.</li>
+    /// </ul>
+    #[serde(rename = "StyleControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub style_control: Option<String>,
+}
+
 /// <p>Embedded Destination Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmbeddedDestinationSettings {}
@@ -2105,6 +2396,24 @@ pub struct EncoderSettings {
     pub video_descriptions: Vec<VideoDescription>,
 }
 
+/// <p>Failover Condition settings. There can be multiple failover conditions inside AutomaticInputFailoverSettings.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct FailoverCondition {
+    /// <p>Failover condition type-specific settings.</p>
+    #[serde(rename = "FailoverConditionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failover_condition_settings: Option<FailoverConditionSettings>,
+}
+
+/// <p>Settings for one failover condition.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct FailoverConditionSettings {
+    /// <p>MediaLive will perform a failover if content is not detected in this input for the specified period.</p>
+    #[serde(rename = "InputLossSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_loss_settings: Option<InputLossFailoverSettings>,
+}
+
 /// <p>Feature Activations</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FeatureActivations {
@@ -2171,7 +2480,7 @@ pub struct FollowModeScheduleActionStartSettings {
 /// <p>Frame Capture Group Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FrameCaptureGroupSettings {
-    /// <p>The destination for the frame capture files. Either the URI for an Amazon S3 bucket and object, plus a file name prefix (for example, s3ssl://sportsDelivery/highlights/20180820/curling<em>) or the URI for a MediaStore container, plus a file name prefix (for example, mediastoressl://sportsDelivery/20180820/curling</em>). The final file names consist of the prefix from the destination field (for example, &quot;curling_&quot;) + name modifier + the counter (5 digits, starting from 00001) + extension (which is always .jpg).  For example, curlingLow.00001.jpg</p>
+    /// <p>The destination for the frame capture files. Either the URI for an Amazon S3 bucket and object, plus a file name prefix (for example, s3ssl://sportsDelivery/highlights/20180820/curling-) or the URI for a MediaStore container, plus a file name prefix (for example, mediastoressl://sportsDelivery/20180820/curling-). The final file names consist of the prefix from the destination field (for example, &quot;curling-&quot;) + name modifier + the counter (5 digits, starting from 00001) + extension (which is always .jpg).  For example, curling-low.00001.jpg</p>
     #[serde(rename = "Destination")]
     pub destination: OutputLocationRef,
 }
@@ -2469,6 +2778,14 @@ pub struct H265ColorSpaceSettings {
     pub rec_709_settings: Option<Rec709Settings>,
 }
 
+/// <p>H265 Filter Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct H265FilterSettings {
+    #[serde(rename = "TemporalFilterSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub temporal_filter_settings: Option<TemporalFilterSettings>,
+}
+
 /// <p>H265 Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H265Settings {
@@ -2500,6 +2817,10 @@ pub struct H265Settings {
     #[serde(rename = "ColorSpaceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_space_settings: Option<H265ColorSpaceSettings>,
+    /// <p>Optional filters that you can apply to an encode.</p>
+    #[serde(rename = "FilterSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_settings: Option<H265FilterSettings>,
     /// <p>Four bit AFD value to write on all frames of video in the output stream. Only valid when afdSignaling is set to &#39;Fixed&#39;.</p>
     #[serde(rename = "FixedAfd")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2570,6 +2891,10 @@ pub struct H265Settings {
     ///
     /// <p>CBR: Quality varies, depending on the video complexity. Recommended only if you distribute
     /// your assets to devices that cannot handle variable bitrates.</p>
+    ///
+    /// <p>Multiplex: This rate control mode is only supported (and is required) when the video is being
+    /// delivered to a MediaLive Multiplex in which case the rate control configuration is controlled
+    /// by the properties within the Multiplex Program.</p>
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rate_control_mode: Option<String>,
@@ -2743,6 +3068,12 @@ pub struct HlsGroupSettings {
     #[serde(rename = "DirectoryStructure")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_structure: Option<String>,
+    /// <p>Specifies whether to insert EXT-X-DISCONTINUITY tags in the HLS child manifests for this output group.
+    /// Typically, choose Insert because these tags are required in the manifest (according to the HLS specification) and serve an important purpose.
+    /// Choose Never Insert only if the downstream system is doing real-time failover (without using the MediaLive automatic failover feature) and only if that downstream system has advised you to exclude the tags.</p>
+    #[serde(rename = "DiscontinuityTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub discontinuity_tags: Option<String>,
     /// <p>Encrypts the segments with the given encryption scheme.  Exclude this parameter if no encryption is desired.</p>
     #[serde(rename = "EncryptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2761,7 +3092,15 @@ pub struct HlsGroupSettings {
     #[serde(rename = "IFrameOnlyPlaylists")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i_frame_only_playlists: Option<String>,
-    /// <p>Applies only if Mode field is LIVE. Specifies the maximum number of segments in the media manifest file. After this maximum, older segments are removed from the media manifest. This number must be less than or equal to the Keep Segments field.</p>
+    /// <p>Specifies whether to include the final (incomplete) segment in the media output when the pipeline stops producing output because of a channel stop, a channel pause or a loss of input to the pipeline.
+    /// Auto means that MediaLive decides whether to include the final segment, depending on the channel class and the types of output groups.
+    /// Suppress means to never include the incomplete segment. We recommend you choose Auto and let MediaLive control the behavior.</p>
+    #[serde(rename = "IncompleteSegmentBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub incomplete_segment_behavior: Option<String>,
+    /// <p>Applies only if Mode field is LIVE.</p>
+    ///
+    /// <p>Specifies the maximum number of segments in the media manifest file. After this maximum, older segments are removed from the media manifest. This number must be smaller than the number in the Keep Segments field.</p>
     #[serde(rename = "IndexNSegments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_n_segments: Option<i64>,
@@ -2777,7 +3116,11 @@ pub struct HlsGroupSettings {
     #[serde(rename = "IvSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iv_source: Option<String>,
-    /// <p>Applies only if Mode field is LIVE. Specifies the number of media segments (.ts files) to retain in the destination directory.</p>
+    /// <p>Applies only if Mode field is LIVE.</p>
+    ///
+    /// <p>Specifies the number of media segments to retain in the destination directory. This number should be bigger than indexNSegments (Num segments). We recommend (value = (2 x indexNsegments) + 1).</p>
+    ///
+    /// <p>If this &quot;keep segments&quot; number is too low, the following might happen: the player is still reading a media manifest file that lists this segment, but that segment has been removed from the destination directory (as directed by indexNSegments). This situation would result in a 404 HTTP error on the player.</p>
     #[serde(rename = "KeepSegments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub keep_segments: Option<i64>,
@@ -3343,12 +3686,22 @@ pub struct InputLossBehavior {
     pub repeat_frame_msec: Option<i64>,
 }
 
+/// <p>MediaLive will perform a failover if content is not detected in this input for the specified period.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct InputLossFailoverSettings {
+    /// <p>The amount of time (in milliseconds) that no input is detected. After that time, an input failover will occur.</p>
+    #[serde(rename = "InputLossThresholdMsec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_loss_threshold_msec: Option<i64>,
+}
+
 /// <p>Action to prepare an input for a future immediate input switch.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputPrepareScheduleActionSettings {
     /// <p>The name of the input attachment that should be prepared by this action. If no name is provided, the action will stop the most recent prepare (if any) when activated.</p>
     #[serde(rename = "InputAttachmentNameReference")]
-    pub input_attachment_name_reference: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_attachment_name_reference: Option<String>,
     /// <p>Settings to let you create a clip of the file input, in order to set up the input to ingest only a portion of the file.</p>
     #[serde(rename = "InputClippingSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3580,6 +3933,34 @@ pub struct ListChannelsResponse {
     pub next_token: Option<String>,
 }
 
+/// <p>Placeholder documentation for ListInputDeviceTransfersRequest</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListInputDeviceTransfersRequest {
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    #[serde(rename = "TransferType")]
+    pub transfer_type: String,
+}
+
+/// <p>Placeholder documentation for ListInputDeviceTransfersResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListInputDeviceTransfersResponse {
+    /// <p>The list of devices that you are transferring or are being transferred to you.</p>
+    #[serde(rename = "InputDeviceTransfers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_device_transfers: Option<Vec<TransferringInputDeviceSummary>>,
+    /// <p>A token to get additional list results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>Placeholder documentation for ListInputDevicesRequest</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3726,7 +4107,7 @@ pub struct ListOfferingsRequest {
     #[serde(rename = "ChannelConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_configuration: Option<String>,
-    /// <p>Filter by codec, &#39;AVC&#39;, &#39;HEVC&#39;, &#39;MPEG2&#39;, or &#39;AUDIO&#39;</p>
+    /// <p>Filter by codec, &#39;AVC&#39;, &#39;HEVC&#39;, &#39;MPEG2&#39;, &#39;AUDIO&#39;, or &#39;LINK&#39;</p>
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec: Option<String>,
@@ -3788,7 +4169,7 @@ pub struct ListReservationsRequest {
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_class: Option<String>,
-    /// <p>Filter by codec, &#39;AVC&#39;, &#39;HEVC&#39;, &#39;MPEG2&#39;, or &#39;AUDIO&#39;</p>
+    /// <p>Filter by codec, &#39;AVC&#39;, &#39;HEVC&#39;, &#39;MPEG2&#39;, &#39;AUDIO&#39;, or &#39;LINK&#39;</p>
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec: Option<String>,
@@ -3894,7 +4275,7 @@ pub struct M2tsSettings {
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
-    /// <p>If set to multiplex, use multiplex buffer model for accurate interleaving.  Setting to bufferModel to none can lead to lower latency, but low-memory devices may not be able to play back the stream without interruptions.</p>
+    /// <p>Controls the timing accuracy for output network traffic. Leave as MULTIPLEX to ensure accurate network packet timing. Or set to NONE, which might result in lower latency but will result in more variability in output network packet timing. This variability might cause interruptions, jitter, or bursty behavior in your playback or receiving devices.</p>
     #[serde(rename = "BufferModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub buffer_model: Option<String>,
@@ -4183,6 +4564,94 @@ pub struct Mp2Settings {
     pub sample_rate: Option<f64>,
 }
 
+/// <p>Mpeg2 Filter Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Mpeg2FilterSettings {
+    #[serde(rename = "TemporalFilterSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub temporal_filter_settings: Option<TemporalFilterSettings>,
+}
+
+/// <p>Mpeg2 Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Mpeg2Settings {
+    /// <p>Choose Off to disable adaptive quantization. Or choose another value to enable the quantizer and set its strength. The strengths are: Auto, Off, Low, Medium, High. When you enable this field, MediaLive allows intra-frame quantizers to vary, which might improve visual quality.</p>
+    #[serde(rename = "AdaptiveQuantization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub adaptive_quantization: Option<String>,
+    /// <p>Indicates the AFD values that MediaLive will write into the video encode. If you do not know what AFD signaling is, or if your downstream system has not given you guidance, choose AUTO.
+    /// AUTO: MediaLive will try to preserve the input AFD value (in cases where multiple AFD values are valid).
+    /// FIXED: MediaLive will use the value you specify in fixedAFD.</p>
+    #[serde(rename = "AfdSignaling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub afd_signaling: Option<String>,
+    /// <p>Specifies whether to include the color space metadata. The metadata describes the color space that applies to the video (the colorSpace field). We recommend that you insert the metadata.</p>
+    #[serde(rename = "ColorMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub color_metadata: Option<String>,
+    /// <p>Choose the type of color space conversion to apply to the output. For detailed information on setting up both the input and the output to obtain the desired color space in the output, see the section on &quot;MediaLive Features - Video - color space&quot; in the MediaLive User Guide.
+    /// PASSTHROUGH: Keep the color space of the input content - do not convert it.
+    /// AUTO:Convert all content that is SD to rec 601, and convert all content that is HD to rec 709.</p>
+    #[serde(rename = "ColorSpace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub color_space: Option<String>,
+    /// <p>Sets the pixel aspect ratio for the encode.</p>
+    #[serde(rename = "DisplayAspectRatio")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_aspect_ratio: Option<String>,
+    /// <p>Optionally specify a noise reduction filter, which can improve quality of compressed content. If you do not choose a filter, no filter will be applied.
+    /// TEMPORAL: This filter is useful for both source content that is noisy (when it has excessive digital artifacts) and source content that is clean.
+    /// When the content is noisy, the filter cleans up the source content before the encoding phase, with these two effects: First, it improves the output video quality because the content has been cleaned up. Secondly, it decreases the bandwidth because MediaLive does not waste bits on encoding noise.
+    /// When the content is reasonably clean, the filter tends to decrease the bitrate.</p>
+    #[serde(rename = "FilterSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_settings: Option<Mpeg2FilterSettings>,
+    /// <p>Complete this field only when afdSignaling is set to FIXED. Enter the AFD value (4 bits) to write on all frames of the video encode.</p>
+    #[serde(rename = "FixedAfd")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fixed_afd: Option<String>,
+    /// <p>description&quot;: &quot;The framerate denominator. For example, 1001. The framerate is the numerator divided by the denominator. For example, 24000 / 1001 = 23.976 FPS.</p>
+    #[serde(rename = "FramerateDenominator")]
+    pub framerate_denominator: i64,
+    /// <p>The framerate numerator. For example, 24000. The framerate is the numerator divided by the denominator. For example, 24000 / 1001 = 23.976 FPS.</p>
+    #[serde(rename = "FramerateNumerator")]
+    pub framerate_numerator: i64,
+    /// <p>MPEG2: default is open GOP.</p>
+    #[serde(rename = "GopClosedCadence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_closed_cadence: Option<i64>,
+    /// <p>Relates to the GOP structure. The number of B-frames between reference frames. If you do not know what a B-frame is, use the default.</p>
+    #[serde(rename = "GopNumBFrames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_num_b_frames: Option<i64>,
+    /// <p>Relates to the GOP structure. The GOP size (keyframe interval) in the units specified in gopSizeUnits. If you do not know what GOP is, use the default.
+    /// If gopSizeUnits is frames, then the gopSize must be an integer and must be greater than or equal to 1.
+    /// If gopSizeUnits is seconds, the gopSize must be greater than 0, but does not need to be an integer.</p>
+    #[serde(rename = "GopSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_size: Option<f64>,
+    /// <p>Relates to the GOP structure. Specifies whether the gopSize is specified in frames or seconds. If you do not plan to change the default gopSize, leave the default. If you specify SECONDS, MediaLive will internally convert the gop size to a frame count.</p>
+    #[serde(rename = "GopSizeUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_size_units: Option<String>,
+    /// <p>Set the scan type of the output to PROGRESSIVE or INTERLACED (top field first).</p>
+    #[serde(rename = "ScanType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_type: Option<String>,
+    /// <p>Relates to the GOP structure. If you do not know what GOP is, use the default.
+    /// FIXED: Set the number of B-frames in each sub-GOP to the value in gopNumBFrames.
+    /// DYNAMIC: Let MediaLive optimize the number of B-frames in each sub-GOP, to improve visual quality.</p>
+    #[serde(rename = "SubgopLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subgop_length: Option<String>,
+    /// <p>Determines how MediaLive inserts timecodes in the output video. For detailed information about setting up the input and the output for a timecode, see the section on &quot;MediaLive Features - Timecode configuration&quot; in the MediaLive User Guide.
+    /// DISABLED: do not include timecodes.
+    /// GOP_TIMECODE: Include timecode metadata in the GOP header.</p>
+    #[serde(rename = "TimecodeInsertion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timecode_insertion: Option<String>,
+}
+
 /// <p>Ms Smooth Group Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MsSmoothGroupSettings {
@@ -4383,6 +4852,10 @@ pub struct MultiplexProgram {
     #[serde(rename = "PacketIdentifiersMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub packet_identifiers_map: Option<MultiplexProgramPacketIdentifiersMap>,
+    /// <p>Contains information about the current sources for the specified program in the specified multiplex. Keep in mind that each multiplex pipeline connects to both pipelines in a given source channel (the channel identified by the program). But only one of those channel pipelines is ever active at one time.</p>
+    #[serde(rename = "PipelineDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_details: Option<Vec<MultiplexProgramPipelineDetail>>,
     /// <p>The name of the multiplex program.</p>
     #[serde(rename = "ProgramName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4446,6 +4919,20 @@ pub struct MultiplexProgramPacketIdentifiersMap {
     #[serde(rename = "VideoPid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_pid: Option<i64>,
+}
+
+/// <p>The current source for one of the pipelines in the multiplex.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MultiplexProgramPipelineDetail {
+    /// <p>Identifies the channel pipeline that is currently active for the pipeline (identified by PipelineId) in the multiplex.</p>
+    #[serde(rename = "ActiveChannelPipeline")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_channel_pipeline: Option<String>,
+    /// <p>Identifies a specific pipeline in the multiplex.</p>
+    #[serde(rename = "PipelineId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_id: Option<String>,
 }
 
 /// <p>Transport stream service descriptor configuration for the Multiplex program.</p>
@@ -4533,6 +5020,10 @@ pub struct MultiplexStatmuxVideoSettings {
     #[serde(rename = "MinimumBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_bitrate: Option<i64>,
+    /// <p>The purpose of the priority is to use a combination of the\nmultiplex rate control algorithm and the QVBR capability of the\nencoder to prioritize the video quality of some channels in a\nmultiplex over others.  Channels that have a higher priority will\nget higher video quality at the expense of the video quality of\nother channels in the multiplex with lower priority.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
 }
 
 /// <p>Placeholder documentation for MultiplexSummary</p>
@@ -4889,6 +5380,10 @@ pub struct PurchaseOfferingResponse {
     pub reservation: Option<Reservation>,
 }
 
+/// <p>Raw Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct RawSettings {}
+
 /// <p>Rec601 Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Rec601Settings {}
@@ -4896,6 +5391,20 @@ pub struct Rec601Settings {}
 /// <p>Rec709 Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Rec709Settings {}
+
+/// <p>Placeholder documentation for RejectInputDeviceTransferRequest</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RejectInputDeviceTransferRequest {
+    /// <p>The unique ID of the input device to reject. For example, hd-123456789abcdef.</p>
+    #[serde(rename = "InputDeviceId")]
+    pub input_device_id: String,
+}
+
+/// <p>Placeholder documentation for RejectInputDeviceTransferResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RejectInputDeviceTransferResponse {}
 
 /// <p>Remix Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -5373,6 +5882,10 @@ pub struct StartChannelResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>Specification of CDI inputs for this channel</p>
+    #[serde(rename = "CdiInputSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdi_input_specification: Option<CdiInputSpecification>,
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5398,6 +5911,7 @@ pub struct StartChannelResponse {
     #[serde(rename = "InputAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_attachments: Option<Vec<InputAttachment>>,
+    /// <p>Specification of network and file inputs for this channel</p>
     #[serde(rename = "InputSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_specification: Option<InputSpecification>,
@@ -5580,6 +6094,10 @@ pub struct StopChannelResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>Specification of CDI inputs for this channel</p>
+    #[serde(rename = "CdiInputSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdi_input_specification: Option<CdiInputSpecification>,
     /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
     #[serde(rename = "ChannelClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5605,6 +6123,7 @@ pub struct StopChannelResponse {
     #[serde(rename = "InputAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_attachments: Option<Vec<InputAttachment>>,
+    /// <p>Specification of network and file inputs for this channel</p>
     #[serde(rename = "InputSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_specification: Option<InputSpecification>,
@@ -5748,6 +6267,50 @@ pub struct TimecodeConfig {
     pub sync_threshold: Option<i64>,
 }
 
+/// <p>A request to transfer an input device.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TransferInputDeviceRequest {
+    /// <p>The unique ID of this input device. For example, hd-123456789abcdef.</p>
+    #[serde(rename = "InputDeviceId")]
+    pub input_device_id: String,
+    /// <p>The AWS account ID (12 digits) for the recipient of the device transfer.</p>
+    #[serde(rename = "TargetCustomerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_customer_id: Option<String>,
+    /// <p>An optional message for the recipient. Maximum 280 characters.</p>
+    #[serde(rename = "TransferMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transfer_message: Option<String>,
+}
+
+/// <p>Placeholder documentation for TransferInputDeviceResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TransferInputDeviceResponse {}
+
+/// <p>Details about the input device that is being transferred.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TransferringInputDeviceSummary {
+    /// <p>The unique ID of the input device.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The optional message that the sender has attached to the transfer.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The AWS account ID for the recipient of the input device transfer.</p>
+    #[serde(rename = "TargetCustomerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_customer_id: Option<String>,
+    /// <p>The type (direction) of the input device transfer.</p>
+    #[serde(rename = "TransferType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transfer_type: Option<String>,
+}
+
 /// <p>Ttml Destination Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TtmlDestinationSettings {
@@ -5829,6 +6392,10 @@ pub struct UpdateChannelClassResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateChannelRequest {
+    /// <p>Specification of CDI inputs for this channel</p>
+    #[serde(rename = "CdiInputSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdi_input_specification: Option<CdiInputSpecification>,
     /// <p>channel ID</p>
     #[serde(rename = "ChannelId")]
     pub channel_id: String,
@@ -5843,7 +6410,7 @@ pub struct UpdateChannelRequest {
     #[serde(rename = "InputAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_attachments: Option<Vec<InputAttachment>>,
-    /// <p>Specification of input for this channel (max. bitrate, resolution, codec, etc.)</p>
+    /// <p>Specification of network and file inputs for this channel</p>
     #[serde(rename = "InputSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_specification: Option<InputSpecification>,
@@ -6105,6 +6672,9 @@ pub struct VideoCodecSettings {
     #[serde(rename = "H265Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub h265_settings: Option<H265Settings>,
+    #[serde(rename = "Mpeg2Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mpeg_2_settings: Option<Mpeg2Settings>,
 }
 
 /// <p>Video settings for this stream.</p>
@@ -6121,7 +6691,10 @@ pub struct VideoDescription {
     /// <p>The name of this VideoDescription. Outputs will use this name to uniquely identify this Description.  Description names should be unique within this Live Event.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Indicates how to respond to the AFD values in the input stream. RESPOND causes input video to be clipped, depending on the AFD value, input display aspect ratio, and output display aspect ratio, and (except for FRAME<em>CAPTURE codec) includes the values in the output. PASSTHROUGH (does not apply to FRAME</em>CAPTURE codec) ignores the AFD values and includes the values in the output, so input video is not clipped. NONE ignores the AFD values and does not include the values through to the output, so input video is not clipped.</p>
+    /// <p>Indicates how MediaLive will respond to the AFD values that might be in the input video. If you do not know what AFD signaling is, or if your downstream system has not given you guidance, choose PASSTHROUGH.
+    /// RESPOND: MediaLive clips the input video using a formula that uses the AFD values (configured in afdSignaling ), the input display aspect ratio, and the output display aspect ratio. MediaLive also includes the AFD values in the output, unless the codec for this encode is FRAME_CAPTURE.
+    /// PASSTHROUGH: MediaLive ignores the AFD values and does not clip the video. But MediaLive does include the values in the output.
+    /// NONE: MediaLive does not clip the input video and does not include the AFD values in the output</p>
     #[serde(rename = "RespondToAfd")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub respond_to_afd: Option<String>,
@@ -6185,10 +6758,337 @@ pub struct VideoSelectorSettings {
     pub video_selector_program_id: Option<VideoSelectorProgramId>,
 }
 
+/// <p>Wav Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct WavSettings {
+    /// <p>Bits per sample.</p>
+    #[serde(rename = "BitDepth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bit_depth: Option<f64>,
+    /// <p>The audio coding mode for the WAV audio. The mode determines the number of channels in the audio.</p>
+    #[serde(rename = "CodingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub coding_mode: Option<String>,
+    /// <p>Sample rate in Hz.</p>
+    #[serde(rename = "SampleRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_rate: Option<f64>,
+}
+
 /// <p>Webvtt Destination Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct WebvttDestinationSettings {}
 
+/// Errors returned by AcceptInputDeviceTransfer
+#[derive(Debug, PartialEq)]
+pub enum AcceptInputDeviceTransferError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+}
+
+impl AcceptInputDeviceTransferError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptInputDeviceTransferError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(AcceptInputDeviceTransferError::BadGateway(
+                        err.msg,
+                    ))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(AcceptInputDeviceTransferError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(AcceptInputDeviceTransferError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(AcceptInputDeviceTransferError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(AcceptInputDeviceTransferError::GatewayTimeout(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        AcceptInputDeviceTransferError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(AcceptInputDeviceTransferError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(AcceptInputDeviceTransferError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(
+                        AcceptInputDeviceTransferError::UnprocessableEntity(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AcceptInputDeviceTransferError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AcceptInputDeviceTransferError::BadGateway(ref cause) => write!(f, "{}", cause),
+            AcceptInputDeviceTransferError::BadRequest(ref cause) => write!(f, "{}", cause),
+            AcceptInputDeviceTransferError::Conflict(ref cause) => write!(f, "{}", cause),
+            AcceptInputDeviceTransferError::Forbidden(ref cause) => write!(f, "{}", cause),
+            AcceptInputDeviceTransferError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            AcceptInputDeviceTransferError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AcceptInputDeviceTransferError::NotFound(ref cause) => write!(f, "{}", cause),
+            AcceptInputDeviceTransferError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            AcceptInputDeviceTransferError::UnprocessableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AcceptInputDeviceTransferError {}
+/// Errors returned by BatchDelete
+#[derive(Debug, PartialEq)]
+pub enum BatchDeleteError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl BatchDeleteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(BatchDeleteError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(BatchDeleteError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(BatchDeleteError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(BatchDeleteError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(BatchDeleteError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(BatchDeleteError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(BatchDeleteError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(BatchDeleteError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchDeleteError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchDeleteError::BadGateway(ref cause) => write!(f, "{}", cause),
+            BatchDeleteError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchDeleteError::Conflict(ref cause) => write!(f, "{}", cause),
+            BatchDeleteError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchDeleteError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            BatchDeleteError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BatchDeleteError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchDeleteError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchDeleteError {}
+/// Errors returned by BatchStart
+#[derive(Debug, PartialEq)]
+pub enum BatchStartError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl BatchStartError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchStartError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(BatchStartError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(BatchStartError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(BatchStartError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(BatchStartError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(BatchStartError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(BatchStartError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(BatchStartError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(BatchStartError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchStartError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchStartError::BadGateway(ref cause) => write!(f, "{}", cause),
+            BatchStartError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchStartError::Conflict(ref cause) => write!(f, "{}", cause),
+            BatchStartError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchStartError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            BatchStartError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BatchStartError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchStartError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchStartError {}
+/// Errors returned by BatchStop
+#[derive(Debug, PartialEq)]
+pub enum BatchStopError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl BatchStopError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchStopError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(BatchStopError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(BatchStopError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(BatchStopError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(BatchStopError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(BatchStopError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(BatchStopError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(BatchStopError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(BatchStopError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchStopError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchStopError::BadGateway(ref cause) => write!(f, "{}", cause),
+            BatchStopError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchStopError::Conflict(ref cause) => write!(f, "{}", cause),
+            BatchStopError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchStopError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            BatchStopError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            BatchStopError::NotFound(ref cause) => write!(f, "{}", cause),
+            BatchStopError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchStopError {}
 /// Errors returned by BatchUpdateSchedule
 #[derive(Debug, PartialEq)]
 pub enum BatchUpdateScheduleError {
@@ -6265,6 +7165,100 @@ impl fmt::Display for BatchUpdateScheduleError {
     }
 }
 impl Error for BatchUpdateScheduleError {}
+/// Errors returned by CancelInputDeviceTransfer
+#[derive(Debug, PartialEq)]
+pub enum CancelInputDeviceTransferError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+}
+
+impl CancelInputDeviceTransferError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelInputDeviceTransferError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(CancelInputDeviceTransferError::BadGateway(
+                        err.msg,
+                    ))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(CancelInputDeviceTransferError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CancelInputDeviceTransferError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CancelInputDeviceTransferError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(CancelInputDeviceTransferError::GatewayTimeout(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        CancelInputDeviceTransferError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CancelInputDeviceTransferError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CancelInputDeviceTransferError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(
+                        CancelInputDeviceTransferError::UnprocessableEntity(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CancelInputDeviceTransferError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CancelInputDeviceTransferError::BadGateway(ref cause) => write!(f, "{}", cause),
+            CancelInputDeviceTransferError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CancelInputDeviceTransferError::Conflict(ref cause) => write!(f, "{}", cause),
+            CancelInputDeviceTransferError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CancelInputDeviceTransferError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            CancelInputDeviceTransferError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CancelInputDeviceTransferError::NotFound(ref cause) => write!(f, "{}", cause),
+            CancelInputDeviceTransferError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            CancelInputDeviceTransferError::UnprocessableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CancelInputDeviceTransferError {}
 /// Errors returned by CreateChannel
 #[derive(Debug, PartialEq)]
 pub enum CreateChannelError {
@@ -7417,6 +8411,90 @@ impl fmt::Display for DescribeInputDeviceError {
     }
 }
 impl Error for DescribeInputDeviceError {}
+/// Errors returned by DescribeInputDeviceThumbnail
+#[derive(Debug, PartialEq)]
+pub enum DescribeInputDeviceThumbnailError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl DescribeInputDeviceThumbnailError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeInputDeviceThumbnailError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(DescribeInputDeviceThumbnailError::BadGateway(
+                        err.msg,
+                    ))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeInputDeviceThumbnailError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeInputDeviceThumbnailError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(DescribeInputDeviceThumbnailError::GatewayTimeout(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        DescribeInputDeviceThumbnailError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeInputDeviceThumbnailError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        DescribeInputDeviceThumbnailError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeInputDeviceThumbnailError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeInputDeviceThumbnailError::BadGateway(ref cause) => write!(f, "{}", cause),
+            DescribeInputDeviceThumbnailError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DescribeInputDeviceThumbnailError::Forbidden(ref cause) => write!(f, "{}", cause),
+            DescribeInputDeviceThumbnailError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            DescribeInputDeviceThumbnailError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeInputDeviceThumbnailError::NotFound(ref cause) => write!(f, "{}", cause),
+            DescribeInputDeviceThumbnailError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeInputDeviceThumbnailError {}
 /// Errors returned by DescribeInputSecurityGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeInputSecurityGroupError {
@@ -7903,6 +8981,80 @@ impl fmt::Display for ListChannelsError {
     }
 }
 impl Error for ListChannelsError {}
+/// Errors returned by ListInputDeviceTransfers
+#[derive(Debug, PartialEq)]
+pub enum ListInputDeviceTransfersError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+}
+
+impl ListInputDeviceTransfersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInputDeviceTransfersError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(ListInputDeviceTransfersError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(ListInputDeviceTransfersError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListInputDeviceTransfersError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(ListInputDeviceTransfersError::GatewayTimeout(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        ListInputDeviceTransfersError::InternalServerError(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListInputDeviceTransfersError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(
+                        ListInputDeviceTransfersError::UnprocessableEntity(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListInputDeviceTransfersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListInputDeviceTransfersError::BadGateway(ref cause) => write!(f, "{}", cause),
+            ListInputDeviceTransfersError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListInputDeviceTransfersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListInputDeviceTransfersError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            ListInputDeviceTransfersError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListInputDeviceTransfersError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ListInputDeviceTransfersError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListInputDeviceTransfersError {}
 /// Errors returned by ListInputDevices
 #[derive(Debug, PartialEq)]
 pub enum ListInputDevicesError {
@@ -8469,6 +9621,100 @@ impl fmt::Display for PurchaseOfferingError {
     }
 }
 impl Error for PurchaseOfferingError {}
+/// Errors returned by RejectInputDeviceTransfer
+#[derive(Debug, PartialEq)]
+pub enum RejectInputDeviceTransferError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+}
+
+impl RejectInputDeviceTransferError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectInputDeviceTransferError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(RejectInputDeviceTransferError::BadGateway(
+                        err.msg,
+                    ))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(RejectInputDeviceTransferError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(RejectInputDeviceTransferError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(RejectInputDeviceTransferError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(RejectInputDeviceTransferError::GatewayTimeout(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        RejectInputDeviceTransferError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(RejectInputDeviceTransferError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(RejectInputDeviceTransferError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(
+                        RejectInputDeviceTransferError::UnprocessableEntity(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RejectInputDeviceTransferError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RejectInputDeviceTransferError::BadGateway(ref cause) => write!(f, "{}", cause),
+            RejectInputDeviceTransferError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RejectInputDeviceTransferError::Conflict(ref cause) => write!(f, "{}", cause),
+            RejectInputDeviceTransferError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RejectInputDeviceTransferError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            RejectInputDeviceTransferError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RejectInputDeviceTransferError::NotFound(ref cause) => write!(f, "{}", cause),
+            RejectInputDeviceTransferError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            RejectInputDeviceTransferError::UnprocessableEntity(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for RejectInputDeviceTransferError {}
 /// Errors returned by StartChannel
 #[derive(Debug, PartialEq)]
 pub enum StartChannelError {
@@ -8757,6 +10003,88 @@ impl fmt::Display for StopMultiplexError {
     }
 }
 impl Error for StopMultiplexError {}
+/// Errors returned by TransferInputDevice
+#[derive(Debug, PartialEq)]
+pub enum TransferInputDeviceError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+}
+
+impl TransferInputDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TransferInputDeviceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(TransferInputDeviceError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(TransferInputDeviceError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(TransferInputDeviceError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(TransferInputDeviceError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(TransferInputDeviceError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(TransferInputDeviceError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TransferInputDeviceError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(TransferInputDeviceError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(TransferInputDeviceError::UnprocessableEntity(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TransferInputDeviceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TransferInputDeviceError::BadGateway(ref cause) => write!(f, "{}", cause),
+            TransferInputDeviceError::BadRequest(ref cause) => write!(f, "{}", cause),
+            TransferInputDeviceError::Conflict(ref cause) => write!(f, "{}", cause),
+            TransferInputDeviceError::Forbidden(ref cause) => write!(f, "{}", cause),
+            TransferInputDeviceError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            TransferInputDeviceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TransferInputDeviceError::NotFound(ref cause) => write!(f, "{}", cause),
+            TransferInputDeviceError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            TransferInputDeviceError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TransferInputDeviceError {}
 /// Errors returned by UpdateChannel
 #[derive(Debug, PartialEq)]
 pub enum UpdateChannelError {
@@ -9344,11 +10672,41 @@ impl Error for UpdateReservationError {}
 /// Trait representing the capabilities of the MediaLive API. MediaLive clients implement this trait.
 #[async_trait]
 pub trait MediaLive {
+    /// <p>Accept an incoming input device transfer. The ownership of the device will transfer to your AWS account.</p>
+    async fn accept_input_device_transfer(
+        &self,
+        input: AcceptInputDeviceTransferRequest,
+    ) -> Result<AcceptInputDeviceTransferResponse, RusotoError<AcceptInputDeviceTransferError>>;
+
+    /// <p>Starts delete of resources.</p>
+    async fn batch_delete(
+        &self,
+        input: BatchDeleteRequest,
+    ) -> Result<BatchDeleteResponse, RusotoError<BatchDeleteError>>;
+
+    /// <p>Starts existing resources</p>
+    async fn batch_start(
+        &self,
+        input: BatchStartRequest,
+    ) -> Result<BatchStartResponse, RusotoError<BatchStartError>>;
+
+    /// <p>Stops running resources</p>
+    async fn batch_stop(
+        &self,
+        input: BatchStopRequest,
+    ) -> Result<BatchStopResponse, RusotoError<BatchStopError>>;
+
     /// <p>Update a channel schedule</p>
     async fn batch_update_schedule(
         &self,
         input: BatchUpdateScheduleRequest,
     ) -> Result<BatchUpdateScheduleResponse, RusotoError<BatchUpdateScheduleError>>;
+
+    /// <p>Cancel an input device transfer that you have requested.</p>
+    async fn cancel_input_device_transfer(
+        &self,
+        input: CancelInputDeviceTransferRequest,
+    ) -> Result<CancelInputDeviceTransferResponse, RusotoError<CancelInputDeviceTransferError>>;
 
     /// <p>Creates a new channel</p>
     async fn create_channel(
@@ -9452,6 +10810,12 @@ pub trait MediaLive {
         input: DescribeInputDeviceRequest,
     ) -> Result<DescribeInputDeviceResponse, RusotoError<DescribeInputDeviceError>>;
 
+    /// <p>Get the latest thumbnail data for the input device.</p>
+    async fn describe_input_device_thumbnail(
+        &self,
+        input: DescribeInputDeviceThumbnailRequest,
+    ) -> Result<DescribeInputDeviceThumbnailResponse, RusotoError<DescribeInputDeviceThumbnailError>>;
+
     /// <p>Produces a summary of an Input Security Group</p>
     async fn describe_input_security_group(
         &self,
@@ -9493,6 +10857,12 @@ pub trait MediaLive {
         &self,
         input: ListChannelsRequest,
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>>;
+
+    /// <p>List input devices that are currently being transferred. List input devices that you are transferring from your AWS account or input devices that another AWS account is transferring to you.</p>
+    async fn list_input_device_transfers(
+        &self,
+        input: ListInputDeviceTransfersRequest,
+    ) -> Result<ListInputDeviceTransfersResponse, RusotoError<ListInputDeviceTransfersError>>;
 
     /// <p>List input devices</p>
     async fn list_input_devices(
@@ -9548,6 +10918,12 @@ pub trait MediaLive {
         input: PurchaseOfferingRequest,
     ) -> Result<PurchaseOfferingResponse, RusotoError<PurchaseOfferingError>>;
 
+    /// <p>Reject the transfer of the specified input device to your AWS account.</p>
+    async fn reject_input_device_transfer(
+        &self,
+        input: RejectInputDeviceTransferRequest,
+    ) -> Result<RejectInputDeviceTransferResponse, RusotoError<RejectInputDeviceTransferError>>;
+
     /// <p>Starts an existing channel</p>
     async fn start_channel(
         &self,
@@ -9571,6 +10947,12 @@ pub trait MediaLive {
         &self,
         input: StopMultiplexRequest,
     ) -> Result<StopMultiplexResponse, RusotoError<StopMultiplexError>>;
+
+    /// <p>Start an input device transfer to another AWS account. After you make the request, the other account must accept or reject the transfer.</p>
+    async fn transfer_input_device(
+        &self,
+        input: TransferInputDeviceRequest,
+    ) -> Result<TransferInputDeviceResponse, RusotoError<TransferInputDeviceError>>;
 
     /// <p>Updates a channel.</p>
     async fn update_channel(
@@ -9660,6 +11042,131 @@ impl MediaLiveClient {
 
 #[async_trait]
 impl MediaLive for MediaLiveClient {
+    /// <p>Accept an incoming input device transfer. The ownership of the device will transfer to your AWS account.</p>
+    #[allow(unused_mut)]
+    async fn accept_input_device_transfer(
+        &self,
+        input: AcceptInputDeviceTransferRequest,
+    ) -> Result<AcceptInputDeviceTransferResponse, RusotoError<AcceptInputDeviceTransferError>>
+    {
+        let request_uri = format!(
+            "/prod/inputDevices/{input_device_id}/accept",
+            input_device_id = input.input_device_id
+        );
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AcceptInputDeviceTransferResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AcceptInputDeviceTransferError::from_response(response))
+        }
+    }
+
+    /// <p>Starts delete of resources.</p>
+    #[allow(unused_mut)]
+    async fn batch_delete(
+        &self,
+        input: BatchDeleteRequest,
+    ) -> Result<BatchDeleteResponse, RusotoError<BatchDeleteError>> {
+        let request_uri = "/prod/batch/delete";
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchDeleteResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchDeleteError::from_response(response))
+        }
+    }
+
+    /// <p>Starts existing resources</p>
+    #[allow(unused_mut)]
+    async fn batch_start(
+        &self,
+        input: BatchStartRequest,
+    ) -> Result<BatchStartResponse, RusotoError<BatchStartError>> {
+        let request_uri = "/prod/batch/start";
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchStartResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchStartError::from_response(response))
+        }
+    }
+
+    /// <p>Stops running resources</p>
+    #[allow(unused_mut)]
+    async fn batch_stop(
+        &self,
+        input: BatchStopRequest,
+    ) -> Result<BatchStopResponse, RusotoError<BatchStopError>> {
+        let request_uri = "/prod/batch/stop";
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchStopResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchStopError::from_response(response))
+        }
+    }
+
     /// <p>Update a channel schedule</p>
     #[allow(unused_mut)]
     async fn batch_update_schedule(
@@ -9691,6 +11198,38 @@ impl MediaLive for MediaLiveClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(BatchUpdateScheduleError::from_response(response))
+        }
+    }
+
+    /// <p>Cancel an input device transfer that you have requested.</p>
+    #[allow(unused_mut)]
+    async fn cancel_input_device_transfer(
+        &self,
+        input: CancelInputDeviceTransferRequest,
+    ) -> Result<CancelInputDeviceTransferResponse, RusotoError<CancelInputDeviceTransferError>>
+    {
+        let request_uri = format!(
+            "/prod/inputDevices/{input_device_id}/cancel",
+            input_device_id = input.input_device_id
+        );
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CancelInputDeviceTransferResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CancelInputDeviceTransferError::from_response(response))
         }
     }
 
@@ -10220,6 +11759,52 @@ impl MediaLive for MediaLiveClient {
         }
     }
 
+    /// <p>Get the latest thumbnail data for the input device.</p>
+    #[allow(unused_mut)]
+    async fn describe_input_device_thumbnail(
+        &self,
+        input: DescribeInputDeviceThumbnailRequest,
+    ) -> Result<DescribeInputDeviceThumbnailResponse, RusotoError<DescribeInputDeviceThumbnailError>>
+    {
+        let request_uri = format!(
+            "/prod/inputDevices/{input_device_id}/thumbnailData",
+            input_device_id = input.input_device_id
+        );
+
+        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_header("accept", &input.accept.to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+
+            let mut result = DescribeInputDeviceThumbnailResponse::default();
+            result.body = Some(response.body);
+
+            result.content_length = response
+                .headers
+                .remove("Content-Length")
+                .map(|value| value.parse::<i64>().unwrap());
+            result.content_type = response.headers.remove("Content-Type");
+            result.e_tag = response.headers.remove("ETag");
+            result.last_modified = response
+                .headers
+                .remove("Last-Modified")
+                .map(|value| value.parse::<f64>().unwrap());
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeInputDeviceThumbnailError::from_response(response))
+        }
+    }
+
     /// <p>Produces a summary of an Input Security Group</p>
     #[allow(unused_mut)]
     async fn describe_input_security_group(
@@ -10451,6 +12036,44 @@ impl MediaLive for MediaLiveClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListChannelsError::from_response(response))
+        }
+    }
+
+    /// <p>List input devices that are currently being transferred. List input devices that you are transferring from your AWS account or input devices that another AWS account is transferring to you.</p>
+    #[allow(unused_mut)]
+    async fn list_input_device_transfers(
+        &self,
+        input: ListInputDeviceTransfersRequest,
+    ) -> Result<ListInputDeviceTransfersResponse, RusotoError<ListInputDeviceTransfersError>> {
+        let request_uri = "/prod/inputDeviceTransfers";
+
+        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        params.put("transferType", &input.transfer_type);
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListInputDeviceTransfersResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListInputDeviceTransfersError::from_response(response))
         }
     }
 
@@ -10835,6 +12458,38 @@ impl MediaLive for MediaLiveClient {
         }
     }
 
+    /// <p>Reject the transfer of the specified input device to your AWS account.</p>
+    #[allow(unused_mut)]
+    async fn reject_input_device_transfer(
+        &self,
+        input: RejectInputDeviceTransferRequest,
+    ) -> Result<RejectInputDeviceTransferResponse, RusotoError<RejectInputDeviceTransferError>>
+    {
+        let request_uri = format!(
+            "/prod/inputDevices/{input_device_id}/reject",
+            input_device_id = input.input_device_id
+        );
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RejectInputDeviceTransferResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RejectInputDeviceTransferError::from_response(response))
+        }
+    }
+
     /// <p>Starts an existing channel</p>
     #[allow(unused_mut)]
     async fn start_channel(
@@ -10956,6 +12611,40 @@ impl MediaLive for MediaLiveClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(StopMultiplexError::from_response(response))
+        }
+    }
+
+    /// <p>Start an input device transfer to another AWS account. After you make the request, the other account must accept or reject the transfer.</p>
+    #[allow(unused_mut)]
+    async fn transfer_input_device(
+        &self,
+        input: TransferInputDeviceRequest,
+    ) -> Result<TransferInputDeviceResponse, RusotoError<TransferInputDeviceError>> {
+        let request_uri = format!(
+            "/prod/inputDevices/{input_device_id}/transfer",
+            input_device_id = input.input_device_id
+        );
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TransferInputDeviceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TransferInputDeviceError::from_response(response))
         }
     }
 

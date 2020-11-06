@@ -593,11 +593,11 @@ pub struct CreateLagRequest {
     #[serde(rename = "childConnectionTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub child_connection_tags: Option<Vec<Tag>>,
-    /// <p>The ID of an existing connection to migrate to the LAG.</p>
+    /// <p>The ID of an existing dedicated connection to migrate to the LAG.</p>
     #[serde(rename = "connectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The bandwidth of the individual physical connections bundled by the LAG. The possible values are 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, 500Mbps, 1Gbps, 2Gbps, 5Gbps, and 10Gbps. </p>
+    /// <p>The bandwidth of the individual physical dedicated connections bundled by the LAG. The possible values are 1Gbps and 10Gbps. </p>
     #[serde(rename = "connectionsBandwidth")]
     pub connections_bandwidth: String,
     /// <p>The name of the LAG.</p>
@@ -606,7 +606,7 @@ pub struct CreateLagRequest {
     /// <p>The location for the LAG.</p>
     #[serde(rename = "location")]
     pub location: String,
-    /// <p>The number of physical connections initially provisioned and bundled by the LAG.</p>
+    /// <p>The number of physical dedicated connections initially provisioned and bundled by the LAG.</p>
     #[serde(rename = "numberOfConnections")]
     pub number_of_connections: i64,
     /// <p>The name of the service provider associated with the LAG.</p>
@@ -1359,11 +1359,11 @@ pub struct Lag {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p>The minimum number of physical connections that must be operational for the LAG itself to be operational.</p>
+    /// <p>The minimum number of physical dedicated connections that must be operational for the LAG itself to be operational.</p>
     #[serde(rename = "minimumLinks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_links: Option<i64>,
-    /// <p>The number of physical connections bundled by the LAG, up to a maximum of 10.</p>
+    /// <p>The number of physical dedicated connections bundled by the LAG, up to a maximum of 10.</p>
     #[serde(rename = "numberOfConnections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_connections: Option<i64>,
@@ -4789,7 +4789,7 @@ pub trait DirectConnect {
         RusotoError<CreateDirectConnectGatewayAssociationError>,
     >;
 
-    /// <p>Creates a proposal to associate the specified virtual private gateway or transit gateway with the specified Direct Connect gateway.</p> <p>You can only associate a Direct Connect gateway and virtual private gateway or transit gateway when the account that owns the Direct Connect gateway and the account that owns the virtual private gateway or transit gateway have the same AWS Payer ID.</p>
+    /// <p>Creates a proposal to associate the specified virtual private gateway or transit gateway with the specified Direct Connect gateway.</p> <p>You can associate a Direct Connect gateway and virtual private gateway or transit gateway that is owned by any AWS account. </p>
     async fn create_direct_connect_gateway_association_proposal(
         &self,
         input: CreateDirectConnectGatewayAssociationProposalRequest,
@@ -4804,7 +4804,7 @@ pub trait DirectConnect {
         input: CreateInterconnectRequest,
     ) -> Result<Interconnect, RusotoError<CreateInterconnectError>>;
 
-    /// <p>Creates a link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple interfaces, enabling you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect Partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
+    /// <p>Creates a link aggregation group (LAG) with the specified number of bundled physical dedicated connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple interfaces, enabling you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (either 1Gbps or 10Gbps) and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 dedicated connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical dedicated connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical dedicated connection, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the dedicated connection terminates. Any virtual interfaces associated with the dedicated connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect Partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
     async fn create_lag(&self, input: CreateLagRequest)
         -> Result<Lag, RusotoError<CreateLagError>>;
 
@@ -5445,7 +5445,7 @@ impl DirectConnect for DirectConnectClient {
             .deserialize::<CreateDirectConnectGatewayAssociationResult, _>()
     }
 
-    /// <p>Creates a proposal to associate the specified virtual private gateway or transit gateway with the specified Direct Connect gateway.</p> <p>You can only associate a Direct Connect gateway and virtual private gateway or transit gateway when the account that owns the Direct Connect gateway and the account that owns the virtual private gateway or transit gateway have the same AWS Payer ID.</p>
+    /// <p>Creates a proposal to associate the specified virtual private gateway or transit gateway with the specified Direct Connect gateway.</p> <p>You can associate a Direct Connect gateway and virtual private gateway or transit gateway that is owned by any AWS account. </p>
     async fn create_direct_connect_gateway_association_proposal(
         &self,
         input: CreateDirectConnectGatewayAssociationProposalRequest,
@@ -5491,7 +5491,7 @@ impl DirectConnect for DirectConnectClient {
         proto::json::ResponsePayload::new(&response).deserialize::<Interconnect, _>()
     }
 
-    /// <p>Creates a link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple interfaces, enabling you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect Partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
+    /// <p>Creates a link aggregation group (LAG) with the specified number of bundled physical dedicated connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple interfaces, enabling you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (either 1Gbps or 10Gbps) and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 dedicated connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical dedicated connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical dedicated connection, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the dedicated connection terminates. Any virtual interfaces associated with the dedicated connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect Partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
     async fn create_lag(
         &self,
         input: CreateLagRequest,
