@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 (Please put changes here)
 
 - Display `rusoto_core::Client` in docs
+- Fix incorrect parse logic for timestamp headers in JSON based protocols
 
 ## [0.45.0] - 2020-07-22
 

@@ -2,6 +2,7 @@ use inflector::Inflector;
 
 use crate::botocore::{Member, Operation, Shape, ShapeType};
 use crate::Service;
+use super::GenerateProtocol;
 
 // Rest Response Parser
 //
@@ -10,6 +11,7 @@ use crate::Service;
 pub fn generate_response_headers_parser(
     service: &Service<'_>,
     operation: &Operation,
+    protocol: &dyn GenerateProtocol,
 ) -> Option<String> {
     // nothing to do if there's no output type
     operation.output.as_ref()?;
@@ -23,7 +25,7 @@ pub fn generate_response_headers_parser(
         .iter()
         .filter_map(
             |(member_name, member)| match member.location.as_ref().map(String::as_ref) {
-                Some("header") => Some(parse_single_header(service, shape, member_name, member)),
+                Some("header") => Some(parse_single_header(service, protocol, shape, member_name, member)),
                 Some("headers") => {
                     Some(parse_multiple_headers(service, shape, member_name, member))
                 }
@@ -99,6 +101,7 @@ fn parse_headers_map(member_name: &str, member: &Member, required: bool) -> Stri
 
 fn parse_single_header(
     service: &Service<'_>,
+    protocol: &dyn GenerateProtocol,
     shape: &Shape,
     member_name: &str,
     member: &Member,
@@ -110,22 +113,23 @@ fn parse_single_header(
                  result.{field_name} = {primitive_parser};",
             location_name = member.location_name.as_ref().unwrap(),
             field_name = member_name.to_snake_case(),
-            primitive_parser = generate_header_primitive_parser(member_shape).unwrap_or("value")
+            primitive_parser = generate_header_primitive_parser(protocol, member_shape).unwrap_or("value")
         )
     } else {
         format!(
             "result.{field_name} = response.headers.remove(\"{location_name}\"){primitive_parser};",
             location_name = member.location_name.as_ref().unwrap(),
             field_name = member_name.to_snake_case(),
-            primitive_parser = generate_header_primitive_parser(member_shape)
+            primitive_parser = generate_header_primitive_parser(protocol, member_shape)
                 .map(|s| format!(".map(|value| {})", s))
                 .unwrap_or_default()
         )
     }
 }
 
-fn generate_header_primitive_parser(shape: &Shape) -> Option<&str> {
+fn generate_header_primitive_parser(protocol: &dyn GenerateProtocol, shape: &Shape) -> Option<&'static str> {
     let statement = match shape.shape_type {
+        ShapeType::Timestamp if protocol.timestamp_type() == "f64" => "value.parse::<f64>().unwrap()",
         ShapeType::String | ShapeType::Timestamp => return None,
         ShapeType::Double => "value.parse::<f64>().unwrap()",
         ShapeType::Integer | ShapeType::Long => "value.parse::<i64>().unwrap()",
