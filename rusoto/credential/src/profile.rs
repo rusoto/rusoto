@@ -7,7 +7,7 @@ use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 
 use async_trait::async_trait;
-use dirs::home_dir;
+use dirs_next::home_dir;
 use regex::Regex;
 use serde::Deserialize;
 use tokio::process::Command;

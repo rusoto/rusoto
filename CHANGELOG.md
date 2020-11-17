@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 (Please put changes here)
 
 - Display `rusoto_core::Client` in docs
+- Swap the unmaintained `dirs` crate for its replacement `dirs-next`
+
 
 ## [0.45.0] - 2020-07-22
 
