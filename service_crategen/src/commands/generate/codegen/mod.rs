@@ -257,6 +257,9 @@ pub fn get_rust_type(
             ShapeType::Double => "f64".into(),
             ShapeType::Float => "f32".into(),
             ShapeType::Integer | ShapeType::Long => "i64".into(),
+            ShapeType::String if shape.shape_enum.is_some() => {
+                mutate_type_name(service, shape_name)
+            }
             ShapeType::String => "String".into(),
             ShapeType::Timestamp => for_timestamps.into(),
             ShapeType::List => format!(
@@ -539,6 +542,8 @@ fn get_variant_name(variant: &str) -> String {
     // an underscore as well as prepend one to make them valid identifiers.
     if variant.parse::<f32>().is_ok() || variant.parse::<u32>().is_ok() {
         format!("_{}", variant.replace(".", "_"))
+    } else if variant.to_lowercase() == "self" {
+        "AwsSelf".to_owned()
     } else {
         variant
             .replace(|c| !char::is_alphanumeric(c), "_")
@@ -552,24 +557,25 @@ fn generate_enum(name: &str, variants: &Vec<String>) -> String {
         .map(|v| (v.clone(), get_variant_name(&v)))
         .collect();
 
-    format!("
+    format!(
+        "
+
+        struct Unknown{name}(String);
+
         #[allow(non_camel_case_types)]
         #[derive(Clone,Debug,Eq,PartialEq)]
+        #[non_exhaustive]
         pub enum {name} {{
-            {variants}
+            {variants},
+            #[doc(hidden)]
+            UnknownVariant(Unknown{name})
         }}
 
         impl Into<String> for {name} {{
             fn into(self) -> String {{
-                let s: &'static str = self.into();
-                s.to_owned()
-            }}
-        }}
-
-        impl Into<&'static str> for {name} {{
-            fn into(self) -> &'static str {{
                 match self {{
-                    {matches}
+                    {matches},
+                    UnknownVariant(Unknown{name}(original)) => original
                 }}
             }}
         }}
@@ -577,29 +583,30 @@ fn generate_enum(name: &str, variants: &Vec<String>) -> String {
         impl ::std::str::FromStr for {name} {{
             type Err = ();
             fn from_str(s: &str) -> Result<Self, Self::Err> {{
-                match s {{
+                Ok(match s {{
                     {reverse_matches},
-                    _ => Err(())
-                }}
+                    _ => UnknownVariant(Unknown{name}(original))
+                }})
             }}
         }}
         ",
-            name = name,
-            variants = variant_names
-                .values()
-                .cloned()
-                .collect::<Vec<_>>()
-                .join(",\n"),
-            matches = variant_names
-                .iter()
-                .map(|(s, v)| format!("{}::{} => \"{}\"", name, v, s))
-                .collect::<Vec<_>>()
-                .join(",\n"),
-            reverse_matches = variant_names
-                .iter()
-                .map(|(s, v)| format!("\"{}\" => Ok({}::{})", s, name, v))
-                .collect::<Vec<_>>()
-                .join(",\n"))
+        name = name,
+        variants = variant_names
+            .values()
+            .cloned()
+            .collect::<Vec<_>>()
+            .join(",\n"),
+        matches = variant_names
+            .iter()
+            .map(|(s, v)| format!("{}::{} => \"{}\".to_string()", name, v, s))
+            .collect::<Vec<_>>()
+            .join(",\n"),
+        reverse_matches = variant_names
+            .iter()
+            .map(|(s, v)| format!("\"{}\" => {}::{}", s, name, v))
+            .collect::<Vec<_>>()
+            .join(",\n")
+    )
 }
 
 fn generate_event_enum<P>(
