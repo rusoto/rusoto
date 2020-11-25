@@ -149,6 +149,20 @@ impl<'a> PostPolicy<'a> {
         self
     }
 
+    /// Set security token
+    pub fn set_security_token(mut self, security_token: &'a str) -> Self {
+        if security_token.is_empty() {
+            return self;
+        }
+
+        self.form_data.insert(
+            "x-amz-security-token".to_string(),
+            security_token.to_string(),
+        );
+        self = self.append_policy("eq", "$x-amz-security-token", security_token);
+        self
+    }
+
     /// Set content-type policy condition and update the form data
     #[allow(dead_code)]
     pub fn set_content_type(mut self, content_type: &'a str) -> Self {
@@ -521,5 +535,38 @@ mod tests {
         let policy: serde_json::Value = serde_json::from_slice(&policy_as_vec_u8).unwrap();
         let conditions = policy["conditions"].as_array().unwrap();
         assert!(conditions.contains(&serde_json::json!(["starts-with", "$key", "foo"])));
+    }
+
+    #[test]
+    fn set_security_token() {
+        let expiration_date = Utc.ymd(2020, 1, 1).and_hms(1, 2, 3);
+        let security_token = "some-session-token";
+
+        let res = PostPolicy::default()
+            .set_bucket_name(BUCKET)
+            .set_region(&REGION)
+            .set_access_key_id(ACCESS_KEY_ID)
+            .set_secret_access_key(SECRET_ACCESS_KEY)
+            .set_key(OBJECT_KEY)
+            .set_expiration(&expiration_date)
+            .set_security_token(&security_token)
+            .build_form_data();
+
+        let (_, form_data) = res.unwrap();
+        dbg!(&form_data);
+        assert_eq!(
+            form_data.get("x-amz-security-token").unwrap(),
+            "some-session-token"
+        );
+
+        let policy_as_base64 = form_data.get("policy").unwrap();
+        let policy_as_vec_u8 = base64::decode(policy_as_base64).unwrap();
+        let policy: serde_json::Value = serde_json::from_slice(&policy_as_vec_u8).unwrap();
+        let conditions = policy["conditions"].as_array().unwrap();
+        assert!(conditions.contains(&serde_json::json!([
+            "eq",
+            "$x-amz-security-token",
+            "some-session-token"
+        ])));
     }
 }
