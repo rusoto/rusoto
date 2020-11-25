@@ -368,12 +368,13 @@ fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String 
             };
             match payload_shape.shape_type {
                 payload_type
-                    if payload_type == ShapeType::Blob || payload_type == ShapeType::String =>
+                    if payload_type == ShapeType::Blob || payload_type == ShapeType::String || payload_type == ShapeType::Structure =>
                 {
                     payload_body_parser(
                         payload_type,
                         shape_name,
                         payload_member_name,
+                        payload_member_shape,
                         mutable_result,
                         payload_shape_required,
                     )
@@ -390,29 +391,34 @@ fn payload_body_parser(
     payload_type: ShapeType,
     output_shape: &str,
     payload_member: &str,
+    payload_member_shape: &str,
     mutable_result: bool,
     payload_required: bool,
 ) -> String {
-    let response_body = if payload_required {
+    let payload = if payload_required {
         match payload_type {
-            ShapeType::Blob => "response.body",
-            _ => "String::from_utf8_lossy(response.body.as_ref())",
+            ShapeType::Blob => "response.body".to_string(),
+            ShapeType::Structure => 
+                format!("proto::json::ResponsePayload::new(&response) .deserialize::<{payload_member_shape}, _>()?", payload_member_shape = payload_member_shape),
+            _ => "String::from_utf8_lossy(response.body.as_ref())".to_string(),
         }
     } else {
         match payload_type {
-            ShapeType::Blob => "Some(response.body)",
-            _ => "Some(String::from_utf8_lossy(response.body.as_ref()).into_owned())",
+            ShapeType::Blob => "Some(response.body)".to_string(),
+            ShapeType::Structure => 
+                format!("proto::json::ResponsePayload::new(&response) .deserialize::<{payload_member_shape}, _>().ok()", payload_member_shape = payload_member_shape),
+            _ => "Some(String::from_utf8_lossy(response.body.as_ref()).into_owned())".to_string(),
         }
     };
 
     format!(
         "
         let {mutable} result = {output_shape}::default();
-        result.{payload_member} = {response_body};
+        result.{payload_member} = {payload};
         ",
         output_shape = output_shape,
         payload_member = payload_member.to_snake_case(),
-        response_body = response_body,
+        payload = payload,
         mutable = if mutable_result { "mut" } else { "" }
     )
 }
